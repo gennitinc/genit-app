@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -194,7 +195,7 @@ export const MobileFileTree: React.FC<MobileFileTreeProps> = ({
             isOpen && "rotate-90 transform"
           )}
         />
-        Project Files
+        <LocalizedText text={"Project Files"} />
       </Button>
       <AnimatePresence>
         {isOpen && (

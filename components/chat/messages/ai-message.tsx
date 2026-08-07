@@ -13,6 +13,7 @@ import {
   MessageContainer,
   MessageContent,
 } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -277,7 +278,7 @@ export function AIMessage({
                               target='_blank'
                               rel='noopener noreferrer'
                             >
-                              Top Up Meta Ads Balance
+                              <LocalizedText text={"Top Up Meta Ads Balance"} />
                             </a>
                           </Button>
                         )}
@@ -293,7 +294,9 @@ export function AIMessage({
                               target='_blank'
                               rel='noopener noreferrer'
                             >
-                              Top Up Google Ads Balance
+                              <LocalizedText
+                                text={"Top Up Google Ads Balance"}
+                              />
                             </a>
                           </Button>
                         )}
@@ -326,7 +329,9 @@ export function AIMessage({
                 if (isProjectSelection) {
                   return (
                     <div className=''>
-                      <p className='mb-4'>Select Project Type</p>
+                      <p className='mb-4'>
+                        <LocalizedText text={"Select Project Type"} />
+                      </p>
                       <div
                         key={`${message.id}-${i}`}
                         className='bg-muted/30 border-border/50 mt-4 rounded-lg border p-4 backdrop-blur-sm'
@@ -408,7 +413,10 @@ export function AIMessage({
               {totalTime && totalTime > 0 && (
                 <div className='flex items-center gap-1'>
                   <Clock className='h-3 w-3' />
-                  <span>Processed in {formatTime(totalTime)}</span>
+                  <span>
+                    <LocalizedText text={"Processed in"} />
+                    {formatTime(totalTime)}
+                  </span>
                 </div>
               )}
             </div>

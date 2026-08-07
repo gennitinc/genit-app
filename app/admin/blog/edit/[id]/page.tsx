@@ -2,6 +2,7 @@
 
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { ArrowLeft, Loader2, RefreshCw, Save, X } from "lucide-react";
@@ -156,7 +157,9 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
         <LoadingFileLoader size={16} />
-        <p className='text-sm text-zinc-500'>Loading article details...</p>
+        <p className='text-sm text-zinc-500'>
+          <LocalizedText text={"Loading article details..."} />
+        </p>
       </div>
     );
   }
@@ -173,9 +176,13 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
             <ArrowLeft className='h-5 w-5' />
           </Link>
           <div>
-            <h1 className='text-xl font-bold text-white'>Edit Blog Article</h1>
+            <h1 className='text-xl font-bold text-white'>
+              <LocalizedText text={"Edit Blog Article"} />
+            </h1>
             <p className='mt-0.5 text-xs text-zinc-400'>
-              Modify article layout content and settings
+              <LocalizedText
+                text={"Modify article layout content and settings"}
+              />
             </p>
           </div>
         </div>
@@ -184,7 +191,8 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
           onClick={handleSubmit}
           className='hover:shadow-primary/20 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-xs font-bold text-white transition duration-200 hover:bg-indigo-700 hover:shadow-lg'
         >
-          Save Changes <Save className='h-3.5 w-3.5' />
+          <LocalizedText text={"Save Changes"} />
+          <Save className='h-3.5 w-3.5' />
         </button>
       </div>
 
@@ -194,7 +202,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
           {/* Title input */}
           <div className='space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Article Title *
+              <LocalizedText text={"Article Title *"} />
             </label>
             <input
               type='text'
@@ -215,7 +223,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
           {/* Custom Rich Text Editor */}
           <div className='flex flex-col space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Content Body *
+              <LocalizedText text={"Content Body *"} />
             </label>
             <NotionEditor value={content} onChange={setContent} />
           </div>
@@ -230,10 +238,12 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
             <div className='flex items-center justify-between pb-3'>
               <div>
                 <h3 className='text-lg font-bold text-white'>
-                  Finalize Changes
+                  <LocalizedText text={"Finalize Changes"} />
                 </h3>
                 <p className='mt-0.5 text-xs font-medium text-zinc-400'>
-                  Verify publication settings before saving
+                  <LocalizedText
+                    text={"Verify publication settings before saving"}
+                  />
                 </p>
               </div>
               <button
@@ -250,7 +260,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
               {/* Cover Photo */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Cover Photo *
+                  <LocalizedText text={"Cover Photo *"} />
                 </label>
 
                 <MediaPicker
@@ -263,7 +273,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
               {/* Excerpt */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Excerpt *
+                  <LocalizedText text={"Excerpt *"} />
                 </label>
                 <textarea
                   required
@@ -279,7 +289,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 {/* Category Option */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Category *
+                    <LocalizedText text={"Category *"} />
                   </label>
                   <select
                     value={category}
@@ -297,7 +307,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 {/* Read Time */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Read Time (Auto-calculated)
+                    <LocalizedText text={"Read Time (Auto-calculated)"} />
                   </label>
                   <input
                     type='text'
@@ -314,7 +324,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 {/* Slug Override */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Slug Override
+                    <LocalizedText text={"Slug Override"} />
                   </label>
                   <input
                     type='text'
@@ -331,7 +341,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 {/* Publisher Type */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Published By *
+                    <LocalizedText text={"Published By *"} />
                   </label>
                   <select
                     value={publisherType}
@@ -340,8 +350,12 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                     }
                     className='w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-white transition focus:border-cyan-500 focus:outline-none'
                   >
-                    <option value='Platform'>Platform (Genit Official)</option>
-                    <option value='Author'>Author (Your Admin Profile)</option>
+                    <option value='Platform'>
+                      <LocalizedText text={"Platform (Genit Official)"} />
+                    </option>
+                    <option value='Author'>
+                      <LocalizedText text={"Author (Your Admin Profile)"} />
+                    </option>
                   </select>
                 </div>
               </div>
@@ -349,7 +363,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
               {/* Tags */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Tags (Comma separated)
+                  <LocalizedText text={"Tags (Comma separated)"} />
                 </label>
                 <input
                   type='text'
@@ -369,7 +383,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                     onChange={(e) => setIsActive(e.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Publish status (Active)
+                  <LocalizedText text={"Publish status (Active)"} />
                 </label>
 
                 <label className='flex cursor-pointer items-center gap-2 text-xs font-semibold text-zinc-300 select-none'>
@@ -379,7 +393,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                     onChange={(e) => setIsFeatured(e.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Featured Article
+                  <LocalizedText text={"Featured Article"} />
                 </label>
               </div>
             </div>
@@ -391,7 +405,7 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                 onClick={() => setIsModalOpen(false)}
                 className='inline-flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 py-2.5 text-xs font-semibold text-zinc-400 transition hover:border-zinc-700 hover:text-white'
               >
-                Back to Editor
+                <LocalizedText text={"Back to Editor"} />
               </button>
               <button
                 type='button'
@@ -405,7 +419,8 @@ export default function EditBlogPostPage({ params }: EditBlogPostPageProps) {
                   </>
                 ) : (
                   <>
-                    <Save className='h-3.5 w-3.5' /> Save Changes
+                    <Save className='h-3.5 w-3.5' />{" "}
+                    <LocalizedText text={"Save Changes"} />
                   </>
                 )}
               </button>

@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import {
   MobileNav,
   MobileNavHeader,
@@ -39,8 +41,12 @@ export function LandingMainNav() {
         <NavbarLogo />
         <NavItems items={navItems} />
         <div className='flex items-center gap-4'>
-          <NavbarButton variant='secondary'>Login</NavbarButton>
-          <NavbarButton variant='primary'>Book a call</NavbarButton>
+          <NavbarButton variant='secondary'>
+            <LocalizedText text={"Login"} />
+          </NavbarButton>
+          <NavbarButton variant='primary'>
+            <LocalizedText text={"Book a call"} />
+          </NavbarButton>
         </div>
       </NavBody>
 
@@ -91,13 +97,15 @@ export function LandingMainNav() {
               data-state='closed'
               href='/signin'
             >
-              Sign in
+              <LocalizedText text={"Sign in"} />
             </Link>
             <Link
               className='text-foreground not-disabled:hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none after:pointer-events-none after:absolute after:top-[-2px] after:left-[-2px] after:h-[calc(100%+4px)] after:w-[calc(100%+4px)] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat not-disabled:hover:bg-white/90 not-disabled:hover:text-black focus-visible:bg-white/90 focus-visible:text-black focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:text-white/50 disabled:opacity-30'
               href='/signup'
             >
-              <span>Start for $0</span>
+              <span>
+                <LocalizedText text={"Start for $0"} />
+              </span>
               <ArrowRight className='ml-1 h-4 w-4' />
             </Link>
           </div>

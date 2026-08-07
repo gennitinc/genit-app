@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -133,7 +135,7 @@ const Page = () => {
             <div className='inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm'>
               <span className='text-orange-500'>●</span>
               <span className='text-xs font-medium tracking-wide text-orange-600 uppercase'>
-                3 spots left for august
+                <LocalizedText text={"3 spots left for august"} />
               </span>
             </div>
           </div>
@@ -142,7 +144,7 @@ const Page = () => {
           <div className='mb-8 text-center'>
             <h1 className='mb-6 text-5xl leading-tight font-bold md:text-6xl'>
               <span className='flex flex-wrap items-center justify-center gap-3'>
-                Make changes
+                <LocalizedText text={"Make changes"} />
                 <span className='inline-flex items-center gap-1'>
                   <Image
                     src='https://ext.same-assets.com/3322540528/3449985188.png'
@@ -161,14 +163,19 @@ const Page = () => {
                 </span>
               </span>
               <span className='block'>
-                that builds{" "}
-                <span className='font-serif italic'>real influence.</span>
+                <LocalizedText text={"that builds"} />{" "}
+                <span className='font-serif italic'>
+                  <LocalizedText text={"real influence."} />
+                </span>
               </span>
             </h1>
 
             <p className='mx-auto mb-8 max-w-md text-lg text-gray-500'>
-              We turn your expertise into viral short-form content that builds
-              trust and drives attention.
+              <LocalizedText
+                text={
+                  "We turn your expertise into viral short-form content that builds trust and drives attention."
+                }
+              />
             </p>
 
             {/* CTA Buttons */}
@@ -192,13 +199,13 @@ const Page = () => {
                     strokeLinejoin='round'
                   />
                 </svg>
-                Let&apos;s grow your brand
+                <LocalizedText text={"Let&apos;s grow your brand"} />
               </Link>
               <Link
                 href='#pricing'
                 className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium transition-colors hover:bg-gray-50'
               >
-                See pricing
+                <LocalizedText text={"See pricing"} />
               </Link>
             </div>
 
@@ -206,7 +213,7 @@ const Page = () => {
             <div className='flex items-center justify-center gap-8'>
               <div className='flex items-center gap-4'>
                 <span className='text-xs tracking-wide text-gray-400 uppercase'>
-                  100+ personal brands
+                  <LocalizedText text={"100+ personal brands"} />
                 </span>
                 <div className='flex -space-x-2'>
                   <Image
@@ -228,7 +235,7 @@ const Page = () => {
               <div className='h-8 w-px bg-gray-200' />
               <div className='flex items-center gap-2'>
                 <span className='text-xs tracking-wide text-gray-400 uppercase'>
-                  rated excellent: 5/5
+                  <LocalizedText text={"rated excellent: 5/5"} />
                 </span>
                 <div className='flex gap-0.5'>
                   {[...Array(5)].map((_, i) => (
@@ -268,7 +275,7 @@ const Page = () => {
                     className='h-8 w-8 rounded-full border-2 border-white'
                   />
                   <span className='text-sm font-medium text-white'>
-                    dan_cooks
+                    <LocalizedText text={"dan_cooks"} />
                   </span>
                   <Image
                     src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -308,7 +315,9 @@ const Page = () => {
                   <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
                   <circle cx='12' cy='12' r='3' />
                 </svg>
-                <span className='text-sm font-medium'>40k+</span>
+                <span className='text-sm font-medium'>
+                  <LocalizedText text={"40k+"} />
+                </span>
               </div>
 
               {/* Floating Badge - 30k Likes */}
@@ -323,7 +332,9 @@ const Page = () => {
                 >
                   <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' />
                 </svg>
-                <span className='text-sm font-medium'>30k</span>
+                <span className='text-sm font-medium'>
+                  <LocalizedText text={"30k"} />
+                </span>
               </div>
 
               {/* Floating Badge - 2k+ followers */}
@@ -338,14 +349,16 @@ const Page = () => {
                   height={24}
                   className='h-6 w-6 rounded-full'
                 />
-                <span className='text-sm font-medium'>2k+ followers</span>
+                <span className='text-sm font-medium'>
+                  <LocalizedText text={"2k+ followers"} />
+                </span>
               </div>
             </div>
 
             {/* Side Buttons */}
             <div className='absolute top-1/3 -right-32 flex flex-col gap-3'>
               <button className='rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800'>
-                Buy template
+                <LocalizedText text={"Buy template"} />
               </button>
               <div className='flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm'>
                 <svg
@@ -357,7 +370,9 @@ const Page = () => {
                 >
                   <path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' />
                 </svg>
-                <span>Made in Framer</span>
+                <span>
+                  <LocalizedText text={"Made in Framer"} />
+                </span>
               </div>
             </div>
           </div>
@@ -370,7 +385,7 @@ const Page = () => {
             <div className='inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm'>
               <span className='text-orange-500'>●</span>
               <span className='text-xs font-medium tracking-wide text-orange-600 uppercase'>
-                3 spots left for august
+                <LocalizedText text={"3 spots left for august"} />
               </span>
             </div>
           </div>
@@ -378,9 +393,9 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-8 text-center'>
             <h2 className='mb-6 text-4xl font-bold md:text-5xl'>
-              Your profile growth is
+              <LocalizedText text={"Your profile growth is"} />
               <br />
-              only a few edits away.
+              <LocalizedText text={"only a few edits away."} />
             </h2>
 
             {/* CTA Button */}
@@ -388,7 +403,7 @@ const Page = () => {
               href='https://cal.com'
               className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-gray-50'
             >
-              Get started today
+              <LocalizedText text={"Get started today"} />
             </Link>
           </div>
 
@@ -411,7 +426,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  skin_glow
+                  <LocalizedText text={"skin_glow"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -439,7 +454,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  sasha_dances
+                  <LocalizedText text={"sasha_dances"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -467,7 +482,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  MikeCooks
+                  <LocalizedText text={"MikeCooks"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -487,7 +502,7 @@ const Page = () => {
             <div className='inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm'>
               <span className='text-orange-500'>●</span>
               <span className='text-xs font-medium tracking-wide text-orange-600 uppercase'>
-                3 spots left for august
+                <LocalizedText text={"3 spots left for august"} />
               </span>
             </div>
           </div>
@@ -495,9 +510,9 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-8 text-center'>
             <h2 className='mb-6 text-4xl font-bold md:text-5xl'>
-              Your profile growth is
+              <LocalizedText text={"Your profile growth is"} />
               <br />
-              only a few edits away.
+              <LocalizedText text={"only a few edits away."} />
             </h2>
 
             {/* CTA Button */}
@@ -505,7 +520,7 @@ const Page = () => {
               href='https://cal.com'
               className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-gray-50'
             >
-              Get started today
+              <LocalizedText text={"Get started today"} />
             </Link>
           </div>
 
@@ -528,7 +543,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  skin_glow
+                  <LocalizedText text={"skin_glow"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -556,7 +571,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  sasha_dances
+                  <LocalizedText text={"sasha_dances"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -584,7 +599,7 @@ const Page = () => {
                   className='h-6 w-6 rounded-full border-2 border-white object-cover'
                 />
                 <span className='text-xs font-medium text-white'>
-                  MikeCooks
+                  <LocalizedText text={"MikeCooks"} />
                 </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -603,7 +618,7 @@ const Page = () => {
           <div className='mb-6 flex justify-center'>
             <div className='inline-flex items-center gap-2 rounded-full border border-pink-700/30 bg-pink-900/30 px-4 py-1.5 text-xs'>
               <span className='font-medium tracking-wide text-pink-400 uppercase'>
-                Process
+                <LocalizedText text={"Process"} />
               </span>
             </div>
           </div>
@@ -611,14 +626,16 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-16 text-center'>
             <h2 className='mb-4 text-4xl font-bold text-white md:text-5xl'>
-              Here's how we turn your
+              <LocalizedText text={"Here's how we turn your"} />
               <br />
-              raw clips into viral content.
+              <LocalizedText text={"raw clips into viral content."} />
             </h2>
             <p className='mx-auto max-w-lg text-lg text-gray-400'>
-              From idea to execution, we handle everything — so you can focus on
-              creating while we make sure your videos get seen, shared, and
-              saved.
+              <LocalizedText
+                text={
+                  "From idea to execution, we handle everything — so you can focus on creating while we make sure your videos get seen, shared, and saved."
+                }
+              />
             </p>
           </div>
 
@@ -627,7 +644,7 @@ const Page = () => {
             {/* Step 1 */}
             <div className='rounded-3xl bg-[#141414] p-6'>
               <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-pink-900/40 px-3 py-1 text-xs text-pink-400'>
-                Step 1
+                <LocalizedText text={"Step 1"} />
               </div>
               <div className='mb-6 flex gap-3'>
                 <div className='h-24 w-24 overflow-hidden rounded-lg'>
@@ -650,18 +667,21 @@ const Page = () => {
                 </div>
               </div>
               <h3 className='mb-2 text-lg font-semibold text-white'>
-                Kickoff call.
+                <LocalizedText text={"Kickoff call."} />
               </h3>
               <p className='text-sm text-gray-400'>
-                Quick kickoff call to learn your brand, tone, and goals. So
-                every video feels authentically you.
+                <LocalizedText
+                  text={
+                    "Quick kickoff call to learn your brand, tone, and goals. So every video feels authentically you."
+                  }
+                />
               </p>
             </div>
 
             {/* Step 2 */}
             <div className='rounded-3xl bg-[#141414] p-6'>
               <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-pink-900/40 px-3 py-1 text-xs text-pink-400'>
-                Step 2
+                <LocalizedText text={"Step 2"} />
               </div>
               <div className='mb-6 flex h-32 items-center justify-center'>
                 <div className='relative'>
@@ -681,53 +701,65 @@ const Page = () => {
                 </div>
               </div>
               <h3 className='mb-2 text-lg font-semibold text-white'>
-                Send us your footage.
+                <LocalizedText text={"Send us your footage."} />
               </h3>
               <p className='text-sm text-gray-400'>
-                Record on your phone, Zoom, podcast, or wherever you like. Just
-                upload it — we'll take it from there.
+                <LocalizedText
+                  text={
+                    "Record on your phone, Zoom, podcast, or wherever you like. Just upload it — we'll take it from there."
+                  }
+                />
               </p>
             </div>
 
             {/* Step 3 */}
             <div className='rounded-3xl bg-[#141414] p-6'>
               <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-pink-900/40 px-3 py-1 text-xs text-pink-400'>
-                Step 3
+                <LocalizedText text={"Step 3"} />
               </div>
               <div className='mb-6 rounded-lg bg-gray-800/50 p-4'>
                 <div className='mb-2 flex items-center gap-3'>
                   <div className='h-8 w-8 rounded-full bg-gray-600' />
                   <div className='flex-1'>
                     <div className='inline-block rounded-lg bg-gray-700 px-3 py-2 text-xs text-white'>
-                      Hey, we uploaded the edited reels
+                      <LocalizedText
+                        text={"Hey, we uploaded the edited reels"}
+                      />
                     </div>
                   </div>
                 </div>
                 <div className='flex items-center justify-end gap-3'>
                   <div className='inline-block rounded-lg bg-white px-3 py-2 text-xs text-black'>
-                    These look awesome!
+                    <LocalizedText text={"These look awesome!"} />
                   </div>
                 </div>
                 <div className='mt-2 flex items-center gap-3'>
                   <div className='h-8 w-8 rounded-full bg-gray-600' />
                   <div className='inline-block rounded-lg bg-gray-700 px-3 py-2 text-xs text-white'>
-                    Glad you liked them! Just finishing your next week's content
+                    <LocalizedText
+                      text={
+                        "Glad you liked them! Just finishing your next week's content"
+                      }
+                    />
                   </div>
                 </div>
               </div>
               <h3 className='mb-2 text-lg font-semibold text-white'>
-                We edit. You approve.
+                <LocalizedText text={"We edit. You approve."} />
               </h3>
               <p className='text-sm text-gray-400'>
-                Our team crafts edits with hooks, subtitles, music, and visual
-                flair. You review, request changes, or hit post.
+                <LocalizedText
+                  text={
+                    "Our team crafts edits with hooks, subtitles, music, and visual flair. You review, request changes, or hit post."
+                  }
+                />
               </p>
             </div>
 
             {/* Step 4 */}
             <div className='rounded-3xl bg-[#141414] p-6'>
               <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-pink-900/40 px-3 py-1 text-xs text-pink-400'>
-                Step 4
+                <LocalizedText text={"Step 4"} />
               </div>
               <div className='mb-6 flex h-32 items-end justify-center gap-1'>
                 {[40, 55, 70, 60, 80, 65, 90, 75].map((height, i) => (
@@ -739,11 +771,14 @@ const Page = () => {
                 ))}
               </div>
               <h3 className='mb-2 text-lg font-semibold text-white'>
-                Track what works.
+                <LocalizedText text={"Track what works."} />
               </h3>
               <p className='text-sm text-gray-400'>
-                Each month, we show you what's performing best — so you can
-                double down on content that converts.
+                <LocalizedText
+                  text={
+                    "Each month, we show you what's performing best — so you can double down on content that converts."
+                  }
+                />
               </p>
             </div>
           </div>
@@ -755,7 +790,7 @@ const Page = () => {
           <div className='mb-6 flex justify-center'>
             <div className='inline-flex items-center gap-2 rounded-full border border-pink-200 bg-pink-50 px-4 py-1.5 text-xs'>
               <span className='font-medium tracking-wide text-pink-600 uppercase'>
-                Projects
+                <LocalizedText text={"Projects"} />
               </span>
             </div>
           </div>
@@ -763,13 +798,16 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-12 text-center'>
             <h2 className='mb-4 text-4xl font-bold md:text-5xl'>
-              Where strategy meets
+              <LocalizedText text={"Where strategy meets"} />
               <br />
-              scroll-stopping content.
+              <LocalizedText text={"scroll-stopping content."} />
             </h2>
             <p className='mx-auto max-w-md text-lg text-gray-500'>
-              A curated look at how we turned raw footage into viral-worthy
-              moments — and real audience growth.
+              <LocalizedText
+                text={
+                  "A curated look at how we turned raw footage into viral-worthy moments — and real audience growth."
+                }
+              />
             </p>
           </div>
 
@@ -815,7 +853,7 @@ const Page = () => {
           <div className='mb-6 flex justify-center'>
             <div className='inline-flex items-center gap-2 rounded-full border border-pink-200 bg-pink-50 px-4 py-1.5 text-xs'>
               <span className='font-medium tracking-wide text-pink-600 uppercase'>
-                Purpose
+                <LocalizedText text={"Purpose"} />
               </span>
             </div>
           </div>
@@ -823,13 +861,16 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-12 text-center'>
             <h2 className='mb-4 text-4xl font-bold md:text-5xl'>
-              Performance-led creatives
+              <LocalizedText text={"Performance-led creatives"} />
               <br />
-              that helps brands scale faster.
+              <LocalizedText text={"that helps brands scale faster."} />
             </h2>
             <p className='mx-auto max-w-md text-lg text-gray-500'>
-              We blend aesthetics with performance to help you turn views into
-              real business outcomes.
+              <LocalizedText
+                text={
+                  "We blend aesthetics with performance to help you turn views into real business outcomes."
+                }
+              />
             </p>
           </div>
 
@@ -854,7 +895,7 @@ const Page = () => {
                     className='h-7 w-7 rounded-full border-2 border-white'
                   />
                   <span className='text-sm font-medium text-white'>
-                    zaratalks
+                    <LocalizedText text={"zaratalks"} />
                   </span>
                   <Image
                     src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -866,11 +907,11 @@ const Page = () => {
               </div>
               {/* Floating Badge */}
               <div className='absolute top-4 right-4 rounded-full bg-white px-3 py-1.5 text-xs font-medium shadow-lg'>
-                6.1% conversion
+                <LocalizedText text={"6.1% conversion"} />
               </div>
               {/* Bottom Badge */}
               <div className='absolute -bottom-2 -left-2 rounded-full bg-white px-3 py-1.5 text-xs font-medium shadow-lg'>
-                5k follower growth
+                <LocalizedText text={"5k follower growth"} />
               </div>
             </div>
 
@@ -893,7 +934,7 @@ const Page = () => {
                     className='h-7 w-7 rounded-full border-2 border-white'
                   />
                   <span className='text-sm font-medium text-white'>
-                    travelwithmia
+                    <LocalizedText text={"travelwithmia"} />
                   </span>
                   <Image
                     src='https://ext.same-assets.com/3322540528/871220803.png'
@@ -915,7 +956,7 @@ const Page = () => {
                   <path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' />
                   <path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' />
                 </svg>
-                Link clicks
+                <LocalizedText text={"Link clicks"} />
               </div>
             </div>
           </div>
@@ -960,7 +1001,7 @@ const Page = () => {
           <div className='mb-6 flex justify-center'>
             <div className='inline-flex items-center gap-2 rounded-full border border-pink-700/30 bg-pink-900/30 px-4 py-1.5 text-xs'>
               <span className='font-medium tracking-wide text-pink-400 uppercase'>
-                Pricing
+                <LocalizedText text={"Pricing"} />
               </span>
             </div>
           </div>
@@ -968,11 +1009,14 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-16 text-center'>
             <h2 className='mb-4 text-4xl font-bold text-white md:text-5xl'>
-              Flexible plans built for growth.
+              <LocalizedText text={"Flexible plans built for growth."} />
             </h2>
             <p className='mx-auto max-w-lg text-lg text-gray-400'>
-              Pick a plan that fits your content needs and lets us do the heavy
-              lifting.
+              <LocalizedText
+                text={
+                  "Pick a plan that fits your content needs and lets us do the heavy lifting."
+                }
+              />
             </p>
           </div>
 
@@ -997,7 +1041,8 @@ const Page = () => {
                     </p>
                   </div>
                   <div className='text-xl font-bold text-white'>
-                    {plan.price}/m
+                    {plan.price}
+                    <LocalizedText text={"/m"} />
                   </div>
                 </div>
 
@@ -1043,7 +1088,7 @@ const Page = () => {
           <div className='mb-6 flex justify-center'>
             <div className='inline-flex items-center gap-2 rounded-full border border-pink-200 bg-pink-50 px-4 py-1.5 text-xs'>
               <span className='font-medium tracking-wide text-pink-600 uppercase'>
-                Mission
+                <LocalizedText text={"Mission"} />
               </span>
             </div>
           </div>
@@ -1051,13 +1096,16 @@ const Page = () => {
           {/* Heading */}
           <div className='mb-12 text-center'>
             <h2 className='mb-4 text-4xl font-bold md:text-5xl'>
-              Built for creators who
+              <LocalizedText text={"Built for creators who"} />
               <br />
-              are ready to grow today.
+              <LocalizedText text={"are ready to grow today."} />
             </h2>
             <p className='mx-auto max-w-md text-lg text-gray-500'>
-              If you're showing up, we'll make sure it converts — with
-              short-form content built to scale.
+              <LocalizedText
+                text={
+                  "If you're showing up, we'll make sure it converts — with short-form content built to scale."
+                }
+              />
             </p>
           </div>
 
@@ -1080,7 +1128,9 @@ const Page = () => {
                   height={32}
                   className='h-8 w-8 rounded-full border-2 border-white'
                 />
-                <span className='text-sm font-medium text-white'>_jason</span>
+                <span className='text-sm font-medium text-white'>
+                  <LocalizedText text={"_jason"} />
+                </span>
                 <Image
                   src='https://ext.same-assets.com/3322540528/871220803.png'
                   alt='Verified'
@@ -1099,7 +1149,9 @@ const Page = () => {
               >
                 <path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' />
               </svg>
-              <span className='text-sm font-medium'>200k</span>
+              <span className='text-sm font-medium'>
+                <LocalizedText text={"200k"} />
+              </span>
             </div>
 
             {/* Floating Badge - 1.9k profile clicks */}
@@ -1115,7 +1167,9 @@ const Page = () => {
                 <circle cx='12' cy='10' r='3' />
                 <path d='M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662' />
               </svg>
-              <span className='text-sm font-medium'>1.9k profile clicks</span>
+              <span className='text-sm font-medium'>
+                <LocalizedText text={"1.9k profile clicks"} />
+              </span>
             </div>
           </div>
         </div>
@@ -1158,12 +1212,15 @@ const Page = () => {
                   </svg>
                 </div>
                 <span className='text-lg font-semibold text-white'>
-                  Influence
+                  <LocalizedText text={"Influence"} />
                 </span>
               </Link>
               <p className='text-sm leading-relaxed text-gray-400'>
-                We turn your expertise into viral short-form content that builds
-                trust and drives attention.
+                <LocalizedText
+                  text={
+                    "We turn your expertise into viral short-form content that builds trust and drives attention."
+                  }
+                />
               </p>
             </div>
 
@@ -1175,25 +1232,25 @@ const Page = () => {
                   href='/about'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  About
+                  <LocalizedText text={"About"} />
                 </Link>
                 <Link
                   href='#pricing'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Pricing
+                  <LocalizedText text={"Pricing"} />
                 </Link>
                 <Link
                   href='/blog'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Blog
+                  <LocalizedText text={"Blog"} />
                 </Link>
                 <Link
                   href='/careers'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Careers
+                  <LocalizedText text={"Careers"} />
                 </Link>
               </div>
 
@@ -1203,19 +1260,19 @@ const Page = () => {
                   href='https://instagram.com'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Instagram
+                  <LocalizedText text={"Instagram"} />
                 </Link>
                 <Link
                   href='https://youtube.com'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  YouTube
+                  <LocalizedText text={"YouTube"} />
                 </Link>
                 <Link
                   href='https://tiktok.com'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  TikTok
+                  <LocalizedText text={"TikTok"} />
                 </Link>
               </div>
 
@@ -1225,13 +1282,13 @@ const Page = () => {
                   href='/contact'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Contact
+                  <LocalizedText text={"Contact"} />
                 </Link>
                 <Link
                   href='/terms'
                   className='text-sm text-gray-300 transition-colors hover:text-white'
                 >
-                  Terms
+                  <LocalizedText text={"Terms"} />
                 </Link>
                 <Link
                   href='/404'
@@ -1251,19 +1308,21 @@ const Page = () => {
                 href='https://browser.supply'
                 className='underline transition-colors hover:text-gray-300'
               >
-                browser.supply
+                <LocalizedText text={"browser.supply"} />
               </Link>
               .{" "}
               <Link
                 href='https://framer.com'
                 className='underline transition-colors hover:text-gray-300'
               >
-                Framer
+                <LocalizedText text={"Framer"} />
               </Link>{" "}
-              website templates
+              <LocalizedText text={"website templates"} />
             </p>
             <div className='mt-4 flex items-center gap-2 md:mt-0'>
-              <span className='text-sm text-gray-500'>Created by</span>
+              <span className='text-sm text-gray-500'>
+                <LocalizedText text={"Created by"} />
+              </span>
               <Image
                 src='https://ext.same-assets.com/3322540528/3374079693.png'
                 alt='Ramish Aziz'
@@ -1275,7 +1334,7 @@ const Page = () => {
                 href='https://x.com/ramishdotdesign'
                 className='text-sm text-gray-300 underline transition-colors hover:text-white'
               >
-                Ramish Aziz
+                <LocalizedText text={"Ramish Aziz"} />
               </Link>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { CreatorProfileContent } from "@/components/creator/creator-profile-content";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -504,9 +505,11 @@ export default function CreatorProfilePage() {
     return (
       <div className='flex min-h-screen flex-col items-center justify-center p-4'>
         <h1 className='mb-4 text-2xl font-bold text-neutral-900 dark:text-white'>
-          Creator not found
+          <LocalizedText text={"Creator not found"} />
         </h1>
-        <Button onClick={() => router.back()}>Go back</Button>
+        <Button onClick={() => router.back()}>
+          <LocalizedText text={"Go back"} />
+        </Button>
       </div>
     );
   }
@@ -631,7 +634,9 @@ export default function CreatorProfilePage() {
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Previous page</p>
+                <p>
+                  <LocalizedText text={"Previous page"} />
+                </p>
               </TooltipContent>
             </Tooltip>
 
@@ -728,15 +733,15 @@ export default function CreatorProfilePage() {
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("x")}>
                         <X className='mr-2 h-4 w-4' />
-                        Share on X
+                        <LocalizedText text={"Share on X"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("facebook")}>
                         <Facebook className='mr-2 h-4 w-4' />
-                        Share on Facebook
+                        <LocalizedText text={"Share on Facebook"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("linkedin")}>
                         <Linkedin className='mr-2 h-4 w-4' />
-                        Share on LinkedIn
+                        <LocalizedText text={"Share on LinkedIn"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
                         <svg
@@ -747,7 +752,7 @@ export default function CreatorProfilePage() {
                         >
                           <path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z' />
                         </svg>
-                        Share on WhatsApp
+                        <LocalizedText text={"Share on WhatsApp"} />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -769,13 +774,15 @@ export default function CreatorProfilePage() {
                       </DrawerTrigger>
                       <DrawerContent className='max-h-[85dvh]'>
                         <DrawerHeader>
-                          <DrawerTitle>Edit Profile</DrawerTitle>
+                          <DrawerTitle>
+                            <LocalizedText text={"Edit Profile"} />
+                          </DrawerTitle>
                         </DrawerHeader>
                         <div className='overflow-y-auto px-4 pb-4'>
                           <div className='space-y-4'>
                             <div>
                               <label className='mb-2 block text-sm font-medium'>
-                                Bio
+                                <LocalizedText text={"Bio"} />
                               </label>
                               <textarea
                                 value={settingsBio}
@@ -790,7 +797,9 @@ export default function CreatorProfilePage() {
                             </div>
                             <div>
                               <label className='mb-2 block text-sm font-medium'>
-                                Social Media Links (Max 4)
+                                <LocalizedText
+                                  text={"Social Media Links (Max 4)"}
+                                />
                               </label>
                               <div className='space-y-3'>
                                 {/* Selected Socials */}
@@ -860,7 +869,11 @@ export default function CreatorProfilePage() {
                                   )}
                                 {selectedSocials.length >= 4 && (
                                   <p className='text-xs text-neutral-500'>
-                                    Maximum of 4 social media links allowed
+                                    <LocalizedText
+                                      text={
+                                        "Maximum of 4 social media links allowed"
+                                      }
+                                    />
                                   </p>
                                 )}
                               </div>
@@ -873,7 +886,7 @@ export default function CreatorProfilePage() {
                               variant='outline'
                               onClick={() => setIsSettingsDrawerOpen(false)}
                             >
-                              Cancel
+                              <LocalizedText text={"Cancel"} />
                             </Button>
                             <Button
                               onClick={handleSaveSettings}
@@ -882,7 +895,7 @@ export default function CreatorProfilePage() {
                               {isSavingSettings ? (
                                 <LoadingFileLoader size={16} />
                               ) : null}
-                              Save
+                              <LocalizedText text={"Save"} />
                             </Button>
                           </div>
                         </DrawerFooter>
@@ -975,14 +988,14 @@ export default function CreatorProfilePage() {
                         <Users className='h-5 w-5 text-neutral-500' />
                         <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           <span className='font-bold'>{profile.followers}</span>{" "}
-                          followers
+                          <LocalizedText text={"followers"} />
                         </span>
                       </div>
                       <div className='flex items-center gap-2'>
                         <User className='h-5 w-5 text-neutral-500' />
                         <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           <span className='font-bold'>{profile.following}</span>{" "}
-                          following
+                          <LocalizedText text={"following"} />
                         </span>
                       </div>
                       <div className='flex items-center gap-2'>
@@ -991,7 +1004,7 @@ export default function CreatorProfilePage() {
                           <span className='font-bold'>
                             {profile.stats.totalPosts}
                           </span>{" "}
-                          posts
+                          <LocalizedText text={"posts"} />
                         </span>
                       </div>
                     </div>
@@ -1008,7 +1021,7 @@ export default function CreatorProfilePage() {
                       profile.socials?.tiktok) && (
                       <div className='flex flex-col gap-2'>
                         <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                          Follow me on
+                          <LocalizedText text={"Follow me on"} />
                         </p>
                         <div className='flex flex-wrap items-center gap-3'>
                           {profile.socials?.instagram && (
@@ -1163,15 +1176,15 @@ export default function CreatorProfilePage() {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("x")}>
                       <X className='mr-2 h-4 w-4' />
-                      Share on X
+                      <LocalizedText text={"Share on X"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("facebook")}>
                       <Facebook className='mr-2 h-4 w-4' />
-                      Share on Facebook
+                      <LocalizedText text={"Share on Facebook"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("linkedin")}>
                       <Linkedin className='mr-2 h-4 w-4' />
-                      Share on LinkedIn
+                      <LocalizedText text={"Share on LinkedIn"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
                       <svg
@@ -1182,7 +1195,7 @@ export default function CreatorProfilePage() {
                       >
                         <path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z' />
                       </svg>
-                      Share on WhatsApp
+                      <LocalizedText text={"Share on WhatsApp"} />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -1198,17 +1211,19 @@ export default function CreatorProfilePage() {
                         className='rounded-lg px-4 py-2'
                       >
                         <Settings className='mr-2 h-4 w-4' />
-                        Settings
+                        <LocalizedText text={"Settings"} />
                       </Button>
                     </DialogTrigger>
                     <DialogContent className='max-h-[80dvh] max-w-md overflow-y-auto [&>button]:hidden'>
                       <DialogHeader>
-                        <DialogTitle>Edit Profile</DialogTitle>
+                        <DialogTitle>
+                          <LocalizedText text={"Edit Profile"} />
+                        </DialogTitle>
                       </DialogHeader>
                       <div className='mt-4 space-y-4'>
                         <div>
                           <label className='mb-2 block text-sm font-medium'>
-                            Bio
+                            <LocalizedText text={"Bio"} />
                           </label>
                           <textarea
                             value={settingsBio}
@@ -1223,7 +1238,9 @@ export default function CreatorProfilePage() {
                         </div>
                         <div>
                           <label className='mb-2 block text-sm font-medium'>
-                            Social Media Links (Max 4)
+                            <LocalizedText
+                              text={"Social Media Links (Max 4)"}
+                            />
                           </label>
                           <div className='space-y-3'>
                             {/* Selected Socials */}
@@ -1293,7 +1310,11 @@ export default function CreatorProfilePage() {
                               )}
                             {selectedSocials.length >= 4 && (
                               <p className='text-xs text-neutral-500'>
-                                Maximum of 4 social media links allowed
+                                <LocalizedText
+                                  text={
+                                    "Maximum of 4 social media links allowed"
+                                  }
+                                />
                               </p>
                             )}
                           </div>
@@ -1303,7 +1324,7 @@ export default function CreatorProfilePage() {
                             variant='outline'
                             onClick={() => setIsSettingsDialogOpen(false)}
                           >
-                            Cancel
+                            <LocalizedText text={"Cancel"} />
                           </Button>
                           <Button
                             onClick={handleSaveSettings}
@@ -1312,7 +1333,7 @@ export default function CreatorProfilePage() {
                             {isSavingSettings ? (
                               <LoadingFileLoader size={16} />
                             ) : null}
-                            Save
+                            <LocalizedText text={"Save"} />
                           </Button>
                         </div>
                       </div>
@@ -1380,14 +1401,14 @@ export default function CreatorProfilePage() {
                     <Users className='h-5 w-5 text-neutral-500' />
                     <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       <span className='font-bold'>{profile.followers}</span>{" "}
-                      followers
+                      <LocalizedText text={"followers"} />
                     </span>
                   </div>
                   <div className='flex items-center gap-2'>
                     <User className='h-5 w-5 text-neutral-500' />
                     <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       <span className='font-bold'>{profile.following}</span>{" "}
-                      following
+                      <LocalizedText text={"following"} />
                     </span>
                   </div>
                   <div className='flex items-center gap-2'>
@@ -1396,7 +1417,7 @@ export default function CreatorProfilePage() {
                       <span className='font-bold'>
                         {profile.stats.totalPosts}
                       </span>{" "}
-                      posts
+                      <LocalizedText text={"posts"} />
                     </span>
                   </div>
                 </div>
@@ -1413,17 +1434,19 @@ export default function CreatorProfilePage() {
                         className='hidden rounded-lg px-6 py-2'
                       >
                         <Settings className='mr-2 h-4 w-4' />
-                        Settings
+                        <LocalizedText text={"Settings"} />
                       </Button>
                     </DrawerTrigger>
                     <DrawerContent>
                       <DrawerHeader>
-                        <DrawerTitle>Edit Profile</DrawerTitle>
+                        <DrawerTitle>
+                          <LocalizedText text={"Edit Profile"} />
+                        </DrawerTitle>
                       </DrawerHeader>
                       <div className='mt-4 space-y-4 px-4'>
                         <div>
                           <label className='mb-2 block text-sm font-medium'>
-                            Bio
+                            <LocalizedText text={"Bio"} />
                           </label>
                           <textarea
                             value={settingsBio}
@@ -1438,7 +1461,9 @@ export default function CreatorProfilePage() {
                         </div>
                         <div>
                           <label className='mb-2 block text-sm font-medium'>
-                            Social Media Links (Max 4)
+                            <LocalizedText
+                              text={"Social Media Links (Max 4)"}
+                            />
                           </label>
                           <div className='space-y-3'>
                             {/* Selected Socials */}
@@ -1508,7 +1533,11 @@ export default function CreatorProfilePage() {
                               )}
                             {selectedSocials.length >= 4 && (
                               <p className='text-xs text-neutral-500'>
-                                Maximum of 4 social media links allowed
+                                <LocalizedText
+                                  text={
+                                    "Maximum of 4 social media links allowed"
+                                  }
+                                />
                               </p>
                             )}
                           </div>
@@ -1518,7 +1547,7 @@ export default function CreatorProfilePage() {
                             variant='outline'
                             onClick={() => setIsSettingsDrawerOpen(false)}
                           >
-                            Cancel
+                            <LocalizedText text={"Cancel"} />
                           </Button>
                           <Button
                             onClick={handleSaveSettings}
@@ -1527,7 +1556,7 @@ export default function CreatorProfilePage() {
                             {isSavingSettings ? (
                               <LoadingFileLoader size={16} />
                             ) : null}
-                            Save
+                            <LocalizedText text={"Save"} />
                           </Button>
                         </div>
                       </div>
@@ -1566,7 +1595,7 @@ export default function CreatorProfilePage() {
                   profile.socials?.tiktok) && (
                   <div className='flex flex-col items-center gap-2'>
                     <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                      Follow me on
+                      <LocalizedText text={"Follow me on"} />
                     </p>
                     <div className='flex flex-wrap items-center justify-center gap-3'>
                       {profile.socials?.instagram && (
@@ -1736,7 +1765,9 @@ export default function CreatorProfilePage() {
                     : "text-neutral-500 dark:text-neutral-400"
                 )}
               />
-              <span>Images</span>
+              <span>
+                <LocalizedText text={"Images"} />
+              </span>
               <span
                 className={cn(
                   "ml-1 rounded-full px-1.5 py-0.5 text-xs font-semibold transition-colors",
@@ -1773,7 +1804,9 @@ export default function CreatorProfilePage() {
                     : "text-neutral-500 dark:text-neutral-400"
                 )}
               />
-              <span>Videos</span>
+              <span>
+                <LocalizedText text={"Videos"} />
+              </span>
               <span
                 className={cn(
                   "ml-1 rounded-full px-1.5 py-0.5 text-xs font-semibold transition-colors",

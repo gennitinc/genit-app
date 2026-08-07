@@ -1,6 +1,7 @@
 "use client";
 
 import { FileUpload } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useMessageEditor } from "@/hooks/message/use-message-editor";
 import { AlertCircle, Loader } from "lucide-react";
@@ -78,12 +79,12 @@ export function MessageEditor({
 
         {/* Character count */}
         <div className='text-muted-foreground bg-background absolute right-2 bottom-2 rounded px-1 text-xs'>
-          {text.length} characters
+          {text.length} <LocalizedText text={"characters"} />
         </div>
 
         {/* Resize indicator */}
         <div className='text-muted-foreground bg-background absolute bottom-2 left-2 rounded px-1 text-xs'>
-          {text.split("\n").length} lines
+          {text.split("\n").length} <LocalizedText text={"lines"} />
         </div>
       </div>
 
@@ -105,15 +106,15 @@ export function MessageEditor({
       {/* Action Buttons */}
       <div className='flex items-center justify-between'>
         <div className='text-muted-foreground text-xs'>
-          Press{" "}
+          <LocalizedText text={"Press"} />{" "}
           <kbd className='bg-muted-foreground/10 rounded px-1 py-0.5 text-xs'>
-            Esc
+            <LocalizedText text={"Esc"} />
           </kbd>{" "}
-          to cancel, or{" "}
+          <LocalizedText text={"to cancel, or"} />{" "}
           <kbd className='bg-muted-foreground/10 rounded px-1 py-0.5 text-xs'>
-            Cmd+Enter
+            <LocalizedText text={"Cmd+Enter"} />
           </kbd>{" "}
-          to save
+          <LocalizedText text={"to save"} />
         </div>
 
         <div className='flex items-center gap-2'>
@@ -127,7 +128,9 @@ export function MessageEditor({
           >
             <div className='from-muted-foreground/30 pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b to-transparent'></div>
             <div className='relative flex items-center gap-2'>
-              <span className='text-muted-foreground font-medium'>Cancel</span>
+              <span className='text-muted-foreground font-medium'>
+                <LocalizedText text={"Cancel"} />
+              </span>
             </div>
             <div className='via-muted-foreground/40 absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
             <div className='via-muted-foreground/60 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
@@ -145,10 +148,14 @@ export function MessageEditor({
               {isLoading ? (
                 <>
                   <Loader className='h-4 w-4 animate-spin' />
-                  <span className='font-medium'>Saving...</span>
+                  <span className='font-medium'>
+                    <LocalizedText text={"Saving..."} />
+                  </span>
                 </>
               ) : (
-                <span className='font-medium'>Save</span>
+                <span className='font-medium'>
+                  <LocalizedText text={"Save"} />
+                </span>
               )}
             </div>
             <div className='via-muted-foreground/20 absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent'></div>
@@ -158,8 +165,15 @@ export function MessageEditor({
 
       {/* Helper text for expandable textarea */}
       <div className='text-muted-foreground bg-background rounded p-2 text-xs'>
-        💡 <strong>Smart Editor:</strong> Textarea auto-expands as you type •
-        Markdown formatting is converted to plain text for editing
+        💡{" "}
+        <strong>
+          <LocalizedText text={"Smart Editor:"} />
+        </strong>{" "}
+        <LocalizedText
+          text={
+            "Textarea auto-expands as you type • Markdown formatting is converted to plain text for editing"
+          }
+        />
       </div>
     </div>
   );

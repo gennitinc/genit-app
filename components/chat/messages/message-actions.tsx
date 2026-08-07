@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -89,7 +90,9 @@ export function MessageActions({
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Delete</p>
+            <p>
+              <LocalizedText text={"Delete"} />
+            </p>
           </TooltipContent>
         </Tooltip>
       )}

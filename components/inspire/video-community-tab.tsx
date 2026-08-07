@@ -1,6 +1,7 @@
 "use client";
 
 import { Skeleton } from "../ui/skeleton";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -385,10 +386,12 @@ export function VideoCommunityTab({
             <Users className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
           <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-            No community videos yet
+            <LocalizedText text={"No community videos yet"} />
           </h3>
           <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-            Generate a video and publish it to share with others
+            <LocalizedText
+              text={"Generate a video and publish it to share with others"}
+            />
           </p>
           <div className='flex flex-col gap-3 sm:flex-row'>
             <button
@@ -396,14 +399,14 @@ export function VideoCommunityTab({
               onClick={() => onTabChange("preview")}
               className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
-              Create Video
+              <LocalizedText text={"Create Video"} />
             </button>
             <button
               type='button'
               onClick={() => onTabChange("templates")}
               className='rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
             >
-              Browse Templates
+              <LocalizedText text={"Browse Templates"} />
             </button>
           </div>
         </div>
@@ -696,7 +699,10 @@ function VideoCard({
 
         {video && (
           <div className='absolute top-3 left-3 z-10 flex items-center gap-1.5'>
-            <span>{video.duration}s</span>
+            <span>
+              {video.duration}
+              <LocalizedText text={"s"} />
+            </span>
           </div>
         )}
       </div>
@@ -750,7 +756,9 @@ function VideoCard({
             className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
           >
             <RefreshCw className='h-3 w-3' />
-            <span className='hidden md:block'>Recreate</span>
+            <span className='hidden md:block'>
+              <LocalizedText text={"Recreate"} />
+            </span>
           </button>
         </div>
       </div>
@@ -828,7 +836,7 @@ function VideoDetailContent({
           {/* Prompt */}
           <div>
             <h3 className='mb-1 text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-              Prompt
+              <LocalizedText text={"Prompt"} />
             </h3>
             <div>
               <p
@@ -847,11 +855,13 @@ function VideoDetailContent({
                 >
                   {showFullPrompt ? (
                     <>
-                      View less <ChevronUp className='h-3 w-3' />
+                      <LocalizedText text={"View less"} />
+                      <ChevronUp className='h-3 w-3' />
                     </>
                   ) : (
                     <>
-                      View more <ChevronDown className='h-3 w-3' />
+                      <LocalizedText text={"View more"} />
+                      <ChevronDown className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -896,7 +906,7 @@ function VideoDetailContent({
                 )}
               </div>
               <p className='text-xs text-neutral-500 dark:text-neutral-400'>
-                Creator
+                <LocalizedText text={"Creator"} />
               </p>
             </div>
           </Link>
@@ -905,11 +915,15 @@ function VideoDetailContent({
           <div className='m-2 flex items-center gap-4'>
             <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
               <Heart className='h-4 w-4' />
-              <span>{video.likes} likes</span>
+              <span>
+                {video.likes} <LocalizedText text={"likes"} />
+              </span>
             </div>
             <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
               <Eye className='h-4 w-4' />
-              <span>{video.views} views</span>
+              <span>
+                {video.views} <LocalizedText text={"views"} />
+              </span>
             </div>
           </div>
         </div>
@@ -924,7 +938,7 @@ function VideoDetailContent({
             className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
             <RefreshCw className='h-4 w-4' />
-            Recreate
+            <LocalizedText text={"Recreate"} />
           </button>
           <button
             type='button'

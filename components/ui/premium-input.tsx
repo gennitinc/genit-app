@@ -2,6 +2,7 @@
 
 import ShinyText from "./shiny-text";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
@@ -162,7 +163,9 @@ export function PremiumInput({
 
       <div className='mb-2 flex h-fit items-center justify-between px-4'>
         <div className='flex items-center gap-2'>
-          <label className='text-sm font-medium'>Prompt</label>
+          <label className='text-sm font-medium'>
+            <LocalizedText text={"Prompt"} />
+          </label>
         </div>
         <div className='flex h-fit items-center justify-between px-4'>
           {/* <div className="flex items-center gap-2">
@@ -181,12 +184,12 @@ export function PremiumInput({
                 <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
                   <span className='text-muted-foreground text-xs'>
-                    {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
-                    left
+                    {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                    <LocalizedText text={"Credits left"} />
                   </span>
                 ) : (
                   <span className='text-muted-foreground text-xs'>
-                    Get started for free
+                    <LocalizedText text={"Get started for free"} />
                   </span>
                 )}
               </div>
@@ -198,14 +201,14 @@ export function PremiumInput({
                       className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/pricing")}
                     >
-                      Upgrade
+                      <LocalizedText text={"Upgrade"} />
                     </span>
                   ) : (
                     <span
                       className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/user/settings?tab=billing")}
                     >
-                      Buy Credits
+                      <LocalizedText text={"Buy Credits"} />
                     </span>
                   )}
                 </div>
@@ -264,7 +267,9 @@ export function PremiumInput({
                 )}
               </button>
             </TooltipTrigger>
-            <TooltipContent side='top'>Enhance with AI</TooltipContent>
+            <TooltipContent side='top'>
+              <LocalizedText text={"Enhance with AI"} />
+            </TooltipContent>
           </Tooltip>
         </div>
 

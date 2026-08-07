@@ -2,6 +2,7 @@
 
 import { BrandData } from "@/app/(auth)/onboarding/_components/types";
 import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -405,12 +406,12 @@ export function OrgSwitcher({
               <DropdownMenuSeparator className='bg-border' />
 
               <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                Organizations
+                <LocalizedText text={"Organizations"} />
               </DropdownMenuLabel>
 
               {organizations.length === 0 && (
                 <div className='text-muted-foreground px-2 py-3 text-xs'>
-                  No organizations yet.
+                  <LocalizedText text={"No organizations yet."} />
                 </div>
               )}
 
@@ -460,16 +461,16 @@ export function OrgSwitcher({
                       </DropdownMenuItem>
                       <DropdownMenuSeparator className='bg-border' />
                       <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                        Teams
+                        <LocalizedText text={"Teams"} />
                       </DropdownMenuLabel>
                       {loadingTeamsFor === org._id ? (
                         <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
                           <LoadingFileLoader size={16} />
-                          Loading teams…
+                          <LocalizedText text={"Loading teams…"} />
                         </div>
                       ) : (teamsByOrg[org._id] || []).length === 0 ? (
                         <div className='text-muted-foreground px-2 py-1.5 text-xs'>
-                          No teams yet
+                          <LocalizedText text={"No teams yet"} />
                         </div>
                       ) : (
                         (teamsByOrg[org._id] || []).map((team) => {
@@ -532,7 +533,7 @@ export function OrgSwitcher({
                             className='focus:bg-accent focus:text-accent-foreground'
                           >
                             <Plus className='mr-2 h-4 w-4' />
-                            Create team
+                            <LocalizedText text={"Create team"} />
                           </DropdownMenuItem>
                         </>
                       )}
@@ -550,7 +551,7 @@ export function OrgSwitcher({
                   className='focus:bg-accent focus:text-accent-foreground'
                 >
                   <Plus className='mr-2 h-4 w-4' />
-                  Create organization
+                  <LocalizedText text={"Create organization"} />
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem
@@ -562,9 +563,11 @@ export function OrgSwitcher({
                   className='focus:bg-accent focus:text-accent-foreground'
                 >
                   <Lock className='mr-2 h-4 w-4 opacity-70' />
-                  <span className='flex-1'>Create organization</span>
+                  <span className='flex-1'>
+                    <LocalizedText text={"Create organization"} />
+                  </span>
                   <span className='ml-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 px-1.5 py-0.5 text-[9px] font-semibold text-white'>
-                    PRO
+                    <LocalizedText text={"PRO"} />
                   </span>
                 </DropdownMenuItem>
               )}
@@ -579,7 +582,7 @@ export function OrgSwitcher({
                   >
                     <Link href={`/creator/${user.username}`}>
                       <UserIcon className='mr-2 h-4 w-4' />
-                      View profile
+                      <LocalizedText text={"View profile"} />
                     </Link>
                   </DropdownMenuItem>
                 )}
@@ -589,7 +592,7 @@ export function OrgSwitcher({
                 >
                   <Link href='/user/settings'>
                     <BadgeCheck className='mr-2 h-4 w-4' />
-                    Account
+                    <LocalizedText text={"Account"} />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -598,7 +601,7 @@ export function OrgSwitcher({
                 >
                   <Link href='/user/settings?tab=billing'>
                     <CreditCard className='mr-2 h-4 w-4' />
-                    Billing
+                    <LocalizedText text={"Billing"} />
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -612,12 +615,12 @@ export function OrgSwitcher({
                 {theme === "dark" ? (
                   <>
                     <Sun className='mr-2 h-4 w-4' />
-                    Switch to light mode
+                    <LocalizedText text={"Switch to light mode"} />
                   </>
                 ) : (
                   <>
                     <Moon className='mr-2 h-4 w-4' />
-                    Switch to dark mode
+                    <LocalizedText text={"Switch to dark mode"} />
                   </>
                 )}
               </DropdownMenuItem>
@@ -629,7 +632,7 @@ export function OrgSwitcher({
                 }}
               >
                 <LogOut className='mr-2 h-4 w-4' />
-                Log out
+                <LocalizedText text={"Log out"} />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -647,14 +650,20 @@ export function OrgSwitcher({
       >
         <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle>Create team</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Create team"} />
+            </DialogTitle>
             <DialogDescription>
-              Teams group members inside this organization.
+              <LocalizedText
+                text={"Teams group members inside this organization."}
+              />
             </DialogDescription>
           </DialogHeader>
           <div className='space-y-3 py-2'>
             <div className='space-y-1.5'>
-              <Label htmlFor='switcher-name'>Team name</Label>
+              <Label htmlFor='switcher-name'>
+                <LocalizedText text={"Team name"} />
+              </Label>
               <Input
                 id='switcher-name'
                 value={name}
@@ -664,7 +673,9 @@ export function OrgSwitcher({
               />
             </div>
             <div className='space-y-1.5'>
-              <Label htmlFor='switcher-desc'>Description (optional)</Label>
+              <Label htmlFor='switcher-desc'>
+                <LocalizedText text={"Description (optional)"} />
+              </Label>
               <Input
                 id='switcher-desc'
                 value={description}
@@ -682,14 +693,14 @@ export function OrgSwitcher({
               }}
               disabled={submitting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               onClick={handleSubmitCreate}
               disabled={!name.trim() || submitting}
             >
               {submitting ? <LoadingFileLoader size={16} /> : null}
-              Create
+              <LocalizedText text={"Create"} />
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -707,16 +718,22 @@ export function OrgSwitcher({
         <DialogContent className='sm:max-w-md'>
           <DialogHeader>
             <DialogTitle>
-              Invite to {inviteContext?.teamName || "team"}
+              <LocalizedText text={"Invite to"} />
+              {inviteContext?.teamName || "team"}
             </DialogTitle>
             <DialogDescription>
-              They'll receive an email invitation. If they don't have a genit
-              account yet, they can create one with this address.
+              <LocalizedText
+                text={
+                  "They'll receive an email invitation. If they don't have a genit account yet, they can create one with this address."
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <div className='space-y-3 py-2'>
             <div className='space-y-1.5'>
-              <Label htmlFor='invite-email'>Email address</Label>
+              <Label htmlFor='invite-email'>
+                <LocalizedText text={"Email address"} />
+              </Label>
               <Input
                 id='invite-email'
                 type='email'
@@ -727,7 +744,9 @@ export function OrgSwitcher({
               />
             </div>
             <div className='space-y-1.5'>
-              <Label htmlFor='invite-role'>Role</Label>
+              <Label htmlFor='invite-role'>
+                <LocalizedText text={"Role"} />
+              </Label>
               <Select
                 value={inviteRole}
                 onValueChange={(v) =>
@@ -739,12 +758,14 @@ export function OrgSwitcher({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='Lead'>
-                    Lead — can manage the team
+                    <LocalizedText text={"Lead — can manage the team"} />
                   </SelectItem>
                   <SelectItem value='Member'>
-                    Member — can collaborate
+                    <LocalizedText text={"Member — can collaborate"} />
                   </SelectItem>
-                  <SelectItem value='Viewer'>Viewer — read-only</SelectItem>
+                  <SelectItem value='Viewer'>
+                    <LocalizedText text={"Viewer — read-only"} />
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -758,7 +779,7 @@ export function OrgSwitcher({
               }}
               disabled={inviting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               onClick={handleSubmitInvite}
@@ -769,7 +790,7 @@ export function OrgSwitcher({
               ) : (
                 <Mail className='mr-2 h-4 w-4' />
               )}
-              Send invitation
+              <LocalizedText text={"Send invitation"} />
             </Button>
           </DialogFooter>
         </DialogContent>

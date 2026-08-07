@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -256,18 +257,23 @@ const LandingCommunityVideos = () => {
         {/* Header */}
         <div className='mb-12 space-y-4 text-center md:mb-16'>
           <h2 className='text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-            Creator community showcase
+            <LocalizedText text={"Creator community showcase"} />
           </h2>
           <p className='text-muted-foreground mx-auto max-w-2xl px-2 text-base md:text-base'>
-            Discover AI-generated content from our talented community of
-            creators.
+            <LocalizedText
+              text={
+                "Discover AI-generated content from our talented community of creators."
+              }
+            />
           </p>
 
           <Link
             href='/community'
             className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
           >
-            <span>View All</span>
+            <span>
+              <LocalizedText text={"View All"} />
+            </span>
             <ArrowRightIcon className='h-4 w-4' />
           </Link>
         </div>

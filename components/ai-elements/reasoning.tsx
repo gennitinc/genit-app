@@ -1,6 +1,7 @@
 "use client";
 
 import { Response } from "./response";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Collapsible,
   CollapsibleContent,
@@ -114,12 +115,25 @@ export type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger>;
 
 const getThinkingMessage = (isStreaming: boolean, duration?: number) => {
   if (isStreaming || duration === 0) {
-    return <p>Thinking...</p>;
+    return (
+      <p>
+        <LocalizedText text={"Thinking..."} />
+      </p>
+    );
   }
   if (duration === undefined) {
-    return <p>Thought for a few seconds</p>;
+    return (
+      <p>
+        <LocalizedText text={"Thought for a few seconds"} />
+      </p>
+    );
   }
-  return <p>Thought for {duration} seconds</p>;
+  return (
+    <p>
+      <LocalizedText text={"Thought for"} />
+      {duration} <LocalizedText text={"seconds"} />
+    </p>
+  );
 };
 
 export const ReasoningTrigger = memo(

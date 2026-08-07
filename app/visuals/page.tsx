@@ -5,10 +5,11 @@ import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
   INTEGRATIONS,
-  connectionsForIntegration,
   type Integration,
+  connectionsForIntegration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -333,7 +334,8 @@ export default function VisualsHomePage() {
       <div className='mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
-            Hello {current?.businessName || user?.username || "User"} 👋
+            <LocalizedText text={"Hello"} />
+            {current?.businessName || user?.username || "User"} 👋
           </h1>
           <div className='mt-4 flex items-center'>
             {connectedIntegrations.slice(0, 6).map((integration, index) => (
@@ -359,7 +361,7 @@ export default function VisualsHomePage() {
             </Link>
             {connectedIntegrations.length === 0 && (
               <span className='text-xs text-zinc-500 dark:text-white/45'>
-                No channels connected yet
+                <LocalizedText text={"No channels connected yet"} />
               </span>
             )}
           </div>
@@ -496,9 +498,13 @@ export default function VisualsHomePage() {
         <section className='rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
             <div>
-              <h2 className='text-base font-semibold'>Content activity</h2>
+              <h2 className='text-base font-semibold'>
+                <LocalizedText text={"Content activity"} />
+              </h2>
               <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
-                Posts drafted vs posts published in selected range
+                <LocalizedText
+                  text={"Posts drafted vs posts published in selected range"}
+                />
               </p>
             </div>
           </div>
@@ -577,11 +583,11 @@ export default function VisualsHomePage() {
           <div className='flex items-center justify-center gap-2 text-xs text-zinc-600 dark:text-white/65'>
             <span className='flex items-center gap-2'>
               <span className='h-2 w-2 rounded-sm bg-slate-400' />
-              Drafted
+              <LocalizedText text={"Drafted"} />
             </span>
             <span className='flex items-center gap-2'>
               <span className='h-2 w-2 rounded-sm bg-sky-400' />
-              Published
+              <LocalizedText text={"Published"} />
             </span>
           </div>
         </section>
@@ -590,16 +596,20 @@ export default function VisualsHomePage() {
       <section className='mt-5 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
-            <h2 className='text-base font-semibold'>Plugins</h2>
+            <h2 className='text-base font-semibold'>
+              <LocalizedText text={"Plugins"} />
+            </h2>
             <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
-              Add channels and tools for this organization.
+              <LocalizedText
+                text={"Add channels and tools for this organization."}
+              />
             </p>
           </div>
           <Link
             href='/plugin'
             className='inline-flex h-9 items-center justify-center rounded-xl border border-zinc-200 px-3 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'
           >
-            View all
+            <LocalizedText text={"View all"} />
           </Link>
         </div>
 

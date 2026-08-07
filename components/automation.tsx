@@ -26,6 +26,7 @@ import {
   WhatsAppBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -839,7 +840,9 @@ export default function AutomationWorkflow({
             <span className='h-2 w-2 rounded-full bg-green-400' />
           </div>
 
-          <span className='text-sm font-semibold'>Automation</span>
+          <span className='text-sm font-semibold'>
+            <LocalizedText text={"Automation"} />
+          </span>
         </div>
 
         {/* Toolbar items at the far right */}
@@ -878,12 +881,12 @@ export default function AutomationWorkflow({
             {isEditMode ? (
               <>
                 <Eye className='h-3.5 w-3.5' />
-                View
+                <LocalizedText text={"View"} />
               </>
             ) : (
               <>
                 <Edit2 className='h-3.5 w-3.5' />
-                Edit
+                <LocalizedText text={"Edit"} />
               </>
             )}
           </Button>
@@ -963,7 +966,7 @@ export default function AutomationWorkflow({
                   className='text-muted-foreground hover:text-foreground h-7 gap-1 rounded px-2 text-xs font-medium'
                 >
                   <Plus className='h-3.5 w-3.5' />
-                  Add
+                  <LocalizedText text={"Add"} />
                   <ChevronDown className='h-3 w-3' />
                 </Button>
 

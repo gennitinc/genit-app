@@ -1,8 +1,9 @@
 "use client";
 
-import { ImagePreviewDialog, MessageEditor } from "@/components/chat/messages";
 import { Response } from "@/components/ai-elements/response";
+import { ImagePreviewDialog, MessageEditor } from "@/components/chat/messages";
 import { MessageContainer, MessageContent } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Button } from "@/components/ui/button";
 import {
@@ -234,7 +235,7 @@ export function UserMessage({
                     </p>
                   </div>
                   <p className='text-muted-foreground mt-0.5 text-xs'>
-                    {fileSize} • Click to view
+                    {fileSize} <LocalizedText text={"• Click to view"} />
                   </p>
                 </div>
 

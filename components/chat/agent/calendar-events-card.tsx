@@ -1,6 +1,7 @@
 "use client";
 
 import { AgentCard } from "./agent-card";
+import { LocalizedText } from "@/components/localized-text";
 import { Calendar, ExternalLink, MapPin, Users } from "lucide-react";
 
 type GcalEvent = {
@@ -87,7 +88,7 @@ export function CalendarEventsCard({
     >
       {events.length === 0 ? (
         <div className='text-muted-foreground py-2 text-center text-[12.5px]'>
-          Nothing on the calendar.
+          <LocalizedText text={"Nothing on the calendar."} />
         </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>

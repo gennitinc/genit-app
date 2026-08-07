@@ -19,14 +19,15 @@ import {
   MessengerBrand,
   MicrosoftOutlookBrand,
   PinterestBrand,
-  SnapchatBrand,
   SlackBrand,
+  SnapchatBrand,
   TelegramBrand,
   TikTokBrand,
   WhatsAppBrand,
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { LocalizedText } from "@/components/localized-text";
 import { useIntegrations, usePipedreamApps } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
@@ -38,13 +39,13 @@ import {
   AlertTriangle,
   ArrowRight,
   AtSign,
+  Blocks,
   Calendar,
   CheckCircle2,
   Cog,
   Megaphone,
-  MoreHorizontal,
   MessageSquare,
-  Blocks,
+  MoreHorizontal,
   Search,
   TrendingUp,
 } from "lucide-react";
@@ -411,12 +412,11 @@ export function connectionsForIntegration(
   const connections = byPlatform.get(integration.platform) ?? [];
   if (integration.appSlug) {
     return connections.filter(
-        (connection) => connection.metadata?.appSlug === integration.appSlug
-      );
+      (connection) => connection.metadata?.appSlug === integration.appSlug
+    );
   }
   const managed = (byPlatform.get("pipedream") ?? []).filter(
-    (connection) =>
-      connection.metadata?.nativePlatform === integration.platform
+    (connection) => connection.metadata?.nativePlatform === integration.platform
   );
   return [...connections, ...managed];
 }
@@ -478,7 +478,7 @@ function IntegrationCard({
             disabled
             className='cursor-not-allowed rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500'
           >
-            Soon
+            <LocalizedText text={"Soon"} />
           </button>
         ) : status === "connected" || status === "partial" ? (
           <button
@@ -495,7 +495,7 @@ function IntegrationCard({
             onClick={onConnect}
             className='rounded-full border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
           >
-            Add
+            <LocalizedText text={"Add"} />
           </button>
         )}
       </div>
@@ -546,7 +546,8 @@ export function IntegrationsExplorer() {
         appSlug: app.name_slug,
         name: app.name,
         description:
-          app.description || `Connect ${app.name} and use its actions from Genit.`,
+          app.description ||
+          `Connect ${app.name} and use its actions from Genit.`,
         category: "More Plugins",
         icon: Blocks,
         remoteIcon: app.img_src,
@@ -612,7 +613,7 @@ export function IntegrationsExplorer() {
         <div className='mb-10'>
           <div className='mb-4 flex items-baseline justify-between'>
             <h3 className='text-xs font-semibold tracking-wider text-zinc-500 uppercase dark:text-zinc-400'>
-              Added
+              <LocalizedText text={"Added"} />
             </h3>
             <button
               type='button'
@@ -623,7 +624,7 @@ export function IntegrationsExplorer() {
               }}
               className='text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300'
             >
-              Manage
+              <LocalizedText text={"Manage"} />
             </button>
           </div>
           <div className='flex flex-wrap gap-3'>
@@ -726,7 +727,9 @@ export function IntegrationsExplorer() {
       {grouped.length === 0 ? (
         <div className='py-16 text-center'>
           <p className='text-sm text-zinc-500 dark:text-zinc-400'>
-            No plugins match &ldquo;{query}&rdquo;.
+            <LocalizedText text={"No plugins match &ldquo;"} />
+            {query}
+            <LocalizedText text={"&rdquo;."} />
           </p>
         </div>
       ) : (

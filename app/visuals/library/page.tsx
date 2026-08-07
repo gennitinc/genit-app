@@ -1,6 +1,7 @@
 "use client";
 
 import { MediaAsset } from "@/components/admin/MediaPicker";
+import { LocalizedText } from "@/components/localized-text";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -216,14 +217,16 @@ export default function BlogLibraryPage() {
                   onClick={() => download(selectedAsset)}
                   className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-indigo-500/10 px-3 text-xs font-medium text-indigo-600 transition hover:bg-indigo-500/20 dark:text-indigo-300'
                 >
-                  <Download className='h-3.5 w-3.5' /> Download
+                  <Download className='h-3.5 w-3.5' />{" "}
+                  <LocalizedText text={"Download"} />
                 </button>
                 <button
                   type='button'
                   onClick={() => setDeleteAsset(selectedAsset)}
                   className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-red-500/10 px-3 text-xs font-medium text-red-600 transition hover:bg-red-500/20 dark:text-red-400'
                 >
-                  <Trash2 className='h-3.5 w-3.5' /> Delete
+                  <Trash2 className='h-3.5 w-3.5' />{" "}
+                  <LocalizedText text={"Delete"} />
                 </button>
               </div>
             </div>
@@ -234,7 +237,7 @@ export default function BlogLibraryPage() {
             <div className='mt-6 space-y-3 rounded-xl bg-black/[0.02] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
               <div className='flex items-center justify-between text-xs'>
                 <span className='text-muted-foreground dark:text-white/60'>
-                  Size
+                  <LocalizedText text={"Size"} />
                 </span>
                 <span className='text-foreground font-medium dark:text-white/90'>
                   {formatFileSize(selectedAsset.size)}
@@ -244,7 +247,7 @@ export default function BlogLibraryPage() {
                 selectedAsset.mimeType.startsWith("video")) && (
                 <div className='flex items-center justify-between text-xs'>
                   <span className='text-muted-foreground dark:text-white/60'>
-                    Dimensions
+                    <LocalizedText text={"Dimensions"} />
                   </span>
                   <span className='text-foreground font-medium dark:text-white/90'>
                     {dimensions
@@ -256,7 +259,7 @@ export default function BlogLibraryPage() {
               {selectedAsset.mimeType.startsWith("video") && (
                 <div className='flex items-center justify-between text-xs'>
                   <span className='text-muted-foreground dark:text-white/60'>
-                    Duration
+                    <LocalizedText text={"Duration"} />
                   </span>
                   <span className='text-foreground font-medium dark:text-white/90'>
                     {dimensions?.duration &&
@@ -272,7 +275,7 @@ export default function BlogLibraryPage() {
               )}
               <div className='flex items-center justify-between text-xs'>
                 <span className='text-muted-foreground dark:text-white/60'>
-                  Date added
+                  <LocalizedText text={"Date added"} />
                 </span>
                 <span className='text-foreground font-medium dark:text-white/90'>
                   {new Intl.DateTimeFormat(undefined, {
@@ -282,7 +285,7 @@ export default function BlogLibraryPage() {
               </div>
               <div className='flex items-center justify-between text-xs'>
                 <span className='text-muted-foreground dark:text-white/60'>
-                  Library
+                  <LocalizedText text={"Library"} />
                 </span>
                 <span className='text-foreground font-medium capitalize dark:text-white/90'>
                   {scope}
@@ -299,7 +302,9 @@ export default function BlogLibraryPage() {
     <div className='mx-auto max-w-6xl space-y-6'>
       <div className='flex flex-wrap items-end justify-between gap-4 pb-2'>
         <div>
-          <h1 className='text-foreground text-xl font-bold'>Media Library</h1>
+          <h1 className='text-foreground text-xl font-bold'>
+            <LocalizedText text={"Media Library"} />
+          </h1>
           <p className='mt-1 text-xs text-zinc-400'>
             {scope === "organization"
               ? "Shared uploads and generated media for the active organization"
@@ -345,7 +350,9 @@ export default function BlogLibraryPage() {
             ) : (
               <UploadIcon className='h-4 w-4 font-bold' />
             )}{" "}
-            <span className='hidden lg:flex'>Upload</span>
+            <span className='hidden lg:flex'>
+              <LocalizedText text={"Upload"} />
+            </span>
           </button>
         </div>
       </div>
@@ -354,10 +361,10 @@ export default function BlogLibraryPage() {
           <div className='mb-2 flex items-center justify-between gap-3 text-xs'>
             <span className='font-medium'>
               {storage.plan} {storage.shared ? "organization" : "personal"}{" "}
-              storage
+              <LocalizedText text={"storage"} />
             </span>
             <span className='text-muted-foreground'>
-              {formatFileSize(storage.usedBytes)} of{" "}
+              {formatFileSize(storage.usedBytes)} <LocalizedText text={"of"} />{" "}
               {formatFileSize(storage.limitBytes)}
             </span>
           </div>
@@ -369,8 +376,11 @@ export default function BlogLibraryPage() {
           </div>
           {storage.shared && (
             <p className='text-muted-foreground mt-2 text-xs'>
-              Shared by all organization members and billed to the organization
-              owner.
+              <LocalizedText
+                text={
+                  "Shared by all organization members and billed to the organization owner."
+                }
+              />
             </p>
           )}
         </div>
@@ -382,7 +392,9 @@ export default function BlogLibraryPage() {
       ) : assets.length === 0 ? (
         <div className='flex h-64 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-800 text-zinc-500'>
           <Library className='mb-3 h-9 w-9' />
-          <p className='text-sm'>No media yet</p>
+          <p className='text-sm'>
+            <LocalizedText text={"No media yet"} />
+          </p>
         </div>
       ) : (
         <section
@@ -390,7 +402,7 @@ export default function BlogLibraryPage() {
           className='mt-6 px-1 md:px-2'
         >
           <h2 id='media-gallery-heading' className='sr-only'>
-            Media Gallery
+            <LocalizedText text={"Media Gallery"} />
           </h2>
           <div className='mx-auto max-w-7xl'>
             {view === "grid" ? (
@@ -417,7 +429,7 @@ export default function BlogLibraryPage() {
                           className='h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105'
                         />
                         <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm'>
-                          Video
+                          <LocalizedText text={"Video"} />
                         </span>
                       </div>
                     ) : (
@@ -564,14 +576,14 @@ export default function BlogLibraryPage() {
               </div>
               <div>
                 <DialogTitle className='text-foreground text-lg font-semibold tracking-tight dark:text-white'>
-                  Delete Media
+                  <LocalizedText text={"Delete Media"} />
                 </DialogTitle>
                 <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
-                  Are you sure you want to delete{" "}
+                  <LocalizedText text={"Are you sure you want to delete"} />{" "}
                   <span className='text-foreground font-medium dark:text-white'>
                     {deleteAsset?.name}
                   </span>
-                  ? This action cannot be undone.
+                  <LocalizedText text={"? This action cannot be undone."} />
                 </p>
               </div>
             </div>
@@ -583,7 +595,7 @@ export default function BlogLibraryPage() {
                 onClick={() => setDeleteAsset(null)}
                 className='text-foreground px-4 py-2 text-sm font-medium ring-1 ring-black/10 transition'
               >
-                Cancel
+                <LocalizedText text={"Cancel"} />
               </button>
               <button
                 type='button'

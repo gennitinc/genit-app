@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -113,7 +114,7 @@ function PricingCard({
           variant='secondary'
           className='absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-blue-600 text-white'
         >
-          Popular
+          <LocalizedText text={"Popular"} />
         </Badge>
       )}
       <div className='p-6'>
@@ -134,8 +135,9 @@ function PricingCard({
           </div>
           {isYearly && (
             <p className='mt-1 text-sm text-blue-500'>
-              Save ${(tier.monthlyPrice * 12 - tier.yearlyPrice).toFixed(0)}{" "}
-              yearly
+              <LocalizedText text={"Save $"} />
+              {(tier.monthlyPrice * 12 - tier.yearlyPrice).toFixed(0)}{" "}
+              <LocalizedText text={"yearly"} />
             </p>
           )}
         </div>
@@ -149,7 +151,10 @@ function PricingCard({
           )}
         >
           <Link href='/pricing'>
-            <span>Choose {tier.name}</span>
+            <span>
+              <LocalizedText text={"Choose"} />
+              {tier.name}
+            </span>
             <ArrowRight className='ml-1 h-4 w-4' />
           </Link>
         </Button>
@@ -178,11 +183,14 @@ function PricingContent({
       <div className='space-y-8 px-2 py-6 md:p-6'>
         <div className='text-center'>
           <h2 className='text-foreground text-2xl font-bold sm:text-3xl'>
-            Choose the right plan for you
+            <LocalizedText text={"Choose the right plan for you"} />
           </h2>
           <p className='text-muted-foreground mx-auto mt-4 max-w-2xl text-center text-sm'>
-            Our plans are designed to fit your needs, whether you're just
-            starting out or scaling up.
+            <LocalizedText
+              text={
+                "Our plans are designed to fit your needs, whether you're just starting out or scaling up."
+              }
+            />
           </p>
         </div>
 
@@ -198,7 +206,7 @@ function PricingContent({
               )}
               onClick={() => setIsYearly(false)}
             >
-              Monthly
+              <LocalizedText text={"Monthly"} />
             </Button>
             <Button
               variant='ghost'
@@ -210,7 +218,7 @@ function PricingContent({
               )}
               onClick={() => setIsYearly(true)}
             >
-              Annually
+              <LocalizedText text={"Annually"} />
             </Button>
           </div>
         </div>
@@ -226,7 +234,10 @@ function PricingContent({
             href='/pricing'
             className='flex flex-row items-center gap-2 text-base font-semibold text-gray-400 dark:text-gray-300'
           >
-            <span> Compare plans </span>
+            <span>
+              {" "}
+              <LocalizedText text={"Compare plans"} />
+            </span>
 
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -322,7 +333,9 @@ export function PricingDialog({
           {/* <DrawerTitle className="text-2xl font-bold">Choose your plan</DrawerTitle> */}
           <DrawerClose className='absolute top-4 right-4'>
             <X className='h-4 w-4' />
-            <span className='sr-only'>Close</span>
+            <span className='sr-only'>
+              <LocalizedText text={"Close"} />
+            </span>
           </DrawerClose>
         </DrawerHeader>
         <div className='h-full overflow-y-auto px-4 pb-8'>

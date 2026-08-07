@@ -3,6 +3,7 @@ import { BlogSocial } from "@/components/blog/blog-social";
 import { ShareButtons } from "@/components/blog/share-buttons";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { apiResponse, clientUrl } from "@/utils/apiResponse";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -273,13 +274,15 @@ export default async function BlogPostPage(props: {
         <LandingNavbar />
         <div className='py-40 text-center'>
           <h1 className='mb-4 text-3xl font-bold text-black dark:text-white'>
-            Post Not Found
+            <LocalizedText text={"Post Not Found"} />
           </h1>
           <p className='mb-8 text-zinc-600 dark:text-zinc-400'>
-            The blog article you are looking for does not exist.
+            <LocalizedText
+              text={"The blog article you are looking for does not exist."}
+            />
           </p>
           <Link href='/blog' className='text-cyan-500 hover:underline'>
-            Back to all posts
+            <LocalizedText text={"Back to all posts"} />
           </Link>
         </div>
         <LandingFooter />
@@ -340,16 +343,17 @@ export default async function BlogPostPage(props: {
           className='group mb-10 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 transition-colors hover:text-black dark:text-zinc-400 dark:hover:text-white'
         >
           <span className='transform transition-transform group-hover:-translate-x-1'>
-            &larr;
+            <LocalizedText text={"&larr;"} />
           </span>{" "}
-          All posts
+          <LocalizedText text={"All posts"} />
         </Link>
 
         <div className='grid grid-cols-1 gap-12 lg:grid-cols-12'>
           {/* Main Article Content (Left/Center) */}
           <div className='flex flex-col lg:col-span-8'>
             <span className='mb-4 text-xs font-semibold tracking-wider text-zinc-600 uppercase dark:text-zinc-400'>
-              Published {formatDate(post.publishedAt)} in{" "}
+              <LocalizedText text={"Published"} />
+              {formatDate(post.publishedAt)} <LocalizedText text={"in"} />{" "}
               <span className='text-cyan-500'>{post.category}</span>
             </span>
 
@@ -427,7 +431,7 @@ export default async function BlogPostPage(props: {
             {/* Reading Time */}
             <div>
               <span className='mb-1 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
-                Reading time
+                <LocalizedText text={"Reading time"} />
               </span>
               <span className='text-sm text-zinc-600 dark:text-zinc-400'>
                 {post.readTime}
@@ -438,7 +442,7 @@ export default async function BlogPostPage(props: {
             {headings.length > 0 && (
               <div>
                 <span className='mb-4 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
-                  Outline
+                  <LocalizedText text={"Outline"} />
                 </span>
                 <ul className='space-y-3'>
                   {headings.map((h, idx) => (
@@ -462,7 +466,7 @@ export default async function BlogPostPage(props: {
             {/* Social Share Buttons */}
             <div>
               <span className='mb-4 block text-sm font-semibold tracking-wide text-black uppercase dark:text-white'>
-                Share this
+                <LocalizedText text={"Share this"} />
               </span>
               <ShareButtons title={post.title} slug={slug} />
             </div>
@@ -473,7 +477,7 @@ export default async function BlogPostPage(props: {
         {relatedPosts.length > 0 && (
           <div className='mt-16 w-full border-t border-zinc-200 pt-12 dark:border-zinc-800/60'>
             <h3 className='mb-8 text-2xl font-bold text-black dark:text-white'>
-              Related articles
+              <LocalizedText text={"Related articles"} />
             </h3>
             <div className='scrollbar-hide -mx-4 flex gap-6 overflow-x-auto scroll-smooth px-4 pb-6 md:-mx-0 md:px-0'>
               {relatedPosts.slice(0, 3).map((item) => (

@@ -3,6 +3,7 @@
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { PremiumInput } from "@/components/ui/premium-input";
@@ -167,16 +168,20 @@ const LogoAnimationPage = () => {
       <main className='relative mt-12 flex-grow md:mb-20'>
         <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
           <h1 className='text-2xl font-bold tracking-tight lg:text-5xl'>
-            Logo{" "}
+            <LocalizedText text={"Logo"} />{" "}
             <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-              Animator
+              <LocalizedText text={"Animator"} />
             </span>
           </h1>
           <p
             className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
             style={{ animationDelay: "0.2s" }}
           >
-            Breathe life into your brand with professional lifecycle animations.
+            <LocalizedText
+              text={
+                "Breathe life into your brand with professional lifecycle animations."
+              }
+            />
           </p>
         </div>
 
@@ -217,9 +222,11 @@ const LogoAnimationPage = () => {
                           <div className='mb-2 rounded-full bg-indigo-600 p-2 transition-transform group-hover:scale-110 hover:bg-indigo-700/10'>
                             <Upload className='text-primary size-5' />
                           </div>
-                          <p className='text-sm font-medium'>Click to upload</p>
+                          <p className='text-sm font-medium'>
+                            <LocalizedText text={"Click to upload"} />
+                          </p>
                           <p className='text-muted-foreground mt-1 text-[10px]'>
-                            SVG, PNG, JPG (Max 5MB)
+                            <LocalizedText text={"SVG, PNG, JPG (Max 5MB)"} />
                           </p>
                         </div>
                       )}
@@ -257,7 +264,9 @@ const LogoAnimationPage = () => {
                         <SelectItem value='Video'>
                           <div className='flex items-center gap-2'>
                             <Play className='size-3.5' />
-                            <span>Video (MP4)</span>
+                            <span>
+                              <LocalizedText text={"Video (MP4)"} />
+                            </span>
                           </div>
                         </SelectItem>
                         {/* <SelectItem value="GIF">
@@ -285,12 +294,12 @@ const LogoAnimationPage = () => {
                   {isGenerating ? (
                     <>
                       <RefreshCw className='size-5 animate-spin' />
-                      Animating...
+                      <LocalizedText text={"Animating..."} />
                     </>
                   ) : (
                     <>
                       <Sparkles className='size-5' />
-                      Generate Animation
+                      <LocalizedText text={"Generate Animation"} />
                     </>
                   )}
                 </Button>
@@ -301,10 +310,13 @@ const LogoAnimationPage = () => {
             <div className='relative flex min-h-[50vh] flex-col items-stretch overflow-hidden rounded-lg border border-black/5 bg-black dark:border-white/5'>
               <div className='z-20 flex h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 backdrop-blur'>
                 <div className='flex items-center gap-3'>
-                  <span className='text-base font-bold text-white'>Result</span>
+                  <span className='text-base font-bold text-white'>
+                    <LocalizedText text={"Result"} />
+                  </span>
                   {generatedVideoUrl && (
                     <span className='flex items-center gap-1 rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-medium text-green-400'>
-                      <CheckCircle2 className='size-2.5' /> Ready
+                      <CheckCircle2 className='size-2.5' />{" "}
+                      <LocalizedText text={"Ready"} />
                     </span>
                   )}
                 </div>
@@ -313,7 +325,7 @@ const LogoAnimationPage = () => {
                   className='inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-xs font-medium text-neutral-300 transition-colors hover:bg-white/[0.08] hover:text-white'
                 >
                   <HistoryIcon className='size-3.5' />
-                  History
+                  <LocalizedText text={"History"} />
                 </button>
               </div>
 
@@ -329,10 +341,12 @@ const LogoAnimationPage = () => {
                     </div>
                     <div className='space-y-1'>
                       <p className='text-sm font-bold tracking-widest text-white/50 uppercase'>
-                        Breathe Life Into Your Logo
+                        <LocalizedText text={"Breathe Life Into Your Logo"} />
                       </p>
                       <p className='text-xs text-white/30 italic'>
-                        Upload your logo and let AI do the rest
+                        <LocalizedText
+                          text={"Upload your logo and let AI do the rest"}
+                        />
                       </p>
                     </div>
                   </div>
@@ -346,10 +360,12 @@ const LogoAnimationPage = () => {
                     </div>
                     <div className='text-center'>
                       <p className='text-sm font-bold text-white'>
-                        Animating Lifecycle
+                        <LocalizedText text={"Animating Lifecycle"} />
                       </p>
                       <p className='mt-1 text-xs text-white/40 italic'>
-                        This usually takes about 30-40 seconds...
+                        <LocalizedText
+                          text={"This usually takes about 30-40 seconds..."}
+                        />
                       </p>
                     </div>
                   </div>
@@ -388,7 +404,7 @@ const LogoAnimationPage = () => {
                       />
                     </div>
                     <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
-                      Source Preview
+                      <LocalizedText text={"Source Preview"} />
                     </p>
                   </div>
                 )}
@@ -403,7 +419,8 @@ const LogoAnimationPage = () => {
         <SheetContent className='w-full overflow-y-auto sm:max-w-md'>
           <SheetHeader className='mb-6'>
             <SheetTitle className='flex items-center gap-2'>
-              <HistoryIcon className='size-5' /> Animation History
+              <HistoryIcon className='size-5' />{" "}
+              <LocalizedText text={"Animation History"} />
             </SheetTitle>
           </SheetHeader>
 
@@ -414,7 +431,7 @@ const LogoAnimationPage = () => {
               </div>
             ) : history.length === 0 ? (
               <div className='text-muted-foreground p-12 text-center text-sm'>
-                No past animations found.
+                <LocalizedText text={"No past animations found."} />
               </div>
             ) : (
               history.map((job) => (

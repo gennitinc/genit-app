@@ -1,5 +1,7 @@
 "use client";
+
 import UserPopOver from "../user/userPopOver";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,9 +10,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import cookie from "js-cookie";
 import appLogo from "@/resources/images/gennit.svg";
 import { LoadingFileLoader } from "@/utils/Loading";
+import cookie from "js-cookie";
 import {
   Book,
   Check,
@@ -143,7 +145,7 @@ export function PresentationNavbar({
           {/* Brand name and project - Responsive */}
           <div className='flex min-w-0 items-center gap-1 sm:gap-2'>
             <span className='from-muted-foreground via-muted-foreground/90 to-muted-foreground relative flex-shrink-0 bg-gradient-to-r bg-clip-text text-base font-bold text-transparent sm:text-lg'>
-              genit
+              <LocalizedText text={"genit"} />
               <div className='absolute inset-x-0 -bottom-0.5 h-0.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'></div>
             </span>
             {/* Separator - Hidden on very small screens */}
@@ -181,7 +183,7 @@ export function PresentationNavbar({
                   <LoadingFileLoader size={16} />
 
                   <span className='hidden font-medium sm:inline'>
-                    Saving...
+                    <LocalizedText text={"Saving..."} />
                   </span>
                 </div>
               ) : (
@@ -190,7 +192,9 @@ export function PresentationNavbar({
                 <div className='flex items-center gap-1'>
                   <Check className='h-3.5 w-3.5 text-green-600 dark:text-green-500' />
 
-                  <span className='hidden font-medium sm:inline'>Saved</span>
+                  <span className='hidden font-medium sm:inline'>
+                    <LocalizedText text={"Saved"} />
+                  </span>
                 </div>
               )}
             </div>
@@ -245,7 +249,7 @@ export function PresentationNavbar({
                       className='hover:bg-muted flex w-full items-center gap-2 rounded-t-lg px-3 py-2 text-left text-sm'
                     >
                       <FileDown className='h-4 w-4' />
-                      PowerPoint
+                      <LocalizedText text={"PowerPoint"} />
                     </button>
                   )}
                   {onExportPDF && (
@@ -255,7 +259,7 @@ export function PresentationNavbar({
                       className='hover:bg-muted flex w-full items-center gap-2 rounded-b-lg px-3 py-2 text-left text-sm'
                     >
                       <FileDown className='h-4 w-4' />
-                      PDF
+                      <LocalizedText text={"PDF"} />
                     </button>
                   )}
                 </div>
@@ -276,7 +280,7 @@ export function PresentationNavbar({
               <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                 <div className='flex flex-row items-center gap-2'>
                   <Play className='h-3 w-3' />
-                  Present
+                  <LocalizedText text={"Present"} />
                 </div>
               </span>
             </button>
@@ -351,7 +355,7 @@ export function PresentationNavbar({
 
             <div className='relative flex items-center justify-start text-sm'>
               <Share2 className='mr-1.5 h-4 w-4' />
-              Share
+              <LocalizedText text={"Share"} />
             </div>
 
             {/* Present Button - Mobile (Default variant for prominence) */}
@@ -361,7 +365,7 @@ export function PresentationNavbar({
               <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                 <div className='flex flex-row items-center gap-2'>
                   <Play className='h-3 w-3' />
-                  Present
+                  <LocalizedText text={"Present"} />
                 </div>
               </span>
             </button>

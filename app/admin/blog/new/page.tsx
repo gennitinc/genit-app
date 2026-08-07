@@ -2,6 +2,7 @@
 
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -253,10 +254,15 @@ export default function NewBlogPostPage() {
             <ArrowLeft className='h-5 w-5' />
           </Link>
           <div>
-            <h1 className='text-xl font-bold text-white'>New Blog Article</h1>
+            <h1 className='text-xl font-bold text-white'>
+              <LocalizedText text={"New Blog Article"} />
+            </h1>
             <p className='mt-0.5 text-xs text-zinc-400'>
-              Draft and publish a new Medium-style article with dynamic
-              formatting
+              <LocalizedText
+                text={
+                  "Draft and publish a new Medium-style article with dynamic formatting"
+                }
+              />
             </p>
           </div>
         </div>
@@ -267,14 +273,16 @@ export default function NewBlogPostPage() {
             onClick={() => setIsAiModalOpen(true)}
             className='inline-flex cursor-pointer items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-600/10 transition duration-200 hover:from-purple-500 hover:to-indigo-500 hover:shadow-purple-600/20'
           >
-            <Sparkles className='h-4 w-4' /> Write with AI
+            <Sparkles className='h-4 w-4' />{" "}
+            <LocalizedText text={"Write with AI"} />
           </button>
           <button
             type='button'
             onClick={handleSubmit}
             className='hover:shadow-primary/20 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-xs font-bold text-white transition duration-200 hover:bg-indigo-700 hover:shadow-lg'
           >
-            Publish Article <Save className='h-3.5 w-3.5' />
+            <LocalizedText text={"Publish Article"} />
+            <Save className='h-3.5 w-3.5' />
           </button>
         </div>
       </div>
@@ -285,7 +293,7 @@ export default function NewBlogPostPage() {
           {/* Title input */}
           <div className='space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Article Title *
+              <LocalizedText text={"Article Title *"} />
             </label>
             <input
               type='text'
@@ -320,7 +328,7 @@ export default function NewBlogPostPage() {
                   <span
                     className={withAiImage ? "text-zinc-300" : "text-zinc-500"}
                   >
-                    Generate cover image
+                    <LocalizedText text={"Generate cover image"} />
                   </span>
                   <span
                     className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
@@ -345,14 +353,15 @@ export default function NewBlogPostPage() {
                 {isGeneratingBody ? (
                   <>
                     <LoadingFileLoader size={16} />
-                    Generating...
+                    <LocalizedText text={"Generating..."} />
                   </>
                 ) : (
                   <>
                     <Sparkles className='h-3.5 w-3.5' />
-                    Generate Body
+                    <LocalizedText text={"Generate Body"} />
                     <span className='ml-0.5 text-[10px] font-semibold opacity-75'>
-                      ({withAiImage ? "15" : "5"} credits)
+                      ({withAiImage ? "15" : "5"}{" "}
+                      <LocalizedText text={"credits)"} />
                     </span>
                   </>
                 )}
@@ -363,7 +372,7 @@ export default function NewBlogPostPage() {
           {/* Custom Rich Text Editor */}
           <div className='flex flex-col space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Content Body *
+              <LocalizedText text={"Content Body *"} />
             </label>
             <NotionEditor value={content} onChange={setContent} />
           </div>
@@ -378,10 +387,12 @@ export default function NewBlogPostPage() {
             <div className='flex items-center justify-between pb-3'>
               <div>
                 <h3 className='text-lg font-bold text-white'>
-                  Finalize Blog Post
+                  <LocalizedText text={"Finalize Blog Post"} />
                 </h3>
                 <p className='mt-0.5 text-xs font-medium text-zinc-400'>
-                  Configure publication metadata before publishing
+                  <LocalizedText
+                    text={"Configure publication metadata before publishing"}
+                  />
                 </p>
               </div>
               <button
@@ -398,7 +409,7 @@ export default function NewBlogPostPage() {
               {/* Cover Photo */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Cover Photo *
+                  <LocalizedText text={"Cover Photo *"} />
                 </label>
 
                 <MediaPicker
@@ -411,7 +422,7 @@ export default function NewBlogPostPage() {
               {/* Excerpt */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Excerpt *
+                  <LocalizedText text={"Excerpt *"} />
                 </label>
                 <textarea
                   required
@@ -427,7 +438,7 @@ export default function NewBlogPostPage() {
                 {/* Category Option */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Category *
+                    <LocalizedText text={"Category *"} />
                   </label>
                   <select
                     value={category}
@@ -445,7 +456,7 @@ export default function NewBlogPostPage() {
                 {/* Read Time */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Read Time (Auto-calculated)
+                    <LocalizedText text={"Read Time (Auto-calculated)"} />
                   </label>
                   <input
                     type='text'
@@ -462,7 +473,7 @@ export default function NewBlogPostPage() {
                 {/* Slug Override */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Slug Override (Optional)
+                    <LocalizedText text={"Slug Override (Optional)"} />
                   </label>
                   <input
                     type='text'
@@ -479,7 +490,7 @@ export default function NewBlogPostPage() {
                 {/* Publisher Type */}
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Published By *
+                    <LocalizedText text={"Published By *"} />
                   </label>
                   <select
                     value={publisherType}
@@ -488,8 +499,12 @@ export default function NewBlogPostPage() {
                     }
                     className='w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-white transition focus:border-cyan-500 focus:outline-none'
                   >
-                    <option value='Platform'>Platform (Genit Official)</option>
-                    <option value='Author'>Author (Your Admin Profile)</option>
+                    <option value='Platform'>
+                      <LocalizedText text={"Platform (Genit Official)"} />
+                    </option>
+                    <option value='Author'>
+                      <LocalizedText text={"Author (Your Admin Profile)"} />
+                    </option>
                   </select>
                 </div>
               </div>
@@ -497,7 +512,7 @@ export default function NewBlogPostPage() {
               {/* Tags */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Tags (Comma separated)
+                  <LocalizedText text={"Tags (Comma separated)"} />
                 </label>
                 <input
                   type='text'
@@ -517,7 +532,7 @@ export default function NewBlogPostPage() {
                     onChange={(e) => setIsActive(e.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Publish status (Active)
+                  <LocalizedText text={"Publish status (Active)"} />
                 </label>
 
                 <label className='flex cursor-pointer items-center gap-2 text-xs font-semibold text-zinc-300 select-none'>
@@ -527,7 +542,7 @@ export default function NewBlogPostPage() {
                     onChange={(e) => setIsFeatured(e.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Featured Article
+                  <LocalizedText text={"Featured Article"} />
                 </label>
               </div>
             </div>
@@ -539,7 +554,7 @@ export default function NewBlogPostPage() {
                 onClick={() => setIsModalOpen(false)}
                 className='inline-flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 py-2.5 text-xs font-semibold text-zinc-400 transition hover:border-zinc-700 hover:text-white'
               >
-                Back to Editor
+                <LocalizedText text={"Back to Editor"} />
               </button>
               <button
                 type='button'
@@ -550,11 +565,12 @@ export default function NewBlogPostPage() {
                 {isSubmitting ? (
                   <>
                     <LoadingFileLoader size={16} />
-                    Publishing...
+                    <LocalizedText text={"Publishing..."} />
                   </>
                 ) : (
                   <>
-                    <Save className='h-3.5 w-3.5' /> Publish Blog Post
+                    <Save className='h-3.5 w-3.5' />{" "}
+                    <LocalizedText text={"Publish Blog Post"} />
                   </>
                 )}
               </button>
@@ -573,10 +589,14 @@ export default function NewBlogPostPage() {
                 <Sparkles className='h-5 w-5 text-purple-400' />
                 <div>
                   <h3 className='text-lg font-bold text-white'>
-                    AI Blog Article Writer
+                    <LocalizedText text={"AI Blog Article Writer"} />
                   </h3>
                   <p className='mt-0.5 text-xs font-medium text-zinc-400'>
-                    Generate a complete SEO-optimized article instantly
+                    <LocalizedText
+                      text={
+                        "Generate a complete SEO-optimized article instantly"
+                      }
+                    />
                   </p>
                 </div>
               </div>
@@ -592,16 +612,17 @@ export default function NewBlogPostPage() {
             {/* Modal Content */}
             <div className='space-y-4'>
               <p className='text-xs leading-relaxed text-zinc-300'>
-                Genit AI will research entrepreneurial pain points, insert
-                relevant code scripts, align with Genit's business
-                features/integrations, and generate a custom futuristic DALL-E
-                cover photo.
+                <LocalizedText
+                  text={
+                    "Genit AI will research entrepreneurial pain points, insert relevant code scripts, align with Genit's business features/integrations, and generate a custom futuristic DALL-E cover photo."
+                  }
+                />
               </p>
 
               {/* Curated Topics List */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Select Article Topic *
+                  <LocalizedText text={"Select Article Topic *"} />
                 </label>
                 <div className='custom-scrollbar grid max-h-[200px] grid-cols-1 gap-2 overflow-y-auto pr-1'>
                   {AI_TOPICS.map((topic) => {
@@ -634,7 +655,7 @@ export default function NewBlogPostPage() {
               {/* Custom instructions input */}
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Custom Instructions (Optional)
+                  <LocalizedText text={"Custom Instructions (Optional)"} />
                 </label>
                 <textarea
                   value={customInstructions}
@@ -648,15 +669,20 @@ export default function NewBlogPostPage() {
               {/* Balance Check */}
               <div className='flex items-center justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-3 text-xs'>
                 <span className='font-medium text-zinc-400'>
-                  Generation Cost
+                  <LocalizedText text={"Generation Cost"} />
                 </span>
-                <span className='font-bold text-white'>15 Credits</span>
+                <span className='font-bold text-white'>
+                  <LocalizedText text={"15 Credits"} />
+                </span>
                 <span className='text-zinc-500'>|</span>
-                <span className='text-zinc-400'>Your Balance</span>
+                <span className='text-zinc-400'>
+                  <LocalizedText text={"Your Balance"} />
+                </span>
                 <span
                   className={`font-bold ${user?.creditsRemaining && user.creditsRemaining >= 15 ? "text-emerald-400" : "text-rose-400"}`}
                 >
-                  {user?.creditsRemaining ?? 0} Credits
+                  {user?.creditsRemaining ?? 0}{" "}
+                  <LocalizedText text={"Credits"} />
                 </span>
               </div>
             </div>
@@ -669,7 +695,7 @@ export default function NewBlogPostPage() {
                 onClick={() => setIsAiModalOpen(false)}
                 className='inline-flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 py-2.5 text-xs font-semibold text-zinc-400 transition hover:border-zinc-700 hover:text-white disabled:opacity-50'
               >
-                Cancel
+                <LocalizedText text={"Cancel"} />
               </button>
               <button
                 type='button'
@@ -680,11 +706,12 @@ export default function NewBlogPostPage() {
                 {isGeneratingAi ? (
                   <>
                     <LoadingFileLoader size={16} />
-                    Writing Article...
+                    <LocalizedText text={"Writing Article..."} />
                   </>
                 ) : (
                   <>
-                    <Sparkles className='h-3.5 w-3.5' /> Generate Post
+                    <Sparkles className='h-3.5 w-3.5' />{" "}
+                    <LocalizedText text={"Generate Post"} />
                   </>
                 )}
               </button>

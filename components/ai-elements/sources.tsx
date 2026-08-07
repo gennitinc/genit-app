@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Collapsible,
   CollapsibleContent,
@@ -34,7 +35,10 @@ export const SourcesTrigger = ({
   >
     {children ?? (
       <>
-        <p className='font-medium'>Used {count} sources</p>
+        <p className='font-medium'>
+          <LocalizedText text={"Used"} />
+          {count} <LocalizedText text={"sources"} />
+        </p>
         <ChevronDownIcon className='h-4 w-4' />
       </>
     )}

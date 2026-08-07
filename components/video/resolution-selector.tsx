@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -238,7 +239,7 @@ export function ResolutionSelector({
       {/* Resolution Selection */}
       <div className='space-y-3'>
         <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-          Resolution
+          <LocalizedText text={"Resolution"} />
         </h4>
         <div className='space-y-2'>
           {RESOLUTIONS.map((res) => (
@@ -255,7 +256,7 @@ export function ResolutionSelector({
       {/* Aspect Ratio Selection */}
       <div className='space-y-3'>
         <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-          Aspect Ratio
+          <LocalizedText text={"Aspect Ratio"} />
         </h4>
         <div className='grid grid-cols-2 gap-2'>
           {ASPECT_RATIOS.map((ratio) => (
@@ -282,7 +283,7 @@ export function ResolutionSelector({
   return (
     <div className='space-y-3'>
       <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-        Video Settings
+        <LocalizedText text={"Video Settings"} />
       </h3>
 
       {/* Quick Selection Cards */}
@@ -354,7 +355,7 @@ export function ResolutionSelector({
             <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
           </div>
           <span className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
-            More Options
+            <LocalizedText text={"More Options"} />
           </span>
         </button>
       </div>
@@ -364,9 +365,13 @@ export function ResolutionSelector({
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent className='max-w-lg'>
             <DialogHeader>
-              <DialogTitle>Video Settings</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Video Settings"} />
+              </DialogTitle>
               <DialogDescription>
-                Configure resolution and aspect ratio for your video
+                <LocalizedText
+                  text={"Configure resolution and aspect ratio for your video"}
+                />
               </DialogDescription>
             </DialogHeader>
             <FullSettingsPanel />
@@ -376,9 +381,13 @@ export function ResolutionSelector({
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
           <DrawerContent className='max-h-[85vh]'>
             <DrawerHeader>
-              <DrawerTitle>Video Settings</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Video Settings"} />
+              </DrawerTitle>
               <DrawerDescription>
-                Configure resolution and aspect ratio for your video
+                <LocalizedText
+                  text={"Configure resolution and aspect ratio for your video"}
+                />
               </DrawerDescription>
             </DrawerHeader>
             <div className='overflow-y-auto px-4 pb-6'>

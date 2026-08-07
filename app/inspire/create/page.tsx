@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -32,7 +33,7 @@ export default function CreateRedirectPage() {
       <div className='flex flex-col items-center gap-4'>
         <LoadingFileLoader size={16} />
         <p className='text-muted-foreground text-sm font-medium'>
-          Redirecting to newer app experience...
+          <LocalizedText text={"Redirecting to newer app experience..."} />
         </p>
       </div>
     </div>

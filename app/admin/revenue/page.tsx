@@ -2,6 +2,7 @@
 
 import { AnalyticsCharts } from "@/components/admin/AnalyticsCharts";
 import { StatsCards } from "@/components/admin/StatsCards";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { apiResponse } from "@/utils/apiResponse";
@@ -71,18 +72,21 @@ export default function RevenuePage() {
         <div className='space-y-1'>
           <div className='text-primary flex items-center gap-2 text-xs font-bold tracking-tight uppercase'>
             <DollarSign className='h-3.5 w-3.5' />
-            Financial Analysis
+            <LocalizedText text={"Financial Analysis"} />
           </div>
           <h1 className='text-4xl font-extrabold tracking-tight'>
-            Revenue Dashboard
+            <LocalizedText text={"Revenue Dashboard"} />
           </h1>
           <p className='text-muted-foreground'>
-            Monitor platform earnings and subscription conversions.
+            <LocalizedText
+              text={"Monitor platform earnings and subscription conversions."}
+            />
           </p>
         </div>
         <div className='flex gap-3'>
           <Button className='shadow-primary/20 h-auto gap-2 rounded-lg bg-indigo-600 px-6 py-6 shadow-lg hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'>
-            <TrendingUp className='h-5 w-5' /> Detailed Report
+            <TrendingUp className='h-5 w-5' />{" "}
+            <LocalizedText text={"Detailed Report"} />
           </Button>
         </div>
       </div>
@@ -153,15 +157,17 @@ export default function RevenuePage() {
             <div className='mb-8 flex items-center justify-between'>
               <div>
                 <h3 className='text-xl font-bold tracking-tight'>
-                  Revenue Trends
+                  <LocalizedText text={"Revenue Trends"} />
                 </h3>
                 <p className='text-muted-foreground text-sm'>
-                  Historical earnings across all subscription tiers.
+                  <LocalizedText
+                    text={"Historical earnings across all subscription tiers."}
+                  />
                 </p>
               </div>
               <div className='flex gap-2'>
                 <Badge variant='outline' className='bg-background rounded-lg'>
-                  Last 12 Months
+                  <LocalizedText text={"Last 12 Months"} />
                 </Badge>
               </div>
             </div>
@@ -180,7 +186,7 @@ export default function RevenuePage() {
         <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
           <div className='bg-card border-border/50 rounded-[2rem] border p-8'>
             <h3 className='mb-6 text-xl font-bold tracking-tight'>
-              Plan Concentration
+              <LocalizedText text={"Plan Concentration"} />
             </h3>
             <div className='space-y-6'>
               {Object.entries(financialStats.plans).map(
@@ -209,14 +215,17 @@ export default function RevenuePage() {
           <div className='from-primary/10 to-background border-primary/20 group relative flex flex-col justify-center overflow-hidden rounded-[2rem] border bg-gradient-to-br p-8 text-center'>
             <div className='absolute inset-0 bg-indigo-600 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-indigo-700/5' />
             <h3 className='mb-4 text-2xl font-bold tracking-tight'>
-              Financial Health: Excellent
+              <LocalizedText text={"Financial Health: Excellent"} />
             </h3>
             <p className='text-muted-foreground mx-auto mb-8 max-w-sm'>
-              The platform's revenue retention is currently at 94.2%. Conversion
-              rates for the 'Pro' tier have increased by 8% this week.
+              <LocalizedText
+                text={
+                  "The platform's revenue retention is currently at 94.2%. Conversion rates for the 'Pro' tier have increased by 8% this week."
+                }
+              />
             </p>
             <Button className='mx-auto w-fit rounded-xl px-10'>
-              Optimize Pricing
+              <LocalizedText text={"Optimize Pricing"} />
             </Button>
           </div>
         </div>

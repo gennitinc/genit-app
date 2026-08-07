@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -312,14 +313,16 @@ export default function AdminVoicesPage() {
     <div className='container mx-auto px-4 py-8'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className='mb-2 text-3xl font-bold'>Voice Management</h1>
+          <h1 className='mb-2 text-3xl font-bold'>
+            <LocalizedText text={"Voice Management"} />
+          </h1>
           <p className='text-muted-foreground'>
-            Manage AI voices for video generation
+            <LocalizedText text={"Manage AI voices for video generation"} />
           </p>
         </div>
         <Button onClick={handleCreateClick}>
           <Plus className='mr-2 h-4 w-4' />
-          Create Voice
+          <LocalizedText text={"Create Voice"} />
         </Button>
       </div>
 
@@ -341,9 +344,15 @@ export default function AdminVoicesPage() {
             <SelectValue placeholder='Filter by category' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Categories</SelectItem>
-            <SelectItem value='ai'>AI Voices</SelectItem>
-            <SelectItem value='cloned'>Cloned Voices</SelectItem>
+            <SelectItem value='all'>
+              <LocalizedText text={"All Categories"} />
+            </SelectItem>
+            <SelectItem value='ai'>
+              <LocalizedText text={"AI Voices"} />
+            </SelectItem>
+            <SelectItem value='cloned'>
+              <LocalizedText text={"Cloned Voices"} />
+            </SelectItem>
           </SelectContent>
         </Select>
         <Select
@@ -354,13 +363,20 @@ export default function AdminVoicesPage() {
             <SelectValue placeholder='Filter by gender' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Genders</SelectItem>
-            <SelectItem value='male'>Male</SelectItem>
-            <SelectItem value='female'>Female</SelectItem>
+            <SelectItem value='all'>
+              <LocalizedText text={"All Genders"} />
+            </SelectItem>
+            <SelectItem value='male'>
+              <LocalizedText text={"Male"} />
+            </SelectItem>
+            <SelectItem value='female'>
+              <LocalizedText text={"Female"} />
+            </SelectItem>
           </SelectContent>
         </Select>
         <div className='text-muted-foreground text-sm'>
-          {filteredVoices.length} voice{filteredVoices.length !== 1 ? "s" : ""}
+          {filteredVoices.length} <LocalizedText text={"voice"} />
+          {filteredVoices.length !== 1 ? "s" : ""}
         </div>
       </div>
 
@@ -371,7 +387,9 @@ export default function AdminVoicesPage() {
       ) : filteredVoices.length === 0 ? (
         <div className='py-12 text-center'>
           <Volume2 className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
-          <p className='text-muted-foreground'>No voices found</p>
+          <p className='text-muted-foreground'>
+            <LocalizedText text={"No voices found"} />
+          </p>
         </div>
       ) : (
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
@@ -431,10 +449,15 @@ export default function AdminVoicesPage() {
                       {voice.status}
                     </Badge>
                   )}
-                  {voice.isPublic && <Badge variant='secondary'>Public</Badge>}
+                  {voice.isPublic && (
+                    <Badge variant='secondary'>
+                      <LocalizedText text={"Public"} />
+                    </Badge>
+                  )}
                 </div>
                 <div className='text-muted-foreground text-xs'>
-                  Used {voice.usageCount} time
+                  <LocalizedText text={"Used"} />
+                  {voice.usageCount} <LocalizedText text={"time"} />
                   {voice.usageCount !== 1 ? "s" : ""}
                 </div>
               </div>
@@ -447,16 +470,20 @@ export default function AdminVoicesPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Create New Voice</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Create New Voice"} />
+            </DialogTitle>
             <DialogDescription>
-              Add a new AI voice for video generation
+              <LocalizedText text={"Add a new AI voice for video generation"} />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='name'>Name *</Label>
+                <Label htmlFor='name'>
+                  <LocalizedText text={"Name *"} />
+                </Label>
                 <Input
                   id='name'
                   value={formData.name}
@@ -468,7 +495,9 @@ export default function AdminVoicesPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='gender'>Gender *</Label>
+                <Label htmlFor='gender'>
+                  <LocalizedText text={"Gender *"} />
+                </Label>
                 <Select
                   value={formData.gender}
                   onValueChange={(v: "male" | "female") =>
@@ -479,8 +508,12 @@ export default function AdminVoicesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='male'>Male</SelectItem>
-                    <SelectItem value='female'>Female</SelectItem>
+                    <SelectItem value='male'>
+                      <LocalizedText text={"Male"} />
+                    </SelectItem>
+                    <SelectItem value='female'>
+                      <LocalizedText text={"Female"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -488,7 +521,9 @@ export default function AdminVoicesPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='language'>Language *</Label>
+                <Label htmlFor='language'>
+                  <LocalizedText text={"Language *"} />
+                </Label>
                 <Select
                   value={formData.language}
                   onValueChange={(value) =>
@@ -509,7 +544,9 @@ export default function AdminVoicesPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='accent'>Accent *</Label>
+                <Label htmlFor='accent'>
+                  <LocalizedText text={"Accent *"} />
+                </Label>
                 <Select
                   value={formData.accent}
                   onValueChange={(value) =>
@@ -532,7 +569,9 @@ export default function AdminVoicesPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='category'>Category</Label>
+                <Label htmlFor='category'>
+                  <LocalizedText text={"Category"} />
+                </Label>
                 <Select
                   value={formData.category}
                   onValueChange={(v: "ai" | "cloned") =>
@@ -543,20 +582,28 @@ export default function AdminVoicesPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='ai'>AI Voice</SelectItem>
-                    <SelectItem value='cloned'>Cloned Voice</SelectItem>
+                    <SelectItem value='ai'>
+                      <LocalizedText text={"AI Voice"} />
+                    </SelectItem>
+                    <SelectItem value='cloned'>
+                      <LocalizedText text={"Cloned Voice"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='status'>Status</Label>
+                <Label htmlFor='status'>
+                  <LocalizedText text={"Status"} />
+                </Label>
                 <Select value='active' disabled>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='active'>Active</SelectItem>
+                    <SelectItem value='active'>
+                      <LocalizedText text={"Active"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -564,7 +611,9 @@ export default function AdminVoicesPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='provider'>Provider (Optional)</Label>
+                <Label htmlFor='provider'>
+                  <LocalizedText text={"Provider (Optional)"} />
+                </Label>
                 <Input
                   id='provider'
                   value={formData.provider}
@@ -577,7 +626,7 @@ export default function AdminVoicesPage() {
 
               <div className='space-y-2'>
                 <Label htmlFor='providerVoiceId'>
-                  Provider Voice ID (Optional)
+                  <LocalizedText text={"Provider Voice ID (Optional)"} />
                 </Label>
                 <Input
                   id='providerVoiceId'
@@ -594,7 +643,9 @@ export default function AdminVoicesPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='audio'>Audio File *</Label>
+              <Label htmlFor='audio'>
+                <LocalizedText text={"Audio File *"} />
+              </Label>
               <div className='flex items-center gap-4'>
                 <div className='flex-1'>
                   <Input
@@ -605,7 +656,9 @@ export default function AdminVoicesPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload an audio sample (MP3, WAV, etc.)
+                    <LocalizedText
+                      text={"Upload an audio sample (MP3, WAV, etc.)"}
+                    />
                   </p>
                 </div>
                 {audioFile && (
@@ -629,7 +682,9 @@ export default function AdminVoicesPage() {
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor='isPublic'>Make Public</Label>
+              <Label htmlFor='isPublic'>
+                <LocalizedText text={"Make Public"} />
+              </Label>
             </div>
           </div>
 
@@ -641,13 +696,13 @@ export default function AdminVoicesPage() {
                 setAudioFile(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Creating...
+                  <LocalizedText text={"Creating..."} />
                 </>
               ) : (
                 "Create Voice"
@@ -661,15 +716,19 @@ export default function AdminVoicesPage() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Edit Voice</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Edit Voice"} />
+            </DialogTitle>
             <DialogDescription>
-              Update voice information and settings
+              <LocalizedText text={"Update voice information and settings"} />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='space-y-2'>
-              <Label htmlFor='edit-name'>Name *</Label>
+              <Label htmlFor='edit-name'>
+                <LocalizedText text={"Name *"} />
+              </Label>
               <Input
                 id='edit-name'
                 value={formData.name}
@@ -681,7 +740,9 @@ export default function AdminVoicesPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='edit-language'>Language *</Label>
+                <Label htmlFor='edit-language'>
+                  <LocalizedText text={"Language *"} />
+                </Label>
                 <Select
                   value={formData.language}
                   onValueChange={(value) =>
@@ -702,7 +763,9 @@ export default function AdminVoicesPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='edit-accent'>Accent *</Label>
+                <Label htmlFor='edit-accent'>
+                  <LocalizedText text={"Accent *"} />
+                </Label>
                 <Select
                   value={formData.accent}
                   onValueChange={(value) =>
@@ -725,7 +788,9 @@ export default function AdminVoicesPage() {
 
             <div className='space-y-2'>
               <Label htmlFor='edit-audio'>
-                Audio File (Optional - leave empty to keep current)
+                <LocalizedText
+                  text={"Audio File (Optional - leave empty to keep current)"}
+                />
               </Label>
               <div className='flex items-center gap-4'>
                 <div className='flex-1'>
@@ -737,7 +802,11 @@ export default function AdminVoicesPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload a new audio sample to replace the existing one
+                    <LocalizedText
+                      text={
+                        "Upload a new audio sample to replace the existing one"
+                      }
+                    />
                   </p>
                 </div>
                 {audioFile && (
@@ -761,7 +830,9 @@ export default function AdminVoicesPage() {
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor='edit-isPublic'>Make Public</Label>
+              <Label htmlFor='edit-isPublic'>
+                <LocalizedText text={"Make Public"} />
+              </Label>
             </div>
           </div>
 
@@ -774,13 +845,13 @@ export default function AdminVoicesPage() {
                 setAudioFile(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Updating...
+                  <LocalizedText text={"Updating..."} />
                 </>
               ) : (
                 "Update Voice"
@@ -794,10 +865,13 @@ export default function AdminVoicesPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Voice</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Voice"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{voiceToDelete?.name}"? This
-              action cannot be undone.
+              <LocalizedText text={'Are you sure you want to delete "'} />
+              {voiceToDelete?.name}
+              <LocalizedText text={'"? This action cannot be undone.'} />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -809,7 +883,7 @@ export default function AdminVoicesPage() {
               }}
               disabled={isDeleting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -819,7 +893,7 @@ export default function AdminVoicesPage() {
               {isDeleting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Deleting...
+                  <LocalizedText text={"Deleting..."} />
                 </>
               ) : (
                 "Delete"

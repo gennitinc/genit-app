@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
@@ -222,14 +223,15 @@ export function MediaPicker({
             disabled={uploading}
             className='flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-50'
           >
-            <Upload className='h-4 w-4' /> Upload
+            <Upload className='h-4 w-4' /> <LocalizedText text={"Upload"} />
           </button>
           <button
             type='button'
             onClick={() => setOpen(true)}
             className='flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:border-zinc-600'
           >
-            <Library className='h-4 w-4' /> Choose from library
+            <Library className='h-4 w-4' />{" "}
+            <LocalizedText text={"Choose from library"} />
           </button>
         </div>
       </div>
@@ -239,7 +241,9 @@ export function MediaPicker({
           <div className='max-h-[82vh] w-full max-w-4xl overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-2xl'>
             <div className='flex items-center justify-between p-5'>
               <div>
-                <h3 className='font-bold text-white'>Media library</h3>
+                <h3 className='font-bold text-white'>
+                  <LocalizedText text={"Media library"} />
+                </h3>
                 <p className='text-xs text-zinc-500'>
                   {acceptsVideo
                     ? "Your organization’s images and videos"
@@ -262,7 +266,9 @@ export function MediaPicker({
               ) : assets.length === 0 ? (
                 <div className='flex h-48 flex-col items-center justify-center gap-2 text-zinc-500'>
                   <Library className='h-8 w-8' />
-                  <p className='text-sm'>Your library is empty</p>
+                  <p className='text-sm'>
+                    <LocalizedText text={"Your library is empty"} />
+                  </p>
                 </div>
               ) : (
                 <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4'>

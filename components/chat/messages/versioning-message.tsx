@@ -3,6 +3,7 @@
 import { VideoPlayerMessage } from "../video-player-message";
 import { DeleteConfirmation } from "./delete-confirmation";
 import { MessageActions } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ShinyText from "@/components/ui/shiny-text";
@@ -738,11 +739,13 @@ export function VersioningMessage({
                 d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
               ></path>
             </svg>
-            <p className='text-muted-foreground text-xs'>Fetching files...</p>
+            <p className='text-muted-foreground text-xs'>
+              <LocalizedText text={"Fetching files..."} />
+            </p>
           </div>
           <div className='flex-shrink-0'>
             <Badge variant='secondary' className='text-xs'>
-              loading
+              <LocalizedText text={"loading"} />
             </Badge>
           </div>
         </div>
@@ -759,10 +762,12 @@ export function VersioningMessage({
           </div>
           <div className='min-w-0 flex-1'>
             <p className='text-muted-foreground truncate text-xs font-medium sm:text-sm'>
-              Failed to load files
+              <LocalizedText text={"Failed to load files"} />
             </p>
             <p className='text-muted-foreground text-xs'>
-              Something went wrong while fetching the data
+              <LocalizedText
+                text={"Something went wrong while fetching the data"}
+              />
             </p>
           </div>
           <div className='flex-shrink-0'>
@@ -773,7 +778,7 @@ export function VersioningMessage({
               className='h-6 px-2 text-xs text-red-500 hover:text-red-700'
             >
               <RefreshCw className='mr-1 h-3 w-3' />
-              Retry
+              <LocalizedText text={"Retry"} />
             </Button>
           </div>
         </div>
@@ -844,7 +849,7 @@ export function VersioningMessage({
               <div className='mt-0.5 flex items-center gap-1'>
                 <Video className='text-muted-foreground h-3 w-3' />
                 <p className='text-muted-foreground text-xs'>
-                  Preview • Remotion
+                  <LocalizedText text={"Preview • Remotion"} />
                 </p>
               </div>
             </div>
@@ -913,9 +918,11 @@ export function VersioningMessage({
                     <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-violet-500/10'>
                       <div className='flex items-center gap-1 rounded-full bg-violet-600/80 px-2 py-1 text-xs text-white backdrop-blur-sm'>
                         <Wand2 className='h-3 w-3' />
-                        <span className='hidden lg:block'>Click to edit</span>
+                        <span className='hidden lg:block'>
+                          <LocalizedText text={"Click to edit"} />
+                        </span>
                         <span className='lg:hidden'>
-                          Only available on desktop
+                          <LocalizedText text={"Only available on desktop"} />
                         </span>
                       </div>
                     </div>
@@ -926,7 +933,7 @@ export function VersioningMessage({
                     <div className='absolute top-2 right-2 z-20'>
                       <div className='flex items-center gap-1 rounded-full bg-violet-600 px-2 py-0.5 text-xs text-white'>
                         <Wand2 className='h-3 w-3' />
-                        Painting
+                        <LocalizedText text={"Painting"} />
                       </div>
                     </div>
                   )}
@@ -938,7 +945,7 @@ export function VersioningMessage({
                     {/* Brush size */}
                     <div className='flex items-center gap-2 px-1'>
                       <span className='text-xs whitespace-nowrap text-violet-400'>
-                        Brush:
+                        <LocalizedText text={"Brush:"} />
                       </span>
 
                       <input
@@ -1007,7 +1014,7 @@ export function VersioningMessage({
                           }}
                           disabled={isInpainting}
                         >
-                          Cancel
+                          <LocalizedText text={"Cancel"} />
                         </Button>
 
                         <Button
@@ -1027,8 +1034,13 @@ export function VersioningMessage({
                     </div>
 
                     <p className='text-muted-foreground px-1 text-xs'>
-                      Painted area stays active — click <strong>Cancel</strong>{" "}
-                      to clear.
+                      <LocalizedText
+                        text={"Painted area stays active — click"}
+                      />
+                      <strong>
+                        <LocalizedText text={"Cancel"} />
+                      </strong>{" "}
+                      <LocalizedText text={"to clear."} />
                     </p>
                   </div>
                 )}
@@ -1041,7 +1053,8 @@ export function VersioningMessage({
                     <div className='flex items-center gap-1'>
                       <ImageIcon className='text-muted-foreground h-3 w-3' />
                       <p className='text-muted-foreground text-xs'>
-                        Image • {fileExt}
+                        <LocalizedText text={"Image •"} />
+                        {fileExt}
                       </p>
                     </div>
 
@@ -1058,7 +1071,7 @@ export function VersioningMessage({
                         className='border-primary/30 text-primary hidden h-7.5 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5 lg:flex'
                       >
                         <LayoutGrid className='h-3 w-3' />
-                        View
+                        <LocalizedText text={"View"} />
                       </Button>
                       {!isPublished && !item.publishStatus && (
                         <Button
@@ -1110,7 +1123,7 @@ export function VersioningMessage({
                         className='h-7.5 w-fit gap-1.5 px-2 text-xs'
                       >
                         <Play className='h-3 w-3' />
-                        Convert to video
+                        <LocalizedText text={"Convert to video"} />
                       </Button>
                     </div>
                   </div>
@@ -1137,7 +1150,8 @@ export function VersioningMessage({
                     <div className='flex items-center gap-1'>
                       <Video className='text-muted-foreground h-3 w-3' />
                       <p className='text-muted-foreground text-xs'>
-                        Video • {fileExt}
+                        <LocalizedText text={"Video •"} />
+                        {fileExt}
                       </p>
                     </div>
                     {(isPublished || item.publishStatus) && (
@@ -1193,12 +1207,18 @@ export function VersioningMessage({
                     </p>
                     <div className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
                       <span className='inline-flex items-center gap-1 rounded bg-violet-500/10 px-1.5 py-0.5 font-medium text-violet-500'>
-                        Workflow
+                        <LocalizedText text={"Workflow"} />
                       </span>
                       <span>•</span>
-                      <span>{item.data?.nodes?.length || 0} nodes</span>
+                      <span>
+                        {item.data?.nodes?.length || 0}{" "}
+                        <LocalizedText text={"nodes"} />
+                      </span>
                       <span>•</span>
-                      <span>{item.data?.edges?.length || 0} connections</span>
+                      <span>
+                        {item.data?.edges?.length || 0}{" "}
+                        <LocalizedText text={"connections"} />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1243,12 +1263,18 @@ export function VersioningMessage({
                     </p>
                     <div className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs'>
                       <span className='inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 font-medium text-amber-600'>
-                        Automation
+                        <LocalizedText text={"Automation"} />
                       </span>
                       <span>•</span>
-                      <span>{item.data?.nodes?.length || 0} nodes</span>
+                      <span>
+                        {item.data?.nodes?.length || 0}{" "}
+                        <LocalizedText text={"nodes"} />
+                      </span>
                       <span>•</span>
-                      <span>{item.data?.edges?.length || 0} connections</span>
+                      <span>
+                        {item.data?.edges?.length || 0}{" "}
+                        <LocalizedText text={"connections"} />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1382,14 +1408,14 @@ export function VersioningMessage({
                     }}
                     disabled={isUpdatingActive}
                   >
-                    Set as main
+                    <LocalizedText text={"Set as main"} />
                   </Button>
                 )}
                 {item.isActive && (
                   <div className='flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-1'>
                     <Check className='h-3 w-3 text-violet-500' />
                     <span className='text-[10px] font-semibold text-violet-600 uppercase'>
-                      main
+                      <LocalizedText text={"main"} />
                     </span>
                   </div>
                 )}
@@ -1507,7 +1533,7 @@ export function VersioningMessage({
                   )}
                   {generation.isLatest && (
                     <Badge className='flex-shrink-0 border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-xs text-green-600'>
-                      Latest
+                      <LocalizedText text={"Latest"} />
                     </Badge>
                   )}
                   <p className='text-muted-foreground line-clamp-1 hidden truncate text-xs lg:flex'>

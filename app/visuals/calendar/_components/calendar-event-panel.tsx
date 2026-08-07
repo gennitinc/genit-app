@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -233,14 +234,16 @@ export function CalendarEventPanel({
                   className='rounded-xl bg-violet-600 text-white hover:bg-violet-700'
                   onClick={() => setEditing(true)}
                 >
-                  <Pencil className='h-4 w-4' /> Edit event
+                  <Pencil className='h-4 w-4' />{" "}
+                  <LocalizedText text={"Edit event"} />
                 </Button>
                 <Button
                   variant='outline'
                   className='rounded-xl sm:ml-auto'
                   onClick={() => setConfirmDelete(true)}
                 >
-                  <Trash2 className='h-4 w-4' /> Delete
+                  <Trash2 className='h-4 w-4' />{" "}
+                  <LocalizedText text={"Delete"} />
                 </Button>
               </div>
               {confirmDelete && (
@@ -248,10 +251,10 @@ export function CalendarEventPanel({
                   <GradientFrame />
                   <div className='relative z-10'>
                     <p className='text-foreground text-sm font-medium dark:text-white'>
-                      Delete this event for everyone?
+                      <LocalizedText text={"Delete this event for everyone?"} />
                     </p>
                     <p className='text-muted-foreground mt-1 text-xs dark:text-white/60'>
-                      This cannot be undone.
+                      <LocalizedText text={"This cannot be undone."} />
                     </p>
                     <div className='mt-4 flex gap-2'>
                       <Button
@@ -267,8 +270,8 @@ export function CalendarEventPanel({
                         }}
                         className='rounded-xl bg-red-500 text-white hover:bg-red-600'
                       >
-                        {deleting && <LoadingFileLoader size={16} />} Delete
-                        event
+                        {deleting && <LoadingFileLoader size={16} />}{" "}
+                        <LocalizedText text={"Delete event"} />
                       </Button>
                       <Button
                         size='sm'
@@ -276,7 +279,7 @@ export function CalendarEventPanel({
                         onClick={() => setConfirmDelete(false)}
                         className='rounded-xl'
                       >
-                        Cancel
+                        <LocalizedText text={"Cancel"} />
                       </Button>
                     </div>
                   </div>
@@ -319,7 +322,7 @@ export function CalendarEventPanel({
                   htmlFor='event-title'
                   className='text-zinc-600 dark:text-zinc-400'
                 >
-                  Event title
+                  <LocalizedText text={"Event title"} />
                 </Label>
                 <Input
                   id='event-title'
@@ -339,7 +342,7 @@ export function CalendarEventPanel({
                     htmlFor='event-start'
                     className='text-zinc-600 dark:text-zinc-400'
                   >
-                    Starts
+                    <LocalizedText text={"Starts"} />
                   </Label>
                   <Input
                     id='event-start'
@@ -357,7 +360,7 @@ export function CalendarEventPanel({
                     htmlFor='event-end'
                     className='text-zinc-600 dark:text-zinc-400'
                   >
-                    Ends
+                    <LocalizedText text={"Ends"} />
                   </Label>
                   <Input
                     id='event-end'
@@ -390,14 +393,14 @@ export function CalendarEventPanel({
                   }}
                   className='accent-violet-600'
                 />{" "}
-                All-day event
+                <LocalizedText text={"All-day event"} />
               </label>
               <div className='space-y-2'>
                 <Label
                   htmlFor='event-calendar'
                   className='text-zinc-600 dark:text-zinc-400'
                 >
-                  Calendar
+                  <LocalizedText text={"Calendar"} />
                 </Label>
                 <select
                   id='event-calendar'
@@ -407,7 +410,9 @@ export function CalendarEventPanel({
                   }
                   className='h-11 w-full rounded-xl border border-black/5 bg-black/[0.02] px-3 text-sm focus:ring-2 focus:ring-violet-500/50 focus:outline-none focus-visible:border-violet-500 focus-visible:ring-violet-500/20 dark:border-white/10 dark:bg-white/[0.04] dark:text-white'
                 >
-                  <option value='primary'>Primary calendar</option>
+                  <option value='primary'>
+                    <LocalizedText text={"Primary calendar"} />
+                  </option>
                   {calendars
                     .filter((item) => !item.primary && item.id !== "primary")
                     .map((item) => (
@@ -422,7 +427,7 @@ export function CalendarEventPanel({
                   htmlFor='event-location'
                   className='text-zinc-600 dark:text-zinc-400'
                 >
-                  Location
+                  <LocalizedText text={"Location"} />
                 </Label>
                 <Input
                   id='event-location'
@@ -439,7 +444,7 @@ export function CalendarEventPanel({
                   htmlFor='event-guests'
                   className='text-zinc-600 dark:text-zinc-400'
                 >
-                  Guests
+                  <LocalizedText text={"Guests"} />
                 </Label>
                 <Input
                   id='event-guests'
@@ -452,7 +457,9 @@ export function CalendarEventPanel({
                   className='h-11 rounded-xl border-black/5 bg-black/[0.02] focus-visible:border-violet-500 focus-visible:ring-violet-500/20 dark:border-white/10 dark:bg-white/[0.04] dark:text-white'
                 />
                 <p className='text-muted-foreground text-xs dark:text-white/50'>
-                  Separate email addresses with commas.
+                  <LocalizedText
+                    text={"Separate email addresses with commas."}
+                  />
                 </p>
               </div>
               <div className='space-y-2'>
@@ -460,7 +467,7 @@ export function CalendarEventPanel({
                   htmlFor='event-description'
                   className='text-zinc-600 dark:text-zinc-400'
                 >
-                  Notes
+                  <LocalizedText text={"Notes"} />
                 </Label>
                 <Textarea
                   id='event-description'
@@ -480,7 +487,7 @@ export function CalendarEventPanel({
                     className='rounded-xl'
                     onClick={() => setEditing(false)}
                   >
-                    Cancel
+                    <LocalizedText text={"Cancel"} />
                   </Button>
                 )}
                 <Button

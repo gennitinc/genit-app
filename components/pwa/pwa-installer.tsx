@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -175,11 +176,14 @@ export function PWAInstaller() {
             {/* Text */}
             <div className='space-y-2'>
               <DialogTitle className='text-xl font-semibold'>
-                Install Genit AI
+                <LocalizedText text={"Install Genit AI"} />
               </DialogTitle>
               <DialogDescription className='text-muted-foreground text-sm'>
-                Get faster access, offline support, and a smoother experience
-                when you install the app.
+                <LocalizedText
+                  text={
+                    "Get faster access, offline support, and a smoother experience when you install the app."
+                  }
+                />
               </DialogDescription>
             </div>
 
@@ -195,7 +199,7 @@ export function PWAInstaller() {
             <div className='flex w-full gap-3 pt-2'>
               <Button onClick={handleInstallClick} className='flex-1 gap-2'>
                 <Download className='h-4 w-4' />
-                Install App
+                <LocalizedText text={"Install App"} />
               </Button>
             </div>
           </div>

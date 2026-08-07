@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -58,7 +59,9 @@ export const ArtifactClose = ({
     {...props}
   >
     {children ?? <XIcon className='size-4' />}
-    <span className='sr-only'>Close</span>
+    <span className='sr-only'>
+      <LocalizedText text={"Close"} />
+    </span>
   </Button>
 );
 

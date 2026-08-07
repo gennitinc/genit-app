@@ -1,6 +1,8 @@
 "use client";
+
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 import { trackAppOpened, trackEvent } from "@/lib/mixpanelClient";
@@ -88,7 +90,7 @@ const AppCard = ({
             disabled
             className='cursor-not-allowed rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500'
           >
-            Soon
+            <LocalizedText text={"Soon"} />
           </button>
         ) : (
           <button
@@ -96,7 +98,7 @@ const AppCard = ({
             onClick={onAction}
             className='rounded-full border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
           >
-            Try
+            <LocalizedText text={"Try"} />
           </button>
         )}
       </div>
@@ -177,10 +179,14 @@ const Apps = () => {
               <div className='mr-auto ml-auto max-w-4xl pt-12 pr-4 pb-20 pl-4 sm:px-6 lg:px-8'>
                 <div className='mb-10 text-left'>
                   <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
-                    Apps
+                    <LocalizedText text={"Apps"} />
                   </h1>
                   <p className='mt-2 text-sm text-zinc-500 sm:text-base dark:text-zinc-400'>
-                    Pick a starting point. your ai game just got smarter
+                    <LocalizedText
+                      text={
+                        "Pick a starting point. your ai game just got smarter"
+                      }
+                    />
                   </p>
                 </div>
 
@@ -252,7 +258,9 @@ const Apps = () => {
                 {grouped.length === 0 ? (
                   <div className='py-16 text-center'>
                     <p className='text-sm text-zinc-500 dark:text-zinc-400'>
-                      No apps match &ldquo;{query}&rdquo;.
+                      <LocalizedText text={"No apps match &ldquo;"} />
+                      {query}
+                      <LocalizedText text={"&rdquo;."} />
                     </p>
                   </div>
                 ) : (
@@ -282,10 +290,10 @@ const Apps = () => {
                 <section className='mt-12'>
                   <div className='mb-4'>
                     <h3 className='text-foreground text-lg font-semibold tracking-tight'>
-                      Developers
+                      <LocalizedText text={"Developers"} />
                     </h3>
                     <p className='text-muted-foreground mt-0.5 text-xs'>
-                      Build custom agents
+                      <LocalizedText text={"Build custom agents"} />
                     </p>
                   </div>
 
@@ -298,14 +306,17 @@ const Apps = () => {
                         </div>
 
                         <h3 className='text-foreground text-sm font-semibold'>
-                          Custom Agent
+                          <LocalizedText text={"Custom Agent"} />
                         </h3>
                       </div>
 
                       {/* description */}
                       <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
-                        Build and deploy AI agents with full SDK control and
-                        integration hooks.
+                        <LocalizedText
+                          text={
+                            "Build and deploy AI agents with full SDK control and integration hooks."
+                          }
+                        />
                       </p>
 
                       {/* CTA */}
@@ -314,12 +325,12 @@ const Apps = () => {
                           href='#'
                           className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
                         >
-                          SDK Coming soon
+                          <LocalizedText text={"SDK Coming soon"} />
                           <ArrowRight className='h-3 w-3' />
                         </a>
 
                         <span className='text-muted-foreground text-[10px]'>
-                          SDK
+                          <LocalizedText text={"SDK"} />
                         </span>
                       </div>
                     </div>
@@ -328,11 +339,11 @@ const Apps = () => {
 
                 <div className='mt-12 text-center'>
                   <p className='text-muted-foreground mb-4 text-sm'>
-                    Need a custom workflow or agent?
+                    <LocalizedText text={"Need a custom workflow or agent?"} />
                   </p>
                   <button className='border-border bg-card/60 text-foreground hover:bg-accent inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10'>
                     <Plus className='h-4 w-4' />
-                    Request agent
+                    <LocalizedText text={"Request agent"} />
                   </button>
                 </div>
               </div>

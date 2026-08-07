@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,21 +45,28 @@ export default function ActivityPage() {
             <Activity className='h-6 w-6' />
           </div>
           <div>
-            <h1 className='text-3xl font-bold tracking-tight'>Activity Logs</h1>
+            <h1 className='text-3xl font-bold tracking-tight'>
+              <LocalizedText text={"Activity Logs"} />
+            </h1>
             <p className='text-muted-foreground text-sm'>
-              Monitor system usage and user generation events in real-time.
+              <LocalizedText
+                text={
+                  "Monitor system usage and user generation events in real-time."
+                }
+              />
             </p>
           </div>
         </div>
         <div className='flex gap-2'>
           <Button variant='outline' className='gap-2'>
-            <Download className='h-4 w-4' /> Export CSV
+            <Download className='h-4 w-4' />{" "}
+            <LocalizedText text={"Export CSV"} />
           </Button>
           <Button
             variant='destructive'
             className='cursor-not-allowed gap-2 opacity-50'
           >
-            <Trash2 className='h-4 w-4' /> Clear Logs
+            <Trash2 className='h-4 w-4' /> <LocalizedText text={"Clear Logs"} />
           </Button>
         </div>
       </div>
@@ -116,7 +124,7 @@ export default function ActivityPage() {
           <div className='ml-auto flex items-center gap-1.5'>
             <div className='h-2 w-2 animate-pulse rounded-full bg-emerald-500' />
             <span className='text-xs font-semibold tracking-wider uppercase'>
-              Live Feed
+              <LocalizedText text={"Live Feed"} />
             </span>
           </div>
         </div>
@@ -126,19 +134,19 @@ export default function ActivityPage() {
             <TableHeader className='bg-muted/30'>
               <TableRow>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Event Type
+                  <LocalizedText text={"Event Type"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Count
+                  <LocalizedText text={"Count"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Trend
+                  <LocalizedText text={"Trend"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Last Activity
+                  <LocalizedText text={"Last Activity"} />
                 </TableHead>
                 <TableHead className='py-4 text-right text-xs font-bold tracking-wider uppercase'>
-                  Status
+                  <LocalizedText text={"Status"} />
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -175,11 +183,11 @@ export default function ActivityPage() {
                         </span>
                       </TableCell>
                       <TableCell className='text-muted-foreground text-sm italic'>
-                        Just now
+                        <LocalizedText text={"Just now"} />
                       </TableCell>
                       <TableCell className='text-right'>
                         <Badge className='border-none bg-emerald-500/10 px-2 py-0 text-[10px] font-bold text-emerald-500 uppercase'>
-                          Successful
+                          <LocalizedText text={"Successful"} />
                         </Badge>
                       </TableCell>
                     </TableRow>

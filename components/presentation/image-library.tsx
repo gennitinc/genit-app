@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -494,7 +495,7 @@ export function ImageLibrary({
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
-                  Image Library
+                  <LocalizedText text={"Image Library"} />
                 </h3>
                 <p className='text-muted-foreground text-xs'>
                   {activeTab === "upload"
@@ -527,15 +528,15 @@ export function ImageLibrary({
           <TabsList className='grid w-full grid-cols-3'>
             <TabsTrigger value='upload' className='text-xs'>
               <Upload className='mr-1 h-3 w-3' />
-              Uploads
+              <LocalizedText text={"Uploads"} />
             </TabsTrigger>
             <TabsTrigger value='library' className='text-xs'>
               <ImageIcon className='mr-1 h-3 w-3' />
-              Library
+              <LocalizedText text={"Library"} />
             </TabsTrigger>
             <TabsTrigger value='generate' className='text-xs'>
               <Sparkles className='mr-1 h-3 w-3' />
-              Generate
+              <LocalizedText text={"Generate"} />
             </TabsTrigger>
           </TabsList>
 
@@ -559,12 +560,12 @@ export function ImageLibrary({
                 {isUploading ? (
                   <>
                     <LoadingFileLoader size={16} />
-                    Uploading...
+                    <LocalizedText text={"Uploading..."} />
                   </>
                 ) : (
                   <>
                     <Upload className='mr-2 h-4 w-4' />
-                    Upload Images
+                    <LocalizedText text={"Upload Images"} />
                   </>
                 )}
               </Button>
@@ -572,9 +573,13 @@ export function ImageLibrary({
             {uploadedImages.length === 0 && (
               <div className='text-muted-foreground py-8 text-center text-sm'>
                 <ImagePlus className='mx-auto mb-2 h-8 w-8 opacity-50' />
-                <p>No uploaded images</p>
+                <p>
+                  <LocalizedText text={"No uploaded images"} />
+                </p>
                 <p className='mt-1 text-xs'>
-                  Click "Upload Images" to get started
+                  <LocalizedText
+                    text={'Click "Upload Images" to get started'}
+                  />
                 </p>
               </div>
             )}
@@ -599,7 +604,11 @@ export function ImageLibrary({
             </div>
             {!searchQuery.trim() && (
               <div className='text-muted-foreground mb-2 text-xs'>
-                Showing popular images. Search for specific images above.
+                <LocalizedText
+                  text={
+                    "Showing popular images. Search for specific images above."
+                  }
+                />
               </div>
             )}
           </TabsContent>
@@ -608,7 +617,9 @@ export function ImageLibrary({
           <TabsContent value='generate' className='mt-4 space-y-4'>
             <div>
               <label className='text-foreground mb-2 block text-xs font-medium'>
-                Describe the image you want to generate
+                <LocalizedText
+                  text={"Describe the image you want to generate"}
+                />
               </label>
               <Textarea
                 value={generatePrompt}
@@ -625,12 +636,12 @@ export function ImageLibrary({
               {isGenerating ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Generating...
+                  <LocalizedText text={"Generating..."} />
                 </>
               ) : (
                 <>
                   <Sparkles className='mr-2 h-4 w-4' />
-                  Generate Image
+                  <LocalizedText text={"Generate Image"} />
                 </>
               )}
             </Button>
@@ -698,7 +709,8 @@ export function ImageLibrary({
                       {image.author && (
                         <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100'>
                           <p className='truncate text-xs text-white'>
-                            Photo by {image.author}
+                            <LocalizedText text={"Photo by"} />
+                            {image.author}
                           </p>
                         </div>
                       )}
@@ -724,7 +736,7 @@ export function ImageLibrary({
               size='sm'
             >
               <Download className='mr-2 h-4 w-4' />
-              Insert Image
+              <LocalizedText text={"Insert Image"} />
             </Button>
             {selectedImage.authorUrl && (
               <Button

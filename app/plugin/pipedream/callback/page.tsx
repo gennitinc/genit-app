@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { useEffect } from "react";
 
 export default function PipedreamCallbackPage() {
@@ -26,7 +27,7 @@ export default function PipedreamCallbackPage() {
 
   return (
     <main className='flex min-h-screen items-center justify-center bg-white text-sm text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300'>
-      Finishing connection…
+      <LocalizedText text={"Finishing connection…"} />
     </main>
   );
 }

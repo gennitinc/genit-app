@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
@@ -21,7 +22,7 @@ export function AutoModeDialog({
   const isMobile = useIsMobile();
 
   const content = (
-    <div className='max-h-[88dvh] overflow-y-auto rounded-t-3xl bg-white border sm:grid sm:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.4fr)] sm:rounded-3xl dark:bg-black'>
+    <div className='max-h-[88dvh] overflow-y-auto rounded-t-3xl border bg-white sm:grid sm:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.4fr)] sm:rounded-3xl dark:bg-black'>
       <div className='relative h-28 overflow-hidden sm:h-auto'>
         <Image
           src='/genit-auto.png'
@@ -34,12 +35,14 @@ export function AutoModeDialog({
       </div>
 
       <div className='flex min-w-0 flex-col'>
-        <div className='border-b border-zinc-200  px-5 py-4 sm:px-6 dark:border-white/10 dark:from-indigo-500/15 dark:via-zinc-950 dark:to-violet-500/10'>
+        <div className='border-b border-zinc-200 px-5 py-4 sm:px-6 dark:border-white/10 dark:from-indigo-500/15 dark:via-zinc-950 dark:to-violet-500/10'>
           <h2 className='mt-1 text-xl font-semibold tracking-tight text-zinc-950 sm:text-2xl dark:text-white'>
-            Autonomous marketing?
+            <LocalizedText text={"Autonomous marketing?"} />
           </h2>
           <p className='mt-2 max-w-xl text-sm leading-6 text-zinc-600 dark:text-zinc-300'>
-            Genit runs your marketing operations, end to end.
+            <LocalizedText
+              text={"Genit runs your marketing operations, end to end."}
+            />
           </p>
         </div>
 
@@ -93,7 +96,7 @@ export function AutoModeDialog({
             disabled={approving}
             className='flex-1 rounded-md active:scale-[0.97] sm:flex-none'
           >
-            Cancel
+            <LocalizedText text={"Cancel"} />
           </Button>
           <Button
             onClick={() => void onApprove()}
@@ -111,7 +114,9 @@ export function AutoModeDialog({
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className='border-none bg-transparent p-0 shadow-none'>
-          <DrawerTitle className='sr-only'>Genit Auto</DrawerTitle>
+          <DrawerTitle className='sr-only'>
+            <LocalizedText text={"Genit Auto"} />
+          </DrawerTitle>
           {content}
         </DrawerContent>
       </Drawer>
@@ -121,7 +126,9 @@ export function AutoModeDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='overflow-hidden border-none bg-transparent p-0 shadow-2xl sm:max-w-3xl [&>button]:hidden'>
-        <DialogTitle className='sr-only'>Genit Auto</DialogTitle>
+        <DialogTitle className='sr-only'>
+          <LocalizedText text={"Genit Auto"} />
+        </DialogTitle>
         {content}
       </DialogContent>
     </Dialog>

@@ -1,12 +1,14 @@
 "use client";
 
 import { JoinReferralCard } from "./join-referral-card";
+import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
@@ -21,7 +23,6 @@ import {
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 interface ReferredUser {
   _id: string;
@@ -253,10 +254,12 @@ export default function ReferralDashboard() {
       <header className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
         <div>
           <h1 className='text-foreground text-2xl font-semibold tracking-tight md:text-3xl'>
-            Referral Dashboard
+            <LocalizedText text={"Referral Dashboard"} />
           </h1>
           <p className='text-muted-foreground mt-1 text-sm'>
-            Track your earnings and grow your supporter community.
+            <LocalizedText
+              text={"Track your earnings and grow your supporter community."}
+            />
           </p>
         </div>
         <Button
@@ -269,7 +272,7 @@ export default function ReferralDashboard() {
           <RefreshCw
             className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
           />
-          Refresh
+          <LocalizedText text={"Refresh"} />
         </Button>
       </header>
 
@@ -279,7 +282,7 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-              Total Revenue
+              <LocalizedText text={"Total Revenue"} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -291,7 +294,8 @@ export default function ReferralDashboard() {
               })}
             </div>
             <p className='mt-1 text-xs text-green-600'>
-              +{stats.revenueChange}% from last month
+              +{stats.revenueChange}
+              <LocalizedText text={"% from last month"} />
             </p>
           </CardContent>
         </Card>
@@ -300,7 +304,7 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-              Total Supporters
+              <LocalizedText text={"Total Supporters"} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -309,9 +313,9 @@ export default function ReferralDashboard() {
             </div>
             <p className='text-muted-foreground mt-1 text-xs'>
               <span className='text-green-600'>
-                {stats.activeSupporters} active
+                {stats.activeSupporters} <LocalizedText text={"active"} />
               </span>{" "}
-              · {stats.expiringSupporters} expiring
+              · {stats.expiringSupporters} <LocalizedText text={"expiring"} />
             </p>
           </CardContent>
         </Card>
@@ -320,7 +324,7 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader className='pb-2'>
             <CardTitle className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-              Revenue Share
+              <LocalizedText text={"Revenue Share"} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -328,7 +332,7 @@ export default function ReferralDashboard() {
               {stats.revenueShare}%
             </div>
             <p className='text-muted-foreground mt-1 text-xs'>
-              Earned on every supported plan
+              <LocalizedText text={"Earned on every supported plan"} />
             </p>
           </CardContent>
         </Card>
@@ -340,7 +344,7 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
-              Supporters Distribution
+              <LocalizedText text={"Supporters Distribution"} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -367,7 +371,9 @@ export default function ReferralDashboard() {
                   <div className='text-foreground text-3xl font-semibold'>
                     {stats.totalSupporters}
                   </div>
-                  <div className='text-muted-foreground text-xs'>Total</div>
+                  <div className='text-muted-foreground text-xs'>
+                    <LocalizedText text={"Total"} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -379,7 +385,7 @@ export default function ReferralDashboard() {
                     {stats.activeSupporters}
                   </p>
                   <p className='text-muted-foreground text-xs'>
-                    Supporting &gt; 7 days
+                    <LocalizedText text={"Supporting &gt; 7 days"} />
                   </p>
                 </div>
               </div>
@@ -390,7 +396,7 @@ export default function ReferralDashboard() {
                     {stats.expiringSupporters}
                   </p>
                   <p className='text-muted-foreground text-xs'>
-                    Expiring &lt; 7 days
+                    <LocalizedText text={"Expiring &lt; 7 days"} />
                   </p>
                 </div>
               </div>
@@ -402,7 +408,7 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
-              Top Supporters
+              <LocalizedText text={"Top Supporters"} />
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -428,14 +434,15 @@ export default function ReferralDashboard() {
                         )}
                       </div>
                       <p className='text-muted-foreground text-xs'>
-                        {supporter.daysActive}d active
+                        {supporter.daysActive}
+                        <LocalizedText text={"d active"} />
                       </p>
                     </div>
                   </div>
                 ))
               ) : (
                 <div className='text-muted-foreground py-4 text-center text-sm'>
-                  No supporters yet
+                  <LocalizedText text={"No supporters yet"} />
                 </div>
               )}
             </div>
@@ -449,13 +456,13 @@ export default function ReferralDashboard() {
           {/* <GradientFrame /> */}
           <CardHeader>
             <CardTitle className='text-sm font-medium'>
-              Share Your Link
+              <LocalizedText text={"Share Your Link"} />
             </CardTitle>
           </CardHeader>
           <CardContent className='space-y-6'>
             <div className='space-y-3'>
               <div className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-                QR Code
+                <LocalizedText text={"QR Code"} />
               </div>
               <div className='flex items-center justify-center rounded-lg border bg-white p-4'>
                 <img src={qrCodeUrl} alt='QR Code' className='h-48 w-48' />
@@ -468,7 +475,7 @@ export default function ReferralDashboard() {
                   className='w-full'
                 >
                   <Download className='mr-2 h-4 w-4' />
-                  Download PNG
+                  <LocalizedText text={"Download PNG"} />
                 </Button>
                 <Button
                   variant='outline'
@@ -477,14 +484,14 @@ export default function ReferralDashboard() {
                   className='w-full'
                 >
                   <Code className='mr-2 h-4 w-4' />
-                  Copy Embed
+                  <LocalizedText text={"Copy Embed"} />
                 </Button>
               </div>
             </div>
 
             <div className='space-y-3'>
               <div className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-                Referral Link
+                <LocalizedText text={"Referral Link"} />
               </div>
               <div className='flex items-center gap-2'>
                 <LinkIcon className='text-muted-foreground h-4 w-4 shrink-0' />
@@ -492,11 +499,14 @@ export default function ReferralDashboard() {
               </div>
               <Button onClick={handleCopyLink} className='w-full'>
                 <Copy className='mr-2 h-4 w-4' />
-                Copy Link
+                <LocalizedText text={"Copy Link"} />
               </Button>
               <p className='text-muted-foreground text-xs'>
-                Supporters back you for 365 days after picking you as their
-                Creator. Re-engage them regularly to keep your support active.
+                <LocalizedText
+                  text={
+                    "Supporters back you for 365 days after picking you as their Creator. Re-engage them regularly to keep your support active."
+                  }
+                />
               </p>
             </div>
           </CardContent>
@@ -505,27 +515,40 @@ export default function ReferralDashboard() {
         <Card className='relative h-fit'>
           {/* <GradientFrame /> */}
           <CardHeader>
-            <CardTitle className='text-sm font-medium'>Media Kit</CardTitle>
+            <CardTitle className='text-sm font-medium'>
+              <LocalizedText text={"Media Kit"} />
+            </CardTitle>
           </CardHeader>
           <CardContent className='space-y-4'>
             <p className='text-muted-foreground text-sm'>
-              A complete brand toolkit to help you stand out and onboard new
-              supporters.
+              <LocalizedText
+                text={
+                  "A complete brand toolkit to help you stand out and onboard new supporters."
+                }
+              />
             </p>
             <div>
               <div className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
-                Includes
+                <LocalizedText text={"Includes"} />
               </div>
               <ul className='text-foreground grid grid-cols-2 gap-y-1 text-sm'>
-                <li>· Logo</li>
-                <li>· Colors</li>
-                <li>· Font</li>
-                <li>· Elements</li>
+                <li>
+                  <LocalizedText text={"· Logo"} />
+                </li>
+                <li>
+                  <LocalizedText text={"· Colors"} />
+                </li>
+                <li>
+                  <LocalizedText text={"· Font"} />
+                </li>
+                <li>
+                  <LocalizedText text={"· Elements"} />
+                </li>
               </ul>
             </div>
             <Button className='w-full'>
               <Download className='mr-2 h-4 w-4' />
-              Download from Google Drive
+              <LocalizedText text={"Download from Google Drive"} />
             </Button>
           </CardContent>
         </Card>

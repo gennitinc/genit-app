@@ -4,6 +4,7 @@ import { Logo } from "../logo";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
+import { LocalizedText } from "@/components/localized-text";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -57,7 +58,9 @@ export default function TopNavWithAurora({
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
             <Logo className='h-9 w-9' />
-            <span className='text-lg font-semibold'>Genit</span>
+            <span className='text-lg font-semibold'>
+              <LocalizedText text={"Genit"} />
+            </span>
           </Link>
         </div>
         <div className='z-20 flex items-center gap-4'>

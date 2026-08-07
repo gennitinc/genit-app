@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -473,10 +474,12 @@ function ChatHistoryPage() {
               <div className='mb-4 flex items-center justify-between'>
                 <div>
                   <h1 className='text-foreground mb-1 text-2xl font-semibold'>
-                    History
+                    <LocalizedText text={"History"} />
                   </h1>
                   <p className='text-muted-foreground text-sm'>
-                    Your recent projects and conversations
+                    <LocalizedText
+                      text={"Your recent projects and conversations"}
+                    />
                   </p>
                 </div>
                 <Button
@@ -494,7 +497,7 @@ function ChatHistoryPage() {
                   <RefreshCw
                     className={`h-3 w-3 ${loading ? "animate-spin" : ""}`}
                   />
-                  Refresh
+                  <LocalizedText text={"Refresh"} />
                 </Button>
               </div>
 
@@ -528,14 +531,14 @@ function ChatHistoryPage() {
                 <div className='py-16 text-center'>
                   <Loader className='mx-auto mb-3 h-8 w-8 animate-spin rounded-full' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
-                    Loading conversations...
+                    <LocalizedText text={"Loading conversations..."} />
                   </h3>
                 </div>
               ) : error ? (
                 <div className='py-16 text-center'>
                   <MessageSquare className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
-                    Error loading conversations
+                    <LocalizedText text={"Error loading conversations"} />
                   </h3>
                   <p className='text-muted-foreground mb-3 text-xs'>{error}</p>
                   <Button
@@ -548,7 +551,7 @@ function ChatHistoryPage() {
                       fetchAllProjects(1, false, searchQuery);
                     }}
                   >
-                    Try Again
+                    <LocalizedText text={"Try Again"} />
                   </Button>
                 </div>
               ) : filteredProjects.length === 0 ? (
@@ -621,7 +624,7 @@ function ChatHistoryPage() {
                                       }}
                                     >
                                       <Archive className='mr-2 h-3 w-3' />
-                                      Archive
+                                      <LocalizedText text={"Archive"} />
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       className='text-destructive'
@@ -632,7 +635,7 @@ function ChatHistoryPage() {
                                       }}
                                     >
                                       <Trash2 className='mr-2 h-3 w-3' />
-                                      Delete
+                                      <LocalizedText text={"Delete"} />
                                     </DropdownMenuItem>
                                   </>
                                 )}
@@ -650,7 +653,7 @@ function ChatHistoryPage() {
                                     }}
                                   >
                                     <Trash2 className='mr-2 h-3 w-3' />
-                                    Delete
+                                    <LocalizedText text={"Delete"} />
                                   </DropdownMenuItem>
                                 )}
                               </DropdownMenuContent>
@@ -665,14 +668,14 @@ function ChatHistoryPage() {
                     <div className='py-8 text-center'>
                       <Loader className='text-muted-foreground mx-auto mb-2 h-6 w-6 animate-spin rounded-full' />
                       <p className='text-muted-foreground text-xs'>
-                        Loading more...
+                        <LocalizedText text={"Loading more..."} />
                       </p>
                     </div>
                   )}
                   {!hasMore && filteredProjects.length > 0 && (
                     <div className='py-8 text-center'>
                       <p className='text-muted-foreground text-xs'>
-                        No more projects to load
+                        <LocalizedText text={"No more projects to load"} />
                       </p>
                     </div>
                   )}

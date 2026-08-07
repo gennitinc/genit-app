@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -230,11 +231,31 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Create folders and upload new files to locations you choose",
     "Update or delete files genit creates on your behalf",
   ],
-  google_meet: ["Create and launch meeting spaces", "Read meeting details", "End active conferences"],
-  google_sheets: ["Create and read spreadsheets", "Write values and apply batch formatting", "Invite collaborators and assign viewer, commenter, editor or owner roles"],
-  google_slides: ["Create and read presentations", "Add and edit slides with batch updates", "Invite collaborators and manage their roles"],
-  google_docs: ["Create and read documents", "Insert, replace and format document content", "Invite collaborators and manage their roles"],
-  google_forms: ["Create surveys and quizzes", "Add and edit questions", "Read responses and invite collaborators"],
+  google_meet: [
+    "Create and launch meeting spaces",
+    "Read meeting details",
+    "End active conferences",
+  ],
+  google_sheets: [
+    "Create and read spreadsheets",
+    "Write values and apply batch formatting",
+    "Invite collaborators and assign viewer, commenter, editor or owner roles",
+  ],
+  google_slides: [
+    "Create and read presentations",
+    "Add and edit slides with batch updates",
+    "Invite collaborators and manage their roles",
+  ],
+  google_docs: [
+    "Create and read documents",
+    "Insert, replace and format document content",
+    "Invite collaborators and manage their roles",
+  ],
+  google_forms: [
+    "Create surveys and quizzes",
+    "Add and edit questions",
+    "Read responses and invite collaborators",
+  ],
   pipedream: [
     "Connect the selected account through Pipedream's managed authentication",
     "Let Genit discover and run the app's supported actions",
@@ -331,11 +352,26 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Drive's full-access scope is restricted — your Google Cloud app must be verified before going to production (development users work without verification)",
     "Add /api/v1/integrations/google_drive/callback as an authorized redirect URI on your Google OAuth client",
   ],
-  google_meet: ["Enable the Google Meet REST API in the same Google Cloud project", "Uses the existing Google Drive OAuth callback"],
-  google_sheets: ["Enable Google Sheets API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
-  google_slides: ["Enable Google Slides API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
-  google_docs: ["Enable Google Docs API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
-  google_forms: ["Enable Google Forms API and Google Drive API", "Uses the existing Google Drive OAuth callback"],
+  google_meet: [
+    "Enable the Google Meet REST API in the same Google Cloud project",
+    "Uses the existing Google Drive OAuth callback",
+  ],
+  google_sheets: [
+    "Enable Google Sheets API and Google Drive API",
+    "Uses the existing Google Drive OAuth callback",
+  ],
+  google_slides: [
+    "Enable Google Slides API and Google Drive API",
+    "Uses the existing Google Drive OAuth callback",
+  ],
+  google_docs: [
+    "Enable Google Docs API and Google Drive API",
+    "Uses the existing Google Drive OAuth callback",
+  ],
+  google_forms: [
+    "Enable Google Forms API and Google Drive API",
+    "Uses the existing Google Drive OAuth callback",
+  ],
 };
 
 // Per-platform copy for the credential-entry flow (no OAuth). Used to build
@@ -383,7 +419,8 @@ const CREDENTIAL_INPUT: Partial<
     autoComplete: "off",
     helpUrl: "https://www.linkedin.com/campaignmanager/accounts",
     helpUrlLabel: "Campaign Manager",
-    helpSuffix: ". Connect LinkedIn first so Genit can reuse the authorized token.",
+    helpSuffix:
+      ". Connect LinkedIn first so Genit can reuse the authorized token.",
   },
   x_ads: {
     label: "X Ads account ID",
@@ -842,7 +879,8 @@ export function ConnectDialog({
                 <div className='min-w-0'>
                   <DialogHeader className='space-y-0 text-left'>
                     <DialogTitle className='text-lg font-semibold tracking-tight'>
-                      Connect {platformName}
+                      <LocalizedText text={"Connect"} />
+                      {platformName}
                     </DialogTitle>
                     <DialogDescription className='text-xs'>
                       {platformDescription}
@@ -855,15 +893,20 @@ export function ConnectDialog({
                 <div className='relative z-10 mt-5'>
                   {!isSupported ? (
                     <div className='border-border bg-card/60 text-muted-foreground rounded-md border px-3 py-3 text-xs dark:border-white/10 dark:bg-white/5'>
-                      We're still building the {platformName} connection. We'll
-                      enable it for your organization as soon as it's ready.
+                      <LocalizedText text={"We're still building the"} />
+                      {platformName}{" "}
+                      <LocalizedText
+                        text={
+                          "connection. We'll enable it for your organization as soon as it's ready."
+                        }
+                      />
                     </div>
                   ) : (
                     <>
                       <div className='relative bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
                         <GradientFrame />
                         <p className='text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase'>
-                          genit will be able to
+                          <LocalizedText text={"genit will be able to"} />
                         </p>
                         <ul className='space-y-2'>
                           {scopes.map((scope) => (
@@ -884,7 +927,7 @@ export function ConnectDialog({
                         <div className='relative mt-4 bg-neutral-50 px-3 py-3 dark:bg-neutral-800'>
                           <GradientFrame />
                           <p className='text-foreground mb-1 text-xs font-medium'>
-                            Before you continue
+                            <LocalizedText text={"Before you continue"} />
                           </p>
                           <ul className='text-muted-foreground space-y-1 text-xs [overflow-wrap:anywhere]'>
                             {requirements.map((r) => (
@@ -903,13 +946,20 @@ export function ConnectDialog({
                           <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
                             <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
                             <p className='text-foreground text-xs'>
-                              You&apos;re already signed in to Meta for{" "}
-                              {platformName} as{" "}
+                              <LocalizedText
+                                text={
+                                  "You&apos;re already signed in to Meta for"
+                                }
+                              />{" "}
+                              {platformName} <LocalizedText text={"as"} />{" "}
                               <span className='font-medium'>
                                 {identityBySurface.get(platform)?.metaUserName}
                               </span>
-                              . We&apos;ll reuse that login when possible — you
-                              may not see a popup.
+                              <LocalizedText
+                                text={
+                                  ". We&apos;ll reuse that login when possible — you may not see a popup."
+                                }
+                              />
                             </p>
                           </div>
                         )}
@@ -946,7 +996,7 @@ export function ConnectDialog({
                             />
                           </div>
                           <p className='text-muted-foreground mt-1.5 text-[11px]'>
-                            Paste the key from{" "}
+                            <LocalizedText text={"Paste the key from"} />{" "}
                             {credentialConfig.helpUrl ? (
                               <a
                                 href={credentialConfig.helpUrl}
@@ -975,10 +1025,14 @@ export function ConnectDialog({
                   <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
                     <GradientFrame />
                     <p className='text-foreground font-medium'>
-                      Select accounts to connect
+                      <LocalizedText text={"Select accounts to connect"} />
                     </p>
                     <p className='text-muted-foreground mt-1 text-xs'>
-                      Choose which accounts you want to manage with genit.
+                      <LocalizedText
+                        text={
+                          "Choose which accounts you want to manage with genit."
+                        }
+                      />
                     </p>
                   </div>
                   <div className='mt-4 space-y-2'>
@@ -1057,7 +1111,7 @@ export function ConnectDialog({
                     <CheckCircle2 className='h-7 w-7 text-emerald-500' />
                   </div>
                   <p className='text-foreground mt-4 text-sm font-medium'>
-                    {platformName} connected
+                    {platformName} <LocalizedText text={"connected"} />
                   </p>
                   {connectedAccount && (
                     <p className='text-muted-foreground mt-1 text-xs'>
@@ -1072,7 +1126,7 @@ export function ConnectDialog({
                   <div className='relative bg-neutral-50 px-3 py-3 text-sm dark:bg-neutral-800'>
                     <GradientFrame />
                     <p className='text-foreground font-medium'>
-                      Connection failed
+                      <LocalizedText text={"Connection failed"} />
                     </p>
                     <p className='text-muted-foreground mt-1 text-xs'>
                       {errorMessage}
@@ -1086,7 +1140,11 @@ export function ConnectDialog({
               <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
                 <ShieldCheck className='h-3.5 w-3.5' />
                 <span className='min-w-0'>
-                  Tokens are encrypted. Managed connections use Pipedream.
+                  <LocalizedText
+                    text={
+                      "Tokens are encrypted. Managed connections use Pipedream."
+                    }
+                  />
                 </span>
               </div>
 
@@ -1111,7 +1169,7 @@ export function ConnectDialog({
                   ) : (
                     <>
                       <Lock className='mr-1 h-3.5 w-3.5' />
-                      Coming soon
+                      <LocalizedText text={"Coming soon"} />
                     </>
                   )}
                 </Button>
@@ -1128,7 +1186,7 @@ export function ConnectDialog({
                     onOpenChange(false);
                   }}
                 >
-                  Cancel
+                  <LocalizedText text={"Cancel"} />
                 </Button>
               )}
 
@@ -1141,7 +1199,7 @@ export function ConnectDialog({
                     onClick={() => onOpenChange(false)}
                     disabled={provisionLoading}
                   >
-                    Cancel
+                    <LocalizedText text={"Cancel"} />
                   </Button>
                   <Button
                     type='button'
@@ -1153,7 +1211,7 @@ export function ConnectDialog({
                     {provisionLoading ? (
                       <>
                         <LoadingFileLoader size={16} />
-                        Connecting…
+                        <LocalizedText text={"Connecting…"} />
                       </>
                     ) : (
                       `Connect ${selectedIgIds.size || ""} ${
@@ -1171,7 +1229,7 @@ export function ConnectDialog({
                   onClick={handleDone}
                   className='bg-linear-to-r from-emerald-500 to-teal-500 text-white'
                 >
-                  Done
+                  <LocalizedText text={"Done"} />
                 </Button>
               )}
 
@@ -1183,7 +1241,7 @@ export function ConnectDialog({
                     variant='ghost'
                     onClick={() => onOpenChange(false)}
                   >
-                    Close
+                    <LocalizedText text={"Close"} />
                   </Button>
                   <Button
                     type='button'
@@ -1194,7 +1252,7 @@ export function ConnectDialog({
                     }}
                     className='bg-linear-to-r from-cyan-500 to-blue-500 text-white'
                   >
-                    Try again
+                    <LocalizedText text={"Try again"} />
                   </Button>
                 </div>
               )}

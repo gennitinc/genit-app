@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -65,17 +67,23 @@ export default function CreditTopUpModal({
     <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle>Top up credits</DialogTitle>
+          <DialogTitle>
+            <LocalizedText text={"Top up credits"} />
+          </DialogTitle>
           <DialogDescription>
-            Choose how much to add. Every $1 gives you {CREDITS_PER_USD}{" "}
-            credits.
+            <LocalizedText
+              text={"Choose how much to add. Every $1 gives you"}
+            />
+            {CREDITS_PER_USD} <LocalizedText text={"credits."} />
           </DialogDescription>
         </DialogHeader>
 
         <div className='mt-4 space-y-5'>
           <div className='space-y-3'>
             <div className='flex items-center justify-between'>
-              <span className='text-muted-foreground text-sm'>Amount</span>
+              <span className='text-muted-foreground text-sm'>
+                <LocalizedText text={"Amount"} />
+              </span>
               <div className='relative w-32'>
                 <span className='text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2'>
                   $
@@ -110,25 +118,31 @@ export default function CreditTopUpModal({
 
           <div className='bg-muted/60 rounded-lg border p-4 text-center'>
             <p className='text-muted-foreground text-xs font-medium tracking-wide uppercase'>
-              You receive
+              <LocalizedText text={"You receive"} />
             </p>
             <p className='mt-1 text-3xl font-semibold'>
               {Number.isFinite(credits) && credits > 0
                 ? credits.toLocaleString()
                 : 0}
             </p>
-            <p className='text-muted-foreground text-sm'>credits</p>
+            <p className='text-muted-foreground text-sm'>
+              <LocalizedText text={"credits"} />
+            </p>
             <p className='text-muted-foreground mt-2 text-xs'>
               ${Number.isFinite(amount) ? amount.toLocaleString() : 0} ×{" "}
-              {CREDITS_PER_USD} credits
+              {CREDITS_PER_USD} <LocalizedText text={"credits"} />
             </p>
           </div>
           <p className='text-muted-foreground text-xs'>
-            Credits are added automatically after Polar confirms payment.
+            <LocalizedText
+              text={
+                "Credits are added automatically after Polar confirms payment."
+              }
+            />
           </p>
           <div className='flex justify-end gap-2'>
             <Button variant='ghost' onClick={onClose} disabled={loading}>
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={handleSubmit} disabled={loading || !isValidAmount}>
               {loading

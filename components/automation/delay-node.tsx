@@ -1,6 +1,7 @@
 "use client";
 
 import { DELAY_UNITS, type DelayUnit } from "./automation-types";
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { Clock, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
@@ -50,7 +51,7 @@ export function DelayNode({ id, data }: NodeProps<DelayNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Clock className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            Delay
+            <LocalizedText text={"Delay"} />
           </span>
         </div>
         {isEdit && (
@@ -68,7 +69,9 @@ export function DelayNode({ id, data }: NodeProps<DelayNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -82,7 +85,9 @@ export function DelayNode({ id, data }: NodeProps<DelayNodeData>) {
 
             <div className='flex gap-2'>
               <div className='flex-1'>
-                <label className={labelCls}>Duration</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Duration"} />
+                </label>
                 <input
                   type='number'
                   min={1}
@@ -96,7 +101,9 @@ export function DelayNode({ id, data }: NodeProps<DelayNodeData>) {
                 />
               </div>
               <div className='flex-1'>
-                <label className={labelCls}>Unit</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Unit"} />
+                </label>
                 <select
                   value={data.unit || "minutes"}
                   onChange={(e) =>
@@ -123,7 +130,7 @@ export function DelayNode({ id, data }: NodeProps<DelayNodeData>) {
               {data.title}
             </h4>
             <div className='text-zinc-655 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-center text-[10px] dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
-              Wait for{" "}
+              <LocalizedText text={"Wait for"} />{" "}
               <span className='text-sm font-semibold text-zinc-800 dark:text-neutral-200'>
                 {data.duration || 1}
               </span>{" "}

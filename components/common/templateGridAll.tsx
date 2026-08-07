@@ -8,6 +8,7 @@ import AnimatedTooltipPreview from "./homeAgentsTooltip";
 import { HomeInfoGrid } from "./homeInfoGrid";
 import CategoryAndSearch from "@/components/common/category-and-search";
 import { PricingDialog } from "@/components/common/pricing-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -837,7 +838,9 @@ export default function TemplateGridAll() {
         <Drawer open={viewOpen} onOpenChange={setViewOpen}>
           <DrawerContent className='h-[75vh]'>
             <DrawerHeader className='border-b px-4 py-2'>
-              <DrawerTitle>Preview</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Preview"} />
+              </DrawerTitle>
             </DrawerHeader>
             <div className='min-h-0 flex-1 overflow-hidden'>
               <img
@@ -854,7 +857,9 @@ export default function TemplateGridAll() {
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
           <DialogContent className='flex h-[85vh] max-w-3xl flex-col overflow-hidden p-0'>
             <DialogHeader className='flex-shrink-0 border-b px-4 py-3'>
-              <DialogTitle>Recreate</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Recreate"} />
+              </DialogTitle>
             </DialogHeader>
 
             {/* Image container with relative positioning */}
@@ -927,7 +932,7 @@ export default function TemplateGridAll() {
                             disabled={isGenerating}
                             aria-label={`Remove ${file.name}`}
                           >
-                            &times;
+                            <LocalizedText text={"&times;"} />
                           </button>
                           {file.type && file.type.startsWith("image/") && (
                             <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -1197,7 +1202,7 @@ export default function TemplateGridAll() {
                       <div className='flex items-center gap-2'>
                         <Palette className='text-primary h-4 w-4' />
                         <h3 className='text-foreground text-sm font-semibold'>
-                          Brand Identity
+                          <LocalizedText text={"Brand Identity"} />
                         </h3>
                       </div>
                       <button
@@ -1223,7 +1228,9 @@ export default function TemplateGridAll() {
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
           <DrawerContent className='flex h-[85vh] flex-col overflow-hidden'>
             <DrawerHeader className='flex-shrink-0'>
-              <DrawerTitle>Recreate</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Recreate"} />
+              </DrawerTitle>
             </DrawerHeader>
 
             {/* Image container with relative positioning */}
@@ -1296,7 +1303,7 @@ export default function TemplateGridAll() {
                             disabled={isGenerating}
                             aria-label={`Remove ${file.name}`}
                           >
-                            &times;
+                            <LocalizedText text={"&times;"} />
                           </button>
                           {file.type && file.type.startsWith("image/") && (
                             <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -1563,7 +1570,7 @@ export default function TemplateGridAll() {
                       <div className='flex items-center gap-2'>
                         <Palette className='text-primary h-4 w-4' />
                         <h3 className='text-foreground text-sm font-semibold'>
-                          Brand Identity
+                          <LocalizedText text={"Brand Identity"} />
                         </h3>
                       </div>
                       <button

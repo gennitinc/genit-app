@@ -14,6 +14,7 @@ import { MessageActions } from "@/components/chat/messages/message-actions";
 import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
 import { UserMessage } from "@/components/chat/messages/user-message";
+import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
 import type {
@@ -133,7 +134,9 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
         <LoadingFileLoader size={14} />
         <span className='text-foreground font-medium'>{pendingLabel}</span>
-        <span className='text-muted-foreground'>running…</span>
+        <span className='text-muted-foreground'>
+          <LocalizedText text={"running…"} />
+        </span>
       </div>
     );
   }
@@ -179,7 +182,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
             rel='noreferrer'
             className='text-foreground hover:text-foreground/80 mt-1.5 inline-flex items-center gap-1 text-[12px] font-medium underline-offset-2 hover:underline'
           >
-            Open in Google Calendar
+            <LocalizedText text={"Open in Google Calendar"} />
           </a>
         )}
       </AgentCard>
@@ -232,7 +235,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
         <span className='text-foreground font-medium'>
           {humanizeToolName(call.name)}
         </span>{" "}
-        · result
+        <LocalizedText text={"· result"} />
       </summary>
       <pre className='border-border/70 -mb-[1px] overflow-x-auto border-t px-3.5 py-2.5 text-[10.5px] leading-relaxed dark:border-white/10'>
         {JSON.stringify(data, null, 2)}
@@ -247,7 +250,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
     return (
       <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
         <LoadingFileLoader size={14} />
-        Working
+        <LocalizedText text={"Working"} />
       </span>
     );
   }
@@ -255,7 +258,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
     return (
       <span className='inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400'>
         <span className='h-1.5 w-1.5 rounded-full bg-amber-500' />
-        Waiting on you
+        <LocalizedText text={"Waiting on you"} />
       </span>
     );
   }
@@ -263,7 +266,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
     return (
       <span className='inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400'>
         <span className='h-1.5 w-1.5 rounded-full bg-amber-500' />
-        Connect account
+        <LocalizedText text={"Connect account"} />
       </span>
     );
   }
@@ -271,7 +274,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
     return (
       <span className='inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10.5px] font-medium text-emerald-600 dark:text-emerald-400'>
         <CheckCircle2 className='h-2.5 w-2.5' />
-        Done
+        <LocalizedText text={"Done"} />
       </span>
     );
   }
@@ -279,7 +282,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
     return (
       <span className='inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10.5px] font-medium text-rose-600 dark:text-rose-400'>
         <XCircle className='h-2.5 w-2.5' />
-        Failed
+        <LocalizedText text={"Failed"} />
       </span>
     );
   }
@@ -384,7 +387,7 @@ export function AgentMessage({
         {/* Header row: name + inline status badge */}
         <div className='mb-2 flex items-center gap-2'>
           <span className='text-foreground text-[12px] font-medium tracking-tight'>
-            genit
+            <LocalizedText text={"genit"} />
           </span>
           <StatusBadge status={run.status} />
         </div>

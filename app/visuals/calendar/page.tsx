@@ -7,6 +7,7 @@ import {
   INTEGRATIONS,
   type Integration,
 } from "@/app/integrations/integrations-explorer";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   EventCalendar,
@@ -346,10 +347,12 @@ export default function CalendarPage() {
           <div className='flex min-w-0 flex-col justify-end py-1'>
             <div>
               <h3 className='font-instrument-serif text-2xl font-semibold tracking-tight md:text-3xl'>
-                Brand Events
+                <LocalizedText text={"Brand Events"} />
               </h3>
               <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
-                Plan your work and keep every event in sync.
+                <LocalizedText
+                  text={"Plan your work and keep every event in sync."}
+                />
               </p>
             </div>
 
@@ -369,7 +372,7 @@ export default function CalendarPage() {
                   className='my-2 rounded-xl px-4'
                   onClick={openCreateEvent}
                 >
-                  New
+                  <LocalizedText text={"New"} />
                   <Plus className='h-4 w-4' />
                 </Button>
               ) : (
@@ -378,7 +381,7 @@ export default function CalendarPage() {
                   onClick={handleConnectCalendar}
                 >
                   <GoogleCalendarBrand />
-                  Connect calendar
+                  <LocalizedText text={"Connect calendar"} />
                 </Button>
               )}
             </div>
@@ -392,7 +395,7 @@ export default function CalendarPage() {
                 </div>
                 <div className='min-w-0'>
                   <p className='truncate text-sm font-medium'>
-                    Google Calendar
+                    <LocalizedText text={"Google Calendar"} />
                   </p>
                   <p className='truncate text-xs text-zinc-500 dark:text-white/50'>
                     {activeConnection?.accountName || "Not connected"}
@@ -418,13 +421,13 @@ export default function CalendarPage() {
             <div className='mt-4 grid grid-cols-2 gap-3'>
               <div className='rounded-xl bg-zinc-50 p-3 ring-1 ring-zinc-200 dark:bg-white/[0.04] dark:ring-white/10'>
                 <p className='text-[11px] text-zinc-500 dark:text-white/50'>
-                  Events in view
+                  <LocalizedText text={"Events in view"} />
                 </p>
                 <p className='mt-1 text-xl font-semibold'>{eventCount}</p>
               </div>
               <div className='rounded-xl bg-zinc-50 p-3 ring-1 ring-zinc-200 dark:bg-white/[0.04] dark:ring-white/10'>
                 <p className='text-[11px] text-zinc-500 dark:text-white/50'>
-                  Current view
+                  <LocalizedText text={"Current view"} />
                 </p>
                 <p className='mt-1 truncate text-sm font-semibold'>
                   {VIEW_OPTIONS.find((option) => option.value === currentView)
@@ -467,7 +470,9 @@ export default function CalendarPage() {
                   aria-label='Google calendar'
                   className='h-8 max-w-44 appearance-none truncate rounded-lg border border-zinc-200 bg-white py-1 pr-8 pl-3 text-xs font-medium text-zinc-800 outline-none dark:border-white/10 dark:bg-[#0c0c0c] dark:text-white'
                 >
-                  <option value='primary'>Primary calendar</option>
+                  <option value='primary'>
+                    <LocalizedText text={"Primary calendar"} />
+                  </option>
                   {(calendarsQuery.data || [])
                     .filter(
                       (calendar) =>
@@ -512,7 +517,7 @@ export default function CalendarPage() {
               onClick={() => calendarApi()?.setOption("date", new Date())}
               className='h-8 rounded-lg border border-zinc-200 px-2.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/[0.06]'
             >
-              Today
+              <LocalizedText text={"Today"} />
             </button>
             <button
               onClick={() => eventsQuery.refetch()}
@@ -536,7 +541,9 @@ export default function CalendarPage() {
               onChange={(event) => setSelectedCalendarId(event.target.value)}
               className='w-full rounded-lg bg-zinc-100 px-3 py-2 text-sm text-zinc-900 dark:bg-white/[0.06] dark:text-white'
             >
-              <option value='primary'>Primary calendar</option>
+              <option value='primary'>
+                <LocalizedText text={"Primary calendar"} />
+              </option>
               {(calendarsQuery.data || [])
                 .filter((calendar) => !calendar.primary)
                 .map((calendar) => (
@@ -574,17 +581,21 @@ export default function CalendarPage() {
             <div className='absolute inset-0 z-20 flex items-center justify-center bg-white/70 p-5 text-center backdrop-blur-[2px] dark:bg-black/55'>
               <div className='relative w-full max-w-sm overflow-hidden rounded-lg bg-white p-6 ring-1 ring-zinc-200 dark:bg-[#0c0c0c] dark:ring-white/10'>
                 <h3 className='relative text-lg font-semibold'>
-                  Bring your schedule into Genit
+                  <LocalizedText text={"Bring your schedule into Genit"} />
                 </h3>
                 <p className='relative mt-1 mb-5 text-sm text-zinc-500 dark:text-white/55'>
-                  Connect Google Calendar to create, edit, and manage events.
+                  <LocalizedText
+                    text={
+                      "Connect Google Calendar to create, edit, and manage events."
+                    }
+                  />
                 </p>
                 <Button
                   className='relative rounded-xl'
                   onClick={handleConnectCalendar}
                 >
                   <GoogleCalendarBrand />
-                  Connect Google Calendar
+                  <LocalizedText text={"Connect Google Calendar"} />
                 </Button>
               </div>
             </div>
@@ -592,12 +603,15 @@ export default function CalendarPage() {
 
           {activeConnection && eventsQuery.isError && (
             <div className='absolute inset-x-4 top-4 z-20 flex items-center justify-between gap-3 rounded-sm border border-red-200 bg-red-50 p-3 text-sm text-red-800 shadow-sm dark:border-red-900 dark:bg-red-950 dark:text-red-200'>
-              <span>Could not load events. {errorMessage}</span>
+              <span>
+                <LocalizedText text={"Could not load events."} />
+                {errorMessage}
+              </span>
               <button
                 onClick={() => eventsQuery.refetch()}
                 className='shrink-0 font-semibold'
               >
-                Try again
+                <LocalizedText text={"Try again"} />
               </button>
             </div>
           )}

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { UIMessage } from "ai";
@@ -206,7 +207,8 @@ export const BranchPage = ({ className, ...props }: BranchPageProps) => {
       )}
       {...props}
     >
-      {currentBranch + 1} of {totalBranches}
+      {currentBranch + 1} <LocalizedText text={"of"} />
+      {totalBranches}
     </span>
   );
 };

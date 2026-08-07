@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import React, { useState } from "react";
 
 export function LandingAvatar() {
@@ -51,10 +52,10 @@ export function LandingAvatar() {
     <div className='mt-20'>
       <div className='mb-12 space-y-4 text-center md:mb-16'>
         <h2 className='text-foreground text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl'>
-          Generate AI-Human Avatars
+          <LocalizedText text={"Generate AI-Human Avatars"} />
         </h2>
         <p className='text-muted-foreground mx-auto max-w-2xl text-base md:text-base'>
-          Generate stunning AI-Human avatars with AI.
+          <LocalizedText text={"Generate stunning AI-Human avatars with AI."} />
         </p>
       </div>
       <>

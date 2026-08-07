@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -51,7 +52,9 @@ export function DeleteConfirmation({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
-            <DialogTitle>Delete Message</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Message"} />
+            </DialogTitle>
             <DialogDescription>{message}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -60,7 +63,7 @@ export function DeleteConfirmation({
               onClick={() => onOpenChange(false)}
               disabled={isDeleting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -79,7 +82,9 @@ export function DeleteConfirmation({
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Delete Message</DrawerTitle>
+          <DrawerTitle>
+            <LocalizedText text={"Delete Message"} />
+          </DrawerTitle>
           <DrawerDescription>{message}</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
@@ -95,7 +100,7 @@ export function DeleteConfirmation({
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
           >
-            Cancel
+            <LocalizedText text={"Cancel"} />
           </Button>
         </DrawerFooter>
       </DrawerContent>

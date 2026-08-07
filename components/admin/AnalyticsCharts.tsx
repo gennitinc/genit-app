@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -45,9 +46,9 @@ export const AnalyticsCharts = ({
           className='bg-card border-border/50 rounded-lg border p-6'
         >
           <h3 className='mb-6 flex items-center justify-between text-lg font-semibold'>
-            Platform Growth
+            <LocalizedText text={"Platform Growth"} />
             <span className='text-muted-foreground bg-muted rounded px-2 py-1 text-xs font-normal'>
-              Last 30 Days
+              <LocalizedText text={"Last 30 Days"} />
             </span>
           </h3>
           <div className='h-[300px] w-full'>
@@ -106,7 +107,9 @@ export const AnalyticsCharts = ({
         transition={{ delay: 0.1 }}
         className='bg-card border-border/50 rounded-lg border p-6'
       >
-        <h3 className='mb-6 text-lg font-semibold'>Feature Distribution</h3>
+        <h3 className='mb-6 text-lg font-semibold'>
+          <LocalizedText text={"Feature Distribution"} />
+        </h3>
         <div className='flex h-[300px] w-full items-center justify-center'>
           <ResponsiveContainer width='100%' height='100%'>
             <PieChart>

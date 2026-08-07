@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -135,7 +136,9 @@ export default function BrowserConsole() {
                 }`}
               />
             </button>
-            <h3 className='font-mono text-sm font-medium'>Console</h3>
+            <h3 className='font-mono text-sm font-medium'>
+              <LocalizedText text={"Console"} />
+            </h3>
           </div>
           <div className='flex items-center space-x-2'>
             <button
@@ -159,7 +162,9 @@ export default function BrowserConsole() {
         {isExpanded && (
           <div className='h-full overflow-y-auto font-mono text-sm text-gray-100'>
             {logs.length === 0 ? (
-              <div className='p-4 text-gray-500 italic'>No logs to display</div>
+              <div className='p-4 text-gray-500 italic'>
+                <LocalizedText text={"No logs to display"} />
+              </div>
             ) : (
               <div className='p-1'>
                 {logs.map((log) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -127,10 +128,10 @@ export function ChartLibrary({
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
-                  Chart Library
+                  <LocalizedText text={"Chart Library"} />
                 </h3>
                 <p className='text-muted-foreground text-xs'>
-                  Create data visualizations
+                  <LocalizedText text={"Create data visualizations"} />
                 </p>
               </div>
             </div>
@@ -154,7 +155,9 @@ export function ChartLibrary({
           <div className='space-y-4 pb-4'>
             {/* Chart Type Selection */}
             <div className='space-y-2'>
-              <Label className='text-xs font-medium'>Chart Type</Label>
+              <Label className='text-xs font-medium'>
+                <LocalizedText text={"Chart Type"} />
+              </Label>
               <div className='grid grid-cols-3 gap-2'>
                 {(
                   ["bar", "pie", "line", "doughnut", "area"] as ChartType[]
@@ -182,7 +185,7 @@ export function ChartLibrary({
             {/* Chart Title */}
             <div className='space-y-2'>
               <Label htmlFor='chart-title' className='text-xs font-medium'>
-                Chart Title (Optional)
+                <LocalizedText text={"Chart Title (Optional)"} />
               </Label>
               <Input
                 id='chart-title'
@@ -196,7 +199,7 @@ export function ChartLibrary({
             {/* Labels */}
             <div className='space-y-2'>
               <Label htmlFor='chart-labels' className='text-xs font-medium'>
-                Labels (comma-separated)
+                <LocalizedText text={"Labels (comma-separated)"} />
               </Label>
               <Input
                 id='chart-labels'
@@ -206,14 +209,15 @@ export function ChartLibrary({
                 className='h-9 text-sm'
               />
               <p className='text-muted-foreground text-[10px]'>
-                {parsedLabels.length} label(s) detected
+                {parsedLabels.length}{" "}
+                <LocalizedText text={"label(s) detected"} />
               </p>
             </div>
 
             {/* Data */}
             <div className='space-y-2'>
               <Label htmlFor='chart-data' className='text-xs font-medium'>
-                Data Values (comma-separated)
+                <LocalizedText text={"Data Values (comma-separated)"} />
               </Label>
               <Input
                 id='chart-data'
@@ -223,14 +227,14 @@ export function ChartLibrary({
                 className='h-9 text-sm'
               />
               <p className='text-muted-foreground text-[10px]'>
-                {parsedData.length} value(s) detected
+                {parsedData.length} <LocalizedText text={"value(s) detected"} />
               </p>
             </div>
 
             {/* Data Label */}
             <div className='space-y-2'>
               <Label htmlFor='data-label' className='text-xs font-medium'>
-                Data Series Label
+                <LocalizedText text={"Data Series Label"} />
               </Label>
               <Input
                 id='data-label'
@@ -246,18 +250,25 @@ export function ChartLibrary({
               <div className='bg-muted/50 border-border rounded-lg border p-3'>
                 <div className='mb-2 flex items-center gap-2'>
                   <Settings className='text-muted-foreground h-4 w-4' />
-                  <span className='text-xs font-medium'>Preview</span>
+                  <span className='text-xs font-medium'>
+                    <LocalizedText text={"Preview"} />
+                  </span>
                 </div>
                 <div className='text-muted-foreground space-y-1 text-xs'>
                   <p>
-                    Type:{" "}
+                    <LocalizedText text={"Type:"} />{" "}
                     <span className='font-mono capitalize'>{chartType}</span>
                   </p>
                   <p>
-                    Data Points:{" "}
+                    <LocalizedText text={"Data Points:"} />{" "}
                     {Math.min(parsedLabels.length, parsedData.length)}
                   </p>
-                  {chartTitle && <p>Title: {chartTitle}</p>}
+                  {chartTitle && (
+                    <p>
+                      <LocalizedText text={"Title:"} />
+                      {chartTitle}
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -278,11 +289,13 @@ export function ChartLibrary({
           }
         >
           <Download className='mr-2 h-4 w-4' />
-          Insert Chart
+          <LocalizedText text={"Insert Chart"} />
         </Button>
         {parsedLabels.length !== parsedData.length && (
           <p className='text-destructive mt-2 text-center text-xs'>
-            Number of labels must match number of data values
+            <LocalizedText
+              text={"Number of labels must match number of data values"}
+            />
           </p>
         )}
       </div>

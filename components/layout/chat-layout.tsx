@@ -65,17 +65,13 @@ function ChatLayoutInner() {
   }, [setSidebarOpen]);
 
   const isGenerationActive =
-    Boolean(isGeneratingImage) ||
-    (liveNodes?.length ?? 0) > 0;
+    Boolean(isGeneratingImage) || (liveNodes?.length ?? 0) > 0;
 
   const latestMessagePreview = useMemo(
     () => getLatestMessagePreview(messages),
     [messages]
   );
-  const latestAgentPreview = useMemo(
-    () => getLatestAgentPreview(runs),
-    [runs]
-  );
+  const latestAgentPreview = useMemo(() => getLatestAgentPreview(runs), [runs]);
   const latestPreview = [latestMessagePreview, latestAgentPreview]
     .filter((value) => value !== null)
     .sort((a, b) => a.createdAt - b.createdAt)
@@ -113,9 +109,7 @@ function ChatLayoutInner() {
     focusedPreviewType || latestPreview?.type || categoryPreviewType;
 
   const hasAnyPreview =
-    isGenerationActive ||
-    Boolean(artifactPreview) ||
-    Boolean(previewType);
+    isGenerationActive || Boolean(artifactPreview) || Boolean(previewType);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -216,7 +210,9 @@ function ChatLayoutInner() {
                   type='button'
                   onClick={() => setIsPreviewOpen((v) => !v)}
                   className='border-border/50 bg-background/80 hover:bg-accent absolute top-0 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-                  aria-label={isPreviewOpen ? "Close preview panel" : "Open preview panel"}
+                  aria-label={
+                    isPreviewOpen ? "Close preview panel" : "Open preview panel"
+                  }
                   title={isPreviewOpen ? "Hide preview" : "Show preview"}
                 >
                   <AnimatePresence initial={false} mode='wait'>
@@ -228,7 +224,11 @@ function ChatLayoutInner() {
                       transition={{ duration: 0.18, ease: "easeOut" }}
                       className='inline-flex'
                     >
-                      {isPreviewOpen ? <PanelRightClose className='h-4 w-4' /> : <PanelRightOpen className='h-4 w-4' />}
+                      {isPreviewOpen ? (
+                        <PanelRightClose className='h-4 w-4' />
+                      ) : (
+                        <PanelRightOpen className='h-4 w-4' />
+                      )}
                     </motion.span>
                   </AnimatePresence>
                 </button>

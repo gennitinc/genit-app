@@ -13,6 +13,7 @@ import {
   PostEditorDialog,
   type PostEditorForm,
 } from "@/app/visuals/_components/post-editor-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -1011,18 +1012,22 @@ export default function PostsPage() {
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
             <div>
               <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight'>
-                Content workspace
+                <LocalizedText text={"Content workspace"} />
               </h1>
               <p className='mt-1 max-w-2xl text-sm leading-5 text-zinc-500 dark:text-white/55'>
-                Create, schedule, and publish posts across all your social
-                channels.
+                <LocalizedText
+                  text={
+                    "Create, schedule, and publish posts across all your social channels."
+                  }
+                />
               </p>
             </div>
             <Button
               onClick={openCreate}
               className='mt-4 flex h-9 w-fit items-center gap-2 rounded-xl px-4 text-sm disabled:opacity-50'
             >
-              New Post <Plus className='h-4 w-4' />
+              <LocalizedText text={"New Post"} />
+              <Plus className='h-4 w-4' />
             </Button>
           </div>
 
@@ -1034,10 +1039,11 @@ export default function PostsPage() {
                 </div>
                 <div className='min-w-0'>
                   <p className='truncate text-sm font-medium'>
-                    Content overview
+                    <LocalizedText text={"Content overview"} />
                   </p>
                   <p className='truncate text-xs text-zinc-500 dark:text-white/50'>
-                    {connected.length} connected channel
+                    {connected.length}{" "}
+                    <LocalizedText text={"connected channel"} />
                     {connected.length === 1 ? "" : "s"}
                   </p>
                 </div>
@@ -1124,7 +1130,9 @@ export default function PostsPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='all'>All platforms</SelectItem>
+                <SelectItem value='all'>
+                  <LocalizedText text={"All platforms"} />
+                </SelectItem>
                 {PLATFORMS.map((platform) => (
                   <SelectItem key={platform} value={platform}>
                     {LABEL[platform]}
@@ -1192,7 +1200,7 @@ export default function PostsPage() {
                 onClick={openCreate}
               >
                 <Plus className='mr-2 h-4 w-4' />
-                New post
+                <LocalizedText text={"New post"} />
               </Button>
             )}
           </div>
@@ -1219,7 +1227,7 @@ export default function PostsPage() {
                       {(!post.remote || post.platform === "facebook") && (
                         <DropdownMenuItem onSelect={() => openEdit(post)}>
                           <Edit3 className='h-3.5 w-3.5' />
-                          Edit
+                          <LocalizedText text={"Edit"} />
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem
@@ -1227,7 +1235,7 @@ export default function PostsPage() {
                         className='text-red-600 focus:text-red-600'
                       >
                         <Trash2 className='h-3.5 w-3.5' />
-                        Delete
+                        <LocalizedText text={"Delete"} />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -1294,7 +1302,8 @@ export default function PostsPage() {
                           onClick={() => setAnalyticsPost(post)}
                           className='flex items-center gap-1 text-[11px] font-semibold text-sky-300'
                         >
-                          Analytics <BarChart3 className='h-3 w-3' />
+                          <LocalizedText text={"Analytics"} />
+                          <BarChart3 className='h-3 w-3' />
                         </button>
                       </div>
                     </div>
@@ -1353,15 +1362,17 @@ export default function PostsPage() {
               </div>
               <div>
                 <DialogTitle className='text-foreground text-lg font-semibold tracking-tight dark:text-white'>
-                  Delete Post
+                  <LocalizedText text={"Delete Post"} />
                 </DialogTitle>
                 <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
-                  Are you sure you want to delete this post from{" "}
+                  <LocalizedText
+                    text={"Are you sure you want to delete this post from"}
+                  />{" "}
                   <span className='text-foreground font-medium dark:text-white'>
                     {deleteTarget?.accountName ||
                       LABEL[deleteTarget?.platform || "facebook"]}
                   </span>
-                  ? This action cannot be undone.
+                  <LocalizedText text={"? This action cannot be undone."} />
                 </p>
               </div>
             </div>
@@ -1372,7 +1383,7 @@ export default function PostsPage() {
                 onClick={() => setDeleteTarget(null)}
                 className='text-foreground px-4 py-2 text-sm font-medium ring-1 ring-black/10 transition'
               >
-                Cancel
+                <LocalizedText text={"Cancel"} />
               </button>
               <button
                 type='button'
@@ -1404,10 +1415,10 @@ export default function PostsPage() {
               </span>
               <div>
                 <DialogTitle className='text-foreground text-sm font-semibold dark:text-white'>
-                  Post analytics
+                  <LocalizedText text={"Post analytics"} />
                 </DialogTitle>
                 <DialogDescription className='text-muted-foreground text-[11px]'>
-                  Performance metrics · last 28 days
+                  <LocalizedText text={"Performance metrics · last 28 days"} />
                 </DialogDescription>
               </div>
             </div>
@@ -1419,7 +1430,7 @@ export default function PostsPage() {
               <div className='flex flex-col gap-3 lg:border-r lg:border-black/5 lg:pr-4 dark:lg:border-white/[0.05]'>
                 <div>
                   <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
-                    Post Details
+                    <LocalizedText text={"Post Details"} />
                   </h3>
                   <div className='group overflow-hidden rounded-xl border border-black/10 bg-black/[0.015] dark:border-white/[0.08] dark:bg-white/[0.02]'>
                     <div className='relative flex aspect-video w-full items-center justify-center overflow-hidden border-b border-black/5 bg-zinc-100 dark:border-white/[0.05] dark:bg-zinc-900'>
@@ -1471,14 +1482,17 @@ export default function PostsPage() {
                   <>
                     {analyticsQuery.isError && (
                       <div className='text-foreground/30 rounded-lg p-2.5 text-[11px]'>
-                        Live analytics could not be refreshed. Showing the
-                        latest metrics supplied by the platform.
+                        <LocalizedText
+                          text={
+                            "Live analytics could not be refreshed. Showing the latest metrics supplied by the platform."
+                          }
+                        />
                       </div>
                     )}
 
                     <div>
                       <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
-                        Engagement
+                        <LocalizedText text={"Engagement"} />
                       </h3>
                       <div className='h-48 w-full rounded-xl border border-black/10 bg-black/[0.015] p-3 dark:border-white/[0.08] dark:bg-white/[0.02]'>
                         <ResponsiveContainer width='100%' height='100%'>
@@ -1539,7 +1553,7 @@ export default function PostsPage() {
 
                     <div>
                       <h3 className='text-muted-foreground mb-2 text-[10px] font-semibold tracking-wider uppercase'>
-                        Breakdown
+                        <LocalizedText text={"Breakdown"} />
                       </h3>
                       <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>
                         {analyticsMetrics.map(
@@ -1573,7 +1587,7 @@ export default function PostsPage() {
               className='rounded-md border-none bg-transparent dark:hover:text-white'
             >
               <RefreshCw className='h-4 w-4' />
-              Refresh
+              <LocalizedText text={"Refresh"} />
             </Button>
             {analyticsPost?.permalink && (
               <Button asChild className='rounded-md font-medium'>
@@ -1582,7 +1596,8 @@ export default function PostsPage() {
                   target='_blank'
                   rel='noreferrer'
                 >
-                  View live post <ExternalLink className='h-4 w-4' />
+                  <LocalizedText text={"View live post"} />
+                  <ExternalLink className='h-4 w-4' />
                 </a>
               </Button>
             )}

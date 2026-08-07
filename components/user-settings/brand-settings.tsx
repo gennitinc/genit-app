@@ -8,6 +8,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -332,10 +333,15 @@ export default function BrandSettings() {
         <div className='border-border bg-muted/40 flex items-start gap-3 rounded-lg border px-4 py-3 text-sm'>
           <Lock className='text-muted-foreground mt-0.5 h-4 w-4 shrink-0' />
           <div>
-            <p className='text-foreground font-medium'>View-only access</p>
+            <p className='text-foreground font-medium'>
+              <LocalizedText text={"View-only access"} />
+            </p>
             <p className='text-muted-foreground mt-0.5 text-xs'>
-              Only the organization owner can edit this brand. Ask the owner if
-              something needs to change.
+              <LocalizedText
+                text={
+                  "Only the organization owner can edit this brand. Ask the owner if something needs to change."
+                }
+              />
             </p>
           </div>
         </div>
@@ -345,11 +351,14 @@ export default function BrandSettings() {
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='flex items-center gap-2 text-base'>
               <Palette className='h-5 w-5' />
-              Brand identity
+              <LocalizedText text={"Brand identity"} />
             </CardTitle>
             <CardDescription>
-              Update the logo, name, and one-line description we picked up
-              during onboarding.
+              <LocalizedText
+                text={
+                  "Update the logo, name, and one-line description we picked up during onboarding."
+                }
+              />
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-6 p-5'>
@@ -369,7 +378,9 @@ export default function BrandSettings() {
                 ) : (
                   <div className='text-muted-foreground flex flex-col items-center gap-1'>
                     <ImageIcon className='size-6' />
-                    <span className='text-xs'>Upload logo</span>
+                    <span className='text-xs'>
+                      <LocalizedText text={"Upload logo"} />
+                    </span>
                   </div>
                 )}
                 {isUploadingLogo && (
@@ -390,7 +401,9 @@ export default function BrandSettings() {
               />
               <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
                 <div className='space-y-2'>
-                  <Label htmlFor='businessName'>Business name</Label>
+                  <Label htmlFor='businessName'>
+                    <LocalizedText text={"Business name"} />
+                  </Label>
                   <Input
                     id='businessName'
                     value={form.businessName}
@@ -398,7 +411,9 @@ export default function BrandSettings() {
                   />
                 </div>
                 <div className='space-y-2'>
-                  <Label htmlFor='companyWebsite'>Website</Label>
+                  <Label htmlFor='companyWebsite'>
+                    <LocalizedText text={"Website"} />
+                  </Label>
                   <Input
                     id='companyWebsite'
                     value={form.companyWebsite}
@@ -407,7 +422,9 @@ export default function BrandSettings() {
                   />
                 </div>
                 <div className='space-y-2 md:col-span-2'>
-                  <Label htmlFor='businessBio'>One-line description</Label>
+                  <Label htmlFor='businessBio'>
+                    <LocalizedText text={"One-line description"} />
+                  </Label>
                   <Textarea
                     id='businessBio'
                     value={form.businessBio}
@@ -416,7 +433,9 @@ export default function BrandSettings() {
                   />
                 </div>
                 <div className='space-y-2 md:col-span-2'>
-                  <Label htmlFor='industry'>Industry</Label>
+                  <Label htmlFor='industry'>
+                    <LocalizedText text={"Industry"} />
+                  </Label>
                   <Input
                     id='industry'
                     value={form.industry}
@@ -431,15 +450,22 @@ export default function BrandSettings() {
 
         <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-            <CardTitle className='text-base'>Visual style</CardTitle>
+            <CardTitle className='text-base'>
+              <LocalizedText text={"Visual style"} />
+            </CardTitle>
             <CardDescription>
-              Brand colors and font preferences. Used to generate on-brand
-              assets.
+              <LocalizedText
+                text={
+                  "Brand colors and font preferences. Used to generate on-brand assets."
+                }
+              />
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-6 p-5'>
             <div className='space-y-3'>
-              <Label>Colors</Label>
+              <Label>
+                <LocalizedText text={"Colors"} />
+              </Label>
               <div className='flex flex-wrap items-center gap-3'>
                 {colors.map((c, i) => (
                   <ColorSwatch
@@ -477,14 +503,20 @@ export default function BrandSettings() {
 
         <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-            <CardTitle className='text-base'>Brand DNA</CardTitle>
+            <CardTitle className='text-base'>
+              <LocalizedText text={"Brand DNA"} />
+            </CardTitle>
             <CardDescription>
-              The narrative the AI uses when writing in your voice.
+              <LocalizedText
+                text={"The narrative the AI uses when writing in your voice."}
+              />
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4 p-5'>
             <div className='space-y-2'>
-              <Label htmlFor='aboutUs'>About us</Label>
+              <Label htmlFor='aboutUs'>
+                <LocalizedText text={"About us"} />
+              </Label>
               <Textarea
                 id='aboutUs'
                 rows={4}
@@ -494,7 +526,9 @@ export default function BrandSettings() {
             </div>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-2'>
-                <Label htmlFor='mission'>Mission</Label>
+                <Label htmlFor='mission'>
+                  <LocalizedText text={"Mission"} />
+                </Label>
                 <Textarea
                   id='mission'
                   rows={3}
@@ -503,7 +537,9 @@ export default function BrandSettings() {
                 />
               </div>
               <div className='space-y-2'>
-                <Label htmlFor='vision'>Vision</Label>
+                <Label htmlFor='vision'>
+                  <LocalizedText text={"Vision"} />
+                </Label>
                 <Textarea
                   id='vision'
                   rows={3}
@@ -513,7 +549,9 @@ export default function BrandSettings() {
               </div>
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='slogan'>Slogan</Label>
+              <Label htmlFor='slogan'>
+                <LocalizedText text={"Slogan"} />
+              </Label>
               <Input
                 id='slogan'
                 value={form.slogan}
@@ -522,7 +560,9 @@ export default function BrandSettings() {
               />
             </div>
             <div className='space-y-2'>
-              <Label>Values</Label>
+              <Label>
+                <LocalizedText text={"Values"} />
+              </Label>
               <ChipEditor
                 values={form.values}
                 onChange={(v) => update("values", v)}
@@ -530,7 +570,9 @@ export default function BrandSettings() {
               />
             </div>
             <div className='space-y-2'>
-              <Label>Voice tone</Label>
+              <Label>
+                <LocalizedText text={"Voice tone"} />
+              </Label>
               <NumberedList
                 values={form.voiceTone}
                 onChange={(v) => update("voiceTone", v)}
@@ -542,8 +584,12 @@ export default function BrandSettings() {
 
         <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-            <CardTitle className='text-base'>Social profiles</CardTitle>
-            <CardDescription>Where can people find you online?</CardDescription>
+            <CardTitle className='text-base'>
+              <LocalizedText text={"Social profiles"} />
+            </CardTitle>
+            <CardDescription>
+              <LocalizedText text={"Where can people find you online?"} />
+            </CardDescription>
           </CardHeader>
           <CardContent className='p-5'>
             <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
@@ -582,18 +628,18 @@ export default function BrandSettings() {
               onClick={handleReset}
               disabled={!dirty || isSaving}
             >
-              Reset
+              <LocalizedText text={"Reset"} />
             </Button>
             <Button onClick={handleSave} disabled={!dirty || isSaving}>
               {isSaving ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Saving...
+                  <LocalizedText text={"Saving..."} />
                 </>
               ) : (
                 <>
                   <Save className='mr-2 h-4 w-4' />
-                  Save changes
+                  <LocalizedText text={"Save changes"} />
                 </>
               )}
             </Button>
@@ -723,7 +769,7 @@ function ChipEditor({
           placeholder={placeholder}
         />
         <Button type='button' variant='outline' onClick={add}>
-          Add
+          <LocalizedText text={"Add"} />
         </Button>
       </div>
     </div>

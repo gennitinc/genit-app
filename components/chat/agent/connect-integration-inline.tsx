@@ -1,8 +1,10 @@
 "use client";
 
 import { AgentButton, AgentCard } from "./agent-card";
+import { LocalizedText } from "@/components/localized-text";
 import type { AgentIntegrationRequired } from "@/lib/agents-api";
 import { requestConnectUrl } from "@/lib/integrations-api";
+import { LoadingFileLoader } from "@/utils/Loading";
 import {
   ArrowRight,
   CheckCircle2,
@@ -12,7 +14,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoadingFileLoader } from "@/utils/Loading";
 
 // Inline "Connect this integration to continue" card shown inside an
 // in-progress agent message. After successful OAuth, the server's callback
@@ -117,7 +118,8 @@ export function ConnectIntegrationInline({
         </div>
         <div className='min-w-0 flex-1'>
           <div className='text-foreground text-sm leading-snug font-medium'>
-            Connect {required.platformName} to continue
+            <LocalizedText text={"Connect"} />
+            {required.platformName} <LocalizedText text={"to continue"} />
           </div>
           <p className='text-muted-foreground mt-1 text-[12.5px] leading-relaxed'>
             {required.reason}
@@ -125,7 +127,11 @@ export function ConnectIntegrationInline({
           <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
             <ShieldCheck className='h-3 w-3' />
             <span>
-              You'll authorize in a popup. We never see your password.
+              <LocalizedText
+                text={
+                  "You'll authorize in a popup. We never see your password."
+                }
+              />
             </span>
           </div>
 
@@ -139,7 +145,7 @@ export function ConnectIntegrationInline({
             {phase === "connected" ? (
               <div className='inline-flex items-center gap-1.5 text-[12px] font-medium text-emerald-600 dark:text-emerald-400'>
                 <CheckCircle2 className='h-3.5 w-3.5' />
-                Connected — resuming
+                <LocalizedText text={"Connected — resuming"} />
               </div>
             ) : (
               <>
@@ -152,12 +158,13 @@ export function ConnectIntegrationInline({
                 >
                   {phase === "connecting" ? (
                     <>
-                       <LoadingFileLoader size={14} />
-                      Connecting…
+                      <LoadingFileLoader size={14} />
+                      <LocalizedText text={"Connecting…"} />
                     </>
                   ) : (
                     <>
-                      Connect {required.platformName}
+                      <LocalizedText text={"Connect"} />
+                      {required.platformName}
                       <ArrowRight className='h-3 w-3' />
                     </>
                   )}
@@ -171,7 +178,7 @@ export function ConnectIntegrationInline({
                       setErrorMessage(null);
                     }}
                   >
-                    Dismiss
+                    <LocalizedText text={"Dismiss"} />
                   </AgentButton>
                 )}
               </>

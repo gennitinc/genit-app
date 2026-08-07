@@ -1,5 +1,6 @@
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -68,37 +69,53 @@ export default function RemovalInstructionsPage() {
         <div className='content mx-auto max-w-4xl'>
           <div>
             <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-              Data & Plugin{" "}
+              <LocalizedText text={"Data & Plugin"} />{" "}
               <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                Removal
+                <LocalizedText text={"Removal"} />
               </span>
             </h1>
             <p className='text-gray-9 mt-2 text-start text-sm leading-[1.6] font-normal text-neutral-600 dark:text-neutral-400'>
-              Last update: <time dateTime='2026-05-17'>May 17th, 2026</time>
+              <LocalizedText text={"Last update:"} />
+              <time dateTime='2026-05-17'>
+                <LocalizedText text={"May 17th, 2026"} />
+              </time>
             </p>
           </div>
 
           <SectionHeading id='1-overview' label='1. Overview' />
           <p className={P_CLASS}>
-            genit lets you connect third-party accounts — Facebook Pages,
-            Instagram Business profiles, Meta Ads accounts, Threads profiles and
-            others — so our agents can publish content, read engagement and pull
-            insights on your behalf. You stay in control: every connection can
-            be disconnected at any time, and you can request a full deletion of
-            the data we have stored on your behalf.
+            <LocalizedText
+              text={
+                "genit lets you connect third-party accounts — Facebook Pages, Instagram Business profiles, Meta Ads accounts, Threads profiles and others — so our agents can publish content, read engagement and pull insights on your behalf. You stay in control: every connection can be disconnected at any time, and you can request a full deletion of the data we have stored on your behalf."
+              }
+            />
           </p>
           <p className={P_CLASS}>
-            This page tells you exactly how to do that. It covers three things:
+            <LocalizedText
+              text={
+                "This page tells you exactly how to do that. It covers three things:"
+              }
+            />
           </p>
           <ul className={LIST_CLASS}>
-            <li>How to disconnect a single plugin from inside genit.</li>
             <li>
-              How to revoke genit&apos;s access directly from the third-party
-              platform (Facebook, Instagram, Meta Business, Threads, etc.).
+              <LocalizedText
+                text={"How to disconnect a single plugin from inside genit."}
+              />
             </li>
             <li>
-              How to request a permanent deletion of any data we may still hold
-              (e.g. cached account metadata, scheduled posts).
+              <LocalizedText
+                text={
+                  "How to revoke genit&apos;s access directly from the third-party platform (Facebook, Instagram, Meta Business, Threads, etc.)."
+                }
+              />
+            </li>
+            <li>
+              <LocalizedText
+                text={
+                  "How to request a permanent deletion of any data we may still hold (e.g. cached account metadata, scheduled posts)."
+                }
+              />
             </li>
           </ul>
 
@@ -107,50 +124,77 @@ export default function RemovalInstructionsPage() {
             label='2. Disconnect a single plugin in genit'
           />
           <p className={P_CLASS}>
-            The fastest way to remove a plugin is from inside the genit
-            app. We immediately delete the encrypted access token we hold for
-            that target and stop any scheduled work that depends on it.
+            <LocalizedText
+              text={
+                "The fastest way to remove a plugin is from inside the genit app. We immediately delete the encrypted access token we hold for that target and stop any scheduled work that depends on it."
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Sign in to genit at{" "}
+              <LocalizedText text={"Sign in to genit at"} />{" "}
               <a
                 target='_blank'
                 rel='noopener noreferrer'
                 className={LINK_CLASS}
                 href='https://trygenit.com'
               >
-                trygenit.com
+                <LocalizedText text={"trygenit.com"} />
               </a>
               .
             </li>
             <li>
-              Open{" "}
+              <LocalizedText text={"Open"} />{" "}
               <a className={LINK_CLASS} href='/plugin'>
-                Plugin
+                <LocalizedText text={"Plugin"} />
               </a>{" "}
-              from the navigation menu.
+              <LocalizedText text={"from the navigation menu."} />
             </li>
             <li>
-              Find the card for the platform you want to remove (Facebook,
-              Instagram, Meta Ads, Threads, …) and click{" "}
-              <strong className={STRONG_CLASS}>Manage</strong>.
+              <LocalizedText
+                text={
+                  "Find the card for the platform you want to remove (Facebook, Instagram, Meta Ads, Threads, …) and click"
+                }
+              />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Manage"} />
+              </strong>
+              .
             </li>
             <li>
-              In the dialog, locate the specific{" "}
-              <strong className={STRONG_CLASS}>Page</strong>,{" "}
-              <strong className={STRONG_CLASS}>Instagram account</strong>,{" "}
-              <strong className={STRONG_CLASS}>Ad account</strong> or{" "}
-              <strong className={STRONG_CLASS}>Threads profile</strong> you want
-              to unlink and click{" "}
-              <strong className={STRONG_CLASS}>Disconnect</strong>, then{" "}
-              <strong className={STRONG_CLASS}>Confirm</strong>.
+              <LocalizedText text={"In the dialog, locate the specific"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Page"} />
+              </strong>
+              ,{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Instagram account"} />
+              </strong>
+              ,{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Ad account"} />
+              </strong>{" "}
+              <LocalizedText text={"or"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Threads profile"} />
+              </strong>{" "}
+              <LocalizedText text={"you want to unlink and click"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Disconnect"} />
+              </strong>
+              <LocalizedText text={", then"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Confirm"} />
+              </strong>
+              .
             </li>
           </ol>
           <p className={P_CLASS}>
-            Disconnecting one target does not affect the others. For example,
-            you can remove a specific Facebook Page while keeping Instagram
-            publishing connected.
+            <LocalizedText
+              text={
+                "Disconnecting one target does not affect the others. For example, you can remove a specific Facebook Page while keeping Instagram publishing connected."
+              }
+            />
           </p>
 
           <SectionHeading
@@ -158,34 +202,45 @@ export default function RemovalInstructionsPage() {
             label='3. Revoke all Meta access at once'
           />
           <p className={P_CLASS}>
-            When you sign in with Meta, that single Meta login powers Facebook
-            Pages, Instagram Business accounts and Meta Ads inside genit. If you
-            want to wipe every Meta connection at once:
+            <LocalizedText
+              text={
+                "When you sign in with Meta, that single Meta login powers Facebook Pages, Instagram Business accounts and Meta Ads inside genit. If you want to wipe every Meta connection at once:"
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Open{" "}
+              <LocalizedText text={"Open"} />{" "}
               <a className={LINK_CLASS} href='/plugin'>
-                Plugin
+                <LocalizedText text={"Plugin"} />
               </a>{" "}
-              in genit.
+              <LocalizedText text={"in genit."} />
             </li>
             <li>
-              Click <strong className={STRONG_CLASS}>Manage</strong> on any Meta
-              surface card (Facebook, Instagram, or Meta Ads).
-            </li>
-            <li>
-              At the bottom of the dialog, click{" "}
+              <LocalizedText text={"Click"} />
               <strong className={STRONG_CLASS}>
-                Revoke Meta access entirely
+                <LocalizedText text={"Manage"} />
+              </strong>{" "}
+              <LocalizedText
+                text={
+                  "on any Meta surface card (Facebook, Instagram, or Meta Ads)."
+                }
+              />
+            </li>
+            <li>
+              <LocalizedText text={"At the bottom of the dialog, click"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Revoke Meta access entirely"} />
               </strong>
-              , then confirm.
+              <LocalizedText text={", then confirm."} />
             </li>
           </ol>
           <p className={P_CLASS}>
-            This removes every Facebook, Instagram and Meta Ads plugin tied
-            to your Meta identity for this organization, and deletes the
-            encrypted token genit stored.
+            <LocalizedText
+              text={
+                "This removes every Facebook, Instagram and Meta Ads plugin tied to your Meta identity for this organization, and deletes the encrypted token genit stored."
+              }
+            />
           </p>
 
           <SectionHeading
@@ -193,43 +248,69 @@ export default function RemovalInstructionsPage() {
             label='4. Revoke from Facebook directly'
           />
           <p className={P_CLASS}>
-            You can also revoke genit&apos;s access from your Meta account
-            settings — this works even if you have lost access to genit.
+            <LocalizedText
+              text={
+                "You can also revoke genit&apos;s access from your Meta account settings — this works even if you have lost access to genit."
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Sign in to Facebook and go to{" "}
+              <LocalizedText text={"Sign in to Facebook and go to"} />{" "}
               <a
                 target='_blank'
                 rel='noopener noreferrer'
                 className={LINK_CLASS}
                 href='https://www.facebook.com/settings?tab=business_tools'
               >
-                Settings → Business Integrations
+                <LocalizedText text={"Settings → Business Integrations"} />
               </a>
               .
             </li>
             <li>
-              Find <strong className={STRONG_CLASS}>genit</strong> in the list
-              of connected apps.
+              <LocalizedText text={"Find"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"genit"} />
+              </strong>{" "}
+              <LocalizedText text={"in the list of connected apps."} />
             </li>
             <li>
-              Click <strong className={STRONG_CLASS}>Remove</strong>, then tick{" "}
+              <LocalizedText text={"Click"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Remove"} />
+              </strong>
+              <LocalizedText text={", then tick"} />{" "}
               <em>
-                &quot;Delete all posts, videos or events genit posted on your
-                timeline.&quot;
+                <LocalizedText
+                  text={
+                    "&quot;Delete all posts, videos or events genit posted on your timeline.&quot;"
+                  }
+                />
               </em>{" "}
-              if you also want to remove the content created via genit.
+              <LocalizedText
+                text={
+                  "if you also want to remove the content created via genit."
+                }
+              />
             </li>
             <li>
-              Confirm by clicking{" "}
-              <strong className={STRONG_CLASS}>Remove</strong>.
+              <LocalizedText text={"Confirm by clicking"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Remove"} />
+              </strong>
+              .
             </li>
           </ol>
           <p className={P_CLASS}>
-            Facebook will instantly invalidate the access token. genit detects
-            the revocation on the next request and marks the plugin as{" "}
-            <strong className={STRONG_CLASS}>revoked</strong> in your dashboard.
+            <LocalizedText
+              text={
+                "Facebook will instantly invalidate the access token. genit detects the revocation on the next request and marks the plugin as"
+              }
+            />{" "}
+            <strong className={STRONG_CLASS}>
+              <LocalizedText text={"revoked"} />
+            </strong>{" "}
+            <LocalizedText text={"in your dashboard."} />
           </p>
 
           <SectionHeading
@@ -237,29 +318,49 @@ export default function RemovalInstructionsPage() {
             label='5. Revoke from Instagram directly'
           />
           <p className={P_CLASS}>
-            Instagram Business plugins live under the linked Facebook Page.
-            To revoke them from Instagram&apos;s side:
+            <LocalizedText
+              text={
+                "Instagram Business plugins live under the linked Facebook Page. To revoke them from Instagram&apos;s side:"
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Open the Instagram mobile app, go to your profile, tap{" "}
+              <LocalizedText
+                text={"Open the Instagram mobile app, go to your profile, tap"}
+              />{" "}
               <strong className={STRONG_CLASS}>
-                Settings → Account → Apps and websites
+                <LocalizedText
+                  text={"Settings → Account → Apps and websites"}
+                />
               </strong>
               .
             </li>
             <li>
-              Open the <strong className={STRONG_CLASS}>Active</strong> tab.
+              <LocalizedText text={"Open the"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Active"} />
+              </strong>{" "}
+              <LocalizedText text={"tab."} />
             </li>
             <li>
-              Find <strong className={STRONG_CLASS}>genit</strong> and tap{" "}
-              <strong className={STRONG_CLASS}>Remove</strong>.
+              <LocalizedText text={"Find"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"genit"} />
+              </strong>{" "}
+              <LocalizedText text={"and tap"} />{" "}
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Remove"} />
+              </strong>
+              .
             </li>
           </ol>
           <p className={P_CLASS}>
-            Alternatively, revoking the parent Facebook Page connection (Step 4)
-            automatically revokes Instagram access since the two share an access
-            token.
+            <LocalizedText
+              text={
+                "Alternatively, revoking the parent Facebook Page connection (Step 4) automatically revokes Instagram access since the two share an access token."
+              }
+            />
           </p>
 
           <SectionHeading
@@ -267,33 +368,46 @@ export default function RemovalInstructionsPage() {
             label='6. Revoke Meta Ads / Business Manager access'
           />
           <p className={P_CLASS}>
-            To remove genit from your Meta Business Manager:
+            <LocalizedText
+              text={"To remove genit from your Meta Business Manager:"}
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Go to{" "}
+              <LocalizedText text={"Go to"} />{" "}
               <a
                 target='_blank'
                 rel='noopener noreferrer'
                 className={LINK_CLASS}
                 href='https://business.facebook.com/settings/apps'
               >
-                business.facebook.com → Settings → Apps
+                <LocalizedText
+                  text={"business.facebook.com → Settings → Apps"}
+                />
               </a>
               .
             </li>
             <li>
-              Select <strong className={STRONG_CLASS}>genit</strong> from the
-              connected apps list.
+              <LocalizedText text={"Select"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"genit"} />
+              </strong>{" "}
+              <LocalizedText text={"from the connected apps list."} />
             </li>
             <li>
-              Click <strong className={STRONG_CLASS}>Remove</strong>, then
-              confirm.
+              <LocalizedText text={"Click"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Remove"} />
+              </strong>
+              <LocalizedText text={", then confirm."} />
             </li>
           </ol>
           <p className={P_CLASS}>
-            This severs genit&apos;s ability to read or write any ad accounts,
-            campaigns or insights under your Business Manager.
+            <LocalizedText
+              text={
+                "This severs genit&apos;s ability to read or write any ad accounts, campaigns or insights under your Business Manager."
+              }
+            />
           </p>
 
           <SectionHeading
@@ -301,29 +415,47 @@ export default function RemovalInstructionsPage() {
             label='7. Revoke Threads access'
           />
           <p className={P_CLASS}>
-            Threads uses a separate OAuth flow from the rest of Meta, so it must
-            be revoked independently.
+            <LocalizedText
+              text={
+                "Threads uses a separate OAuth flow from the rest of Meta, so it must be revoked independently."
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Open the Threads app, go to your profile, tap the menu, then{" "}
+              <LocalizedText
+                text={
+                  "Open the Threads app, go to your profile, tap the menu, then"
+                }
+              />{" "}
               <strong className={STRONG_CLASS}>
-                Settings → Account → Websites and apps
+                <LocalizedText
+                  text={"Settings → Account → Websites and apps"}
+                />
               </strong>
               .
             </li>
             <li>
-              Find <strong className={STRONG_CLASS}>genit</strong> in the list
-              of connected apps.
+              <LocalizedText text={"Find"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"genit"} />
+              </strong>{" "}
+              <LocalizedText text={"in the list of connected apps."} />
             </li>
             <li>
-              Tap <strong className={STRONG_CLASS}>Remove</strong> to revoke the
-              token.
+              <LocalizedText text={"Tap"} />
+              <strong className={STRONG_CLASS}>
+                <LocalizedText text={"Remove"} />
+              </strong>{" "}
+              <LocalizedText text={"to revoke the token."} />
             </li>
           </ol>
           <p className={P_CLASS}>
-            You can also disconnect from inside genit by following Step 2 and
-            selecting your Threads profile.
+            <LocalizedText
+              text={
+                "You can also disconnect from inside genit by following Step 2 and selecting your Threads profile."
+              }
+            />
           </p>
 
           <SectionHeading
@@ -331,58 +463,82 @@ export default function RemovalInstructionsPage() {
             label='8. Request a permanent data deletion'
           />
           <p className={P_CLASS}>
-            Disconnecting a plugin immediately deletes the encrypted
-            access token we held for it. However, depending on what you used
-            genit for, we may also have stored: cached account metadata (profile
-            name, account id), the content of scheduled or published posts you
-            composed, and aggregate engagement metrics fetched on your behalf.
+            <LocalizedText
+              text={
+                "Disconnecting a plugin immediately deletes the encrypted access token we held for it. However, depending on what you used genit for, we may also have stored: cached account metadata (profile name, account id), the content of scheduled or published posts you composed, and aggregate engagement metrics fetched on your behalf."
+              }
+            />
           </p>
           <p className={P_CLASS}>
-            To request a permanent deletion of all data genit holds for you:
+            <LocalizedText
+              text={
+                "To request a permanent deletion of all data genit holds for you:"
+              }
+            />
           </p>
           <ol className={ORDERED_CLASS}>
             <li>
-              Email{" "}
+              <LocalizedText text={"Email"} />{" "}
               <a
                 className={LINK_CLASS}
                 href='mailto:team@trygenit.com?subject=Data%20deletion%20request'
               >
-                team@trygenit.com
+                <LocalizedText text={"team@trygenit.com"} />
               </a>{" "}
-              from the email address associated with your genit account.
+              <LocalizedText
+                text={
+                  "from the email address associated with your genit account."
+                }
+              />
             </li>
             <li>
-              In the subject line, write{" "}
+              <LocalizedText text={"In the subject line, write"} />{" "}
               <strong className={STRONG_CLASS}>
-                &quot;Data deletion request&quot;
+                <LocalizedText text={"&quot;Data deletion request&quot;"} />
               </strong>
               .
             </li>
             <li>
-              In the body, tell us which connection(s) you want deleted, or say
-              &quot;all data&quot; to delete everything.
+              <LocalizedText
+                text={
+                  "In the body, tell us which connection(s) you want deleted, or say &quot;all data&quot; to delete everything."
+                }
+              />
             </li>
           </ol>
           <p className={P_CLASS}>
-            We will confirm receipt within{" "}
-            <strong className={STRONG_CLASS}>2 business days</strong> and
-            complete the deletion within{" "}
-            <strong className={STRONG_CLASS}>30 days</strong>, in line with our{" "}
+            <LocalizedText text={"We will confirm receipt within"} />{" "}
+            <strong className={STRONG_CLASS}>
+              <LocalizedText text={"2 business days"} />
+            </strong>{" "}
+            <LocalizedText text={"and complete the deletion within"} />{" "}
+            <strong className={STRONG_CLASS}>
+              <LocalizedText text={"30 days"} />
+            </strong>
+            <LocalizedText text={", in line with our"} />{" "}
             <a className={LINK_CLASS} href='/legal/privacy-policy'>
-              Privacy Policy
+              <LocalizedText text={"Privacy Policy"} />
             </a>
-            . You will receive a confirmation email once the deletion is done.
+            <LocalizedText
+              text={
+                ". You will receive a confirmation email once the deletion is done."
+              }
+            />
           </p>
 
           <SectionHeading id='9-questions' label='9. Questions?' />
           <p className={P_CLASS}>
-            If anything in these steps doesn&apos;t work for you, or if you
-            can&apos;t find the genit entry in the third-party platform&apos;s
-            settings, please reach us at{" "}
+            <LocalizedText
+              text={
+                "If anything in these steps doesn&apos;t work for you, or if you can&apos;t find the genit entry in the third-party platform&apos;s settings, please reach us at"
+              }
+            />{" "}
             <a className={LINK_CLASS} href='mailto:team@trygenit.com'>
-              team@trygenit.com
+              <LocalizedText text={"team@trygenit.com"} />
             </a>{" "}
-            and we&apos;ll help you complete the removal manually.
+            <LocalizedText
+              text={"and we&apos;ll help you complete the removal manually."}
+            />
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, ExternalLink, Globe } from "lucide-react";
@@ -250,16 +251,19 @@ export default function PartnerLogos() {
               <div className='w-full max-w-lg'>
                 <Badge className='text-primary mb-6 inline-flex items-center gap-1.5 bg-indigo-600 px-3 py-1.5 text-sm font-medium hover:bg-indigo-700/10'>
                   <Globe className='h-4 w-4' />
-                  Strategic Partnerships
+                  <LocalizedText text={"Strategic Partnerships"} />
                 </Badge>
                 <h2 className='mb-6 text-3xl font-bold tracking-tight lg:text-4xl'>
-                  Powered by industry-leading technologies
+                  <LocalizedText
+                    text={"Powered by industry-leading technologies"}
+                  />
                 </h2>
                 <p className='text-normal text-muted-foreground mb-8 text-base'>
-                  We collaborate with the most innovative companies in tech to
-                  deliver cutting-edge solutions that keep you ahead of the
-                  competition. Our strategic partnerships ensure you get the
-                  best tools for your needs.
+                  <LocalizedText
+                    text={
+                      "We collaborate with the most innovative companies in tech to deliver cutting-edge solutions that keep you ahead of the competition. Our strategic partnerships ensure you get the best tools for your needs."
+                    }
+                  />
                 </p>
                 <div className='flex flex-col gap-4 sm:flex-row'>
                   <Button
@@ -268,7 +272,7 @@ export default function PartnerLogos() {
                       router.push("/contact");
                     }}
                   >
-                    Become a partner
+                    <LocalizedText text={"Become a partner"} />
                     <ArrowRight className='size-4 transition-transform duration-300 group-hover:translate-x-1' />
                   </Button>
                   <Button
@@ -277,7 +281,7 @@ export default function PartnerLogos() {
                     disabled={true}
                   >
                     <CheckCircle className='size-4' />
-                    View case studies
+                    <LocalizedText text={"View case studies"} />
                   </Button>
                 </div>
               </div>
@@ -303,7 +307,9 @@ export default function PartnerLogos() {
                     </span>
                   </div>
                   <div className='text-primary mt-1 flex items-center text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100'>
-                    <span>Learn more</span>
+                    <span>
+                      <LocalizedText text={"Learn more"} />
+                    </span>
                     <ExternalLink className='ml-1 h-3 w-3' />
                   </div>
                 </a>

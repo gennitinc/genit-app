@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -117,7 +118,9 @@ export function BrowserViewer({
         <div className='bg-opacity-50 absolute inset-0 z-10 flex items-center justify-center bg-gray-100'>
           <div className='flex flex-col items-center gap-2'>
             <LoadingFileLoader size={16} />
-            <p className='text-sm text-gray-600'>Loading preview...</p>
+            <p className='text-sm text-gray-600'>
+              <LocalizedText text={"Loading preview..."} />
+            </p>
           </div>
         </div>
       )}
@@ -126,11 +129,14 @@ export function BrowserViewer({
         <div className='absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-100'>
           <div className='max-w-md p-4 text-center'>
             <p className='mb-2 font-medium text-red-500'>
-              Failed to load preview in iframe
+              <LocalizedText text={"Failed to load preview in iframe"} />
             </p>
             <p className='mb-4 text-sm text-gray-600'>
-              This may be due to CORS restrictions or the WebContainer not being
-              fully initialized.
+              <LocalizedText
+                text={
+                  "This may be due to CORS restrictions or the WebContainer not being fully initialized."
+                }
+              />
             </p>
             <a
               href={finalUrl}
@@ -138,7 +144,7 @@ export function BrowserViewer({
               rel='noopener noreferrer'
               className='hover:bg-indigo-700-600 rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-600 hover:bg-indigo-700'
             >
-              Open in new tab
+              <LocalizedText text={"Open in new tab"} />
             </a>
           </div>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import {
   FileAudio,
@@ -98,7 +99,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Upload className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            Upload Asset
+            <LocalizedText text={"Upload Asset"} />
           </span>
         </div>
         {isEdit && (
@@ -125,7 +126,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
           <>
             <div className='space-y-1'>
               <label className='text-[9px] font-medium tracking-wider text-zinc-500 uppercase dark:text-neutral-400'>
-                Title
+                <LocalizedText text={"Title"} />
               </label>
               <input
                 type='text'
@@ -148,10 +149,10 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 </div>
                 <div>
                   <p className='text-xs font-medium text-zinc-800 dark:text-neutral-200'>
-                    Click to upload prep work
+                    <LocalizedText text={"Click to upload prep work"} />
                   </p>
                   <p className='mt-0.5 text-[9px] text-zinc-500 dark:text-neutral-400'>
-                    Images, videos, audio, or docs
+                    <LocalizedText text={"Images, videos, audio, or docs"} />
                   </p>
                 </div>
               </div>
@@ -176,13 +177,13 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                     onClick={triggerFileSelect}
                     className='dark:hover:bg-neutral-750 dark:border-neutral-750 flex-1 rounded-lg border border-zinc-200 bg-zinc-100 py-1.5 text-[10px] font-medium text-zinc-700 transition hover:bg-zinc-200 dark:bg-neutral-800 dark:text-neutral-200'
                   >
-                    Replace
+                    <LocalizedText text={"Replace"} />
                   </button>
                   <button
                     onClick={clearFile}
                     className='flex-1 rounded-lg border border-red-200 bg-red-50 py-1.5 text-[10px] font-medium text-red-600 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40'
                   >
-                    Remove
+                    <LocalizedText text={"Remove"} />
                   </button>
                 </div>
               </div>
@@ -212,7 +213,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                       className='flex items-center gap-1 text-zinc-500 transition-colors hover:text-zinc-700 dark:text-neutral-400 dark:hover:text-neutral-200'
                     >
                       <LinkIcon className='h-3 w-3' />
-                      View File
+                      <LocalizedText text={"View File"} />
                     </a>
                   )}
                 </div>
@@ -220,7 +221,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
             ) : (
               <div className='rounded-xl border border-dashed border-zinc-200 bg-zinc-50/20 p-4 text-center dark:border-neutral-800 dark:bg-neutral-950/20'>
                 <p className='text-xs text-zinc-500 dark:text-neutral-400'>
-                  No file uploaded yet
+                  <LocalizedText text={"No file uploaded yet"} />
                 </p>
               </div>
             )}

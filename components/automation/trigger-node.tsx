@@ -10,6 +10,7 @@ import {
   WhatsAppBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -101,7 +102,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Zap className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            Trigger
+            <LocalizedText text={"Trigger"} />
           </span>
         </div>
         <div className='flex items-center gap-1'>
@@ -115,7 +116,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
           )}
           {!isEdit && data.isActive === false && (
             <span className='rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-500 uppercase'>
-              Paused
+              <LocalizedText text={"Paused"} />
             </span>
           )}
         </div>
@@ -126,7 +127,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Name</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Name"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -139,7 +142,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             </div>
 
             <div>
-              <label className={labelCls}>Trigger</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Trigger"} />
+              </label>
               <select
                 value={data.triggerType}
                 onChange={(e) =>
@@ -157,7 +162,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
 
             {data.triggerType === "schedule" && (
               <div>
-                <label className={labelCls}>Frequency</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Frequency"} />
+                </label>
                 <select
                   value={data.scheduleFrequency || "Once"}
                   onChange={(e) =>
@@ -213,7 +220,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
 
             {data.triggerType === "webhook" && (
               <div>
-                <label className={labelCls}>Webhook URL</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Webhook URL"} />
+                </label>
                 <div className='dark:border-neutral-850 rounded-xl border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 font-mono text-[10px] break-all text-zinc-500 dark:bg-neutral-950 dark:text-neutral-400'>
                   {data.webhookUrl || "Generated on save"}
                 </div>
@@ -222,7 +231,11 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
 
             {data.triggerType === "pipedream" && (
               <p className='rounded border border-blue-500/20 bg-blue-500/5 px-2.5 py-2 text-[10px] leading-4 text-zinc-600 dark:text-neutral-300'>
-                Ask Genit in chat to connect a plugin event to this trigger node.
+                <LocalizedText
+                  text={
+                    "Ask Genit in chat to connect a plugin event to this trigger node."
+                  }
+                />
               </p>
             )}
 
@@ -234,7 +247,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               data.triggerType === "instagram_comment" ||
               data.triggerType === "x_mention") && (
               <div>
-                <label className={labelCls}>Keyword filter</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Keyword filter"} />
+                </label>
                 <input
                   type='text'
                   value={data.filterValue || ""}
@@ -251,7 +266,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               data.triggerType === "outlook_email_received") && (
               <>
                 <div>
-                  <label className={labelCls}>From</label>
+                  <label className={labelCls}>
+                    <LocalizedText text={"From"} />
+                  </label>
                   <input
                     type='text'
                     value={data.senderFilter || ""}
@@ -265,7 +282,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   />
                 </div>
                 <div>
-                  <label className={labelCls}>Subject contains</label>
+                  <label className={labelCls}>
+                    <LocalizedText text={"Subject contains"} />
+                  </label>
                   <input
                     type='text'
                     value={data.filterValue || ""}
@@ -281,7 +300,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
 
             {data.triggerType === "brevo_contact_added" && (
               <div>
-                <label className={labelCls}>List</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"List"} />
+                </label>
                 <input
                   type='text'
                   value={data.filterValue || ""}
@@ -296,7 +317,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
 
             {data.triggerType === "calendar_event" && (
               <div>
-                <label className={labelCls}>Event type</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Event type"} />
+                </label>
                 <select
                   value={data.filterValue || "created"}
                   onChange={(e) =>
@@ -304,10 +327,18 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   }
                   className={selectCls}
                 >
-                  <option value='created'>Created</option>
-                  <option value='starting'>Starting</option>
-                  <option value='updated'>Updated</option>
-                  <option value='cancelled'>Cancelled</option>
+                  <option value='created'>
+                    <LocalizedText text={"Created"} />
+                  </option>
+                  <option value='starting'>
+                    <LocalizedText text={"Starting"} />
+                  </option>
+                  <option value='updated'>
+                    <LocalizedText text={"Updated"} />
+                  </option>
+                  <option value='cancelled'>
+                    <LocalizedText text={"Cancelled"} />
+                  </option>
                 </select>
               </div>
             )}

@@ -6,6 +6,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { PremiumInput } from "@/components/ui/premium-input";
@@ -215,16 +216,16 @@ const PresenterPage = () => {
           <main className='flex-grow pt-12'>
             <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
               <h1 className='text-2xl font-semibold tracking-tight lg:text-4xl'>
-                Character
+                <LocalizedText text={"Character"} />
                 <span className='from-primary to-accent ml-1 bg-gradient-to-r bg-clip-text text-transparent'>
-                  Creation
+                  <LocalizedText text={"Creation"} />
                 </span>
               </h1>
               <p
                 className='text-muted-foreground animate-fadeInUp my-2 text-sm md:text-lg'
                 style={{ animationDelay: "0.2s" }}
               >
-                Create and manage your AI Characters
+                <LocalizedText text={"Create and manage your AI Characters"} />
               </p>
             </div>
 
@@ -241,7 +242,7 @@ const PresenterPage = () => {
                   <div className='space-y-4'>
                     <div className='space-y-2'>
                       <label className='text-muted-foreground text-xs font-bold uppercase'>
-                        Presenter Name
+                        <LocalizedText text={"Presenter Name"} />
                       </label>
                       <input
                         type='text'
@@ -254,16 +255,22 @@ const PresenterPage = () => {
 
                     <div className='space-y-2'>
                       <label className='text-muted-foreground text-xs font-bold uppercase'>
-                        Gender
+                        <LocalizedText text={"Gender"} />
                       </label>
                       <Select value={gender} onValueChange={setGender}>
                         <SelectTrigger className='h-9 w-full rounded-lg border-none bg-black/5 px-4 dark:bg-white/5'>
                           <SelectValue placeholder='Select Gender' />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value='unisex'>Unisex</SelectItem>
-                          <SelectItem value='male'>Male</SelectItem>
-                          <SelectItem value='female'>Female</SelectItem>
+                          <SelectItem value='unisex'>
+                            <LocalizedText text={"Unisex"} />
+                          </SelectItem>
+                          <SelectItem value='male'>
+                            <LocalizedText text={"Male"} />
+                          </SelectItem>
+                          <SelectItem value='female'>
+                            <LocalizedText text={"Female"} />
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -279,13 +286,14 @@ const PresenterPage = () => {
                         value='upload'
                         className='flex items-center gap-2'
                       >
-                        <Upload size={14} /> Upload
+                        <Upload size={14} /> <LocalizedText text={"Upload"} />
                       </TabsTrigger>
                       <TabsTrigger
                         value='ai'
                         className='flex items-center gap-2'
                       >
-                        <Sparkles size={14} /> AI Generate
+                        <Sparkles size={14} />{" "}
+                        <LocalizedText text={"AI Generate"} />
                       </TabsTrigger>
                     </TabsList>
 
@@ -301,7 +309,7 @@ const PresenterPage = () => {
                           <div className='text-muted-foreground flex flex-col items-center gap-2'>
                             <Upload size={24} />
                             <span className='text-xs font-medium'>
-                              Click to upload image
+                              <LocalizedText text={"Click to upload image"} />
                             </span>
                           </div>
                         )}
@@ -356,7 +364,7 @@ const PresenterPage = () => {
                       ) : (
                         <SaveIcon className='mr-2' />
                       )}
-                      Save as Presenter
+                      <LocalizedText text={"Save as Presenter"} />
                     </Button>
                   )}
                 </div>
@@ -374,7 +382,7 @@ const PresenterPage = () => {
                             : "text-muted-foreground"
                         )}
                       >
-                        My Presenters
+                        <LocalizedText text={"My Presenters"} />
                       </button>
                       <button
                         onClick={() => setRightActiveTab("preview")}
@@ -386,7 +394,7 @@ const PresenterPage = () => {
                             : "text-muted-foreground"
                         )}
                       >
-                        Preview
+                        <LocalizedText text={"Preview"} />
                       </button>
                     </div>
                   </div>
@@ -448,10 +456,12 @@ const PresenterPage = () => {
                         <div className='text-muted-foreground col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-20'>
                           <User size={48} className='mb-4 opacity-20' />
                           <p className='text-sm font-medium'>
-                            No presenters yet
+                            <LocalizedText text={"No presenters yet"} />
                           </p>
                           <p className='text-xs'>
-                            Create your first one on the left
+                            <LocalizedText
+                              text={"Create your first one on the left"}
+                            />
                           </p>
                         </div>
                       )}
@@ -471,7 +481,7 @@ const PresenterPage = () => {
                         )}
                       </div>
                       <p className='text-muted-foreground mt-4 text-xs italic'>
-                        Current Candidate Preview
+                        <LocalizedText text={"Current Candidate Preview"} />
                       </p>
                     </div>
                   )}

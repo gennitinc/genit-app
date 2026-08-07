@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -112,16 +113,20 @@ export function ChatPanel({
       {/* Header */}
       <div className='border-b border-gray-200 p-4'>
         <div className='mb-3 flex items-center justify-between'>
-          <h3 className='font-semibold text-gray-900'>AI Assistant</h3>
+          <h3 className='font-semibold text-gray-900'>
+            <LocalizedText text={"AI Assistant"} />
+          </h3>
           <Button size='sm' variant='outline'>
             <Plus className='mr-1 h-4 w-4' />
-            New Chat
+            <LocalizedText text={"New Chat"} />
           </Button>
         </div>
 
         {/* Previous Chats */}
         <div className='space-y-2'>
-          <p className='mb-2 text-sm text-gray-600'>Previous Chats</p>
+          <p className='mb-2 text-sm text-gray-600'>
+            <LocalizedText text={"Previous Chats"} />
+          </p>
           {previousChats.map((chat) => (
             <div
               key={chat.id}
@@ -145,11 +150,15 @@ export function ChatPanel({
         <div className='border-b border-gray-200 p-4'>
           <div className='flex items-center gap-2'>
             <div className='flex h-6 w-6 items-center justify-center rounded-full bg-purple-500'>
-              <span className='text-xs font-bold text-white'>P</span>
+              <span className='text-xs font-bold text-white'>
+                <LocalizedText text={"P"} />
+              </span>
             </div>
-            <span className='font-medium text-gray-900'>Poppy</span>
+            <span className='font-medium text-gray-900'>
+              <LocalizedText text={"Poppy"} />
+            </span>
             <Badge variant='secondary' className='text-xs'>
-              AI Assistant
+              <LocalizedText text={"AI Assistant"} />
             </Badge>
           </div>
         </div>
@@ -158,13 +167,15 @@ export function ChatPanel({
         <ScrollArea className='flex-1 p-4'>
           <div className='space-y-4'>
             <div className='text-center'>
-              <p className='mb-2 text-sm text-gray-600'>Summarize:</p>
+              <p className='mb-2 text-sm text-gray-600'>
+                <LocalizedText text={"Summarize:"} />
+              </p>
               <div className='flex justify-center gap-2'>
                 <Button size='sm' variant='outline' onClick={handleSummarize}>
-                  Summarize
+                  <LocalizedText text={"Summarize"} />
                 </Button>
                 <Button size='sm' variant='outline' onClick={handleGetInsights}>
-                  Get Key Insights
+                  <LocalizedText text={"Get Key Insights"} />
                 </Button>
               </div>
             </div>

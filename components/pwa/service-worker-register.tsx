@@ -32,9 +32,7 @@ export function ServiceWorkerRegister() {
       await Promise.allSettled([
         caches
           .keys()
-          .then((keys) =>
-            Promise.all(keys.map((key) => caches.delete(key)))
-          ),
+          .then((keys) => Promise.all(keys.map((key) => caches.delete(key)))),
         navigator.serviceWorker
           .getRegistrations()
           .then((registrations) =>

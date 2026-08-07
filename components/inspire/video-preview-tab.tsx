@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Tooltip,
   TooltipContent,
@@ -304,10 +305,11 @@ export function VideoPreviewTab({
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
               <LoadingFileLoader size={16} />
               <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
-                Generating video
+                <LocalizedText text={"Generating video"} />
               </h3>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                {generationProgress}% complete
+                {generationProgress}
+                <LocalizedText text={"% complete"} />
               </p>
               <div className='h-1 w-48 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700'>
                 <div
@@ -357,11 +359,14 @@ export function VideoPreviewTab({
                 <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
               </div>
               <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-                No videos yet
+                <LocalizedText text={"No videos yet"} />
               </h3>
               <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-                Enter a prompt or upload an image in the left panel and click
-                Generate to create your video
+                <LocalizedText
+                  text={
+                    "Enter a prompt or upload an image in the left panel and click Generate to create your video"
+                  }
+                />
               </p>
               <div className='flex flex-col gap-3 sm:flex-row'>
                 <button
@@ -373,7 +378,7 @@ export function VideoPreviewTab({
                   }
                   className='rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  Try Example Prompt
+                  <LocalizedText text={"Try Example Prompt"} />
                 </button>
                 {onTabChange && (
                   <button
@@ -381,7 +386,7 @@ export function VideoPreviewTab({
                     onClick={() => onTabChange("templates")}
                     className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                   >
-                    Browse Templates
+                    <LocalizedText text={"Browse Templates"} />
                   </button>
                 )}
               </div>
@@ -394,7 +399,8 @@ export function VideoPreviewTab({
           <div className='mt-4'>
             <div className='mb-2 flex items-center justify-between'>
               <p className='text-xs font-medium text-neutral-500 dark:text-neutral-400'>
-                Generated outputs ({generatedVideos.length})
+                <LocalizedText text={"Generated outputs ("} />
+                {generatedVideos.length})
               </p>
             </div>
             <div className='flex gap-2 overflow-x-auto pb-2'>
@@ -447,7 +453,9 @@ export function VideoPreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Recreate</p>
+                <p>
+                  <LocalizedText text={"Recreate"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -469,7 +477,9 @@ export function VideoPreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy prompt</p>
+                <p>
+                  <LocalizedText text={"Copy prompt"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -483,7 +493,9 @@ export function VideoPreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Download</p>
+                <p>
+                  <LocalizedText text={"Download"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -497,7 +509,9 @@ export function VideoPreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Share</p>
+                <p>
+                  <LocalizedText text={"Share"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <button
@@ -514,17 +528,17 @@ export function VideoPreviewTab({
               {publishing ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Publishing...
+                  <LocalizedText text={"Publishing..."} />
                 </>
               ) : isPublished ? (
                 <>
                   <Upload className='h-4 w-4' />
-                  Published
+                  <LocalizedText text={"Published"} />
                 </>
               ) : (
                 <>
                   <Upload className='h-4 w-4' />
-                  Publish
+                  <LocalizedText text={"Publish"} />
                 </>
               )}
             </button>
@@ -537,7 +551,7 @@ export function VideoPreviewTab({
             <div className='flex items-start justify-between gap-4'>
               <div className='min-w-0 flex-1'>
                 <p className='mb-1 text-xs font-medium tracking-wider text-neutral-500 uppercase dark:text-neutral-400'>
-                  Prompt
+                  <LocalizedText text={"Prompt"} />
                 </p>
                 <p className='line-clamp-2 text-sm text-neutral-900 dark:text-white'>
                   {generatedVideos[selectedVideoIndex]?.prompt || "No prompt"}

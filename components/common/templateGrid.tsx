@@ -1,9 +1,11 @@
 "use client";
+
 import { AIThinkingContent } from "../chat/messages";
 import ShinyText from "../ui/shiny-text";
 import AnimatedTooltipPreview from "./homeAgentsTooltip";
 import { HomeInfoGrid } from "./homeInfoGrid";
 import { PricingDialog } from "@/components/common/pricing-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -500,12 +502,14 @@ export default function TemplateGrid() {
 
   const Header = (
     <div className='mt-8 mb-4 flex items-center justify-between'>
-      <h2 className='text-foreground text-base font-semibold'>Inspirations</h2>
+      <h2 className='text-foreground text-base font-semibold'>
+        <LocalizedText text={"Inspirations"} />
+      </h2>
       <button
         className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm'
         onClick={() => router.push("/community")}
       >
-        View all
+        <LocalizedText text={"View all"} />
         <ArrowRight className='h-4 w-4' />
       </button>
     </div>
@@ -644,7 +648,9 @@ export default function TemplateGrid() {
         <Drawer open={viewOpen} onOpenChange={setViewOpen}>
           <DrawerContent className='h-[75vh]'>
             <DialogHeader className='border-b px-4 py-2'>
-              <DialogTitle>Preview</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Preview"} />
+              </DialogTitle>
             </DialogHeader>
             <div className='h-[63%] flex-shrink-0 overflow-hidden border-b'>
               <img
@@ -719,7 +725,7 @@ export default function TemplateGrid() {
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
-                          &times;
+                          <LocalizedText text={"&times;"} />
                         </button>
                         {file.type && file.type.startsWith("image/") && (
                           <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -777,7 +783,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className='text-muted-foreground ml-2 text-xs'>
-                              Get started for free
+                              <LocalizedText text={"Get started for free"} />
                             </span>
                           )}
                         </div>
@@ -789,7 +795,7 @@ export default function TemplateGrid() {
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
-                                Upgrade
+                                <LocalizedText text={"Upgrade"} />
                               </span>
                             ) : (
                               <span
@@ -798,7 +804,7 @@ export default function TemplateGrid() {
                                   router.push("/user/settings?tab=billing")
                                 }
                               >
-                                Buy Credits
+                                <LocalizedText text={"Buy Credits"} />
                               </span>
                             )}
                           </div>
@@ -912,7 +918,9 @@ export default function TemplateGrid() {
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
           <DialogContent className='flex h-[80vh] max-w-3xl flex-col overflow-hidden p-0'>
             <DialogHeader className='flex-shrink-0 border-b px-4 py-3'>
-              <DialogTitle>Recreate</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Recreate"} />
+              </DialogTitle>
             </DialogHeader>
 
             <div className='h-[63%] flex-shrink-0 overflow-hidden'>
@@ -988,7 +996,7 @@ export default function TemplateGrid() {
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
-                          &times;
+                          <LocalizedText text={"&times;"} />
                         </button>
                         {file.type && file.type.startsWith("image/") && (
                           <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -1046,7 +1054,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className='text-muted-foreground ml-2 text-xs'>
-                              Get started for free
+                              <LocalizedText text={"Get started for free"} />
                             </span>
                           )}
                         </div>
@@ -1058,7 +1066,7 @@ export default function TemplateGrid() {
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
-                                Upgrade
+                                <LocalizedText text={"Upgrade"} />
                               </span>
                             ) : (
                               <span
@@ -1067,7 +1075,7 @@ export default function TemplateGrid() {
                                   router.push("/user/settings?tab=billing")
                                 }
                               >
-                                Buy Credits
+                                <LocalizedText text={"Buy Credits"} />
                               </span>
                             )}
                           </div>
@@ -1180,7 +1188,9 @@ export default function TemplateGrid() {
         <Drawer open={editOpen} onOpenChange={setEditOpen}>
           <DrawerContent className='flex h-[85vh] flex-col overflow-hidden'>
             <DrawerHeader className='flex-shrink-0'>
-              <DrawerTitle>Recreate</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Recreate"} />
+              </DrawerTitle>
             </DrawerHeader>
             <div className='h-[63%] flex-shrink-0 overflow-hidden border-b'>
               <img
@@ -1255,7 +1265,7 @@ export default function TemplateGrid() {
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
-                          &times;
+                          <LocalizedText text={"&times;"} />
                         </button>
                         {file.type && file.type.startsWith("image/") && (
                           <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -1313,7 +1323,7 @@ export default function TemplateGrid() {
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
                             <span className='text-muted-foreground ml-2 text-xs'>
-                              Get started for free
+                              <LocalizedText text={"Get started for free"} />
                             </span>
                           )}
                         </div>
@@ -1325,7 +1335,7 @@ export default function TemplateGrid() {
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() => router.push("/pricing")}
                               >
-                                Upgrade
+                                <LocalizedText text={"Upgrade"} />
                               </span>
                             ) : (
                               <span
@@ -1334,7 +1344,7 @@ export default function TemplateGrid() {
                                   router.push("/user/settings?tab=billing")
                                 }
                               >
-                                Buy Credits
+                                <LocalizedText text={"Buy Credits"} />
                               </span>
                             )}
                           </div>

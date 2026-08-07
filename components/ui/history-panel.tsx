@@ -1,3 +1,4 @@
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -119,7 +120,7 @@ export function HistoryPanel({ id, versionTree = [] }: HistoryPanelProps) {
     <div className='flex h-full flex-col bg-zinc-900'>
       <div className='p-4'>
         <h2 className='mb-2 text-lg font-semibold text-zinc-100'>
-          Version History
+          <LocalizedText text={"Version History"} />
         </h2>
         <div className='relative'>
           <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400' />

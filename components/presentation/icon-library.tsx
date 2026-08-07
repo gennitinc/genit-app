@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -385,7 +386,7 @@ export function IconLibrary({
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
-                  Icon Library
+                  <LocalizedText text={"Icon Library"} />
                 </h3>
                 <p className='text-muted-foreground text-xs'>
                   {isSearching
@@ -428,7 +429,7 @@ export function IconLibrary({
           <div className='bg-muted/50 border-border mb-4 space-y-3 rounded-lg border p-3'>
             <div className='flex items-center justify-between'>
               <span className='text-foreground text-xs font-medium'>
-                Selected:
+                <LocalizedText text={"Selected:"} />
               </span>
               <span className='text-muted-foreground max-w-[200px] truncate font-mono text-xs'>
                 {selectedIcon}
@@ -437,7 +438,7 @@ export function IconLibrary({
             <div className='grid grid-cols-2 gap-2'>
               <div>
                 <label className='text-muted-foreground mb-1 block text-[10px]'>
-                  Color
+                  <LocalizedText text={"Color"} />
                 </label>
                 <div className='flex gap-1'>
                   <input
@@ -457,7 +458,7 @@ export function IconLibrary({
               </div>
               <div>
                 <label className='text-muted-foreground mb-1 block text-[10px]'>
-                  Size
+                  <LocalizedText text={"Size"} />
                 </label>
                 <Input
                   type='number'
@@ -475,7 +476,7 @@ export function IconLibrary({
               className='h-8 w-full text-xs'
             >
               <Download className='mr-1 h-3 w-3' />
-              Insert Icon
+              <LocalizedText text={"Insert Icon"} />
             </Button>
           </div>
         )}
@@ -495,7 +496,9 @@ export function IconLibrary({
             ) : displayedIcons.length === 0 ? (
               <div className='flex h-32 items-center justify-center'>
                 <p className='text-muted-foreground text-sm'>
-                  No icons found. Try a different search term.
+                  <LocalizedText
+                    text={"No icons found. Try a different search term."}
+                  />
                 </p>
               </div>
             ) : (

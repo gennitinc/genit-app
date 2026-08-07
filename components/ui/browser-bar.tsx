@@ -1,3 +1,4 @@
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -124,15 +125,15 @@ export function BrowserBar({
         <DropdownMenuContent align='end'>
           <DropdownMenuItem onClick={() => handleDeviceChange("desktop")}>
             <Monitor className='mr-2 h-4 w-4' />
-            Desktop
+            <LocalizedText text={"Desktop"} />
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDeviceChange("tablet")}>
             <Tablet className='mr-2 h-4 w-4' />
-            Tablet
+            <LocalizedText text={"Tablet"} />
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDeviceChange("mobile")}>
             <Smartphone className='mr-2 h-4 w-4' />
-            Mobile
+            <LocalizedText text={"Mobile"} />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

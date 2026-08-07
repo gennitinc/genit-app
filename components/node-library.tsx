@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Code,
@@ -103,7 +104,9 @@ export default function NodeLibrary() {
         </Button>
       ))}
       <div className='mt-4 text-xs text-gray-500'>
-        Drag and drop nodes onto the canvas to build your workflow
+        <LocalizedText
+          text={"Drag and drop nodes onto the canvas to build your workflow"}
+        />
       </div>
     </div>
   );

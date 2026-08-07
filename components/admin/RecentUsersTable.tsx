@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -41,9 +42,11 @@ export const RecentUsersTable = () => {
       className='bg-card border-border/50 mt-8 rounded-lg border p-6'
     >
       <div className='mb-6 flex items-center justify-between'>
-        <h3 className='text-lg font-semibold'>Recent Signups</h3>
+        <h3 className='text-lg font-semibold'>
+          <LocalizedText text={"Recent Signups"} />
+        </h3>
         <Badge variant='outline' className='font-normal'>
-          Latest 10 users
+          <LocalizedText text={"Latest 10 users"} />
         </Badge>
       </div>
 
@@ -52,16 +55,16 @@ export const RecentUsersTable = () => {
           <TableHeader className='bg-muted/50'>
             <TableRow>
               <TableHead className='text-xs font-bold tracking-wider uppercase'>
-                User
+                <LocalizedText text={"User"} />
               </TableHead>
               <TableHead className='text-xs font-bold tracking-wider uppercase'>
-                Email
+                <LocalizedText text={"Email"} />
               </TableHead>
               <TableHead className='text-xs font-bold tracking-wider uppercase'>
-                Plan
+                <LocalizedText text={"Plan"} />
               </TableHead>
               <TableHead className='text-xs font-bold tracking-wider uppercase'>
-                Joined
+                <LocalizedText text={"Joined"} />
               </TableHead>
             </TableRow>
           </TableHeader>

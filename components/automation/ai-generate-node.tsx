@@ -1,4 +1,5 @@
 import { type AIContentType, AI_CONTENT_TYPES } from "./automation-types";
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
@@ -74,7 +75,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Sparkles className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            AI Generate
+            <LocalizedText text={"AI Generate"} />
           </span>
         </div>
         {isEdit && (
@@ -92,7 +93,9 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -106,7 +109,9 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
 
             {/* Content Type Tabs */}
             <div>
-              <label className={labelCls}>Output Type</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Output Type"} />
+              </label>
               <div className='dark:border-neutral-850 flex gap-1 rounded-lg border border-zinc-200 bg-zinc-50 p-1 dark:bg-neutral-950'>
                 {AI_CONTENT_TYPES.map((ct) => (
                   <button
@@ -131,7 +136,9 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
             </div>
 
             <div className='relative'>
-              <label className={labelCls}>Model</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Model"} />
+              </label>
               <div className='relative'>
                 <select
                   value={data.model || ""}
@@ -145,7 +152,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                     value=''
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Auto (default)
+                    <LocalizedText text={"Auto (default)"} />
                   </option>
                   {serverModels.map((m) => (
                     <option
@@ -163,7 +170,9 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
 
             {(data.contentType === "image" || data.contentType === "video") && (
               <div>
-                <label className={labelCls}>Aspect Ratio</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Aspect Ratio"} />
+                </label>
                 <select
                   value={data.aspectRatio || "16:9"}
                   onChange={(e) =>
@@ -175,38 +184,40 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                     value='auto'
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Auto
+                    <LocalizedText text={"Auto"} />
                   </option>
                   <option
                     value='16:9'
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Landscape 16:9
+                    <LocalizedText text={"Landscape 16:9"} />
                   </option>
                   <option
                     value='9:16'
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Portrait 9:16
+                    <LocalizedText text={"Portrait 9:16"} />
                   </option>
                   <option
                     value='1:1'
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Square 1:1
+                    <LocalizedText text={"Square 1:1"} />
                   </option>
                   <option
                     value='4:3'
                     className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                   >
-                    Standard 4:3
+                    <LocalizedText text={"Standard 4:3"} />
                   </option>
                 </select>
               </div>
             )}
 
             <div>
-              <label className={labelCls}>Prompt</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Prompt"} />
+              </label>
               <textarea
                 value={data.prompt || ""}
                 onChange={(e) =>

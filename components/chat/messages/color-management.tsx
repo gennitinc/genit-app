@@ -1,6 +1,7 @@
 "use client";
 
 import { ColorShadeScale } from "./color-shade-scale";
+import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -493,7 +494,9 @@ export function ColorManagement({
             exit={{ opacity: 0 }}
             className='text-muted-foreground/50 py-2 text-center text-[11px] italic'
           >
-            AI will select the optimal palette automatically.
+            <LocalizedText
+              text={"AI will select the optimal palette automatically."}
+            />
           </motion.p>
         ) : (
           <motion.div
@@ -547,7 +550,8 @@ export function ColorManagement({
                     onClick={addBrandSecondary}
                     className='text-muted-foreground hover:text-foreground flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-[10px] transition-all hover:border-white/20'
                   >
-                    <Plus className='h-3 w-3' /> Add secondary scale
+                    <Plus className='h-3 w-3' />{" "}
+                    <LocalizedText text={"Add secondary scale"} />
                   </button>
                 )}
                 {!isLocked && (
@@ -556,7 +560,7 @@ export function ColorManagement({
                     className='text-muted-foreground hover:text-foreground group flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-white/5 text-[10px] transition-all hover:border-white/10 hover:bg-white/5'
                   >
                     <RefreshCw className='h-3 w-3 transition-transform duration-500 group-hover:rotate-180' />{" "}
-                    Randomise colors
+                    <LocalizedText text={"Randomise colors"} />
                   </button>
                 )}
               </div>
@@ -566,7 +570,7 @@ export function ColorManagement({
             {activeTab === "neutral" && (
               <div className='space-y-1.5'>
                 <span className='text-muted-foreground text-[10px] font-medium'>
-                  Base Grey
+                  <LocalizedText text={"Base Grey"} />
                 </span>
                 <HexInput
                   value={neutralBase}
@@ -614,7 +618,7 @@ export function ColorManagement({
 
                 {fontsLoading ? (
                   <div className='text-muted-foreground/40 flex items-center justify-center py-6 text-xs'>
-                    Loading fonts…
+                    <LocalizedText text={"Loading fonts…"} />
                   </div>
                 ) : (
                   <div className='custom-scrollbar grid max-h-52 grid-cols-2 gap-1.5 overflow-y-auto pr-1'>
@@ -665,7 +669,7 @@ export function ColorManagement({
 
                 {resolvedPrimaryFont && (
                   <p className='text-primary/70 text-center text-[10px]'>
-                    Selected:{" "}
+                    <LocalizedText text={"Selected:"} />{" "}
                     <span
                       className='font-semibold'
                       style={{ fontFamily: `"${resolvedPrimaryFont}"` }}

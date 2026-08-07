@@ -1,3 +1,4 @@
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -58,7 +59,9 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
                 <Copy className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Copy</TooltipContent>
+            <TooltipContent>
+              <LocalizedText text={"Copy"} />
+            </TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -71,7 +74,9 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
                 <Download className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Download</TooltipContent>
+            <TooltipContent>
+              <LocalizedText text={"Download"} />
+            </TooltipContent>
           </Tooltip>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { Slide } from "@/types/presentation-schema";
 import { useSortable } from "@dnd-kit/sortable";
@@ -81,7 +82,8 @@ export function DraggableSlide({
             : "bg-muted text-muted-foreground"
         )}
       >
-        Slide {index + 1}
+        <LocalizedText text={"Slide"} />
+        {index + 1}
       </div>
 
       {children}

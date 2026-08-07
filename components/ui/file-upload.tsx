@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { IconUpload } from "@tabler/icons-react";
 import { motion } from "framer-motion";
@@ -69,10 +71,12 @@ export const FileUpload = ({
         </div>
         <div className='flex flex-col items-center justify-center'>
           <p className='relative z-20 font-sans text-base font-bold text-neutral-700 dark:text-neutral-300'>
-            Upload file
+            <LocalizedText text={"Upload file"} />
           </p>
           <p className='relative z-20 mt-2 font-sans text-base font-normal text-neutral-400 dark:text-neutral-400'>
-            Drag or drop your files here or click to upload
+            <LocalizedText
+              text={"Drag or drop your files here or click to upload"}
+            />
           </p>
           <div className='relative mx-auto mt-10 w-full max-w-xl'>
             {files.length > 0 &&
@@ -100,7 +104,8 @@ export const FileUpload = ({
                       layout
                       className='shadow-input w-fit shrink-0 rounded-lg px-2 py-1 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white'
                     >
-                      {(file.size / (1024 * 1024)).toFixed(2)} MB
+                      {(file.size / (1024 * 1024)).toFixed(2)}{" "}
+                      <LocalizedText text={"MB"} />
                     </motion.p>
                   </div>
 
@@ -119,7 +124,7 @@ export const FileUpload = ({
                       animate={{ opacity: 1 }}
                       layout
                     >
-                      modified{" "}
+                      <LocalizedText text={"modified"} />{" "}
                       {new Date(file.lastModified).toLocaleDateString()}
                     </motion.p>
                   </div>
@@ -145,7 +150,7 @@ export const FileUpload = ({
                     animate={{ opacity: 1 }}
                     className='flex flex-col items-center text-neutral-600'
                   >
-                    Drop it
+                    <LocalizedText text={"Drop it"} />
                     <IconUpload className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
                   </motion.p>
                 ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Tooltip,
   TooltipContent,
@@ -320,10 +321,11 @@ export function ImagePreviewTab({
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
               <LoadingFileLoader size={16} />
               <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
-                Generating image
+                <LocalizedText text={"Generating image"} />
               </h3>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                {generationProgress}% complete
+                {generationProgress}
+                <LocalizedText text={"% complete"} />
               </p>
               <div className='h-1 w-48 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700'>
                 <div
@@ -362,11 +364,14 @@ export function ImagePreviewTab({
                 <ImageIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
               </div>
               <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-                No images yet
+                <LocalizedText text={"No images yet"} />
               </h3>
               <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-                Enter a prompt in the left panel and click Generate to create
-                your image
+                <LocalizedText
+                  text={
+                    "Enter a prompt in the left panel and click Generate to create your image"
+                  }
+                />
               </p>
               <div className='flex flex-col gap-3 sm:flex-row'>
                 <button
@@ -378,7 +383,7 @@ export function ImagePreviewTab({
                   }
                   className='rounded-lg bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  Try Example Prompt
+                  <LocalizedText text={"Try Example Prompt"} />
                 </button>
                 {onTabChange && (
                   <button
@@ -386,7 +391,7 @@ export function ImagePreviewTab({
                     onClick={() => onTabChange("templates")}
                     className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
                   >
-                    Browse Templates
+                    <LocalizedText text={"Browse Templates"} />
                   </button>
                 )}
               </div>
@@ -450,7 +455,9 @@ export function ImagePreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Recreate</p>
+                <p>
+                  <LocalizedText text={"Recreate"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -473,7 +480,9 @@ export function ImagePreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy prompt</p>
+                <p>
+                  <LocalizedText text={"Copy prompt"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -487,7 +496,9 @@ export function ImagePreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Download</p>
+                <p>
+                  <LocalizedText text={"Download"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -501,7 +512,9 @@ export function ImagePreviewTab({
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Share</p>
+                <p>
+                  <LocalizedText text={"Share"} />
+                </p>
               </TooltipContent>
             </Tooltip>
             <button
@@ -518,17 +531,17 @@ export function ImagePreviewTab({
               {publishing ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Publishing...
+                  <LocalizedText text={"Publishing..."} />
                 </>
               ) : isPublished ? (
                 <>
                   <Upload className='h-4 w-4' />
-                  Published
+                  <LocalizedText text={"Published"} />
                 </>
               ) : (
                 <>
                   <Upload className='h-4 w-4' />
-                  Publish
+                  <LocalizedText text={"Publish"} />
                 </>
               )}
             </button>
@@ -540,7 +553,7 @@ export function ImagePreviewTab({
           <div className='mt-4 rounded-xl border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
             <div className='min-w-0 flex-1'>
               <p className='mb-1 text-xs font-medium tracking-wider text-neutral-500 uppercase dark:text-neutral-400'>
-                Prompt
+                <LocalizedText text={"Prompt"} />
               </p>
               <p className='line-clamp-2 text-sm text-neutral-900 dark:text-white'>
                 {generatedImages[selectedImageIndex]?.prompt}

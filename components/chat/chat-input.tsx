@@ -4,6 +4,7 @@ import { ModelSelector } from "../inspire/model-selector";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
 import { BrandIdentityPanel } from "./messages/brand-identity-panel";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -237,7 +238,8 @@ export function ChatInput({
       if (isAgentic) {
         // Build uploaded file list for the agent
         let uploadedFiles:
-          { name: string; type: string; url: string; size?: number }[] | undefined;
+          | { name: string; type: string; url: string; size?: number }[]
+          | undefined;
 
         if (attachedFiles.length > 0) {
           const formData = new FormData();
@@ -410,12 +412,12 @@ export function ChatInput({
                   <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                   {user ? (
                     <span className='text-muted-foreground text-xs'>
-                      {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
-                      left
+                      {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                      <LocalizedText text={"Credits left"} />
                     </span>
                   ) : (
                     <span className='text-muted-foreground text-xs'>
-                      Get started for free
+                      <LocalizedText text={"Get started for free"} />
                     </span>
                   )}
                 </div>
@@ -427,7 +429,7 @@ export function ChatInput({
                         className='cursor-pointer text-blue-500 hover:underline'
                         onClick={() => router.push("/pricing")}
                       >
-                        Upgrade
+                        <LocalizedText text={"Upgrade"} />
                       </span>
                     ) : (
                       <span
@@ -436,7 +438,7 @@ export function ChatInput({
                           router.push("/user/settings?tab=billing")
                         }
                       >
-                        Buy Credits
+                        <LocalizedText text={"Buy Credits"} />
                       </span>
                     )}
                   </div>
@@ -527,7 +529,7 @@ export function ChatInput({
                   <div className='animate-in fade-in slide-in-from-right-1 flex items-center gap-1.5 px-1.5 text-[10px] font-medium duration-300'>
                     {brandSaveStatus === "saving" ? (
                       <>
-                         <LoadingFileLoader size={14} />
+                        <LoadingFileLoader size={14} />
                       </>
                     ) : (
                       <>
@@ -661,7 +663,7 @@ export function ChatInput({
                     <div className='flex items-center gap-2'>
                       <Palette className='text-primary h-4 w-4' />
                       <h3 className='text-foreground text-sm font-semibold'>
-                        Brand Identity
+                        <LocalizedText text={"Brand Identity"} />
                       </h3>
                     </div>
                     <button

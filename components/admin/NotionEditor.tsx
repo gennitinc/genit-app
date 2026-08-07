@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { apiResponse } from "@/utils/apiResponse";
 import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -381,7 +382,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
       {/* Slash commands menu */}
       <EditorCommand className='z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950 px-1 py-1 shadow-2xl transition-all'>
         <EditorCommandEmpty className='px-3 py-2 text-xs text-zinc-500'>
-          No results found
+          <LocalizedText text={"No results found"} />
         </EditorCommandEmpty>
         <EditorCommandList>
           {suggestionItems.map((item) => (

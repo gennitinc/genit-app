@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -115,16 +116,16 @@ export function NavUser({ user }: any) {
               >
                 <Link href={`/creator/${user?.username}`}>
                   <User className='mr-2 h-4 w-4' />
-                  View Profile
+                  <LocalizedText text={"View Profile"} />
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className='focus:bg-accent focus:text-accent-foreground'>
                 <BadgeCheck className='mr-2 h-4 w-4' />
-                Account
+                <LocalizedText text={"Account"} />
               </DropdownMenuItem>
               <DropdownMenuItem className='focus:bg-accent focus:text-accent-foreground'>
                 <CreditCard className='mr-2 h-4 w-4' />
-                Billing
+                <LocalizedText text={"Billing"} />
               </DropdownMenuItem>
               {/* <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
                 <Bell className="mr-2 h-4 w-4" />
@@ -139,12 +140,16 @@ export function NavUser({ user }: any) {
               {theme === "dark" ? (
                 <>
                   <Sun className='mr-2 h-4 w-4' />
-                  <span>Switch to light mode</span>
+                  <span>
+                    <LocalizedText text={"Switch to light mode"} />
+                  </span>
                 </>
               ) : (
                 <>
                   <Moon className='mr-2 h-4 w-4' />
-                  <span>Switch to dark mode</span>
+                  <span>
+                    <LocalizedText text={"Switch to dark mode"} />
+                  </span>
                 </>
               )}
             </DropdownMenuItem>
@@ -156,7 +161,7 @@ export function NavUser({ user }: any) {
               }}
             >
               <LogOut className='mr-2 h-4 w-4' />
-              Log out
+              <LocalizedText text={"Log out"} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

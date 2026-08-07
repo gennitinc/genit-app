@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -131,7 +132,7 @@ export function ImageHistoryTab({
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
           <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Loading history images
+            <LocalizedText text={"Loading history images"} />
           </p>
         </div>
       </section>
@@ -147,10 +148,10 @@ export function ImageHistoryTab({
               <ImageIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
             <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-              No history yet
+              <LocalizedText text={"No history yet"} />
             </h3>
             <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-              Your generated images will appear here
+              <LocalizedText text={"Your generated images will appear here"} />
             </p>
           </div>
         </div>
@@ -220,19 +221,26 @@ export function ImageHistoryTab({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Image</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Delete Image"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this image? This action cannot be
-              undone.
+              <LocalizedText
+                text={
+                  "Are you sure you want to delete this image? This action cannot be undone."
+                }
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              <LocalizedText text={"Cancel"} />
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className='bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
-              Delete
+              <LocalizedText text={"Delete"} />
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

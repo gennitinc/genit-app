@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -257,9 +258,11 @@ export default function AdminTemplatesPage() {
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='mb-6'>
-        <h1 className='mb-2 text-3xl font-bold'>Template Management</h1>
+        <h1 className='mb-2 text-3xl font-bold'>
+          <LocalizedText text={"Template Management"} />
+        </h1>
         <p className='text-muted-foreground'>
-          Manage all templates in the platform
+          <LocalizedText text={"Manage all templates in the platform"} />
         </p>
       </div>
 
@@ -277,7 +280,8 @@ export default function AdminTemplatesPage() {
           />
         </div>
         <div className='text-muted-foreground text-sm'>
-          {templates.length} template{templates.length !== 1 ? "s" : ""}
+          {templates.length} <LocalizedText text={"template"} />
+          {templates.length !== 1 ? "s" : ""}
         </div>
         {selectedTemplates.size > 0 && (
           <Button
@@ -285,7 +289,8 @@ export default function AdminTemplatesPage() {
             onClick={() => setBulkDeleteDialogOpen(true)}
           >
             <Trash2 className='mr-2 h-4 w-4' />
-            Delete {selectedTemplates.size} selected
+            <LocalizedText text={"Delete"} />
+            {selectedTemplates.size} <LocalizedText text={"selected"} />
           </Button>
         )}
       </div>
@@ -296,7 +301,7 @@ export default function AdminTemplatesPage() {
         </div>
       ) : templates.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
-          No templates found
+          <LocalizedText text={"No templates found"} />
         </div>
       ) : (
         <>
@@ -394,7 +399,7 @@ export default function AdminTemplatesPage() {
             {isFetchingMore && <LoadingFileLoader size={16} />}
             {!hasNextPage && templates.length > 0 && (
               <p className='text-muted-foreground text-sm'>
-                No more templates to load
+                <LocalizedText text={"No more templates to load"} />
               </p>
             )}
           </div>
@@ -404,10 +409,15 @@ export default function AdminTemplatesPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Template</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Template"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this template? This action cannot
-              be undone.
+              <LocalizedText
+                text={
+                  "Are you sure you want to delete this template? This action cannot be undone."
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -419,7 +429,7 @@ export default function AdminTemplatesPage() {
               }}
               disabled={isDeleting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -429,7 +439,7 @@ export default function AdminTemplatesPage() {
               {isDeleting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Deleting...
+                  <LocalizedText text={"Deleting..."} />
                 </>
               ) : (
                 "Delete"
@@ -445,11 +455,14 @@ export default function AdminTemplatesPage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Templates</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Templates"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete {selectedTemplates.size} template
-              {selectedTemplates.size !== 1 ? "s" : ""}? This action cannot be
-              undone.
+              <LocalizedText text={"Are you sure you want to delete"} />
+              {selectedTemplates.size} <LocalizedText text={"template"} />
+              {selectedTemplates.size !== 1 ? "s" : ""}
+              <LocalizedText text={"? This action cannot be undone."} />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -458,7 +471,7 @@ export default function AdminTemplatesPage() {
               onClick={() => setBulkDeleteDialogOpen(false)}
               disabled={isBulkDeleting}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -468,7 +481,7 @@ export default function AdminTemplatesPage() {
               {isBulkDeleting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Deleting...
+                  <LocalizedText text={"Deleting..."} />
                 </>
               ) : (
                 "Delete"

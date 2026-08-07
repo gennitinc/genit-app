@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -527,7 +528,7 @@ export function VoiceSelector({
         <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
       </div>
       <p className='text-xs font-medium text-neutral-600 dark:text-neutral-400'>
-        View More
+        <LocalizedText text={"View More"} />
       </p>
     </button>
   );
@@ -545,7 +546,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          AI Voices
+          <LocalizedText text={"AI Voices"} />
         </button>
         <button
           onClick={() => setActiveTab("my-audio")}
@@ -556,7 +557,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          My Audio
+          <LocalizedText text={"My Audio"} />
         </button>
         <button
           onClick={() => setActiveTab("clone")}
@@ -567,7 +568,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          Clone Voice
+          <LocalizedText text={"Clone Voice"} />
         </button>
       </div>
 
@@ -579,7 +580,7 @@ export function VoiceSelector({
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-              No voices available
+              <LocalizedText text={"No voices available"} />
             </div>
           ) : (
             <div className='grid grid-cols-5 gap-2'>
@@ -615,7 +616,9 @@ export function VoiceSelector({
             </div>
           ) : userVoices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-              You haven't cloned or uploaded any voices yet
+              <LocalizedText
+                text={"You haven't cloned or uploaded any voices yet"}
+              />
             </div>
           ) : (
             <div className='grid grid-cols-5 gap-2'>
@@ -652,10 +655,12 @@ export function VoiceSelector({
               <Mic className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
             </div>
             <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-              Clone Your Voice
+              <LocalizedText text={"Clone Your Voice"} />
             </h4>
             <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
-              Record or upload a sample to create your unique voice
+              <LocalizedText
+                text={"Record or upload a sample to create your unique voice"}
+              />
             </p>
           </div>
 
@@ -677,12 +682,13 @@ export function VoiceSelector({
                   {isRecording ? (
                     <>
                       <Square className='h-4 w-4' />
-                      Stop ({formatTime(recordingTime)})
+                      <LocalizedText text={"Stop ("} />
+                      {formatTime(recordingTime)})
                     </>
                   ) : (
                     <>
                       <Mic className='h-4 w-4' />
-                      Record
+                      <LocalizedText text={"Record"} />
                     </>
                   )}
                 </button>
@@ -699,7 +705,7 @@ export function VoiceSelector({
                   />
                   <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2.5 text-sm font-medium text-neutral-900 transition-all hover:bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'>
                     <Upload className='h-4 w-4' />
-                    Upload
+                    <LocalizedText text={"Upload"} />
                   </span>
                 </label>
               </div>
@@ -708,7 +714,7 @@ export function VoiceSelector({
             {isRecording && (
               <div className='flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'>
                 <div className='h-2 w-2 animate-pulse rounded-full bg-red-500' />
-                Speak clearly for at least 10 seconds
+                <LocalizedText text={"Speak clearly for at least 10 seconds"} />
               </div>
             )}
 
@@ -728,14 +734,14 @@ export function VoiceSelector({
                     }}
                     className='ml-2 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
                   >
-                    Remove
+                    <LocalizedText text={"Remove"} />
                   </button>
                 </div>
 
                 {/* Voice Name Input */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Voice Name *
+                    <LocalizedText text={"Voice Name *"} />
                   </label>
                   <input
                     type='text'
@@ -749,7 +755,7 @@ export function VoiceSelector({
                 {/* Language Select */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Language
+                    <LocalizedText text={"Language"} />
                   </label>
                   <Select
                     value={voiceLanguage}
@@ -771,7 +777,7 @@ export function VoiceSelector({
                 {/* Accent Select */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Accent
+                    <LocalizedText text={"Accent"} />
                   </label>
                   <Select value={voiceAccent} onValueChange={setVoiceAccent}>
                     <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
@@ -790,7 +796,7 @@ export function VoiceSelector({
                 {/* Gender Selection */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Gender
+                    <LocalizedText text={"Gender"} />
                   </label>
                   <div className='flex gap-2'>
                     <button
@@ -803,7 +809,7 @@ export function VoiceSelector({
                           : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
-                      Male
+                      <LocalizedText text={"Male"} />
                     </button>
                     <button
                       type='button'
@@ -815,7 +821,7 @@ export function VoiceSelector({
                           : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
-                      Female
+                      <LocalizedText text={"Female"} />
                     </button>
                   </div>
                 </div>
@@ -829,12 +835,12 @@ export function VoiceSelector({
                   {isProcessing ? (
                     <>
                       <LoadingFileLoader size={16} />
-                      Saving Voice...
+                      <LocalizedText text={"Saving Voice..."} />
                     </>
                   ) : (
                     <>
                       <Mic className='h-4 w-4' />
-                      Save & Clone Voice
+                      <LocalizedText text={"Save & Clone Voice"} />
                     </>
                   )}
                 </button>
@@ -859,7 +865,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          AI Voices
+          <LocalizedText text={"AI Voices"} />
         </button>
         <button
           onClick={() => setActiveTab("my-audio")}
@@ -870,7 +876,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          My Audio
+          <LocalizedText text={"My Audio"} />
         </button>
         <button
           onClick={() => setActiveTab("clone")}
@@ -881,7 +887,7 @@ export function VoiceSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          Clone Voice
+          <LocalizedText text={"Clone Voice"} />
         </button>
       </div>
 
@@ -889,7 +895,7 @@ export function VoiceSelector({
       {activeTab === "voices" && (
         <div className='space-y-3'>
           <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-            Choose voice
+            <LocalizedText text={"Choose voice"} />
           </h3>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
@@ -897,7 +903,7 @@ export function VoiceSelector({
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-              No voices available
+              <LocalizedText text={"No voices available"} />
             </div>
           ) : (
             <div className='grid grid-cols-4 gap-2'>
@@ -936,7 +942,9 @@ export function VoiceSelector({
           ) : userVoices.length === 0 ? (
             <div className='py-4 text-center'>
               <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                You haven't cloned or uploaded any voices yet
+                <LocalizedText
+                  text={"You haven't cloned or uploaded any voices yet"}
+                />
               </p>
             </div>
           ) : (
@@ -975,10 +983,12 @@ export function VoiceSelector({
               <Mic className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
             </div>
             <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-              Clone Your Voice
+              <LocalizedText text={"Clone Your Voice"} />
             </h4>
             <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
-              Record or upload a sample to create your unique voice
+              <LocalizedText
+                text={"Record or upload a sample to create your unique voice"}
+              />
             </p>
           </div>
 
@@ -1000,12 +1010,13 @@ export function VoiceSelector({
                   {isRecording ? (
                     <>
                       <Square className='h-4 w-4' />
-                      Stop ({formatTime(recordingTime)})
+                      <LocalizedText text={"Stop ("} />
+                      {formatTime(recordingTime)})
                     </>
                   ) : (
                     <>
                       <Mic className='h-4 w-4' />
-                      Record
+                      <LocalizedText text={"Record"} />
                     </>
                   )}
                 </button>
@@ -1022,7 +1033,7 @@ export function VoiceSelector({
                   />
                   <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-neutral-100 px-3 py-2.5 text-sm font-medium text-neutral-900 transition-all hover:bg-neutral-200 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'>
                     <Upload className='h-4 w-4' />
-                    Upload
+                    <LocalizedText text={"Upload"} />
                   </span>
                 </label>
               </div>
@@ -1031,7 +1042,7 @@ export function VoiceSelector({
             {isRecording && (
               <div className='flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'>
                 <div className='h-2 w-2 animate-pulse rounded-full bg-red-500' />
-                Speak clearly for at least 10 seconds
+                <LocalizedText text={"Speak clearly for at least 10 seconds"} />
               </div>
             )}
 
@@ -1051,14 +1062,14 @@ export function VoiceSelector({
                     }}
                     className='ml-2 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
                   >
-                    Remove
+                    <LocalizedText text={"Remove"} />
                   </button>
                 </div>
 
                 {/* Voice Name Input */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Voice Name *
+                    <LocalizedText text={"Voice Name *"} />
                   </label>
                   <input
                     type='text'
@@ -1072,7 +1083,7 @@ export function VoiceSelector({
                 {/* Language Select */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Language
+                    <LocalizedText text={"Language"} />
                   </label>
                   <Select
                     value={voiceLanguage}
@@ -1094,7 +1105,7 @@ export function VoiceSelector({
                 {/* Accent Select */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Accent
+                    <LocalizedText text={"Accent"} />
                   </label>
                   <Select value={voiceAccent} onValueChange={setVoiceAccent}>
                     <SelectTrigger className='w-full border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white'>
@@ -1113,7 +1124,7 @@ export function VoiceSelector({
                 {/* Gender Selection */}
                 <div className='space-y-2'>
                   <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    Gender
+                    <LocalizedText text={"Gender"} />
                   </label>
                   <div className='flex gap-2'>
                     <button
@@ -1126,7 +1137,7 @@ export function VoiceSelector({
                           : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
-                      Male
+                      <LocalizedText text={"Male"} />
                     </button>
                     <button
                       type='button'
@@ -1138,7 +1149,7 @@ export function VoiceSelector({
                           : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                       )}
                     >
-                      Female
+                      <LocalizedText text={"Female"} />
                     </button>
                   </div>
                 </div>
@@ -1152,12 +1163,12 @@ export function VoiceSelector({
                   {isProcessing ? (
                     <>
                       <LoadingFileLoader size={16} />
-                      Saving Voice...
+                      <LocalizedText text={"Saving Voice..."} />
                     </>
                   ) : (
                     <>
                       <Mic className='h-4 w-4' />
-                      Save & Clone Voice
+                      <LocalizedText text={"Save & Clone Voice"} />
                     </>
                   )}
                 </button>
@@ -1172,9 +1183,11 @@ export function VoiceSelector({
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent className='flex max-h-[85vh] max-w-3xl flex-col'>
             <DialogHeader>
-              <DialogTitle>Select Voice</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Select Voice"} />
+              </DialogTitle>
               <DialogDescription>
-                Choose an AI voice or clone your own
+                <LocalizedText text={"Choose an AI voice or clone your own"} />
               </DialogDescription>
             </DialogHeader>
             <div className='flex-1 overflow-hidden'>
@@ -1186,9 +1199,11 @@ export function VoiceSelector({
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
           <DrawerContent className='flex max-h-[85vh] flex-col'>
             <DrawerHeader>
-              <DrawerTitle>Select Voice</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Select Voice"} />
+              </DrawerTitle>
               <DrawerDescription>
-                Choose an AI voice or clone your own
+                <LocalizedText text={"Choose an AI voice or clone your own"} />
               </DrawerDescription>
             </DrawerHeader>
             <div className='flex-1 overflow-y-auto px-4 pb-6'>

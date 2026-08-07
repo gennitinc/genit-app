@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -210,7 +211,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                 </span>
                 {comment.isEdited && (
                   <span className='rounded-md bg-zinc-200 px-1.5 py-0.5 text-[10px] text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500'>
-                    Edited
+                    <LocalizedText text={"Edited"} />
                   </span>
                 )}
               </div>
@@ -235,14 +236,16 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                           }}
                           className='flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-zinc-700 outline-none hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800'
                         >
-                          <Edit2 className='h-3.5 w-3.5' /> Edit
+                          <Edit2 className='h-3.5 w-3.5' />{" "}
+                          <LocalizedText text={"Edit"} />
                         </DropdownMenu.Item>
                       )}
                       <DropdownMenu.Item
                         onClick={() => handleDeleteComment(comment._id)}
                         className='flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-red-600 outline-none hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30'
                       >
-                        <Trash2 className='h-3.5 w-3.5' /> Delete
+                        <Trash2 className='h-3.5 w-3.5' />{" "}
+                        <LocalizedText text={"Delete"} />
                       </DropdownMenu.Item>
                     </DropdownMenu.Content>
                   </DropdownMenu.Portal>
@@ -263,14 +266,14 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                     onClick={() => setEditingId(null)}
                     className='px-3 py-1.5 text-xs text-zinc-500 hover:text-black dark:hover:text-white'
                   >
-                    Cancel
+                    <LocalizedText text={"Cancel"} />
                   </button>
                   <button
                     onClick={() => handleEditComment(comment._id)}
                     disabled={isSubmitting || !editContent.trim()}
                     className='rounded-lg bg-cyan-500 px-3 py-1.5 text-xs text-white hover:bg-cyan-600 disabled:opacity-50'
                   >
-                    Save
+                    <LocalizedText text={"Save"} />
                   </button>
                 </div>
               </div>
@@ -296,7 +299,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               className='flex items-center gap-1 text-xs font-medium text-zinc-500 transition-colors hover:text-cyan-500'
             >
               <CornerDownRight className='h-3.5 w-3.5' />
-              Reply
+              <LocalizedText text={"Reply"} />
             </button>
           </div>
 
@@ -315,14 +318,14 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                     onClick={() => setReplyingTo(null)}
                     className='px-3 py-1.5 text-xs text-zinc-500 hover:text-black dark:hover:text-white'
                   >
-                    Cancel
+                    <LocalizedText text={"Cancel"} />
                   </button>
                   <button
                     onClick={() => handlePostComment(comment._id)}
                     disabled={isSubmitting || !replyContent.trim()}
                     className='rounded-lg bg-cyan-500 px-4 py-1.5 text-xs text-white hover:bg-cyan-600 disabled:opacity-50'
                   >
-                    Reply
+                    <LocalizedText text={"Reply"} />
                   </button>
                 </div>
               </div>
@@ -343,7 +346,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
   return (
     <div className='mt-4 w-full max-w-3xl lg:mt-12'>
       <h3 className='mb-8 text-2xl font-bold text-black dark:text-white'>
-        Comments
+        <LocalizedText text={"Comments"} />
       </h3>
 
       {/* Main Comment Input */}
@@ -389,7 +392,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               className='flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600 disabled:opacity-50'
             >
               {isSubmitting && <LoadingFileLoader size={16} />}
-              Post Comment
+              <LocalizedText text={"Post Comment"} />
             </button>
           </div>
         </div>
@@ -403,7 +406,9 @@ export function BlogComments({ postId }: BlogCommentsProps) {
       ) : comments.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-200 py-12 text-center dark:border-zinc-800'>
           <p className='text-zinc-500 dark:text-zinc-400'>
-            No comments yet. Be the first to share your thoughts!
+            <LocalizedText
+              text={"No comments yet. Be the first to share your thoughts!"}
+            />
           </p>
         </div>
       ) : (

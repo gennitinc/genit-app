@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { toast } from "@/hooks/use-toast";
 import { Tutorial } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -75,7 +76,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
           <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Loading tutorials
+            <LocalizedText text={"Loading tutorials"} />
           </p>
         </div>
       </section>
@@ -90,10 +91,12 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
             <PlayCircle className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
           <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-            No tutorials available
+            <LocalizedText text={"No tutorials available"} />
           </h3>
           <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-            Tutorials are being added regularly. Check back soon!
+            <LocalizedText
+              text={"Tutorials are being added regularly. Check back soon!"}
+            />
           </p>
           <a
             href='https://www.youtube.com/@genit-tutorials'
@@ -101,7 +104,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
             rel='noopener noreferrer'
             className='inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
-            Visit YouTube Channel
+            <LocalizedText text={"Visit YouTube Channel"} />
             <ExternalLink className='h-4 w-4' />
           </a>
         </div>
@@ -114,10 +117,10 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
       <div className='mb-4 flex items-center justify-between'>
         <div>
           <h2 className='mb-1 text-lg font-semibold text-neutral-900 dark:text-white'>
-            Learn How to Use
+            <LocalizedText text={"Learn How to Use"} />
           </h2>
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Watch tutorials to get started quickly
+            <LocalizedText text={"Watch tutorials to get started quickly"} />
           </p>
         </div>
         <a
@@ -126,7 +129,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
           rel='noopener noreferrer'
           className='flex items-center gap-1.5 text-sm font-medium text-cyan-500 transition-colors hover:text-cyan-600'
         >
-          View All
+          <LocalizedText text={"View All"} />
           <ExternalLink className='h-4 w-4' />
         </a>
       </div>
@@ -165,7 +168,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
       {tutorials.length > 0 && (
         <div className='space-y-2'>
           <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-            More Tutorials
+            <LocalizedText text={"More Tutorials"} />
           </h4>
 
           {tutorials.map((tutorial, index) => {
@@ -213,7 +216,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
         className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'
       >
         <PlayCircle className='h-5 w-5' />
-        View All Tutorials on YouTube
+        <LocalizedText text={"View All Tutorials on YouTube"} />
         <ExternalLink className='h-4 w-4' />
       </a>
     </section>

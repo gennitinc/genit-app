@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import {
   Area,
@@ -164,7 +165,7 @@ export function ChartBlock({
       default:
         return (
           <div className='text-muted-foreground flex h-full items-center justify-center'>
-            Unknown chart type
+            <LocalizedText text={"Unknown chart type"} />
           </div>
         );
     }

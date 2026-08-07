@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserContext } from "@/context/AuthenticatedContext";
@@ -172,12 +173,15 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
             <h2
               className={`mt-5 text-2xl font-semibold tracking-tight text-balance sm:text-3xl lg:text-4xl ${isDark ? "text-white" : "text-gray-900"}`}
             >
-              Creators Program
+              <LocalizedText text={"Creators Program"} />
             </h2>
             <div>
               <p className='text-muted-foreground mt-2 text-lg sm:text-lg lg:text-sm'>
-                Become an an affiliate and start earning, Get a unique referral
-                link, QR code, and media kit to promote your profile
+                <LocalizedText
+                  text={
+                    "Become an an affiliate and start earning, Get a unique referral link, QR code, and media kit to promote your profile"
+                  }
+                />
               </p>
             </div>
 
@@ -195,7 +199,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                 {joining ? (
                   <>
                     <RefreshCw className='mr-2 h-5 w-5 animate-spin' />
-                    processing...
+                    <LocalizedText text={"processing..."} />
                   </>
                 ) : (
                   "Become an affiliate"
@@ -208,7 +212,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   isDark ? "text-white" : "text-gray-900"
                 }`}
               >
-                Read terms
+                <LocalizedText text={"Read terms"} />
                 <span aria-hidden='true' className='ml-2'>
                   →
                 </span>
@@ -235,12 +239,12 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                     <div
                       className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
                     >
-                      It's amazing!
+                      <LocalizedText text={"It's amazing!"} />
                     </div>
                     <div
                       className={`text-lg font-medium sm:text-xl ${isDark ? "text-gray-200" : "text-gray-700"}`}
                     >
-                      5 day streak
+                      <LocalizedText text={"5 day streak"} />
                     </div>
                   </div>
                   <div className='text-2xl sm:text-3xl'>🎉</div>
@@ -338,7 +342,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
                   <h6
                     className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
                   >
-                    Total earnings
+                    <LocalizedText text={"Total earnings"} />
                   </h6>
                   <div
                     className={`mt-2 flex text-lg font-semibold sm:text-xl ${isDark ? "text-gray-100" : "text-gray-900"}`}
@@ -384,11 +388,14 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
         <div className='mb-6 max-w-4xl rounded-xl border border-gray-200 bg-white p-4 sm:mb-8 sm:p-6 md:mx-8 lg:mx-12 lg:max-w-5xl xl:mx-16 dark:border-neutral-800 dark:bg-neutral-900'>
           <div className='mb-4 sm:mb-6'>
             <h2 className='mb-2 text-lg font-bold text-gray-900 sm:text-lg dark:text-white'>
-              How It Works
+              <LocalizedText text={"How It Works"} />
             </h2>
             <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-              Our referral process is simple and rewarding for everyone
-              involved.
+              <LocalizedText
+                text={
+                  "Our referral process is simple and rewarding for everyone involved."
+                }
+              />
             </p>
           </div>
           <div className='space-y-4 sm:space-y-6'>
@@ -400,11 +407,14 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               </div>
               <div className='min-w-0 flex-1'>
                 <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  Share Your Referral Link
+                  <LocalizedText text={"Share Your Referral Link"} />
                 </h3>
                 <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  Get your unique referral link from your dashboard and share it
-                  with friends, family, or on social media.
+                  <LocalizedText
+                    text={
+                      "Get your unique referral link from your dashboard and share it with friends, family, or on social media."
+                    }
+                  />
                 </p>
               </div>
             </div>
@@ -416,11 +426,14 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               </div>
               <div className='min-w-0 flex-1'>
                 <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  Friend signs up
+                  <LocalizedText text={"Friend signs up"} />
                 </h3>
                 <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  When someone uses your referral link to create an account and
-                  complete their profile, they become your referral.
+                  <LocalizedText
+                    text={
+                      "When someone uses your referral link to create an account and complete their profile, they become your referral."
+                    }
+                  />
                 </p>
               </div>
             </div>
@@ -432,11 +445,14 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               </div>
               <div className='min-w-0 flex-1'>
                 <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  Earn rewards
+                  <LocalizedText text={"Earn rewards"} />
                 </h3>
                 <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  Once your referral makes their first subscription, you earn
-                  rewards. The more referrals, the more you earn.
+                  <LocalizedText
+                    text={
+                      "Once your referral makes their first subscription, you earn rewards. The more referrals, the more you earn."
+                    }
+                  />
                 </p>
               </div>
             </div>

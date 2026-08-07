@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Copy } from "lucide-react";
@@ -53,7 +54,9 @@ export function CodeBlock({
           onClick={copyToClipboard}
         >
           <Copy className='h-4 w-4' />
-          <span className='sr-only'>Copy code</span>
+          <span className='sr-only'>
+            <LocalizedText text={"Copy code"} />
+          </span>
         </Button>
       )}
       {copied && (
@@ -64,7 +67,7 @@ export function CodeBlock({
             "dark:bg-zinc-800 dark:text-zinc-50"
           )}
         >
-          Copied!
+          <LocalizedText text={"Copied!"} />
         </div>
       )}
     </div>

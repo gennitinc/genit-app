@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -221,7 +222,9 @@ const ResponsiveCarouselModal = ({
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
         <DialogContent className='max-w-4xl overflow-hidden border-white/10 bg-black p-0'>
           <DialogHeader className='sr-only'>
-            <DialogTitle>View Angle</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"View Angle"} />
+            </DialogTitle>
           </DialogHeader>
           {content}
         </DialogContent>
@@ -233,7 +236,9 @@ const ResponsiveCarouselModal = ({
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
       <DrawerContent className='border-white/10 bg-black'>
         <DrawerHeader className='sr-only'>
-          <DrawerTitle>View Angle</DrawerTitle>
+          <DrawerTitle>
+            <LocalizedText text={"View Angle"} />
+          </DrawerTitle>
         </DrawerHeader>
         {content}
       </DrawerContent>
@@ -265,7 +270,8 @@ const GeneratedGrid = ({
             />
             <div className='absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20' />
             <div className='absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 font-mono text-[8px] text-white/70 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100'>
-              Angle {idx + 1}
+              <LocalizedText text={"Angle"} />
+              {idx + 1}
             </div>
           </div>
         ))}
@@ -389,7 +395,7 @@ const HistoryCard = ({
         </div>
       ) : (
         <p className='text-muted-foreground py-2 text-center text-[10px] italic'>
-          All images deleted
+          <LocalizedText text={"All images deleted"} />
         </p>
       )}
     </div>
@@ -414,7 +420,7 @@ const HistoryContent = ({
     <div className='border-border bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-4'>
       <h2 className='flex items-center gap-2 text-lg font-normal'>
         <HistoryIcon className='size-4' />
-        Angle History
+        <LocalizedText text={"Angle History"} />
       </h2>
     </div>
 
@@ -426,9 +432,11 @@ const HistoryContent = ({
       ) : history.length === 0 ? (
         <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
           <HistoryIcon className='text-muted-foreground/30 size-10' />
-          <p className='text-muted-foreground text-sm'>No history yet.</p>
+          <p className='text-muted-foreground text-sm'>
+            <LocalizedText text={"No history yet."} />
+          </p>
           <p className='text-muted-foreground text-xs'>
-            Generate some angles to see them here.
+            <LocalizedText text={"Generate some angles to see them here."} />
           </p>
         </div>
       ) : (
@@ -650,16 +658,20 @@ const AnglesReshapePage = () => {
             <div className='bg-grid-black/[0.1] dark:bg-grid-white/[0.2] absolute inset-0' />
             <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
               <h1 className='text-2xl font-semibold tracking-tight lg:text-4xl'>
-                Cinematic
+                <LocalizedText text={"Cinematic"} />
                 <span className='from-primary to-accent ml-1 bg-gradient-to-r bg-clip-text text-transparent'>
-                  Angles
+                  <LocalizedText text={"Angles"} />
                 </span>
               </h1>
               <p
                 className='text-muted-foreground animate-fadeInUp my-2 text-sm md:text-lg'
                 style={{ animationDelay: "0.2s" }}
               >
-                Precision tools built for creators who demand control.
+                <LocalizedText
+                  text={
+                    "Precision tools built for creators who demand control."
+                  }
+                />
               </p>
             </div>
 
@@ -697,10 +709,10 @@ const AnglesReshapePage = () => {
                       >
                         <div className='pointer-events-none absolute top-4 z-10 space-y-1 px-4 text-center'>
                           <p className='text-foreground text-[10px] font-bold uppercase'>
-                            Hold and drag to change
+                            <LocalizedText text={"Hold and drag to change"} />
                           </p>
                           <p className='text-foreground text-[10px] italic'>
-                            camera angle
+                            <LocalizedText text={"camera angle"} />
                           </p>
                         </div>
 
@@ -779,7 +791,7 @@ const AnglesReshapePage = () => {
                               <div className='flex flex-col items-center justify-center gap-0.5'>
                                 <ImageIcon className='size-3.5 text-blue-500 md:size-4' />
                                 <span className='text-[6px] leading-none font-bold tracking-wide text-gray-500 uppercase'>
-                                  Upload
+                                  <LocalizedText text={"Upload"} />
                                 </span>
                               </div>
                             )}
@@ -796,8 +808,12 @@ const AnglesReshapePage = () => {
                         className='mt-1 w-full'
                       >
                         <TabsList className='ml-2 w-fit'>
-                          <TabsTrigger value='upload'>Upload</TabsTrigger>
-                          <TabsTrigger value='controls'>Controls</TabsTrigger>
+                          <TabsTrigger value='upload'>
+                            <LocalizedText text={"Upload"} />
+                          </TabsTrigger>
+                          <TabsTrigger value='controls'>
+                            <LocalizedText text={"Controls"} />
+                          </TabsTrigger>
                         </TabsList>
 
                         {/* Upload Tab */}
@@ -821,7 +837,7 @@ const AnglesReshapePage = () => {
                                 </span>
                               ) : (
                                 <span className='text-sm text-slate-600 dark:text-slate-300'>
-                                  Upload file
+                                  <LocalizedText text={"Upload file"} />
                                 </span>
                               )}
                               <input
@@ -832,7 +848,11 @@ const AnglesReshapePage = () => {
                                 onChange={handleFileUpload}
                               />
                               <p className='mt-2 text-xs font-medium text-slate-400 dark:text-slate-500'>
-                                PNG, JPG, SVG, WEBP, and GIF are Allowed.
+                                <LocalizedText
+                                  text={
+                                    "PNG, JPG, SVG, WEBP, and GIF are Allowed."
+                                  }
+                                />
                               </p>
                             </label>
                           </div>
@@ -848,7 +868,7 @@ const AnglesReshapePage = () => {
                                 return (
                                   <div className='flex items-center gap-1.5'>
                                     <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
-                                      Rotation
+                                      <LocalizedText text={"Rotation"} />
                                     </span>
                                     <button
                                       onClick={() =>
@@ -903,7 +923,7 @@ const AnglesReshapePage = () => {
                                 return (
                                   <div className='flex items-center gap-1.5'>
                                     <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
-                                      Tilt
+                                      <LocalizedText text={"Tilt"} />
                                     </span>
                                     <button
                                       onClick={() =>
@@ -959,7 +979,7 @@ const AnglesReshapePage = () => {
                                 return (
                                   <div className='flex items-center gap-1.5'>
                                     <span className='w-[60px] shrink-0 truncate text-[10px] text-neutral-400 dark:text-neutral-500'>
-                                      Zoom
+                                      <LocalizedText text={"Zoom"} />
                                     </span>
                                     <button
                                       onClick={() =>
@@ -991,7 +1011,8 @@ const AnglesReshapePage = () => {
                                       />
                                       <div className='absolute inset-0 flex items-center justify-center'>
                                         <span className='text-[10px] font-medium text-neutral-700 tabular-nums dark:text-neutral-200'>
-                                          {zoom}x
+                                          {zoom}
+                                          <LocalizedText text={"x"} />
                                         </span>
                                       </div>
                                     </div>
@@ -1020,7 +1041,9 @@ const AnglesReshapePage = () => {
                                 className='size-3 border-slate-300 accent-blue-600 dark:border-slate-700'
                               />
                               <span className='text-foreground text-sm font-normal'>
-                                Auto-Generate 10 Best Angles
+                                <LocalizedText
+                                  text={"Auto-Generate 10 Best Angles"}
+                                />
                               </span>
                             </label>
 
@@ -1056,11 +1079,12 @@ const AnglesReshapePage = () => {
                   <div className='flex h-fit shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 py-2 backdrop-blur'>
                     <div className='flex items-center gap-2'>
                       <span className='text-base font-bold text-white'>
-                        Result
+                        <LocalizedText text={"Result"} />
                       </span>
                       {generatedImages.length > 0 && (
                         <span className='rounded-full bg-cyan-500/20 px-2 py-0.5 text-[10px] font-medium text-cyan-400'>
-                          {generatedImages.length} angles
+                          {generatedImages.length}{" "}
+                          <LocalizedText text={"angles"} />
                         </span>
                       )}
                     </div>
@@ -1070,7 +1094,7 @@ const AnglesReshapePage = () => {
                       title='View history'
                     >
                       <HistoryIcon className='size-3.5' />
-                      History
+                      <LocalizedText text={"History"} />
                     </button>
                   </div>
 
@@ -1135,10 +1159,14 @@ const AnglesReshapePage = () => {
                       />
                       <div className='flex flex-col items-center gap-1'>
                         <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
-                          Live Preview
+                          <LocalizedText text={"Live Preview"} />
                         </p>
                         <p className='text-[10px] text-white/30 italic'>
-                          Drag the globe or use sliders to adjust angle
+                          <LocalizedText
+                            text={
+                              "Drag the globe or use sliders to adjust angle"
+                            }
+                          />
                         </p>
                       </div>
                     </div>
@@ -1156,10 +1184,14 @@ const AnglesReshapePage = () => {
                       />
                       <div className='absolute inset-x-0 bottom-4 flex flex-col items-center gap-1'>
                         <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
-                          You have the canvas, No Camera needed
+                          <LocalizedText
+                            text={"You have the canvas, No Camera needed"}
+                          />
                         </p>
                         <p className='text-[10px] text-white/30 italic'>
-                          Upload an image and generate
+                          <LocalizedText
+                            text={"Upload an image and generate"}
+                          />
                         </p>
                       </div>
                     </div>

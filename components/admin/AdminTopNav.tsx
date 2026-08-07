@@ -3,6 +3,7 @@
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -49,7 +50,9 @@ export function AdminTopNav() {
           <Breadcrumb className='hidden md:flex'>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href='/admin'>Admin</BreadcrumbLink>
+                <BreadcrumbLink href='/admin'>
+                  <LocalizedText text={"Admin"} />
+                </BreadcrumbLink>
               </BreadcrumbItem>
               {pathSegments.length > 1 && (
                 <>

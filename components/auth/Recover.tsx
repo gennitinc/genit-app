@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -82,15 +84,18 @@ export const RecoverComp = () => {
           <div className='mt-4 flex items-center justify-center gap-2'>
             <Logo />
             <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-              Genit
+              <LocalizedText text={"Genit"} />
             </h1>
           </div>
           <CardTitle className='text-2xl font-bold'>
-            Recover your account
+            <LocalizedText text={"Recover your account"} />
           </CardTitle>
           <CardDescription>
-            Enter the email address associated with your account and we'll send
-            you instructions to reset your password.
+            <LocalizedText
+              text={
+                "Enter the email address associated with your account and we'll send you instructions to reset your password."
+              }
+            />
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-6'>
@@ -168,7 +173,7 @@ export const RecoverComp = () => {
                       d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                     ></path>
                   </svg>
-                  Sending...
+                  <LocalizedText text={"Sending..."} />
                 </div>
               ) : (
                 "Send Reset Link"
@@ -182,13 +187,13 @@ export const RecoverComp = () => {
           {/* Sign In Link */}
           <div className='text-center'>
             <span className='text-muted-foreground text-sm'>
-              Remember your login details?{" "}
+              <LocalizedText text={"Remember your login details?"} />{" "}
               <Link
                 href='/signin'
                 className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
                 prefetch={false}
               >
-                Sign In
+                <LocalizedText text={"Sign In"} />
               </Link>
             </span>
           </div>
@@ -197,12 +202,12 @@ export const RecoverComp = () => {
 
       <div className='mt-5 w-full max-w-[26rem] space-y-3'>
         <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-          This site is protected by reCAPTCHA and our{" "}
+          <LocalizedText text={"This site is protected by reCAPTCHA and our"} />{" "}
           <a
             href='#'
             className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
           >
-            Policy
+            <LocalizedText text={"Policy"} />
           </a>{" "}
           {/* &{" "}
                 <a
@@ -213,14 +218,14 @@ export const RecoverComp = () => {
                 </a> */}
         </p>
         <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-          ©2026 genit. A product of{" "}
+          <LocalizedText text={"©2026 genit. A product of"} />{" "}
           <a
             className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
             href='#'
           >
-            Klip Inc.
+            <LocalizedText text={"Klip Inc."} />
           </a>{" "}
-          All rights reserved.
+          <LocalizedText text={"All rights reserved."} />
         </p>
       </div>
     </div>

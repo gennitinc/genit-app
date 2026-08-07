@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
@@ -218,7 +219,9 @@ export const ContextContentFooter = ({
     >
       {children ?? (
         <>
-          <span className='text-muted-foreground'>Total cost</span>
+          <span className='text-muted-foreground'>
+            <LocalizedText text={"Total cost"} />
+          </span>
           <span>{totalCost}</span>
         </>
       )}
@@ -260,7 +263,9 @@ export const ContextInputUsage = ({
       className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className='text-muted-foreground'>Input</span>
+      <span className='text-muted-foreground'>
+        <LocalizedText text={"Input"} />
+      </span>
       <TokensWithCost costText={inputCostText} tokens={inputTokens} />
     </div>
   );
@@ -300,7 +305,9 @@ export const ContextOutputUsage = ({
       className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className='text-muted-foreground'>Output</span>
+      <span className='text-muted-foreground'>
+        <LocalizedText text={"Output"} />
+      </span>
       <TokensWithCost costText={outputCostText} tokens={outputTokens} />
     </div>
   );
@@ -340,7 +347,9 @@ export const ContextReasoningUsage = ({
       className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className='text-muted-foreground'>Reasoning</span>
+      <span className='text-muted-foreground'>
+        <LocalizedText text={"Reasoning"} />
+      </span>
       <TokensWithCost costText={reasoningCostText} tokens={reasoningTokens} />
     </div>
   );
@@ -380,7 +389,9 @@ export const ContextCacheUsage = ({
       className={cn("flex items-center justify-between text-xs", className)}
       {...props}
     >
-      <span className='text-muted-foreground'>Cache</span>
+      <span className='text-muted-foreground'>
+        <LocalizedText text={"Cache"} />
+      </span>
       <TokensWithCost costText={cacheCostText} tokens={cacheTokens} />
     </div>
   );

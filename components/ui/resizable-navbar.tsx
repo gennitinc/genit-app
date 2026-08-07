@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import {
@@ -240,7 +242,9 @@ export const NavbarLogo = () => {
         width={30}
         height={30}
       />
-      <span className='font-medium text-black dark:text-white'>Startup</span>
+      <span className='font-medium text-black dark:text-white'>
+        <LocalizedText text={"Startup"} />
+      </span>
     </a>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -238,14 +239,18 @@ export default function AdminPresentersPage() {
     <div className='container mx-auto px-4 py-8'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className='mb-2 text-3xl font-bold'>Avatar Management</h1>
+          <h1 className='mb-2 text-3xl font-bold'>
+            <LocalizedText text={"Avatar Management"} />
+          </h1>
           <p className='text-muted-foreground'>
-            Manage AI avatars/presenters for video generation
+            <LocalizedText
+              text={"Manage AI avatars/presenters for video generation"}
+            />
           </p>
         </div>
         <Button onClick={handleCreateClick}>
           <Plus className='mr-2 h-4 w-4' />
-          Create Avatar
+          <LocalizedText text={"Create Avatar"} />
         </Button>
       </div>
 
@@ -267,13 +272,19 @@ export default function AdminPresentersPage() {
             <SelectValue placeholder='Filter by gender' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Genders</SelectItem>
-            <SelectItem value='male'>Male</SelectItem>
-            <SelectItem value='female'>Female</SelectItem>
+            <SelectItem value='all'>
+              <LocalizedText text={"All Genders"} />
+            </SelectItem>
+            <SelectItem value='male'>
+              <LocalizedText text={"Male"} />
+            </SelectItem>
+            <SelectItem value='female'>
+              <LocalizedText text={"Female"} />
+            </SelectItem>
           </SelectContent>
         </Select>
         <div className='text-muted-foreground text-sm'>
-          {filteredPresenters.length} avatar
+          {filteredPresenters.length} <LocalizedText text={"avatar"} />
           {filteredPresenters.length !== 1 ? "s" : ""}
         </div>
       </div>
@@ -284,7 +295,7 @@ export default function AdminPresentersPage() {
         </div>
       ) : filteredPresenters.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
-          No avatars found
+          <LocalizedText text={"No avatars found"} />
         </div>
       ) : (
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
@@ -351,14 +362,15 @@ export default function AdminPresentersPage() {
                       </Badge>
                       {presenter.isPublic && (
                         <Badge variant='outline' className='text-xs'>
-                          Public
+                          <LocalizedText text={"Public"} />
                         </Badge>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className='text-muted-foreground text-xs'>
-                  Usage: {presenter.usageCount || 0} times
+                  <LocalizedText text={"Usage:"} />
+                  {presenter.usageCount || 0} <LocalizedText text={"times"} />
                 </div>
               </div>
             </div>
@@ -370,16 +382,22 @@ export default function AdminPresentersPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Create New Avatar</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Create New Avatar"} />
+            </DialogTitle>
             <DialogDescription>
-              Add a new AI avatar/presenter for video generation
+              <LocalizedText
+                text={"Add a new AI avatar/presenter for video generation"}
+              />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='name'>Name *</Label>
+                <Label htmlFor='name'>
+                  <LocalizedText text={"Name *"} />
+                </Label>
                 <Input
                   id='name'
                   value={formData.name}
@@ -391,7 +409,9 @@ export default function AdminPresentersPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='gender'>Gender *</Label>
+                <Label htmlFor='gender'>
+                  <LocalizedText text={"Gender *"} />
+                </Label>
                 <Select
                   value={formData.gender}
                   onValueChange={(v: "male" | "female") =>
@@ -402,15 +422,21 @@ export default function AdminPresentersPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='male'>Male</SelectItem>
-                    <SelectItem value='female'>Female</SelectItem>
+                    <SelectItem value='male'>
+                      <LocalizedText text={"Male"} />
+                    </SelectItem>
+                    <SelectItem value='female'>
+                      <LocalizedText text={"Female"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='category'>Category</Label>
+              <Label htmlFor='category'>
+                <LocalizedText text={"Category"} />
+              </Label>
               <Select
                 value={formData.category}
                 onValueChange={(v: "popular" | "new" | "custom") =>
@@ -421,15 +447,23 @@ export default function AdminPresentersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='popular'>Popular</SelectItem>
-                  <SelectItem value='new'>New</SelectItem>
-                  <SelectItem value='custom'>Custom</SelectItem>
+                  <SelectItem value='popular'>
+                    <LocalizedText text={"Popular"} />
+                  </SelectItem>
+                  <SelectItem value='new'>
+                    <LocalizedText text={"New"} />
+                  </SelectItem>
+                  <SelectItem value='custom'>
+                    <LocalizedText text={"Custom"} />
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='image'>Avatar Image *</Label>
+              <Label htmlFor='image'>
+                <LocalizedText text={"Avatar Image *"} />
+              </Label>
               <div className='flex items-center gap-4'>
                 {imagePreview && (
                   <div className='relative h-32 w-32 overflow-hidden rounded-lg border'>
@@ -449,7 +483,9 @@ export default function AdminPresentersPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload an avatar image (JPEG, PNG, WebP)
+                    <LocalizedText
+                      text={"Upload an avatar image (JPEG, PNG, WebP)"}
+                    />
                   </p>
                 </div>
                 {imagePreview && (
@@ -476,7 +512,9 @@ export default function AdminPresentersPage() {
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor='isPublic'>Make Public</Label>
+              <Label htmlFor='isPublic'>
+                <LocalizedText text={"Make Public"} />
+              </Label>
             </div>
           </div>
 
@@ -489,13 +527,13 @@ export default function AdminPresentersPage() {
                 setImagePreview(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Creating...
+                  <LocalizedText text={"Creating..."} />
                 </>
               ) : (
                 "Create Avatar"
@@ -509,15 +547,19 @@ export default function AdminPresentersPage() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Edit Avatar</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Edit Avatar"} />
+            </DialogTitle>
             <DialogDescription>
-              Update avatar information and settings
+              <LocalizedText text={"Update avatar information and settings"} />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='space-y-2'>
-              <Label htmlFor='edit-name'>Name *</Label>
+              <Label htmlFor='edit-name'>
+                <LocalizedText text={"Name *"} />
+              </Label>
               <Input
                 id='edit-name'
                 value={formData.name}
@@ -528,7 +570,9 @@ export default function AdminPresentersPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='edit-category'>Category</Label>
+              <Label htmlFor='edit-category'>
+                <LocalizedText text={"Category"} />
+              </Label>
               <Select
                 value={formData.category}
                 onValueChange={(v: "popular" | "new" | "custom") =>
@@ -539,15 +583,23 @@ export default function AdminPresentersPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='popular'>Popular</SelectItem>
-                  <SelectItem value='new'>New</SelectItem>
-                  <SelectItem value='custom'>Custom</SelectItem>
+                  <SelectItem value='popular'>
+                    <LocalizedText text={"Popular"} />
+                  </SelectItem>
+                  <SelectItem value='new'>
+                    <LocalizedText text={"New"} />
+                  </SelectItem>
+                  <SelectItem value='custom'>
+                    <LocalizedText text={"Custom"} />
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='edit-image'>Avatar Image</Label>
+              <Label htmlFor='edit-image'>
+                <LocalizedText text={"Avatar Image"} />
+              </Label>
               <div className='flex items-center gap-4'>
                 {imagePreview && (
                   <div className='relative h-32 w-32 overflow-hidden rounded-lg border'>
@@ -567,8 +619,11 @@ export default function AdminPresentersPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload a new image to replace the current one (JPEG, PNG,
-                    WebP)
+                    <LocalizedText
+                      text={
+                        "Upload a new image to replace the current one (JPEG, PNG, WebP)"
+                      }
+                    />
                   </p>
                 </div>
                 {imagePreview && editingPresenter && (
@@ -595,7 +650,9 @@ export default function AdminPresentersPage() {
                   setFormData({ ...formData, isPublic: checked })
                 }
               />
-              <Label htmlFor='edit-isPublic'>Make Public</Label>
+              <Label htmlFor='edit-isPublic'>
+                <LocalizedText text={"Make Public"} />
+              </Label>
             </div>
           </div>
 
@@ -609,13 +666,13 @@ export default function AdminPresentersPage() {
                 setImagePreview(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Updating...
+                  <LocalizedText text={"Updating..."} />
                 </>
               ) : (
                 "Update Avatar"
@@ -629,10 +686,17 @@ export default function AdminPresentersPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Avatar</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Avatar"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{presenterToDelete?.name}"? This
-              action cannot be undone. The avatar will be marked as inactive.
+              <LocalizedText text={'Are you sure you want to delete "'} />
+              {presenterToDelete?.name}
+              <LocalizedText
+                text={
+                  '"? This action cannot be undone. The avatar will be marked as inactive.'
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -643,7 +707,7 @@ export default function AdminPresentersPage() {
                 setPresenterToDelete(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -653,7 +717,7 @@ export default function AdminPresentersPage() {
               {isDeleting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Deleting...
+                  <LocalizedText text={"Deleting..."} />
                 </>
               ) : (
                 "Delete Avatar"

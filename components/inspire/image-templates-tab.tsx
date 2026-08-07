@@ -1,6 +1,7 @@
 "use client";
 
 import { GenerationParamsCallback } from "./image-community-tab";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -84,11 +85,14 @@ function CategoryTemplatesList({
           <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
         </div>
         <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-          No templates in this category
+          <LocalizedText text={"No templates in this category"} />
         </h3>
         <p className='max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-          This category doesn't have any templates yet. Try browsing other
-          categories!
+          <LocalizedText
+            text={
+              "This category doesn't have any templates yet. Try browsing other categories!"
+            }
+          />
         </p>
       </div>
     );
@@ -109,14 +113,14 @@ function CategoryTemplatesList({
       {loading && (
         <div className='col-span-3 flex items-center justify-center py-8'>
           <div className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Loading more templates...
+            <LocalizedText text={"Loading more templates..."} />
           </div>
         </div>
       )}
       {!hasMore && templates.length > 0 && (
         <div className='col-span-3 flex items-center justify-center py-4'>
           <div className='text-sm text-neutral-500 dark:text-neutral-400'>
-            No more templates
+            <LocalizedText text={"No more templates"} />
           </div>
         </div>
       )}
@@ -185,7 +189,7 @@ function TemplateCard({
         {/* Use Button */}
         <div className='absolute right-2 bottom-2 opacity-0 transition-opacity group-hover:opacity-100'>
           <button className='rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-100'>
-            Use
+            <LocalizedText text={"Use"} />
           </button>
         </div>
       </div>
@@ -343,7 +347,7 @@ export function ImageTemplatesTab({
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
           <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Loading templates
+            <LocalizedText text={"Loading templates"} />
           </p>
         </div>
       </section>
@@ -358,17 +362,19 @@ export function ImageTemplatesTab({
             <IconTemplate className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
           <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-            No templates available
+            <LocalizedText text={"No templates available"} />
           </h3>
           <p className='mb-6 max-w-sm text-sm text-neutral-500 dark:text-neutral-400'>
-            Templates are being added regularly. Check back soon!
+            <LocalizedText
+              text={"Templates are being added regularly. Check back soon!"}
+            />
           </p>
           <button
             type='button'
             onClick={() => onTabChange("preview")}
             className='rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
-            Start Creating
+            <LocalizedText text={"Start Creating"} />
           </button>
         </div>
       </section>
@@ -391,7 +397,7 @@ export function ImageTemplatesTab({
                     onClick={() => handleCategoryOpen(category)}
                     className='flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
                   >
-                    See all
+                    <LocalizedText text={"See all"} />
                     <ChevronRight className='h-4 w-4' />
                   </button>
                 )}
@@ -433,7 +439,8 @@ export function ImageTemplatesTab({
               <>
                 <DialogHeader>
                   <DialogTitle className='text-xl font-semibold'>
-                    {selectedCategory.title} Templates
+                    {selectedCategory.title}{" "}
+                    <LocalizedText text={"Templates"} />
                   </DialogTitle>
                 </DialogHeader>
                 <CategoryTemplatesList
@@ -458,7 +465,8 @@ export function ImageTemplatesTab({
               <>
                 <DrawerHeader>
                   <DrawerTitle className='text-xl font-semibold'>
-                    {selectedCategory.title} Templates
+                    {selectedCategory.title}{" "}
+                    <LocalizedText text={"Templates"} />
                   </DrawerTitle>
                 </DrawerHeader>
                 <CategoryTemplatesList

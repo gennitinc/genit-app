@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,7 +47,7 @@ export function NavProjects({
       <SidebarGroupLabel
         className={cn("text-zinc-400", state === "collapsed" && "sr-only")}
       >
-        Projects
+        <LocalizedText text={"Projects"} />
       </SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
@@ -82,7 +83,9 @@ export function NavProjects({
                   className={cn(state === "collapsed" && "hidden")}
                 >
                   <MoreHorizontal />
-                  <span className='sr-only'>More</span>
+                  <span className='sr-only'>
+                    <LocalizedText text={"More"} />
+                  </span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -92,16 +95,22 @@ export function NavProjects({
               >
                 <DropdownMenuItem>
                   <Folder className='text-muted-foreground' />
-                  <span>View Project</span>
+                  <span>
+                    <LocalizedText text={"View Project"} />
+                  </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Forward className='text-muted-foreground' />
-                  <span>Share Project</span>
+                  <span>
+                    <LocalizedText text={"Share Project"} />
+                  </span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Trash2 className='text-muted-foreground' />
-                  <span>Delete Project</span>
+                  <span>
+                    <LocalizedText text={"Delete Project"} />
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -123,7 +132,7 @@ export function NavProjects({
                   : "ml-2 w-auto opacity-100"
               )}
             >
-              More
+              <LocalizedText text={"More"} />
             </span>
           </SidebarMenuButton>
         </SidebarMenuItem>

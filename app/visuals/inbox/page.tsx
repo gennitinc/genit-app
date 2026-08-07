@@ -16,10 +16,11 @@ import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
   INTEGRATIONS,
-  connectionsForIntegration,
   type Integration,
+  connectionsForIntegration,
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
+import { LocalizedText } from "@/components/localized-text";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -161,7 +162,9 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 function ConversationListSkeleton() {
   return (
     <div role='status' aria-label='Loading conversations' className='space-y-1'>
-      <span className='sr-only'>Loading conversations</span>
+      <span className='sr-only'>
+        <LocalizedText text={"Loading conversations"} />
+      </span>
       {Array.from({ length: 7 }).map((_, index) => (
         <div
           key={index}
@@ -190,7 +193,9 @@ function MessageThreadSkeleton() {
       aria-label='Loading messages'
       className='mx-auto max-w-3xl space-y-5'
     >
-      <span className='sr-only'>Loading messages</span>
+      <span className='sr-only'>
+        <LocalizedText text={"Loading messages"} />
+      </span>
       {Array.from({ length: 5 }).map((_, index) => (
         <div
           key={index}
@@ -382,7 +387,7 @@ function EmailMessageBody({
         {quotedText && (
           <details className='text-muted-foreground mt-3 border-t pt-2 text-xs'>
             <summary className='cursor-pointer font-semibold'>
-              Show quoted text
+              <LocalizedText text={"Show quoted text"} />
             </summary>
             <div className='text-foreground mt-2 whitespace-pre-wrap'>
               {quotedText}
@@ -761,7 +766,7 @@ export default function InboxPage() {
           (account.platform === "pipedream" &&
             Boolean(
               account.metadata?.pipedreamInbox?.replyActionId ||
-                account.metadata?.pipedreamInbox?.replyProxyRequest?.url
+              account.metadata?.pipedreamInbox?.replyProxyRequest?.url
             )) ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
@@ -1321,7 +1326,7 @@ export default function InboxPage() {
             <ChevronLeft className='h-5 w-5' />
           </Button>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
-            Inbox
+            <LocalizedText text={"Inbox"} />
           </h1>
         </div>
         <div className='flex flex-nowrap gap-2 max-xl:gap-1'>
@@ -1348,7 +1353,9 @@ export default function InboxPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-64'>
-              <DropdownMenuLabel>Connected brand</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <LocalizedText text={"Connected brand"} />
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup
                 value={selectedAccountId}
@@ -1357,9 +1364,11 @@ export default function InboxPage() {
                 <DropdownMenuRadioItem value='all'>
                   <Inbox className='mr-2 h-4 w-4' />
                   <span className='flex min-w-0 flex-col'>
-                    <span>All accounts</span>
+                    <span>
+                      <LocalizedText text={"All accounts"} />
+                    </span>
                     <span className='text-muted-foreground text-[10px]'>
-                      Every connected channel
+                      <LocalizedText text={"Every connected channel"} />
                     </span>
                   </span>
                 </DropdownMenuRadioItem>
@@ -1374,7 +1383,7 @@ export default function InboxPage() {
                     </span>
                     {account.isPrimary && (
                       <span className='text-muted-foreground text-[9px]'>
-                        Primary
+                        <LocalizedText text={"Primary"} />
                       </span>
                     )}
                   </DropdownMenuRadioItem>
@@ -1386,7 +1395,7 @@ export default function InboxPage() {
                   <DropdownMenuItem asChild>
                     <Link href='/plugin'>
                       <Plus className='mr-2 h-4 w-4' />
-                      Connect a channel
+                      <LocalizedText text={"Connect a channel"} />
                     </Link>
                   </DropdownMenuItem>
                 </>
@@ -1412,7 +1421,9 @@ export default function InboxPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-52'>
-              <DropdownMenuLabel>Show conversations</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <LocalizedText text={"Show conversations"} />
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup
                 value={status || "all"}
@@ -1421,14 +1432,16 @@ export default function InboxPage() {
                 }
               >
                 <DropdownMenuRadioItem value='all'>
-                  All conversations
+                  <LocalizedText text={"All conversations"} />
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value='open'>Open</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value='open'>
+                  <LocalizedText text={"Open"} />
+                </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value='resolved'>
-                  Resolved
+                  <LocalizedText text={"Resolved"} />
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value='snoozed'>
-                  Snoozed
+                  <LocalizedText text={"Snoozed"} />
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
               {selectedAccount &&
@@ -1437,7 +1450,9 @@ export default function InboxPage() {
                 ) && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Mailbox</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      <LocalizedText text={"Mailbox"} />
+                    </DropdownMenuLabel>
                     <DropdownMenuRadioGroup
                       value={folder}
                       onValueChange={setFolder}
@@ -1463,7 +1478,9 @@ export default function InboxPage() {
                   </>
                 )}
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <LocalizedText text={"Sort by"} />
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup
                 value={sort}
@@ -1472,13 +1489,13 @@ export default function InboxPage() {
                 }
               >
                 <DropdownMenuRadioItem value='newest'>
-                  Newest first
+                  <LocalizedText text={"Newest first"} />
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value='oldest'>
-                  Oldest first
+                  <LocalizedText text={"Oldest first"} />
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value='unread'>
-                  Unread first
+                  <LocalizedText text={"Unread first"} />
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -1497,7 +1514,9 @@ export default function InboxPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-52'>
-              <DropdownMenuLabel>Inbox settings</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <LocalizedText text={"Inbox settings"} />
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={!unreadTotal || markAllMutation.isPending}
@@ -1514,7 +1533,7 @@ export default function InboxPage() {
                 ) : (
                   <CheckCheck className='mr-2 h-4 w-4' />
                 )}
-                Mark all read
+                <LocalizedText text={"Mark all read"} />
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={!syncableAccounts.length || syncMutation.isPending}
@@ -1525,19 +1544,19 @@ export default function InboxPage() {
                 ) : (
                   <RefreshCw className='mr-2 h-4 w-4' />
                 )}
-                Sync connected channels
+                <LocalizedText text={"Sync connected channels"} />
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={!historyAccounts.length || syncMutation.isPending}
                 onSelect={() => syncChannels(true)}
               >
                 <Archive className='mr-2 h-4 w-4' />
-                Import older channel history
+                <LocalizedText text={"Import older channel history"} />
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href='/plugin'>
                   <Settings className='mr-2 h-4 w-4' />
-                  Manage plugins
+                  <LocalizedText text={"Manage plugins"} />
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -1546,12 +1565,16 @@ export default function InboxPage() {
             <DropdownMenuTrigger asChild>
               <Button className='rounded-md bg-indigo-600 px-3 text-white hover:bg-indigo-700 max-sm:size-9 max-sm:p-0'>
                 <Cable className='h-4 w-4 sm:hidden' />
-                <span className='max-sm:sr-only'>Channel</span>
+                <span className='max-sm:sr-only'>
+                  <LocalizedText text={"Channel"} />
+                </span>
                 <ChevronDown className='h-4 w-4 max-sm:hidden' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-64'>
-              <DropdownMenuLabel>Inbox channels</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <LocalizedText text={"Inbox channels"} />
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {inboxIntegrations.map((integration) => {
                 const hasIdentityForSurface = isMetaSurface(
@@ -1650,7 +1673,9 @@ export default function InboxPage() {
                     }
                     aria-label='Select all loaded conversations'
                   />
-                  <span className='truncate'>Select all</span>
+                  <span className='truncate'>
+                    <LocalizedText text={"Select all"} />
+                  </span>
                   <span className='bg-muted text-muted-foreground shrink-0 rounded-full px-2 py-0.5 text-[10px] tabular-nums'>
                     {selectedConversationIds.size}
                   </span>
@@ -1664,41 +1689,41 @@ export default function InboxPage() {
                       disabled={bulkBusy}
                     >
                       <MoreHorizontal className='mr-1.5 h-4 w-4' />
-                      More
+                      <LocalizedText text={"More"} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-56'>
                     <DropdownMenuItem onSelect={() => runBulkAction("read")}>
                       <CheckCheck className='mr-2 h-4 w-4' />
-                      Mark as read
+                      <LocalizedText text={"Mark as read"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => runBulkAction("open")}>
                       <Inbox className='mr-2 h-4 w-4' />
-                      Mark open
+                      <LocalizedText text={"Mark open"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onSelect={() => runBulkAction("resolved")}
                     >
                       <CheckCircle className='mr-2 h-4 w-4' />
-                      Resolve
+                      <LocalizedText text={"Resolve"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => runBulkAction("snoozed")}>
                       <Clock3 className='mr-2 h-4 w-4' />
-                      Snooze
+                      <LocalizedText text={"Snooze"} />
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onSelect={() => setSelectedConversationIds(new Set())}
                     >
                       <XCircle className='mr-2 h-4 w-4' />
-                      Cancel selection
+                      <LocalizedText text={"Cancel selection"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className='text-red-600 focus:text-red-600'
                       onSelect={() => setBulkDeleteOpen(true)}
                     >
                       <Trash2 className='mr-2 h-4 w-4' />
-                      Delete selected
+                      <LocalizedText text={"Delete selected"} />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -1714,11 +1739,15 @@ export default function InboxPage() {
                 <span className='mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900'>
                   <Inbox className='text-muted-foreground h-6 w-6' />
                 </span>
-                <h3 className='text-sm font-semibold'>No conversations here</h3>
+                <h3 className='text-sm font-semibold'>
+                  <LocalizedText text={"No conversations here"} />
+                </h3>
                 <p className='text-muted-foreground mt-1 text-xs leading-5'>
-                  Try another account or filter. Connected Gmail accounts sync
-                  recent threads automatically; use Inbox settings to import
-                  older mail.
+                  <LocalizedText
+                    text={
+                      "Try another account or filter. Connected Gmail accounts sync recent threads automatically; use Inbox settings to import older mail."
+                    }
+                  />
                 </p>
               </div>
             ) : (
@@ -1848,7 +1877,7 @@ export default function InboxPage() {
                         }
                       >
                         <CheckCheck className='mr-2 h-4 w-4' />
-                        Mark as read
+                        <LocalizedText text={"Mark as read"} />
                       </ContextMenuItem>
                       <ContextMenuSeparator />
                       <ContextMenuItem
@@ -1926,26 +1955,26 @@ export default function InboxPage() {
                         }}
                       >
                         <PanelRight className='mr-2 h-4 w-4' />
-                        Contact details
+                        <LocalizedText text={"Contact details"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         onSelect={() => void exportChat(conversation)}
                       >
                         <Download className='mr-2 h-4 w-4' />
-                        Export chat
+                        <LocalizedText text={"Export chat"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         onSelect={() => setClearTarget(conversation)}
                       >
                         <Eraser className='mr-2 h-4 w-4' />
-                        Clear chat
+                        <LocalizedText text={"Clear chat"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         className='text-red-600 focus:text-red-600'
                         onSelect={() => setDeleteTarget(conversation)}
                       >
                         <Trash2 className='mr-2 h-4 w-4' />
-                        Delete conversation
+                        <LocalizedText text={"Delete conversation"} />
                       </ContextMenuItem>
                     </ContextMenuContent>
                   </ContextMenu>
@@ -2063,7 +2092,7 @@ export default function InboxPage() {
                       onClick={() => changeStatus("open")}
                     >
                       <Archive className='mr-2 h-4 w-4' />
-                      Reopen
+                      <LocalizedText text={"Reopen"} />
                     </Button>
                   ) : (
                     <Button
@@ -2074,7 +2103,7 @@ export default function InboxPage() {
                       onClick={() => changeStatus("resolved")}
                     >
                       <Check className='mr-2 h-4 w-4' />
-                      Resolve
+                      <LocalizedText text={"Resolve"} />
                     </Button>
                   )}
                   <DropdownMenu>
@@ -2090,19 +2119,19 @@ export default function InboxPage() {
                     <DropdownMenuContent align='end' className='w-56'>
                       <DropdownMenuItem onSelect={() => changeStatus("open")}>
                         <Inbox className='mr-2 h-4 w-4' />
-                        Mark open
+                        <LocalizedText text={"Mark open"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => changeStatus("snoozed")}
                       >
                         <Clock3 className='mr-2 h-4 w-4' />
-                        Snooze
+                        <LocalizedText text={"Snooze"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => changeStatus("resolved")}
                       >
                         <Check className='mr-2 h-4 w-4' />
-                        Resolve
+                        <LocalizedText text={"Resolve"} />
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -2148,26 +2177,26 @@ export default function InboxPage() {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onSelect={() => setShowDetails(true)}>
                         <PanelRight className='mr-2 h-4 w-4' />
-                        Contact details
+                        <LocalizedText text={"Contact details"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => void exportChat(activeConversation)}
                       >
                         <Download className='mr-2 h-4 w-4' />
-                        Export chat
+                        <LocalizedText text={"Export chat"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => setClearTarget(activeConversation)}
                       >
                         <Eraser className='mr-2 h-4 w-4' />
-                        Clear chat
+                        <LocalizedText text={"Clear chat"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className='text-red-600 focus:text-red-600'
                         onSelect={() => setDeleteTarget(activeConversation)}
                       >
                         <Trash2 className='mr-2 h-4 w-4' />
-                        Delete conversation
+                        <LocalizedText text={"Delete conversation"} />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -2306,7 +2335,8 @@ export default function InboxPage() {
                                           );
                                       }}
                                     >
-                                      <Pencil className='mr-2 h-4 w-4' /> Edit
+                                      <Pencil className='mr-2 h-4 w-4' />{" "}
+                                      <LocalizedText text={"Edit"} />
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       className='text-red-600 focus:text-red-600'
@@ -2318,7 +2348,8 @@ export default function InboxPage() {
                                         })
                                       }
                                     >
-                                      <Trash2 className='mr-2 h-4 w-4' /> Delete
+                                      <Trash2 className='mr-2 h-4 w-4' />{" "}
+                                      <LocalizedText text={"Delete"} />
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
@@ -2340,7 +2371,7 @@ export default function InboxPage() {
                                   }
                                 >
                                   <RefreshCw className='h-3 w-3' />
-                                  Retry
+                                  <LocalizedText text={"Retry"} />
                                 </button>
                               ) : (
                                 <>
@@ -2366,7 +2397,7 @@ export default function InboxPage() {
                 {activeConversation.isBlocked ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Ban className='h-4 w-4 text-red-500' />
-                    This contact is blocked.{" "}
+                    <LocalizedText text={"This contact is blocked."} />{" "}
                     <button
                       className='font-semibold text-indigo-700 hover:underline dark:text-indigo-400'
                       onClick={() =>
@@ -2377,38 +2408,43 @@ export default function InboxPage() {
                         )
                       }
                     >
-                      Unblock to reply
+                      <LocalizedText text={"Unblock to reply"} />
                     </button>
                   </div>
                 ) : activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
                     <Check className='h-4 w-4' />
-                    This conversation is resolved.{" "}
+                    <LocalizedText
+                      text={"This conversation is resolved."}
+                    />{" "}
                     <button
                       className='font-semibold text-indigo-700 hover:underline dark:text-indigo-400'
                       onClick={() => changeStatus("open")}
                     >
-                      Reopen to reply
+                      <LocalizedText text={"Reopen to reply"} />
                     </button>
                   </div>
                 ) : providerReplyUnavailable ? (
                   <div className='text-muted-foreground mx-auto max-w-3xl rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
-                    Telegram Business reply access is not active. Reauthorize
-                    the Business Bot with permission to read and reply to
-                    messages. You can still review, label, and resolve this
-                    conversation.
+                    <LocalizedText
+                      text={
+                        "Telegram Business reply access is not active. Reauthorize the Business Bot with permission to read and reply to messages. You can still review, label, and resolve this conversation."
+                      }
+                    />
                   </div>
                 ) : whatsappReplyWindowClosed ? (
                   <div className='mx-auto max-w-3xl space-y-3 rounded-lg bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
                     <p>
-                      WhatsApp’s 24-hour reply window has closed. Send an
-                      approved template here; normal replies become available
-                      after the customer responds.
+                      <LocalizedText
+                        text={
+                          "WhatsApp’s 24-hour reply window has closed. Send an approved template here; normal replies become available after the customer responds."
+                        }
+                      />
                     </p>
                     {templatesLoading ? (
                       <div className='flex items-center gap-2'>
-                        <Loader2 className='h-4 w-4 animate-spin' /> Loading
-                        templates…
+                        <Loader2 className='h-4 w-4 animate-spin' />{" "}
+                        <LocalizedText text={"Loading templates…"} />
                       </div>
                     ) : whatsappTemplates.length ? (
                       <div className='space-y-3'>
@@ -2456,18 +2492,24 @@ export default function InboxPage() {
                           {sendTemplateMutation.isPending && (
                             <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                           )}
-                          Send template
+                          <LocalizedText text={"Send template"} />
                         </Button>
                       </div>
                     ) : (
-                      <p>No approved WhatsApp templates are available.</p>
+                      <p>
+                        <LocalizedText
+                          text={"No approved WhatsApp templates are available."}
+                        />
+                      </p>
                     )}
                   </div>
                 ) : telegramBusinessReplyWindowClosed ? (
                   <div className='mx-auto max-w-3xl rounded-lg bg-amber-50 p-4 text-sm text-amber-950 dark:bg-amber-950/40 dark:text-amber-100'>
-                    Telegram Business replies are available for 24 hours after
-                    the customer&apos;s latest message. Wait for the customer to
-                    message the business account again before replying.
+                    <LocalizedText
+                      text={
+                        "Telegram Business replies are available for 24 hours after the customer&apos;s latest message. Wait for the customer to message the business account again before replying."
+                      }
+                    />
                   </div>
                 ) : (
                   <div className='bg-background/80 border-border/70 focus-within:border-foreground/20 relative mx-auto max-w-3xl rounded-2xl border shadow-lg shadow-black/5 backdrop-blur-xl transition-[border-color,box-shadow] duration-200 ease-out focus-within:shadow-xl focus-within:shadow-black/10 dark:shadow-black/20'>
@@ -2607,7 +2649,7 @@ export default function InboxPage() {
                           ) : (
                             <CircleFadingArrowUp className='h-3.5 w-3.5' />
                           )}
-                          AI Write
+                          <LocalizedText text={"AI Write"} />
                         </Button>
                       </div>
 
@@ -2670,7 +2712,7 @@ export default function InboxPage() {
                 />
               </span>
               <h2 className='text-muted-foreground text-lg font-medium'>
-                Multi Channel As One
+                <LocalizedText text={"Multi Channel As One"} />
               </h2>
             </div>
           )}
@@ -2728,15 +2770,23 @@ export default function InboxPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this conversation?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Delete this conversation?"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes the conversation with{" "}
-              {deleteTarget?.customerName} and its message history. This cannot
-              be undone.
+              <LocalizedText
+                text={"This permanently removes the conversation with"}
+              />{" "}
+              {deleteTarget?.customerName}{" "}
+              <LocalizedText
+                text={"and its message history. This cannot be undone."}
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              <LocalizedText text={"Cancel"} />
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               className='bg-red-600 text-white hover:bg-red-700'
@@ -2753,16 +2803,24 @@ export default function InboxPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear this conversation?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Clear this conversation?"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This removes the current message history with{" "}
-              {clearTarget?.customerName} from Genit. New messages will still
-              appear normally. This cannot be undone.
+              <LocalizedText
+                text={"This removes the current message history with"}
+              />{" "}
+              {clearTarget?.customerName}{" "}
+              <LocalizedText
+                text={
+                  "from Genit. New messages will still appear normally. This cannot be undone."
+                }
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={clearMutation.isPending}>
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmClear}
@@ -2778,14 +2836,23 @@ export default function InboxPage() {
       <AlertDialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete selected conversations?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Delete selected conversations?"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes {selectedConversationIds.size}{" "}
-              conversations and their message history. This cannot be undone.
+              <LocalizedText text={"This permanently removes"} />
+              {selectedConversationIds.size}{" "}
+              <LocalizedText
+                text={
+                  "conversations and their message history. This cannot be undone."
+                }
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={bulkBusy}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={bulkBusy}>
+              <LocalizedText text={"Cancel"} />
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => runBulkAction("delete")}
               disabled={bulkBusy}
@@ -2803,14 +2870,21 @@ export default function InboxPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this message?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Delete this message?"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes the message from Genit. This cannot be
-              undone.
+              <LocalizedText
+                text={
+                  "This permanently removes the message from Genit. This cannot be undone."
+                }
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              <LocalizedText text={"Cancel"} />
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteMessage}
               disabled={deleteMessageMutation.isPending}

@@ -4,6 +4,7 @@ import {
   DocPage,
   DocsEditorForm,
 } from "@/components/admin/docs/DocsEditorForm";
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Loader2 } from "lucide-react";
@@ -43,7 +44,9 @@ export default function EditDocPage({ params }: EditDocPageProps) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
         <LoadingFileLoader size={16} />
-        <p className='text-sm text-zinc-500'>Loading documentation...</p>
+        <p className='text-sm text-zinc-500'>
+          <LocalizedText text={"Loading documentation..."} />
+        </p>
       </div>
     );
   }

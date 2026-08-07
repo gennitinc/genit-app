@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import React from "react";
 import { useEffect, useState } from "react";
 
@@ -24,9 +26,9 @@ const LandingPageBanner = () => {
       {showBanner && (
         <div className='relative flex items-center justify-start bg-gradient-to-r from-violet-500 via-[#560280] to-[#E0724A] px-2 py-2 text-sm font-medium text-white md:items-center md:justify-center'>
           <p>
-            Exclusive Price Drop! Hurry, 🎉{" "}
+            <LocalizedText text={"Exclusive Price Drop! Hurry, 🎉"} />{" "}
             <span className='text-sm underline underline-offset-2'>
-              Offer Ends Soon!
+              <LocalizedText text={"Offer Ends Soon!"} />
             </span>
           </p>
           <button

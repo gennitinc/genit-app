@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "../ui/button";
+import { LocalizedText } from "@/components/localized-text";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
@@ -159,8 +160,7 @@ const GraphicsCanvasContent = ({
           id: nodeId,
           type: "design",
           selected:
-            itemId === focusedGenerationId ||
-            mediaUrl === focusedGenerationId,
+            itemId === focusedGenerationId || mediaUrl === focusedGenerationId,
           position: existingNode?.position || {
             x: xOffset + (imageCount % itemsPerRow) * colGap,
             y: yOffset + rowIndex * rowGap,
@@ -273,15 +273,14 @@ const GraphicsCanvasContent = ({
             <span className='h-2 w-2 rounded-full bg-green-400' />
           </div>
 
-          <span className='text-sm font-semibold'>Design Studio</span>
+          <span className='text-sm font-semibold'>
+            <LocalizedText text={"Design Studio"} />
+          </span>
         </div>
 
         {/* Toolbar items at the far right */}
         <div className='bg-background/80 border-border flex items-center space-x-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
           {/* Fullscreen Toggle */}
-         
-
-          
 
           {/* Zoom In */}
           <Button
@@ -316,7 +315,7 @@ const GraphicsCanvasContent = ({
           >
             <View className='h-3.5 w-3.5' />
           </Button>
-           {onToggleFullscreen && (
+          {onToggleFullscreen && (
             <>
               <Button
                 variant='ghost'
@@ -367,10 +366,12 @@ const GraphicsCanvasContent = ({
               <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
                 <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
                 <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
-                  genit Workspace
+                  <LocalizedText text={"genit Workspace"} />
                 </p>
                 <p className='text-xs text-neutral-200 dark:text-neutral-900'>
-                  Project files will appear here if any
+                  <LocalizedText
+                    text={"Project files will appear here if any"}
+                  />
                 </p>
               </div>
             </div>
@@ -388,7 +389,7 @@ const GraphicsCanvasContent = ({
 
                 <div className='flex flex-col items-center gap-1.5 px-2'>
                   <p className='text-[11px] font-bold tracking-[0.2em] text-black uppercase dark:text-white/80'>
-                    Agent Thinking
+                    <LocalizedText text={"Agent Thinking"} />
                   </p>
 
                   <p className='text-center text-[9px] leading-relaxed text-black italic dark:text-white/60'>

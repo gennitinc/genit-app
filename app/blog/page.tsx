@@ -2,6 +2,7 @@
 
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Eye, Heart, Loader2, MessageSquare } from "lucide-react";
@@ -121,10 +122,10 @@ export default function BlogIndex() {
           <div className='scrollbar-hide flex w-full shrink-0 flex-col gap-8 md:sticky md:top-24 md:max-h-[calc(100vh-6rem)] md:w-64 md:self-start md:overflow-y-auto'>
             <div>
               <h1 className='mb-2 text-3xl font-bold tracking-tight text-black dark:text-white'>
-                Blog
+                <LocalizedText text={"Blog"} />
               </h1>
               <p className='text-sm text-zinc-600 dark:text-zinc-400'>
-                Compiled notes from the Genit team
+                <LocalizedText text={"Compiled notes from the Genit team"} />
               </p>
             </div>
 
@@ -157,7 +158,7 @@ export default function BlogIndex() {
             ) : posts.length === 0 ? (
               <div className='rounded-3xl border border-dashed border-zinc-200 py-24 text-center dark:border-zinc-800'>
                 <p className='text-zinc-500 dark:text-zinc-400'>
-                  No posts found in this category.
+                  <LocalizedText text={"No posts found in this category."} />
                 </p>
               </div>
             ) : (

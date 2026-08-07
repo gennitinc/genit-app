@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CreateConversationInput } from "@/lib/inbox-api";
@@ -49,19 +50,21 @@ export function NewConversationDialog({
     >
       <div className='shrink-0 border-b px-5 py-4 text-left'>
         <h2 id='new-conversation-title' className='font-semibold'>
-          New conversation
+          <LocalizedText text={"New conversation"} />
         </h2>
         <p
           id='new-conversation-description'
           className='text-muted-foreground mt-1 text-sm'
         >
-          Start a thread through one of your connected channels.
+          <LocalizedText
+            text={"Start a thread through one of your connected channels."}
+          />
         </p>
       </div>
       <div className='min-h-0 flex-1 overflow-y-auto px-5 py-6'>
         <div className='mx-auto w-full max-w-2xl space-y-4'>
           <label className='block text-sm font-medium'>
-            Channel
+            <LocalizedText text={"Channel"} />
             <select
               className='bg-background mt-2 h-10 w-full rounded-md border px-3'
               value={integrationId}
@@ -75,7 +78,7 @@ export function NewConversationDialog({
             </select>
           </label>
           <label className='block text-sm font-medium'>
-            Contact name
+            <LocalizedText text={"Contact name"} />
             <Input
               className='mt-2'
               value={name}
@@ -84,14 +87,13 @@ export function NewConversationDialog({
             />
           </label>
           <label className='block text-sm font-medium'>
-            Recipient
+            <LocalizedText text={"Recipient"} />
             <Input
               className='mt-2'
               value={recipient}
               onChange={(event) => setRecipient(event.target.value)}
               placeholder={
-                account?.platform === "gmail" ||
-                account?.platform === "outlook"
+                account?.platform === "gmail" || account?.platform === "outlook"
                   ? "name@example.com"
                   : account?.platform === "telegram"
                     ? "Telegram chat ID"
@@ -106,7 +108,7 @@ export function NewConversationDialog({
           {account &&
             ["gmail", "email", "outlook"].includes(account.platform) && (
               <label className='block text-sm font-medium'>
-                Subject (optional)
+                <LocalizedText text={"Subject (optional)"} />
                 <Input
                   className='mt-2'
                   value={subject}
@@ -118,7 +120,7 @@ export function NewConversationDialog({
       </div>
       <div className='flex shrink-0 flex-col-reverse gap-2 border-t px-5 py-4 sm:flex-row sm:justify-end'>
         <Button variant='outline' onClick={() => onOpenChange(false)}>
-          Cancel
+          <LocalizedText text={"Cancel"} />
         </Button>
         <Button
           disabled={pending || !account || !name.trim() || !recipient.trim()}
@@ -126,8 +128,7 @@ export function NewConversationDialog({
             account &&
             onCreate({
               integrationId: account._id,
-              platform:
-                account.platform as CreateConversationInput["platform"],
+              platform: account.platform as CreateConversationInput["platform"],
               customerName: name.trim(),
               customerId: recipient.trim(),
               customerHandle: recipient.trim(),
@@ -135,7 +136,7 @@ export function NewConversationDialog({
             })
           }
         >
-          Create conversation
+          <LocalizedText text={"Create conversation"} />
         </Button>
       </div>
     </div>

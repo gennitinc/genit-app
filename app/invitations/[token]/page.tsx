@@ -1,11 +1,12 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import cookie from "js-cookie";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
+import cookie from "js-cookie";
 import { Building2, Loader2, MailWarning, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -117,13 +118,13 @@ export default function AcceptInvitationPage() {
         <div className='max-w-md text-center'>
           <MailWarning className='text-muted-foreground mx-auto mb-3 h-10 w-10' />
           <h1 className='text-foreground text-xl font-semibold'>
-            Invitation unavailable
+            <LocalizedText text={"Invitation unavailable"} />
           </h1>
           <p className='text-muted-foreground mt-2 text-sm'>
             {error || "This invitation may have expired or been revoked."}
           </p>
           <Button className='mt-6' onClick={() => router.push("/")}>
-            Go to genit
+            <LocalizedText text={"Go to genit"} />
           </Button>
         </div>
       </main>
@@ -156,17 +157,18 @@ export default function AcceptInvitationPage() {
           </Avatar>
 
           <h1 className='text-foreground mt-4 text-2xl font-semibold'>
-            You're invited to {invitation.organization.businessName}
+            <LocalizedText text={"You're invited to"} />
+            {invitation.organization.businessName}
           </h1>
           <p className='text-muted-foreground mt-2 text-sm'>
             <span className='text-foreground font-medium'>
               {invitation.invitedBy.username}
             </span>{" "}
-            invited you to join the{" "}
+            <LocalizedText text={"invited you to join the"} />{" "}
             <span className='text-foreground font-medium'>
               {invitation.team.name}
             </span>{" "}
-            team as{" "}
+            <LocalizedText text={"team as"} />{" "}
             <span className='text-foreground font-medium'>
               {invitation.role}
             </span>
@@ -176,7 +178,7 @@ export default function AcceptInvitationPage() {
           <div className='border-border mt-6 grid w-full grid-cols-2 gap-3 rounded-lg border p-3 text-left'>
             <div>
               <p className='text-muted-foreground text-[10px] tracking-wider uppercase'>
-                Organization
+                <LocalizedText text={"Organization"} />
               </p>
               <p className='text-foreground mt-0.5 flex items-center gap-1.5 text-sm'>
                 <Building2 className='h-3.5 w-3.5 opacity-70' />
@@ -185,7 +187,7 @@ export default function AcceptInvitationPage() {
             </div>
             <div>
               <p className='text-muted-foreground text-[10px] tracking-wider uppercase'>
-                Team
+                <LocalizedText text={"Team"} />
               </p>
               <p className='text-foreground mt-0.5 flex items-center gap-1.5 text-sm'>
                 <Users className='h-3.5 w-3.5 opacity-70' />
@@ -200,11 +202,11 @@ export default function AcceptInvitationPage() {
             </div>
           ) : isAuthed && !emailMatch ? (
             <div className='mt-6 w-full rounded-lg border border-amber-200 bg-amber-50 p-3 text-left text-xs text-amber-900 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-200'>
-              You're signed in as{" "}
-              <span className='font-medium'>{user!.email}</span> but this invite
-              was sent to{" "}
-              <span className='font-medium'>{invitation.email}</span>. Sign in
-              with that address to accept.
+              <LocalizedText text={"You're signed in as"} />{" "}
+              <span className='font-medium'>{user!.email}</span>{" "}
+              <LocalizedText text={"but this invite was sent to"} />{" "}
+              <span className='font-medium'>{invitation.email}</span>
+              <LocalizedText text={". Sign in with that address to accept."} />
             </div>
           ) : null}
 
@@ -229,7 +231,7 @@ export default function AcceptInvitationPage() {
                 }
                 className='w-full'
               >
-                Create an account
+                <LocalizedText text={"Create an account"} />
               </Button>
             )}
           </div>

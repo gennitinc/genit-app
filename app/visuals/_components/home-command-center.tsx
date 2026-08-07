@@ -6,6 +6,7 @@ import {
   POST_PLATFORM_LABELS,
   PostEditorDialog,
 } from "./post-editor-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -306,7 +307,7 @@ export function HomeCommandCenter({
           <div className='flex h-[20px] items-center justify-center'>
             <div className='max-w-md p-5 text-center'>
               <p className='text-sm text-rose-700 dark:text-rose-300'>
-                Could not load the content pipeline.
+                <LocalizedText text={"Could not load the content pipeline."} />
               </p>
               <p className='mt-1 text-xs text-rose-600/80 dark:text-rose-400/80'>
                 {errorMessage(postsQuery.error)}
@@ -317,7 +318,7 @@ export function HomeCommandCenter({
                 onClick={() => postsQuery.refetch()}
                 className='mt-4 rounded-sm bg-rose-500 px-4 py-2 text-xs font-semibold text-white transition hover:bg-rose-600'
               >
-                Retry
+                <LocalizedText text={"Retry"} />
               </button>
             </div>
           </div>
@@ -326,7 +327,9 @@ export function HomeCommandCenter({
             <div className='overflow-hidden rounded-lg bg-neutral-800 px-2 text-white shadow-sm ring-1 ring-white/10'>
               <div className='flex items-center justify-between gap-3 border-b border-white/10 p-2'>
                 <div>
-                  <h3 className='font-bold tracking-tight'>Content pipeline</h3>
+                  <h3 className='font-bold tracking-tight'>
+                    <LocalizedText text={"Content pipeline"} />
+                  </h3>
                 </div>
                 <div className='flex shrink-0 items-center gap-1.5'>
                   <Button
@@ -335,7 +338,8 @@ export function HomeCommandCenter({
                     onClick={openCreate}
                     className='rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
-                    <Plus className='mr-1 h-3.5 w-3.5' /> New post
+                    <Plus className='mr-1 h-3.5 w-3.5' />{" "}
+                    <LocalizedText text={"New post"} />
                   </Button>
                   <Button
                     asChild
@@ -344,7 +348,8 @@ export function HomeCommandCenter({
                     className='rounded-full text-white/70 hover:bg-white/10 hover:text-white'
                   >
                     <Link href='/visuals/posts'>
-                      View all <ArrowRight className='ml-1.5 h-3.5 w-3.5' />
+                      <LocalizedText text={"View all"} />
+                      <ArrowRight className='ml-1.5 h-3.5 w-3.5' />
                     </Link>
                   </Button>
                 </div>
@@ -416,10 +421,14 @@ export function HomeCommandCenter({
                 <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center text-white'>
                   <FileText className='h-7 w-7 text-white/40' />
                   <h4 className='mt-3 font-semibold text-white'>
-                    Your pipeline is ready
+                    <LocalizedText text={"Your pipeline is ready"} />
                   </h4>
                   <p className='mt-1 max-w-sm text-sm text-white/50'>
-                    Start a draft, schedule it, and track it through publishing.
+                    <LocalizedText
+                      text={
+                        "Start a draft, schedule it, and track it through publishing."
+                      }
+                    />
                   </p>
                   <Button
                     onClick={openCreate}
@@ -427,7 +436,7 @@ export function HomeCommandCenter({
                     className='mt-4 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
                     <Plus className='mr-1.5 h-4 w-4' />
-                    New post
+                    <LocalizedText text={"New post"} />
                   </Button>
                 </div>
               )}
@@ -436,9 +445,11 @@ export function HomeCommandCenter({
             <div className='h-fit rounded-lg bg-neutral-800 p-5 text-white shadow-sm ring-1 ring-white/10'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <h3 className='font-bold tracking-tight'>Coming up</h3>
+                  <h3 className='font-bold tracking-tight'>
+                    <LocalizedText text={"Coming up"} />
+                  </h3>
                   <p className='mt-1 text-xs text-white/50'>
-                    Your next scheduled releases
+                    <LocalizedText text={"Your next scheduled releases"} />
                   </p>
                 </div>
                 <Clock3 className='h-4 w-4 text-indigo-300' />
@@ -468,13 +479,13 @@ export function HomeCommandCenter({
                   <div className='rounded-lg border border-dashed border-white/15 p-6 text-center'>
                     <CalendarClock className='mx-auto h-6 w-6 text-white/35' />
                     <p className='mt-3 text-sm font-medium'>
-                      No posts scheduled
+                      <LocalizedText text={"No posts scheduled"} />
                     </p>
                     <button
                       onClick={openCreate}
                       className='mt-2 text-xs font-semibold text-indigo-300 hover:text-indigo-200'
                     >
-                      Plan one now
+                      <LocalizedText text={"Plan one now"} />
                     </button>
                   </div>
                 )}
@@ -485,7 +496,8 @@ export function HomeCommandCenter({
                 className='mt-4 w-full rounded-xl text-white/70 hover:bg-white/10 hover:text-white'
               >
                 <Link href='/visuals/calendar'>
-                  Open calendar <ArrowRight className='ml-1.5 h-4 w-4' />
+                  <LocalizedText text={"Open calendar"} />
+                  <ArrowRight className='ml-1.5 h-4 w-4' />
                 </Link>
               </Button>
             </div>
@@ -520,14 +532,20 @@ export function HomeCommandCenter({
       >
         <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle>Delete this post?</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete this post?"} />
+            </DialogTitle>
             <DialogDescription>
-              This removes it from the content workspace and cannot be undone.
+              <LocalizedText
+                text={
+                  "This removes it from the content workspace and cannot be undone."
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant='outline' onClick={() => setDeleteTarget(null)}>
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -537,7 +555,7 @@ export function HomeCommandCenter({
               }
             >
               {deleteMutation.isPending && <LoadingFileLoader size={16} />}
-              Delete post
+              <LocalizedText text={"Delete post"} />
             </Button>
           </DialogFooter>
         </DialogContent>

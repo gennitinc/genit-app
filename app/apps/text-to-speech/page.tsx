@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -468,7 +469,7 @@ function TextToSpeechPage() {
                 {!editorContent && (
                   <div className='animate-in fade-in slide-in-from-bottom-4 mt-auto pb-6 delay-200 duration-500'>
                     <p className='text-muted-foreground/50 mb-3 text-sm font-medium'>
-                      Get started with
+                      <LocalizedText text={"Get started with"} />
                     </p>
                     <div className='flex flex-wrap gap-2'>
                       {examples.map((example, idx) => (
@@ -621,12 +622,16 @@ function TextToSpeechPage() {
                     {isGenerating ? (
                       <>
                         <LoadingFileLoader size={16} />
-                        <span className='hidden sm:inline'>Generating...</span>
+                        <span className='hidden sm:inline'>
+                          <LocalizedText text={"Generating..."} />
+                        </span>
                       </>
                     ) : (
                       <>
                         <AudioWaveform className='h-3.5 w-3.5' />
-                        <span className='hidden sm:inline'>Generate</span>
+                        <span className='hidden sm:inline'>
+                          <LocalizedText text={"Generate"} />
+                        </span>
                       </>
                     )}
                   </button>
@@ -647,7 +652,7 @@ function TextToSpeechPage() {
                       : "text-muted-foreground hover:text-foreground/70 border-transparent"
                   )}
                 >
-                  Settings
+                  <LocalizedText text={"Settings"} />
                 </button>
                 <button
                   onClick={() => setSettingsTab("history")}
@@ -658,7 +663,7 @@ function TextToSpeechPage() {
                       : "text-muted-foreground hover:text-foreground/70 border-transparent"
                   )}
                 >
-                  History
+                  <LocalizedText text={"History"} />
                 </button>
               </div>
             </div>
@@ -671,7 +676,7 @@ function TextToSpeechPage() {
                   {/* Voice Selector */}
                   <div className='flex flex-col gap-2'>
                     <label className='text-foreground text-sm font-medium'>
-                      Voice
+                      <LocalizedText text={"Voice"} />
                     </label>
                     <button
                       onClick={() => setIsVoiceSelectorOpen(true)}
@@ -705,7 +710,7 @@ function TextToSpeechPage() {
                   {/* Model Selector with Gradient Border */}
                   <div className='flex flex-col gap-2'>
                     <label className='text-foreground text-sm font-medium'>
-                      Model
+                      <LocalizedText text={"Model"} />
                     </label>
                     <div className='overflow-hidden rounded-[13px]'>
                       <div className='bg-background relative p-[3px]'>
@@ -731,18 +736,22 @@ function TextToSpeechPage() {
                         <button className='bg-background text-foreground hover:bg-accent relative flex h-10 w-full items-center justify-between rounded-[10px] border-none px-3 text-sm font-medium transition-colors'>
                           <span className='flex items-center gap-2'>
                             <span className='border-border text-muted-foreground flex h-5 w-5 items-center justify-center rounded border text-[8px] font-black'>
-                              V2
+                              <LocalizedText text={"V2"} />
                             </span>
-                            <span>Multilingual v2</span>
+                            <span>
+                              <LocalizedText text={"Multilingual v2"} />
+                            </span>
                           </span>
                           <ChevronRight className='text-muted-foreground/40 h-4 w-4' />
                         </button>
                         <div className='relative flex items-center justify-between gap-2 px-3 py-2'>
                           <p className='text-muted-foreground text-sm font-medium'>
-                            The most expressive Text to Speech
+                            <LocalizedText
+                              text={"The most expressive Text to Speech"}
+                            />
                           </p>
                           <button className='bg-background hover:bg-accent border-border inline-flex h-7 flex-shrink-0 items-center justify-center rounded-lg border px-2.5 text-xs font-medium whitespace-nowrap transition-colors'>
-                            Try v3
+                            <LocalizedText text={"Try v3"} />
                           </button>
                         </div>
                       </div>
@@ -799,7 +808,7 @@ function TextToSpeechPage() {
                   {/* Language Override */}
                   <div className='flex items-center justify-between'>
                     <label className='text-foreground decoration-muted-foreground/30 text-sm font-medium underline decoration-dotted underline-offset-2 select-none'>
-                      Language Override
+                      <LocalizedText text={"Language Override"} />
                     </label>
                     <Switch
                       checked={languageOverride}
@@ -810,7 +819,7 @@ function TextToSpeechPage() {
                   {/* Output Format */}
                   <div className='flex flex-col gap-1.5'>
                     <label className='text-foreground text-sm font-medium'>
-                      Output Format
+                      <LocalizedText text={"Output Format"} />
                     </label>
                     <Select
                       value={outputFormat}
@@ -821,15 +830,23 @@ function TextToSpeechPage() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='mp3_44100_128'>
-                          MP3 44.1 kHz (128kbps)
+                          <LocalizedText text={"MP3 44.1 kHz (128kbps)"} />
                         </SelectItem>
                         <SelectItem value='mp3_44100_192'>
-                          MP3 44.1 kHz (192kbps)
+                          <LocalizedText text={"MP3 44.1 kHz (192kbps)"} />
                         </SelectItem>
-                        <SelectItem value='pcm_16000'>PCM 16 kHz</SelectItem>
-                        <SelectItem value='pcm_22050'>PCM 22.05 kHz</SelectItem>
-                        <SelectItem value='pcm_24000'>PCM 24 kHz</SelectItem>
-                        <SelectItem value='pcm_44100'>PCM 44.1 kHz</SelectItem>
+                        <SelectItem value='pcm_16000'>
+                          <LocalizedText text={"PCM 16 kHz"} />
+                        </SelectItem>
+                        <SelectItem value='pcm_22050'>
+                          <LocalizedText text={"PCM 22.05 kHz"} />
+                        </SelectItem>
+                        <SelectItem value='pcm_24000'>
+                          <LocalizedText text={"PCM 24 kHz"} />
+                        </SelectItem>
+                        <SelectItem value='pcm_44100'>
+                          <LocalizedText text={"PCM 44.1 kHz"} />
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -842,7 +859,7 @@ function TextToSpeechPage() {
                         onCheckedChange={setSpeakerBoost}
                       />
                       <label className='text-foreground decoration-muted-foreground/30 cursor-pointer text-sm font-medium underline decoration-dotted underline-offset-2 select-none'>
-                        Speaker boost
+                        <LocalizedText text={"Speaker boost"} />
                       </label>
                     </div>
                     <button
@@ -850,7 +867,9 @@ function TextToSpeechPage() {
                       className='text-muted-foreground hover:text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-[10px] px-3 py-1.5 text-sm font-medium transition-colors'
                     >
                       <RotateCcw className='h-3.5 w-3.5' />
-                      <span>Reset values</span>
+                      <span>
+                        <LocalizedText text={"Reset values"} />
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -863,10 +882,12 @@ function TextToSpeechPage() {
                     <div className='flex flex-col items-center justify-center gap-3 py-16 text-center'>
                       <Clock className='text-muted-foreground/20 h-8 w-8' />
                       <p className='text-muted-foreground/40 text-sm font-medium'>
-                        No generations yet
+                        <LocalizedText text={"No generations yet"} />
                       </p>
                       <p className='text-muted-foreground/30 text-xs'>
-                        Generated audio will appear here
+                        <LocalizedText
+                          text={"Generated audio will appear here"}
+                        />
                       </p>
                     </div>
                   ) : (
@@ -943,11 +964,11 @@ function TextToSpeechPage() {
                       </div>
                       <button className='bg-muted/40 hover:bg-muted/60 text-foreground/70 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors'>
                         <SlidersHorizontal className='h-4 w-4' />
-                        Filter
+                        <LocalizedText text={"Filter"} />
                       </button>
                       <button className='bg-muted/40 hover:bg-muted/60 text-foreground/70 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors'>
                         <RotateCcw className='h-4 w-4' />
-                        Default
+                        <LocalizedText text={"Default"} />
                       </button>
                     </div>
                   </div>
@@ -960,13 +981,15 @@ function TextToSpeechPage() {
                   <div className='flex flex-col items-center justify-center gap-3 py-20'>
                     <LoadingFileLoader size={16} />
                     <span className='text-muted-foreground text-sm font-medium'>
-                      Loading voices...
+                      <LocalizedText text={"Loading voices..."} />
                     </span>
                   </div>
                 ) : filteredVoices.length === 0 ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-20 opacity-40'>
                     <AudioWaveform className='text-muted-foreground h-12 w-12' />
-                    <span className='text-sm font-medium'>No voices found</span>
+                    <span className='text-sm font-medium'>
+                      <LocalizedText text={"No voices found"} />
+                    </span>
                   </div>
                 ) : (
                   <div className='space-y-8'>
@@ -1004,7 +1027,7 @@ function TextToSpeechPage() {
                                   {voice.gender}
                                 </Badge>
                                 <Badge className='border-none bg-white/10 text-[10px] text-white backdrop-blur-md'>
-                                  Featured
+                                  <LocalizedText text={"Featured"} />
                                 </Badge>
                               </div>
                             </div>
@@ -1049,7 +1072,7 @@ function TextToSpeechPage() {
                                       variant='outline'
                                       className='px-1.5 py-0 text-[10px] font-medium opacity-60'
                                     >
-                                      English
+                                      <LocalizedText text={"English"} />
                                     </Badge>
                                     <Badge
                                       variant='outline'
@@ -1061,7 +1084,7 @@ function TextToSpeechPage() {
                                       variant='outline'
                                       className='px-1.5 py-0 text-[10px] font-medium opacity-60'
                                     >
-                                      Natural
+                                      <LocalizedText text={"Natural"} />
                                     </Badge>
                                   </div>
                                 </div>
@@ -1100,7 +1123,7 @@ function TextToSpeechPage() {
                                 }}
                                 className='bg-foreground text-background rounded-lg px-4 py-1.5 text-sm font-bold transition-all hover:opacity-90 active:scale-95'
                               >
-                                Use
+                                <LocalizedText text={"Use"} />
                               </button>
                             </div>
                           </div>

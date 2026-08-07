@@ -1,6 +1,7 @@
 "use client";
 
 import { NotionEditor } from "@/components/admin/NotionEditor";
+import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { ArrowLeft, Loader2, Save, X } from "lucide-react";
@@ -150,7 +151,11 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
               {mode === "new" ? "New Documentation Page" : "Edit Documentation"}
             </h1>
             <p className='mt-0.5 text-xs text-zinc-400'>
-              Write docs with the same rich editor used for blog publishing
+              <LocalizedText
+                text={
+                  "Write docs with the same rich editor used for blog publishing"
+                }
+              />
             </p>
           </div>
         </div>
@@ -168,7 +173,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
         <div className='space-y-6'>
           <div className='space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Page Title *
+              <LocalizedText text={"Page Title *"} />
             </label>
             <input
               type='text'
@@ -186,7 +191,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
 
           <div className='flex flex-col space-y-2'>
             <label className='text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-              Content Body *
+              <LocalizedText text={"Content Body *"} />
             </label>
             <NotionEditor value={content} onChange={setContent} />
           </div>
@@ -199,10 +204,12 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
             <div className='flex items-center justify-between pb-3'>
               <div>
                 <h3 className='text-lg font-bold text-white'>
-                  Finalize Documentation
+                  <LocalizedText text={"Finalize Documentation"} />
                 </h3>
                 <p className='mt-0.5 text-xs font-medium text-zinc-400'>
-                  Set navigation and publishing details before saving
+                  <LocalizedText
+                    text={"Set navigation and publishing details before saving"}
+                  />
                 </p>
               </div>
               <button
@@ -217,7 +224,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
             <div className='space-y-4'>
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Summary *
+                  <LocalizedText text={"Summary *"} />
                 </label>
                 <textarea
                   required
@@ -232,7 +239,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Section *
+                    <LocalizedText text={"Section *"} />
                   </label>
                   <input
                     list='doc-sections'
@@ -250,7 +257,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
 
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Sidebar Order
+                    <LocalizedText text={"Sidebar Order"} />
                   </label>
                   <input
                     type='number'
@@ -265,7 +272,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Slug Override
+                    <LocalizedText text={"Slug Override"} />
                   </label>
                   <input
                     type='text'
@@ -281,7 +288,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
 
                 <div className='space-y-2'>
                   <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                    Read Time
+                    <LocalizedText text={"Read Time"} />
                   </label>
                   <input
                     type='text'
@@ -295,7 +302,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
 
               <div className='space-y-2'>
                 <label className='block text-xs font-semibold tracking-wider text-zinc-400 uppercase'>
-                  Tags (Comma separated)
+                  <LocalizedText text={"Tags (Comma separated)"} />
                 </label>
                 <input
                   type='text'
@@ -314,7 +321,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                     onChange={(event) => setIsActive(event.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Published
+                  <LocalizedText text={"Published"} />
                 </label>
 
                 <label className='flex cursor-pointer items-center gap-2 text-xs font-semibold text-zinc-300 select-none'>
@@ -324,7 +331,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                     onChange={(event) => setIsFeatured(event.target.checked)}
                     className='rounded border-zinc-800 bg-zinc-900 text-cyan-500 focus:ring-cyan-500'
                   />
-                  Featured
+                  <LocalizedText text={"Featured"} />
                 </label>
               </div>
             </div>
@@ -335,7 +342,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                 onClick={() => setIsModalOpen(false)}
                 className='inline-flex flex-1 cursor-pointer items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 py-2.5 text-xs font-semibold text-zinc-400 transition hover:border-zinc-700 hover:text-white'
               >
-                Back to Editor
+                <LocalizedText text={"Back to Editor"} />
               </button>
               <button
                 type='button'
@@ -349,7 +356,8 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                   </>
                 ) : (
                   <>
-                    <Save className='h-3.5 w-3.5' /> Save Documentation
+                    <Save className='h-3.5 w-3.5' />{" "}
+                    <LocalizedText text={"Save Documentation"} />
                   </>
                 )}
               </button>

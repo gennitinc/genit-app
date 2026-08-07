@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -118,12 +120,18 @@ export function UpdatePasswordComp() {
           <div className='mt-4 flex items-center justify-center gap-2'>
             <Logo />
             <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-              Genit
+              <LocalizedText text={"Genit"} />
             </h1>
           </div>
-          <CardTitle className='text-2xl font-bold'>Update password</CardTitle>
+          <CardTitle className='text-2xl font-bold'>
+            <LocalizedText text={"Update password"} />
+          </CardTitle>
           <CardDescription>
-            Your email has been verified. Please enter a new password.
+            <LocalizedText
+              text={
+                "Your email has been verified. Please enter a new password."
+              }
+            />
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-6'>
@@ -324,7 +332,7 @@ export function UpdatePasswordComp() {
                       d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                     ></path>
                   </svg>
-                  Updating...
+                  <LocalizedText text={"Updating..."} />
                 </div>
               ) : (
                 "Update Password"
@@ -336,12 +344,12 @@ export function UpdatePasswordComp() {
 
       <div className='mt-5 w-full max-w-[26rem] space-y-3'>
         <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-          This site is protected by reCAPTCHA and our{" "}
+          <LocalizedText text={"This site is protected by reCAPTCHA and our"} />{" "}
           <a
             href='#'
             className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
           >
-            Policy
+            <LocalizedText text={"Policy"} />
           </a>{" "}
           {/* &{" "}
                 <a
@@ -352,14 +360,14 @@ export function UpdatePasswordComp() {
                 </a> */}
         </p>
         <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-          ©2026 genit. A product of{" "}
+          <LocalizedText text={"©2026 genit. A product of"} />{" "}
           <a
             className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
             href='#'
           >
-            Klip Inc.
+            <LocalizedText text={"Klip Inc."} />
           </a>{" "}
-          All rights reserved.
+          <LocalizedText text={"All rights reserved."} />
         </p>
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import useEmblaCarousel, {
@@ -195,7 +196,9 @@ function CarouselPrevious({
       {...props}
     >
       <ChevronLeft />
-      <span className='sr-only'>Previous slide</span>
+      <span className='sr-only'>
+        <LocalizedText text={"Previous slide"} />
+      </span>
     </Button>
   );
 }
@@ -225,7 +228,9 @@ function CarouselNext({
       {...props}
     >
       <ChevronRight />
-      <span className='sr-only'>Next slide</span>
+      <span className='sr-only'>
+        <LocalizedText text={"Next slide"} />
+      </span>
     </Button>
   );
 }

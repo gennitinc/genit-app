@@ -1,6 +1,7 @@
 import { AutoModeDialog } from "@/components/common/auto-mode-dialog";
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { LanguageSelect } from "@/components/language-select";
+import { LocalizedText } from "@/components/localized-text";
 import PricingComponent from "@/components/pricing/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -787,7 +788,7 @@ const SettingsHome = () => {
                         {savingProfile && (
                           <Loader2 className='mr-2 size-4 animate-spin' />
                         )}
-                        Save account
+                        <LocalizedText text={"Save account"} />
                       </Button>
                     </div>
                   </CardContent>
@@ -795,9 +796,15 @@ const SettingsHome = () => {
 
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-                    <CardTitle className='text-base'>Password</CardTitle>
+                    <CardTitle className='text-base'>
+                      <LocalizedText text={"Password"} />
+                    </CardTitle>
                     <CardDescription>
-                      Reset your password through your verified email.
+                      <LocalizedText
+                        text={
+                          "Reset your password through your verified email."
+                        }
+                      />
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
@@ -807,10 +814,13 @@ const SettingsHome = () => {
                       </span>
                       <div>
                         <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                          Secure reset
+                          <LocalizedText text={"Secure reset"} />
                         </p>
                         <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                          We’ll send a six-digit code to {user?.email}.
+                          <LocalizedText
+                            text={"We’ll send a six-digit code to"}
+                          />
+                          {user?.email}.
                         </p>
                       </div>
                     </div>
@@ -823,7 +833,7 @@ const SettingsHome = () => {
                       {sendingPasswordReset && (
                         <Loader2 className='mr-2 size-4 animate-spin' />
                       )}
-                      Reset password
+                      <LocalizedText text={"Reset password"} />
                     </Button>
                   </CardContent>
                 </Card>
@@ -843,10 +853,12 @@ const SettingsHome = () => {
                       </div>
                       <div>
                         <CardTitle className='text-xl'>
-                          Genit Auto marketing loop
+                          <LocalizedText text={"Genit Auto marketing loop"} />
                         </CardTitle>
                         <CardDescription className='mt-1 max-w-2xl text-sm leading-6'>
-                          Reviews active campaigns and performance
+                          <LocalizedText
+                            text={"Reviews active campaigns and performance"}
+                          />
                         </CardDescription>
                       </div>
                     </div>
@@ -864,11 +876,14 @@ const SettingsHome = () => {
                   <div className='bg-background/60 flex items-center justify-between gap-5 rounded-xl border p-4'>
                     <div className='min-w-0'>
                       <h4 className='text-sm font-semibold'>
-                        Run autonomously
+                        <LocalizedText text={"Run autonomously"} />
                       </h4>
                       <p className='text-muted-foreground mt-0.5 max-w-2xl text-sm leading-5'>
-                        Uses your brand, campaigns, posts, email activity,
-                        attribution, and connected marketing data.
+                        <LocalizedText
+                          text={
+                            "Uses your brand, campaigns, posts, email activity, attribution, and connected marketing data."
+                          }
+                        />
                       </p>
                     </div>
                     <Switch
@@ -889,10 +904,15 @@ const SettingsHome = () => {
                         <Target className='h-4 w-4' />
                       </div>
                       <div>
-                        <h4 className='font-semibold'>Goals & learning</h4>
+                        <h4 className='font-semibold'>
+                          <LocalizedText text={"Goals & learning"} />
+                        </h4>
                         <p className='text-muted-foreground mt-0.5 text-sm leading-5'>
-                          Set a measurable target. Each loop evaluates progress,
-                          adjusts the plan, and remembers the result.
+                          <LocalizedText
+                            text={
+                              "Set a measurable target. Each loop evaluates progress, adjusts the plan, and remembers the result."
+                            }
+                          />
                         </p>
                       </div>
                     </div>
@@ -900,7 +920,7 @@ const SettingsHome = () => {
                     <div className='bg-muted/30 grid gap-3 rounded-xl border p-3 md:grid-cols-2'>
                       <div className='space-y-1.5 md:col-span-2'>
                         <Label htmlFor='auto-goal-title' className='text-xs'>
-                          Goal
+                          <LocalizedText text={"Goal"} />
                         </Label>
                         <Input
                           id='auto-goal-title'
@@ -912,7 +932,7 @@ const SettingsHome = () => {
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-goal-metric' className='text-xs'>
-                          Metric
+                          <LocalizedText text={"Metric"} />
                         </Label>
                         <Select
                           value={goalMetric}
@@ -928,22 +948,26 @@ const SettingsHome = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value='impressions'>
-                              Impressions
+                              <LocalizedText text={"Impressions"} />
                             </SelectItem>
-                            <SelectItem value='clicks'>Clicks</SelectItem>
+                            <SelectItem value='clicks'>
+                              <LocalizedText text={"Clicks"} />
+                            </SelectItem>
                             <SelectItem value='conversions'>
-                              Conversions
+                              <LocalizedText text={"Conversions"} />
                             </SelectItem>
                             <SelectItem value='conversionValue'>
-                              Conversion value
+                              <LocalizedText text={"Conversion value"} />
                             </SelectItem>
-                            <SelectItem value='roi'>ROI</SelectItem>
+                            <SelectItem value='roi'>
+                              <LocalizedText text={"ROI"} />
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-goal-target' className='text-xs'>
-                          Target
+                          <LocalizedText text={"Target"} />
                         </Label>
                         <Input
                           id='auto-goal-target'
@@ -964,7 +988,8 @@ const SettingsHome = () => {
                           (currentOrg?.autoModeGoals?.length || 0) >= 10
                         }
                       >
-                        <Plus className='h-4 w-4' /> Add goal
+                        <Plus className='h-4 w-4' />{" "}
+                        <LocalizedText text={"Add goal"} />
                       </Button>
                     </div>
 
@@ -1014,7 +1039,9 @@ const SettingsHome = () => {
                     {(autoInsights?.currentPlan ||
                       currentOrg?.autoModeCurrentPlan) && (
                       <div className='bg-muted/20 rounded-xl border p-4'>
-                        <p className='text-sm font-medium'>Current plan</p>
+                        <p className='text-sm font-medium'>
+                          <LocalizedText text={"Current plan"} />
+                        </p>
                         <p className='text-muted-foreground mt-1 text-xs'>
                           {
                             (
@@ -1067,11 +1094,14 @@ const SettingsHome = () => {
                       </div>
                       <div>
                         <h4 className='font-semibold'>
-                          Controlled experiments
+                          <LocalizedText text={"Controlled experiments"} />
                         </h4>
                         <p className='text-muted-foreground mt-0.5 text-sm leading-5'>
-                          Compare two active campaigns for at least three
-                          cycles. A winner needs at least 10% measured lift.
+                          <LocalizedText
+                            text={
+                              "Compare two active campaigns for at least three cycles. A winner needs at least 10% measured lift."
+                            }
+                          />
                         </p>
                       </div>
                     </div>
@@ -1082,7 +1112,7 @@ const SettingsHome = () => {
                           htmlFor='auto-experiment-title'
                           className='text-xs'
                         >
-                          Experiment name
+                          <LocalizedText text={"Experiment name"} />
                         </Label>
                         <Input
                           id='auto-experiment-title'
@@ -1099,7 +1129,7 @@ const SettingsHome = () => {
                           htmlFor='auto-experiment-metric'
                           className='text-xs'
                         >
-                          Success metric
+                          <LocalizedText text={"Success metric"} />
                         </Label>
                         <Select
                           value={experimentMetric}
@@ -1117,16 +1147,20 @@ const SettingsHome = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value='impressions'>
-                              Impressions
+                              <LocalizedText text={"Impressions"} />
                             </SelectItem>
-                            <SelectItem value='clicks'>Clicks</SelectItem>
+                            <SelectItem value='clicks'>
+                              <LocalizedText text={"Clicks"} />
+                            </SelectItem>
                             <SelectItem value='conversions'>
-                              Conversions
+                              <LocalizedText text={"Conversions"} />
                             </SelectItem>
                             <SelectItem value='conversionValue'>
-                              Conversion value
+                              <LocalizedText text={"Conversion value"} />
                             </SelectItem>
-                            <SelectItem value='roi'>ROI</SelectItem>
+                            <SelectItem value='roi'>
+                              <LocalizedText text={"ROI"} />
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -1135,7 +1169,7 @@ const SettingsHome = () => {
                           htmlFor='auto-experiment-lift'
                           className='text-xs'
                         >
-                          Minimum lift (%)
+                          <LocalizedText text={"Minimum lift (%)"} />
                         </Label>
                         <Input
                           id='auto-experiment-lift'
@@ -1151,7 +1185,7 @@ const SettingsHome = () => {
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-variant-a' className='text-xs'>
-                          Variant A
+                          <LocalizedText text={"Variant A"} />
                         </Label>
                         <Select value={variantA} onValueChange={setVariantA}>
                           <SelectTrigger
@@ -1174,7 +1208,7 @@ const SettingsHome = () => {
                       </div>
                       <div className='space-y-1.5'>
                         <Label htmlFor='auto-variant-b' className='text-xs'>
-                          Variant B
+                          <LocalizedText text={"Variant B"} />
                         </Label>
                         <Select value={variantB} onValueChange={setVariantB}>
                           <SelectTrigger
@@ -1200,14 +1234,18 @@ const SettingsHome = () => {
                         onClick={addAutoExperiment}
                         disabled={savingAuto || autoCampaigns.length < 2}
                       >
-                        <Plus className='h-4 w-4' /> Create experiment
+                        <Plus className='h-4 w-4' />{" "}
+                        <LocalizedText text={"Create experiment"} />
                       </Button>
                     </div>
                     {autoCampaigns.length < 2 && (
                       <p className='text-muted-foreground flex items-center gap-2 text-xs'>
                         <span className='bg-muted-foreground/60 size-1.5 rounded-full' />
-                        Activate at least two GTM campaigns to run an
-                        experiment.
+                        <LocalizedText
+                          text={
+                            "Activate at least two GTM campaigns to run an experiment."
+                          }
+                        />
                       </p>
                     )}
                     {(
@@ -1236,10 +1274,12 @@ const SettingsHome = () => {
                               </div>
                               <p className='text-muted-foreground text-xs'>
                                 {experiment.variantA?.campaignName || "A"}:{" "}
-                                {experiment.variantA?.value ?? "—"} vs{" "}
+                                {experiment.variantA?.value ?? "—"}{" "}
+                                <LocalizedText text={"vs"} />{" "}
                                 {experiment.variantB?.campaignName || "B"}:{" "}
                                 {experiment.variantB?.value ?? "—"} ·{" "}
-                                {experiment.samples || 0}/3 cycles
+                                {experiment.samples || 0}
+                                <LocalizedText text={"/3 cycles"} />
                                 {experiment.winner
                                   ? ` · Winner ${experiment.winner} (${experiment.liftPercent}% lift)`
                                   : ""}
@@ -1266,11 +1306,15 @@ const SettingsHome = () => {
                     <section className='bg-background/60 space-y-3 rounded-xl border p-4 sm:p-5'>
                       <div className='flex items-center justify-between gap-4'>
                         <div>
-                          <h4 className='font-medium'>Adaptive allocation</h4>
+                          <h4 className='font-medium'>
+                            <LocalizedText text={"Adaptive allocation"} />
+                          </h4>
                           <p className='text-muted-foreground text-sm'>
-                            Proposed GTM budget split from performance and
-                            experiment winners. Applying updates campaign plans,
-                            not provider ad spend.
+                            <LocalizedText
+                              text={
+                                "Proposed GTM budget split from performance and experiment winners. Applying updates campaign plans, not provider ad spend."
+                              }
+                            />
                           </p>
                         </div>
                         <Button
@@ -1284,7 +1328,7 @@ const SettingsHome = () => {
                             )?.totalBudget
                           }
                         >
-                          Apply allocation
+                          <LocalizedText text={"Apply allocation"} />
                         </Button>
                       </div>
                       <div className='grid gap-2 sm:grid-cols-2'>
@@ -1305,7 +1349,7 @@ const SettingsHome = () => {
                               </Badge>
                             </div>
                             <p className='text-muted-foreground mt-1 text-xs'>
-                              Planned budget{" "}
+                              <LocalizedText text={"Planned budget"} />{" "}
                               {campaign.suggestedBudget.toLocaleString()} ·{" "}
                               {campaign.reason}
                             </p>
@@ -1320,10 +1364,15 @@ const SettingsHome = () => {
                     <section className='bg-background/60 space-y-3 rounded-xl border p-4 sm:p-5'>
                       <div className='flex items-center justify-between gap-3'>
                         <div>
-                          <h4 className='font-medium'>Scenario simulation</h4>
+                          <h4 className='font-medium'>
+                            <LocalizedText text={"Scenario simulation"} />
+                          </h4>
                           <p className='text-muted-foreground text-sm'>
-                            Linear forecast if the proposed allocation is
-                            applied.
+                            <LocalizedText
+                              text={
+                                "Linear forecast if the proposed allocation is applied."
+                              }
+                            />
                           </p>
                         </div>
                         <Badge variant='secondary'>
@@ -1333,7 +1382,7 @@ const SettingsHome = () => {
                               currentOrg?.autoModeSimulation
                             )?.confidence
                           }{" "}
-                          confidence
+                          <LocalizedText text={"confidence"} />
                         </Badge>
                       </div>
                       <div className='grid gap-2 sm:grid-cols-3'>
@@ -1355,7 +1404,7 @@ const SettingsHome = () => {
                               </p>
                               <p className='text-muted-foreground text-xs'>
                                 {simulation.baseline[metric].toLocaleString()}{" "}
-                                baseline ·{" "}
+                                <LocalizedText text={"baseline ·"} />{" "}
                                 {simulation.uplift[metric] >= 0 ? "+" : ""}
                                 {simulation.uplift[metric]}%
                               </p>
@@ -1373,10 +1422,15 @@ const SettingsHome = () => {
                           <Bot className='h-4 w-4' />
                         </div>
                         <div>
-                          <h4 className='font-semibold'>Specialist missions</h4>
+                          <h4 className='font-semibold'>
+                            <LocalizedText text={"Specialist missions"} />
+                          </h4>
                           <p className='text-muted-foreground mt-0.5 max-w-xl text-sm leading-5'>
-                            Turn the current plan into strategist, creator, and
-                            analyst work. Approval never includes publishing.
+                            <LocalizedText
+                              text={
+                                "Turn the current plan into strategist, creator, and analyst work. Approval never includes publishing."
+                              }
+                            />
                           </p>
                         </div>
                       </div>
@@ -1392,7 +1446,7 @@ const SettingsHome = () => {
                           )
                         }
                       >
-                        Compile plan
+                        <LocalizedText text={"Compile plan"} />
                       </Button>
                     </div>
                     {autoMissions.length === 0 ? (
@@ -1401,11 +1455,14 @@ const SettingsHome = () => {
                           <Bot className='h-4 w-4' />
                         </div>
                         <p className='mt-3 text-sm font-medium'>
-                          No missions yet
+                          <LocalizedText text={"No missions yet"} />
                         </p>
                         <p className='text-muted-foreground mt-1 max-w-sm text-xs leading-5'>
-                          Complete an Auto plan, then compile it into specialist
-                          work.
+                          <LocalizedText
+                            text={
+                              "Complete an Auto plan, then compile it into specialist work."
+                            }
+                          />
                         </p>
                       </div>
                     ) : (
@@ -1430,7 +1487,9 @@ const SettingsHome = () => {
                                     </Badge>
                                     {mission.memoryWrittenAt && (
                                       <Badge variant='outline'>
-                                        In Brand Brain
+                                        <LocalizedText
+                                          text={"In Brand Brain"}
+                                        />
                                       </Badge>
                                     )}
                                   </div>
@@ -1454,7 +1513,7 @@ const SettingsHome = () => {
                                         )
                                       }
                                     >
-                                      Approve mission
+                                      <LocalizedText text={"Approve mission"} />
                                     </Button>
                                   )}
                                   {mission.status === "failed" && (
@@ -1465,7 +1524,7 @@ const SettingsHome = () => {
                                         decideAutoMission(mission._id, "retry")
                                       }
                                     >
-                                      Retry
+                                      <LocalizedText text={"Retry"} />
                                     </Button>
                                   )}
                                   {[
@@ -1481,7 +1540,7 @@ const SettingsHome = () => {
                                         missionAction(mission._id, "cancel")
                                       }
                                     >
-                                      Cancel
+                                      <LocalizedText text={"Cancel"} />
                                     </Button>
                                   )}
                                 </div>
@@ -1531,7 +1590,9 @@ const SettingsHome = () => {
                                                 )
                                               }
                                             >
-                                              Save output
+                                              <LocalizedText
+                                                text={"Save output"}
+                                              />
                                             </Button>
                                           )}
                                         </div>
@@ -1550,7 +1611,9 @@ const SettingsHome = () => {
                                     )
                                   }
                                 >
-                                  Approve outputs and remember
+                                  <LocalizedText
+                                    text={"Approve outputs and remember"}
+                                  />
                                 </Button>
                               )}
 
@@ -1595,7 +1658,9 @@ const SettingsHome = () => {
                                         createMissionDraft(mission._id)
                                       }
                                     >
-                                      Create channel draft
+                                      <LocalizedText
+                                        text={"Create channel draft"}
+                                      />
                                     </Button>
                                   </div>
 
@@ -1647,7 +1712,9 @@ const SettingsHome = () => {
                                               )
                                             }
                                           >
-                                            Save draft
+                                            <LocalizedText
+                                              text={"Save draft"}
+                                            />
                                           </Button>
                                           <Button
                                             size='sm'
@@ -1659,7 +1726,9 @@ const SettingsHome = () => {
                                               )
                                             }
                                           >
-                                            Approve and publish
+                                            <LocalizedText
+                                              text={"Approve and publish"}
+                                            />
                                           </Button>
                                           <Input
                                             aria-label='Schedule publishing time'
@@ -1685,7 +1754,7 @@ const SettingsHome = () => {
                                               )
                                             }
                                           >
-                                            Schedule
+                                            <LocalizedText text={"Schedule"} />
                                           </Button>
                                         </div>
                                       )}
@@ -1701,11 +1770,13 @@ const SettingsHome = () => {
 
                               {mission.outcome && (
                                 <p className='text-muted-foreground border-t pt-2 text-xs'>
-                                  Learned outcome:{" "}
-                                  {mission.outcome.publishedAssets} assets ·{" "}
-                                  {mission.outcome.metrics?.clicks || 0} clicks
-                                  · {mission.outcome.conversions || 0}{" "}
-                                  conversions
+                                  <LocalizedText text={"Learned outcome:"} />{" "}
+                                  {mission.outcome.publishedAssets}{" "}
+                                  <LocalizedText text={"assets ·"} />{" "}
+                                  {mission.outcome.metrics?.clicks || 0}{" "}
+                                  <LocalizedText text={"clicks ·"} />
+                                  {mission.outcome.conversions || 0}{" "}
+                                  <LocalizedText text={"conversions"} />
                                 </p>
                               )}
                               {mission.steps.some(
@@ -1736,7 +1807,9 @@ const SettingsHome = () => {
                     <>
                       <Separator />
                       <div className='space-y-3'>
-                        <h4 className='font-medium'>Auto alerts</h4>
+                        <h4 className='font-medium'>
+                          <LocalizedText text={"Auto alerts"} />
+                        </h4>
                         {(
                           autoInsights?.alerts ||
                           currentOrg?.autoModeAlerts?.filter(
@@ -1766,7 +1839,7 @@ const SettingsHome = () => {
                               variant='ghost'
                               onClick={() => acknowledgeAutoAlert(alert.id)}
                             >
-                              Acknowledge
+                              <LocalizedText text={"Acknowledge"} />
                             </Button>
                           </div>
                         ))}
@@ -1779,17 +1852,21 @@ const SettingsHome = () => {
                   <div className='space-y-4'>
                     <div>
                       <h4 className='flex items-center gap-2 font-medium'>
-                        <Shield className='h-4 w-4' /> Action guardrails
+                        <Shield className='h-4 w-4' />{" "}
+                        <LocalizedText text={"Action guardrails"} />
                       </h4>
                       <p className='text-muted-foreground text-sm'>
-                        Control which autonomous actions need a person and how
-                        much one cycle may use.
+                        <LocalizedText
+                          text={
+                            "Control which autonomous actions need a person and how much one cycle may use."
+                          }
+                        />
                       </p>
                     </div>
                     <div className='grid gap-4 sm:grid-cols-3'>
                       <div className='space-y-2'>
                         <Label htmlFor='approval-policy'>
-                          Require approval
+                          <LocalizedText text={"Require approval"} />
                         </Label>
                         <Select
                           value={
@@ -1812,18 +1889,20 @@ const SettingsHome = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value='destructive'>
-                              Destructive actions
+                              <LocalizedText text={"Destructive actions"} />
                             </SelectItem>
                             <SelectItem value='external'>
-                              All external actions
+                              <LocalizedText text={"All external actions"} />
                             </SelectItem>
-                            <SelectItem value='all'>Every action</SelectItem>
+                            <SelectItem value='all'>
+                              <LocalizedText text={"Every action"} />
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className='space-y-2'>
                         <Label htmlFor='daily-action-limit'>
-                          Daily actions
+                          <LocalizedText text={"Daily actions"} />
                         </Label>
                         <Input
                           id='daily-action-limit'
@@ -1845,7 +1924,7 @@ const SettingsHome = () => {
                       </div>
                       <div className='space-y-2'>
                         <Label htmlFor='run-credit-limit'>
-                          Credits per run
+                          <LocalizedText text={"Credits per run"} />
                         </Label>
                         <Input
                           id='run-credit-limit'
@@ -1873,9 +1952,15 @@ const SettingsHome = () => {
                   <div className='space-y-3'>
                     <div className='flex items-center justify-between'>
                       <div>
-                        <h4 className='font-medium'>Approvals & run history</h4>
+                        <h4 className='font-medium'>
+                          <LocalizedText text={"Approvals & run history"} />
+                        </h4>
                         <p className='text-muted-foreground text-sm'>
-                          The latest governed actions for this organization.
+                          <LocalizedText
+                            text={
+                              "The latest governed actions for this organization."
+                            }
+                          />
                         </p>
                       </div>
                       <Button
@@ -1887,7 +1972,7 @@ const SettingsHome = () => {
                         <RefreshCw
                           className={`mr-2 h-4 w-4 ${loadingRuns ? "animate-spin" : ""}`}
                         />
-                        Refresh
+                        <LocalizedText text={"Refresh"} />
                       </Button>
                     </div>
                     {automationRuns.length === 0 ? (
@@ -1930,7 +2015,7 @@ const SettingsHome = () => {
                                     decideAutomationRun(run._id, "reject")
                                   }
                                 >
-                                  Reject
+                                  <LocalizedText text={"Reject"} />
                                 </Button>
                                 <Button
                                   size='sm'
@@ -1938,7 +2023,7 @@ const SettingsHome = () => {
                                     decideAutomationRun(run._id, "approve")
                                   }
                                 >
-                                  Approve
+                                  <LocalizedText text={"Approve"} />
                                 </Button>
                               </div>
                             )}
@@ -1950,7 +2035,7 @@ const SettingsHome = () => {
                                   decideAutomationRun(run._id, "retry")
                                 }
                               >
-                                Retry
+                                <LocalizedText text={"Retry"} />
                               </Button>
                             )}
                           </div>
@@ -1964,10 +2049,15 @@ const SettingsHome = () => {
                   <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
                     <div>
                       <h4 className='flex items-center gap-2 font-medium'>
-                        <RefreshCw className='h-4 w-4' /> Loop timer
+                        <RefreshCw className='h-4 w-4' />{" "}
+                        <LocalizedText text={"Loop timer"} />
                       </h4>
                       <p className='text-muted-foreground text-sm'>
-                        Choose how often Genit starts a new marketing cycle.
+                        <LocalizedText
+                          text={
+                            "Choose how often Genit starts a new marketing cycle."
+                          }
+                        />
                       </p>
                     </div>
                     <Select
@@ -1988,19 +2078,31 @@ const SettingsHome = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value='10'>Every 10 minutes</SelectItem>
-                        <SelectItem value='30'>Every 30 minutes</SelectItem>
-                        <SelectItem value='60'>Every hour</SelectItem>
-                        <SelectItem value='360'>Every 6 hours</SelectItem>
-                        <SelectItem value='1440'>Every day</SelectItem>
-                        <SelectItem value='10080'>Every week</SelectItem>
+                        <SelectItem value='10'>
+                          <LocalizedText text={"Every 10 minutes"} />
+                        </SelectItem>
+                        <SelectItem value='30'>
+                          <LocalizedText text={"Every 30 minutes"} />
+                        </SelectItem>
+                        <SelectItem value='60'>
+                          <LocalizedText text={"Every hour"} />
+                        </SelectItem>
+                        <SelectItem value='360'>
+                          <LocalizedText text={"Every 6 hours"} />
+                        </SelectItem>
+                        <SelectItem value='1440'>
+                          <LocalizedText text={"Every day"} />
+                        </SelectItem>
+                        <SelectItem value='10080'>
+                          <LocalizedText text={"Every week"} />
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   {currentOrg?.autoModeLastRunAt && (
                     <p className='text-muted-foreground text-xs'>
-                      Last cycle:{" "}
+                      <LocalizedText text={"Last cycle:"} />{" "}
                       {new Date(currentOrg.autoModeLastRunAt).toLocaleString()}
                       {currentOrg.autoModeLastError
                         ? ` · ${currentOrg.autoModeLastError}`
@@ -2008,8 +2110,11 @@ const SettingsHome = () => {
                     </p>
                   )}
                   <p className='text-muted-foreground text-xs'>
-                    Genit Auto analyzes and recommends. Publishing, sending, and
-                    destructive changes follow the guardrails above.
+                    <LocalizedText
+                      text={
+                        "Genit Auto analyzes and recommends. Publishing, sending, and destructive changes follow the guardrails above."
+                      }
+                    />
                   </p>
                 </CardContent>
               </Card>
@@ -2024,7 +2129,7 @@ const SettingsHome = () => {
                       <div className='flex items-start justify-between gap-4'>
                         <div>
                           <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
-                            Current plan
+                            <LocalizedText text={"Current plan"} />
                           </p>
                           <p className='mt-1 text-xl font-semibold text-zinc-950 dark:text-white'>
                             {user?.userPlan || "Basic"}
@@ -2037,7 +2142,7 @@ const SettingsHome = () => {
                           </p>
                         </div>
                         <Badge className='bg-emerald-50 text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-300'>
-                          Active
+                          <LocalizedText text={"Active"} />
                         </Badge>
                       </div>
                     </CardContent>
@@ -2046,20 +2151,20 @@ const SettingsHome = () => {
                     <CardContent className='flex items-center justify-between gap-4 p-5'>
                       <div>
                         <p className='text-xs font-medium text-zinc-500 dark:text-zinc-400'>
-                          Credit balance
+                          <LocalizedText text={"Credit balance"} />
                         </p>
                         <p className='mt-1 text-xl font-semibold text-zinc-950 tabular-nums dark:text-white'>
                           {(user?.creditsRemaining ?? 0).toLocaleString()}
                         </p>
                         <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
-                          Pay what you want from $10.
+                          <LocalizedText text={"Pay what you want from $10."} />
                         </p>
                       </div>
                       <Button
                         onClick={() => setIsTopUpOpen(true)}
                         className='shrink-0 rounded-xl active:scale-[0.97]'
                       >
-                        Top up
+                        <LocalizedText text={"Top up"} />
                       </Button>
                     </CardContent>
                   </Card>
@@ -2069,10 +2174,12 @@ const SettingsHome = () => {
                   <CardHeader className='gap-4 border-b border-zinc-200 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'>
                     <div>
                       <CardTitle className='text-base'>
-                        Billing history
+                        <LocalizedText text={"Billing history"} />
                       </CardTitle>
                       <CardDescription className='mt-1'>
-                        Payments, top-ups, invoices, and receipts.
+                        <LocalizedText
+                          text={"Payments, top-ups, invoices, and receipts."}
+                        />
                       </CardDescription>
                     </div>
                     <Button
@@ -2085,7 +2192,7 @@ const SettingsHome = () => {
                       {openingBillingPortal && (
                         <Loader2 className='mr-2 size-4 animate-spin' />
                       )}
-                      Invoices & receipts
+                      <LocalizedText text={"Invoices & receipts"} />
                     </Button>
                   </CardHeader>
                   <CardContent className='p-0'>
@@ -2095,11 +2202,14 @@ const SettingsHome = () => {
                           <CreditCard className='size-5' />
                         </span>
                         <p className='mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                          No billing activity yet
+                          <LocalizedText text={"No billing activity yet"} />
                         </p>
                         <p className='mt-1 max-w-sm text-sm text-zinc-500 dark:text-zinc-400'>
-                          Completed subscriptions and credit top-ups will appear
-                          here.
+                          <LocalizedText
+                            text={
+                              "Completed subscriptions and credit top-ups will appear here."
+                            }
+                          />
                         </p>
                       </div>
                     ) : (
@@ -2148,7 +2258,7 @@ const SettingsHome = () => {
                                     rel='noreferrer'
                                   >
                                     <Download className='mr-2 size-4' />
-                                    Download
+                                    <LocalizedText text={"Download"} />
                                   </a>
                                 </Button>
                               )}
@@ -2162,9 +2272,15 @@ const SettingsHome = () => {
 
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-                    <CardTitle className='text-base'>Plans & pricing</CardTitle>
+                    <CardTitle className='text-base'>
+                      <LocalizedText text={"Plans & pricing"} />
+                    </CardTitle>
                     <CardDescription>
-                      Upgrade your monthly credit allowance at any time.
+                      <LocalizedText
+                        text={
+                          "Upgrade your monthly credit allowance at any time."
+                        }
+                      />
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='p-3 sm:p-5'>
@@ -2188,10 +2304,12 @@ const SettingsHome = () => {
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
                     <CardTitle className='text-base'>
-                      Account protection
+                      <LocalizedText text={"Account protection"} />
                     </CardTitle>
                     <CardDescription>
-                      Security controls for your Genit account.
+                      <LocalizedText
+                        text={"Security controls for your Genit account."}
+                      />
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='divide-y divide-zinc-200 p-0 dark:divide-white/10'>
@@ -2202,10 +2320,14 @@ const SettingsHome = () => {
                         </span>
                         <div>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                            Login notifications
+                            <LocalizedText text={"Login notifications"} />
                           </p>
                           <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                            Save your preference for account-access alerts.
+                            <LocalizedText
+                              text={
+                                "Save your preference for account-access alerts."
+                              }
+                            />
                           </p>
                         </div>
                       </div>
@@ -2223,14 +2345,20 @@ const SettingsHome = () => {
                         </span>
                         <div>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                            Two-factor authentication
+                            <LocalizedText text={"Two-factor authentication"} />
                           </p>
                           <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                            Additional verification is not available yet.
+                            <LocalizedText
+                              text={
+                                "Additional verification is not available yet."
+                              }
+                            />
                           </p>
                         </div>
                       </div>
-                      <Badge variant='outline'>Coming soon</Badge>
+                      <Badge variant='outline'>
+                        <LocalizedText text={"Coming soon"} />
+                      </Badge>
                     </div>
                     <div className='flex items-center justify-between gap-5 px-5 py-4'>
                       <div className='flex min-w-0 items-start gap-3'>
@@ -2239,14 +2367,20 @@ const SettingsHome = () => {
                         </span>
                         <div>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                            Device sessions
+                            <LocalizedText text={"Device sessions"} />
                           </p>
                           <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
-                            Multi-device session controls are not available yet.
+                            <LocalizedText
+                              text={
+                                "Multi-device session controls are not available yet."
+                              }
+                            />
                           </p>
                         </div>
                       </div>
-                      <Badge variant='outline'>Coming soon</Badge>
+                      <Badge variant='outline'>
+                        <LocalizedText text={"Coming soon"} />
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -2255,11 +2389,14 @@ const SettingsHome = () => {
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
                     <div>
                       <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
-                        Sign out of this device
+                        <LocalizedText text={"Sign out of this device"} />
                       </p>
                       <p className='mt-1 text-sm text-zinc-500 dark:text-zinc-400'>
-                        Signing out will require you to log back in to continue
-                        using genit.
+                        <LocalizedText
+                          text={
+                            "Signing out will require you to log back in to continue using genit."
+                          }
+                        />
                       </p>
                     </div>
                     <Button
@@ -2271,7 +2408,7 @@ const SettingsHome = () => {
                       {isSigningOut ? (
                         <>
                           <LoadingFileLoader size={16} />
-                          Signing out...
+                          <LocalizedText text={"Signing out..."} />
                         </>
                       ) : (
                         "Sign out"
@@ -2284,11 +2421,14 @@ const SettingsHome = () => {
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
                     <div>
                       <p className='text-sm font-medium text-red-900 dark:text-red-200'>
-                        Delete account
+                        <LocalizedText text={"Delete account"} />
                       </p>
                       <p className='mt-1 max-w-xl text-sm text-red-700/80 dark:text-red-300/70'>
-                        Permanently remove your projects, assets, and history.
-                        This cannot be undone.
+                        <LocalizedText
+                          text={
+                            "Permanently remove your projects, assets, and history. This cannot be undone."
+                          }
+                        />
                       </p>
                     </div>
                     <Button
@@ -2301,7 +2441,7 @@ const SettingsHome = () => {
                       {isDeletingAccount ? (
                         <>
                           <LoadingFileLoader size={16} />
-                          Deleting...
+                          <LocalizedText text={"Deleting..."} />
                         </>
                       ) : (
                         "Delete account"

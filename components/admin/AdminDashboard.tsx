@@ -3,6 +3,7 @@
 import { AnalyticsCharts } from "./AnalyticsCharts";
 import { RecentUsersTable } from "./RecentUsersTable";
 import { StatsCards } from "./StatsCards";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -51,7 +52,7 @@ export const AdminDashboard = () => {
       <div className='flex h-[600px] flex-col items-center justify-center gap-4'>
         <LoadingFileLoader size={16} />
         <p className='text-muted-foreground animate-pulse text-sm'>
-          Loading analytics dashboard...
+          <LocalizedText text={"Loading analytics dashboard..."} />
         </p>
       </div>
     );
@@ -63,7 +64,9 @@ export const AdminDashboard = () => {
         <div className='bg-destructive/10 text-destructive mb-6 rounded-full p-4'>
           <AlertCircle className='h-12 w-12' />
         </div>
-        <h2 className='mb-2 text-xl font-bold'>Access Denied</h2>
+        <h2 className='mb-2 text-xl font-bold'>
+          <LocalizedText text={"Access Denied"} />
+        </h2>
         <p className='text-muted-foreground mb-8'>{error}</p>
         <Button
           onClick={fetchDashboardData}
@@ -71,7 +74,7 @@ export const AdminDashboard = () => {
           className='gap-2'
         >
           <RefreshCcw className='h-4 w-4' />
-          Retry
+          <LocalizedText text={"Retry"} />
         </Button>
       </div>
     );
@@ -82,10 +85,12 @@ export const AdminDashboard = () => {
       <div className='mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
           <h1 className='mb-2 text-3xl font-bold tracking-tight'>
-            Admin Overview
+            <LocalizedText text={"Admin Overview"} />
           </h1>
           <p className='text-muted-foreground'>
-            Monitor your platform's growth and user activity.
+            <LocalizedText
+              text={"Monitor your platform's growth and user activity."}
+            />
           </p>
         </div>
         <Button
@@ -95,7 +100,7 @@ export const AdminDashboard = () => {
           className='bg-background/50 gap-2 self-start backdrop-blur-sm'
         >
           <RefreshCcw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh Stats
+          <LocalizedText text={"Refresh Stats"} />
         </Button>
       </div>
 
@@ -111,21 +116,31 @@ export const AdminDashboard = () => {
 
       <div className='from-primary/10 via-background to-background border-primary/20 group relative mt-12 overflow-hidden rounded-3xl border bg-gradient-to-br p-8'>
         <div className='relative z-10'>
-          <h2 className='mb-4 text-2xl font-bold'>Deep Insights</h2>
+          <h2 className='mb-4 text-2xl font-bold'>
+            <LocalizedText text={"Deep Insights"} />
+          </h2>
           <p className='text-muted-foreground mb-6 max-w-2xl'>
-            Your platform is growing. We've detected a significant increase in
+            <LocalizedText
+              text={
+                "Your platform is growing. We've detected a significant increase in"
+              }
+            />
             <strong> {data.overview.content.total.toLocaleString()} </strong>
-            pieces of AI content created. Most users are currently interacting
-            with
+            <LocalizedText
+              text={
+                "pieces of AI content created. Most users are currently interacting with"
+              }
+            />
             <strong> {data.topActivities[0]?.name || "new features"}</strong>.
           </p>
           <div className='flex gap-4'>
             <div className='bg-background/80 border-border/50 rounded-xl border px-4 py-2 text-sm font-medium backdrop-blur-md'>
-              Daily Avg: {Math.round(data.overview.content.total / 30)}{" "}
-              generations
+              <LocalizedText text={"Daily Avg:"} />
+              {Math.round(data.overview.content.total / 30)}{" "}
+              <LocalizedText text={"generations"} />
             </div>
             <div className='bg-background/80 border-border/50 rounded-xl border px-4 py-2 text-sm font-medium backdrop-blur-md'>
-              System Status: Optimal
+              <LocalizedText text={"System Status: Optimal"} />
             </div>
           </div>
         </div>

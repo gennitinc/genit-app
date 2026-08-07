@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -188,11 +190,14 @@ export function GenerationUI({
                   </div>
 
                   <h2 className='bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-400 dark:to-purple-400'>
-                    Creating Your Application
+                    <LocalizedText text={"Creating Your Application"} />
                   </h2>
                   <p className='text-muted-foreground/50 mt-3 max-w-lg text-center'>
-                    Our AI is crafting your custom application with modern
-                    technologies and best practices
+                    <LocalizedText
+                      text={
+                        "Our AI is crafting your custom application with modern technologies and best practices"
+                      }
+                    />
                   </p>
                 </div>
 
@@ -218,7 +223,8 @@ export function GenerationUI({
                             {getStatusMessage()}
                           </h3>
                           <p className='text-muted-foreground/50 text-sm'>
-                            {Math.round(animationProgress)}% complete
+                            {Math.round(animationProgress)}
+                            <LocalizedText text={"% complete"} />
                           </p>
                         </div>
                       </div>
@@ -337,10 +343,12 @@ export function GenerationUI({
                 </div>
                 <div className='space-y-2'>
                   <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
-                    Ready to Create
+                    <LocalizedText text={"Ready to Create"} />
                   </h2>
                   <p className='text-muted-foreground/50'>
-                    Start a conversation to generate your application
+                    <LocalizedText
+                      text={"Start a conversation to generate your application"}
+                    />
                   </p>
                 </div>
               </motion.div>
@@ -361,10 +369,11 @@ export function GenerationUI({
                   </div>
                   <div>
                     <h3 className='text-muted-foreground font-medium'>
-                      Generated Files
+                      <LocalizedText text={"Generated Files"} />
                     </h3>
                     <p className='text-muted-foreground/50 text-xs'>
-                      {generatedFiles.length} files created
+                      {generatedFiles.length}{" "}
+                      <LocalizedText text={"files created"} />
                     </p>
                   </div>
                 </div>
@@ -377,7 +386,9 @@ export function GenerationUI({
                     className='gap-1 bg-blue-600 text-white hover:bg-blue-700'
                   >
                     <Code2 className='h-3.5 w-3.5' />
-                    <span>View Code</span>
+                    <span>
+                      <LocalizedText text={"View Code"} />
+                    </span>
                     <ArrowRight className='h-3.5 w-3.5' />
                   </Button>
                 )}
@@ -400,12 +411,18 @@ export function GenerationUI({
                         {showAllFiles ? (
                           <>
                             <ChevronUp className='h-3.5 w-3.5' />
-                            <span>Show Less</span>
+                            <span>
+                              <LocalizedText text={"Show Less"} />
+                            </span>
                           </>
                         ) : (
                           <>
                             <ChevronDown className='h-3.5 w-3.5' />
-                            <span>Show All {generatedFiles.length} Files</span>
+                            <span>
+                              <LocalizedText text={"Show All"} />
+                              {generatedFiles.length}{" "}
+                              <LocalizedText text={"Files"} />
+                            </span>
                           </>
                         )}
                       </Button>

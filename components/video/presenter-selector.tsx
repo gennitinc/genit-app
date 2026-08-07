@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -412,7 +413,7 @@ export function PresenterSelector({
         <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
       </div>
       <p className='text-xs font-medium text-neutral-600 dark:text-neutral-400'>
-        View More
+        <LocalizedText text={"View More"} />
       </p>
     </button>
   );
@@ -430,7 +431,7 @@ export function PresenterSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          AI Avatar
+          <LocalizedText text={"AI Avatar"} />
         </button>
         {isAuthenticated && (
           <>
@@ -443,7 +444,7 @@ export function PresenterSelector({
                   : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
-              My Avatar
+              <LocalizedText text={"My Avatar"} />
             </button>
             <button
               onClick={() => setActiveTab("upload")}
@@ -454,7 +455,7 @@ export function PresenterSelector({
                   : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
-              Upload
+              <LocalizedText text={"Upload"} />
             </button>
           </>
         )}
@@ -468,7 +469,7 @@ export function PresenterSelector({
             </div>
           ) : presenters.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-              No presenters available
+              <LocalizedText text={"No presenters available"} />
             </div>
           ) : (
             <PresenterGrid
@@ -486,7 +487,7 @@ export function PresenterSelector({
           {!isAuthenticated ? (
             <div className='py-8 text-center'>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                Please sign in to view your avatars
+                <LocalizedText text={"Please sign in to view your avatars"} />
               </p>
             </div>
           ) : loading ? (
@@ -499,7 +500,7 @@ export function PresenterSelector({
               {userPresenters.length > 0 ? (
                 <div>
                   <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    My Avatars
+                    <LocalizedText text={"My Avatars"} />
                   </h4>
                   <PresenterGrid
                     presenters={userPresenters}
@@ -513,7 +514,9 @@ export function PresenterSelector({
               ) : (
                 <div className='py-4 text-center'>
                   <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                    You haven't uploaded any avatars yet
+                    <LocalizedText
+                      text={"You haven't uploaded any avatars yet"}
+                    />
                   </p>
                 </div>
               )}
@@ -527,7 +530,7 @@ export function PresenterSelector({
           {!isAuthenticated ? (
             <div className='py-8 text-center'>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                Please sign in to upload avatars
+                <LocalizedText text={"Please sign in to upload avatars"} />
               </p>
             </div>
           ) : (
@@ -538,10 +541,12 @@ export function PresenterSelector({
                   <Upload className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 </div>
                 <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-                  Upload Your Avatar
+                  <LocalizedText text={"Upload Your Avatar"} />
                 </h4>
                 <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
-                  Select an image to create your custom avatar
+                  <LocalizedText
+                    text={"Select an image to create your custom avatar"}
+                  />
                 </p>
               </div>
 
@@ -561,7 +566,7 @@ export function PresenterSelector({
                     />
                     <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
                       <Upload className='h-4 w-4' />
-                      Select Image
+                      <LocalizedText text={"Select Image"} />
                     </span>
                   </label>
                 </div>
@@ -582,7 +587,7 @@ export function PresenterSelector({
 
                     <div className='space-y-2'>
                       <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                        Avatar Name *
+                        <LocalizedText text={"Avatar Name *"} />
                       </label>
                       <input
                         type='text'
@@ -598,7 +603,7 @@ export function PresenterSelector({
                   {/* Gender Selection */}
                   <div className='space-y-2'>
                     <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                      Gender *
+                      <LocalizedText text={"Gender *"} />
                     </label>
                     <div className='flex gap-2'>
                       <button
@@ -613,7 +618,7 @@ export function PresenterSelector({
                           uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
-                        Male
+                        <LocalizedText text={"Male"} />
                       </button>
                       <button
                         type='button'
@@ -627,7 +632,7 @@ export function PresenterSelector({
                           uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
-                        Female
+                        <LocalizedText text={"Female"} />
                       </button>
                     </div>
                   </div>
@@ -645,7 +650,7 @@ export function PresenterSelector({
                       disabled={uploading}
                       className='flex-1 rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-700 transition-all hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                     >
-                      Cancel
+                      <LocalizedText text={"Cancel"} />
                     </button>
                     <button
                       type='button'
@@ -656,12 +661,12 @@ export function PresenterSelector({
                       {uploading ? (
                         <>
                           <LoadingFileLoader size={16} />
-                          Saving...
+                          <LocalizedText text={"Saving..."} />
                         </>
                       ) : (
                         <>
                           <Upload className='h-4 w-4' />
-                          Save Avatar
+                          <LocalizedText text={"Save Avatar"} />
                         </>
                       )}
                     </button>
@@ -688,7 +693,7 @@ export function PresenterSelector({
               : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
           )}
         >
-          AI Avatar
+          <LocalizedText text={"AI Avatar"} />
         </button>
         {isAuthenticated && (
           <>
@@ -701,7 +706,7 @@ export function PresenterSelector({
                   : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
-              My Avatar
+              <LocalizedText text={"My Avatar"} />
             </button>
             <button
               onClick={() => setActiveTab("upload")}
@@ -712,7 +717,7 @@ export function PresenterSelector({
                   : "border-transparent text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
               )}
             >
-              Upload
+              <LocalizedText text={"Upload"} />
             </button>
           </>
         )}
@@ -722,7 +727,7 @@ export function PresenterSelector({
       {activeTab === "popular" && (
         <div className='space-y-3'>
           <h3 className='text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-            Choose avatar
+            <LocalizedText text={"Choose avatar"} />
           </h3>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
@@ -730,7 +735,7 @@ export function PresenterSelector({
             </div>
           ) : presenters.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
-              No presenters available
+              <LocalizedText text={"No presenters available"} />
             </div>
           ) : (
             <div className='grid grid-cols-4 gap-2'>
@@ -763,7 +768,7 @@ export function PresenterSelector({
           {!isAuthenticated ? (
             <div className='py-4 text-center'>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                Please sign in to view your avatars
+                <LocalizedText text={"Please sign in to view your avatars"} />
               </p>
             </div>
           ) : loading ? (
@@ -776,7 +781,7 @@ export function PresenterSelector({
               {userPresenters.length > 0 ? (
                 <div>
                   <h4 className='mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                    My Avatars
+                    <LocalizedText text={"My Avatars"} />
                   </h4>
                   <div className='grid grid-cols-4 gap-2'>
                     {userPresenters.map((presenter) => {
@@ -804,7 +809,9 @@ export function PresenterSelector({
               ) : (
                 <div className='py-4 text-center'>
                   <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-                    You haven't uploaded any avatars yet
+                    <LocalizedText
+                      text={"You haven't uploaded any avatars yet"}
+                    />
                   </p>
                 </div>
               )}
@@ -818,7 +825,7 @@ export function PresenterSelector({
           {!isAuthenticated ? (
             <div className='py-4 text-center'>
               <p className='mb-4 text-sm text-neutral-500 dark:text-neutral-400'>
-                Please sign in to upload avatars
+                <LocalizedText text={"Please sign in to upload avatars"} />
               </p>
             </div>
           ) : (
@@ -829,10 +836,12 @@ export function PresenterSelector({
                   <Upload className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
                 </div>
                 <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
-                  Upload Your Avatar
+                  <LocalizedText text={"Upload Your Avatar"} />
                 </h4>
                 <p className='mt-1 text-xs text-neutral-500 dark:text-neutral-400'>
-                  Select an image to create your custom avatar
+                  <LocalizedText
+                    text={"Select an image to create your custom avatar"}
+                  />
                 </p>
               </div>
 
@@ -852,7 +861,7 @@ export function PresenterSelector({
                     />
                     <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
                       <Upload className='h-4 w-4' />
-                      Select Image
+                      <LocalizedText text={"Select Image"} />
                     </span>
                   </label>
                 </div>
@@ -873,7 +882,7 @@ export function PresenterSelector({
                     {/* Avatar Name Input */}
                     <div className='space-y-2'>
                       <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                        Avatar Name *
+                        <LocalizedText text={"Avatar Name *"} />
                       </label>
                       <input
                         type='text'
@@ -889,7 +898,7 @@ export function PresenterSelector({
                   {/* Gender Selection */}
                   <div className='space-y-2'>
                     <label className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
-                      Gender *
+                      <LocalizedText text={"Gender *"} />
                     </label>
                     <div className='flex gap-2'>
                       <button
@@ -904,7 +913,7 @@ export function PresenterSelector({
                           uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
-                        Male
+                        <LocalizedText text={"Male"} />
                       </button>
                       <button
                         type='button'
@@ -918,7 +927,7 @@ export function PresenterSelector({
                           uploading && "cursor-not-allowed opacity-50"
                         )}
                       >
-                        Female
+                        <LocalizedText text={"Female"} />
                       </button>
                     </div>
                   </div>
@@ -936,7 +945,7 @@ export function PresenterSelector({
                       disabled={uploading}
                       className='flex-1 rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-700 transition-all hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                     >
-                      Cancel
+                      <LocalizedText text={"Cancel"} />
                     </button>
                     <button
                       type='button'
@@ -947,12 +956,12 @@ export function PresenterSelector({
                       {uploading ? (
                         <>
                           <LoadingFileLoader size={16} />
-                          Saving...
+                          <LocalizedText text={"Saving..."} />
                         </>
                       ) : (
                         <>
                           <Upload className='h-4 w-4' />
-                          Save Avatar
+                          <LocalizedText text={"Save Avatar"} />
                         </>
                       )}
                     </button>
@@ -969,7 +978,9 @@ export function PresenterSelector({
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent className='max-w-3xl'>
             <DialogHeader>
-              <DialogTitle>Select Avatar</DialogTitle>
+              <DialogTitle>
+                <LocalizedText text={"Select Avatar"} />
+              </DialogTitle>
               {/* <DialogDescription>
                 Choose an AI avatar or upload your own
               </DialogDescription> */}
@@ -981,7 +992,9 @@ export function PresenterSelector({
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
           <DrawerContent className='max-h-[85vh]'>
             <DrawerHeader>
-              <DrawerTitle>Select Avatar</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Select Avatar"} />
+              </DrawerTitle>
               {/* <DrawerDescription>
                 Choose an AI avatar or upload your own
               </DrawerDescription> */}

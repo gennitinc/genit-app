@@ -1,6 +1,7 @@
 "use client";
 
 import { FilePreviewTooltip } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -150,10 +151,12 @@ export function FileUpload({
           className='flex items-center gap-2'
         >
           <Paperclip className='h-4 w-4' />
-          Attach Files
+          <LocalizedText text={"Attach Files"} />
         </Button>
         <span className='text-xs text-gray-500'>
-          {files.length}/{maxFiles} files • Max {maxSizeInMB}MB each
+          {files.length}/{maxFiles} <LocalizedText text={"files • Max"} />
+          {maxSizeInMB}
+          <LocalizedText text={"MB each"} />
         </span>
       </div>
 
@@ -176,9 +179,13 @@ export function FileUpload({
           onClick={() => fileInputRef.current?.click()}
         >
           <Paperclip className='mx-auto mb-2 h-8 w-8 text-gray-400' />
-          <p className='font-medium'>Drop files here or click to browse</p>
+          <p className='font-medium'>
+            <LocalizedText text={"Drop files here or click to browse"} />
+          </p>
           <p className='mt-1 text-xs'>
-            Supports images, documents, videos, and audio files
+            <LocalizedText
+              text={"Supports images, documents, videos, and audio files"}
+            />
           </p>
         </div>
       )}
@@ -187,7 +194,8 @@ export function FileUpload({
       {files.length > 0 && (
         <div className='space-y-2'>
           <h4 className='text-sm font-medium text-gray-700'>
-            Attached Files ({files.length})
+            <LocalizedText text={"Attached Files ("} />
+            {files.length})
           </h4>
           <div className='scrollbar-hover grid max-h-48 gap-2 overflow-y-auto'>
             {files.map((file, index) => (
@@ -204,7 +212,8 @@ export function FileUpload({
                       </span>
                     </div>
                     <p className='mt-0.5 text-xs text-gray-500'>
-                      {formatFileSize(file.size)} • Last modified{" "}
+                      {formatFileSize(file.size)}{" "}
+                      <LocalizedText text={"• Last modified"} />{" "}
                       {new Date(file.lastModified).toLocaleDateString()}
                     </p>
                   </div>

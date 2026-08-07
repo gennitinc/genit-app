@@ -8,6 +8,7 @@ import {
   YoutubeBrand,
 } from "./social-icons";
 import { BrandData, SocialPlatform, SocialUrls } from "./types";
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -186,7 +187,7 @@ export function StepImport({
             disabled={!url.trim()}
             className='absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
-            Import
+            <LocalizedText text={"Import"} />
             <ArrowRight className='ml-1 h-4 w-4' />
           </Button>
         </div>
@@ -194,7 +195,7 @@ export function StepImport({
         <div className='my-7 flex items-center gap-4'>
           <div className='h-px flex-1 bg-neutral-200 dark:bg-white/10' />
           <span className='text-xs tracking-widest text-neutral-500 uppercase dark:text-neutral-400'>
-            Or
+            <LocalizedText text={"Or"} />
           </span>
           <div className='h-px flex-1 bg-neutral-200 dark:bg-white/10' />
         </div>
@@ -205,7 +206,7 @@ export function StepImport({
             className='mx-auto inline-flex h-fit w-fit items-center justify-center gap-2 rounded-lg border border-dashed border-cyan-300/30 px-4 py-2 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
             <Plus className='h-5 w-5' />
-            Add brand manually
+            <LocalizedText text={"Add brand manually"} />
           </button>
           {onSkip && (
             <button
@@ -216,7 +217,7 @@ export function StepImport({
               {isSkipping ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Skipping...
+                  <LocalizedText text={"Skipping..."} />
                 </>
               ) : (
                 "Skip for now"
@@ -353,7 +354,7 @@ function ImportingState({ message }: { message: string }) {
     <div className='mx-auto w-full max-w-3xl px-4 pt-16 pb-24'>
       <div className='text-center'>
         <h2 className='mt-4 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:mt-16 dark:text-white'>
-          Reading your brand
+          <LocalizedText text={"Reading your brand"} />
         </h2>
         <p className='mt-3 min-h-[1.5rem] text-neutral-600 transition-all dark:text-neutral-300'>
           {message}
@@ -463,7 +464,9 @@ function ManualSetup({
           <Karaoke text='Tell us about your brand' />
         </h1>
         <p className='onb-animate-in onb-stagger-2 mt-3 text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
-          No website yet? No problem — just add your socials.
+          <LocalizedText
+            text={"No website yet? No problem — just add your socials."}
+          />
         </p>
       </div>
 
@@ -471,7 +474,7 @@ function ManualSetup({
         {/* Logo */}
         <div>
           <Label className='mb-2 block text-neutral-600 dark:text-neutral-300'>
-            Your Logo
+            <LocalizedText text={"Your Logo"} />
           </Label>
           <button
             type='button'
@@ -491,10 +494,10 @@ function ManualSetup({
                   <Upload className='size-5 text-neutral-500 dark:text-neutral-400' />
                 </div>
                 <p className='font-medium text-neutral-900 dark:text-white'>
-                  Upload your logo
+                  <LocalizedText text={"Upload your logo"} />
                 </p>
                 <p className='text-xs text-neutral-500 dark:text-neutral-400'>
-                  PNG, SVG, JPG &middot; max 5MB
+                  <LocalizedText text={"PNG, SVG, JPG &middot; max 5MB"} />
                 </p>
               </>
             )}
@@ -538,9 +541,11 @@ function ManualSetup({
         <div>
           <div className='mb-3 flex items-center justify-between'>
             <Label className='text-neutral-600 dark:text-neutral-300'>
-              Social profiles{" "}
+              <LocalizedText text={"Social profiles"} />{" "}
               <span className='text-neutral-500 dark:text-neutral-400'>
-                (any one if you don&apos;t have a website)
+                <LocalizedText
+                  text={"(any one if you don&apos;t have a website)"}
+                />
               </span>
             </Label>
           </div>
@@ -605,14 +610,14 @@ function ManualSetup({
             onClick={onBack}
             className='flex-1 text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:text-white dark:hover:bg-white/5'
           >
-            ← Back
+            <LocalizedText text={"← Back"} />
           </Button>
           <Button
             onClick={handleContinue}
             disabled={isUploading}
             className='flex-1 bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
-            Continue
+            <LocalizedText text={"Continue"} />
             <ArrowRight className='ml-1 h-4 w-4' />
           </Button>
         </div>

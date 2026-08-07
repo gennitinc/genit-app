@@ -1,6 +1,7 @@
 "use client";
 
 import { HTTP_METHODS, type HttpMethod } from "./automation-types";
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { Globe, Plus, Trash2, X } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
@@ -82,7 +83,7 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Globe className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            HTTP Request
+            <LocalizedText text={"HTTP Request"} />
           </span>
         </div>
         {isEdit && (
@@ -100,7 +101,9 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -114,7 +117,9 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
 
             <div className='flex gap-2'>
               <div className='w-[80px]'>
-                <label className={labelCls}>Method</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Method"} />
+                </label>
                 <select
                   value={data.method || "GET"}
                   onChange={(e) =>
@@ -134,7 +139,9 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
                 </select>
               </div>
               <div className='flex-1'>
-                <label className={labelCls}>URL</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"URL"} />
+                </label>
                 <input
                   type='text'
                   value={data.url || ""}
@@ -150,7 +157,9 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
             {/* Headers */}
             <div className='space-y-1.5'>
               <div className='flex items-center justify-between'>
-                <label className={labelCls}>Headers</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Headers"} />
+                </label>
                 <button
                   onClick={addHeader}
                   className='text-indigo-600 transition-colors hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300'
@@ -196,7 +205,9 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
             {/* Body (only for POST/PUT/PATCH) */}
             {data.method !== "GET" && data.method !== "DELETE" && (
               <div>
-                <label className={labelCls}>Body</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Body"} />
+                </label>
                 <textarea
                   value={data.body || ""}
                   onChange={(e) =>
@@ -233,7 +244,8 @@ export function HttpRequestNode({ id, data }: NodeProps<HttpRequestNodeData>) {
               </div>
               {headers.length > 0 && (
                 <span className='mt-0.5 block pl-8 text-zinc-500 dark:text-neutral-400'>
-                  {headers.length} header{headers.length !== 1 ? "s" : ""}
+                  {headers.length} <LocalizedText text={"header"} />
+                  {headers.length !== 1 ? "s" : ""}
                 </span>
               )}
             </div>

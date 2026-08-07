@@ -1,6 +1,7 @@
 "use client";
 
 import { WobbleCard } from "../ui/wobble-card";
+import { LocalizedText } from "@/components/localized-text";
 import React from "react";
 
 export function HomeInfoGrid() {
@@ -12,11 +13,14 @@ export function HomeInfoGrid() {
       >
         <div className='max-w-xs'>
           <h2 className='text-left text-base font-semibold tracking-[-0.015em] text-balance text-white md:text-xl lg:text-3xl'>
-            Gippity AI powers the entire universe
+            <LocalizedText text={"Gippity AI powers the entire universe"} />
           </h2>
           <p className='mt-4 text-left text-base/6 text-neutral-200'>
-            With over 100,000 mothly active bot users, Gippity AI is the most
-            popular AI platform for developers.
+            <LocalizedText
+              text={
+                "With over 100,000 mothly active bot users, Gippity AI is the most popular AI platform for developers."
+              }
+            />
           </p>
         </div>
         <img
@@ -29,10 +33,14 @@ export function HomeInfoGrid() {
       </WobbleCard>
       <WobbleCard containerClassName='col-span-1 min-h-[300px]'>
         <h2 className='max-w-80 text-left text-base font-semibold tracking-[-0.015em] text-balance text-white md:text-xl lg:text-3xl'>
-          No shirt, no shoes, no weapons.
+          <LocalizedText text={"No shirt, no shoes, no weapons."} />
         </h2>
         <p className='mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200'>
-          If someone yells “stop!”, goes limp, or taps out, the fight is over.
+          <LocalizedText
+            text={
+              "If someone yells “stop!”, goes limp, or taps out, the fight is over."
+            }
+          />
         </p>
       </WobbleCard>
       {/* <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-blue-900 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]">

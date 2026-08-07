@@ -2,6 +2,7 @@
 
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight-new";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
@@ -396,16 +397,18 @@ export default function PricingComponent({
         {!embedded && (
           <div className='animate-fadeInUp text-center'>
             <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-              Choose Your{" "}
+              <LocalizedText text={"Choose Your"} />{" "}
               <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                Plan
+                <LocalizedText text={"Plan"} />
               </span>
             </h1>
             <p
               className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
               style={{ animationDelay: "0.2s" }}
             >
-              Flexible pricing options designed for you.
+              <LocalizedText
+                text={"Flexible pricing options designed for you."}
+              />
             </p>
           </div>
         )}
@@ -453,7 +456,7 @@ export default function PricingComponent({
               htmlFor='pricing-switch'
               className='text-sm text-gray-800 dark:text-neutral-200'
             >
-              Monthly
+              <LocalizedText text={"Monthly"} />
             </label>
             <label
               htmlFor='pricing-switch'
@@ -483,7 +486,7 @@ export default function PricingComponent({
               htmlFor='pricing-switch'
               className='relative text-sm text-gray-800 dark:text-neutral-200'
             >
-              Annually
+              <LocalizedText text={"Annually"} />
               <span className='absolute start-auto -end-10 -top-10 md:-end-28'>
                 <span className='flex items-center'>
                   <svg
@@ -501,7 +504,7 @@ export default function PricingComponent({
                     />
                   </svg>
                   <span className='mt-3 inline-block rounded-full bg-indigo-600 px-2.5 py-1 text-[11px] leading-5 font-semibold whitespace-nowrap text-white uppercase'>
-                    Save 17%
+                    <LocalizedText text={"Save 17%"} />
                   </span>
                 </span>
               </span>
@@ -605,7 +608,7 @@ export default function PricingComponent({
                     </div>
                     {plan.popular && (
                       <div className='rounded-full bg-indigo-600 px-3 py-1 text-xs font-medium text-white shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:bg-indigo-700'>
-                        Popular
+                        <LocalizedText text={"Popular"} />
                       </div>
                     )}
                   </div>
@@ -629,7 +632,7 @@ export default function PricingComponent({
                     <div className='flex items-end'>
                       {plan.monthlyPrice === -1 ? (
                         <span className='text-foreground text-3xl font-medium md:text-4xl'>
-                          Custom
+                          <LocalizedText text={"Custom"} />
                         </span>
                       ) : (
                         <span className='text-foreground text-3xl font-medium md:text-4xl'>

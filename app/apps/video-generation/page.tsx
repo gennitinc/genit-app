@@ -17,6 +17,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Drawer,
   DrawerContent,
@@ -825,7 +826,7 @@ function VideoGenerationPage() {
                       )}
                     >
                       <Video className='h-4 w-4' />
-                      Video
+                      <LocalizedText text={"Video"} />
                     </button>
                     <button
                       type='button'
@@ -851,7 +852,7 @@ function VideoGenerationPage() {
                       )}
                     >
                       <ImageIcon className='h-4 w-4' />
-                      Image
+                      <LocalizedText text={"Image"} />
                     </button>
                   </div>
 
@@ -862,12 +863,16 @@ function VideoGenerationPage() {
                     <DrawerTrigger asChild>
                       <button className='flex h-fit w-fit items-center justify-center gap-2 rounded-sm border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-semibold md:hidden dark:border-neutral-700 dark:bg-neutral-800'>
                         <LayoutDashboard size={16} />
-                        <span>view</span>
+                        <span>
+                          <LocalizedText text={"view"} />
+                        </span>
                       </button>
                     </DrawerTrigger>
                     <DrawerContent className='h-[85vh] px-2'>
                       <DrawerHeader className='px-0'>
-                        <DrawerTitle>Explore & Results</DrawerTitle>
+                        <DrawerTitle>
+                          <LocalizedText text={"Explore & Results"} />
+                        </DrawerTitle>
                       </DrawerHeader>
                       <div className='flex min-h-0 flex-1 flex-col overflow-hidden pb-6'>
                         <div className='hide-scrollbar mb-4 flex shrink-0 gap-2 overflow-x-auto'>
@@ -1023,7 +1028,7 @@ function VideoGenerationPage() {
                             </>
                           ) : (
                             <span className='text-[14px] text-neutral-500'>
-                              Start Frame
+                              <LocalizedText text={"Start Frame"} />
                             </span>
                           )}
                           <input
@@ -1060,7 +1065,7 @@ function VideoGenerationPage() {
                             </>
                           ) : (
                             <span className='text-[14px] text-neutral-500'>
-                              End Frame
+                              <LocalizedText text={"End Frame"} />
                             </span>
                           )}
                           <input
@@ -1125,7 +1130,7 @@ function VideoGenerationPage() {
                     <div className='space-y-2'>
                       <div className='flex items-center justify-between'>
                         <label className='text-sm font-medium'>
-                          Reference Images (Optional)
+                          <LocalizedText text={"Reference Images (Optional)"} />
                         </label>
                       </div>
                       <div className='flex flex-wrap gap-2'>
@@ -1183,7 +1188,9 @@ function VideoGenerationPage() {
                     {generationMode === "image" && (
                       <div className='space-y-2'>
                         <div className='flex items-center justify-between'>
-                          <label className='text-sm font-medium'>Style</label>
+                          <label className='text-sm font-medium'>
+                            <LocalizedText text={"Style"} />
+                          </label>
                         </div>
                         <div className='grid grid-cols-3 gap-2'>
                           {[
@@ -1291,7 +1298,7 @@ function VideoGenerationPage() {
                         </div>
                         <div className='flex items-center justify-between'>
                           <label className='mt-4 text-sm font-medium'>
-                            No of Images
+                            <LocalizedText text={"No of Images"} />
                           </label>
                         </div>
                         <div className='flex w-[40%] items-center gap-1.5 border-t pt-2'>
@@ -1341,7 +1348,7 @@ function VideoGenerationPage() {
 
                         <div className='flex items-center justify-between'>
                           <label className='mt-4 text-sm font-medium'>
-                            Aspect Ratio
+                            <LocalizedText text={"Aspect Ratio"} />
                           </label>
                         </div>
 
@@ -1375,7 +1382,7 @@ function VideoGenerationPage() {
                               <div className='flex items-center gap-2'>
                                 <Video className='text-text-secondary h-4 w-4' />
                                 <span className='text-font-primary text-sm font-medium'>
-                                  Reference Video
+                                  <LocalizedText text={"Reference Video"} />
                                 </span>
                               </div>
                               <div className='flex items-center gap-2'>
@@ -1453,10 +1460,12 @@ function VideoGenerationPage() {
                                     />
                                     <Video className='mb-2 h-8 w-8 text-neutral-400' />
                                     <span className='text-sm font-medium text-neutral-500'>
-                                      Upload reference video
+                                      <LocalizedText
+                                        text={"Upload reference video"}
+                                      />
                                     </span>
                                     <p className='mt-1 text-xs text-neutral-400'>
-                                      Max size: 50MB
+                                      <LocalizedText text={"Max size: 50MB"} />
                                     </p>
                                   </label>
                                 )}
@@ -1475,7 +1484,7 @@ function VideoGenerationPage() {
                               <div className='flex items-center gap-2'>
                                 <Volume2 className='text-text-secondary h-4 w-4' />
                                 <span className='text-font-primary text-sm font-medium'>
-                                  Audio & Voice
+                                  <LocalizedText text={"Audio & Voice"} />
                                 </span>
                               </div>
                               <div className='flex items-center gap-2'>
@@ -1536,7 +1545,7 @@ function VideoGenerationPage() {
                             }
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
-                            Avatar & Presenter
+                            <LocalizedText text={"Avatar & Presenter"} />
                             <ChevronDown
                               size={16}
                               className={cn(
@@ -1566,7 +1575,7 @@ function VideoGenerationPage() {
                             }
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
-                            Resolution & Format
+                            <LocalizedText text={"Resolution & Format"} />
                             <ChevronDown
                               size={16}
                               className={cn(
@@ -1587,7 +1596,7 @@ function VideoGenerationPage() {
                               {generationMode === "video" && (
                                 <div className='border-t pt-2'>
                                   <label className='text-font-primary mb-2 block text-sm font-medium'>
-                                    Duration
+                                    <LocalizedText text={"Duration"} />
                                   </label>
                                   <select
                                     value={duration}
@@ -1596,8 +1605,12 @@ function VideoGenerationPage() {
                                     }
                                     className='bg-background border-neutral-12 w-full rounded-md border px-3 py-2 text-sm'
                                   >
-                                    <option value={4}>4 seconds</option>
-                                    <option value={8}>8 seconds</option>
+                                    <option value={4}>
+                                      <LocalizedText text={"4 seconds"} />
+                                    </option>
+                                    <option value={8}>
+                                      <LocalizedText text={"8 seconds"} />
+                                    </option>
                                     {/* <option value={12}>12 seconds</option>
                                   <option value={16}>16 seconds</option>
                                   <option value={30}>30 seconds</option> */}
@@ -1613,7 +1626,7 @@ function VideoGenerationPage() {
                             onClick={() => toggleSection("advanced")}
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
-                            Advanced Settings
+                            <LocalizedText text={"Advanced Settings"} />
                             <ChevronDown
                               size={16}
                               className={cn(
@@ -1652,10 +1665,12 @@ function VideoGenerationPage() {
                                     </div>
                                     <div>
                                       <p className='text-sm font-medium text-neutral-900 dark:text-white'>
-                                        Fixed Lens
+                                        <LocalizedText text={"Fixed Lens"} />
                                       </p>
                                       <p className='text-xs text-neutral-500 dark:text-neutral-400'>
-                                        Lock camera position
+                                        <LocalizedText
+                                          text={"Lock camera position"}
+                                        />
                                       </p>
                                     </div>
                                   </div>
@@ -1701,10 +1716,12 @@ function VideoGenerationPage() {
                                     </div>
                                     <div>
                                       <p className='text-sm font-medium text-neutral-900 dark:text-white'>
-                                        Include Audio
+                                        <LocalizedText text={"Include Audio"} />
                                       </p>
                                       <p className='text-xs text-neutral-500 dark:text-neutral-400'>
-                                        Add sound to video
+                                        <LocalizedText
+                                          text={"Add sound to video"}
+                                        />
                                       </p>
                                     </div>
                                   </div>
@@ -1761,7 +1778,7 @@ function VideoGenerationPage() {
                             <Sparkles size={16} />
                           )}
                           <span>
-                            Generate{" "}
+                            <LocalizedText text={"Generate"} />{" "}
                             {generationMode === "image" ? "Image" : "Video"}
                           </span>
                         </>

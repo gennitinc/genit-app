@@ -3,6 +3,7 @@
 import { ChartBlock } from "./chart-block";
 import { DraggableBlock } from "./draggable-block";
 import { TiptapEditor } from "./tiptap-editor";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -222,7 +223,7 @@ export function SlideCanvas({
               className='text-destructive focus:text-destructive'
             >
               <Trash2 className='mr-2 h-4 w-4' />
-              Delete Slide
+              <LocalizedText text={"Delete Slide"} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -247,7 +248,9 @@ export function SlideCanvas({
           {slide.blocks.length === 0 && (
             <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
               <p className={cn("text-muted-foreground", themeStyle.text)}>
-                Click "Text" or "Templates" to add content
+                <LocalizedText
+                  text={'Click "Text" or "Templates" to add content'}
+                />
               </p>
             </div>
           )}

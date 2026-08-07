@@ -1,6 +1,7 @@
 "use client";
 
 import { BlogComments } from "./blog-comments";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Drawer,
   DrawerContent,
@@ -169,7 +170,9 @@ export function BlogSocial({
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerContent className='max-h-[85vh] bg-white dark:bg-zinc-950'>
             <DrawerHeader className='sr-only text-left'>
-              <DrawerTitle>Comments</DrawerTitle>
+              <DrawerTitle>
+                <LocalizedText text={"Comments"} />
+              </DrawerTitle>
             </DrawerHeader>
             <div className='scrollbar-hide mx-auto w-full max-w-3xl overflow-y-auto px-4 pb-8'>
               <BlogComments postId={postId} />

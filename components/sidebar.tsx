@@ -1,7 +1,9 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/context/LanguageContext";
 import { Play, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -35,6 +37,7 @@ const knowledgeItems = [
 ];
 
 export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
 
   const toggleItem = (itemId: string) => {
@@ -54,9 +57,13 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
             <div className='flex h-8 w-8 items-center justify-center rounded-full bg-orange-500'>
               <span className='text-sm font-bold text-white'>🧠</span>
             </div>
-            <span className='text-foreground font-semibold'>Boards</span>
+            <span className='text-foreground font-semibold'>
+              <LocalizedText text={"Boards"} />
+            </span>
           </div>
-          <span className='text-muted-foreground text-sm'>Welcome</span>
+          <span className='text-muted-foreground text-sm'>
+            <LocalizedText text={"Welcome"} />
+          </span>
         </div>
 
         {/* Navigation */}
@@ -66,14 +73,14 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
             size='sm'
             className='text-yellow-600 hover:text-yellow-700'
           >
-            ⭐ Affiliate
+            <LocalizedText text={"⭐ Affiliate"} />
           </Button>
           <Button
             variant='ghost'
             size='sm'
             className='text-muted-foreground hover:text-foreground'
           >
-            📚 Learn
+            <LocalizedText text={"📚 Learn"} />
           </Button>
         </div>
       </div>
@@ -83,7 +90,7 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
         <div className='relative'>
           <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
-            placeholder='Search knowledge...'
+            placeholder={t("Search knowledge...")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className='pl-10'
@@ -121,7 +128,7 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
                 </div>
                 <div className='min-w-0 flex-1'>
                   <h3 className='text-foreground mb-1 line-clamp-2 text-sm font-medium'>
-                    {item.title}
+                    {t(item.title)}
                   </h3>
                   <div className='text-muted-foreground flex items-center gap-2 text-xs'>
                     <span className='capitalize'>{item.type}</span>

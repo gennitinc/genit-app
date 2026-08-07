@@ -8,6 +8,7 @@ import {
   YoutubeBrand,
 } from "./social-icons";
 import { BrandData, SocialPlatform } from "./types";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -162,11 +163,13 @@ export function StepBrandDna({
     <div className='mx-auto w-full max-w-6xl px-4 pt-8 pb-16 sm:px-6 lg:px-8'>
       <div className='mb-8 text-center'>
         <h1 className='onb-animate-in onb-stagger-1 mt-4 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl lg:mt-16 dark:text-white'>
-          Your brand, distilled
+          <LocalizedText text={"Your brand, distilled"} />
         </h1>
 
         <p className='onb-animate-in onb-stagger-2 mt-2 text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
-          Review and tweak anything that doesn&apos;t feel right.
+          <LocalizedText
+            text={"Review and tweak anything that doesn&apos;t feel right."}
+          />
         </p>
 
         <div className='mt-8 flex justify-center gap-3'>
@@ -175,14 +178,14 @@ export function StepBrandDna({
             onClick={onBack}
             className='text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:text-white dark:hover:bg-white/5'
           >
-            ← Back
+            <LocalizedText text={"← Back"} />
           </Button>
 
           <Button
             onClick={onContinue}
             className='bg-indigo-600 font-medium text-white hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 md:px-10'
           >
-            Save &amp; Continue
+            <LocalizedText text={"Save &amp; Continue"} />
             <ArrowRight className='ml-1 size-4' />
           </Button>
         </div>
@@ -206,7 +209,9 @@ export function StepBrandDna({
             ) : (
               <div className='flex flex-col items-center gap-1 text-neutral-500'>
                 <ImageIcon className='size-6' />
-                <span className='text-xs'>Upload logo</span>
+                <span className='text-xs'>
+                  <LocalizedText text={"Upload logo"} />
+                </span>
               </div>
             )}
           </button>
@@ -245,7 +250,7 @@ export function StepBrandDna({
           {brand.screenshot ? (
             <div className='hidden w-56 shrink-0 md:block'>
               <Label className='mb-1.5 block text-[10px] tracking-wider text-neutral-500 uppercase'>
-                Source preview
+                <LocalizedText text={"Source preview"} />
               </Label>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -257,7 +262,9 @@ export function StepBrandDna({
           ) : null}
         </div>
         {uploadingLogo && (
-          <p className='mt-3 text-xs text-neutral-500'>Uploading logo…</p>
+          <p className='mt-3 text-xs text-neutral-500'>
+            <LocalizedText text={"Uploading logo…"} />
+          </p>
         )}
       </div>
 
@@ -428,7 +435,7 @@ function FontSelect({
         style={{ fontFamily: value || "inherit" }}
       >
         <option value='' className='bg-white dark:bg-neutral-900'>
-          Select font
+          <LocalizedText text={"Select font"} />
         </option>
         {options.map((f) => (
           <option
@@ -541,7 +548,7 @@ function ChipEditor({
           onClick={add}
           className='h-10 border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-200 hover:text-neutral-900 dark:border-white/15 dark:bg-white/10 dark:bg-white/[0.04] dark:text-white'
         >
-          Add
+          <LocalizedText text={"Add"} />
         </Button>
       </div>
     </div>

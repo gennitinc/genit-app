@@ -5,6 +5,7 @@ import {
   ImageCommunityTab,
   VideoCommunityTab,
 } from "@/components/inspire";
+import { LocalizedText } from "@/components/localized-text";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Compass } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -53,7 +54,7 @@ export default function CommunityComp() {
                 {" "}
                 <Compass />
                 <span className='text-sm font-normal sm:text-base md:text-xl lg:text-2xl'>
-                  Discover
+                  <LocalizedText text={"Discover"} />
                 </span>{" "}
               </div>
 
@@ -62,13 +63,13 @@ export default function CommunityComp() {
                   value='designs'
                   className='flex items-center gap-2'
                 >
-                  Designs
+                  <LocalizedText text={"Designs"} />
                 </TabsTrigger>
                 <TabsTrigger value='video' className='flex items-center gap-2'>
-                  Videos
+                  <LocalizedText text={"Videos"} />
                 </TabsTrigger>
                 <TabsTrigger value='image' className='flex items-center gap-2'>
-                  Images
+                  <LocalizedText text={"Images"} />
                 </TabsTrigger>
               </TabsList>
             </div>

@@ -10,6 +10,7 @@ import {
   SocialUrls,
   emptyBrand,
 } from "./_components/types";
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
@@ -231,7 +232,7 @@ export default function OnboardingPage() {
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
             >
-              Genit
+              <LocalizedText text={"Genit"} />
             </span>
           </Link>
           <div className='flex w-40 items-center gap-2'>

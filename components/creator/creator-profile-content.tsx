@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
   DialogContent,
@@ -355,7 +356,7 @@ function VideoCard({
               className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
             >
               <RefreshCw className='h-3 w-3' />
-              Recreate
+              <LocalizedText text={"Recreate"} />
             </button>
           </div>
         </div>
@@ -529,7 +530,8 @@ export function CreatorProfileContent({
     return (
       <div className='py-12 text-center'>
         <p className='text-neutral-500 dark:text-neutral-400'>
-          No {contentType} published yet
+          <LocalizedText text={"No"} />
+          {contentType} <LocalizedText text={"published yet"} />
         </p>
       </div>
     );
@@ -686,7 +688,7 @@ function ContentDetailContent({
           {/* Prompt */}
           <div>
             <h3 className='mb-1 text-sm font-medium text-neutral-500 dark:text-neutral-400'>
-              Prompt
+              <LocalizedText text={"Prompt"} />
             </h3>
             <div>
               <p
@@ -706,11 +708,13 @@ function ContentDetailContent({
                 >
                   {showFullPrompt ? (
                     <>
-                      View less <ChevronUp className='h-3 w-3' />
+                      <LocalizedText text={"View less"} />
+                      <ChevronUp className='h-3 w-3' />
                     </>
                   ) : (
                     <>
-                      View more <ChevronDown className='h-3 w-3' />
+                      <LocalizedText text={"View more"} />
+                      <ChevronDown className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -755,7 +759,7 @@ function ContentDetailContent({
                 )}
               </div>
               <p className='text-xs text-neutral-500 dark:text-neutral-400'>
-                Creator
+                <LocalizedText text={"Creator"} />
               </p>
             </div>
           </Link>
@@ -801,7 +805,7 @@ function ContentDetailContent({
             className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
             <RefreshCw className='h-4 w-4' />
-            Recreate
+            <LocalizedText text={"Recreate"} />
           </button>
           <button
             type='button'

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -67,18 +68,26 @@ const AutoReplyUpgradeDialog = ({
         <div className='relative z-10 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
           <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
             <CheckCircle2 className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
-            <span className='font-medium'>AI inbox automation</span>
+            <span className='font-medium'>
+              <LocalizedText text={"AI inbox automation"} />
+            </span>
           </div>
           <p className='text-muted-foreground mt-3 text-xs dark:text-white/70'>
-            Let Genit reply to new inbound messages from your connected plugins.
+            <LocalizedText
+              text={
+                "Let Genit reply to new inbound messages from your connected plugins."
+              }
+            />
           </p>
         </div>
 
         <h3 className='text-foreground relative z-10 mt-6 text-xl font-semibold tracking-tight md:text-2xl dark:text-white'>
-          Upgrade to unlock auto-replies
+          <LocalizedText text={"Upgrade to unlock auto-replies"} />
         </h3>
         <p className='text-muted-foreground relative z-10 mt-2 text-sm font-normal dark:text-white/70'>
-          AI auto-replies are available on every paid plan.
+          <LocalizedText
+            text={"AI auto-replies are available on every paid plan."}
+          />
         </p>
 
         <div className='relative z-10 mt-8 flex justify-end gap-3'>
@@ -87,13 +96,13 @@ const AutoReplyUpgradeDialog = ({
             className='border-none bg-transparent text-sm'
             onClick={() => onOpenChange(false)}
           >
-            Cancel
+            <LocalizedText text={"Cancel"} />
           </Button>
           <Button
             className='rounded-sm bg-indigo-600 text-sm text-white hover:bg-indigo-700'
             onClick={() => router.push("/pricing")}
           >
-            Upgrade Now
+            <LocalizedText text={"Upgrade Now"} />
           </Button>
         </div>
       </div>
@@ -329,7 +338,7 @@ export function ManageDialog({
                 <div className='min-w-0'>
                   <DialogHeader className='space-y-0 text-left'>
                     <DialogTitle className='text-lg font-semibold tracking-tight'>
-                      {platformName} connections
+                      {platformName} <LocalizedText text={"connections"} />
                     </DialogTitle>
                     <DialogDescription className='text-xs'>
                       {sortedConnections.length === 0
@@ -345,15 +354,19 @@ export function ManageDialog({
               {showIdentitySection && (
                 <div className='relative z-10 mt-5 rounded-md border border-violet-500/20 bg-violet-500/4 p-3 dark:border-violet-300/20 dark:bg-violet-300/4'>
                   <p className='text-foreground text-xs font-medium'>
-                    Signed in to Meta as{" "}
+                    <LocalizedText text={"Signed in to Meta as"} />{" "}
                     <span className='font-semibold'>
                       {identity?.metaUserName}
                     </span>
                   </p>
                   <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                    This identity is scoped to {platformName} only. Your other
-                    Meta connections (Facebook, Instagram, Meta Ads, WhatsApp)
-                    each have their own independent login.
+                    <LocalizedText text={"This identity is scoped to"} />
+                    {platformName}{" "}
+                    <LocalizedText
+                      text={
+                        "only. Your other Meta connections (Facebook, Instagram, Meta Ads, WhatsApp) each have their own independent login."
+                      }
+                    />
                   </p>
                 </div>
               )}
@@ -363,18 +376,28 @@ export function ManageDialog({
                 {sortedConnections.length === 0 && (
                   <div className='border-border bg-card/60 rounded-md border px-3 py-4 text-center dark:border-white/10 dark:bg-white/5'>
                     <p className='text-foreground text-sm'>
-                      No {label.toLowerCase()}s provisioned for {platformName}.
+                      <LocalizedText text={"No"} />
+                      {label.toLowerCase()}
+                      <LocalizedText text={"s provisioned for"} />
+                      {platformName}.
                     </p>
                     {showIdentitySection ? (
                       <p className='text-muted-foreground mt-1 text-[11px]'>
-                        Your Meta login is authorized, but no usable{" "}
-                        {label.toLowerCase()}s were found on this account. Fix
-                        it on the Meta side and click Connect again, or revoke
-                        Meta access below to start clean.
+                        <LocalizedText
+                          text={"Your Meta login is authorized, but no usable"}
+                        />{" "}
+                        {label.toLowerCase()}
+                        <LocalizedText
+                          text={
+                            "s were found on this account. Fix it on the Meta side and click Connect again, or revoke Meta access below to start clean."
+                          }
+                        />
                       </p>
                     ) : (
                       <p className='text-muted-foreground mt-1 text-[11px]'>
-                        Click Connect from the plugin page to set up{" "}
+                        <LocalizedText
+                          text={"Click Connect from the plugin page to set up"}
+                        />{" "}
                         {platformName}.
                       </p>
                     )}
@@ -416,12 +439,13 @@ export function ManageDialog({
                             {conn.isPrimary && (
                               <span className='inline-flex items-center gap-0.5 rounded bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 ring-1 ring-violet-500/30 dark:text-violet-300'>
                                 <Star className='h-2.5 w-2.5' />
-                                Primary
+                                <LocalizedText text={"Primary"} />
                               </span>
                             )}
                           </div>
                           <p className='text-muted-foreground truncate text-[11px]'>
-                            {label} ID: {conn.accountId}
+                            {label} <LocalizedText text={"ID:"} />
+                            {conn.accountId}
                           </p>
                         </div>
                         <span
@@ -448,16 +472,20 @@ export function ManageDialog({
 
                       {telegramBusinessPending && (
                         <div className='mt-3 rounded-md border border-sky-500/30 bg-sky-500/5 px-3 py-2 text-[11px] text-sky-800 dark:text-sky-200'>
-                          In Telegram, open Settings → Telegram Business →
-                          Chatbots and authorize this bot to read and reply to
-                          customer messages.
+                          <LocalizedText
+                            text={
+                              "In Telegram, open Settings → Telegram Business → Chatbots and authorize this bot to read and reply to customer messages."
+                            }
+                          />
                         </div>
                       )}
 
                       <dl className='mt-3 grid grid-cols-2 gap-2 text-[11px]'>
                         {connectedAt && (
                           <div>
-                            <dt className='text-muted-foreground'>Connected</dt>
+                            <dt className='text-muted-foreground'>
+                              <LocalizedText text={"Connected"} />
+                            </dt>
                             <dd className='text-foreground mt-0.5'>
                               {connectedAt}
                             </dd>
@@ -466,7 +494,7 @@ export function ManageDialog({
                         {expiresAt && (
                           <div>
                             <dt className='text-muted-foreground'>
-                              Token expires
+                              <LocalizedText text={"Token expires"} />
                             </dt>
                             <dd className='text-foreground mt-0.5'>
                               {expiresAt}
@@ -478,7 +506,7 @@ export function ManageDialog({
                       {conn.scopes.length > 0 && (
                         <div className='mt-2.5'>
                           <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>
-                            Scopes
+                            <LocalizedText text={"Scopes"} />
                           </p>
                           <div className='mt-1 flex flex-wrap gap-1'>
                             {conn.scopes.map((s) => (
@@ -497,7 +525,8 @@ export function ManageDialog({
                         (conn.platform !== "pipedream" ||
                           Boolean(
                             conn.metadata?.pipedreamInbox?.replyActionId ||
-                              conn.metadata?.pipedreamInbox?.replyProxyRequest?.url
+                            conn.metadata?.pipedreamInbox?.replyProxyRequest
+                              ?.url
                           )) &&
                         [
                           "instagram",
@@ -513,12 +542,14 @@ export function ManageDialog({
                           <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
                             <div className='min-w-0'>
                               <p className='text-foreground text-xs font-medium'>
-                                AI auto-replies
+                                <LocalizedText text={"AI auto-replies"} />
                               </p>
                               <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                                New inbound messages land in Unified Inbox and
-                                get a Genit AI reply. Turn off for manual admin
-                                response.
+                                <LocalizedText
+                                  text={
+                                    "New inbound messages land in Unified Inbox and get a Genit AI reply. Turn off for manual admin response."
+                                  }
+                                />
                               </p>
                             </div>
                             <Switch
@@ -541,11 +572,16 @@ export function ManageDialog({
                         !conn.metadata?.pipedreamInbox && (
                           <div className='mt-3 rounded-md border border-violet-500/20 bg-violet-500/5 px-3 py-2'>
                             <p className='text-foreground text-xs font-medium'>
-                              Add this plugin to Unified Inbox
+                              <LocalizedText
+                                text={"Add this plugin to Unified Inbox"}
+                              />
                             </p>
                             <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                              Open Chat and ask Genit to connect this plugin&apos;s
-                              incoming-message trigger and reply action.
+                              <LocalizedText
+                                text={
+                                  "Open Chat and ask Genit to connect this plugin&apos;s incoming-message trigger and reply action."
+                                }
+                              />
                             </p>
                             <Button
                               type='button'
@@ -557,7 +593,7 @@ export function ManageDialog({
                                 router.push("/chat");
                               }}
                             >
-                              Set up in Chat
+                              <LocalizedText text={"Set up in Chat"} />
                             </Button>
                           </div>
                         )}
@@ -567,9 +603,13 @@ export function ManageDialog({
                           <div className='flex items-start gap-2'>
                             <AlertTriangle className='mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500' />
                             <p className='text-foreground text-[11px]'>
-                              Scheduled posts targeting this{" "}
-                              {label.toLowerCase()} will stop until you
-                              reconnect.
+                              <LocalizedText
+                                text={"Scheduled posts targeting this"}
+                              />{" "}
+                              {label.toLowerCase()}{" "}
+                              <LocalizedText
+                                text={"will stop until you reconnect."}
+                              />
                             </p>
                           </div>
                         </div>
@@ -586,7 +626,7 @@ export function ManageDialog({
                             className='h-7 px-2 text-[11px]'
                           >
                             <Star className='mr-1 h-3 w-3' />
-                            Make primary
+                            <LocalizedText text={"Make primary"} />
                           </Button>
                         )}
                         {!isConfirming ? (
@@ -598,7 +638,7 @@ export function ManageDialog({
                             className='h-7 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 hover:text-red-700 dark:border-red-400/40 dark:text-red-300'
                           >
                             <Unplug className='mr-1 h-3 w-3' />
-                            Disconnect
+                            <LocalizedText text={"Disconnect"} />
                           </Button>
                         ) : (
                           <>
@@ -613,7 +653,7 @@ export function ManageDialog({
                               disabled={disconnectOne.isPending}
                               className='h-7 px-2 text-[11px]'
                             >
-                              Cancel
+                              <LocalizedText text={"Cancel"} />
                             </Button>
                             <Button
                               type='button'
@@ -640,12 +680,20 @@ export function ManageDialog({
                     <div className='flex items-start justify-between gap-3'>
                       <div>
                         <p className='text-foreground text-xs font-medium'>
-                          Revoke {platformName} access
+                          <LocalizedText text={"Revoke"} />
+                          {platformName} <LocalizedText text={"access"} />
                         </p>
                         <p className='text-muted-foreground mt-1 text-[11px]'>
-                          Removes the Meta login tied to {platformName} and
-                          every {label.toLowerCase()} provisioned under it. Your
-                          other Meta surfaces stay connected.
+                          <LocalizedText
+                            text={"Removes the Meta login tied to"}
+                          />
+                          {platformName} <LocalizedText text={"and every"} />
+                          {label.toLowerCase()}{" "}
+                          <LocalizedText
+                            text={
+                              "provisioned under it. Your other Meta surfaces stay connected."
+                            }
+                          />
                         </p>
                       </div>
                       <Button
@@ -655,13 +703,15 @@ export function ManageDialog({
                         onClick={() => setConfirmIdentityWipe(true)}
                         className='h-7 shrink-0 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 dark:border-red-400/40 dark:text-red-300'
                       >
-                        Revoke
+                        <LocalizedText text={"Revoke"} />
                       </Button>
                     </div>
                   ) : (
                     <div>
                       <p className='text-foreground text-xs font-medium'>
-                        Revoke all {platformName} access on this Meta login?
+                        <LocalizedText text={"Revoke all"} />
+                        {platformName}{" "}
+                        <LocalizedText text={"access on this Meta login?"} />
                       </p>
                       <div className='mt-2 flex justify-end gap-2'>
                         <Button
@@ -675,7 +725,7 @@ export function ManageDialog({
                           disabled={disconnectIdentity.isPending}
                           className='h-7 px-2 text-[11px]'
                         >
-                          Cancel
+                          <LocalizedText text={"Cancel"} />
                         </Button>
                         <Button
                           type='button'
@@ -703,7 +753,7 @@ export function ManageDialog({
                   rel='noreferrer'
                   className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
                 >
-                  {platformName} settings
+                  {platformName} <LocalizedText text={"settings"} />
                   <ExternalLink className='h-3 w-3' />
                 </a>
               ) : (
@@ -711,7 +761,7 @@ export function ManageDialog({
               )}
               <span className='text-muted-foreground inline-flex items-center gap-1 text-[11px]'>
                 <CheckCircle2 className='h-3 w-3' />
-                All tokens encrypted at rest
+                <LocalizedText text={"All tokens encrypted at rest"} />
               </span>
             </div>
           </div>

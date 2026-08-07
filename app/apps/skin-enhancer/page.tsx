@@ -6,6 +6,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { MainContent } from "@/components/layout/main-content";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Compare } from "@/components/ui/compare";
 import { GridPattern } from "@/components/ui/grid-pattern";
@@ -290,7 +291,10 @@ const HistoryCard = ({
           />
           <div className='min-w-0'>
             <p className='text-foreground truncate text-[11px] font-medium'>
-              Realism {job.realismLevel}% · Smoothing {job.beautySmoothing}%
+              <LocalizedText text={"Realism"} />
+              {job.realismLevel}
+              <LocalizedText text={"% · Smoothing"} />
+              {job.beautySmoothing}%
             </p>
             <p className='text-muted-foreground text-[10px]'>
               {new Date(job.createdAt).toLocaleDateString()}
@@ -344,7 +348,7 @@ const HistoryCard = ({
         </div>
       ) : (
         <p className='text-muted-foreground py-2 text-center text-[10px]'>
-          All images deleted
+          <LocalizedText text={"All images deleted"} />
         </p>
       )}
     </div>
@@ -544,16 +548,20 @@ const SkinEnhancerPage = () => {
 
             <div className='animate-fadeInUp mb-10 px-2 text-center md:px-4'>
               <h1 className='text-2xl font-semibold tracking-tight lg:text-4xl'>
-                Skin
+                <LocalizedText text={"Skin"} />
                 <span className='from-primary to-accent ml-1 bg-gradient-to-r bg-clip-text text-transparent'>
-                  Enhancer
+                  <LocalizedText text={"Enhancer"} />
                 </span>
               </h1>
               <p
                 className='text-muted-foreground animate-fadeInUp my-2 text-sm md:text-lg'
                 style={{ animationDelay: "0.2s" }}
               >
-                Achieve professional, true-to-life skin textures in seconds.
+                <LocalizedText
+                  text={
+                    "Achieve professional, true-to-life skin textures in seconds."
+                  }
+                />
               </p>
             </div>
 
@@ -583,10 +591,14 @@ const SkinEnhancerPage = () => {
                       >
                         <div className='pointer-events-none absolute top-4 z-10 space-y-1 px-4 text-center'>
                           <p className='text-foreground text-[10px] font-bold uppercase'>
-                            Skin Preview
+                            <LocalizedText text={"Skin Preview"} />
                           </p>
                           <p className='text-foreground text-[10px]'>
-                            Controls affect AI output, not this preview
+                            <LocalizedText
+                              text={
+                                "Controls affect AI output, not this preview"
+                              }
+                            />
                           </p>
                         </div>
 
@@ -605,7 +617,7 @@ const SkinEnhancerPage = () => {
                               <div className='flex flex-col items-center gap-1'>
                                 <Sparkles className='text-muted-foreground size-5' />
                                 <span className='text-muted-foreground text-[8px] font-bold uppercase'>
-                                  Upload
+                                  <LocalizedText text={"Upload"} />
                                 </span>
                               </div>
                             </label>
@@ -623,8 +635,12 @@ const SkinEnhancerPage = () => {
                         className='mt-1 w-full'
                       >
                         <TabsList className='ml-2 w-fit'>
-                          <TabsTrigger value='upload'>Upload</TabsTrigger>
-                          <TabsTrigger value='controls'>Controls</TabsTrigger>
+                          <TabsTrigger value='upload'>
+                            <LocalizedText text={"Upload"} />
+                          </TabsTrigger>
+                          <TabsTrigger value='controls'>
+                            <LocalizedText text={"Controls"} />
+                          </TabsTrigger>
                         </TabsList>
 
                         {/* Upload Tab */}
@@ -648,7 +664,7 @@ const SkinEnhancerPage = () => {
                                 </span>
                               ) : (
                                 <span className='text-sm text-slate-600 dark:text-slate-300'>
-                                  Upload photo
+                                  <LocalizedText text={"Upload photo"} />
                                 </span>
                               )}
                               <input
@@ -659,7 +675,9 @@ const SkinEnhancerPage = () => {
                                 onChange={handleFileChange}
                               />
                               <p className='mt-2 text-xs font-medium text-slate-400 dark:text-slate-500'>
-                                PNG, JPG and WEBP are Allowed.
+                                <LocalizedText
+                                  text={"PNG, JPG and WEBP are Allowed."}
+                                />
                               </p>
                             </label>
                           </div>
@@ -682,13 +700,13 @@ const SkinEnhancerPage = () => {
                               />
                               {autoMode ? (
                                 <span className='text-foreground text-xs font-normal'>
-                                  Auto (Recommended)
+                                  <LocalizedText text={"Auto (Recommended)"} />
                                 </span>
                               ) : (
                                 <div className='flex items-center gap-2'>
                                   <Settings2 className='text-muted-foreground size-3.5' />
                                   <span className='text-xs'>
-                                    Advanced Controls
+                                    <LocalizedText text={"Advanced Controls"} />
                                   </span>
                                 </div>
                               )}
@@ -696,8 +714,11 @@ const SkinEnhancerPage = () => {
 
                             {autoMode && (
                               <p className='text-muted-foreground text-start text-[10px]'>
-                                AI will use balanced realism settings
-                                automatically.
+                                <LocalizedText
+                                  text={
+                                    "AI will use balanced realism settings automatically."
+                                  }
+                                />
                               </p>
                             )}
 
@@ -721,7 +742,9 @@ const SkinEnhancerPage = () => {
                             {!autoMode && showAdvanced && (
                               <div className='space-y-3 px-2'>
                                 {/* Skin Realism */}
-                                <SectionLabel>Skin Realism</SectionLabel>
+                                <SectionLabel>
+                                  <LocalizedText text={"Skin Realism"} />
+                                </SectionLabel>
                                 <SliderControl
                                   label='Skin Texture'
                                   value={skinTextureIntensity}
@@ -756,7 +779,9 @@ const SkinEnhancerPage = () => {
                                 />
 
                                 {/* Hair */}
-                                <SectionLabel>Hair Details</SectionLabel>
+                                <SectionLabel>
+                                  <LocalizedText text={"Hair Details"} />
+                                </SectionLabel>
                                 <SliderControl
                                   label='Facial Hair Density'
                                   value={facialHairDensity}
@@ -783,7 +808,9 @@ const SkinEnhancerPage = () => {
                                 />
 
                                 {/* Enhancement */}
-                                <SectionLabel>Enhancement</SectionLabel>
+                                <SectionLabel>
+                                  <LocalizedText text={"Enhancement"} />
+                                </SectionLabel>
                                 <SliderControl
                                   label='Beauty Smoothing'
                                   value={beautySmoothing}
@@ -832,7 +859,7 @@ const SkinEnhancerPage = () => {
                                 />
                                 <MessageSquare className='text-muted-foreground size-3' />
                                 <span className='text-foreground text-sm font-normal'>
-                                  Add Prompt
+                                  <LocalizedText text={"Add Prompt"} />
                                 </span>
                               </label>
                             </div>
@@ -882,11 +909,12 @@ const SkinEnhancerPage = () => {
                   <div className='flex h-fit shrink-0 items-center justify-between border-b border-white/5 bg-[#0A0A0A]/50 px-8 py-2 backdrop-blur'>
                     <div className='flex items-center gap-3'>
                       <span className='text-base font-bold text-white'>
-                        Result
+                        <LocalizedText text={"Result"} />
                       </span>
                       {generatedImages.length > 0 && (
                         <span className='rounded-full bg-blue-500/20 px-2 py-0.5 text-[10px] font-medium text-blue-400'>
-                          {generatedImages.length} image
+                          {generatedImages.length}{" "}
+                          <LocalizedText text={"image"} />
                           {generatedImages.length !== 1 ? "s" : ""}
                         </span>
                       )}
@@ -897,7 +925,7 @@ const SkinEnhancerPage = () => {
                       title='View history'
                     >
                       <HistoryIcon className='size-3.5' />
-                      History
+                      <LocalizedText text={"History"} />
                     </button>
                   </div>
 
@@ -911,10 +939,12 @@ const SkinEnhancerPage = () => {
                       </div>
                       <div className='text-center'>
                         <p className='text-sm font-bold text-white'>
-                          Enhancing...
+                          <LocalizedText text={"Enhancing..."} />
                         </p>
                         <p className='mt-1 text-xs text-white/40'>
-                          Applying skin retouching with AI
+                          <LocalizedText
+                            text={"Applying skin retouching with AI"}
+                          />
                         </p>
                       </div>
                     </div>
@@ -935,10 +965,12 @@ const SkinEnhancerPage = () => {
                       </div>
                       <div className='flex flex-col items-center gap-1'>
                         <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
-                          Uploaded Image
+                          <LocalizedText text={"Uploaded Image"} />
                         </p>
                         <p className='text-[10px] text-white/30 italic'>
-                          Adjust controls and hit Enhance
+                          <LocalizedText
+                            text={"Adjust controls and hit Enhance"}
+                          />
                         </p>
                       </div>
                     </div>
@@ -954,10 +986,16 @@ const SkinEnhancerPage = () => {
                       />
                       <div className='flex flex-col items-center gap-1 py-2'>
                         <p className='text-[10px] font-bold tracking-widest text-white/50 uppercase'>
-                          Upload a photo to get started
+                          <LocalizedText
+                            text={"Upload a photo to get started"}
+                          />
                         </p>
                         <p className='text-[10px] text-white/30 italic'>
-                          AI will enhance skin with hyper-realistic detail
+                          <LocalizedText
+                            text={
+                              "AI will enhance skin with hyper-realistic detail"
+                            }
+                          />
                         </p>
                       </div>
                     </div>
@@ -973,7 +1011,7 @@ const SkinEnhancerPage = () => {
               <SheetHeader className='border-border bg-background sticky top-0 z-10 border-b px-6 py-4'>
                 <SheetTitle className='flex items-center gap-2 font-normal'>
                   <HistoryIcon className='size-4' />
-                  History
+                  <LocalizedText text={"History"} />
                 </SheetTitle>
               </SheetHeader>
 
@@ -986,10 +1024,12 @@ const SkinEnhancerPage = () => {
                   <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
                     <HistoryIcon className='text-muted-foreground/30 size-10' />
                     <p className='text-muted-foreground text-sm'>
-                      No history yet.
+                      <LocalizedText text={"No history yet."} />
                     </p>
                     <p className='text-muted-foreground text-xs'>
-                      Enhance a photo to see results here.
+                      <LocalizedText
+                        text={"Enhance a photo to see results here."}
+                      />
                     </p>
                   </div>
                 ) : (

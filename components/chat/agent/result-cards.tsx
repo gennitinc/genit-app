@@ -5,6 +5,7 @@ import {
   AutomationNodeCreatedCard,
   AutomationNodesConnectedCard,
 } from "./automation-cards";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -104,7 +105,9 @@ export function SocialPostPublishedCard({ data }: { data: any }) {
       )}
       {url && (
         <div className='mt-3'>
-          <ExternalLinkInline href={url}>Open post</ExternalLinkInline>
+          <ExternalLinkInline href={url}>
+            <LocalizedText text={"Open post"} />
+          </ExternalLinkInline>
         </div>
       )}
     </AgentCard>
@@ -131,7 +134,9 @@ export function PostListCard({ data }: { data: any }) {
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No {label}s found.
+          <LocalizedText text={"No"} />
+          {label}
+          <LocalizedText text={"s found."} />
         </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
@@ -150,7 +155,7 @@ export function PostListCard({ data }: { data: any }) {
                   <ExternalLinkInline
                     href={p.permalink_url || p.permalink || p.url}
                   >
-                    Open
+                    <LocalizedText text={"Open"} />
                   </ExternalLinkInline>
                 </div>
               )}
@@ -172,7 +177,9 @@ export function CommentsListCard({ data }: { data: any }) {
       meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No comments.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          <LocalizedText text={"No comments."} />
+        </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 5).map((c, i) => (
@@ -227,7 +234,7 @@ export function InsightsCard({ data }: { data: any }) {
     >
       {entries.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No metrics returned.
+          <LocalizedText text={"No metrics returned."} />
         </div>
       ) : (
         <dl className='grid grid-cols-2 gap-x-4 gap-y-3'>
@@ -283,7 +290,7 @@ export function EmailListCard({ data }: { data: any }) {
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          Inbox is clear.
+          <LocalizedText text={"Inbox is clear."} />
         </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
@@ -335,7 +342,9 @@ export function DriveFilesCard({ data }: { data: any }) {
       meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No files.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          <LocalizedText text={"No files."} />
+        </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((f, i) => (
@@ -386,7 +395,9 @@ export function CampaignListCard({ data }: { data: any }) {
       meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No campaigns.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          <LocalizedText text={"No campaigns."} />
+        </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((c, i) => (
@@ -426,7 +437,9 @@ export function ContactListCard({ data }: { data: any }) {
       meta={data?.account}
     >
       {items.length === 0 ? (
-        <div className='text-muted-foreground text-[12.5px]'>No contacts.</div>
+        <div className='text-muted-foreground text-[12.5px]'>
+          <LocalizedText text={"No contacts."} />
+        </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
           {items.slice(0, 6).map((c, i) => (
@@ -678,7 +691,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
               className='border-primary/30 text-primary flex h-7 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5'
             >
               <LayoutGrid className='h-3 w-3' />
-              View
+              <LocalizedText text={"View"} />
             </Button>
           )}
           <Button
@@ -704,7 +717,8 @@ export function GeneratedDesignCard({ data }: { data: any }) {
                 : "Publish"}
           </Button>
           <ExternalLinkInline href={getFullUrl(data.url)}>
-            Open {isVideo ? "Video" : "Image"}
+            <LocalizedText text={"Open"} />
+            {isVideo ? "Video" : "Image"}
           </ExternalLinkInline>
         </div>
       )}
@@ -727,7 +741,7 @@ export function DesignInspirationCard({ data }: { data: any }) {
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No inspirations found.
+          <LocalizedText text={"No inspirations found."} />
         </div>
       ) : (
         <div className='mt-2'>
@@ -849,7 +863,7 @@ export function GtmLeadsCard({ data }: { data: any }) {
     >
       {leads.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No leads found.
+          <LocalizedText text={"No leads found."} />
         </div>
       ) : (
         <ul className='divide-border/70 -mx-3.5 -my-3 divide-y dark:divide-white/10'>
@@ -881,8 +895,11 @@ export function GtmOutboundCard({ data }: { data: any }) {
       tone='success'
     >
       <p className='text-muted-foreground text-[12.5px]'>
-        Personalized sequence jobs were queued. Suppressed, unsubscribed, and
-        invalid leads were skipped.
+        <LocalizedText
+          text={
+            "Personalized sequence jobs were queued. Suppressed, unsubscribed, and invalid leads were skipped."
+          }
+        />
       </p>
     </AgentCard>
   );
@@ -933,7 +950,7 @@ export function GtmOptimizerCard({ data }: { data: any }) {
     >
       {recommendations.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
-          No new recommendations.
+          <LocalizedText text={"No new recommendations."} />
         </div>
       ) : (
         <ul className='space-y-2'>
@@ -983,7 +1000,7 @@ export function GtmPdfReportCard({ data }: { data: any }) {
               onClick={showPreview}
             >
               <ExternalLink className='h-3 w-3' />
-              View
+              <LocalizedText text={"View"} />
             </Button>
             <Button
               asChild
@@ -993,7 +1010,7 @@ export function GtmPdfReportCard({ data }: { data: any }) {
             >
               <a href={url} download>
                 <Download className='h-3 w-3' />
-                Download
+                <LocalizedText text={"Download"} />
               </a>
             </Button>
           </>
@@ -1037,7 +1054,7 @@ export function ResearchReportCard({ data }: { data: any }) {
             onClick={showPreview}
           >
             <ExternalLink className='h-3 w-3' />
-            View report
+            <LocalizedText text={"View report"} />
           </Button>
         )}
         {pdfUrl && (
@@ -1049,7 +1066,7 @@ export function ResearchReportCard({ data }: { data: any }) {
           >
             <a href={pdfUrl} download={report?.fileName}>
               <Download className='h-3 w-3' />
-              Download PDF
+              <LocalizedText text={"Download PDF"} />
             </a>
           </Button>
         )}
@@ -1094,7 +1111,7 @@ export function DocumentArtifactCard({ data }: { data: any }) {
             onClick={showPreview}
           >
             <ExternalLink className='h-3 w-3' />
-            View
+            <LocalizedText text={"View"} />
           </Button>
         )}
         {fileUrl && (
@@ -1106,7 +1123,7 @@ export function DocumentArtifactCard({ data }: { data: any }) {
           >
             <a href={fileUrl} download={artifact?.fileName}>
               <Download className='h-3 w-3' />
-              Download
+              <LocalizedText text={"Download"} />
             </a>
           </Button>
         )}
@@ -1133,7 +1150,8 @@ export function DocumentListCard({ data }: { data: any }) {
               {artifact.title}
             </span>
             <span className='text-muted-foreground shrink-0 text-[11px] uppercase'>
-              {artifact.format} · v{artifact.version}
+              {artifact.format} <LocalizedText text={"· v"} />
+              {artifact.version}
             </span>
           </li>
         ))}

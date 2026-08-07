@@ -1,6 +1,7 @@
 "use client";
 
 import { AgentCard } from "./agent-card";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
 import { AUTOMATION_PREVIEW_ID } from "@/lib/chat-preview";
@@ -16,8 +17,8 @@ import {
   GitBranch,
   Globe,
   Image,
-  Link2,
   LayoutGrid,
+  Link2,
   Mail,
   MessageSquare,
   Mic,
@@ -238,7 +239,9 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
       icon={<span className='text-foreground'>{config.icon}</span>}
       title={
         <span className='flex items-center gap-1.5'>
-          <span>Node added</span>
+          <span>
+            <LocalizedText text={"Node added"} />
+          </span>
           <span className='text-muted-foreground font-normal'>·</span>
           <span className={"text-foreground"}>{config.label}</span>
         </span>
@@ -272,7 +275,7 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
           onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
         >
           <LayoutGrid className='h-3 w-3' />
-          View canvas
+          <LocalizedText text={"View canvas"} />
         </Button>
       </div>
     </AgentCard>
@@ -318,7 +321,7 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
           onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
         >
           <LayoutGrid className='h-3 w-3' />
-          View canvas
+          <LocalizedText text={"View canvas"} />
         </Button>
       </div>
     </AgentCard>

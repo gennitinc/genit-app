@@ -3,6 +3,7 @@
 import { IntegrationsExplorer } from "@/app/integrations/integrations-explorer";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import { Toaster } from "@/components/ui/toaster";
 import { ArrowRight, Code, Plus } from "lucide-react";
 
@@ -23,20 +24,22 @@ export default function PluginPage() {
               <div className='mr-auto ml-auto max-w-4xl pt-12 pr-4 pb-20 pl-4 sm:px-6 lg:px-8'>
                 <div className='mb-10 text-left'>
                   <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
-                    Plugin
+                    <LocalizedText text={"Plugin"} />
                   </h1>
                   <p className='mt-2 text-sm text-zinc-500 sm:text-base dark:text-zinc-400'>
-                    Work with Genit across your favorite tools
+                    <LocalizedText
+                      text={"Work with Genit across your favorite tools"}
+                    />
                   </p>
                 </div>
                 <IntegrationsExplorer />
                 <section className='mt-12'>
                   <div className='mb-4'>
                     <h3 className='text-foreground text-lg font-semibold tracking-tight'>
-                      Developers
+                      <LocalizedText text={"Developers"} />
                     </h3>
                     <p className='text-muted-foreground mt-0.5 text-xs'>
-                      Build custom agents
+                      <LocalizedText text={"Build custom agents"} />
                     </p>
                   </div>
 
@@ -48,13 +51,16 @@ export default function PluginPage() {
                         </div>
 
                         <h3 className='text-foreground text-sm font-semibold'>
-                          Custom Agent
+                          <LocalizedText text={"Custom Agent"} />
                         </h3>
                       </div>
 
                       <p className='text-muted-foreground mt-2 text-xs leading-relaxed'>
-                        Build and deploy AI agents with full SDK control and
-                        plugin hooks.
+                        <LocalizedText
+                          text={
+                            "Build and deploy AI agents with full SDK control and plugin hooks."
+                          }
+                        />
                       </p>
 
                       <div className='mt-3 flex items-center justify-between'>
@@ -62,12 +68,12 @@ export default function PluginPage() {
                           href='#'
                           className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
                         >
-                          SDK Coming soon
+                          <LocalizedText text={"SDK Coming soon"} />
                           <ArrowRight className='h-3 w-3' />
                         </a>
 
                         <span className='text-muted-foreground text-[10px]'>
-                          SDK
+                          <LocalizedText text={"SDK"} />
                         </span>
                       </div>
                     </div>
@@ -75,19 +81,21 @@ export default function PluginPage() {
                 </section>
                 <div className='mt-12 text-center'>
                   <p className='text-muted-foreground mb-4 text-sm'>
-                    Need another plugin?
+                    <LocalizedText text={"Need another plugin?"} />
                   </p>
                   <button className='border-border bg-card/60 text-foreground hover:bg-accent inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10'>
                     <Plus className='h-4 w-4' />
-                    Request plugin
+                    <LocalizedText text={"Request plugin"} />
                   </button>
                   <p className='text-muted-foreground mt-6 text-xs'>
-                    Need to disconnect or delete your data?{" "}
+                    <LocalizedText
+                      text={"Need to disconnect or delete your data?"}
+                    />{" "}
                     <a
                       href='/plugin/removal-instructions'
                       className='text-foreground underline-offset-4 hover:underline'
                     >
-                      Removal instructions
+                      <LocalizedText text={"Removal instructions"} />
                     </a>
                     .
                   </p>

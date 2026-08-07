@@ -1,4 +1,5 @@
 "use client";
+
 import { Navbar } from "./navbar";
 import { Button } from "./ui/button";
 import {
@@ -10,6 +11,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import { FloatingSidebar } from "@/floating-sidebar";
 import { trackEvent, trackFeatureUsed } from "@/lib/mixpanelClient";
@@ -1486,10 +1488,12 @@ const GenittWorkflow = ({
           <DialogHeader>
             <DialogTitle className='flex items-center gap-2 text-2xl font-bold'>
               <PlusCircle className='text-primary h-6 w-6' />
-              Workflow Engine
+              <LocalizedText text={"Workflow Engine"} />
             </DialogTitle>
             <DialogDescription>
-              Create a new workflow project or open existing one.
+              <LocalizedText
+                text={"Create a new workflow project or open existing one."}
+              />
             </DialogDescription>
           </DialogHeader>
 
@@ -1499,7 +1503,7 @@ const GenittWorkflow = ({
             </div>
             <div className='space-y-2'>
               <label className='text-muted-foreground px-1 text-sm font-medium'>
-                New Project Name
+                <LocalizedText text={"New Project Name"} />
               </label>
               <div className='flex space-x-2'>
                 <Input
@@ -1524,7 +1528,7 @@ const GenittWorkflow = ({
               </div>
               <div className='relative flex justify-center text-xs'>
                 <span className='bg-background text-muted-foreground rounded-sm px-2'>
-                  Or open existing
+                  <LocalizedText text={"Or open existing"} />
                 </span>
               </div>
             </div>
@@ -1532,7 +1536,7 @@ const GenittWorkflow = ({
             <div className='space-y-2'>
               <label className='text-muted-foreground flex items-center gap-2 px-1 text-sm font-medium'>
                 <HistoryIcon className='h-4 w-4' />
-                Project History
+                <LocalizedText text={"Project History"} />
               </label>
               <div className='custom-scrollbar mb-6 max-h-[200px] space-y-2 overflow-y-auto pr-1'>
                 {isHistoryLoading ? (
@@ -1557,7 +1561,7 @@ const GenittWorkflow = ({
                             {project.name}
                           </p>
                           <p className='text-muted-foreground text-[10px]'>
-                            Last edited{" "}
+                            <LocalizedText text={"Last edited"} />{" "}
                             {new Date(project.updatedAt).toLocaleDateString()}
                           </p>
                         </div>
@@ -1567,7 +1571,7 @@ const GenittWorkflow = ({
                   ))
                 ) : (
                   <div className='text-muted-foreground border-border rounded-sm border border-dashed py-8 text-center text-sm'>
-                    No existing workflows found.
+                    <LocalizedText text={"No existing workflows found."} />
                   </div>
                 )}
               </div>

@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { apiResponse } from "@/utils/apiResponse";
 import { CircleCheckIcon, XCircleIcon } from "lucide-react";
@@ -60,7 +62,7 @@ export function VerifyPasswordTokenComp() {
         <div className='flex items-center justify-center'>
           <Logo className='h-14 w-14' />
           <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-            Genit
+            <LocalizedText text={"Genit"} />
           </h1>
         </div>
       ) : verifymessage ? (
@@ -71,17 +73,17 @@ export function VerifyPasswordTokenComp() {
               <div className='flex items-center justify-center'>
                 <Logo className='h-14 w-14' />
                 <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                  Genit
+                  <LocalizedText text={"Genit"} />
                 </h1>
               </div>
 
               <div className='space-y-4'>
                 <CircleCheckIcon className='mx-auto h-16 w-16 text-green-500' />
                 <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                  Verified Successfully
+                  <LocalizedText text={"Verified Successfully"} />
                 </h1>
                 <p className='text-sm text-gray-600 dark:text-gray-400'>
-                  You can now update your password.
+                  <LocalizedText text={"You can now update your password."} />
                 </p>
               </div>
 
@@ -90,37 +92,41 @@ export function VerifyPasswordTokenComp() {
                 className='focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
                 prefetch={false}
               >
-                Update Password
+                <LocalizedText text={"Update Password"} />
               </Link>
             </div>
 
             {/* Footer */}
             <div className='mt-8 space-y-3'>
               <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-                This site is protected by reCAPTCHA and subject to the Klip{" "}
+                <LocalizedText
+                  text={
+                    "This site is protected by reCAPTCHA and subject to the Klip"
+                  }
+                />{" "}
                 <a
                   href='#'
                   className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
                 >
-                  Privacy Policy
+                  <LocalizedText text={"Privacy Policy"} />
                 </a>{" "}
                 &{" "}
                 <a
                   href='#'
                   className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
                 >
-                  Terms of Service
+                  <LocalizedText text={"Terms of Service"} />
                 </a>
               </p>
               <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-                ©2026 genit. A product of{" "}
+                <LocalizedText text={"©2026 genit. A product of"} />{" "}
                 <a
                   className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
                   href='#'
                 >
-                  Klip Inc.
+                  <LocalizedText text={"Klip Inc."} />
                 </a>{" "}
-                All rights reserved.
+                <LocalizedText text={"All rights reserved."} />
               </p>
             </div>
           </div>
@@ -137,10 +143,12 @@ export function VerifyPasswordTokenComp() {
               <div className='space-y-4'>
                 <XCircleIcon className='mx-auto h-16 w-16 text-red-500' />
                 <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                  Oops, Link has Expired
+                  <LocalizedText text={"Oops, Link has Expired"} />
                 </h1>
                 <p className='text-sm text-gray-600 dark:text-gray-400'>
-                  You need to request a new verification link.
+                  <LocalizedText
+                    text={"You need to request a new verification link."}
+                  />
                 </p>
               </div>
 
@@ -149,19 +157,21 @@ export function VerifyPasswordTokenComp() {
                 className='focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
                 prefetch={false}
               >
-                Back to Recovery
+                <LocalizedText text={"Back to Recovery"} />
               </Link>
             </div>
 
             {/* Footer */}
             <div className='mt-5 w-full max-w-[26rem] space-y-3'>
               <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-                This site is protected by reCAPTCHA and our{" "}
+                <LocalizedText
+                  text={"This site is protected by reCAPTCHA and our"}
+                />{" "}
                 <a
                   href='#'
                   className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
                 >
-                  Policy
+                  <LocalizedText text={"Policy"} />
                 </a>{" "}
                 {/* &{" "}
                 <a
@@ -172,14 +182,14 @@ export function VerifyPasswordTokenComp() {
                 </a> */}
               </p>
               <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-                ©2026 genit. A product of{" "}
+                <LocalizedText text={"©2026 genit. A product of"} />{" "}
                 <a
                   className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
                   href='#'
                 >
-                  Klip Inc.
+                  <LocalizedText text={"Klip Inc."} />
                 </a>{" "}
-                All rights reserved.
+                <LocalizedText text={"All rights reserved."} />
               </p>
             </div>
           </div>

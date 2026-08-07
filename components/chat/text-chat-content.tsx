@@ -14,6 +14,7 @@ import {
   UserMessage,
   VersioningMessage,
 } from "@/components/chat/messages";
+import { LocalizedText } from "@/components/localized-text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
@@ -365,9 +366,7 @@ export function TextChatContent() {
                     run={item.data}
                     userAvatar={userAvatar}
                     userName={userName}
-                    onCopy={() =>
-                      handleCopyMessage(item.data.text || "")
-                    }
+                    onCopy={() => handleCopyMessage(item.data.text || "")}
                     onLike={() => {
                       // Agent runs don't currently persist reactions server-side;
                       // extend handleLikeToggle when runId-based storage is added.
@@ -540,10 +539,14 @@ export function TextChatContent() {
               <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center'>
                 <div className='mb-8 text-center text-gray-500 dark:text-gray-400'>
                   <p className='mb-2 text-lg font-medium'>
-                    Start a conversation
+                    <LocalizedText text={"Start a conversation"} />
                   </p>
                   <p className='text-sm'>
-                    Ask me anything or describe what you'd like to create
+                    <LocalizedText
+                      text={
+                        "Ask me anything or describe what you'd like to create"
+                      }
+                    />
                   </p>
                 </div>
               </div>

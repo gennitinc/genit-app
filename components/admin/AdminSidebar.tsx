@@ -2,6 +2,7 @@
 
 import { NavUser } from "../layout/nav-user";
 import { AdminNavMain } from "./AdminNavMain";
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import {
   Sidebar,
@@ -46,7 +47,9 @@ export function AdminSidebar({
               state === "collapsed" && !isMobile ? "hidden" : "block"
             )}
           >
-            <span className='text-lg leading-tight font-bold'>Admin</span>
+            <span className='text-lg leading-tight font-bold'>
+              <LocalizedText text={"Admin"} />
+            </span>
           </div>
         </Link>
       </SidebarHeader>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -132,7 +133,7 @@ export function VideoHistoryTab({
         <div className='flex min-h-[60vh] flex-col items-center justify-center'>
           <LoadingFileLoader size={16} />
           <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-            Loading history videos
+            <LocalizedText text={"Loading history videos"} />
           </p>
         </div>
       </section>
@@ -148,10 +149,10 @@ export function VideoHistoryTab({
               <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
             <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
-              No history yet
+              <LocalizedText text={"No history yet"} />
             </h3>
             <p className='text-sm text-neutral-500 dark:text-neutral-400'>
-              Your generated videos will appear here
+              <LocalizedText text={"Your generated videos will appear here"} />
             </p>
           </div>
         </div>
@@ -181,10 +182,15 @@ export function VideoHistoryTab({
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Video</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Video"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this video? This action cannot be
-              undone.
+              <LocalizedText
+                text={
+                  "Are you sure you want to delete this video? This action cannot be undone."
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -192,13 +198,13 @@ export function VideoHistoryTab({
               variant='outline'
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               onClick={handleDelete}
               className='bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
             >
-              Delete
+              <LocalizedText text={"Delete"} />
             </Button>
           </DialogFooter>
         </DialogContent>

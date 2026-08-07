@@ -4,6 +4,7 @@ import {
   CONDITION_OPERATORS,
   type ConditionOperator,
 } from "./automation-types";
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { GitBranch, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
@@ -55,7 +56,7 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <GitBranch className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            Condition
+            <LocalizedText text={"Condition"} />
           </span>
         </div>
         {isEdit && (
@@ -73,7 +74,9 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -86,7 +89,9 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
             </div>
 
             <div>
-              <label className={labelCls}>Field</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Field"} />
+              </label>
               <input
                 type='text'
                 value={data.field || ""}
@@ -99,7 +104,9 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
             </div>
 
             <div>
-              <label className={labelCls}>Operator</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Operator"} />
+              </label>
               <select
                 value={data.operator || "equals"}
                 onChange={(e) =>
@@ -122,7 +129,9 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
             {data.operator !== "is_empty" &&
               data.operator !== "is_not_empty" && (
                 <div>
-                  <label className={labelCls}>Value</label>
+                  <label className={labelCls}>
+                    <LocalizedText text={"Value"} />
+                  </label>
                   <input
                     type='text'
                     value={data.value || ""}
@@ -142,7 +151,8 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
             </h4>
             <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
               <span className='block font-medium text-zinc-800 dark:text-neutral-200'>
-                If {data.field || "…"}
+                <LocalizedText text={"If"} />
+                {data.field || "…"}
               </span>
               <span className='mt-0.5 block truncate text-zinc-500 dark:text-neutral-400'>
                 {operatorLabel} {data.value || ""}
@@ -155,10 +165,10 @@ export function ConditionNode({ id, data }: NodeProps<ConditionNodeData>) {
       {/* Two output handles: True (left) and False (right) */}
       <div className='flex items-center justify-between border-t border-zinc-200 bg-zinc-50/30 px-6 pt-1 pb-3 dark:border-neutral-800/20 dark:bg-neutral-950/10'>
         <span className='font-sans text-[9px] font-semibold tracking-wider text-emerald-500 dark:text-emerald-400'>
-          TRUE
+          <LocalizedText text={"TRUE"} />
         </span>
         <span className='dark:text-red-450 font-sans text-[9px] font-semibold tracking-wider text-red-500'>
-          FALSE
+          <LocalizedText text={"FALSE"} />
         </span>
       </div>
       <Handle

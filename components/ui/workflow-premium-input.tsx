@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea } from "./scroll-area";
 import ShinyText from "./shiny-text";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { enhancePromptText } from "@/lib/prompt-enhancement-api";
@@ -401,7 +402,9 @@ export function WorkflowPremiumInput({
 
       <div className='my-1 flex h-fit items-center justify-between px-4'>
         <div className='flex items-center gap-2'>
-          <label className='text-sm font-medium'>Prompt</label>
+          <label className='text-sm font-medium'>
+            <LocalizedText text={"Prompt"} />
+          </label>
           <div className='bg-border mx-1 h-4 w-px' />
         </div>
         <div className='flex h-fit items-center justify-between px-4'>
@@ -421,12 +424,12 @@ export function WorkflowPremiumInput({
                 <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
                   <span className='text-muted-foreground text-xs'>
-                    {(user?.creditsRemaining ?? 0).toLocaleString()} Credits
-                    left
+                    {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
+                    <LocalizedText text={"Credits left"} />
                   </span>
                 ) : (
                   <span className='text-muted-foreground text-xs'>
-                    Get started for free
+                    <LocalizedText text={"Get started for free"} />
                   </span>
                 )}
               </div>
@@ -438,14 +441,14 @@ export function WorkflowPremiumInput({
                       className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/pricing")}
                     >
-                      Upgrade
+                      <LocalizedText text={"Upgrade"} />
                     </span>
                   ) : (
                     <span
                       className='cursor-pointer text-blue-500 hover:underline'
                       onClick={() => router.push("/user/settings?tab=billing")}
                     >
-                      Buy Credits
+                      <LocalizedText text={"Buy Credits"} />
                     </span>
                   )}
                 </div>
@@ -504,7 +507,9 @@ export function WorkflowPremiumInput({
                 )}
               </button>
             </TooltipTrigger>
-            <TooltipContent side='top'>Enhance with AI</TooltipContent>
+            <TooltipContent side='top'>
+              <LocalizedText text={"Enhance with AI"} />
+            </TooltipContent>
           </Tooltip>
         </div>
 
@@ -604,7 +609,7 @@ export function WorkflowPremiumInput({
             <PopoverTrigger asChild>
               <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
                 <History className='h-3.5 w-3.5 opacity-70' />
-                History
+                <LocalizedText text={"History"} />
               </button>
             </PopoverTrigger>
             <PopoverContent className='w-[320px] p-0' align='start'>
@@ -622,14 +627,18 @@ export function WorkflowPremiumInput({
                     <div className='flex flex-col items-center justify-center gap-2 py-8'>
                       <LoadingFileLoader size={16} />
                       <span className='text-muted-foreground text-[10px]'>
-                        Loading history...
+                        <LocalizedText text={"Loading history..."} />
                       </span>
                     </div>
                   ) : history.length === 0 ? (
                     <div className='flex flex-col items-center justify-center px-4 py-8 text-center'>
                       <History className='text-muted-foreground/20 mb-2 h-8 w-8' />
                       <p className='text-muted-foreground text-[10px]'>
-                        No generation history found for this category.
+                        <LocalizedText
+                          text={
+                            "No generation history found for this category."
+                          }
+                        />
                       </p>
                     </div>
                   ) : (

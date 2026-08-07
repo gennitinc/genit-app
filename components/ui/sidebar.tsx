@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -309,7 +310,9 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
       <PanelLeft />
-      <span className='sr-only'>Toggle Sidebar</span>
+      <span className='sr-only'>
+        <LocalizedText text={"Toggle Sidebar"} />
+      </span>
     </Button>
   );
 });

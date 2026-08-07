@@ -17,14 +17,14 @@ import React from "react";
 
 const CATEGORIES = [
   { id: "home", label: "Home", icon: Home, href: "/visuals" },
-   {
+  {
     id: "posts",
     label: "Posts",
     icon: Layers,
     href: "/visuals/posts",
-  }, 
+  },
   { id: "inbox", label: "Inbox", icon: Inbox, href: "/visuals/inbox" },
-   {
+  {
     id: "calendar",
     label: "Calendar",
     icon: CalendarFold,
@@ -36,7 +36,7 @@ const CATEGORIES = [
     icon: Library,
     href: "/visuals/library",
   },
-   {
+  {
     id: "automation",
     label: "Automation",
     icon: Workflow,

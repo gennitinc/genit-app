@@ -13,6 +13,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
+import { LocalizedText } from "@/components/localized-text";
 import {
   Drawer,
   DrawerContent,
@@ -323,9 +324,9 @@ function ImageGenerationPage() {
           <div className='flex min-h-0 flex-col overflow-hidden px-2 md:h-[calc(100vh-4rem)] md:px-6 lg:px-5'>
             <div className='flex shrink-0 flex-row items-center justify-between gap-2 px-2 py-2'>
               <h1 className='font-bold tracking-tight md:text-2xl lg:hidden lg:text-5xl'>
-                AI Image{" "}
+                <LocalizedText text={"AI Image"} />{" "}
                 <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                  Gen
+                  <LocalizedText text={"Gen"} />
                 </span>
               </h1>
               <Drawer
@@ -335,12 +336,16 @@ function ImageGenerationPage() {
                 <DrawerTrigger asChild>
                   <button className='flex h-fit w-fit items-center justify-center gap-2 rounded-sm border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-semibold md:hidden dark:border-neutral-700 dark:bg-neutral-800'>
                     <LayoutDashboard size={16} />
-                    <span>view</span>
+                    <span>
+                      <LocalizedText text={"view"} />
+                    </span>
                   </button>
                 </DrawerTrigger>
                 <DrawerContent className='h-[85vh] px-2'>
                   <DrawerHeader className='px-0'>
-                    <DrawerTitle>Explore & Results</DrawerTitle>
+                    <DrawerTitle>
+                      <LocalizedText text={"Explore & Results"} />
+                    </DrawerTitle>
                   </DrawerHeader>
                   <div className='flex min-h-0 flex-1 flex-col overflow-hidden pb-6'>
                     <div className='hide-scrollbar mb-4 flex shrink-0 gap-2 overflow-x-auto'>
@@ -450,7 +455,7 @@ function ImageGenerationPage() {
                   <div className='space-y-2'>
                     <div className='flex items-center justify-between'>
                       <label className='text-sm font-medium'>
-                        Reference Images (Optional)
+                        <LocalizedText text={"Reference Images (Optional)"} />
                       </label>
                     </div>
                     <div className='flex flex-wrap gap-2'>
@@ -505,7 +510,9 @@ function ImageGenerationPage() {
 
                   <div className='space-y-2'>
                     <div className='flex items-center justify-between'>
-                      <label className='text-sm font-medium'>Style</label>
+                      <label className='text-sm font-medium'>
+                        <LocalizedText text={"Style"} />
+                      </label>
                     </div>
                     <div className='grid grid-cols-3 gap-2'>
                       {[
@@ -613,7 +620,7 @@ function ImageGenerationPage() {
                     </div>
                     <div className='flex items-center justify-between'>
                       <label className='mt-4 text-sm font-medium'>
-                        No of Images
+                        <LocalizedText text={"No of Images"} />
                       </label>
                     </div>
                     <div className='flex w-[40%] items-center gap-1.5 border-t pt-2'>
@@ -661,7 +668,7 @@ function ImageGenerationPage() {
 
                   <div className='flex items-center justify-between'>
                     <label className='mt-4 text-sm font-medium'>
-                      Aspect Ratio
+                      <LocalizedText text={"Aspect Ratio"} />
                     </label>
                   </div>
                   <div className='grid grid-cols-2 gap-2'>
@@ -689,7 +696,7 @@ function ImageGenerationPage() {
                     ) : (
                       <Wand2 size={16} />
                     )}
-                    Generate Image
+                    <LocalizedText text={"Generate Image"} />
                   </button>
 
                   {/* Mobile Drawer Trigger */}

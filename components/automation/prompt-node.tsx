@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { CircleFadingArrowUp, Sparkles, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
@@ -43,7 +44,7 @@ export function PromptNode({ id, data }: NodeProps<PromptNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <Sparkles className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            AI Prompt
+            <LocalizedText text={"AI Prompt"} />
           </span>
         </div>
         {isEdit && (
@@ -61,7 +62,9 @@ export function PromptNode({ id, data }: NodeProps<PromptNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -74,7 +77,9 @@ export function PromptNode({ id, data }: NodeProps<PromptNodeData>) {
             </div>
 
             <div>
-              <label className={labelCls}>Prompt / Instructions</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Prompt / Instructions"} />
+              </label>
               <textarea
                 value={data.instruction}
                 onChange={(e) =>

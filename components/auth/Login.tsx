@@ -1,5 +1,7 @@
 "use client";
+
 import { AuthMediaCarousel, loginCarouselData } from "./AuthMediaCarousel";
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +14,11 @@ import {
 import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { identifyAndTrackAuth, trackEvent } from "@/lib/mixpanelClient";
-import cookie from "js-cookie";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
 import { apiResponse } from "@/utils/apiResponse";
 import { useGoogleLogin } from "@react-oauth/google";
+import cookie from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -1140,11 +1142,15 @@ export const LoginComp = () => {
             <div className='mt-4 flex items-center justify-center gap-2'>
               <Logo />
               <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                Genit
+                <LocalizedText text={"Genit"} />
               </h1>
             </div>
-            <CardTitle className='text-2xl font-bold'>Welcome back</CardTitle>
-            <CardDescription>Sign in to continue using genit</CardDescription>
+            <CardTitle className='text-2xl font-bold'>
+              <LocalizedText text={"Welcome back"} />
+            </CardTitle>
+            <CardDescription>
+              <LocalizedText text={"Sign in to continue using genit"} />
+            </CardDescription>
           </CardHeader>
           <CardContent className='space-y-2'>
             {/* Social Login Buttons */}
@@ -1181,7 +1187,7 @@ export const LoginComp = () => {
                         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                       ></path>
                     </svg>
-                    Signing in...
+                    <LocalizedText text={"Signing in..."} />
                   </div>
                 ) : (
                   <div className='flex items-center justify-center'>
@@ -1216,7 +1222,9 @@ export const LoginComp = () => {
                         d='M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z'
                       ></path>
                     </svg>
-                    <span>Continue with Google</span>
+                    <span>
+                      <LocalizedText text={"Continue with Google"} />
+                    </span>
                   </div>
                 )}
               </Button>
@@ -1226,7 +1234,7 @@ export const LoginComp = () => {
             <div className='flex items-center'>
               <hr className='flex-grow border-t border-gray-200 dark:border-neutral-900' />
               <span className='px-3 text-sm text-gray-500 dark:text-gray-400'>
-                Or sign up with
+                <LocalizedText text={"Or sign up with"} />
               </span>
               <hr className='flex-grow border-t border-gray-200 dark:border-neutral-900' />
             </div>
@@ -1399,7 +1407,7 @@ export const LoginComp = () => {
                         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                       ></path>
                     </svg>
-                    Signing in...
+                    <LocalizedText text={"Signing in..."} />
                   </div>
                 ) : (
                   "Continue"
@@ -1411,26 +1419,32 @@ export const LoginComp = () => {
             <div className='text-muted-foreground my-4 flex w-full flex-col items-center justify-center gap-4 text-center text-sm'>
               {/* Sign Up Link */}
               <div>
-                <span> Don't have an account? </span>
+                <span>
+                  {" "}
+                  <LocalizedText text={"Don't have an account?"} />
+                </span>
 
                 <Link
                   href='/signup'
                   className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
                   prefetch={false}
                 >
-                  Sign Up
+                  <LocalizedText text={"Sign Up"} />
                 </Link>
               </div>
 
               {/* Forgot Password Link */}
               <div className='text-center'>
-                <span> Forgot password? </span>
+                <span>
+                  {" "}
+                  <LocalizedText text={"Forgot password?"} />
+                </span>
                 <Link
                   href='/recover'
                   className='text-TextLight2 dark:text-TextDark2 text-sm font-medium underline hover:no-underline'
                   prefetch={false}
                 >
-                  recover
+                  <LocalizedText text={"recover"} />
                 </Link>
               </div>
             </div>
@@ -1439,12 +1453,14 @@ export const LoginComp = () => {
 
         <div className='mt-5 w-full max-w-[26rem] space-y-3'>
           <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-            This site is protected by reCAPTCHA and our{" "}
+            <LocalizedText
+              text={"This site is protected by reCAPTCHA and our"}
+            />{" "}
             <a
               href='#'
               className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
             >
-              Policy
+              <LocalizedText text={"Policy"} />
             </a>{" "}
             {/* &{" "}
                 <a
@@ -1455,14 +1471,14 @@ export const LoginComp = () => {
                 </a> */}
           </p>
           <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-            ©2026 genit. A product of{" "}
+            <LocalizedText text={"©2026 genit. A product of"} />{" "}
             <a
               className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
               href='#'
             >
-              Klip Inc.
+              <LocalizedText text={"Klip Inc."} />
             </a>{" "}
-            All rights reserved.
+            <LocalizedText text={"All rights reserved."} />
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type {
@@ -51,7 +52,9 @@ export function ContactDetails({
   return (
     <div className='bg-background flex h-full min-h-0 flex-col overflow-y-auto'>
       <div className='flex h-fit shrink-0 items-center gap-2 border-b px-4 py-2.5'>
-        <h3 className='font-semibold'>Contact details</h3>
+        <h3 className='font-semibold'>
+          <LocalizedText text={"Contact details"} />
+        </h3>
         <Button
           variant='outline'
           size='icon'
@@ -72,7 +75,7 @@ export function ContactDetails({
             className='ml-auto rounded-xl'
             onClick={onCancel}
           >
-            Cancel
+            <LocalizedText text={"Cancel"} />
           </Button>
         )}
       </div>
@@ -121,7 +124,7 @@ export function ContactDetails({
 
         <section className='border-t pt-5'>
           <div className='mb-2 flex items-center gap-2 font-medium'>
-            <Tag className='h-4 w-4' /> Labels
+            <Tag className='h-4 w-4' /> <LocalizedText text={"Labels"} />
           </div>
           {editing ? (
             <Input
@@ -141,12 +144,16 @@ export function ContactDetails({
               ))}
             </div>
           ) : (
-            <p className='text-muted-foreground text-xs'>No labels yet</p>
+            <p className='text-muted-foreground text-xs'>
+              <LocalizedText text={"No labels yet"} />
+            </p>
           )}
         </section>
 
         <section className='border-t pt-5'>
-          <p className='mb-2 font-medium'>Notes</p>
+          <p className='mb-2 font-medium'>
+            <LocalizedText text={"Notes"} />
+          </p>
           {editing ? (
             <textarea
               value={notes}
@@ -162,13 +169,21 @@ export function ContactDetails({
         </section>
 
         <section className='border-t pt-5 text-xs'>
-          <p className='mb-3 font-medium'>Conversation</p>
+          <p className='mb-3 font-medium'>
+            <LocalizedText text={"Conversation"} />
+          </p>
           <div className='text-muted-foreground grid grid-cols-[90px_1fr] gap-2'>
-            <span>Status</span>
+            <span>
+              <LocalizedText text={"Status"} />
+            </span>
             <span className='capitalize'>{conversation.status}</span>
-            <span>Started</span>
+            <span>
+              <LocalizedText text={"Started"} />
+            </span>
             <span>{new Date(conversation.createdAt).toLocaleDateString()}</span>
-            <span>Updated</span>
+            <span>
+              <LocalizedText text={"Updated"} />
+            </span>
             <span>{new Date(conversation.updatedAt).toLocaleString()}</span>
           </div>
         </section>

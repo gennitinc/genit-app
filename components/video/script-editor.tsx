@@ -1,9 +1,17 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Mic, Play, RefreshCw, Sparkles, CircleFadingArrowUp, Volume2 } from "lucide-react";
+import {
+  CircleFadingArrowUp,
+  Mic,
+  Play,
+  RefreshCw,
+  Sparkles,
+  Volume2,
+} from "lucide-react";
 import { useState } from "react";
 
 interface ScriptEditorProps {
@@ -121,12 +129,12 @@ export function ScriptEditor({
               {isGenerating ? (
                 <>
                   <RefreshCw className='mr-2 h-4 w-4 animate-spin' />
-                  Generating...
+                  <LocalizedText text={"Generating..."} />
                 </>
               ) : (
                 <>
                   <Sparkles className='mr-2 h-4 w-4' />
-                  Generate Script
+                  <LocalizedText text={"Generate Script"} />
                 </>
               )}
             </Button>
@@ -177,7 +185,10 @@ export function ScriptEditor({
         </div>
 
         <div className='text-muted-foreground flex items-center gap-4 text-sm'>
-          <span>{duration}s</span>
+          <span>
+            {duration}
+            <LocalizedText text={"s"} />
+          </span>
           <Button
             type='button'
             variant='ghost'
@@ -186,7 +197,7 @@ export function ScriptEditor({
             disabled={!script}
           >
             <Volume2 className='mr-2 h-4 w-4' />
-            Listen
+            <LocalizedText text={"Listen"} />
           </Button>
         </div>
       </div>

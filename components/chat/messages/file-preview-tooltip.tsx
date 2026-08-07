@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { useFilePreview } from "@/hooks/message/use-file-preview";
 import { AlertCircle, FileText, Loader, Play, Volume2 } from "lucide-react";
 import type React from "react";
@@ -46,7 +47,7 @@ export function FilePreviewTooltip({
         <div className='flex items-center justify-center p-4'>
           <Loader className='text-muted-foreground h-6 w-6 animate-spin' />
           <span className='text-muted-foreground ml-2 text-sm'>
-            Loading preview...
+            <LocalizedText text={"Loading preview..."} />
           </span>
         </div>
       );
@@ -65,7 +66,8 @@ export function FilePreviewTooltip({
               onError={() => console.error("Failed to load image preview")}
             />
             <div className='mt-2 text-center text-xs text-gray-500'>
-              {file.name} • {(file.size / 1024 / 1024).toFixed(2)} MB
+              {file.name} • {(file.size / 1024 / 1024).toFixed(2)}{" "}
+              <LocalizedText text={"MB"} />
             </div>
           </div>
         );
@@ -83,8 +85,9 @@ export function FilePreviewTooltip({
               {previewData.content}
             </pre>
             <div className='text-muted-foreground mt-2 text-xs'>
-              {(file.size / 1024).toFixed(1)} KB •{" "}
-              {previewData.content?.split("\n").length} lines
+              {(file.size / 1024).toFixed(1)} <LocalizedText text={"KB •"} />{" "}
+              {previewData.content?.split("\n").length}{" "}
+              <LocalizedText text={"lines"} />
             </div>
           </div>
         );
@@ -100,13 +103,16 @@ export function FilePreviewTooltip({
             </div>
             <div className='rounded border border-red-200 bg-red-50 p-4 text-center'>
               <FileText className='mx-auto mb-2 h-8 w-8 text-red-500' />
-              <p className='text-sm text-red-700'>PDF Document</p>
+              <p className='text-sm text-red-700'>
+                <LocalizedText text={"PDF Document"} />
+              </p>
               <p className='mt-1 text-xs text-red-600'>
-                {(file.size / 1024 / 1024).toFixed(2)} MB
+                {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                <LocalizedText text={"MB"} />
               </p>
             </div>
             <p className='text-muted-foreground mt-2 text-center text-xs'>
-              Click to view full document
+              <LocalizedText text={"Click to view full document"} />
             </p>
           </div>
         );
@@ -127,7 +133,8 @@ export function FilePreviewTooltip({
               </div>
             </div>
             <div className='text-muted-foreground mt-2 text-center text-xs'>
-              {file.name} • {(file.size / 1024 / 1024).toFixed(2)} MB
+              {file.name} • {(file.size / 1024 / 1024).toFixed(2)}{" "}
+              <LocalizedText text={"MB"} />
             </div>
           </div>
         );
@@ -143,9 +150,12 @@ export function FilePreviewTooltip({
             </div>
             <div className='rounded border border-blue-200 bg-blue-50 p-4 text-center'>
               <Volume2 className='mx-auto mb-2 h-8 w-8 text-blue-500' />
-              <p className='text-sm text-blue-700'>Audio File</p>
+              <p className='text-sm text-blue-700'>
+                <LocalizedText text={"Audio File"} />
+              </p>
               <p className='mt-1 text-xs text-blue-600'>
-                {(file.size / 1024 / 1024).toFixed(2)} MB
+                {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                <LocalizedText text={"MB"} />
               </p>
             </div>
             <audio
@@ -173,7 +183,8 @@ export function FilePreviewTooltip({
                   "Preview not available for this file type"}
               </p>
               <p className='text-muted-foreground mt-1 text-xs'>
-                {(file.size / 1024 / 1024).toFixed(2)} MB
+                {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                <LocalizedText text={"MB"} />
               </p>
             </div>
           </div>

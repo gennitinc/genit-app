@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { ArrowRightLeft, Plus, Trash2, X } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
@@ -75,7 +76,7 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           <ArrowRightLeft className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
-            Transform
+            <LocalizedText text={"Transform"} />
           </span>
         </div>
         {isEdit && (
@@ -93,7 +94,9 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
         {isEdit ? (
           <>
             <div>
-              <label className={labelCls}>Title</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Title"} />
+              </label>
               <input
                 type='text'
                 value={data.title}
@@ -107,7 +110,9 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
 
             <div className='space-y-1.5'>
               <div className='flex items-center justify-between'>
-                <label className={labelCls}>Mappings</label>
+                <label className={labelCls}>
+                  <LocalizedText text={"Mappings"} />
+                </label>
                 <button
                   onClick={addMapping}
                   className='hover:text-teal-550 text-teal-600 transition-colors dark:text-teal-400 dark:hover:text-teal-300'
@@ -152,7 +157,9 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
             </div>
 
             <div>
-              <label className={labelCls}>Expression (optional)</label>
+              <label className={labelCls}>
+                <LocalizedText text={"Expression (optional)"} />
+              </label>
               <textarea
                 value={data.expression || ""}
                 onChange={(e) =>
@@ -173,7 +180,8 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
             </h4>
             <div className='text-zinc-650 space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
               <span className='text-zinc-805 block font-medium dark:text-neutral-200'>
-                {mappings.filter((m) => m.key).length} field mapping
+                {mappings.filter((m) => m.key).length}{" "}
+                <LocalizedText text={"field mapping"} />
                 {mappings.filter((m) => m.key).length !== 1 ? "s" : ""}
               </span>
               {data.expression && (

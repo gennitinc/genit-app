@@ -40,7 +40,10 @@ export default async function Pricing() {
     headerList.get("x-vercel-ip-country") ??
     headerList.get("cf-ipcountry") ??
     headerList.get("x-country-code");
-  const pricingCurrency = pricingCurrencyForCountry(country, await getUsdRates());
+  const pricingCurrency = pricingCurrencyForCountry(
+    country,
+    await getUsdRates()
+  );
 
   return (
     <div className='min-h-screen bg-white dark:bg-black'>

@@ -13,6 +13,7 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { LocalizedText } from "@/components/localized-text";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -473,10 +474,14 @@ export default function AutomationPage() {
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
             <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight md:text-3xl'>
-              Brand automations
+              <LocalizedText text={"Brand automations"} />
             </h1>
             <p className='mt-1 max-w-xl text-sm leading-5 text-zinc-500 dark:text-white/55'>
-              Build, monitor, and manage every workflow running for your brand.
+              <LocalizedText
+                text={
+                  "Build, monitor, and manage every workflow running for your brand."
+                }
+              />
             </p>
             <div className='mt-4 flex w-full max-w-xl items-center gap-2'>
               <div className='relative min-w-0 flex-1 sm:max-w-64'>
@@ -498,7 +503,9 @@ export default function AutomationPage() {
                 ) : (
                   <Plus className='h-4 w-4' />
                 )}
-                <span className=''>New </span>
+                <span className=''>
+                  <LocalizedText text={"New"} />
+                </span>
               </Button>
             </div>
           </div>
@@ -512,10 +519,10 @@ export default function AutomationPage() {
                   </div>
                   <div className='min-w-0'>
                     <p className='truncate text-sm font-medium'>
-                      Automation overview
+                      <LocalizedText text={"Automation overview"} />
                     </p>
                     <p className='truncate text-xs text-zinc-500 dark:text-white/50'>
-                      Live workflow status
+                      <LocalizedText text={"Live workflow status"} />
                     </p>
                   </div>
                 </div>
@@ -576,7 +583,7 @@ export default function AutomationPage() {
               ) : (
                 <Plus className='h-3.5 w-3.5' />
               )}
-              Create automation
+              <LocalizedText text={"Create automation"} />
             </Button>
           )}
         </div>
@@ -663,7 +670,7 @@ export default function AutomationPage() {
                     </div>
                   ) : (
                     <div className='flex h-10 items-center justify-center rounded-lg border border-dashed border-zinc-200 text-[10px] text-zinc-500 dark:border-white/10 dark:text-white/40'>
-                      No steps configured
+                      <LocalizedText text={"No steps configured"} />
                     </div>
                   )}
                 </div>
@@ -703,7 +710,9 @@ export default function AutomationPage() {
                     }
                     className='rounded-lg'
                   >
-                    <span>Configure</span>
+                    <span>
+                      <LocalizedText text={"Configure"} />
+                    </span>
                     <ArrowUpRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
                   </Button>
                 </div>
@@ -716,9 +725,15 @@ export default function AutomationPage() {
       {/* Automation Templates */}
       <section className='mt-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <div className='mb-5'>
-          <h2 className='text-base font-semibold'>Templates</h2>
+          <h2 className='text-base font-semibold'>
+            <LocalizedText text={"Templates"} />
+          </h2>
           <p className='mt-0.5 text-xs text-zinc-500 dark:text-white/50'>
-            Start with a pre-built workflow and customize it for your brand.
+            <LocalizedText
+              text={
+                "Start with a pre-built workflow and customize it for your brand."
+              }
+            />
           </p>
         </div>
 
@@ -766,19 +781,27 @@ export default function AutomationPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this automation?</AlertDialogTitle>
+            <AlertDialogTitle>
+              <LocalizedText text={"Delete this automation?"} />
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              "{deleteTarget?.title || "Untitled automation"}" and its workflow
-              will be permanently deleted. This cannot be undone.
+              "{deleteTarget?.title || "Untitled automation"}
+              <LocalizedText
+                text={
+                  '" and its workflow will be permanently deleted. This cannot be undone.'
+                }
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>
+              <LocalizedText text={"Cancel"} />
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
             >
-              Delete automation
+              <LocalizedText text={"Delete automation"} />
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

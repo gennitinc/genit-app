@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Rocket } from "lucide-react";
 
 export default function CampaignsPage() {
@@ -11,10 +12,10 @@ export default function CampaignsPage() {
           <div className='flex w-full items-start justify-between'>
             <div className='flex flex-wrap gap-2'>
               <span className='rounded-full bg-white/15 px-3 py-1 text-xs font-medium tracking-wider text-white/90 uppercase ring-1 ring-white/30 backdrop-blur-sm'>
-                Multi-Channel
+                <LocalizedText text={"Multi-Channel"} />
               </span>
               <span className='rounded-full bg-white/15 px-3 py-1 text-xs font-medium tracking-wider text-white/90 uppercase ring-1 ring-white/30 backdrop-blur-sm'>
-                AI-Powered
+                <LocalizedText text={"AI-Powered"} />
               </span>
             </div>
 
@@ -41,16 +42,19 @@ export default function CampaignsPage() {
           {/* Bottom Left */}
           <div className='mt-auto flex flex-col items-start text-left'>
             <h3 className='font-bricolage text-2xl font-normal tracking-tighter text-white'>
-              Campaigns
+              <LocalizedText text={"Campaigns"} />
             </h3>
 
             <span className='mt-3 rounded-full bg-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white uppercase ring-1 ring-white/30 backdrop-blur-sm'>
-              Coming Soon
+              <LocalizedText text={"Coming Soon"} />
             </span>
 
             <p className='mt-4 max-w-sm text-sm leading-relaxed text-white/85'>
-              Plan, automate, launch, and monitor marketing campaigns across
-              multiple channels.
+              <LocalizedText
+                text={
+                  "Plan, automate, launch, and monitor marketing campaigns across multiple channels."
+                }
+              />
             </p>
           </div>
         </div>

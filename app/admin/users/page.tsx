@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,17 +65,21 @@ export default function UsersPage() {
     <div className='mx-auto max-w-7xl p-8 pb-20'>
       <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
-          <h1 className='text-3xl font-bold tracking-tight'>User Management</h1>
+          <h1 className='text-3xl font-bold tracking-tight'>
+            <LocalizedText text={"User Management"} />
+          </h1>
           <p className='text-muted-foreground mt-1 text-sm'>
-            Manage your platform's user base and their permissions.
+            <LocalizedText
+              text={"Manage your platform's user base and their permissions."}
+            />
           </p>
         </div>
         <div className='flex gap-2'>
           <Button variant='outline' size='sm' className='gap-2'>
-            <Filter className='h-4 w-4' /> Filter
+            <Filter className='h-4 w-4' /> <LocalizedText text={"Filter"} />
           </Button>
           <Button size='sm' className='gap-2'>
-            New User
+            <LocalizedText text={"New User"} />
           </Button>
         </div>
       </div>
@@ -91,7 +96,7 @@ export default function UsersPage() {
             />
           </div>
           <p className='text-muted-foreground ml-auto text-xs font-bold tracking-widest uppercase'>
-            {filteredUsers.length} total users
+            {filteredUsers.length} <LocalizedText text={"total users"} />
           </p>
         </div>
 
@@ -100,19 +105,19 @@ export default function UsersPage() {
             <TableHeader className='bg-muted/30'>
               <TableRow>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  User
+                  <LocalizedText text={"User"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Plan
+                  <LocalizedText text={"Plan"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Status
+                  <LocalizedText text={"Status"} />
                 </TableHead>
                 <TableHead className='py-4 text-xs font-bold tracking-wider uppercase'>
-                  Join Date
+                  <LocalizedText text={"Join Date"} />
                 </TableHead>
                 <TableHead className='py-4 text-right text-xs font-bold tracking-wider uppercase'>
-                  Actions
+                  <LocalizedText text={"Actions"} />
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -169,7 +174,9 @@ export default function UsersPage() {
                     <TableCell>
                       <div className='flex items-center gap-1.5'>
                         <div className='h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' />
-                        <span className='text-xs font-medium'>Active</span>
+                        <span className='text-xs font-medium'>
+                          <LocalizedText text={"Active"} />
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell className='text-muted-foreground text-sm'>
@@ -190,16 +197,21 @@ export default function UsersPage() {
                           align='end'
                           className='border-border w-48 rounded-xl shadow-xl'
                         >
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel>
+                            <LocalizedText text={"Actions"} />
+                          </DropdownMenuLabel>
                           <DropdownMenuItem className='gap-2'>
-                            <UserCheck className='h-4 w-4' /> Edit Profile
+                            <UserCheck className='h-4 w-4' />{" "}
+                            <LocalizedText text={"Edit Profile"} />
                           </DropdownMenuItem>
                           <DropdownMenuItem className='text-primary gap-2'>
-                            <Mail className='h-4 w-4' /> Send Email
+                            <Mail className='h-4 w-4' />{" "}
+                            <LocalizedText text={"Send Email"} />
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className='text-destructive focus:text-destructive gap-2'>
-                            <UserMinus className='h-4 w-4' /> Suspend Account
+                            <UserMinus className='h-4 w-4' />{" "}
+                            <LocalizedText text={"Suspend Account"} />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -210,7 +222,9 @@ export default function UsersPage() {
                 <TableRow>
                   <TableCell colSpan={5} className='h-64 text-center'>
                     <p className='text-muted-foreground'>
-                      No users found matching your search.
+                      <LocalizedText
+                        text={"No users found matching your search."}
+                      />
                     </p>
                   </TableCell>
                 </TableRow>

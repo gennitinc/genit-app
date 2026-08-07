@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Wifi, WifiOff } from "lucide-react";
@@ -84,10 +85,12 @@ export function NetworkStatus({
               <Check className='size-16 text-white' />
             </motion.div>
             <h1 className='mb-4 text-xl font-bold text-green-600 dark:text-green-400'>
-              You&apos;re Back Online!
+              <LocalizedText text={"You&apos;re Back Online!"} />
             </h1>
             <p className='mb-8 text-base text-gray-700 dark:text-gray-300'>
-              Your connection has been restored successfully.
+              <LocalizedText
+                text={"Your connection has been restored successfully."}
+              />
             </p>
             <motion.div
               initial={{ width: 0 }}

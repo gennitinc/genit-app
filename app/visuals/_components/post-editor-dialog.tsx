@@ -10,6 +10,7 @@ import {
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { MediaPicker } from "@/components/admin/MediaPicker";
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -378,7 +379,9 @@ export function PostEditorDialog({
             )}
           </Button>
         </TooltipTrigger>
-        <TooltipContent side='top'>Enhance with AI</TooltipContent>
+        <TooltipContent side='top'>
+          <LocalizedText text={"Enhance with AI"} />
+        </TooltipContent>
       </Tooltip>
     ) : null;
 
@@ -388,9 +391,11 @@ export function PostEditorDialog({
         <div className='grid gap-2'>
           <div className='flex items-center justify-between gap-3'>
             <div>
-              <h3 className='text-sm font-semibold text-white'>Destinations</h3>
+              <h3 className='text-sm font-semibold text-white'>
+                <LocalizedText text={"Destinations"} />
+              </h3>
               <p className='mt-1 text-xs text-zinc-500'>
-                Choose where this post should appear.
+                <LocalizedText text={"Choose where this post should appear."} />
               </p>
             </div>
             <span className='rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold text-zinc-300 ring-1 ring-white/10'>
@@ -448,7 +453,7 @@ export function PostEditorDialog({
         {form.platforms.length > 0 && (
           <div className='hidden gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 lg:grid'>
             <p className='text-[10px] font-semibold tracking-[0.16em] text-zinc-400 uppercase'>
-              Connected accounts
+              <LocalizedText text={"Connected accounts"} />
             </p>
             <div className='space-y-2'>
               {form.platforms.map((platform) => {
@@ -464,7 +469,8 @@ export function PostEditorDialog({
                       <span className='flex h-5 w-5 items-center justify-center rounded bg-white/5 ring-1 ring-white/10'>
                         <PlatformIcon platform={platform} />
                       </span>
-                      {POST_PLATFORM_LABELS[platform]} account
+                      {POST_PLATFORM_LABELS[platform]}{" "}
+                      <LocalizedText text={"account"} />
                     </Label>
                     <Select
                       value={form.integrationIds[platform] || "none"}
@@ -493,7 +499,7 @@ export function PostEditorDialog({
                       </SelectTrigger>
                       <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
                         <SelectItem value='none'>
-                          No connected account
+                          <LocalizedText text={"No connected account"} />
                         </SelectItem>
                         {accounts.map((account) => (
                           <SelectItem key={account._id} value={account._id}>
@@ -512,10 +518,14 @@ export function PostEditorDialog({
           <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
             <div>
               <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
-                YouTube playlist
+                <LocalizedText text={"YouTube playlist"} />
               </p>
               <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
-                Optional. Select an existing playlist or type a new one.
+                <LocalizedText
+                  text={
+                    "Optional. Select an existing playlist or type a new one."
+                  }
+                />
               </p>
             </div>
             <Select
@@ -569,13 +579,17 @@ export function PostEditorDialog({
                 />
               </SelectTrigger>
               <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                <SelectItem value='none'>No playlist</SelectItem>
+                <SelectItem value='none'>
+                  <LocalizedText text={"No playlist"} />
+                </SelectItem>
                 {youtubePlaylists.map((playlist) => (
                   <SelectItem key={playlist.id} value={playlist.id}>
                     {playlist.snippet?.title || playlist.id}
                   </SelectItem>
                 ))}
-                <SelectItem value='custom'>New playlist</SelectItem>
+                <SelectItem value='custom'>
+                  <LocalizedText text={"New playlist"} />
+                </SelectItem>
               </SelectContent>
             </Select>
             {selectedYouTubePlaylistValue === "custom" && (
@@ -608,7 +622,7 @@ export function PostEditorDialog({
                 />
                 <div className='grid gap-2'>
                   <Label className='text-xs font-medium text-zinc-300'>
-                    Playlist visibility
+                    <LocalizedText text={"Playlist visibility"} />
                   </Label>
                   <Select
                     value={form.youtubePlaylistPrivacyStatus}
@@ -623,9 +637,15 @@ export function PostEditorDialog({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                      <SelectItem value='public'>Public</SelectItem>
-                      <SelectItem value='unlisted'>Unlisted</SelectItem>
-                      <SelectItem value='private'>Private</SelectItem>
+                      <SelectItem value='public'>
+                        <LocalizedText text={"Public"} />
+                      </SelectItem>
+                      <SelectItem value='unlisted'>
+                        <LocalizedText text={"Unlisted"} />
+                      </SelectItem>
+                      <SelectItem value='private'>
+                        <LocalizedText text={"Private"} />
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -637,15 +657,17 @@ export function PostEditorDialog({
           <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
             <div>
               <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
-                YouTube video settings
+                <LocalizedText text={"YouTube video settings"} />
               </p>
               <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
-                Upload defaults for this YouTube video.
+                <LocalizedText
+                  text={"Upload defaults for this YouTube video."}
+                />
               </p>
             </div>
             <div className='grid gap-2'>
               <Label className='text-xs font-medium text-zinc-300'>
-                Video visibility
+                <LocalizedText text={"Video visibility"} />
               </Label>
               <Select
                 value={form.youtubePrivacyStatus}
@@ -660,19 +682,25 @@ export function PostEditorDialog({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                  <SelectItem value='public'>Public</SelectItem>
-                  <SelectItem value='unlisted'>Unlisted</SelectItem>
-                  <SelectItem value='private'>Private</SelectItem>
+                  <SelectItem value='public'>
+                    <LocalizedText text={"Public"} />
+                  </SelectItem>
+                  <SelectItem value='unlisted'>
+                    <LocalizedText text={"Unlisted"} />
+                  </SelectItem>
+                  <SelectItem value='private'>
+                    <LocalizedText text={"Private"} />
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className='flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-zinc-950/60 p-3'>
               <div>
                 <Label className='text-xs font-medium text-zinc-200'>
-                  Made for kids
+                  <LocalizedText text={"Made for kids"} />
                 </Label>
                 <p className='mt-1 text-[11px] text-zinc-500'>
-                  Off by default.
+                  <LocalizedText text={"Off by default."} />
                 </p>
               </div>
               <Switch
@@ -719,7 +747,7 @@ export function PostEditorDialog({
             htmlFor='post-content'
             className='text-xs font-medium text-zinc-300'
           >
-            Caption
+            <LocalizedText text={"Caption"} />
           </Label>
           <div className='relative'>
             <Textarea
@@ -737,9 +765,11 @@ export function PostEditorDialog({
         </div>
         <div className='grid gap-2'>
           <div className='flex items-center justify-between gap-3'>
-            <Label className='text-zinc-300'>Media</Label>
+            <Label className='text-zinc-300'>
+              <LocalizedText text={"Media"} />
+            </Label>
             <span className='text-[10px] text-zinc-500'>
-              Images and videos only
+              <LocalizedText text={"Images and videos only"} />
             </span>
           </div>
           <MediaPicker
@@ -790,7 +820,9 @@ export function PostEditorDialog({
         )}
         <div className='grid gap-4 sm:grid-cols-2'>
           <div className='grid gap-2'>
-            <Label className='text-zinc-300'>Status</Label>
+            <Label className='text-zinc-300'>
+              <LocalizedText text={"Status"} />
+            </Label>
             <Select
               value={form.status}
               onValueChange={(value) =>
@@ -801,17 +833,25 @@ export function PostEditorDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='draft'>Draft</SelectItem>
-                <SelectItem value='scheduled'>Scheduled</SelectItem>
-                <SelectItem value='published'>Publish</SelectItem>
-                <SelectItem value='failed'>Failed</SelectItem>
+                <SelectItem value='draft'>
+                  <LocalizedText text={"Draft"} />
+                </SelectItem>
+                <SelectItem value='scheduled'>
+                  <LocalizedText text={"Scheduled"} />
+                </SelectItem>
+                <SelectItem value='published'>
+                  <LocalizedText text={"Publish"} />
+                </SelectItem>
+                <SelectItem value='failed'>
+                  <LocalizedText text={"Failed"} />
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
           {form.status === "scheduled" && (
             <div className='grid gap-2'>
               <Label htmlFor='scheduled-for' className='text-zinc-300'>
-                Publish time
+                <LocalizedText text={"Publish time"} />
               </Label>
               <Input
                 id='scheduled-for'
@@ -836,7 +876,7 @@ export function PostEditorDialog({
         className='text-foreground rounded-md border-none bg-transparent transition-all duration-200'
         onClick={() => onOpenChange(false)}
       >
-        Cancel
+        <LocalizedText text={"Cancel"} />
       </Button>
       <Button
         className='rounded-md bg-indigo-600 px-5 font-medium text-white transition-all duration-200 hover:bg-indigo-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:opacity-50'

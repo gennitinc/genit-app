@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import React, {
   forwardRef,
@@ -491,7 +492,9 @@ export const EventCalendar = forwardRef<
           gridTemplateColumns: `72px repeat(${weekDays.length}, minmax(148px, 1fr))`,
         }}
       >
-        <div className='gcal-all-day-label'>All day</div>
+        <div className='gcal-all-day-label'>
+          <LocalizedText text={"All day"} />
+        </div>
         {weekDays.map((day) => {
           const dayEvents = events.filter(
             (event) => event.allDay && eventIntersectsDay(event, day)

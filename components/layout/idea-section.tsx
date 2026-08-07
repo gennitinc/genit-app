@@ -13,6 +13,7 @@ import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
 import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { PricingDialog } from "@/components/common/pricing-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
@@ -87,7 +89,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export const INTEGRATION_BRANDS = INTEGRATIONS.map(({ name, icon }) => ({
   name,
@@ -377,7 +379,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
         </div>
 
         <span className='mt-3 text-[12px] font-medium whitespace-nowrap text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100'>
-          {item.label}
+          <LocalizedText text={item.label} />
         </span>
       </Link>
 
@@ -417,10 +419,10 @@ const BrandIdentityDialog = ({
           </div>
           <div className='min-w-0'>
             <h3 className='text-foreground truncate text-sm font-semibold'>
-              Brand Identity
+              <LocalizedText text={"Brand Identity"} />
             </h3>
             <p className='text-muted-foreground truncate text-[11px]'>
-              Voice, colors, logo, and brand memory
+              <LocalizedText text={"Voice, colors, logo, and brand memory"} />
             </p>
           </div>
         </div>
@@ -460,6 +462,11 @@ const BrandIdentityDialog = ({
 };
 
 export function IdeaSection() {
+  const { language, t } = useLanguage();
+  const localizedPlaceholders = useMemo(
+    () => PLACEHOLDERS.map(t),
+    [language, t]
+  );
   const {
     attachedFiles,
     setAttachedFiles,
@@ -548,7 +555,7 @@ export function IdeaSection() {
   const router = useRouter();
 
   const placeholderText = useTypewriterEffect({
-    words: PLACEHOLDERS,
+    words: localizedPlaceholders,
     typingSpeed: 40,
     delay: 1000,
   });
@@ -971,7 +978,9 @@ export function IdeaSection() {
             // transition={{ duration: 0.6 }}
           >
             <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
-              <span className='text-xs'>✨ Introducing genit v2</span>
+              <span className='text-xs'>
+                <LocalizedText text={"✨ Introducing genit v2"} />
+              </span>
               <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
 
@@ -992,7 +1001,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Grow without Hiring!
+              <LocalizedText text={"Grow without Hiring!"} />
             </motion.h1>
             {/* <PointerHighlight
                 rectangleClassName='
@@ -1026,8 +1035,11 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              Autonomous AI marketing agents that work 24/7, so you don't have
-              to.
+              <LocalizedText
+                text={
+                  "Autonomous AI marketing agents that work 24/7, so you don't have to."
+                }
+              />
             </motion.p>
           </motion.div>
         </div>
@@ -1100,7 +1112,7 @@ export function IdeaSection() {
                           disabled={isGenerating}
                           aria-label={`Remove ${file.name}`}
                         >
-                          &times;
+                          <LocalizedText text={"&times;"} />
                         </button>
                         {file.type && file.type.startsWith("image/") && (
                           <div className='pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform opacity-0 transition-opacity group-hover:opacity-100'>
@@ -1161,11 +1173,11 @@ export function IdeaSection() {
                           {user ? (
                             <span className='text-muted-foreground text-xs'>
                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
-                              Credits left
+                              <LocalizedText text={"Credits left"} />
                             </span>
                           ) : (
                             <span className='text-muted-foreground text-xs'>
-                              Get started for free
+                              <LocalizedText text={"Get started for free"} />
                             </span>
                           )}
                         </div>
@@ -1197,7 +1209,7 @@ export function IdeaSection() {
                                   : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                               )}
                             >
-                              Chat
+                              <LocalizedText text={"Chat"} />
                             </button>
                             <button
                               type='button'
@@ -1212,7 +1224,7 @@ export function IdeaSection() {
                                   : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                               )}
                             >
-                              Auto
+                              <LocalizedText text={"Auto"} />
                             </button>
                           </div>
 
@@ -1223,7 +1235,7 @@ export function IdeaSection() {
                                   className='cursor-pointer text-blue-500 hover:underline'
                                   onClick={() => router.push("/pricing")}
                                 >
-                                  Upgrade
+                                  <LocalizedText text={"Upgrade"} />
                                 </span>
                               ) : (
                                 <span
@@ -1232,7 +1244,7 @@ export function IdeaSection() {
                                     router.push("/user/settings?tab=billing")
                                   }
                                 >
-                                  Buy Credits
+                                  <LocalizedText text={"Buy Credits"} />
                                 </span>
                               )}
                             </div>
@@ -1314,7 +1326,7 @@ export function IdeaSection() {
                             </button>
                           </TooltipTrigger>
                           <TooltipContent side='top'>
-                            Enhance with AI
+                            <LocalizedText text={"Enhance with AI"} />
                           </TooltipContent>
                         </Tooltip>
                       </div>
@@ -1469,13 +1481,15 @@ export function IdeaSection() {
 
         <section className='relative mt-16 space-y-4 pt-6 pb-10 lg:mt-6'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over {INTEGRATIONS.length}+ marketing{" "}
+            <LocalizedText text={"with over"} />
+            {INTEGRATIONS.length}
+            <LocalizedText text={"+ marketing"} />{" "}
             <Link
               href='/plugin'
               target='_blank'
               className='text-foreground text-sm font-medium underline md:text-base'
             >
-              Plugins
+              <LocalizedText text={"Plugins"} />
             </Link>
           </h2>
           <div className='relative z-10 mx-auto max-w-5xl'>

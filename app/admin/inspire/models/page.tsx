@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -258,14 +259,18 @@ export default function AdminModelsPage() {
     <div className='container mx-auto px-4 py-8'>
       <div className='mb-6 flex items-center justify-between'>
         <div>
-          <h1 className='mb-2 text-3xl font-bold'>Model Management</h1>
+          <h1 className='mb-2 text-3xl font-bold'>
+            <LocalizedText text={"Model Management"} />
+          </h1>
           <p className='text-muted-foreground'>
-            Manage AI models for image and video generation
+            <LocalizedText
+              text={"Manage AI models for image and video generation"}
+            />
           </p>
         </div>
         <Button onClick={handleCreateClick}>
           <Plus className='mr-2 h-4 w-4' />
-          Create Model
+          <LocalizedText text={"Create Model"} />
         </Button>
       </div>
 
@@ -284,18 +289,35 @@ export default function AdminModelsPage() {
             <SelectValue placeholder='Filter by type' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>All Types</SelectItem>
-            <SelectItem value='general'>General (Agent) Models</SelectItem>
-            <SelectItem value='image'>Image Models</SelectItem>
-            <SelectItem value='video'>Video Models</SelectItem>
-            <SelectItem value='audio'>Audio Models</SelectItem>
-            <SelectItem value='text'>Text Models</SelectItem>
-            <SelectItem value='social'>Social Models</SelectItem>
-            <SelectItem value='docs'>Docs Models</SelectItem>
+            <SelectItem value='all'>
+              <LocalizedText text={"All Types"} />
+            </SelectItem>
+            <SelectItem value='general'>
+              <LocalizedText text={"General (Agent) Models"} />
+            </SelectItem>
+            <SelectItem value='image'>
+              <LocalizedText text={"Image Models"} />
+            </SelectItem>
+            <SelectItem value='video'>
+              <LocalizedText text={"Video Models"} />
+            </SelectItem>
+            <SelectItem value='audio'>
+              <LocalizedText text={"Audio Models"} />
+            </SelectItem>
+            <SelectItem value='text'>
+              <LocalizedText text={"Text Models"} />
+            </SelectItem>
+            <SelectItem value='social'>
+              <LocalizedText text={"Social Models"} />
+            </SelectItem>
+            <SelectItem value='docs'>
+              <LocalizedText text={"Docs Models"} />
+            </SelectItem>
           </SelectContent>
         </Select>
         <div className='text-muted-foreground text-sm'>
-          {filteredModels.length} model{filteredModels.length !== 1 ? "s" : ""}
+          {filteredModels.length} <LocalizedText text={"model"} />
+          {filteredModels.length !== 1 ? "s" : ""}
         </div>
       </div>
 
@@ -371,18 +393,19 @@ export default function AdminModelsPage() {
                   </Badge>
                   {model.isDefault && (
                     <Badge variant='default' className='bg-green-500'>
-                      Default
+                      <LocalizedText text={"Default"} />
                     </Badge>
                   )}
                   {model.isPremium && (
                     <Badge variant='default' className='bg-yellow-500'>
-                      Premium
+                      <LocalizedText text={"Premium"} />
                     </Badge>
                   )}
                 </div>
 
                 <p className='text-muted-foreground text-sm'>
-                  ID: {model.modelId}
+                  <LocalizedText text={"ID:"} />
+                  {model.modelId}
                 </p>
 
                 {model.description && (
@@ -392,7 +415,8 @@ export default function AdminModelsPage() {
                 )}
 
                 <div className='text-muted-foreground text-xs'>
-                  Usage: {model.usageCount || 0} times
+                  <LocalizedText text={"Usage:"} />
+                  {model.usageCount || 0} <LocalizedText text={"times"} />
                 </div>
               </div>
             </div>
@@ -404,16 +428,22 @@ export default function AdminModelsPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Create New Model</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Create New Model"} />
+            </DialogTitle>
             <DialogDescription>
-              Add a new AI model for image or video generation
+              <LocalizedText
+                text={"Add a new AI model for image or video generation"}
+              />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='name'>Name *</Label>
+                <Label htmlFor='name'>
+                  <LocalizedText text={"Name *"} />
+                </Label>
                 <Input
                   id='name'
                   value={formData.name}
@@ -425,7 +455,9 @@ export default function AdminModelsPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='type'>Type *</Label>
+                <Label htmlFor='type'>
+                  <LocalizedText text={"Type *"} />
+                </Label>
                 <Select
                   value={formData.type}
                   onValueChange={(v: ModelType) =>
@@ -436,13 +468,27 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='general'>General (Agent)</SelectItem>
-                    <SelectItem value='image'>Image</SelectItem>
-                    <SelectItem value='video'>Video</SelectItem>
-                    <SelectItem value='audio'>Audio</SelectItem>
-                    <SelectItem value='text'>Text</SelectItem>
-                    <SelectItem value='social'>Social</SelectItem>
-                    <SelectItem value='docs'>Documentation</SelectItem>
+                    <SelectItem value='general'>
+                      <LocalizedText text={"General (Agent)"} />
+                    </SelectItem>
+                    <SelectItem value='image'>
+                      <LocalizedText text={"Image"} />
+                    </SelectItem>
+                    <SelectItem value='video'>
+                      <LocalizedText text={"Video"} />
+                    </SelectItem>
+                    <SelectItem value='audio'>
+                      <LocalizedText text={"Audio"} />
+                    </SelectItem>
+                    <SelectItem value='text'>
+                      <LocalizedText text={"Text"} />
+                    </SelectItem>
+                    <SelectItem value='social'>
+                      <LocalizedText text={"Social"} />
+                    </SelectItem>
+                    <SelectItem value='docs'>
+                      <LocalizedText text={"Documentation"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -450,7 +496,9 @@ export default function AdminModelsPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='provider'>Provider *</Label>
+                <Label htmlFor='provider'>
+                  <LocalizedText text={"Provider *"} />
+                </Label>
                 <Input
                   id='provider'
                   value={formData.provider}
@@ -462,7 +510,9 @@ export default function AdminModelsPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='modelId'>Model ID *</Label>
+                <Label htmlFor='modelId'>
+                  <LocalizedText text={"Model ID *"} />
+                </Label>
                 <Input
                   id='modelId'
                   value={formData.modelId}
@@ -475,7 +525,9 @@ export default function AdminModelsPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='description'>Description</Label>
+              <Label htmlFor='description'>
+                <LocalizedText text={"Description"} />
+              </Label>
               <Textarea
                 id='description'
                 value={formData.description}
@@ -488,7 +540,9 @@ export default function AdminModelsPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='icon'>Model Icon/Logo</Label>
+              <Label htmlFor='icon'>
+                <LocalizedText text={"Model Icon/Logo"} />
+              </Label>
               <div className='flex items-center gap-4'>
                 {iconPreview && (
                   <div className='relative h-16 w-16 overflow-hidden rounded-lg border'>
@@ -516,7 +570,11 @@ export default function AdminModelsPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload an icon/logo for this model (SVG, PNG, JPG, WebP)
+                    <LocalizedText
+                      text={
+                        "Upload an icon/logo for this model (SVG, PNG, JPG, WebP)"
+                      }
+                    />
                   </p>
                 </div>
                 {iconPreview && (
@@ -537,7 +595,9 @@ export default function AdminModelsPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='status'>Status</Label>
+                <Label htmlFor='status'>
+                  <LocalizedText text={"Status"} />
+                </Label>
                 <Select
                   value={formData.status}
                   onValueChange={(v: "active" | "inactive" | "beta") =>
@@ -548,15 +608,23 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='active'>Active</SelectItem>
-                    <SelectItem value='inactive'>Inactive</SelectItem>
-                    <SelectItem value='beta'>Beta</SelectItem>
+                    <SelectItem value='active'>
+                      <LocalizedText text={"Active"} />
+                    </SelectItem>
+                    <SelectItem value='inactive'>
+                      <LocalizedText text={"Inactive"} />
+                    </SelectItem>
+                    <SelectItem value='beta'>
+                      <LocalizedText text={"Beta"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='maxResolution'>Max Resolution</Label>
+                <Label htmlFor='maxResolution'>
+                  <LocalizedText text={"Max Resolution"} />
+                </Label>
                 <Input
                   id='maxResolution'
                   value={formData.capabilities.maxResolution}
@@ -583,7 +651,9 @@ export default function AdminModelsPage() {
                     setFormData({ ...formData, isDefault: checked })
                   }
                 />
-                <Label htmlFor='isDefault'>Set as Default</Label>
+                <Label htmlFor='isDefault'>
+                  <LocalizedText text={"Set as Default"} />
+                </Label>
               </div>
 
               <div className='flex items-center gap-2'>
@@ -594,7 +664,9 @@ export default function AdminModelsPage() {
                     setFormData({ ...formData, isPremium: checked })
                   }
                 />
-                <Label htmlFor='isPremium'>Premium Model</Label>
+                <Label htmlFor='isPremium'>
+                  <LocalizedText text={"Premium Model"} />
+                </Label>
               </div>
             </div>
 
@@ -614,7 +686,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='supportsAspectRatio'>
-                  Supports Aspect Ratio
+                  <LocalizedText text={"Supports Aspect Ratio"} />
                 </Label>
               </div>
 
@@ -632,7 +704,9 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor='supportsStyle'>Supports Style</Label>
+                <Label htmlFor='supportsStyle'>
+                  <LocalizedText text={"Supports Style"} />
+                </Label>
               </div>
             </div>
 
@@ -652,7 +726,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='supportsVideoReference'>
-                  Supports Video Ref
+                  <LocalizedText text={"Supports Video Ref"} />
                 </Label>
               </div>
 
@@ -671,7 +745,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='supportsSubjectReference'>
-                  Supports Subject Ref
+                  <LocalizedText text={"Supports Subject Ref"} />
                 </Label>
               </div>
             </div>
@@ -686,7 +760,9 @@ export default function AdminModelsPage() {
                       setFormData({ ...formData, allowCustomAudio: checked })
                     }
                   />
-                  <Label htmlFor='allowCustomAudio'>Allow Custom Audio</Label>
+                  <Label htmlFor='allowCustomAudio'>
+                    <LocalizedText text={"Allow Custom Audio"} />
+                  </Label>
                 </div>
               </div>
             )}
@@ -697,13 +773,13 @@ export default function AdminModelsPage() {
               variant='outline'
               onClick={() => setCreateDialogOpen(false)}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Creating...
+                  <LocalizedText text={"Creating..."} />
                 </>
               ) : (
                 "Create Model"
@@ -717,16 +793,20 @@ export default function AdminModelsPage() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className='max-h-[90vh] max-w-2xl overflow-y-auto'>
           <DialogHeader>
-            <DialogTitle>Edit Model</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Edit Model"} />
+            </DialogTitle>
             <DialogDescription>
-              Update model information and settings
+              <LocalizedText text={"Update model information and settings"} />
             </DialogDescription>
           </DialogHeader>
 
           <div className='space-y-4 py-4'>
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='edit-name'>Name *</Label>
+                <Label htmlFor='edit-name'>
+                  <LocalizedText text={"Name *"} />
+                </Label>
                 <Input
                   id='edit-name'
                   value={formData.name}
@@ -737,7 +817,9 @@ export default function AdminModelsPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='edit-type'>Type *</Label>
+                <Label htmlFor='edit-type'>
+                  <LocalizedText text={"Type *"} />
+                </Label>
                 <Select
                   value={formData.type}
                   onValueChange={(v: ModelType) =>
@@ -748,13 +830,27 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='general'>General (Agent)</SelectItem>
-                    <SelectItem value='image'>Image</SelectItem>
-                    <SelectItem value='video'>Video</SelectItem>
-                    <SelectItem value='audio'>Audio</SelectItem>
-                    <SelectItem value='text'>Text</SelectItem>
-                    <SelectItem value='social'>Social</SelectItem>
-                    <SelectItem value='docs'>Documentation</SelectItem>
+                    <SelectItem value='general'>
+                      <LocalizedText text={"General (Agent)"} />
+                    </SelectItem>
+                    <SelectItem value='image'>
+                      <LocalizedText text={"Image"} />
+                    </SelectItem>
+                    <SelectItem value='video'>
+                      <LocalizedText text={"Video"} />
+                    </SelectItem>
+                    <SelectItem value='audio'>
+                      <LocalizedText text={"Audio"} />
+                    </SelectItem>
+                    <SelectItem value='text'>
+                      <LocalizedText text={"Text"} />
+                    </SelectItem>
+                    <SelectItem value='social'>
+                      <LocalizedText text={"Social"} />
+                    </SelectItem>
+                    <SelectItem value='docs'>
+                      <LocalizedText text={"Documentation"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -762,7 +858,9 @@ export default function AdminModelsPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='edit-provider'>Provider *</Label>
+                <Label htmlFor='edit-provider'>
+                  <LocalizedText text={"Provider *"} />
+                </Label>
                 <Input
                   id='edit-provider'
                   value={formData.provider}
@@ -773,7 +871,9 @@ export default function AdminModelsPage() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='edit-modelId'>Model ID *</Label>
+                <Label htmlFor='edit-modelId'>
+                  <LocalizedText text={"Model ID *"} />
+                </Label>
                 <Input
                   id='edit-modelId'
                   value={formData.modelId}
@@ -785,7 +885,9 @@ export default function AdminModelsPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='edit-description'>Description</Label>
+              <Label htmlFor='edit-description'>
+                <LocalizedText text={"Description"} />
+              </Label>
               <Textarea
                 id='edit-description'
                 value={formData.description}
@@ -797,7 +899,9 @@ export default function AdminModelsPage() {
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='edit-icon'>Model Icon/Logo</Label>
+              <Label htmlFor='edit-icon'>
+                <LocalizedText text={"Model Icon/Logo"} />
+              </Label>
               <div className='flex items-center gap-4'>
                 {iconPreview && (
                   <div className='relative h-16 w-16 overflow-hidden rounded-lg border'>
@@ -825,7 +929,11 @@ export default function AdminModelsPage() {
                     className='cursor-pointer'
                   />
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    Upload an icon/logo for this model (SVG, PNG, JPG, WebP)
+                    <LocalizedText
+                      text={
+                        "Upload an icon/logo for this model (SVG, PNG, JPG, WebP)"
+                      }
+                    />
                   </p>
                 </div>
                 {iconPreview && (
@@ -846,7 +954,9 @@ export default function AdminModelsPage() {
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='space-y-2'>
-                <Label htmlFor='edit-status'>Status</Label>
+                <Label htmlFor='edit-status'>
+                  <LocalizedText text={"Status"} />
+                </Label>
                 <Select
                   value={formData.status}
                   onValueChange={(v: "active" | "inactive" | "beta") =>
@@ -857,15 +967,23 @@ export default function AdminModelsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='active'>Active</SelectItem>
-                    <SelectItem value='inactive'>Inactive</SelectItem>
-                    <SelectItem value='beta'>Beta</SelectItem>
+                    <SelectItem value='active'>
+                      <LocalizedText text={"Active"} />
+                    </SelectItem>
+                    <SelectItem value='inactive'>
+                      <LocalizedText text={"Inactive"} />
+                    </SelectItem>
+                    <SelectItem value='beta'>
+                      <LocalizedText text={"Beta"} />
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='edit-maxResolution'>Max Resolution</Label>
+                <Label htmlFor='edit-maxResolution'>
+                  <LocalizedText text={"Max Resolution"} />
+                </Label>
                 <Input
                   id='edit-maxResolution'
                   value={formData.capabilities.maxResolution}
@@ -892,7 +1010,9 @@ export default function AdminModelsPage() {
                     setFormData({ ...formData, isDefault: checked })
                   }
                 />
-                <Label htmlFor='edit-isDefault'>Set as Default</Label>
+                <Label htmlFor='edit-isDefault'>
+                  <LocalizedText text={"Set as Default"} />
+                </Label>
               </div>
 
               <div className='flex items-center gap-2'>
@@ -903,7 +1023,9 @@ export default function AdminModelsPage() {
                     setFormData({ ...formData, isPremium: checked })
                   }
                 />
-                <Label htmlFor='edit-isPremium'>Premium Model</Label>
+                <Label htmlFor='edit-isPremium'>
+                  <LocalizedText text={"Premium Model"} />
+                </Label>
               </div>
             </div>
 
@@ -923,7 +1045,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='edit-supportsAspectRatio'>
-                  Supports Aspect Ratio
+                  <LocalizedText text={"Supports Aspect Ratio"} />
                 </Label>
               </div>
 
@@ -941,7 +1063,9 @@ export default function AdminModelsPage() {
                     })
                   }
                 />
-                <Label htmlFor='edit-supportsStyle'>Supports Style</Label>
+                <Label htmlFor='edit-supportsStyle'>
+                  <LocalizedText text={"Supports Style"} />
+                </Label>
               </div>
             </div>
 
@@ -961,7 +1085,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='edit-supportsVideoReference'>
-                  Supports Video Ref
+                  <LocalizedText text={"Supports Video Ref"} />
                 </Label>
               </div>
 
@@ -980,7 +1104,7 @@ export default function AdminModelsPage() {
                   }
                 />
                 <Label htmlFor='edit-supportsSubjectReference'>
-                  Supports Subject Ref
+                  <LocalizedText text={"Supports Subject Ref"} />
                 </Label>
               </div>
             </div>
@@ -996,7 +1120,7 @@ export default function AdminModelsPage() {
                     }
                   />
                   <Label htmlFor='edit-allowCustomAudio'>
-                    Allow Custom Audio
+                    <LocalizedText text={"Allow Custom Audio"} />
                   </Label>
                 </div>
               </div>
@@ -1011,13 +1135,13 @@ export default function AdminModelsPage() {
                 setEditingModel(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Updating...
+                  <LocalizedText text={"Updating..."} />
                 </>
               ) : (
                 "Update Model"
@@ -1031,10 +1155,17 @@ export default function AdminModelsPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Model</DialogTitle>
+            <DialogTitle>
+              <LocalizedText text={"Delete Model"} />
+            </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{modelToDelete?.name}"? This
-              action cannot be undone. The model will be marked as inactive.
+              <LocalizedText text={'Are you sure you want to delete "'} />
+              {modelToDelete?.name}
+              <LocalizedText
+                text={
+                  '"? This action cannot be undone. The model will be marked as inactive.'
+                }
+              />
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -1045,7 +1176,7 @@ export default function AdminModelsPage() {
                 setModelToDelete(null);
               }}
             >
-              Cancel
+              <LocalizedText text={"Cancel"} />
             </Button>
             <Button
               variant='destructive'
@@ -1055,7 +1186,7 @@ export default function AdminModelsPage() {
               {isDeleting ? (
                 <>
                   <LoadingFileLoader size={16} />
-                  Deleting...
+                  <LocalizedText text={"Deleting..."} />
                 </>
               ) : (
                 "Delete Model"

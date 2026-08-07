@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -162,12 +164,16 @@ const ResetPassword = () => {
             <div className='flex items-center justify-center'>
               <Logo className='h-14 w-14' />
               <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-                Genit
+                <LocalizedText text={"Genit"} />
               </h1>
             </div>
-            <CardTitle className='text-2xl font-bold'>Reset Password</CardTitle>
+            <CardTitle className='text-2xl font-bold'>
+              <LocalizedText text={"Reset Password"} />
+            </CardTitle>
             <CardDescription>
-              Enter the 6-digit verification code sent to{" "}
+              <LocalizedText
+                text={"Enter the 6-digit verification code sent to"}
+              />{" "}
               <strong>{email}</strong>
             </CardDescription>
           </CardHeader>
@@ -218,7 +224,9 @@ const ResetPassword = () => {
               <>
                 <div className='space-y-4'>
                   <div>
-                    <Label htmlFor='newPassword'>New Password</Label>
+                    <Label htmlFor='newPassword'>
+                      <LocalizedText text={"New Password"} />
+                    </Label>
                     <div className='relative mt-1'>
                       <Input
                         id='newPassword'
@@ -243,7 +251,9 @@ const ResetPassword = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor='confirmPassword'>Confirm Password</Label>
+                    <Label htmlFor='confirmPassword'>
+                      <LocalizedText text={"Confirm Password"} />
+                    </Label>
                     <div className='relative mt-1'>
                       <Input
                         id='confirmPassword'
@@ -282,12 +292,12 @@ const ResetPassword = () => {
 
             <div className='text-muted-foreground text-center text-sm'>
               <p>
-                Remember your password?{" "}
+                <LocalizedText text={"Remember your password?"} />{" "}
                 <button
                   onClick={() => router.push("/signin")}
                   className='text-primary hover:underline'
                 >
-                  Sign in
+                  <LocalizedText text={"Sign in"} />
                 </button>
               </p>
             </div>
@@ -295,12 +305,14 @@ const ResetPassword = () => {
         </Card>
         <div className='mt-5 w-full max-w-[26rem] space-y-3'>
           <p className='text-center text-xs leading-relaxed text-gray-600 dark:text-gray-400'>
-            This site is protected by reCAPTCHA and our{" "}
+            <LocalizedText
+              text={"This site is protected by reCAPTCHA and our"}
+            />{" "}
             <a
               href='#'
               className='text-TextLight1 dark:text-TextDark1 underline hover:no-underline'
             >
-              Policy
+              <LocalizedText text={"Policy"} />
             </a>{" "}
             {/* &{" "}
                 <a
@@ -311,14 +323,14 @@ const ResetPassword = () => {
                 </a> */}
           </p>
           <p className='text-center text-xs text-gray-600 dark:text-gray-400'>
-            ©2026 genit. A product of{" "}
+            <LocalizedText text={"©2026 genit. A product of"} />{" "}
             <a
               className='font-medium text-gray-800 hover:text-blue-600 dark:text-white'
               href='#'
             >
-              Klip Inc.
+              <LocalizedText text={"Klip Inc."} />
             </a>{" "}
-            All rights reserved.
+            <LocalizedText text={"All rights reserved."} />
           </p>
         </div>
       </div>

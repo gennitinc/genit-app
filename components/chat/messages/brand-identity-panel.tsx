@@ -1,6 +1,7 @@
 "use client";
 
 import { BrandOnboardingDialog } from "./brand-onboarding-dialog";
+import { LocalizedText } from "@/components/localized-text";
 import { Switch } from "@/components/ui/switch";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { ProjectDesignContext } from "@/context/DesignProject";
@@ -174,10 +175,14 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
         <div className='rounded-lg border border-dashed border-neutral-300 p-4 text-center dark:border-white/10'>
           <Sparkles className='text-primary mx-auto mb-2 h-5 w-5' />
           <p className='text-foreground text-sm font-medium'>
-            No brand identity yet
+            <LocalizedText text={"No brand identity yet"} />
           </p>
           <p className='text-muted-foreground mt-1 text-xs'>
-            Import your brand to give genit your voice, colors, and logo.
+            <LocalizedText
+              text={
+                "Import your brand to give genit your voice, colors, and logo."
+              }
+            />
           </p>
           <button
             type='button'
@@ -185,7 +190,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             className='text-primary-foreground mt-3 inline-flex items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium transition-opacity hover:bg-indigo-700 hover:opacity-90'
           >
             <Download className='h-3 w-3' />
-            Import Brand
+            <LocalizedText text={"Import Brand"} />
           </button>
         </div>
         <BrandOnboardingDialog
@@ -210,7 +215,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
         <div className='bg-muted/40 flex items-center justify-between gap-3 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-white/10'>
           <div className='min-w-0'>
             <p className='text-foreground text-xs font-semibold'>
-              Apply brand identity
+              <LocalizedText text={"Apply brand identity"} />
             </p>
             <p className='text-muted-foreground mt-0.5 text-[10px] leading-tight'>
               {enabled
@@ -230,7 +235,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
           <div className='mb-2 flex items-center gap-2'>
             <Gauge className='text-muted-foreground h-3.5 w-3.5' />
             <p className='text-foreground text-xs font-semibold'>
-              AI cost mode
+              <LocalizedText text={"AI cost mode"} />
             </p>
           </div>
           <div className='grid grid-cols-3 gap-1 rounded-md bg-white p-1 dark:bg-black/30'>
@@ -387,7 +392,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
           target='_blank'
           className='inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-xs font-medium text-white transition-colors hover:bg-indigo-700'
         >
-          Edit Brand
+          <LocalizedText text={"Edit Brand"} />
         </Link>
         {canReimport && (
           <button
@@ -396,7 +401,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             className='text-muted-foreground hover:text-foreground inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-neutral-200 px-3 text-xs font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
           >
             <Download className='h-3.5 w-3.5' />
-            Re-import Brand
+            <LocalizedText text={"Re-import Brand"} />
           </button>
         )}
       </div>

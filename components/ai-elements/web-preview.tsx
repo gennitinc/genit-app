@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -208,7 +209,7 @@ export const WebPreviewConsole = ({
           className='hover:bg-muted/50 flex w-full items-center justify-between p-4 text-left font-medium'
           variant='ghost'
         >
-          Console
+          <LocalizedText text={"Console"} />
           <ChevronDownIcon
             className={cn(
               "h-4 w-4 transition-transform duration-200",
@@ -225,7 +226,9 @@ export const WebPreviewConsole = ({
       >
         <div className='max-h-48 space-y-1 overflow-y-auto'>
           {logs.length === 0 ? (
-            <p className='text-muted-foreground'>No console output</p>
+            <p className='text-muted-foreground'>
+              <LocalizedText text={"No console output"} />
+            </p>
           ) : (
             logs.map((log, index) => (
               <div

@@ -2,6 +2,7 @@
 
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopNav } from "@/components/admin/AdminTopNav";
+import { LocalizedText } from "@/components/localized-text";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { redirect } from "next/navigation";
@@ -32,7 +33,7 @@ export default function AdminLayout({
         <div className='flex animate-pulse flex-col items-center gap-4'>
           <div className='h-12 w-12 rounded-full bg-indigo-600 hover:bg-indigo-700/20' />
           <p className='text-muted-foreground text-sm'>
-            Verifying admin access...
+            <LocalizedText text={"Verifying admin access..."} />
           </p>
         </div>
       </div>

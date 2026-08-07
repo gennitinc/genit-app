@@ -2,6 +2,7 @@
 
 import { NavMain } from "./nav-main";
 import { OrgSwitcher } from "./org-switcher";
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import {
   Sidebar,
@@ -105,7 +106,7 @@ export function AppSidebar({
                 : "block"
             )}
           >
-            Genit
+            <LocalizedText text={"Genit"} />
           </span>
         </Link>
       </SidebarHeader>
@@ -145,7 +146,7 @@ export function AppSidebar({
                   </div>
                   <div>
                     <div className='text-xs font-semibold text-white'>
-                      Pro Plan
+                      <LocalizedText text={"Pro Plan"} />
                     </div>
                     <div className='text-xs text-white/70'>
                       {t("Design Credits")}

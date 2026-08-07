@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { motion } from "framer-motion";
 import {
   ArrowDownRight,
@@ -61,7 +62,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
             </div>
             <div className='flex items-center rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500'>
               <ArrowUpRight className='mr-1 h-3 w-3' />
-              Active
+              <LocalizedText text={"Active"} />
             </div>
           </div>
           <div>

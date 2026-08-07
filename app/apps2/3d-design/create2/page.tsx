@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -225,14 +226,14 @@ const DesignerV2 = () => {
             </button>
             <div className='flex items-center gap-2'>
               <span className='text-xl font-medium tracking-tight'>
-                Lucky Turtle
+                <LocalizedText text={"Lucky Turtle"} />
               </span>
               <ChevronDown className='size-4 text-white/40' />
             </div>
           </div>
           <div className='flex w-10 flex-col items-center'>
             <span className='mt-1 text-[10px] font-bold tracking-widest text-white/40 uppercase'>
-              Back
+              <LocalizedText text={"Back"} />
             </span>
           </div>
         </div>
@@ -289,7 +290,7 @@ const DesignerV2 = () => {
           >
             <div className='flex items-center justify-between border-b border-white/5 p-4'>
               <div className='flex-grow text-center text-sm font-semibold tracking-tight'>
-                Colors
+                <LocalizedText text={"Colors"} />
               </div>
               <button
                 onClick={() => setShowColorPanel(false)}
@@ -306,19 +307,19 @@ const DesignerV2 = () => {
                     value='grid'
                     className='flex-1 rounded-lg text-xs data-[state=active]:bg-white/15'
                   >
-                    Grid
+                    <LocalizedText text={"Grid"} />
                   </TabsTrigger>
                   <TabsTrigger
                     value='spectrum'
                     className='flex-1 rounded-lg text-xs data-[state=active]:bg-white/15'
                   >
-                    Spectrum
+                    <LocalizedText text={"Spectrum"} />
                   </TabsTrigger>
                   <TabsTrigger
                     value='sliders'
                     className='flex-1 rounded-lg text-xs data-[state=active]:bg-white/15'
                   >
-                    Sliders
+                    <LocalizedText text={"Sliders"} />
                   </TabsTrigger>
                 </TabsList>
 
@@ -339,7 +340,9 @@ const DesignerV2 = () => {
                   {/* Opacity slider */}
                   <div className='space-y-3'>
                     <div className='flex items-center justify-between text-[10px] font-bold tracking-widest text-white/40 uppercase'>
-                      <span>Opacity</span>
+                      <span>
+                        <LocalizedText text={"Opacity"} />
+                      </span>
                       <span className='text-white'>100%</span>
                     </div>
                     <div className='relative flex h-6 w-full items-center rounded-full border border-white/5 bg-gradient-to-r from-transparent to-purple-500 px-1'>
@@ -390,8 +393,12 @@ const DesignerV2 = () => {
             </button>
           </FloatingSegment>
           <div className='flex gap-6 text-[10px] font-bold tracking-widest text-white/40 uppercase'>
-            <span>Undo</span>
-            <span>Redo</span>
+            <span>
+              <LocalizedText text={"Undo"} />
+            </span>
+            <span>
+              <LocalizedText text={"Redo"} />
+            </span>
           </div>
         </div>
 
@@ -401,7 +408,7 @@ const DesignerV2 = () => {
             <Magnet className='group-hover:text-primary size-6 text-white/40' />
           </button>
           <span className='text-primary text-[10px] font-bold tracking-widest uppercase'>
-            Snap
+            <LocalizedText text={"Snap"} />
           </span>
         </div>
 
@@ -444,7 +451,7 @@ const DesignerV2 = () => {
             </button>
           </FloatingSegment>
           <span className='text-[10px] font-bold tracking-widest text-white/40 uppercase'>
-            Color
+            <LocalizedText text={"Color"} />
           </span>
         </div>
 
@@ -459,8 +466,12 @@ const DesignerV2 = () => {
             </button>
           </div>
           <div className='flex gap-6 text-[10px] font-bold tracking-widest text-white/40 uppercase'>
-            <span>Play</span>
-            <span>Action</span>
+            <span>
+              <LocalizedText text={"Play"} />
+            </span>
+            <span>
+              <LocalizedText text={"Action"} />
+            </span>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@
 // import type { Metadata } from "next";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -352,10 +353,14 @@ function Page() {
               alt=''
             />
             <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              Feedback analyser
+              <LocalizedText text={"Feedback analyser"} />
             </h3>
             <p className='mt-1 text-sm text-neutral-400'>
-              Get instant insights into your finances with live dashboards.
+              <LocalizedText
+                text={
+                  "Get instant insights into your finances with live dashboards."
+                }
+              />
             </p>
           </div>
           <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
@@ -365,10 +370,14 @@ function Page() {
               alt=''
             />
             <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              User management
+              <LocalizedText text={"User management"} />
             </h3>
             <p className='mt-1 text-sm text-neutral-400'>
-              Get instant insights into your finances with live dashboards.
+              <LocalizedText
+                text={
+                  "Get instant insights into your finances with live dashboards."
+                }
+              />
             </p>
           </div>
           <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
@@ -378,10 +387,14 @@ function Page() {
               alt=''
             />
             <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              Better invoicing
+              <LocalizedText text={"Better invoicing"} />
             </h3>
             <p className='mt-1 text-sm text-neutral-400'>
-              Get instant insights into your finances with live dashboards.
+              <LocalizedText
+                text={
+                  "Get instant insights into your finances with live dashboards."
+                }
+              />
             </p>
           </div>
         </div>
@@ -400,13 +413,13 @@ function Page() {
                     value='support'
                     className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
                   >
-                    Support
+                    <LocalizedText text={"Support"} />
                   </TabsTrigger>
                   <TabsTrigger
                     value='suggestion'
                     className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
                   >
-                    Suggestion
+                    <LocalizedText text={"Suggestion"} />
                   </TabsTrigger>
                 </TabsList>
               </div>
@@ -415,8 +428,13 @@ function Page() {
                   <CardHeader>
                     {/* <CardTitle>Submit a Support Ticket</CardTitle> */}
                     <CardDescription className='text-neutral-400'>
-                      Need help? Submit a support ticket and we{`'`}ll get back
-                      to you as soon as possible.
+                      <LocalizedText
+                        text={"Need help? Submit a support ticket and we"}
+                      />
+                      {`'`}
+                      <LocalizedText
+                        text={"ll get back to you as soon as possible."}
+                      />
                     </CardDescription>
                   </CardHeader>
                   <form
@@ -429,7 +447,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-name'
                         >
-                          Name
+                          <LocalizedText text={"Name"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -446,7 +464,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-email'
                         >
-                          Email
+                          <LocalizedText text={"Email"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -464,7 +482,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-type'
                         >
-                          Ticket Type
+                          <LocalizedText text={"Ticket Type"} />
                         </Label>
                         <Select
                           onValueChange={handleSupportTicketTypeChange}
@@ -478,15 +496,17 @@ function Page() {
                           </SelectTrigger>
                           <SelectContent className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 border border-neutral-900 dark:border-neutral-900'>
                             <SelectItem value='technical'>
-                              Technical Issue
+                              <LocalizedText text={"Technical Issue"} />
                             </SelectItem>
                             <SelectItem value='billing'>
-                              Billing Question
+                              <LocalizedText text={"Billing Question"} />
                             </SelectItem>
                             <SelectItem value='feature'>
-                              Feature Request
+                              <LocalizedText text={"Feature Request"} />
                             </SelectItem>
-                            <SelectItem value='other'>Other</SelectItem>
+                            <SelectItem value='other'>
+                              <LocalizedText text={"Other"} />
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -495,7 +515,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-subject'
                         >
-                          Subject
+                          <LocalizedText text={"Subject"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -512,7 +532,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-description'
                         >
-                          Description
+                          <LocalizedText text={"Description"} />
                         </Label>
                         <Textarea
                           id='support-description'
@@ -529,7 +549,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='support-file'
                         >
-                          Attach File (optional)
+                          <LocalizedText text={"Attach File (optional)"} />
                         </Label>
                         <div className='flex w-full items-center space-x-2'>
                           <Input
@@ -548,7 +568,7 @@ function Page() {
                             className='flex-shrink-0'
                           >
                             <Upload className='mr-2 h-4 w-4' />
-                            Choose File
+                            <LocalizedText text={"Choose File"} />
                           </Button>
                           <span className='flex-1 text-sm text-gray-500'>
                             {supportFile ? supportFile.name : "No file chosen"}
@@ -575,8 +595,11 @@ function Page() {
                   <CardHeader>
                     {/* <CardTitle>Submit a Suggestion</CardTitle> */}
                     <CardDescription className='text-neutral-400'>
-                      Have an idea to improve our service? We{`'`}d love to hear
-                      it!
+                      <LocalizedText
+                        text={"Have an idea to improve our service? We"}
+                      />
+                      {`'`}
+                      <LocalizedText text={"d love to hear it!"} />
                     </CardDescription>
                   </CardHeader>
                   <form onSubmit={onSuggestionSubmit}>
@@ -586,7 +609,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='suggestion-name'
                         >
-                          Name
+                          <LocalizedText text={"Name"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -603,7 +626,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='suggestion-email'
                         >
-                          Email
+                          <LocalizedText text={"Email"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -621,7 +644,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='suggestion-subject'
                         >
-                          Suggestion Title
+                          <LocalizedText text={"Suggestion Title"} />
                         </Label>
                         <Input
                           className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
@@ -638,7 +661,7 @@ function Page() {
                           className='text-neutral-400'
                           htmlFor='suggestion-description'
                         >
-                          Description
+                          <LocalizedText text={"Description"} />
                         </Label>
                         <Textarea
                           id='suggestion-description'

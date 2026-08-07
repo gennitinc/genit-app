@@ -1,7 +1,9 @@
 "use client";
+
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
+import { LocalizedText } from "@/components/localized-text";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +50,9 @@ const TryNowButton = () => (
       </svg>
     </span>
     <span className='absolute inset-0 -mt-1 h-full w-full rounded-lg bg-gradient-to-b from-transparent via-transparent to-gray-200 opacity-30'></span>
-    <span className='relative text-base font-semibold'>Try now</span>
+    <span className='relative text-base font-semibold'>
+      <LocalizedText text={"Try now"} />
+    </span>
   </button>
 );
 
@@ -121,7 +125,9 @@ const AppCard = ({
                   className='absolute inset-0 size-full h-full w-full object-cover'
                   aria-label={description}
                 >
-                  Your browser does not support the video.
+                  <LocalizedText
+                    text={"Your browser does not support the video."}
+                  />
                 </video>
               ) : (
                 <img
@@ -804,11 +810,14 @@ const Apps = () => {
             <div className='mx-auto w-full px-4 py-8 sm:px-6 lg:mt-10'>
               <div className='ml-2 flex flex-col items-center justify-center space-y-4 md:mx-4 lg:mx-8'>
                 <h1 className='max-w-xl text-center text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl'>
-                  Explore Apps{" "}
+                  <LocalizedText text={"Explore Apps"} />{" "}
                 </h1>
                 <p className='text-normal text-muted-foreground max-w-2xl text-center text-sm leading-relaxed'>
-                  Discover amazing AI-generated videos and images created by our
-                  community.
+                  <LocalizedText
+                    text={
+                      "Discover amazing AI-generated videos and images created by our community."
+                    }
+                  />
                 </p>
 
                 <div className='flex w-full items-center justify-center lg:w-[450px]'>
@@ -949,7 +958,9 @@ const Apps = () => {
                               className='text-sm-semi flex shrink-0 items-center gap-1 p-[10px] text-white transition-colors'
                               onClick={() => setActiveCategory(section.title)}
                             >
-                              <span>See all</span>
+                              <span>
+                                <LocalizedText text={"See all"} />
+                              </span>
                               <svg
                                 className='size-2 sm:size-[18px]'
                                 aria-hidden='true'

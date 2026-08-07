@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -71,11 +72,11 @@ export function StepQuestions({
       {/* Header */}
       <div className='mx-auto mb-16 max-w-md text-center'>
         <h1 className='text-3xl font-semibold tracking-tight text-neutral-900 md:text-3xl dark:text-white'>
-          Tell us a little about yourself
+          <LocalizedText text={"Tell us a little about yourself"} />
         </h1>
 
         <p className='mt-3 text-sm text-neutral-500 md:text-base dark:text-neutral-400'>
-          This helps us tailor your experience.
+          <LocalizedText text={"This helps us tailor your experience."} />
         </p>
       </div>
 
@@ -104,7 +105,7 @@ export function StepQuestions({
           disabled={isSubmitting}
           className='text-neutral-600 dark:text-neutral-400'
         >
-          Back
+          <LocalizedText text={"Back"} />
         </Button>
 
         <Button

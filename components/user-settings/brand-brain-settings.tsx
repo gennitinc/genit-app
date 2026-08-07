@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -320,7 +321,9 @@ export function BrandBrainSettings({
     <fieldset disabled={!editable || busy} className='space-y-3'>
       <div className='grid gap-3 md:grid-cols-[1fr_180px]'>
         <div className='space-y-2'>
-          <Label>Title</Label>
+          <Label>
+            <LocalizedText text={"Title"} />
+          </Label>
           <Input
             value={draft.title}
             onChange={(e) =>
@@ -330,7 +333,9 @@ export function BrandBrainSettings({
           />
         </div>
         <div className='space-y-2'>
-          <Label>Type</Label>
+          <Label>
+            <LocalizedText text={"Type"} />
+          </Label>
           <Select
             value={draft.type}
             onValueChange={(value) =>
@@ -354,7 +359,9 @@ export function BrandBrainSettings({
         </div>
       </div>
       <div className='space-y-2'>
-        <Label>Source URL</Label>
+        <Label>
+          <LocalizedText text={"Source URL"} />
+        </Label>
         <Input
           value={draft.sourceUrl}
           onChange={(e) =>
@@ -367,7 +374,9 @@ export function BrandBrainSettings({
         />
       </div>
       <div className='space-y-2'>
-        <Label>Content</Label>
+        <Label>
+          <LocalizedText text={"Content"} />
+        </Label>
         <Textarea
           value={draft.content}
           onChange={(e) =>
@@ -378,7 +387,9 @@ export function BrandBrainSettings({
         />
       </div>
       <div className='space-y-2'>
-        <Label>Tags</Label>
+        <Label>
+          <LocalizedText text={"Tags"} />
+        </Label>
         <Input
           value={draft.tags}
           onChange={(e) =>
@@ -408,12 +419,12 @@ export function BrandBrainSettings({
             disabled={!editable || busy}
           >
             <Trash2 className='mr-2 h-4 w-4' />
-            Delete
+            <LocalizedText text={"Delete"} />
           </Button>
         )}
         <Button type='button' onClick={save} disabled={!editable || busy}>
           <Save className='mr-2 h-4 w-4' />
-          Save brain
+          <LocalizedText text={"Save brain"} />
         </Button>
       </div>
     </fieldset>
@@ -422,7 +433,9 @@ export function BrandBrainSettings({
   const renderAddSourceTools = () => (
     <div className='grid gap-3 md:grid-cols-2'>
       <div className='border-border rounded-lg border p-3'>
-        <Label>Documents</Label>
+        <Label>
+          <LocalizedText text={"Documents"} />
+        </Label>
         <div className='mt-2 flex gap-2'>
           <Input
             type='file'
@@ -441,7 +454,9 @@ export function BrandBrainSettings({
         </div>
       </div>
       <div className='border-border rounded-lg border p-3'>
-        <Label>Website</Label>
+        <Label>
+          <LocalizedText text={"Website"} />
+        </Label>
         <div className='mt-2 flex gap-2'>
           <Input
             value={websiteUrl}
@@ -468,13 +483,17 @@ export function BrandBrainSettings({
         <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
           <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
             <div>
-              <CardTitle className='text-base'>Advanced brain</CardTitle>
-              <CardDescription>Organization details sync</CardDescription>
+              <CardTitle className='text-base'>
+                <LocalizedText text={"Advanced brain"} />
+              </CardTitle>
+              <CardDescription>
+                <LocalizedText text={"Organization details sync"} />
+              </CardDescription>
             </div>
             <div className='flex flex-wrap items-center gap-2'>
               <span className='border-border bg-muted/40 text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs'>
                 <CheckCircle2 className='h-3.5 w-3.5 text-emerald-500' />
-                Sync
+                <LocalizedText text={"Sync"} />
               </span>
               <Button
                 type='button'
@@ -496,7 +515,9 @@ export function BrandBrainSettings({
         <CardContent className='space-y-5 p-5'>
           <div className='space-y-2'>
             <div className='flex items-center justify-between'>
-              <Label>Sources</Label>
+              <Label>
+                <LocalizedText text={"Sources"} />
+              </Label>
               <Button
                 type='button'
                 variant='ghost'
@@ -504,7 +525,7 @@ export function BrandBrainSettings({
                 onClick={resetDraft}
                 disabled={!editable}
               >
-                New
+                <LocalizedText text={"New"} />
               </Button>
             </div>
             <div className='border-border divide-border overflow-hidden rounded-lg border'>
@@ -516,9 +537,13 @@ export function BrandBrainSettings({
                     className='bg-muted/30 hover:bg-muted/50 flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition-colors'
                   >
                     <div className='min-w-0'>
-                      <p className='truncate text-sm font-medium'>New source</p>
+                      <p className='truncate text-sm font-medium'>
+                        <LocalizedText text={"New source"} />
+                      </p>
                       <p className='text-muted-foreground mt-1 text-xs'>
-                        Add approved knowledge for AI agents.
+                        <LocalizedText
+                          text={"Add approved knowledge for AI agents."}
+                        />
                       </p>
                     </div>
                     <ChevronDown className='text-muted-foreground h-4 w-4 shrink-0 rotate-180 transition-transform' />
@@ -533,11 +558,11 @@ export function BrandBrainSettings({
               )}
               {loading ? (
                 <div className='text-muted-foreground px-3 py-3 text-sm'>
-                  Loading sources...
+                  <LocalizedText text={"Loading sources..."} />
                 </div>
               ) : items.length === 0 ? (
                 <div className='text-muted-foreground px-3 py-3 text-sm'>
-                  No sources yet.
+                  <LocalizedText text={"No sources yet."} />
                 </div>
               ) : (
                 items.map((item) => {
@@ -588,9 +613,13 @@ export function BrandBrainSettings({
 
       <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
         <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-          <CardTitle className='text-base'>Search brain</CardTitle>
+          <CardTitle className='text-base'>
+            <LocalizedText text={"Search brain"} />
+          </CardTitle>
           <CardDescription>
-            Test what agents retrieve from the saved sources.
+            <LocalizedText
+              text={"Test what agents retrieve from the saved sources."}
+            />
           </CardDescription>
         </CardHeader>
         <CardContent className='p-5'>

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -158,7 +159,9 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
     <aside className='flex h-full w-full flex-col border-zinc-900 bg-[#070707] lg:w-80 lg:border-r'>
       <div className='flex items-center gap-2 border-b border-zinc-900 px-4 py-4 lg:hidden'>
         <Logo className='h-8 w-8' />
-        <span className='font-semibold text-white'>Documentation</span>
+        <span className='font-semibold text-white'>
+          <LocalizedText text={"Documentation"} />
+        </span>
         <button
           type='button'
           onClick={() => setMobileNavOpen(false)}
@@ -191,7 +194,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
       <nav className='flex-1 space-y-8 overflow-y-auto px-4 pb-8'>
         {Object.keys(groupedDocs).length === 0 ? (
           <div className='rounded-xl border border-dashed border-zinc-800 p-5 text-center text-sm text-zinc-500'>
-            No docs found
+            <LocalizedText text={"No docs found"} />
           </div>
         ) : (
           Object.entries(groupedDocs).map(([section, items]) => (
@@ -244,28 +247,28 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
           <Link href='/' className='flex items-center gap-2'>
             <Logo className='h-9 w-9' />
             <span className='text-xl font-bold tracking-tight text-white'>
-              Genit
+              <LocalizedText text={"Genit"} />
             </span>
           </Link>
 
           <nav className='ml-4 hidden items-center gap-8 text-sm font-medium md:flex'>
             <Link href='/docs' className='flex items-center gap-2 text-white'>
               <BookOpen className='h-4 w-4' />
-              Documentation
+              <LocalizedText text={"Documentation"} />
             </Link>
             <Link
               href='/docs'
               className='flex items-center gap-2 text-zinc-500 transition hover:text-zinc-200'
             >
               <TerminalSquare className='h-4 w-4' />
-              API Reference
+              <LocalizedText text={"API Reference"} />
             </Link>
             <Link
               href='/docs'
               className='flex items-center gap-2 text-zinc-500 transition hover:text-zinc-200'
             >
               <Library className='h-4 w-4' />
-              Knowledge Base
+              <LocalizedText text={"Knowledge Base"} />
             </Link>
           </nav>
 
@@ -274,13 +277,13 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
               href='/signin'
               className='hidden rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:bg-zinc-800 sm:inline-flex'
             >
-              Sign In
+              <LocalizedText text={"Sign In"} />
             </Link>
             <Link
               href='/signup'
               className='rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200'
             >
-              Get Started
+              <LocalizedText text={"Get Started"} />
             </Link>
           </div>
         </div>
@@ -306,10 +309,12 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
             <div className='mx-auto max-w-2xl px-6 py-32 text-center'>
               <FileText className='mx-auto mb-4 h-10 w-10 text-zinc-600' />
               <h1 className='text-2xl font-semibold text-white'>
-                Documentation is coming soon
+                <LocalizedText text={"Documentation is coming soon"} />
               </h1>
               <p className='mt-2 text-sm text-zinc-500'>
-                Published docs will appear here automatically.
+                <LocalizedText
+                  text={"Published docs will appear here automatically."}
+                />
               </p>
             </div>
           ) : (
@@ -366,7 +371,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                 <div className='sticky top-28 border-l border-zinc-800 pl-6'>
                   <div className='mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-200'>
                     <Menu className='h-4 w-4' />
-                    On this page
+                    <LocalizedText text={"On this page"} />
                   </div>
                   <nav className='space-y-3'>
                     {headings.length ? (
@@ -384,7 +389,9 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                         </a>
                       ))
                     ) : (
-                      <p className='text-sm text-zinc-600'>No sections yet</p>
+                      <p className='text-sm text-zinc-600'>
+                        <LocalizedText text={"No sections yet"} />
+                      </p>
                     )}
                   </nav>
                 </div>
