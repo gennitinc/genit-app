@@ -1,3 +1,6 @@
+import esGenerated from "@/locales/es.generated.json";
+import frGenerated from "@/locales/fr.generated.json";
+
 export const languages = [
   { code: "en", label: "English", flag: "🇺🇸" },
   { code: "es", label: "Español", flag: "🇪🇸" },
@@ -893,6 +896,6 @@ export const translations: Record<
   Exclude<Language, "en">,
   Record<string, string>
 > = {
-  es,
-  fr,
+  es: { ...esGenerated, ...es },
+  fr: { ...frGenerated, ...fr },
 };
