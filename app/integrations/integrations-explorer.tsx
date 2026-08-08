@@ -33,6 +33,8 @@ import {
   IntegrationConnection,
   IntegrationPlatform,
   isMetaSurface,
+  isNativeOnlyPipedreamApp,
+  isNativeOnlyPlatform,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
@@ -415,6 +417,7 @@ export function connectionsForIntegration(
       (connection) => connection.metadata?.appSlug === integration.appSlug
     );
   }
+  if (isNativeOnlyPlatform(integration.platform)) return connections;
   const managed = (byPlatform.get("pipedream") ?? []).filter(
     (connection) => connection.metadata?.nativePlatform === integration.platform
   );
@@ -539,7 +542,8 @@ export function IntegrationsExplorer() {
       });
     }
     for (const app of discoveredApps) {
-      if (known.has(app.name_slug)) continue;
+      if (known.has(app.name_slug) || isNativeOnlyPipedreamApp(app.name_slug))
+        continue;
       known.add(app.name_slug);
       items.push({
         platform: "pipedream",

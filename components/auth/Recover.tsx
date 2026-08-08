@@ -10,14 +10,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import { EMAIL_REGEX } from "@/utils/Regex";
 import { apiResponse } from "@/utils/apiResponse";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React from "react";
 
 export const RecoverComp = () => {
+  const searchParams = useSearchParams();
+  const redirect = getAuthRedirect(searchParams);
   const [formData, setFormdata] = React.useState<AuthTypes>({
     email: "",
   });
@@ -68,7 +72,10 @@ export const RecoverComp = () => {
         toast.success(`Password reset code has been sent to your email`);
 
         // Redirect to password reset verification page
-        window.location.href = `/reset-password?email=${encodeURIComponent(formData.email)}`;
+        window.location.href = withAuthRedirect(
+          `/reset-password?email=${encodeURIComponent(formData.email)}`,
+          redirect
+        );
       }
     } catch (error: any) {
       toast.error(error?.response?.data.message);
@@ -189,7 +196,7 @@ export const RecoverComp = () => {
             <span className='text-muted-foreground text-sm'>
               <LocalizedText text={"Remember your login details?"} />{" "}
               <Link
-                href='/signin'
+                href={withAuthRedirect("/signin", redirect)}
                 className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
                 prefetch={false}
               >

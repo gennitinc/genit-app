@@ -13,11 +13,12 @@ import {
 import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import confetti from "canvas-confetti";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -25,6 +26,8 @@ const STEP_ORDER: OnboardingStep[] = ["import", "dna", "questions"];
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = getAuthRedirect(searchParams);
   const { user, loading: authLoading, fetchCurrentUser } = useUserContext();
 
   const [step, setStep] = useState<OnboardingStep>("import");
@@ -36,7 +39,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
-      router.push("/signin");
+      router.push(withAuthRedirect("/signin", redirect));
       return;
     }
     const o = user.onboarding;
@@ -45,7 +48,7 @@ export default function OnboardingPage() {
       typeof o === "object" &&
       (o.onboardingCompleted || o.onboardingSkipped)
     ) {
-      router.replace("/chat");
+      router.replace(redirect);
       return;
     }
     if (o && typeof o === "object") {
@@ -165,13 +168,13 @@ export default function OnboardingPage() {
         origin: { y: 0.6 },
       });
       toast.success("You can complete this later from settings.");
-      router.replace("/chat");
+      router.replace(redirect);
     } catch (err) {
       console.error("skip onboarding failed", err);
       toast.error("Could not skip onboarding. Try again.");
       setIsSubmitting(false);
     }
-  }, [persist, fetchCurrentUser, router]);
+  }, [persist, fetchCurrentUser, router, redirect]);
 
   const handleFinish = useCallback(
     async ({ role, hearAboutUs }: { role: string; hearAboutUs: string }) => {
@@ -191,14 +194,14 @@ export default function OnboardingPage() {
           origin: { y: 0.6 },
         });
         toast.success("You're all set!");
-        router.replace("/chat");
+        router.replace(redirect);
       } catch (err) {
         console.error("finish failed", err);
         toast.error("Could not finish onboarding. Try again.");
         setIsSubmitting(false);
       }
     },
-    [brand, persist, fetchCurrentUser, router]
+    [brand, persist, fetchCurrentUser, router, redirect]
   );
 
   const progress = useMemo(

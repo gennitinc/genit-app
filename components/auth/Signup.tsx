@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import { identifyAndTrackAuth, trackEvent } from "@/lib/mixpanelClient";
 import { AuthTypes, RegexType } from "@/types/Authtypes";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/Regex";
@@ -20,7 +21,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import { useGoogleLogin } from "@react-oauth/google";
 import cookie from "js-cookie";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React, { useCallback, useState } from "react";
 
@@ -37,6 +38,8 @@ export const SignupComp = () => {
   const [profile, setProfile] = useState<string>("");
   const [provider, setProvider] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = getAuthRedirect(searchParams);
   const { fetchCurrentUser } = useUserContext();
 
   // Extract referral code from URL hash (e.g., #/?creator=@username)
@@ -196,14 +199,17 @@ export const SignupComp = () => {
         if (!currentUser.emailVerified) {
           // Not verified - redirect to verification
           router.push(
-            `/account/verify?email=${encodeURIComponent(currentUser.email)}`
+            withAuthRedirect(
+              `/account/verify?email=${encodeURIComponent(currentUser.email)}`,
+              redirect
+            )
           );
         } else if (!currentUser.onboarding?.onboardingCompleted) {
           // Verified but not onboarded - redirect to onboarding
-          router.push("/onboarding");
+          router.push(withAuthRedirect("/onboarding", redirect));
         } else {
           // Verified and onboarded - go to inspire create
-          router.push("/chat");
+          router.push(redirect);
         }
       }
     } catch (error: any) {
@@ -279,14 +285,17 @@ export const SignupComp = () => {
         if (!currentUser.emailVerified) {
           // Not verified - redirect to verification
           router.push(
-            `/account/verify?email=${encodeURIComponent(currentUser.email)}`
+            withAuthRedirect(
+              `/account/verify?email=${encodeURIComponent(currentUser.email)}`,
+              redirect
+            )
           );
         } else if (!currentUser.onboarding?.onboardingCompleted) {
           // Verified but not onboarded - redirect to onboarding
-          router.push("/onboarding");
+          router.push(withAuthRedirect("/onboarding", redirect));
         } else {
           // Verified and onboarded - go to inspire create
-          router.push("/chat");
+          router.push(redirect);
         }
       }
     } catch (error: any) {
@@ -1490,7 +1499,7 @@ export const SignupComp = () => {
               <span className='text-muted-foreground text-sm'>
                 <LocalizedText text={"Already have an account?"} />{" "}
                 <Link
-                  href='/signin'
+                  href={withAuthRedirect("/signin", redirect)}
                   className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
                   prefetch={false}
                 >

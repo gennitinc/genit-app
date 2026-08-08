@@ -5,6 +5,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Spotlight } from "@/components/ui/spotlight-new";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { trackEvent, trackExperimentExposure } from "@/lib/mixpanelClient";
 import { type PricingCurrency, formatUsdPrice } from "@/lib/pricing-currency";
 import { cn } from "@/lib/utils";
@@ -273,6 +274,7 @@ export default function PricingComponent({
     useState(pricingCurrency);
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const { user, loading: userLoading } = useUserContext();
 
   useEffect(() => {
     trackEvent("pricing_page_viewed", {
@@ -321,6 +323,11 @@ export default function PricingComponent({
       billing_cycle: billing,
       plan_price: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
     });
+
+    if (!user) {
+      window.location.href = `/signin?redirect=${encodeURIComponent("/pricing")}`;
+      return;
+    }
 
     if (plan.monthlyPrice === 0) {
       // Handle free plan - redirect to signup or dashboard
@@ -670,7 +677,7 @@ export default function PricingComponent({
                           })()
                         : handleCheckout(plan)
                     }
-                    disabled={loadingPlan === plan.name}
+                    disabled={userLoading || loadingPlan === plan.name}
                     className={cn(
                       "mt-4 mb-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-2 py-1.5 transition duration-200 active:scale-[0.98]",
                       plan.popular

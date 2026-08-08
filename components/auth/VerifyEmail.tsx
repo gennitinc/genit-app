@@ -17,6 +17,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -27,6 +28,7 @@ const VerifyEmailComp = () => {
   const router = useRouter();
   const params = useSearchParams();
   const email = params.get("email");
+  const redirect = getAuthRedirect(params);
   const { fetchCurrentUser, loading } = useUserContext();
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -38,7 +40,7 @@ const VerifyEmailComp = () => {
   useEffect(() => {
     // If no email parameter, redirect to signup
     if (!email) {
-      router.push("/signup");
+      router.push(withAuthRedirect("/signup", redirect));
     }
   }, [email, router]);
 
@@ -61,7 +63,7 @@ const VerifyEmailComp = () => {
         await fetchCurrentUser();
 
         // Redirect to onboarding after verification
-        router.push("/onboarding");
+        router.push(withAuthRedirect("/onboarding", redirect));
       }
     } catch (error: any) {
       const errorMessage =

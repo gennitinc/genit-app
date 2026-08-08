@@ -109,6 +109,26 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "pipedream",
 ]);
 
+// Pipedream does not provide the Meta social products used by Visuals end to
+// end (its `threads` app is an unrelated product). Keep these on the native
+// connectors that power publishing, inbox, insights, and moderation.
+const NATIVE_ONLY_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
+  "facebook",
+  "instagram",
+  "threads",
+  "meta_ads",
+  "whatsapp",
+  "messenger",
+]);
+
+const NATIVE_ONLY_PIPEDREAM_APPS = new Set([
+  "facebook_pages",
+  "instagram_business",
+  "threads",
+  "facebook_graph_api",
+  "whatsapp_business",
+]);
+
 // Platforms that connect via a credential-entry form (no OAuth popup).
 const CREDENTIAL_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "telegram",
@@ -124,6 +144,14 @@ export function isCredentialPlatform(platform: IntegrationPlatform): boolean {
 
 export function isPlatformSupported(platform: IntegrationPlatform): boolean {
   return SUPPORTED_PLATFORMS.has(platform);
+}
+
+export function isNativeOnlyPlatform(platform: IntegrationPlatform): boolean {
+  return NATIVE_ONLY_PLATFORMS.has(platform);
+}
+
+export function isNativeOnlyPipedreamApp(appSlug: string): boolean {
+  return NATIVE_ONLY_PIPEDREAM_APPS.has(appSlug);
 }
 
 export function isMetaSurface(
@@ -275,7 +303,11 @@ export async function runPipedreamApiRequest<T = unknown>(
 
 export type GoogleWorkspacePlatform = Extract<
   IntegrationPlatform,
-  "google_meet" | "google_sheets" | "google_slides" | "google_docs" | "google_forms"
+  | "google_meet"
+  | "google_sheets"
+  | "google_slides"
+  | "google_docs"
+  | "google_forms"
 >;
 
 /** Calls the full Google Workspace action surface. Roles map to Google Drive:

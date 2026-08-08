@@ -18,6 +18,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { Eye, EyeOff } from "lucide-react";
@@ -29,6 +30,7 @@ const ResetPassword = () => {
   const router = useRouter();
   const params = useSearchParams();
   const email = params.get("email");
+  const redirect = getAuthRedirect(params);
   const [otpValue, setOtpValue] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,7 +43,7 @@ const ResetPassword = () => {
   useEffect(() => {
     // If no email parameter, redirect to recover page
     if (!email) {
-      router.push("/recover");
+      router.push(withAuthRedirect("/recover", redirect));
     }
   }, [email, router]);
 
@@ -110,7 +112,7 @@ const ResetPassword = () => {
         );
 
         // Redirect to signin page
-        router.push("/signin");
+        router.push(withAuthRedirect("/signin", redirect));
       }
     } catch (error: any) {
       const errorMessage =
@@ -294,7 +296,9 @@ const ResetPassword = () => {
               <p>
                 <LocalizedText text={"Remember your password?"} />{" "}
                 <button
-                  onClick={() => router.push("/signin")}
+                  onClick={() =>
+                    router.push(withAuthRedirect("/signin", redirect))
+                  }
                   className='text-primary hover:underline'
                 >
                   <LocalizedText text={"Sign in"} />

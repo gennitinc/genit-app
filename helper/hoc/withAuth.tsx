@@ -1,7 +1,8 @@
 "use client";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function withAuth(
@@ -13,6 +14,8 @@ function withAuth(
     const { user, loading, setLoading } = useUserContext();
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const redirect = getAuthRedirect(searchParams);
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     useEffect(() => {
@@ -33,11 +36,11 @@ function withAuth(
               !user.onboarding?.onboardingSkipped
             ) {
               // Verified but not onboarded - redirect to onboarding
-              router.push("/onboarding");
+              router.push(withAuthRedirect("/onboarding", redirect));
               return;
             } else {
               // Verified and onboarded - redirect to inspire create
-              router.push("/chat");
+              router.push(redirect);
               return;
             }
           }
@@ -87,6 +90,7 @@ function withAuth(
       isAuthPage,
       skipOnboardingCheck,
       pathname,
+      redirect,
     ]);
 
     if (loading || isCheckingAuth) {

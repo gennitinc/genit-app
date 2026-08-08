@@ -8,20 +8,27 @@ export default function PipedreamCallbackPage() {
     const params = new URLSearchParams(window.location.search);
     const error = params.get("error");
     const platform = params.get("platform") || "pipedream";
-    window.opener?.postMessage(
-      error
-        ? {
-            type: "genit:integration:error",
-            platform,
-            message: "The Pipedream connection did not complete.",
-          }
-        : {
-            type: "genit:integration:connected",
-            platform,
-            accountName: params.get("app") || undefined,
-          },
-      window.location.origin
-    );
+    const message = error
+      ? {
+          type: "genit:integration:error",
+          platform,
+          message: "The Pipedream connection did not complete.",
+        }
+      : {
+          type: "genit:integration:connected",
+          platform,
+          accountName: params.get("app") || undefined,
+        };
+    const origins = new Set([
+      window.location.origin,
+      "http://localhost:3000",
+      "https://genit.vercel.app",
+      "https://www.trygenit.com",
+      "https://trygenit.com",
+    ]);
+    if (window.opener) {
+      for (const origin of origins) window.opener.postMessage(message, origin);
+    }
     window.close();
   }, []);
 
