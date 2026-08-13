@@ -81,7 +81,6 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "facebook",
   "instagram",
   "meta_ads",
-  "threads",
   "whatsapp",
   "messenger",
   "gmail",
@@ -109,18 +108,6 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "pipedream",
 ]);
 
-// Pipedream does not provide the Meta social products used by Visuals end to
-// end (its `threads` app is an unrelated product). Keep these on the native
-// connectors that power publishing, inbox, insights, and moderation.
-const NATIVE_ONLY_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
-  "facebook",
-  "instagram",
-  "threads",
-  "meta_ads",
-  "whatsapp",
-  "messenger",
-]);
-
 const NATIVE_ONLY_PIPEDREAM_APPS = new Set([
   "facebook_pages",
   "instagram_business",
@@ -146,8 +133,8 @@ export function isPlatformSupported(platform: IntegrationPlatform): boolean {
   return SUPPORTED_PLATFORMS.has(platform);
 }
 
-export function isNativeOnlyPlatform(platform: IntegrationPlatform): boolean {
-  return NATIVE_ONLY_PLATFORMS.has(platform);
+export function isNativeOnlyPlatform(_platform: IntegrationPlatform): boolean {
+  return false;
 }
 
 export function isNativeOnlyPipedreamApp(appSlug: string): boolean {
@@ -155,15 +142,26 @@ export function isNativeOnlyPipedreamApp(appSlug: string): boolean {
 }
 
 export function isMetaSurface(
-  platform: IntegrationPlatform
-): platform is MetaSurface {
-  return (
-    platform === "facebook" ||
-    platform === "instagram" ||
-    platform === "meta_ads" ||
-    platform === "whatsapp" ||
-    platform === "messenger"
-  );
+  _platform: IntegrationPlatform
+): _platform is MetaSurface {
+  return false;
+}
+
+export function effectiveIntegrationPlatform(
+  integration: IntegrationConnection
+): IntegrationPlatform {
+  if (integration.platform !== "pipedream") return integration.platform;
+  const nativePlatform = integration.metadata?.nativePlatform;
+  return isPlatformSupported(nativePlatform) ? nativePlatform : "pipedream";
+}
+
+export function asEffectiveIntegration(
+  integration: IntegrationConnection
+): IntegrationConnection {
+  const platform = effectiveIntegrationPlatform(integration);
+  return platform === integration.platform
+    ? integration
+    : { ...integration, platform };
 }
 
 export async function fetchIntegrations(): Promise<{

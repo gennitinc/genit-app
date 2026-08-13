@@ -477,7 +477,7 @@ export function LandingFooter() {
                     {t("Pricing")}
                   </Link>
                   <Link
-                    href='/plugin'
+                    href='/all/plugins'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Plugin")}

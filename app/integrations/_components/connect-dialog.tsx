@@ -23,6 +23,7 @@ import {
   connectMailchimpWithApiKey,
   connectTelegramWithToken,
   connectXAdsWithAccountId,
+  fetchIntegrations,
   isCredentialPlatform,
   isMetaSurface,
   isPlatformSupported,
@@ -484,6 +485,7 @@ export function ConnectDialog({
   // has been received. Prevents the popup-closed poll from racing with
   // the message handler and showing a false "error" flash.
   const connectionResolvedRef = useRef(false);
+  const connectionStartedAtRef = useRef(0);
   const qc = useQueryClient();
   const { user, fetchCurrentUser } = useUserContext();
   const { identityBySurface } = useIntegrations();
@@ -531,6 +533,20 @@ export function ConnectDialog({
     : false;
   const credentialConfig = platform ? CREDENTIAL_INPUT[platform] : undefined;
 
+  const markConnected = useCallback(
+    (accountName?: string) => {
+      connectionResolvedRef.current = true;
+      closePopup();
+      setConnectedAccount(accountName || null);
+      setPhase("success");
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      toast.success(`Connected ${platformName}`, {
+        description: accountName ? `@${accountName}` : undefined,
+      });
+    },
+    [closePopup, orgId, platformName, qc]
+  );
+
   useEffect(() => {
     if (!platform) return;
     function handleMessage(e: MessageEvent) {
@@ -573,9 +589,7 @@ export function ConnectDialog({
       }
 
       if (data.type === "genit:integration:connected") {
-        setConnectedAccount(data.accountName || null);
-        setPhase("success");
-        qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+        markConnected(data.accountName);
         // Managed providers persist from a server webhook, which can arrive a
         // moment after the browser redirect. Recheck without blocking the UI.
         window.setTimeout(
@@ -586,17 +600,15 @@ export function ConnectDialog({
           () => qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) }),
           4_000
         );
-        toast.success(`Connected ${platformName}`, {
-          description: data.accountName ? `@${data.accountName}` : undefined,
-        });
       } else {
         setErrorMessage(data.message || "Connection failed");
         setPhase("error");
+        qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
       }
     }
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [platform, platformName, qc, orgId, closePopup]);
+  }, [platform, qc, orgId, closePopup, markConnected]);
 
   const handleConnect = useCallback(async () => {
     if (!platform) return;
@@ -607,6 +619,7 @@ export function ConnectDialog({
     setPhase("connecting");
     setErrorMessage(null);
     connectionResolvedRef.current = false;
+    connectionStartedAtRef.current = Date.now();
 
     let response: ConnectUrlResponse;
     try {
@@ -688,14 +701,31 @@ export function ConnectDialog({
           // If we already resolved (message was received), do nothing.
           if (connectionResolvedRef.current) return;
 
-          // Give the postMessage up to 2 seconds to arrive before
-          // declaring the connection as failed.
-          setTimeout(() => {
+          void (async () => {
+            for (let attempt = 0; attempt < 4; attempt += 1) {
+              await new Promise((resolve) => window.setTimeout(resolve, 1500));
+              if (connectionResolvedRef.current) return;
+              try {
+                const { integrations } = await fetchIntegrations();
+                const connected = integrations.find(
+                  (item) =>
+                    item.status === "active" &&
+                    item.metadata?.provider === "pipedream" &&
+                    (appSlug
+                      ? item.metadata?.appSlug === appSlug
+                      : item.metadata?.nativePlatform === platform) &&
+                    Date.parse(item.updatedAt) >=
+                      connectionStartedAtRef.current - 2_000
+                );
+                if (connected) {
+                  markConnected(connected.accountName);
+                  return;
+                }
+              } catch {
+                // A transient refresh error should not mask the OAuth result.
+              }
+            }
             if (connectionResolvedRef.current) return;
-            // Use functional updates so we only act when phase is still
-            // "connecting". This prevents overriding success/select/error
-            // if state changed between the setTimeout being scheduled and
-            // executing (e.g. due to a React re-render cycle).
             setPhase((current) => {
               if (current !== "connecting") return current;
               setErrorMessage(
@@ -704,7 +734,7 @@ export function ConnectDialog({
               );
               return "error";
             });
-          }, 2000);
+          })();
         }
       }, 600);
     } catch (err: any) {
@@ -714,7 +744,7 @@ export function ConnectDialog({
       setPhase("error");
       toast.error("Could not start connection", { description: msg });
     }
-  }, [platform, platformName, appSlug, qc, orgId]);
+  }, [platform, platformName, appSlug, qc, orgId, markConnected]);
 
   const handleCredentialSubmit = useCallback(async () => {
     if (!platform) return;
@@ -1140,11 +1170,7 @@ export function ConnectDialog({
               <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
                 <ShieldCheck className='h-3.5 w-3.5' />
                 <span className='min-w-0'>
-                  <LocalizedText
-                    text={
-                      "Tokens are encrypted. Managed connections use Pipedream."
-                    }
-                  />
+                  <LocalizedText text={"Tokens are encrypted at rest."} />
                 </span>
               </div>
 

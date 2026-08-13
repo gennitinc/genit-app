@@ -43,6 +43,7 @@ import {
   type FacebookPostSummary,
   type IntegrationConnection,
   type IntegrationPlatform,
+  asEffectiveIntegration,
   deleteFacebookPost,
   deleteThreadsPost,
   fetchFacebookInsights,
@@ -654,10 +655,24 @@ export default function PostsPage() {
 
   const connected = useMemo(
     () =>
-      integrations.filter(
-        (item) => item.status === "active" && PLATFORMS.includes(item.platform)
+      integrations
+        .filter((item) => item.status === "active")
+        .map(asEffectiveIntegration)
+        .filter((item) => PLATFORMS.includes(item.platform)),
+    [integrations]
+  );
+  const managedConnectionIds = useMemo(
+    () =>
+      new Set(
+        integrations
+          .filter((item) => item.metadata?.provider === "pipedream")
+          .map((item) => item._id)
       ),
     [integrations]
+  );
+  const liveConnections = useMemo(
+    () => connected.filter((item) => !managedConnectionIds.has(item._id)),
+    [connected, managedConnectionIds]
   );
   const postsQuery = useInfiniteQuery({
     queryKey: ["social-posts", "pages"],
@@ -670,15 +685,22 @@ export default function PostsPage() {
         : undefined,
   });
   const liveQuery = useQuery({
-    queryKey: ["connected-social-posts", ...connected.map((item) => item._id)],
-    queryFn: () => fetchLivePosts(connected),
-    enabled: connected.length > 0,
+    queryKey: [
+      "connected-social-posts",
+      ...liveConnections.map((item) => item._id),
+    ],
+    queryFn: () => fetchLivePosts(liveConnections),
+    enabled: liveConnections.length > 0,
     staleTime: 60_000,
   });
   const analyticsQuery = useQuery({
     queryKey: ["post-analytics", analyticsPost?._id],
     queryFn: () => fetchPostAnalytics(analyticsPost!),
-    enabled: Boolean(analyticsPost),
+    enabled: Boolean(
+      analyticsPost &&
+      (!analyticsPost.integration ||
+        !managedConnectionIds.has(analyticsPost.integration))
+    ),
   });
 
   useEffect(() => {
@@ -728,7 +750,11 @@ export default function PostsPage() {
     queries: live.map((post) => ({
       queryKey: ["post-analytics", post._id],
       queryFn: () => fetchPostAnalytics(post),
-      enabled: Boolean(post.integration && post.externalId),
+      enabled: Boolean(
+        post.integration &&
+        post.externalId &&
+        !managedConnectionIds.has(post.integration)
+      ),
       staleTime: 5 * 60_000,
       retry: false,
     })),

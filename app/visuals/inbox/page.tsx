@@ -1393,7 +1393,7 @@ export default function InboxPage() {
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href='/plugin'>
+                    <Link href='/plugins'>
                       <Plus className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Connect a channel"} />
                     </Link>
@@ -1554,7 +1554,7 @@ export default function InboxPage() {
                 <LocalizedText text={"Import older channel history"} />
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href='/plugin'>
+                <Link href='/plugins'>
                   <Settings className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Manage plugins"} />
                 </Link>

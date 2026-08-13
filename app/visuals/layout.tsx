@@ -1,9 +1,12 @@
+"use client";
+
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/toaster";
 import { VisualsSidebar } from "@/components/visuals/visuals-sidebar";
+import withAuth from "@/helper/hoc/withAuth";
 
-export default function VisualsLayout({
+function VisualsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -34,3 +37,5 @@ export default function VisualsLayout({
     </div>
   );
 }
+
+export default withAuth(VisualsLayout);

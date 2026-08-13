@@ -577,7 +577,7 @@ const LandingHero = () => {
               </span>{" "}
               marketing{" "}
               <Link
-                href='/plugin'
+                href='/plugins'
                 target='_blank'
                 className='font-medium text-indigo-600 underline underline-offset-4 transition hover:text-indigo-500 dark:text-indigo-400'
               >
@@ -640,7 +640,7 @@ const LandingHero = () => {
           {/* <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over {INTEGRATIONS.length}+ marketing{" "}
             <Link
-              href='/plugin'
+              href='/plugins'
               target='_blank'
               className='text-foreground text-sm font-medium underline md:text-base'
             >

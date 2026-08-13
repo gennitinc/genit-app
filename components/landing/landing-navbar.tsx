@@ -47,7 +47,10 @@ export function LandingNavbar() {
 
   const navigation = [
     { name: t("Chat"), href: "/chat" },
-    { name: t("Plugin"), href: "/plugin" },
+    {
+      name: t("Plugins"),
+      href: currentUser ? "/plugins" : "/all/plugins",
+    },
     { name: t("Visual Flow"), href: "/visuals" },
     ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
@@ -99,9 +102,9 @@ export function LandingNavbar() {
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1100px]:inline-flex'
-                  href='/plugin'
+                  href={currentUser ? "/plugins" : "/all/plugins"}
                 >
-                  {t("Plugin")}
+                  {t("Plugins")}
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'

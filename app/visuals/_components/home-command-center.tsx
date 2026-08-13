@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
+import { asEffectiveIntegration } from "@/lib/integrations-api";
 import {
   type SocialPost,
   createSocialPosts,
@@ -84,10 +85,10 @@ export function HomeCommandCenter({
   const posts = postsQuery.data || [];
   const connected = useMemo(
     () =>
-      integrations.filter(
-        (item) =>
-          item.status === "active" && POST_PLATFORMS.includes(item.platform)
-      ),
+      integrations
+        .filter((item) => item.status === "active")
+        .map(asEffectiveIntegration)
+        .filter((item) => POST_PLATFORMS.includes(item.platform)),
     [integrations]
   );
   const scheduled = posts

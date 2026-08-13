@@ -23,6 +23,7 @@ export default function PipedreamCallbackPage() {
       window.location.origin,
       "http://localhost:3000",
       "https://genit.vercel.app",
+      "https://genitai.vercel.app",
       "https://www.trygenit.com",
       "https://trygenit.com",
     ]);

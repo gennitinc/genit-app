@@ -58,9 +58,9 @@ export function NavMain() {
       badge: t("New"),
     },
     {
-      title: t("Plugin"),
+      title: t("Plugins"),
       icon: GitBranchPlus,
-      href: "/plugin",
+      href: "/plugins",
       // badge: "New",
     },
     ...(isFarmnetUser

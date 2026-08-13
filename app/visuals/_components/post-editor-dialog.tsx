@@ -77,7 +77,6 @@ import {
 export const POST_PLATFORMS: IntegrationPlatform[] = [
   "facebook",
   "instagram",
-  "threads",
   "linkedin",
   "x",
   "tiktok",
@@ -90,7 +89,6 @@ export const POST_PLATFORM_LABELS: Partial<
 > = {
   facebook: "Facebook",
   instagram: "Instagram",
-  threads: "Threads",
   linkedin: "LinkedIn",
   x: "X",
   tiktok: "TikTok",

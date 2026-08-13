@@ -1470,7 +1470,7 @@ export function IdeaSection() {
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
             with over {INTEGRATIONS.length}+ marketing{" "}
             <Link
-              href='/plugin'
+              href='/plugins'
               target='_blank'
               className='text-foreground text-sm font-medium underline md:text-base'
             >
@@ -1484,7 +1484,7 @@ export function IdeaSection() {
                   ({ name, Icon }, i) => (
                     <Link
                       key={`${name}-${i}`}
-                      href={`/plugin#${name.toLowerCase().replace(/\s+/g, "-")}`}
+                      href={`/plugins#${name.toLowerCase().replace(/\s+/g, "-")}`}
                       className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
                     >
                       <span className='flex h-6 items-center md:h-7'>

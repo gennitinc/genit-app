@@ -145,7 +145,7 @@ export default function RemovalInstructionsPage() {
             </li>
             <li>
               <LocalizedText text={"Open"} />{" "}
-              <a className={LINK_CLASS} href='/plugin'>
+              <a className={LINK_CLASS} href='/plugins'>
                 <LocalizedText text={"Plugin"} />
               </a>{" "}
               <LocalizedText text={"from the navigation menu."} />
@@ -211,7 +211,7 @@ export default function RemovalInstructionsPage() {
           <ol className={ORDERED_CLASS}>
             <li>
               <LocalizedText text={"Open"} />{" "}
-              <a className={LINK_CLASS} href='/plugin'>
+              <a className={LINK_CLASS} href='/plugins'>
                 <LocalizedText text={"Plugin"} />
               </a>{" "}
               <LocalizedText text={"in genit."} />

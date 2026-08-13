@@ -18,7 +18,10 @@ import {
 } from "@/components/ui/popover";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
-import { isMetaSurface } from "@/lib/integrations-api";
+import {
+  effectiveIntegrationPlatform,
+  isMetaSurface,
+} from "@/lib/integrations-api";
 import { getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -218,7 +221,9 @@ export default function VisualsHomePage() {
   const stats = statsQuery.data;
 
   const connectedChannels = integrations.filter(
-    (item) => item.status === "active" && POST_PLATFORMS.includes(item.platform)
+    (item) =>
+      item.status === "active" &&
+      POST_PLATFORMS.includes(effectiveIntegrationPlatform(item))
   ).length;
   const activityData = useMemo(() => {
     const byDate = new Map(
@@ -351,7 +356,7 @@ export default function VisualsHomePage() {
               </span>
             ))}
             <Link
-              href='/plugin'
+              href='/plugins'
               className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
               style={{ zIndex: 0 }}
               title='Add plugin'
@@ -606,7 +611,7 @@ export default function VisualsHomePage() {
             </p>
           </div>
           <Link
-            href='/plugin'
+            href='/plugins'
             className='inline-flex h-9 items-center justify-center rounded-xl border border-zinc-200 px-3 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'
           >
             <LocalizedText text={"View all"} />

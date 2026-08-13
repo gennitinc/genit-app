@@ -310,7 +310,14 @@ export function ManageDialog({
   }
 
   const hasMultiple = sortedConnections.length > 1;
-  const label = platform ? targetLabel(platform) : "Target";
+  const managedByPipedream = sortedConnections.some(
+    (connection) => connection.metadata?.provider === "pipedream"
+  );
+  const label = managedByPipedream
+    ? "Connection"
+    : platform
+      ? targetLabel(platform)
+      : "Target";
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -414,6 +421,10 @@ export function ManageDialog({
                   );
                   const connectionActive =
                     conn.status === "active" && !telegramBusinessPending;
+                  const connectionLabel =
+                    conn.metadata?.provider === "pipedream"
+                      ? "Pipedream connection"
+                      : label;
 
                   return (
                     <div
@@ -429,7 +440,9 @@ export function ManageDialog({
                             className='h-9 w-9 rounded-full'
                           />
                         ) : (
-                          <div className='bg-muted h-9 w-9 rounded-full' />
+                          <div className='bg-muted text-muted-foreground flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold'>
+                            {conn.accountName?.charAt(0).toUpperCase() || "?"}
+                          </div>
                         )}
                         <div className='min-w-0 flex-1'>
                           <div className='flex items-center gap-1.5'>
@@ -444,7 +457,7 @@ export function ManageDialog({
                             )}
                           </div>
                           <p className='text-muted-foreground truncate text-[11px]'>
-                            {label} <LocalizedText text={"ID:"} />
+                            {connectionLabel} <LocalizedText text={"ID:"} />
                             {conn.accountId}
                           </p>
                         </div>

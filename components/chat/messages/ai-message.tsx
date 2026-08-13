@@ -260,7 +260,7 @@ export function AIMessage({
                             variant='default'
                             className='w-fit'
                           >
-                            <Link href='/plugin'>
+                            <Link href='/plugins'>
                               {isReconnect ? "Reconnect / Manage" : "Connect"}{" "}
                               {integrationToConnect}
                             </Link>

@@ -51,6 +51,7 @@ import {
   Search,
   TrendingUp,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import {
   type CSSProperties,
   type ComponentType,
@@ -107,11 +108,10 @@ export const INTEGRATIONS: Integration[] = [
   {
     platform: "threads",
     name: "Threads",
-    description:
-      "Publish threads, replies and quotes. Track conversation reach in real time.",
+    description: "Meta Threads is not available through Pipedream yet.",
     category: "Socials",
     icon: AtSign,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(244, 244, 245, 0.6)",
   },
   {
@@ -506,14 +506,21 @@ function IntegrationCard({
   );
 }
 
-export function IntegrationsExplorer() {
+export function IntegrationsExplorer({
+  publicView = false,
+}: {
+  publicView?: boolean;
+}) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const { byPlatform, identityBySurface, integrations } = useIntegrations();
   const normalizedQuery = query.trim();
-  const { data: discoveredApps = [] } = usePipedreamApps(normalizedQuery);
+  const { data: discoveredApps = [] } = usePipedreamApps(
+    publicView ? "" : normalizedQuery
+  );
 
   const catalog = useMemo(() => {
     const items = [...INTEGRATIONS];
@@ -766,7 +773,11 @@ export function IntegrationsExplorer() {
                       key={`${integration.platform}-${integration.appSlug || integration.name}`}
                       integration={integration}
                       status={status}
-                      onConnect={() => setConnectFor(integration)}
+                      onConnect={() =>
+                        publicView
+                          ? router.push("/signin?redirect=/plugins")
+                          : setConnectFor(integration)
+                      }
                       onManage={() => setManageFor(integration)}
                     />
                   );
