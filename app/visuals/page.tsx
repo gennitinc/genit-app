@@ -425,7 +425,7 @@ export default function VisualsHomePage() {
         </Popover>
       </div>
 
-      <div className='grid grid-cols-2 gap-3 xl:grid-cols-4'>
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
         {statCards.map(({ label, value, detail, Icon, dataKey, color }) => (
           <section
             key={label}
@@ -618,7 +618,7 @@ export default function VisualsHomePage() {
           </Link>
         </div>
 
-        <div className='mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4'>
+        <div className='mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
           {pluginCards.map((integration) => {
             const connections = connectionsForIntegration(
               integration,
