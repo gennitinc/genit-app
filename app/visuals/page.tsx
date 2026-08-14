@@ -335,7 +335,7 @@ export default function VisualsHomePage() {
   const chartGridColor = "var(--border)";
 
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 px-0 md:p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <div className='mb-8 flex flex-col gap-y-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
@@ -425,7 +425,7 @@ export default function VisualsHomePage() {
         </Popover>
       </div>
 
-      <div className='grid grid-cols-1 gap-2 md:gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
         {statCards.map(({ label, value, detail, Icon, dataKey, color }) => (
           <section
             key={label}
@@ -599,7 +599,7 @@ export default function VisualsHomePage() {
       </div>
 
       <section className='mt-5 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-        <div className='flex flex-col gap-2 md:gap-3 sm:flex-row sm:items-start sm:justify-between'>
+        <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <h2 className='text-base font-semibold'>
               <LocalizedText text={"Plugins"} />
