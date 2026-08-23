@@ -16,6 +16,7 @@ import { MessageContent } from "@/components/chat/messages/message-content";
 import { UserMessage } from "@/components/chat/messages/user-message";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
+import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
 import type {
   AgentAttachedFile,
@@ -228,19 +229,13 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   const rendered = renderToolResult(call.render, data);
   if (rendered) return <>{rendered}</>;
 
-  // Unknown render type — collapsible JSON debug card.
+  // Unknown render type — confirm completion without exposing provider payloads.
   return (
-    <details className='border-border/70 bg-card my-3 rounded-xl border text-[12px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
-      <summary className='text-muted-foreground hover:text-foreground cursor-pointer list-none px-3.5 py-2.5 transition-colors'>
-        <span className='text-foreground font-medium'>
-          {humanizeToolName(call.name)}
-        </span>{" "}
-        <LocalizedText text={"· result"} />
-      </summary>
-      <pre className='border-border/70 -mb-[1px] overflow-x-auto border-t px-3.5 py-2.5 text-[10.5px] leading-relaxed dark:border-white/10'>
-        {JSON.stringify(data, null, 2)}
-      </pre>
-    </details>
+    <AgentCard
+      icon={<CheckCircle2 className='h-3.5 w-3.5' />}
+      title={humanizeToolName(call.name)}
+      tone='success'
+    />
   );
 }
 
@@ -404,9 +399,11 @@ export function AgentMessage({
             <AgentPlan tasks={run.plan} />
 
             {/* Tool calls */}
-            {displayedToolCalls.map((tc) => (
-              <ToolCallView key={tc.id} call={tc} />
-            ))}
+            {displayedToolCalls
+              .filter((tc) => shouldDisplayToolCall(tc, run.status))
+              .map((tc) => (
+                <ToolCallView key={tc.id} call={tc} />
+              ))}
 
             {/* Integration connect prompt */}
             {run.integrationRequired &&
