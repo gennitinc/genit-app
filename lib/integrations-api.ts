@@ -29,6 +29,7 @@ export type IntegrationPlatform =
   | "google_slides"
   | "google_docs"
   | "google_forms"
+  | "composio"
   | "pipedream";
 
 export type MetaSurface =
@@ -105,6 +106,7 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "google_docs",
   "google_forms",
   "mailchimp",
+  "composio",
   "pipedream",
 ]);
 
@@ -137,7 +139,7 @@ export function isNativeOnlyPlatform(_platform: IntegrationPlatform): boolean {
   return false;
 }
 
-export function isNativeOnlyPipedreamApp(appSlug: string): boolean {
+export function isNativeOnlyComposioToolkit(appSlug: string): boolean {
   return NATIVE_ONLY_PIPEDREAM_APPS.has(appSlug);
 }
 
@@ -150,9 +152,12 @@ export function isMetaSurface(
 export function effectiveIntegrationPlatform(
   integration: IntegrationConnection
 ): IntegrationPlatform {
-  if (integration.platform !== "pipedream") return integration.platform;
+  if (integration.platform !== "composio" && integration.platform !== "pipedream")
+    return integration.platform;
   const nativePlatform = integration.metadata?.nativePlatform;
-  return isPlatformSupported(nativePlatform) ? nativePlatform : "pipedream";
+  return isPlatformSupported(nativePlatform)
+    ? nativePlatform
+    : integration.platform;
 }
 
 export function asEffectiveIntegration(
@@ -258,6 +263,47 @@ export interface PipedreamApp {
   auth_type?: string;
   categories?: string[];
   verifiedByGenit: boolean;
+}
+
+export interface ComposioToolkit {
+  slug: string;
+  name: string;
+  logo?: string;
+  connected: boolean;
+  connectedAccountId?: string;
+  verifiedByGenit: boolean;
+}
+
+export async function requestComposioConnectUrl(
+  toolkit: string
+): Promise<ConnectUrlResponse> {
+  const { data } = await apiResponse.post<ConnectUrlResponse>(
+    "/integrations/composio/connect-url",
+    { toolkit }
+  );
+  return data;
+}
+
+export async function fetchComposioToolkits(
+  query = "",
+  limit = 40
+): Promise<ComposioToolkit[]> {
+  const { data } = await apiResponse.get<{
+    success: true;
+    toolkits: ComposioToolkit[];
+  }>("/integrations/composio/toolkits", { params: { q: query, limit } });
+  return data.toolkits;
+}
+
+export async function syncComposioConnection(
+  toolkit: string,
+  platform: IntegrationPlatform
+): Promise<IntegrationConnection> {
+  const { data } = await apiResponse.post<{
+    success: true;
+    integration: IntegrationConnection;
+  }>("/integrations/composio/sync", { toolkit, platform });
+  return data.integration;
 }
 
 export async function requestPipedreamConnectUrl(

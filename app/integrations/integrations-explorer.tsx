@@ -28,12 +28,12 @@ import {
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { LocalizedText } from "@/components/localized-text";
-import { useIntegrations, usePipedreamApps } from "@/hooks/use-integrations";
+import { useComposioToolkits, useIntegrations } from "@/hooks/use-integrations";
 import {
   IntegrationConnection,
   IntegrationPlatform,
   isMetaSurface,
-  isNativeOnlyPipedreamApp,
+  isNativeOnlyComposioToolkit,
   isNativeOnlyPlatform,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -108,7 +108,7 @@ export const INTEGRATIONS: Integration[] = [
   {
     platform: "threads",
     name: "Threads",
-    description: "Meta Threads is not available through Pipedream yet.",
+    description: "Meta Threads is not available through Composio yet.",
     category: "Socials",
     icon: AtSign,
     baseStatus: "soon",
@@ -365,7 +365,7 @@ export const INTEGRATIONS: Integration[] = [
     glow: "rgba(103, 58, 183, 0.8)",
   },
   {
-    platform: "pipedream",
+    platform: "composio",
     appSlug: "slack",
     name: "Slack",
     description:
@@ -414,11 +414,13 @@ export function connectionsForIntegration(
   const connections = byPlatform.get(integration.platform) ?? [];
   if (integration.appSlug) {
     return connections.filter(
-      (connection) => connection.metadata?.appSlug === integration.appSlug
+      (connection) =>
+        connection.metadata?.toolkitSlug === integration.appSlug ||
+        connection.metadata?.appSlug === integration.appSlug
     );
   }
   if (isNativeOnlyPlatform(integration.platform)) return connections;
-  const managed = (byPlatform.get("pipedream") ?? []).filter(
+  const managed = (byPlatform.get("composio") ?? []).filter(
     (connection) => connection.metadata?.nativePlatform === integration.platform
   );
   return [...connections, ...managed];
@@ -518,7 +520,7 @@ export function IntegrationsExplorer({
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const { byPlatform, identityBySurface, integrations } = useIntegrations();
   const normalizedQuery = query.trim();
-  const { data: discoveredApps = [] } = usePipedreamApps(
+  const { data: discoveredApps = [] } = useComposioToolkits(
     publicView ? "" : normalizedQuery
   );
 
@@ -526,8 +528,8 @@ export function IntegrationsExplorer({
     const items = [...INTEGRATIONS];
     const known = new Set(items.map((item) => item.appSlug).filter(Boolean));
     for (const connection of integrations) {
-      if (connection.platform !== "pipedream") continue;
-      const slug = String(connection.metadata?.appSlug || "");
+      if (connection.platform !== "composio") continue;
+      const slug = String(connection.metadata?.toolkitSlug || "");
       if (!slug || known.has(slug)) continue;
       known.add(slug);
       const nativePlatform = connection.metadata?.nativePlatform;
@@ -537,10 +539,10 @@ export function IntegrationsExplorer({
       )
         continue;
       items.push({
-        platform: "pipedream",
+        platform: "composio",
         appSlug: slug,
-        name: String(connection.metadata?.appName || slug),
-        description: `Use ${connection.metadata?.appName || slug} actions from your Genit agent.`,
+        name: String(connection.metadata?.toolkitName || slug),
+        description: `Use ${connection.metadata?.toolkitName || slug} tools from your Genit agent.`,
         category: "More Plugins",
         icon: Blocks,
         remoteIcon: connection.accountAvatar,
@@ -549,19 +551,18 @@ export function IntegrationsExplorer({
       });
     }
     for (const app of discoveredApps) {
-      if (known.has(app.name_slug) || isNativeOnlyPipedreamApp(app.name_slug))
+      if (known.has(app.slug) || isNativeOnlyComposioToolkit(app.slug))
         continue;
-      known.add(app.name_slug);
+      known.add(app.slug);
       items.push({
-        platform: "pipedream",
-        appSlug: app.name_slug,
+        platform: "composio",
+        appSlug: app.slug,
         name: app.name,
         description:
-          app.description ||
-          `Connect ${app.name} and use its actions from Genit.`,
+          `Connect ${app.name} and use its tools from Genit.`,
         category: "More Plugins",
         icon: Blocks,
-        remoteIcon: app.img_src,
+        remoteIcon: app.logo,
         baseStatus: "available",
         glow: "rgba(99, 102, 241, 0.7)",
       });

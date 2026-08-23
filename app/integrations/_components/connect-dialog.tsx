@@ -30,7 +30,7 @@ import {
   provisionFacebookSelected,
   provisionInstagramSelected,
   requestConnectUrl,
-  requestPipedreamConnectUrl,
+  requestComposioConnectUrl,
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
@@ -260,6 +260,11 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
   pipedream: [
     "Connect the selected account through Pipedream's managed authentication",
     "Let Genit discover and run the app's supported actions",
+    "Revoke the connection at any time from Genit",
+  ],
+  composio: [
+    "Connect the selected account through Composio's managed authentication",
+    "Let Genit discover and run the toolkit's supported tools",
     "Revoke the connection at any time from Genit",
   ],
 };
@@ -624,7 +629,7 @@ export function ConnectDialog({
     let response: ConnectUrlResponse;
     try {
       response = appSlug
-        ? await requestPipedreamConnectUrl(appSlug)
+        ? await requestComposioConnectUrl(appSlug)
         : await requestConnectUrl(platform);
     } catch (err: any) {
       if (
@@ -710,9 +715,9 @@ export function ConnectDialog({
                 const connected = integrations.find(
                   (item) =>
                     item.status === "active" &&
-                    item.metadata?.provider === "pipedream" &&
+                    item.metadata?.provider === "composio" &&
                     (appSlug
-                      ? item.metadata?.appSlug === appSlug
+                      ? item.metadata?.toolkitSlug === appSlug
                       : item.metadata?.nativePlatform === platform) &&
                     Date.parse(item.updatedAt) >=
                       connectionStartedAtRef.current - 2_000
