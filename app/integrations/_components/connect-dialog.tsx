@@ -14,10 +14,12 @@ import {
   integrationsQueryKey,
   useIntegrations,
 } from "@/hooks/use-integrations";
+import { beginConnectionAttempt } from "@/lib/connection-attempt";
 import {
   ConnectUrlResponse,
   InstagramCandidate,
   IntegrationPlatform,
+  completeComposioAuth,
   connectBrevoWithApiKey,
   connectLinkedInAdsWithAccountId,
   connectMailchimpWithApiKey,
@@ -29,10 +31,11 @@ import {
   isPlatformSupported,
   provisionFacebookSelected,
   provisionInstagramSelected,
-  requestConnectUrl,
   requestComposioConnectUrl,
+  requestConnectUrl,
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { apiOrigin } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -82,6 +85,10 @@ type PopupMessage =
         subtitle?: string;
         avatar?: string;
       }>;
+    }
+  | {
+      type: "genit:composio:verify";
+      sessionUri: string;
     };
 
 interface ConnectDialogProps {
@@ -491,6 +498,7 @@ export function ConnectDialog({
   // the message handler and showing a false "error" flash.
   const connectionResolvedRef = useRef(false);
   const connectionStartedAtRef = useRef(0);
+  const connectionAttemptRef = useRef(0);
   const qc = useQueryClient();
   const { user, fetchCurrentUser } = useUserContext();
   const { identityBySurface } = useIntegrations();
@@ -520,6 +528,7 @@ export function ConnectDialog({
 
   useEffect(() => {
     if (!open) {
+      connectionAttemptRef.current += 1;
       closePopup();
       setPhase("idle");
       setErrorMessage(null);
@@ -554,17 +563,35 @@ export function ConnectDialog({
 
   useEffect(() => {
     if (!platform) return;
+    const activePlatform = platform;
     function handleMessage(e: MessageEvent) {
-      if (e.origin !== window.location.origin) return;
+      if (e.origin !== window.location.origin && e.origin !== apiOrigin) return;
+      if (e.source !== popupRef.current) return;
       const data = e.data as PopupMessage | undefined;
       if (!data || typeof data !== "object") return;
       if (
         data.type !== "genit:integration:connected" &&
         data.type !== "genit:integration:error" &&
-        data.type !== "genit:integration:select_target"
+        data.type !== "genit:integration:select_target" &&
+        data.type !== "genit:composio:verify"
       )
         return;
-      if (data.platform !== platform) return;
+      if (data.type === "genit:composio:verify") {
+        void completeComposioAuth(data.sessionUri, activePlatform)
+          .then((integration) => markConnected(integration.accountName))
+          .catch((error: any) => {
+            connectionResolvedRef.current = true;
+            closePopup();
+            setErrorMessage(
+              error?.response?.data?.message ||
+                error?.message ||
+                "Composio verification failed"
+            );
+            setPhase("error");
+          });
+        return;
+      }
+      if (data.platform !== activePlatform) return;
 
       // Mark as resolved BEFORE any React state updates so the popup poll
       // can never race ahead and flash an error.
@@ -621,6 +648,8 @@ export function ConnectDialog({
       toast.info(`${platformName} integration is coming soon`);
       return;
     }
+    closePopup();
+    const isCurrentAttempt = beginConnectionAttempt(connectionAttemptRef);
     setPhase("connecting");
     setErrorMessage(null);
     connectionResolvedRef.current = false;
@@ -632,6 +661,7 @@ export function ConnectDialog({
         ? await requestComposioConnectUrl(appSlug)
         : await requestConnectUrl(platform);
     } catch (err: any) {
+      if (!isCurrentAttempt()) return;
       if (
         platform &&
         isCredentialPlatform(platform) &&
@@ -651,6 +681,7 @@ export function ConnectDialog({
       toast.error("Could not start connection", { description: msg });
       return;
     }
+    if (!isCurrentAttempt()) return;
 
     // Smart-connect fast path: the org already has a Meta identity with
     // sufficient scopes for this surface. No popup needed.
@@ -697,10 +728,14 @@ export function ConnectDialog({
       }
       popupRef.current = popup;
       connectionResolvedRef.current = false;
-      pollRef.current = setInterval(() => {
-        if (popupRef.current && popupRef.current.closed) {
-          if (pollRef.current) clearInterval(pollRef.current);
-          pollRef.current = null;
+      const poll = setInterval(() => {
+        if (!isCurrentAttempt()) {
+          clearInterval(poll);
+          return;
+        }
+        if (popup.closed) {
+          clearInterval(poll);
+          if (pollRef.current === poll) pollRef.current = null;
 
           // The popup closed — but a postMessage may still be in flight.
           // If we already resolved (message was received), do nothing.
@@ -709,9 +744,11 @@ export function ConnectDialog({
           void (async () => {
             for (let attempt = 0; attempt < 4; attempt += 1) {
               await new Promise((resolve) => window.setTimeout(resolve, 1500));
+              if (!isCurrentAttempt()) return;
               if (connectionResolvedRef.current) return;
               try {
                 const { integrations } = await fetchIntegrations();
+                if (!isCurrentAttempt()) return;
                 const connected = integrations.find(
                   (item) =>
                     item.status === "active" &&
@@ -730,9 +767,11 @@ export function ConnectDialog({
                 // A transient refresh error should not mask the OAuth result.
               }
             }
+            if (!isCurrentAttempt()) return;
             if (connectionResolvedRef.current) return;
             setPhase((current) => {
-              if (current !== "connecting") return current;
+              if (!isCurrentAttempt() || current !== "connecting")
+                return current;
               setErrorMessage(
                 (prev) =>
                   prev ?? "Window closed before the connection completed"
@@ -742,6 +781,7 @@ export function ConnectDialog({
           })();
         }
       }, 600);
+      pollRef.current = poll;
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || err?.message || "Failed to open popup";
@@ -749,7 +789,7 @@ export function ConnectDialog({
       setPhase("error");
       toast.error("Could not start connection", { description: msg });
     }
-  }, [platform, platformName, appSlug, qc, orgId, markConnected]);
+  }, [platform, platformName, appSlug, qc, orgId, markConnected, closePopup]);
 
   const handleCredentialSubmit = useCallback(async () => {
     if (!platform) return;

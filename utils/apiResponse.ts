@@ -1,10 +1,12 @@
-import cookie from "js-cookie";
 import axios from "axios";
+import cookie from "js-cookie";
 
 const API_BASE_URL =
   (process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_LIVE_URL
     : process.env.NEXT_PUBLIC_LOCAL_URL) || "http://localhost:8000/api/v1/";
+
+export const apiOrigin = new URL(API_BASE_URL).origin;
 
 //api controller
 export const apiResponse = axios.create({

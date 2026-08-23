@@ -110,12 +110,33 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "pipedream",
 ]);
 
-const NATIVE_ONLY_PIPEDREAM_APPS = new Set([
-  "facebook_pages",
-  "instagram_business",
-  "threads",
-  "facebook_graph_api",
-  "whatsapp_business",
+// These live Composio toolkits already have first-class cards above. Exclude
+// them from dynamic discovery so the same connection is not shown twice.
+const FIRST_CLASS_COMPOSIO_TOOLKITS = new Set([
+  "facebook",
+  "instagram",
+  "metaads",
+  "whatsapp",
+  "linkedin",
+  "twitter",
+  "tiktok",
+  "youtube",
+  "pinterest",
+  "snapchat",
+  "googleads",
+  "linkedin_ads",
+  "telegram",
+  "gmail",
+  "outlook",
+  "mailchimp",
+  "brevo",
+  "googlecalendar",
+  "googledrive",
+  "googlemeet",
+  "googlesheets",
+  "googleslides",
+  "googledocs",
+  "googleforms",
 ]);
 
 // Platforms that connect via a credential-entry form (no OAuth popup).
@@ -140,7 +161,7 @@ export function isNativeOnlyPlatform(_platform: IntegrationPlatform): boolean {
 }
 
 export function isNativeOnlyComposioToolkit(appSlug: string): boolean {
-  return NATIVE_ONLY_PIPEDREAM_APPS.has(appSlug);
+  return FIRST_CLASS_COMPOSIO_TOOLKITS.has(appSlug);
 }
 
 export function isMetaSurface(
@@ -152,7 +173,10 @@ export function isMetaSurface(
 export function effectiveIntegrationPlatform(
   integration: IntegrationConnection
 ): IntegrationPlatform {
-  if (integration.platform !== "composio" && integration.platform !== "pipedream")
+  if (
+    integration.platform !== "composio" &&
+    integration.platform !== "pipedream"
+  )
     return integration.platform;
   const nativePlatform = integration.metadata?.nativePlatform;
   return isPlatformSupported(nativePlatform)
@@ -303,6 +327,17 @@ export async function syncComposioConnection(
     success: true;
     integration: IntegrationConnection;
   }>("/integrations/composio/sync", { toolkit, platform });
+  return data.integration;
+}
+
+export async function completeComposioAuth(
+  sessionUri: string,
+  platform: IntegrationPlatform
+): Promise<IntegrationConnection> {
+  const { data } = await apiResponse.post<{
+    success: true;
+    integration: IntegrationConnection;
+  }>("/integrations/composio/complete-auth", { sessionUri, platform });
   return data.integration;
 }
 
