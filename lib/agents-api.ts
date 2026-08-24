@@ -20,7 +20,12 @@ export interface AgentToolCall {
   id: string;
   name: string;
   args: Record<string, any>;
-  result?: { ok: boolean; data?: any; error?: string };
+  result?: {
+    ok: boolean;
+    data?: any;
+    error?: string;
+    providerLogId?: string;
+  };
   render?: string;
 }
 

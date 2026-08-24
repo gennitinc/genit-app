@@ -522,7 +522,7 @@ const LandingHero = () => {
 
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <a
-                href={user ? "/chat" : "/signup"}
+                href={user ? "/visuals" : "/signup"}
                 className='group inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 active:translate-y-px'
               >
                 Get started

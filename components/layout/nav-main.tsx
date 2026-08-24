@@ -47,15 +47,15 @@ export function NavMain() {
   const isFarmnetUser = user?.email?.toLowerCase() === FARMNET_EMAIL;
   const navItems = [
     {
-      title: t("Chat"),
-      icon: SquarePen,
-      href: "/chat",
-    },
-    {
       title: t("Visual Flow"),
       icon: GalleryHorizontal,
       href: "/visuals",
       badge: t("New"),
+    },
+    {
+      title: t("Chat"),
+      icon: SquarePen,
+      href: "/chat",
     },
     {
       title: t("Plugins"),

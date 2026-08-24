@@ -8,6 +8,7 @@ import {
   LinkedinBrand,
   MessengerBrand,
   MicrosoftOutlookBrand,
+  SlackBrand,
   TelegramBrand,
   WhatsAppBrand,
   XBrand,
@@ -429,7 +430,7 @@ function EmailMessageBody({
   );
 }
 
-const INBOX_PLATFORMS = new Set<IntegrationPlatform>([
+const INBOX_PLATFORMS = new Set<string>([
   "instagram",
   "linkedin",
   "x",
@@ -457,6 +458,27 @@ const PLATFORM_LABELS: Record<string, string> = {
   pipedream: "Managed plugin",
 };
 
+function inboxPlatform(account: IntegrationConnection): string {
+  return String(
+    account.platform === "composio"
+      ? account.metadata?.nativePlatform ||
+          account.metadata?.toolkitSlug ||
+          "composio"
+      : account.platform
+  ).toLowerCase();
+}
+
+function accountDisplayName(account: IntegrationConnection): string {
+  const platform = inboxPlatform(account);
+  const name = account.accountName?.trim();
+  return !name ||
+    [account.platform, platform, account.metadata?.toolkitSlug].some(
+      (value) => String(value || "").toLowerCase() === name.toLowerCase()
+    )
+    ? PLATFORM_LABELS[platform] || name || "Channel"
+    : name;
+}
+
 function PlatformIcon({
   platform,
   className = "h-4 w-4",
@@ -483,6 +505,8 @@ function PlatformIcon({
       return <MessengerBrand className={className} />;
     case "telegram":
       return <TelegramBrand className={className} />;
+    case "slack":
+      return <SlackBrand className={className} />;
     default:
       return <MessageSquare className={className} />;
   }
@@ -533,11 +557,11 @@ function AccountAvatar({ account }: { account: IntegrationConnection }) {
         />
       ) : (
         <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-sm font-semibold text-zinc-600 ring-1 ring-black/5 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-white/10'>
-          {account.accountName?.charAt(0).toUpperCase() || "?"}
+          {accountDisplayName(account).charAt(0).toUpperCase()}
         </div>
       )}
       <span className='absolute -right-1 -bottom-1 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
-        <PlatformIcon platform={account.platform} className='h-3 w-3' />
+        <PlatformIcon platform={inboxPlatform(account)} className='h-3 w-3' />
       </span>
     </div>
   );
@@ -627,6 +651,7 @@ export default function InboxPage() {
   const deferredSearch = useDeferredValue(search.trim());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const requestedHistoryKeyRef = useRef("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replyInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -736,8 +761,10 @@ export default function InboxPage() {
   } = useIntegrations();
   const inboxIntegrations = useMemo(
     () =>
-      INTEGRATIONS.filter((integration) =>
-        INBOX_PLATFORMS.has(integration.platform)
+      INTEGRATIONS.filter(
+        (integration) =>
+          INBOX_PLATFORMS.has(integration.platform) ||
+          integration.appSlug === "slack"
       ),
     []
   );
@@ -746,14 +773,24 @@ export default function InboxPage() {
     : [];
   const accounts = useMemo(
     () =>
-      integrations.filter(
-        (item) =>
-          INBOX_PLATFORMS.has(item.platform) &&
-          item.status === "active" &&
-          (item.platform !== "pipedream" ||
-            Boolean(item.metadata?.pipedreamInbox))
-      ),
-    [integrations]
+      integrations
+        .filter(
+          (item) =>
+            INBOX_PLATFORMS.has(inboxPlatform(item)) &&
+            item.status === "active" &&
+            (item.platform !== "pipedream" ||
+              Boolean(item.metadata?.pipedreamInbox))
+        )
+        .sort((a, b) => {
+          const order = (account: IntegrationConnection) =>
+            inboxIntegrations.findIndex(
+              (integration) =>
+                (integration.appSlug || integration.platform) ===
+                inboxPlatform(account)
+            );
+          return order(a) - order(b);
+        }),
+    [inboxIntegrations, integrations]
   );
   const startableAccounts = useMemo(
     () =>
@@ -784,15 +821,18 @@ export default function InboxPage() {
     () => ({
       integrationId: selectedAccount?._id,
       platform:
-        selectedAccount?.platform === "pipedream"
+        selectedAccount &&
+        ["pipedream", "composio"].includes(selectedAccount.platform)
           ? undefined
-          : selectedAccount?.platform,
+          : selectedAccount
+            ? inboxPlatform(selectedAccount)
+            : undefined,
       status,
       search: deferredSearch || undefined,
       sort,
       folder:
         selectedAccount &&
-        ["gmail", "email", "outlook"].includes(selectedAccount.platform)
+        ["gmail", "email", "outlook"].includes(inboxPlatform(selectedAccount))
           ? folder
           : undefined,
     }),
@@ -894,13 +934,32 @@ export default function InboxPage() {
       "whatsapp",
       "telegram",
       "x",
+      "composio",
     ].includes(account.platform)
   );
   const historyAccounts = syncableAccounts.filter((account) =>
     ["gmail", "outlook", "instagram", "linkedin", "messenger", "x"].includes(
-      account.platform
+      inboxPlatform(account)
     )
   );
+  const providerHistoryKey = (
+    selectedAccount
+      ? historyAccounts.filter((account) => account._id === selectedAccount._id)
+      : historyAccounts
+  )
+    .map((account) => {
+      const metadata = account.metadata || {};
+      const cursor =
+        metadata.composioInboxNextPageToken ||
+        metadata.gmailNextPageToken ||
+        metadata.outlookNextPageToken ||
+        metadata.metaNextPageToken ||
+        metadata.xMentionNextPageToken ||
+        metadata.xDmNextPageToken;
+      return cursor ? `${account._id}:${cursor}` : "";
+    })
+    .filter(Boolean)
+    .join("|");
 
   useEffect(() => {
     const params = new URL(window.location.href).searchParams;
@@ -1019,13 +1078,25 @@ export default function InboxPage() {
 
   useEffect(() => {
     const node = loadMoreRef.current;
-    if (!node || !hasNextPage) return;
+    if (!node || (!hasNextPage && !providerHistoryKey)) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !isFetchingNextPage) fetchNextPage();
+      if (!entry.isIntersecting || isFetchingNextPage || syncMutation.isPending)
+        return;
+      if (hasNextPage) fetchNextPage();
+      else if (requestedHistoryKeyRef.current !== providerHistoryKey) {
+        requestedHistoryKeyRef.current = providerHistoryKey;
+        syncChannels(true);
+      }
     });
     observer.observe(node);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    providerHistoryKey,
+    syncMutation.isPending,
+  ]);
 
   useEffect(() => {
     setShowEmoji(false);
@@ -1341,7 +1412,7 @@ export default function InboxPage() {
               >
                 {selectedAccount ? (
                   <PlatformIcon
-                    platform={selectedAccount.platform}
+                    platform={inboxPlatform(selectedAccount)}
                     className='h-4 w-4'
                   />
                 ) : (
@@ -1375,11 +1446,11 @@ export default function InboxPage() {
                 {accounts.map((account) => (
                   <DropdownMenuRadioItem key={account._id} value={account._id}>
                     <PlatformIcon
-                      platform={account.platform}
+                      platform={inboxPlatform(account)}
                       className='mr-2 h-4 w-4'
                     />
                     <span className='min-w-0 flex-1 truncate'>
-                      {account.accountName || PLATFORM_LABELS[account.platform]}
+                      {accountDisplayName(account)}
                     </span>
                     {account.isPrimary && (
                       <span className='text-muted-foreground text-[9px]'>

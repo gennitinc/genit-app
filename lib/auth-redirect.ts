@@ -2,7 +2,7 @@ const LOCAL_ORIGIN = "https://genit.local";
 
 export function getAuthRedirect(
   searchParams: Pick<URLSearchParams, "get">,
-  fallback = "/chat"
+  fallback = "/visuals"
 ) {
   const value = searchParams.get("redirect");
   if (!value) return fallback;

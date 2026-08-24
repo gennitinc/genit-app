@@ -24,7 +24,6 @@ import {
   updateConversationStatus,
   updateInboxMessage,
 } from "@/lib/inbox-api";
-import cookie from "js-cookie";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import {
   useInfiniteQuery,
@@ -32,6 +31,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import cookie from "js-cookie";
 import { type Socket, io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
@@ -47,8 +47,9 @@ export function useInboxConversations(filters: InboxFilters = {}) {
   return useQuery({
     queryKey: inboxConversationsQueryKey(filters),
     queryFn: () => fetchConversations(filters),
-    staleTime: 10_000,
-    refetchInterval: 15_000,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchInterval: 60_000,
   });
 }
 
@@ -59,12 +60,13 @@ export function useInfiniteInboxConversations(
   return useInfiniteQuery({
     queryKey: inboxConversationsQueryKey(filters),
     queryFn: ({ pageParam = 0 }) =>
-      fetchConversationPage({ ...filters, limit: 30, offset: pageParam }),
+      fetchConversationPage({ ...filters, limit: 50, offset: pageParam }),
     enabled,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
-    staleTime: 5_000,
-    refetchInterval: 5_000,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchInterval: 60_000,
   });
 }
 
@@ -73,8 +75,9 @@ export function useInboxMessages(conversationId?: string) {
     queryKey: inboxMessagesQueryKey(conversationId!),
     queryFn: () => fetchMessages(conversationId!),
     enabled: Boolean(conversationId),
-    staleTime: 5_000,
-    refetchInterval: conversationId ? 8_000 : false,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchInterval: conversationId ? 60_000 : false,
   });
 }
 
@@ -223,8 +226,10 @@ export function useSyncInbox() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: syncInbox,
-    onSuccess: () =>
-      qc.invalidateQueries({ queryKey: ["inbox_conversations"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+      qc.invalidateQueries({ queryKey: ["integrations"] });
+    },
   });
 }
 

@@ -9,8 +9,9 @@ import {
   MetaSurface,
   disconnectIntegrationById,
   disconnectMetaIdentityById,
-  fetchIntegrations,
+  effectiveIntegrationPlatform,
   fetchComposioToolkits,
+  fetchIntegrations,
   requestConnectUrl,
   setPrimaryIntegrationById,
   updateIntegrationInboxSettings,
@@ -53,9 +54,12 @@ export function useIntegrations() {
   const byPlatform = useMemo(() => {
     const map = new Map<IntegrationPlatform, IntegrationConnection[]>();
     for (const item of integrations) {
-      const list = map.get(item.platform) ?? [];
-      list.push(item);
-      map.set(item.platform, list);
+      const platform = effectiveIntegrationPlatform(item);
+      for (const key of new Set([item.platform, platform])) {
+        const list = map.get(key) ?? [];
+        list.push(item);
+        map.set(key, list);
+      }
     }
     for (const list of map.values()) {
       list.sort((a, b) => {
