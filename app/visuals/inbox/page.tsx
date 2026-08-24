@@ -655,6 +655,10 @@ export default function InboxPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replyInputRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    void import("emoji-picker-react");
+  }, []);
+
   /* Lock parent layout ancestors to viewport height so only the
      messages column scrolls – uses inline styles because dynamically
      added Tailwind classes aren't compiled into the CSS bundle. */
@@ -1160,7 +1164,6 @@ export default function InboxPage() {
     const next = reply.slice(0, start) + emoji + reply.slice(end);
     if (replyMaxLength && next.length > replyMaxLength) return;
     setReply(next);
-    setShowEmoji(false);
     requestAnimationFrame(() => {
       input?.focus();
       input?.setSelectionRange(start + emoji.length, start + emoji.length);
@@ -2694,7 +2697,6 @@ export default function InboxPage() {
                             <EmojiPicker
                               onEmojiClick={insertEmoji}
                               autoFocusSearch
-                              lazyLoadEmojis
                               searchPlaceholder='Search emojis'
                               theme={
                                 (resolvedTheme === "dark"

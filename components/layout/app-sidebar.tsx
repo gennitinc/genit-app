@@ -27,47 +27,19 @@ import {
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type * as React from "react";
-import { useEffect, useRef } from "react";
 
 export function AppSidebar({
   className,
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useLanguage();
-  const { state, isMobile, setOpen } = useSidebar();
+  const { state, isMobile } = useSidebar();
   const user = useUserContext().user;
   const isTablet = useMediaQuery("(max-width: 1024px)");
-  const isLargeDesktop = useMediaQuery("(min-width: 1280px)");
   const pathname = usePathname();
   const params = useParams();
 
   const isChatIdPage = !!params.id && pathname.startsWith("/chat");
-  const isVisualsPage = pathname.startsWith("/visuals");
-  const keepsDesktopSidebarCollapsed =
-    isVisualsPage || pathname.startsWith("/user/settings");
-
-  const lastCheckedPathname = useRef<string | null>(null);
-
-  useEffect(() => {
-    // Auto-collapse on desktop and tablets if navigating to specific pages.
-    // By tracking the pathname, we allow the user to manually open the sidebar afterwards.
-    if (pathname !== lastCheckedPathname.current) {
-      lastCheckedPathname.current = pathname;
-
-      if (keepsDesktopSidebarCollapsed && !isMobile) {
-        setOpen(false);
-      } else if (isChatIdPage && !isMobile && !isLargeDesktop) {
-        setOpen(false);
-      }
-    }
-  }, [
-    pathname,
-    keepsDesktopSidebarCollapsed,
-    isChatIdPage,
-    isMobile,
-    isLargeDesktop,
-    setOpen,
-  ]);
 
   // Calculate credit stats from user data
   const creditsRemaining = user?.creditsRemaining || 0;

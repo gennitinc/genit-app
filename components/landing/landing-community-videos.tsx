@@ -1,9 +1,7 @@
 "use client";
 
 import { LocalizedText } from "@/components/localized-text";
-import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useRef } from "react";
 
 interface VideoCard {
@@ -267,7 +265,7 @@ const LandingCommunityVideos = () => {
             />
           </p>
 
-          <Link
+          {/* <Link
             href='/community'
             className='text-muted-foreground mx-auto flex w-fit max-w-2xl items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-base shadow-lg shadow-black/5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:bg-white/20 md:text-base dark:bg-white/5 dark:hover:bg-white/10'
           >
@@ -275,7 +273,7 @@ const LandingCommunityVideos = () => {
               <LocalizedText text={"View All"} />
             </span>
             <ArrowRightIcon className='h-4 w-4' />
-          </Link>
+          </Link> */}
         </div>
 
         {/* Video Grid - Masonry Layout */}

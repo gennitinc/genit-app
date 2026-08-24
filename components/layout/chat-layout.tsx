@@ -4,7 +4,6 @@ import { PreviewPanel } from "../chat/preview-panel";
 import { TextChatContent } from "../chat/text-chat-content";
 import { AppSidebar } from "./app-sidebar";
 import TopNavWithAurora from "./top-nav-with-aurora";
-import { useSidebar } from "@/components/ui/sidebar";
 import {
   AgentRunsProvider,
   useAgentRunsContext,
@@ -57,13 +56,6 @@ function ChatLayoutInner() {
     setFocusedGenerationId,
   } = useProjectDesign();
   const { runs } = useAgentRunsContext();
-  const { setOpen: setSidebarOpen } = useSidebar();
-  const setSidebarOpenRef = useRef(setSidebarOpen);
-
-  useEffect(() => {
-    setSidebarOpenRef.current = setSidebarOpen;
-  }, [setSidebarOpen]);
-
   const isGenerationActive =
     Boolean(isGeneratingImage) || (liveNodes?.length ?? 0) > 0;
 
@@ -157,13 +149,6 @@ function ChatLayoutInner() {
       setIsFullscreen(false);
     }
   }, [hasAnyPreview]);
-
-  // Collapse the app sidebar when the preview opens (more room for canvas);
-  // re-expand it when the preview closes.
-  useEffect(() => {
-    if (!isDesktop) return;
-    setSidebarOpenRef.current(!isPreviewOpen);
-  }, [isPreviewOpen, isDesktop]);
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden'>

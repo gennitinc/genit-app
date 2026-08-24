@@ -488,12 +488,12 @@ export function LandingFooter() {
                   >
                     {t("Creators Program")}
                   </Link>
-                  <Link
+                  {/* <Link
                     href='/community'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Community")}
-                  </Link>
+                  </Link> */}
                   <Link
                     href='/creators-program'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'

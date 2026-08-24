@@ -3,18 +3,32 @@
 import { PricingDialog } from "../common/pricing-dialog";
 // import { ProjectPreview } from "../community/project-preview";
 import { SidebarProvider } from "../ui/sidebar";
+import { useUserContext } from "@/context/AuthenticatedContext";
 import { useUrlState } from "@/hooks/use-url-state";
-import HEYO from "@heyo.so/js";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   const { getUrlState } = useUrlState();
   const preview = getUrlState().getValue("gen");
   const checkout = getUrlState().getValue("checkout");
+  const { user, updateUserPreferences } = useUserContext();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const pathName = usePathname();
-  const heyoInitialized = useRef(false);
+  useEffect(() => {
+    setSidebarOpen(user?.preferences?.sidebarOpen ?? true);
+  }, [user?._id, user?.preferences?.sidebarOpen]);
+
+  const handleSidebarOpenChange = useCallback(
+    (open: boolean) => {
+      setSidebarOpen(open);
+      if (user) {
+        void updateUserPreferences({ sidebarOpen: open }).catch(() =>
+          setSidebarOpen(!open)
+        );
+      }
+    },
+    [user, updateUserPreferences]
+  );
 
   // useEffect(() => {
   //   // Whitelist: Only show HEYO on these public/marketing pages
@@ -72,7 +86,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   // }, [pathName]);
 
   return (
-    <SidebarProvider defaultOpen={!pathName?.startsWith("/visuals")}>
+    <SidebarProvider open={sidebarOpen} onOpenChange={handleSidebarOpenChange}>
       <div className='custom-scrollbar h-full w-full'>
         {children}
 

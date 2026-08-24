@@ -200,6 +200,7 @@ export interface User {
     marketingEmails: boolean;
     twoFactorAuth: boolean;
     loginNotifications: boolean;
+    sidebarOpen?: boolean;
   };
   onboarding?: {
     _id: string;

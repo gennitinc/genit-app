@@ -54,7 +54,7 @@ export function LandingNavbar() {
     { name: t("Visual Flow"), href: "/visuals" },
     ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
-    { name: t("Community"), href: "/community" },
+    // { name: t("Community"), href: "/community" },
     { name: t("Blog"), href: "/blog" },
     { name: t("History"), href: currentUser ? "/chat/history" : "/signin" },
     {
@@ -120,13 +120,13 @@ export function LandingNavbar() {
                     {t("Apps")}
                   </Link>
                 )}
-                <Link
+                {/* <Link
                   target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                   href='/community'
                 >
                   {t("Community")}
-                </Link>
+                </Link> */}
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1360px]:inline-flex'
                   href='/blog'

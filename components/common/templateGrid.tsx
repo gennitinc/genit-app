@@ -31,7 +31,6 @@ import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   AlertCircle,
-  ArrowRight,
   CircleFadingArrowUp,
   Eye,
   Image as ImageIcon,
@@ -505,13 +504,13 @@ export default function TemplateGrid() {
       <h2 className='text-foreground text-base font-semibold'>
         <LocalizedText text={"Inspirations"} />
       </h2>
-      <button
+      {/* <button
         className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm'
         onClick={() => router.push("/community")}
       >
         <LocalizedText text={"View all"} />
         <ArrowRight className='h-4 w-4' />
-      </button>
+      </button> */}
     </div>
   );
 

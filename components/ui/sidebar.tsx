@@ -101,14 +101,10 @@ const SidebarProvider = React.forwardRef<
         : setOpen((open) => !open);
     }, [isMobile, setOpen, setOpenMobile]);
 
-    // Ensure mobile always starts in expanded state and handle loading
+    // Mobile uses its own sheet state; keep the desktop preference untouched.
     React.useEffect(() => {
-      if (isMobile && !open) {
-        setOpen(true);
-      }
-      // Set loading to false after initial render
       setIsLoading(false);
-    }, [isMobile, open, setOpen]);
+    }, []);
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {

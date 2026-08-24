@@ -26,7 +26,6 @@ import {
   Settings,
   Sun,
   User,
-  Users,
   X,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -185,7 +184,7 @@ const UserPopOver = () => {
               },
               { icon: CreditCard, label: t("Pricing"), href: "/pricing" },
               // { icon: Book, label: "Documentation", href: "/documentation" },
-              { icon: Users, label: t("Community"), href: "/community" },
+              // { icon: Users, label: t("Community"), href: "/community" },
               { icon: MessageSquare, label: t("Feedback"), href: "/contact" },
             ].map(({ icon: Icon, label, href }) => (
               <Link

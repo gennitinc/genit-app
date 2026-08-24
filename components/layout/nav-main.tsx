@@ -27,7 +27,6 @@ import {
   Settings,
   SquarePen,
   UserPlus,
-  Users,
   Video,
   WandSparklesIcon,
   Workflow,
@@ -72,11 +71,11 @@ export function NavMain() {
           },
         ]
       : []),
-    {
-      title: t("Community"),
-      icon: Users,
-      href: "/community",
-    },
+    // {
+    //   title: t("Community"),
+    //   icon: Users,
+    //   href: "/community",
+    // },
     {
       title: t("History"),
       icon: History,

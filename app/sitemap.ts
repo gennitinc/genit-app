@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/apps",
     "/apps2",
     "/blog",
-    "/community",
+    // "/community",
     "/creators-program",
     "/inspirations",
     "/all/plugins",

@@ -39,7 +39,6 @@ import {
   Sun,
   Twitter,
   User,
-  Users,
   X,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -220,13 +219,13 @@ export function Navbar({ title }: NavbarProps) {
             >
               <LocalizedText text={"Apps"} />
             </Link>
-            <Link
+            {/* <Link
               target='__blank'
               className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
               href='/community'
             >
               <LocalizedText text={"Community"} />
-            </Link>
+            </Link> */}
             <Link
               target='__blank'
               className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'

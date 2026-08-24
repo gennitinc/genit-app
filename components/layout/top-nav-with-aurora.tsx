@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
 import { LocalizedText } from "@/components/localized-text";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
@@ -32,13 +31,9 @@ export default function TopNavWithAurora({
   }, []);
 
   const isMobile = useIsMobile();
-  const isTablet = useMediaQuery("(max-width: 1024px)");
 
   const params = useParams();
   const isChatIdPage = !!params.id && pathName.startsWith("/chat");
-  const isVisualsPage = pathName.startsWith("/visuals");
-  const keepsDesktopSidebarCollapsed =
-    isVisualsPage || pathName.startsWith("/user/settings");
 
   return (
     <header
@@ -51,10 +46,7 @@ export default function TopNavWithAurora({
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
           {(!isChatIdPage || isMobile || !isPreviewOpen) && (
-            <SidebarTrigger
-              className='z-20 -ml-2'
-              disabled={keepsDesktopSidebarCollapsed && !isTablet}
-            />
+            <SidebarTrigger className='z-20 -ml-2' />
           )}
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
             <Logo className='h-9 w-9' />
