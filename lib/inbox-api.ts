@@ -16,8 +16,7 @@ export interface InboxConversation {
     | "whatsapp"
     | "messenger"
     | "telegram"
-    | "slack"
-    | "pipedream";
+    | "slack";
   platformConversationId: string;
   customerName: string;
   customerId?: string;
@@ -305,9 +304,7 @@ export async function deleteConversation(
   await apiResponse.delete(`/inbox/conversations/${conversationId}`);
 }
 
-export async function clearConversation(
-  conversationId: string
-): Promise<void> {
+export async function clearConversation(conversationId: string): Promise<void> {
   await apiResponse.delete(`/inbox/conversations/${conversationId}/messages`);
 }
 

@@ -665,7 +665,7 @@ export default function PostsPage() {
     () =>
       new Set(
         integrations
-          .filter((item) => ["pipedream", "composio"].includes(item.platform))
+          .filter((item) => item.platform === "composio")
           .map((item) => item._id)
       ),
     [integrations]

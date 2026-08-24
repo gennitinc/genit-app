@@ -439,7 +439,6 @@ const INBOX_PLATFORMS = new Set<string>([
   "whatsapp",
   "messenger",
   "telegram",
-  "pipedream",
 ]);
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -455,7 +454,6 @@ const PLATFORM_LABELS: Record<string, string> = {
   messenger: "Messenger",
   telegram: "Telegram Business",
   slack: "Slack",
-  pipedream: "Managed plugin",
 };
 
 function inboxPlatform(account: IntegrationConnection): string {
@@ -780,10 +778,7 @@ export default function InboxPage() {
       integrations
         .filter(
           (item) =>
-            INBOX_PLATFORMS.has(inboxPlatform(item)) &&
-            item.status === "active" &&
-            (item.platform !== "pipedream" ||
-              Boolean(item.metadata?.pipedreamInbox))
+            INBOX_PLATFORMS.has(inboxPlatform(item)) && item.status === "active"
         )
         .sort((a, b) => {
           const order = (account: IntegrationConnection) =>
@@ -804,11 +799,6 @@ export default function InboxPage() {
           (account.platform === "telegram" &&
             account.metadata?.telegramMode !== "business_bot") ||
           account.platform === "whatsapp" ||
-          (account.platform === "pipedream" &&
-            Boolean(
-              account.metadata?.pipedreamInbox?.replyActionId ||
-              account.metadata?.pipedreamInbox?.replyProxyRequest?.url
-            )) ||
           (account.platform === "x" && account.scopes.includes("dm.write"))
       ),
     [accounts]
@@ -825,8 +815,7 @@ export default function InboxPage() {
     () => ({
       integrationId: selectedAccount?._id,
       platform:
-        selectedAccount &&
-        ["pipedream", "composio"].includes(selectedAccount.platform)
+        selectedAccount && selectedAccount.platform === "composio"
           ? undefined
           : selectedAccount
             ? inboxPlatform(selectedAccount)

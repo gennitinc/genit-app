@@ -423,7 +423,11 @@ export function connectionsForIntegration(
   const managed = (byPlatform.get("composio") ?? []).filter(
     (connection) => connection.metadata?.nativePlatform === integration.platform
   );
-  return [...connections, ...managed];
+  return [
+    ...new Map(
+      [...connections, ...managed].map((item) => [item._id, item])
+    ).values(),
+  ];
 }
 
 function IntegrationCard({
@@ -558,8 +562,7 @@ export function IntegrationsExplorer({
         platform: "composio",
         appSlug: app.slug,
         name: app.name,
-        description:
-          `Connect ${app.name} and use its tools from Genit.`,
+        description: `Connect ${app.name} and use its tools from Genit.`,
         category: "More Plugins",
         icon: Blocks,
         remoteIcon: app.logo,

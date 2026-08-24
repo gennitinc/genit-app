@@ -16,7 +16,6 @@ export type AutomationNodeType =
 // ── Trigger Subtypes ────────────────────────────────────────────────────────
 
 export type TriggerSubtype =
-  | "pipedream"
   | "schedule"
   | "webhook"
   | "manual"
@@ -41,12 +40,6 @@ export interface TriggerSubtypeConfig {
 }
 
 export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
-  {
-    id: "pipedream",
-    label: "Plugin Event",
-    integration: "Connected plugin",
-    iconName: "Blocks",
-  },
   {
     id: "schedule",
     label: "Schedule",
@@ -137,7 +130,6 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
 // ── Action Subtypes ─────────────────────────────────────────────────────────
 
 export type ActionSubtype =
-  | "pipedream_action"
   | "send_gmail"
   | "send_brevo_email"
   | "send_outlook_email"
@@ -178,13 +170,6 @@ export interface ActionSubtypeConfig {
 }
 
 export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
-  {
-    id: "pipedream_action",
-    label: "Run Plugin Action",
-    integration: "Connected plugin",
-    iconName: "Blocks",
-    category: "productivity",
-  },
   {
     id: "send_gmail",
     label: "Send Gmail",

@@ -264,11 +264,6 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
     "Add and edit questions",
     "Read responses and invite collaborators",
   ],
-  pipedream: [
-    "Connect the selected account through Pipedream's managed authentication",
-    "Let Genit discover and run the app's supported actions",
-    "Revoke the connection at any time from Genit",
-  ],
   composio: [
     "Connect the selected account through Composio's managed authentication",
     "Let Genit discover and run the toolkit's supported tools",

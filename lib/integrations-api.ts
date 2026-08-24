@@ -29,8 +29,7 @@ export type IntegrationPlatform =
   | "google_slides"
   | "google_docs"
   | "google_forms"
-  | "composio"
-  | "pipedream";
+  | "composio";
 
 export type MetaSurface =
   "facebook" | "instagram" | "meta_ads" | "whatsapp" | "messenger";
@@ -107,7 +106,6 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "google_forms",
   "mailchimp",
   "composio",
-  "pipedream",
 ]);
 
 // These live Composio toolkits already have first-class cards above. Exclude
@@ -173,11 +171,7 @@ export function isMetaSurface(
 export function effectiveIntegrationPlatform(
   integration: IntegrationConnection
 ): IntegrationPlatform {
-  if (
-    integration.platform !== "composio" &&
-    integration.platform !== "pipedream"
-  )
-    return integration.platform;
+  if (integration.platform !== "composio") return integration.platform;
   const nativePlatform = integration.metadata?.nativePlatform;
   return isPlatformSupported(nativePlatform)
     ? nativePlatform
@@ -278,17 +272,6 @@ export async function requestConnectUrl(
   return data;
 }
 
-export interface PipedreamApp {
-  id: string;
-  name_slug: string;
-  name: string;
-  description?: string;
-  img_src?: string;
-  auth_type?: string;
-  categories?: string[];
-  verifiedByGenit: boolean;
-}
-
 export interface ComposioToolkit {
   slug: string;
   name: string;
@@ -339,45 +322,6 @@ export async function completeComposioAuth(
     integration: IntegrationConnection;
   }>("/integrations/composio/complete-auth", { sessionUri, platform });
   return data.integration;
-}
-
-export async function requestPipedreamConnectUrl(
-  appSlug: string
-): Promise<ConnectUrlResponse> {
-  const { data } = await apiResponse.post<ConnectUrlResponse>(
-    "/integrations/pipedream/connect-url",
-    { appSlug }
-  );
-  return data;
-}
-
-export async function fetchPipedreamApps(
-  query = "",
-  limit = 30
-): Promise<PipedreamApp[]> {
-  const { data } = await apiResponse.get<{
-    success: true;
-    apps: PipedreamApp[];
-  }>("/integrations/pipedream/apps", { params: { q: query, limit } });
-  return data.apps;
-}
-
-export async function runPipedreamApiRequest<T = unknown>(
-  integrationId: string,
-  input: {
-    appSlug: string;
-    url: string;
-    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-    headers?: Record<string, string>;
-    body?: unknown;
-    confirmed?: boolean;
-  }
-): Promise<T> {
-  const { data } = await apiResponse.post<{ success: true; result: T }>(
-    `/integrations/pipedream/${integrationId}/proxy`,
-    input
-  );
-  return data.result;
 }
 
 export type GoogleWorkspacePlatform = Extract<
@@ -451,7 +395,11 @@ export async function updateTelegramSettings(
 
 export async function updateIntegrationInboxSettings(
   id: string,
-  input: { autoReplyEnabled: boolean }
+  input: {
+    autoReplyEnabled?: boolean;
+    commentAutoReplyEnabled?: boolean;
+    linkedInAuthorUrn?: string;
+  }
 ): Promise<Record<string, any>> {
   const { data } = await apiResponse.patch<{
     success: boolean;

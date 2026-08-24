@@ -13,13 +13,10 @@ import {
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { LocalizedText } from "@/components/localized-text";
-import { useIntegrations } from "@/hooks/use-integrations";
 import { cn } from "@/lib/utils";
-import { apiResponse } from "@/utils/apiResponse";
 import {
   Activity,
   AtSign,
-  Blocks,
   FileText,
   Image,
   ImagePlus,
@@ -36,10 +33,9 @@ import {
   Video,
 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
-  pipedream_action: Blocks,
   send_gmail: Mail,
   send_brevo_email: Mail,
   send_outlook_email: Mail,
@@ -109,15 +105,6 @@ interface ActionNodeData {
   categoryId?: string;
   tags?: string;
   privacyStatus?: string;
-  appSlug?: string;
-  actionId?: string;
-  integrationId?: string;
-  configuredProps?: Record<string, unknown>;
-  proxyUrl?: string;
-  proxyMethod?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  proxyHeaders?: Record<string, string>;
-  proxyBody?: unknown;
-  confirmed?: boolean;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -138,50 +125,6 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   const isEdit = data.isEditMode;
   const subtypeConfig = ACTION_SUBTYPES.find((a) => a.id === data.actionType);
   const Icon = ACTION_ICONS[data.actionType];
-  const { integrations } = useIntegrations();
-  const pluginConnections = integrations.filter(
-    (item) => item.platform === "pipedream" && item.status === "active"
-  );
-  const [pluginActions, setPluginActions] = useState<
-    Array<{
-      key: string;
-      name: string;
-      annotations?: { destructiveHint?: boolean };
-    }>
-  >([]);
-  const [pluginPropsText, setPluginPropsText] = useState(() =>
-    JSON.stringify(data.configuredProps || {}, null, 2)
-  );
-  const [pluginPropsError, setPluginPropsError] = useState("");
-  const [proxyBodyText, setProxyBodyText] = useState(() =>
-    JSON.stringify(data.proxyBody || {}, null, 2)
-  );
-  const [proxyHeadersText, setProxyHeadersText] = useState(() =>
-    JSON.stringify(data.proxyHeaders || {}, null, 2)
-  );
-
-  useEffect(() => {
-    if (
-      data.actionType !== "pipedream_action" ||
-      !data.integrationId ||
-      !data.appSlug
-    ) {
-      setPluginActions([]);
-      return;
-    }
-    let active = true;
-    apiResponse
-      .get(`/integrations/pipedream/${data.integrationId}/actions`, {
-        params: { app: data.appSlug, limit: 100 },
-      })
-      .then(({ data: response }) => {
-        if (active) setPluginActions(response.actions || []);
-      })
-      .catch(() => active && setPluginActions([]));
-    return () => {
-      active = false;
-    };
-  }, [data.actionType, data.appSlug, data.integrationId]);
 
   return (
     <div
@@ -296,282 +239,6 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 </optgroup>
               </select>
             </div>
-
-            {data.actionType === "pipedream_action" && (
-              <>
-                <div>
-                  <label className={labelCls}>
-                    <LocalizedText text={"Connected plugin"} />
-                  </label>
-                  <select
-                    value={data.integrationId || ""}
-                    onChange={(event) => {
-                      const connection = pluginConnections.find(
-                        (item) => item._id === event.target.value
-                      );
-                      setPluginPropsText("{}");
-                      setPluginPropsError("");
-                      data.onNodeDataChange(id, {
-                        integrationId: connection?._id || "",
-                        appSlug: connection?.metadata?.appSlug || "",
-                        actionId: "",
-                        configuredProps: {},
-                        proxyUrl: undefined,
-                        proxyMethod: "GET",
-                        proxyHeaders: {},
-                        proxyBody: {},
-                        confirmed: false,
-                      });
-                    }}
-                    className={selectCls}
-                  >
-                    <option value=''>
-                      <LocalizedText text={"Select a plugin"} />
-                    </option>
-                    {pluginConnections.map((connection) => (
-                      <option key={connection._id} value={connection._id}>
-                        {connection.metadata?.appName ||
-                          connection.metadata?.appSlug}{" "}
-                        — {connection.accountName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className={labelCls}>
-                    <LocalizedText text={"Execution mode"} />
-                  </label>
-                  <select
-                    value={
-                      data.proxyUrl !== undefined && !data.actionId
-                        ? "api"
-                        : "action"
-                    }
-                    onChange={(event) => {
-                      setPluginPropsText("{}");
-                      setProxyBodyText("{}");
-                      setPluginPropsError("");
-                      data.onNodeDataChange(id, {
-                        actionId: "",
-                        proxyUrl: event.target.value === "api" ? "" : undefined,
-                        proxyMethod: "GET",
-                        proxyHeaders: {},
-                        proxyBody: {},
-                        configuredProps: {},
-                        confirmed: false,
-                      });
-                    }}
-                    className={selectCls}
-                    disabled={!data.integrationId}
-                  >
-                    <option value='action'>
-                      <LocalizedText text={"Prebuilt action"} />
-                    </option>
-                    <option value='api'>
-                      <LocalizedText text={"Custom API request"} />
-                    </option>
-                  </select>
-                </div>
-                {data.proxyUrl === undefined || data.actionId ? (
-                  <>
-                    <div>
-                      <label className={labelCls}>
-                        <LocalizedText text={"Action"} />
-                      </label>
-                      <select
-                        value={data.actionId || ""}
-                        onChange={(event) => {
-                          setPluginPropsText("{}");
-                          setPluginPropsError("");
-                          data.onNodeDataChange(id, {
-                            actionId: event.target.value,
-                            configuredProps: {},
-                            confirmed: false,
-                          });
-                        }}
-                        className={selectCls}
-                        disabled={!data.integrationId}
-                      >
-                        <option value=''>
-                          <LocalizedText text={"Select an action"} />
-                        </option>
-                        {pluginActions.map((action) => (
-                          <option key={action.key} value={action.key}>
-                            {action.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className={labelCls}>
-                        <LocalizedText text={"Configured inputs (JSON)"} />
-                      </label>
-                      <textarea
-                        value={pluginPropsText}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          setPluginPropsText(value);
-                          try {
-                            const configuredProps = JSON.parse(value || "{}");
-                            if (
-                              !configuredProps ||
-                              Array.isArray(configuredProps) ||
-                              typeof configuredProps !== "object"
-                            )
-                              throw new Error("Inputs must be a JSON object");
-                            setPluginPropsError("");
-                            data.onNodeDataChange(id, { configuredProps });
-                          } catch (error: any) {
-                            setPluginPropsError(
-                              error?.message || "Invalid JSON"
-                            );
-                          }
-                        }}
-                        className={cn(
-                          inputCls,
-                          "min-h-[72px] resize-y font-mono"
-                        )}
-                        placeholder='{"channel":"C123","text":"Hello"}'
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className='grid grid-cols-[72px_1fr] gap-2'>
-                      <div>
-                        <label className={labelCls}>
-                          <LocalizedText text={"Method"} />
-                        </label>
-                        <select
-                          value={data.proxyMethod || "GET"}
-                          onChange={(event) =>
-                            data.onNodeDataChange(id, {
-                              proxyMethod: event.target.value,
-                              confirmed: false,
-                            })
-                          }
-                          className={selectCls}
-                        >
-                          {["GET", "POST", "PUT", "PATCH", "DELETE"].map(
-                            (method) => (
-                              <option key={method}>{method}</option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                      <div>
-                        <label className={labelCls}>
-                          <LocalizedText text={"Provider API URL"} />
-                        </label>
-                        <input
-                          type='url'
-                          value={data.proxyUrl || ""}
-                          onChange={(event) =>
-                            data.onNodeDataChange(id, {
-                              proxyUrl: event.target.value,
-                            })
-                          }
-                          className={inputCls}
-                          placeholder='https://api.provider.com/v1/...'
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className={labelCls}>
-                        <LocalizedText text={"Headers (JSON, optional)"} />
-                      </label>
-                      <textarea
-                        value={proxyHeadersText}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          setProxyHeadersText(value);
-                          try {
-                            const proxyHeaders = JSON.parse(value || "{}");
-                            if (
-                              !proxyHeaders ||
-                              Array.isArray(proxyHeaders) ||
-                              typeof proxyHeaders !== "object"
-                            )
-                              throw new Error("Headers must be a JSON object");
-                            setPluginPropsError("");
-                            data.onNodeDataChange(id, { proxyHeaders });
-                          } catch (error: any) {
-                            setPluginPropsError(
-                              error?.message || "Invalid JSON"
-                            );
-                          }
-                        }}
-                        className={cn(
-                          inputCls,
-                          "min-h-[52px] resize-y font-mono"
-                        )}
-                        placeholder='{"content-type":"application/json"}'
-                      />
-                    </div>
-                    <div>
-                      <label className={labelCls}>
-                        <LocalizedText text={"Request body (JSON)"} />
-                      </label>
-                      <textarea
-                        value={proxyBodyText}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          setProxyBodyText(value);
-                          try {
-                            const proxyBody = JSON.parse(value || "{}");
-                            setPluginPropsError("");
-                            data.onNodeDataChange(id, { proxyBody });
-                          } catch (error: any) {
-                            setPluginPropsError(
-                              error?.message || "Invalid JSON"
-                            );
-                          }
-                        }}
-                        className={cn(
-                          inputCls,
-                          "min-h-[72px] resize-y font-mono"
-                        )}
-                        placeholder='{"message":"{{event.text}}"}'
-                      />
-                    </div>
-                  </>
-                )}
-                <div>
-                  {pluginPropsError && (
-                    <p className='mt-1 text-[9px] text-red-500'>
-                      {pluginPropsError}
-                    </p>
-                  )}
-                  {!pluginPropsError && (
-                    <p className='text-muted-foreground mt-1 text-[9px]'>
-                      <LocalizedText text={"Event values can use"} />
-                      {"{{event.field}}"}.
-                    </p>
-                  )}
-                </div>
-                {(pluginActions.find((action) => action.key === data.actionId)
-                  ?.annotations?.destructiveHint ||
-                  data.proxyMethod === "DELETE") && (
-                  <label className='flex items-start gap-2 text-[10px] text-zinc-600 dark:text-neutral-300'>
-                    <input
-                      type='checkbox'
-                      checked={data.confirmed === true}
-                      onChange={(event) =>
-                        data.onNodeDataChange(id, {
-                          confirmed: event.target.checked,
-                        })
-                      }
-                      className='mt-0.5'
-                    />
-                    <LocalizedText
-                      text={
-                        "I confirm this destructive action may modify or delete external data."
-                      }
-                    />
-                  </label>
-                )}
-              </>
-            )}
 
             {/* ── Send Email config ─────────────────────────── */}
             {(data.actionType === "send_gmail" ||

@@ -222,7 +222,6 @@ export function ManageDialog({
   const updateInboxSettings = useUpdateIntegrationInboxSettings();
   const { identityBySurface } = useIntegrations();
   const { user } = useUserContext();
-  const router = useRouter();
 
   // Each Meta surface (FB, IG, Meta Ads, WhatsApp) has its own identity row
   // now. Pull the one for THIS dialog's platform — revoking it should only
@@ -291,6 +290,41 @@ export function ManageDialog({
     }
   }
 
+  async function handleCommentAutoReply(id: string, enabled: boolean) {
+    if (enabled && (!user || String(user.userPlan) === "Basic")) {
+      setEnterpriseDialogOpen(true);
+      return;
+    }
+    try {
+      await updateInboxSettings.mutateAsync({
+        id,
+        commentAutoReplyEnabled: enabled,
+      });
+      toast.success(
+        enabled ? "AI comment replies enabled" : "AI comment replies disabled"
+      );
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to update comment settings";
+      toast.error("Update failed", { description: msg });
+    }
+  }
+
+  async function handleLinkedInAuthor(id: string, linkedInAuthorUrn: string) {
+    try {
+      await updateInboxSettings.mutateAsync({ id, linkedInAuthorUrn });
+      toast.success("LinkedIn publishing identity updated");
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to update LinkedIn identity";
+      toast.error("Update failed", { description: msg });
+    }
+  }
+
   async function handleDisconnectIdentity() {
     if (!identity) return;
     try {
@@ -310,14 +344,7 @@ export function ManageDialog({
   }
 
   const hasMultiple = sortedConnections.length > 1;
-  const managedByPipedream = sortedConnections.some(
-    (connection) => connection.metadata?.provider === "pipedream"
-  );
-  const label = managedByPipedream
-    ? "Connection"
-    : platform
-      ? targetLabel(platform)
-      : "Target";
+  const label = platform ? targetLabel(platform) : "Target";
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -422,8 +449,8 @@ export function ManageDialog({
                   const connectionActive =
                     conn.status === "active" && !telegramBusinessPending;
                   const connectionLabel =
-                    conn.metadata?.provider === "pipedream"
-                      ? "Pipedream connection"
+                    conn.metadata?.provider === "composio"
+                      ? "Composio connection"
                       : label;
 
                   return (
@@ -535,22 +562,14 @@ export function ManageDialog({
                       )}
 
                       {platform &&
-                        (conn.platform !== "pipedream" ||
-                          Boolean(
-                            conn.metadata?.pipedreamInbox?.replyActionId ||
-                            conn.metadata?.pipedreamInbox?.replyProxyRequest
-                              ?.url
-                          )) &&
                         [
                           "instagram",
-                          "linkedin",
                           "x",
                           "gmail",
                           "outlook",
                           "whatsapp",
                           "messenger",
                           "telegram",
-                          "pipedream",
                         ].includes(platform) && (
                           <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
                             <div className='min-w-0'>
@@ -581,35 +600,80 @@ export function ManageDialog({
                           </div>
                         )}
 
-                      {conn.platform === "pipedream" &&
-                        !conn.metadata?.pipedreamInbox && (
-                          <div className='mt-3 rounded-md border border-violet-500/20 bg-violet-500/5 px-3 py-2'>
-                            <p className='text-foreground text-xs font-medium'>
-                              <LocalizedText
-                                text={"Add this plugin to Unified Inbox"}
-                              />
-                            </p>
-                            <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                              <LocalizedText
-                                text={
-                                  "Open Chat and ask Genit to connect this plugin&apos;s incoming-message trigger and reply action."
-                                }
-                              />
-                            </p>
-                            <Button
-                              type='button'
-                              size='sm'
-                              variant='outline'
-                              className='mt-2 h-7 px-2 text-[11px]'
-                              onClick={() => {
-                                handleClose(false);
-                                router.push("/chat");
-                              }}
-                            >
-                              <LocalizedText text={"Set up in Chat"} />
-                            </Button>
+                      {platform === "linkedin" && (
+                        <>
+                          {Array.isArray(conn.metadata?.linkedInTargets) &&
+                            conn.metadata.linkedInTargets.length > 0 && (
+                              <div className='mt-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
+                                <label className='text-foreground block text-xs font-medium'>
+                                  <LocalizedText text={"Post and reply as"} />
+                                </label>
+                                <select
+                                  aria-label='LinkedIn publishing identity'
+                                  value={
+                                    conn.metadata?.linkedInAuthorUrn ||
+                                    conn.metadata.linkedInTargets[0]?.urn
+                                  }
+                                  disabled={updateInboxSettings.isPending}
+                                  onChange={(event) =>
+                                    handleLinkedInAuthor(
+                                      conn._id,
+                                      event.target.value
+                                    )
+                                  }
+                                  className='border-border bg-background text-foreground mt-2 h-8 w-full rounded-md border px-2 text-xs'
+                                >
+                                  {conn.metadata.linkedInTargets.map(
+                                    (target: {
+                                      urn: string;
+                                      name: string;
+                                      kind: string;
+                                    }) => (
+                                      <option
+                                        key={target.urn}
+                                        value={target.urn}
+                                      >
+                                        {target.name}
+                                        {target.kind === "organization"
+                                          ? " (Page)"
+                                          : " (Profile)"}
+                                      </option>
+                                    )
+                                  )}
+                                </select>
+                                {conn.metadata?.linkedInPageDiscoveryError && (
+                                  <p className='mt-1.5 text-[10px] text-amber-600 dark:text-amber-400'>
+                                    {conn.metadata.linkedInPageDiscoveryError}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
+                          <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
+                            <div className='min-w-0'>
+                              <p className='text-foreground text-xs font-medium'>
+                                <LocalizedText text={"AI comment replies"} />
+                              </p>
+                              <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                                <LocalizedText
+                                  text={
+                                    "Automatically reply to new comments on posts published through Genit."
+                                  }
+                                />
+                              </p>
+                            </div>
+                            <Switch
+                              checked={Boolean(
+                                conn.metadata?.commentAutoReplyEnabled
+                              )}
+                              disabled={updateInboxSettings.isPending}
+                              onCheckedChange={(checked) =>
+                                handleCommentAutoReply(conn._id, checked)
+                              }
+                            />
                           </div>
-                        )}
+                        </>
+                      )}
 
                       {isConfirming && (
                         <div className='mt-3 rounded-md border border-red-500/30 bg-red-500/5 px-3 py-2'>
