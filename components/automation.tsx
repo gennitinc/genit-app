@@ -4,6 +4,8 @@ import { ActionNode } from "./automation/action-node";
 import { AIGenerateNode } from "./automation/ai-generate-node";
 import {
   ADD_NODE_MENU,
+  type AddNodeCategory,
+  type AddNodeItem,
   type AutomationNodeType,
 } from "./automation/automation-types";
 import { ConditionNode } from "./automation/condition-node";
@@ -14,6 +16,7 @@ import { TransformNode } from "./automation/transform-node";
 import { TriggerNode } from "./automation/trigger-node";
 import { UploadNode } from "./automation/upload-node";
 import { Button } from "./ui/button";
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import {
   BrevoBrand,
   EyeIcon as Eye,
@@ -29,10 +32,16 @@ import {
 import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
+import {
+  fetchComposioToolkits,
+  fetchIntegrations,
+  type ComposioToolkit,
+} from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import {
   ArrowLeftRight,
+  AlertTriangle,
   AtSign,
   CalendarDays,
   CalendarPlus,
@@ -62,6 +71,7 @@ import {
   Play,
   Plus,
   Redo2,
+  Search,
   SaveAll,
   Send,
   Settings,
@@ -74,6 +84,7 @@ import {
   Video,
   View,
   Webhook,
+  Zap,
 } from "lucide-react";
 import ReactFlow, {
   Background,
@@ -90,7 +101,13 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { io } from "socket.io-client";
 import { toast } from "sonner";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   Clock,
@@ -117,6 +134,7 @@ const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   Upload,
   GitBranch,
   Sparkles,
+  Zap,
   CircleFadingArrowUp,
   ArrowLeftRight,
   Globe,
@@ -167,7 +185,18 @@ export default function AutomationWorkflow({
   const [isLoading, setIsLoading] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showAddComponent, setShowAddComponent] = useState(false);
+  const [addSearch, setAddSearch] = useState("");
+  const [composioToolkits, setComposioToolkits] = useState<ComposioToolkit[]>([]);
+  const [connectedToolkits, setConnectedToolkits] = useState<Set<string>>(
+    new Set()
+  );
+  const [catalogLoading, setCatalogLoading] = useState(false);
+  const [pendingConnectedApp, setPendingConnectedApp] =
+    useState<AddNodeItem | null>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const validationCount = nodes.filter(
+    (node) => (node.data?.validationErrors as string[] | undefined)?.length
+  ).length;
 
   // Auto-save
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
@@ -176,6 +205,7 @@ export default function AutomationWorkflow({
   const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasUnsavedChanges = useRef(false);
   const initialLoadDone = useRef(false);
+  const suppressNextAutoSave = useRef(false);
 
   // Undo / Redo
   const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
@@ -310,6 +340,38 @@ export default function AutomationWorkflow({
       );
 
       if (res.data?.success) {
+        const serverNodes = res.data.data?.nodes || [];
+        if (serverNodes.length) {
+          const validationByNode = new Map<string, string[]>(
+            (res.data.validationErrors || []).map((item: any) => [
+              item.nodeId,
+              item.errors || [],
+            ])
+          );
+          suppressNextAutoSave.current = true;
+          setNodes((current) =>
+            current.map((node) => {
+              const saved = serverNodes.find((item: any) => item.id === node.id);
+              if (!saved) return node;
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  composioStatus: saved.data?.composioStatus,
+                  composioError: saved.data?.composioError,
+                  composioTriggerId: saved.data?.composioTriggerId,
+                  integrationId: saved.data?.integrationId || node.data?.integrationId,
+                  composioToolkitName:
+                    saved.data?.composioToolkitName || node.data?.composioToolkitName,
+                  composioLogo:
+                    saved.data?.composioLogo || node.data?.composioLogo,
+                  webhookUrl: saved.data?.webhookUrl || node.data?.webhookUrl,
+                  validationErrors: validationByNode.get(node.id) || [],
+                },
+              };
+            })
+          );
+        }
         hasUnsavedChanges.current = false;
         setSaveStatus("saved");
         setTimeout(() => setSaveStatus("idle"), 2000);
@@ -332,6 +394,10 @@ export default function AutomationWorkflow({
   // Mark unsaved on node/edge changes
   useEffect(() => {
     if (!initialLoadDone.current) return;
+    if (suppressNextAutoSave.current) {
+      suppressNextAutoSave.current = false;
+      return;
+    }
     hasUnsavedChanges.current = true;
     scheduleAutoSave();
   }, [nodes, edges, scheduleAutoSave]);
@@ -416,16 +482,26 @@ export default function AutomationWorkflow({
 
   const injectNodeCallbacks = useCallback(
     (nodesList: Node[]) => {
-      return nodesList.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          isEditMode,
-          onRemoveNode: removeNode,
-          onNodeDataChange: onNodeDataChange,
-          onTestRun: onTestRun,
-        },
-      }));
+      return nodesList.map((node) => {
+        const legacyEmailTrigger =
+          node.type === "trigger" &&
+          (node.data?.triggerType === "email_received" ||
+            (!node.data?.triggerType &&
+              /(?:incoming|new)?\s*email\s+received/i.test(
+                node.data?.title || ""
+              )));
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            ...(legacyEmailTrigger ? { triggerType: "gmail_received" } : {}),
+            isEditMode,
+            onRemoveNode: removeNode,
+            onNodeDataChange: onNodeDataChange,
+            onTestRun: onTestRun,
+          },
+        };
+      });
     },
     [isEditMode, removeNode, onNodeDataChange, onTestRun]
   );
@@ -527,6 +603,7 @@ export default function AutomationWorkflow({
             isEditMode,
             onRemoveNode: removeNode,
             onNodeDataChange,
+            onTestRun,
           };
 
           const newNode: Node = {
@@ -585,6 +662,7 @@ export default function AutomationWorkflow({
     isEditMode,
     removeNode,
     onNodeDataChange,
+    onTestRun,
     reactFlowInstance,
   ]);
 
@@ -702,7 +780,11 @@ export default function AutomationWorkflow({
 
   // ── Add Component ───────────────────────────────────────────────────────
 
-  const addComponent = (type: AutomationNodeType, subtype?: string) => {
+  const addComponent = (
+    type: AutomationNodeType,
+    subtype?: string,
+    initialData: Record<string, unknown> = {}
+  ) => {
     const nodeId = `${type}-${Date.now()}`;
 
     let position = {
@@ -733,14 +815,24 @@ export default function AutomationWorkflow({
         baseData.scheduleFrequency = "Every Monday";
         baseData.filterField = "";
         baseData.filterValue = "";
+        if (subtype === "composio_event") {
+          baseData.composioToolkit = "";
+          baseData.composioTriggerSlug = "";
+          baseData.composioTriggerConfig = {};
+        }
         break;
       case "action":
-        baseData.actionType = subtype || "send_email";
+        baseData.actionType = subtype || "send_gmail";
         baseData.recipientEmail = "";
         baseData.subject = "";
         baseData.messageBody = "";
         baseData.contentText = "";
         baseData.instruction = "";
+        if (subtype === "composio_action") {
+          baseData.composioToolkit = "";
+          baseData.composioToolSlug = "";
+          baseData.composioToolArguments = {};
+        }
         break;
       case "prompt":
         baseData.instruction = "";
@@ -777,6 +869,7 @@ export default function AutomationWorkflow({
         baseData.fileUrl = undefined;
         break;
     }
+    Object.assign(baseData, initialData);
 
     // Inject interactive callbacks immediately so the node is fully
     // functional in edit mode without needing a toggle cycle.
@@ -790,6 +883,7 @@ export default function AutomationWorkflow({
         isEditMode,
         onRemoveNode: removeNode,
         onNodeDataChange,
+        onTestRun,
       },
     };
 
@@ -799,7 +893,75 @@ export default function AutomationWorkflow({
       return next;
     });
     setShowAddComponent(false);
+    setAddSearch("");
   };
+
+  useEffect(() => {
+    if (!showAddComponent) return;
+    setCatalogLoading(true);
+    Promise.all([fetchComposioToolkits(), fetchIntegrations()])
+      .then(([toolkits, connections]) => {
+        setComposioToolkits(toolkits);
+        setConnectedToolkits(
+          new Set(
+            connections.integrations
+              .filter((item) => item.platform === "composio" && item.status === "active")
+              .map((item) => String(item.metadata?.toolkitSlug || "").toLowerCase())
+              .filter(Boolean)
+          )
+        );
+      })
+      .catch(() => setComposioToolkits([]))
+      .finally(() => setCatalogLoading(false));
+  }, [showAddComponent]);
+
+  const addNodeMenu = useMemo<AddNodeCategory[]>(() => {
+    const query = addSearch.trim().toLowerCase();
+    const matching = composioToolkits.filter(
+      (item) =>
+        (!query ||
+          item.name.toLowerCase().includes(query) ||
+          item.slug.includes(query)) &&
+        (query || connectedToolkits.has(item.slug) || item.verifiedByGenit)
+    );
+    const visible = matching
+      .sort(
+        (a, b) =>
+          Number(connectedToolkits.has(b.slug)) -
+          Number(connectedToolkits.has(a.slug))
+      )
+      .slice(0, query ? 20 : 8);
+    const appCategory = (type: "trigger" | "action"): AddNodeCategory => ({
+      label: type === "trigger" ? "Connected app triggers" : "Connected app actions",
+      items: visible.map((item) => ({
+        type,
+        subtype: type === "trigger" ? "composio_event" : "composio_action",
+        label: `${item.name} ${type === "trigger" ? "event" : "action"}`,
+        iconName: "Zap",
+        iconUrl: item.logo,
+        connected: connectedToolkits.has(item.slug),
+        initialData: {
+          title: `${item.name} ${type === "trigger" ? "Event" : "Action"}`,
+          composioToolkit: item.slug,
+          composioToolkitName: item.name,
+          composioLogo: item.logo,
+        },
+      })),
+    });
+    const staticMenu = ADD_NODE_MENU.map((category) => ({
+      ...category,
+      items: category.items.filter(
+        (item) =>
+          (!visible.length ||
+            (item.subtype !== "composio_event" &&
+              item.subtype !== "composio_action")) &&
+          (!query || item.label.toLowerCase().includes(query))
+      ),
+    })).filter((category) => category.items.length);
+    return visible.length
+      ? [appCategory("trigger"), appCategory("action"), ...staticMenu]
+      : staticMenu;
+  }, [addSearch, composioToolkits, connectedToolkits]);
 
   // ── Close dropdown on outside click ─────────────────────────────────────
 
@@ -971,8 +1133,26 @@ export default function AutomationWorkflow({
                 </Button>
 
                 {showAddComponent && (
-                  <div className='border-border bg-popover text-popover-foreground absolute right-0 z-50 mt-1.5 max-h-[400px] w-52 overflow-y-auto rounded-lg border py-1 text-xs shadow-lg'>
-                    {ADD_NODE_MENU.map((category, catIdx) => (
+                  <div className='border-border bg-popover text-popover-foreground absolute right-0 z-50 mt-1.5 flex max-h-[480px] w-72 origin-top-right flex-col overflow-hidden rounded-lg border text-xs shadow-lg'>
+                    <div className='border-border/60 bg-popover sticky top-0 z-10 border-b p-2'>
+                      <div className='relative'>
+                        <Search className='text-muted-foreground pointer-events-none absolute top-2 left-2 h-3.5 w-3.5' />
+                        <input
+                          autoFocus
+                          value={addSearch}
+                          onChange={(event) => setAddSearch(event.target.value)}
+                          placeholder='Search nodes and 1,000+ apps'
+                          className='border-border bg-muted/40 text-foreground placeholder:text-muted-foreground h-8 w-full rounded-md border pr-2 pl-7 text-xs outline-none transition-[border-color] duration-150 focus:border-violet-500/60'
+                        />
+                      </div>
+                    </div>
+                    <div className='overflow-y-auto py-1'>
+                    {catalogLoading && !composioToolkits.length && (
+                      <div className='text-muted-foreground flex items-center gap-2 px-3 py-2 text-[10px]'>
+                        <Loader2 className='h-3 w-3 animate-spin' /> Loading connected apps
+                      </div>
+                    )}
+                    {addNodeMenu.map((category, catIdx) => (
                       <div key={category.label}>
                         <div
                           className={cn(
@@ -988,18 +1168,52 @@ export default function AutomationWorkflow({
                           return (
                             <button
                               key={`${item.type}-${item.subtype || item.label}`}
-                              onClick={() =>
-                                addComponent(item.type, item.subtype)
-                              }
-                              className='hover:bg-muted text-foreground flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-colors'
+                              onClick={() => {
+                                if (
+                                  item.connected === false &&
+                                  item.initialData?.composioToolkit
+                                ) {
+                                  setPendingConnectedApp(item);
+                                  setShowAddComponent(false);
+                                  setAddSearch("");
+                                  return;
+                                }
+                                addComponent(
+                                  item.type,
+                                  item.subtype,
+                                  item.initialData
+                                );
+                              }}
+                              className='hover:bg-muted text-foreground flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-[background-color,transform] duration-150 active:scale-[0.98]'
                             >
-                              <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
-                              <span>{item.label}</span>
+                              {item.iconUrl ? (
+                                <img
+                                  src={item.iconUrl}
+                                  alt=''
+                                  className='h-4 w-4 rounded object-contain'
+                                />
+                              ) : (
+                                <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
+                              )}
+                              <span className='min-w-0 flex-1 truncate'>{item.label}</span>
+                              {item.connected ? (
+                                <span className='h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500' title='Connected' />
+                              ) : item.initialData?.composioToolkit ? (
+                                <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
+                                  Connect
+                                </span>
+                              ) : null}
                             </button>
                           );
                         })}
                       </div>
                     ))}
+                    {!catalogLoading && !addNodeMenu.length && (
+                      <p className='text-muted-foreground px-3 py-5 text-center text-[10px]'>
+                        No matching node or connected app
+                      </p>
+                    )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -1008,6 +1222,15 @@ export default function AutomationWorkflow({
 
           {/* Auto-save indicator */}
           <div className='bg-border h-5 w-px' />
+          {validationCount > 0 && (
+            <div
+              className='flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-1 text-[10px] font-medium text-amber-600 dark:text-amber-400'
+              title={`${validationCount} node${validationCount === 1 ? "" : "s"} need configuration`}
+            >
+              <AlertTriangle className='h-3 w-3' />
+              {validationCount}
+            </div>
+          )}
           <div className='text-muted-foreground flex items-center gap-1 px-1.5 text-[10px]'>
             {saveStatus === "saving" && (
               <>
@@ -1060,6 +1283,30 @@ export default function AutomationWorkflow({
           <Background color='#e5e5e5' gap={20} size={1} />
         </ReactFlow>
       </div>
+
+      <ConnectDialog
+        open={Boolean(pendingConnectedApp)}
+        onOpenChange={(open) => !open && setPendingConnectedApp(null)}
+        platform='composio'
+        platformName={String(
+          pendingConnectedApp?.initialData?.composioToolkitName ||
+            "Connected app"
+        )}
+        platformDescription='Connect this app to add its event to your automation.'
+        Icon={Zap}
+        glow='rgba(139,92,246,0.35)'
+        appSlug={String(
+          pendingConnectedApp?.initialData?.composioToolkit || ""
+        )}
+        onConnected={() => {
+          const item = pendingConnectedApp;
+          if (!item) return;
+          const toolkit = String(item.initialData?.composioToolkit || "");
+          setConnectedToolkits((current) => new Set(current).add(toolkit));
+          addComponent(item.type, item.subtype, item.initialData);
+          setPendingConnectedApp(null);
+        }}
+      />
     </div>
   );
 }

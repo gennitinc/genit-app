@@ -47,9 +47,11 @@ export function useInboxConversations(filters: InboxFilters = {}) {
   return useQuery({
     queryKey: inboxConversationsQueryKey(filters),
     queryFn: () => fetchConversations(filters),
-    staleTime: 30_000,
+    staleTime: 10_000,
     gcTime: 5 * 60_000,
-    refetchInterval: 60_000,
+    refetchInterval: 15_000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
 }
 
@@ -64,9 +66,11 @@ export function useInfiniteInboxConversations(
     enabled,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset ?? undefined,
-    staleTime: 30_000,
+    staleTime: 10_000,
     gcTime: 5 * 60_000,
-    refetchInterval: 60_000,
+    refetchInterval: 15_000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
 }
 
@@ -75,9 +79,11 @@ export function useInboxMessages(conversationId?: string) {
     queryKey: inboxMessagesQueryKey(conversationId!),
     queryFn: () => fetchMessages(conversationId!),
     enabled: Boolean(conversationId),
-    staleTime: 30_000,
+    staleTime: 10_000,
     gcTime: 5 * 60_000,
-    refetchInterval: conversationId ? 60_000 : false,
+    refetchInterval: conversationId ? 15_000 : false,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   });
 }
 

@@ -269,7 +269,7 @@ export function LandingFooter() {
                   href='/signup'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='hover:shadow-button border-primary/20 shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+                  className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                 >
                   {t("Start for $0")}
                   <svg

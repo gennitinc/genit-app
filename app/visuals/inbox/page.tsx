@@ -650,6 +650,7 @@ export default function InboxPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const requestedHistoryKeyRef = useRef("");
+  const initialSyncOrgRef = useRef("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replyInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -935,6 +936,19 @@ export default function InboxPage() {
       inboxPlatform(account)
     )
   );
+
+  useEffect(() => {
+    if (
+      !orgId ||
+      integrationsLoading ||
+      !syncableAccounts.length ||
+      initialSyncOrgRef.current === orgId
+    )
+      return;
+    initialSyncOrgRef.current = orgId;
+    syncMutation.mutate({ continueHistory: false });
+  }, [integrationsLoading, orgId, syncableAccounts.length]);
+
   const providerHistoryKey = (
     selectedAccount
       ? historyAccounts.filter((account) => account._id === selectedAccount._id)

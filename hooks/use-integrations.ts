@@ -24,11 +24,10 @@ export function integrationsQueryKey(orgId?: string) {
   return ["integrations", orgId || "none"] as const;
 }
 
-export function useComposioToolkits(query: string) {
+export function useComposioToolkits() {
   return useQuery({
-    queryKey: ["composio-toolkits", query],
-    queryFn: () => fetchComposioToolkits(query, 40),
-    enabled: query.trim().length >= 2,
+    queryKey: ["composio-toolkits"],
+    queryFn: fetchComposioToolkits,
     staleTime: 5 * 60_000,
     retry: false,
   });

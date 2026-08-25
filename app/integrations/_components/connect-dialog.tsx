@@ -100,6 +100,7 @@ interface ConnectDialogProps {
   Icon: ComponentType<{ className?: string; style?: CSSProperties }>;
   glow: string;
   appSlug?: string;
+  onConnected?: () => void;
 }
 
 // `select` = user must pick which IG account(s) to provision before any
@@ -376,10 +377,6 @@ const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
     "Enable Google Docs API and Google Drive API",
     "Uses the existing Google Drive OAuth callback",
   ],
-  google_forms: [
-    "Enable Google Forms API and Google Drive API",
-    "Uses the existing Google Drive OAuth callback",
-  ],
 };
 
 // Per-platform copy for the credential-entry flow (no OAuth). Used to build
@@ -475,6 +472,7 @@ export function ConnectDialog({
   Icon,
   glow,
   appSlug,
+  onConnected,
 }: ConnectDialogProps) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -552,8 +550,9 @@ export function ConnectDialog({
       toast.success(`Connected ${platformName}`, {
         description: accountName ? `@${accountName}` : undefined,
       });
+      onConnected?.();
     },
-    [closePopup, orgId, platformName, qc]
+    [closePopup, onConnected, orgId, platformName, qc]
   );
 
   useEffect(() => {
@@ -949,8 +948,7 @@ export function ConnectDialog({
                 <div className='min-w-0'>
                   <DialogHeader className='space-y-0 text-left'>
                     <DialogTitle className='text-lg font-semibold tracking-tight'>
-                      <LocalizedText text={"Connect"} />
-                      {platformName}
+                      <LocalizedText text={"Connect"} /> {platformName}
                     </DialogTitle>
                     <DialogDescription className='text-xs'>
                       {platformDescription}

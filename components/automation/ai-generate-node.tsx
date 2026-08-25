@@ -1,9 +1,10 @@
 import { type AIContentType, AI_CONTENT_TYPES } from "./automation-types";
+import { ElevenLabsVoiceSelect } from "./elevenlabs-voice-select";
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
-import { CircleFadingArrowUp, Loader2, Sparkles, Trash2 } from "lucide-react";
+import { CircleFadingArrowUp, Loader2, Trash2 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useEffect, useState } from "react";
 
@@ -13,6 +14,8 @@ interface AIGenerateNodeData {
   prompt: string;
   model: string;
   aspectRatio: string;
+  voiceId?: string;
+  voiceName?: string;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -73,7 +76,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
       {/* Header */}
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
-          <Sparkles className='h-4 w-4' />
+          <CircleFadingArrowUp className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"AI Generate"} />
           </span>
@@ -214,6 +217,15 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
               </div>
             )}
 
+            {data.contentType === "audio" && (
+              <ElevenLabsVoiceSelect
+                value={data.voiceId}
+                onChange={(voiceId, voiceName) =>
+                  data.onNodeDataChange(id, { voiceId, voiceName })
+                }
+              />
+            )}
+
             <div>
               <label className={labelCls}>
                 <LocalizedText text={"Prompt"} />
@@ -244,6 +256,11 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                   </span>
                 )}
               </div>
+              {data.contentType === "audio" && data.voiceName && (
+                <p className='truncate text-[10px] text-zinc-500 dark:text-neutral-400'>
+                  Voice: {data.voiceName}
+                </p>
+              )}
               {data.prompt && (
                 <p className='truncate text-[10px] text-zinc-500 dark:text-neutral-400'>
                   {data.prompt}

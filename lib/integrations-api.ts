@@ -155,7 +155,7 @@ export function isPlatformSupported(platform: IntegrationPlatform): boolean {
 }
 
 export function isNativeOnlyPlatform(platform: IntegrationPlatform): boolean {
-  return platform === "pinterest" || platform === "google_forms";
+  return platform === "pinterest";
 }
 
 export function isNativeOnlyComposioToolkit(appSlug: string): boolean {
@@ -276,9 +276,28 @@ export interface ComposioToolkit {
   slug: string;
   name: string;
   logo?: string;
-  connected: boolean;
-  connectedAccountId?: string;
+  description?: string;
+  categories: Array<{ id: string; name: string }>;
   verifiedByGenit: boolean;
+}
+
+export interface ComposioTriggerType {
+  slug: string;
+  name: string;
+  description?: string;
+  config?: Record<string, any>;
+  payload?: Record<string, any>;
+}
+
+export interface ComposioToolDefinition {
+  slug: string;
+  name: string;
+  description?: string;
+  inputParameters?: {
+    properties?: Record<string, any>;
+    required?: string[];
+  };
+  version?: string;
 }
 
 export async function requestComposioConnectUrl(
@@ -291,15 +310,41 @@ export async function requestComposioConnectUrl(
   return data;
 }
 
-export async function fetchComposioToolkits(
-  query = "",
-  limit = 40
-): Promise<ComposioToolkit[]> {
+let composioToolkitsRequest: Promise<ComposioToolkit[]> | undefined;
+
+export function fetchComposioToolkits(): Promise<ComposioToolkit[]> {
+  return (composioToolkitsRequest ??= apiResponse
+    .get<{ success: true; toolkits: ComposioToolkit[] }>(
+      "/integrations/composio/toolkits"
+    )
+    .then(({ data }) => data.toolkits)
+    .catch((error) => {
+      composioToolkitsRequest = undefined;
+      throw error;
+    }));
+}
+
+export async function fetchComposioTriggers(
+  toolkit: string
+): Promise<ComposioTriggerType[]> {
   const { data } = await apiResponse.get<{
     success: true;
-    toolkits: ComposioToolkit[];
-  }>("/integrations/composio/toolkits", { params: { q: query, limit } });
-  return data.toolkits;
+    triggers: ComposioTriggerType[];
+  }>(`/integrations/composio/triggers?toolkit=${encodeURIComponent(toolkit)}`);
+  return data.triggers;
+}
+
+export async function fetchComposioTools(
+  toolkit: string,
+  query = ""
+): Promise<ComposioToolDefinition[]> {
+  const params = new URLSearchParams({ toolkit });
+  if (query) params.set("q", query);
+  const { data } = await apiResponse.get<{
+    success: true;
+    tools: ComposioToolDefinition[];
+  }>(`/integrations/composio/tools?${params}`);
+  return data.tools;
 }
 
 export async function syncComposioConnection(

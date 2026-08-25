@@ -39,7 +39,7 @@ export default function BlogLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [scope, setScope] = useState<"organization" | "personal">("personal");
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [view, setView] = useState<"grid" | "list">("list");
   const [storage, setStorage] = useState<{
     plan: string;
     scope: "organization" | "personal";
@@ -82,6 +82,7 @@ export default function BlogLibraryPage() {
   };
 
   useEffect(() => {
+    setView(window.matchMedia("(min-width: 1280px)").matches ? "grid" : "list");
     loadAssets();
 
     const refreshStorage = () => void loadAssets(false);

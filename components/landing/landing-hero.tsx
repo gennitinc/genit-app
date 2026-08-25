@@ -1,7 +1,7 @@
 "use client";
 
-import { INTEGRATION_BRANDS, IdeaSection } from "../layout/idea-section";
 import { MainContent } from "../layout/main-content";
+import { LocalizedText } from "../localized-text";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
@@ -15,20 +15,14 @@ import {
   XBrand,
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
-import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
+import { PluginsFlow } from "@/components/plugins/plugins-flow";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import Loading from "@/utils/Loading";
 import { ArrowRightIcon, ChevronRight, Play, SendIcon, X } from "lucide-react";
 import Image from "next/image";
@@ -391,10 +385,22 @@ const LandingHero = () => {
   }));
   const [visibleMessages, setVisibleMessages] = useState<number>(0);
   const [isTyping, setIsTyping] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
   const [streamingText, setStreamingText] = useState<{ [key: number]: string }>(
     {}
   );
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const demoContent = (
+    <iframe
+      title={t("Genit product demo")}
+      src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
+      allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+      allowFullScreen
+      className='aspect-video w-full bg-black'
+    />
+  );
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -498,178 +504,98 @@ const LandingHero = () => {
     };
   }, [language]);
   return (
-    <section className='relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
+    <section className='bg-background relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
-        <IdeaSection />
-        {/* <div className='mt-6 grid w-full grid-cols-1 items-center gap-16 px-2 md:px-4 lg:grid-cols-2 lg:px-0'>
-          <div className='w-full max-w-2xl'>
-            <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
-              <span className='text-xs'>✨ Grow without Hiring</span>
-              <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
-            </AnimatedShinyText>
-
-            <h1 className='font-bricolage text-foreground text-5xl leading-[1.05] font-bold tracking-tight sm:text-6xl md:text-6xl'>
-              Marketing Agents
-              <br />
-              <span className='text-muted-foreground font-medium'>
-                That Never Sleep
-              </span>
-            </h1>
-
-            <p className='text-muted-foreground mt-5 max-w-xl text-lg leading-7'>
-              Autonomous AI agents that work 24/7, so you don't have to.
-            </p>
-
-            <div className='mt-8 flex flex-wrap items-center gap-3'>
-              <a
-                href={user ? "/visuals" : "/signup"}
-                className='group inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700 active:translate-y-px'
-              >
-                Get started
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width={24}
-                  height={24}
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  className='h-4 w-4 transition-transform group-hover:translate-x-1'
-                >
-                  <path d='M5 12h14' />
-                  <path d='m12 5 7 7-7 7' />
-                </svg>
-              </a>
-
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button className='border-border bg-background text-foreground hover:bg-muted inline-flex items-center gap-2 rounded-lg border px-5 py-3 transition active:scale-[0.98]'>
-                    <Play className='h-4 w-4 fill-current opacity-30' />
-                    Watch Demo
-                  </button>
-                </DialogTrigger>
-
-                <DialogContent
-                  hideDialogClose
-                  className='border-border bg-background w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-hidden rounded-4xl border p-0 shadow-2xl'
-                >
-                 
-
-                  <div className='border-border relative m-2 overflow-hidden rounded-lg border shadow-2xl'>
-                    <iframe
-                      title='Genit product demo'
-                      src='https://www.youtube-nocookie.com/embed/IjS9eTpmhgk?autoplay=1&rel=0'
-                      allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                      allowFullScreen
-                      className='aspect-video w-full bg-black'
-                    />
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <h2 className='text-muted-foreground mt-6 text-sm tracking-tight md:text-base'>
-              Works with over{" "}
-              <span className='text-foreground font-semibold'>
-                {INTEGRATIONS.length}+
-              </span>{" "}
-              marketing{" "}
-              <Link
-                href='/plugins'
-                target='_blank'
-                className='font-medium text-indigo-600 underline underline-offset-4 transition hover:text-indigo-500 dark:text-indigo-400'
-              >
-                Plugins
-              </Link>
-            </h2>
-
-            <div className='mt-7 flex flex-col items-start gap-4 md:flex-row md:items-center'>
-              <div className='flex items-center -space-x-2'>
-                <img
-                  src='https://i.pinimg.com/1200x/6b/fe/d8/6bfed887cb804dd9e6caee99dbe9dbe4.jpg'
-                  alt='Miavn'
-                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
-                />
-
-                <img
-                  src='https://i.pinimg.com/736x/d5/ea/70/d5ea7077bc2c1775edfda58a8d50ae26.jpg'
-                  alt='User'
-                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
-                />
-
-                <img
-                  src='https://i.pinimg.com/736x/b2/ce/22/b2ce2290ea022f489ab3ca735a5b1a8b.jpg'
-                  alt='User'
-                  className='ring-background h-12 w-12 rounded-full object-cover ring-2'
-                />
-
-                <div className='border-border bg-muted text-foreground ring-background flex h-12 w-12 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ring-2'>
-                  +12
+        <main className='w-full flex-1'>
+          <div className='mx-auto h-full w-full px-4 md:px-24 lg:px-32 xl:px-40'>
+            <div className='border-border relative flex h-fit w-full flex-col items-center border-x border-dashed lg:min-h-[calc(100vh-80px)]'>
+              {/* <div className='border-border bg-background/80 mt-24 flex flex-wrap items-center justify-center gap-2 rounded-full border py-1.5 pr-4 pl-2.5 backdrop-blur-sm md:mt-32'>
+                <div className='relative flex size-3.5 items-center justify-center'>
+                  <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-300 opacity-75 duration-300' />
+                  <span className='relative inline-flex size-2 rounded-full bg-orange-600' />
                 </div>
-              </div>
-
-              <p className='text-muted-foreground text-sm'>
-                Trusted by{" "}
-                <span className='text-foreground font-semibold'>600+</span>{" "}
-                teams worldwide.
+                <p className='text-muted-foreground text-sm'>
+                  Built for Modern Brands
+                </p>
+              </div> */}
+              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 md:mt-28 hover:dark:text-neutral-400'>
+                <span className='text-xs'>
+                  <LocalizedText text={"✨ Built for Modern Business"} />
+                </span>
+                <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+              </AnimatedShinyText>
+              <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
+                AI agents for{" "}
+                <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
+                  Marketing & Growth.
+                </span>
+              </h1>
+              <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
+                Agents that create, automate, and execute your daily task so you
+                can focus on growing your business.
               </p>
-            </div>
-          </div>
+              <div className='mt-7.5 flex gap-5'>
+                <Link
+                  href='/visuals'
+                  className='flex cursor-pointer items-center gap-1 rounded-md bg-indigo-600 px-5 py-2.5 text-sm text-white transition duration-300 hover:scale-105 active:scale-100'
+                >
+                  Get Started
+                  <svg
+                    width={20}
+                    height={20}
+                    viewBox='0 0 20 20'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='m5.833 14.164 8.334-8.333M5.833 5.83h8.334v8.334'
+                      stroke='#ffffff'
+                      strokeWidth={2}
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    />
+                  </svg>
+                </Link>
+                <button
+                  type='button'
+                  onClick={() => setIsDemoOpen(true)}
+                  className='border-border bg-background text-foreground hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md border px-5 py-2.5 text-sm transition-[background-color,transform] duration-150 active:scale-[0.97]'
+                >
+                  <Play className='size-4 fill-current opacity-70' />
+                  Watch Demo
+                </button>
 
-          <div className='relative mx-auto ml-8 w-full max-w-xl lg:ml-0 lg:ml-auto'>
-            <MarketingRobot3D />
-          </div>
-          <div className='mt-24 translate-x-12 perspective-near md:absolute md:top-40 md:-right-6 md:bottom-16 md:left-1/2 md:mt-0 md:translate-x-0'>
-            <div className='before:border-foreground/5 before:bg-foreground/5 relative h-full before:absolute before:-inset-x-4 before:top-0 before:bottom-7 before:skew-x-6 before:rounded-[calc(var(--radius)+1rem)] before:border'>
-              <div className='bg-background shadow-foreground/10 ring-foreground/5 relative h-full -translate-y-12 skew-x-6 overflow-hidden rounded-(--radius) border border-transparent shadow-md ring-1'>
-                <Image
-                  src='https://i.postimg.cc/SKcdVTr1/Dashboard2.png'
-                  alt='app screen'
-                  width={2880}
-                  height={1842}
-                  className='size-full object-cover object-top-left'
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-        <section className='relative mt-5 space-y-4 pt-6 pb-10 lg:mt-6'>
-          {/* <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over {INTEGRATIONS.length}+ marketing{" "}
-            <Link
-              href='/plugins'
-              target='_blank'
-              className='text-foreground text-sm font-medium underline md:text-base'
-            >
-              Plugins
-            </Link>
-          </h2> */}
-          {/* <div className='relative z-10 mx-auto max-w-5xl'>
-            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
-              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
-                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
-                  ({ name, Icon }, i) => (
-                    <Link
-                      key={`${name}-${i}`}
-                      href={`/plugin#${name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
-                    >
-                      <span className='flex h-6 items-center md:h-7'>
-                        <Icon className='h-full w-auto' />
-                      </span>
-                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
-                        {name}
-                      </span>
-                    </Link>
-                  )
+                {isMobileOrTablet ? (
+                  <Drawer open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+                    <DrawerContent className='max-h-[90dvh] border-white/30 bg-white/65 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-24px_80px_rgba(0,0,0,0.28)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-zinc-950/65'>
+                      <DrawerTitle className='sr-only'>
+                        {t("Genit product demo")}
+                      </DrawerTitle>
+                      {demoContent}
+                    </DrawerContent>
+                  </Drawer>
+                ) : (
+                  <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+                    <DialogContent className='w-[calc(100%-2rem)] max-w-5xl gap-0 overflow-hidden rounded-[22px] border-white/30 bg-white/60 p-2 shadow-[0_32px_120px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-zinc-950/60'>
+                      <DialogTitle className='sr-only'>
+                        {t("Genit product demo")}
+                      </DialogTitle>
+                      {demoContent}
+                    </DialogContent>
+                  </Dialog>
                 )}
               </div>
+              <div className='mt-11 w-full px-4'>
+                <img
+                  className='border-border bg-muted mx-auto max-h-64 w-full max-w-[1100px] rounded-xl border object-cover object-top md:max-h-96'
+                  src='https://assets.prebuiltui.com/components/hero-section/hero-modern-dashboard.png'
+                  alt='dashboard'
+                />
+              </div>
             </div>
-          </div> */}
-        </section>
+          </div>
+          <PluginsFlow className='mt-6' />
+        </main>
       </div>
 
       <div className='relative z-10 mt-10 mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8'>

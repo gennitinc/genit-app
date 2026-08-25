@@ -485,7 +485,7 @@ function IntegrationCard({
           <button
             type='button'
             disabled
-            className='cursor-not-allowed rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500'
+            className='cursor-not-allowed rounded-md border border-zinc-200 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-400 select-none dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-500'
           >
             <LocalizedText text={"Soon"} />
           </button>
@@ -493,7 +493,7 @@ function IntegrationCard({
           <button
             type='button'
             onClick={onManage}
-            className='rounded-full p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
+            className='rounded-md p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
             title={`Manage ${integration.name}`}
           >
             <MoreHorizontal className='h-5 w-5' />
@@ -502,7 +502,7 @@ function IntegrationCard({
           <button
             type='button'
             onClick={onConnect}
-            className='rounded-full border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
+            className='rounded-md border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
           >
             <LocalizedText text={"Add"} />
           </button>
@@ -523,10 +523,7 @@ export function IntegrationsExplorer({
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const { byPlatform, identityBySurface, integrations } = useIntegrations();
-  const normalizedQuery = query.trim();
-  const { data: discoveredApps = [] } = useComposioToolkits(
-    publicView ? "" : normalizedQuery
-  );
+  const { data: discoveredApps = [] } = useComposioToolkits();
 
   const catalog = useMemo(() => {
     const items = [...INTEGRATIONS];
@@ -562,7 +559,8 @@ export function IntegrationsExplorer({
         platform: "composio",
         appSlug: app.slug,
         name: app.name,
-        description: `Connect ${app.name} and use its tools from Genit.`,
+        description:
+          app.description || `Connect ${app.name} and use its tools from Genit.`,
         category: "More Plugins",
         icon: Blocks,
         remoteIcon: app.logo,
@@ -669,7 +667,9 @@ export function IntegrationsExplorer({
       )}
 
       {/* Search and filter slider bar */}
-      <div className='mb-8 flex items-center gap-3'>
+      <div
+        className={`sticky ${publicView ? "top-14" : "top-11"} z-20 -mx-4 mb-5 flex items-center gap-3 border-b border-zinc-100/80 bg-white/90 px-4 py-3 backdrop-blur-xl dark:border-zinc-900/80 dark:bg-black/90`}
+      >
         <div className='relative flex-1'>
           <Search className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
           <input
@@ -677,7 +677,7 @@ export function IntegrationsExplorer({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search plugins and skills'
-            className='w-full rounded-full border border-zinc-200 bg-zinc-50/50 py-2.5 pr-4 pl-10 text-sm text-zinc-900 shadow-xs transition-colors placeholder:text-zinc-400 focus:border-zinc-300 focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-700/80'
+            className='w-full rounded-md border border-zinc-200 bg-zinc-50/50 py-2.5 pr-4 pl-10 text-sm text-zinc-900 shadow-xs transition-colors placeholder:text-zinc-400 focus:border-zinc-300 focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-700/80'
           />
         </div>
         <button
@@ -686,7 +686,7 @@ export function IntegrationsExplorer({
             setQuery("");
             setSelectedCategory("All");
           }}
-          className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 text-zinc-500 shadow-xs transition-all hover:bg-zinc-100 hover:text-zinc-800 active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
+          className='flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50/50 text-zinc-500 shadow-xs transition-all hover:bg-zinc-100 hover:text-zinc-800 active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-900/60 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
           title='Clear search and filters'
         >
           <svg

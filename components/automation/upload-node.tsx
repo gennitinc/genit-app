@@ -2,6 +2,7 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
 import {
   FileAudio,
   FileText,
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useRef } from "react";
+import { toast } from "sonner";
 
 interface UploadNodeData {
   title: string;
@@ -20,6 +22,7 @@ interface UploadNodeData {
   fileSize?: string;
   fileType?: "image" | "video" | "audio" | "document";
   fileUrl?: string;
+  isUploading?: boolean;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -45,7 +48,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
 
   const IconComponent = getIcon();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -54,16 +57,24 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
     else if (file.type.startsWith("video/")) detectedType = "video";
     else if (file.type.startsWith("audio/")) detectedType = "audio";
 
-    // Simulate URL for demo purposes
-    const simulatedUrl = URL.createObjectURL(file);
-    const sizeStr = (file.size / (1024 * 1024)).toFixed(2) + " MB";
-
-    data.onNodeDataChange(id, {
-      fileName: file.name,
-      fileSize: sizeStr,
-      fileType: detectedType,
-      fileUrl: simulatedUrl,
-    });
+    data.onNodeDataChange(id, { isUploading: true });
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const response = await apiResponse.post("/apps/workflow/upload", body);
+      data.onNodeDataChange(id, {
+        fileName: response.data.data.fileName,
+        fileSize: `${(response.data.data.size / (1024 * 1024)).toFixed(2)} MB`,
+        fileType: detectedType,
+        fileUrl: response.data.data.url,
+        isUploading: false,
+      });
+    } catch (error: any) {
+      data.onNodeDataChange(id, { isUploading: false });
+      toast.error(error?.response?.data?.message || "Could not upload asset");
+    } finally {
+      e.target.value = "";
+    }
   };
 
   const triggerFileSelect = () => {
@@ -149,7 +160,9 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 </div>
                 <div>
                   <p className='text-xs font-medium text-zinc-800 dark:text-neutral-200'>
-                    <LocalizedText text={"Click to upload prep work"} />
+                    <LocalizedText
+                      text={data.isUploading ? "Uploading…" : "Click to upload asset"}
+                    />
                   </p>
                   <p className='mt-0.5 text-[9px] text-zinc-500 dark:text-neutral-400'>
                     <LocalizedText text={"Images, videos, audio, or docs"} />

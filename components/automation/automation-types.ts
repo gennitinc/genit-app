@@ -19,6 +19,7 @@ export type TriggerSubtype =
   | "schedule"
   | "webhook"
   | "manual"
+  | "composio_event"
   | "whatsapp_message"
   | "gmail_received"
   | "outlook_email_received"
@@ -40,6 +41,12 @@ export interface TriggerSubtypeConfig {
 }
 
 export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
+  {
+    id: "composio_event",
+    label: "Connected App Event",
+    integration: "Composio",
+    iconName: "Zap",
+  },
   {
     id: "schedule",
     label: "Schedule",
@@ -130,6 +137,7 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
 // ── Action Subtypes ─────────────────────────────────────────────────────────
 
 export type ActionSubtype =
+  | "composio_action"
   | "send_gmail"
   | "send_brevo_email"
   | "send_outlook_email"
@@ -171,6 +179,13 @@ export interface ActionSubtypeConfig {
 
 export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
   {
+    id: "composio_action",
+    label: "Connected App Action",
+    integration: "Composio",
+    iconName: "Zap",
+    category: "productivity",
+  },
+  {
     id: "send_gmail",
     label: "Send Gmail",
     integration: "Gmail",
@@ -190,6 +205,41 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
     integration: "Outlook",
     iconName: "Mail",
     category: "messaging",
+  },
+  {
+    id: "whatsapp_reply",
+    label: "Send WhatsApp Message",
+    integration: "WhatsApp",
+    iconName: "WhatsApp",
+    category: "messaging",
+  },
+  {
+    id: "whatsapp_template",
+    label: "Send WhatsApp Template",
+    integration: "WhatsApp",
+    iconName: "WhatsApp",
+    category: "messaging",
+  },
+  {
+    id: "messenger_reply",
+    label: "Send Messenger Message",
+    integration: "Messenger",
+    iconName: "MessageCircle",
+    category: "messaging",
+  },
+  {
+    id: "post_facebook",
+    label: "Post to Facebook",
+    integration: "Facebook",
+    iconName: "Facebook",
+    category: "social",
+  },
+  {
+    id: "post_instagram",
+    label: "Post to Instagram",
+    integration: "Instagram",
+    iconName: "Instagram",
+    category: "social",
   },
   {
     id: "post_linkedin",
@@ -421,6 +471,9 @@ export interface AddNodeItem {
   subtype?: string;
   label: string;
   iconName: string;
+  iconUrl?: string;
+  initialData?: Record<string, unknown>;
+  connected?: boolean;
 }
 
 export const ADD_NODE_MENU: AddNodeCategory[] = [
@@ -494,7 +547,7 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
       {
         type: "ai_generate" as AutomationNodeType,
         label: "AI Generate",
-        iconName: "Sparkles",
+        iconName: "CircleFadingArrowUp",
       },
     ],
   },

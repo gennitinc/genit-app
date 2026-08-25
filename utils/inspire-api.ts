@@ -21,6 +21,7 @@ import {
   TutorialsResponse,
   VideoGenTemplatesResponse,
   Voice,
+  ElevenLabsVoice,
   VoiceResponse,
 } from "@/types/inspire";
 
@@ -445,6 +446,17 @@ export const presenterApi = {
 };
 
 export const voiceApi = {
+  getElevenLabs: async (): Promise<{
+    success: boolean;
+    data: ElevenLabsVoice[];
+    defaultVoiceId?: string;
+  }> => {
+    const response = await apiResponse.get(`/inspire/voices/elevenlabs`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
   /**
    * Get all voices
    */

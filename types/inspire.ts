@@ -336,6 +336,15 @@ export interface VoiceResponse {
   count?: number;
 }
 
+export interface ElevenLabsVoice {
+  id: string;
+  name: string;
+  category?: string;
+  description?: string;
+  previewUrl?: string;
+  labels: Record<string, string>;
+}
+
 export interface CloneVoiceRequest {
   name: string;
   language: string;

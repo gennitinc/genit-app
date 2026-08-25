@@ -19,6 +19,7 @@ import Loading from "@/utils/Loading";
 import { SendIcon } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 // Video data for Reels carousel
@@ -515,8 +516,8 @@ const LandingHero = () => {
             </div> */}
             {/* CTAs */}
             <div className='mt-8 flex flex-wrap items-center gap-3'>
-              <a
-                href='#'
+              <Link
+                href='/visuals'
                 className='group inline-flex items-center gap-2 rounded-full bg-lime-300 px-5 py-3 font-medium text-neutral-950 transition hover:brightness-95 active:translate-y-[1px]'
               >
                 Get started
@@ -535,7 +536,7 @@ const LandingHero = () => {
                   <path d='M5 12h14' className='' />
                   <path d='m12 5 7 7-7 7' className='' />
                 </svg>
-              </a>
+              </Link>
               <a
                 href='#'
                 className='inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-white/90 transition hover:bg-white/[0.08] active:translate-y-[1px]'

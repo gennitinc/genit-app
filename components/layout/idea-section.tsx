@@ -11,9 +11,9 @@ import { ModelSelector } from "../inspire/model-selector";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
-import { INTEGRATIONS } from "@/app/integrations/integrations-explorer";
 import { PricingDialog } from "@/components/common/pricing-dialog";
 import { LocalizedText } from "@/components/localized-text";
+import { PluginsFlow } from "@/components/plugins/plugins-flow";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -90,11 +90,6 @@ import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-export const INTEGRATION_BRANDS = INTEGRATIONS.map(({ name, icon }) => ({
-  name,
-  Icon: icon,
-}));
 
 interface TypewriterEffectProps {
   words: string[];
@@ -1479,42 +1474,7 @@ export function IdeaSection() {
           <div className="absolute top-0 bottom-0 right-0 z-20 w-20 pointer-events-none bg-gradient-to-l from-background to-transparent rounded-r-3xl" />
         </div> */}
 
-        <section className='relative mt-16 space-y-4 pt-6 pb-10 lg:mt-6'>
-          <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            <LocalizedText text={"with over"} />
-            {INTEGRATIONS.length}
-            <LocalizedText text={"+ marketing"} />{" "}
-            <Link
-              href='/plugins'
-              target='_blank'
-              className='text-foreground text-sm font-medium underline md:text-base'
-            >
-              <LocalizedText text={"Plugins"} />
-            </Link>
-          </h2>
-          <div className='relative z-10 mx-auto max-w-5xl'>
-            <div className='overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4'>
-              <div className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused]'>
-                {[...INTEGRATION_BRANDS, ...INTEGRATION_BRANDS].map(
-                  ({ name, Icon }, i) => (
-                    <Link
-                      key={`${name}-${i}`}
-                      href={`/plugins#${name.toLowerCase().replace(/\s+/g, "-")}`}
-                      className='group text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-2 transition-colors'
-                    >
-                      <span className='flex h-6 items-center md:h-7'>
-                        <Icon className='h-full w-auto' />
-                      </span>
-                      <span className='text-sm font-medium whitespace-nowrap md:text-base'>
-                        {name}
-                      </span>
-                    </Link>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
+        <PluginsFlow className='mt-16 lg:mt-6' />
 
         {/* <div className='w-full max-w-4xl min-w-0 px-4 mx-auto mt-8'>
           <div className='flex items-center justify-between mb-2'>

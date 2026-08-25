@@ -46,12 +46,12 @@ export function LandingNavbar() {
   const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
+    { name: t("Visual Flow"), href: "/visuals" },
     { name: t("Chat"), href: "/chat" },
     {
       name: t("Plugins"),
       href: currentUser ? "/plugins" : "/all/plugins",
     },
-    { name: t("Visual Flow"), href: "/visuals" },
     ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     // { name: t("Community"), href: "/community" },
@@ -95,6 +95,12 @@ export function LandingNavbar() {
             <div className='flex items-center gap-2 sm:gap-2'>
               <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                 <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
+                  href='/visuals'
+                >
+                  {t("Visual Flow")}
+                </Link>
+                <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                   href='/chat'
                 >
@@ -106,12 +112,7 @@ export function LandingNavbar() {
                 >
                   {t("Plugins")}
                 </Link>
-                <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
-                  href='/visuals'
-                >
-                  {t("Visual Flow")}
-                </Link>
+
                 {isFarmnetUser && (
                   <Link
                     className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'

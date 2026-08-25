@@ -1,6 +1,8 @@
 "use client";
 
 import { ACTION_SUBTYPES, type ActionSubtype } from "./automation-types";
+import { ComposioCatalogFields } from "./composio-catalog-fields";
+import { ElevenLabsVoiceSelect } from "./elevenlabs-voice-select";
 import {
   FacebookBrand,
   GoogleCalendarBrand,
@@ -16,6 +18,7 @@ import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import {
   Activity,
+  ArrowRightLeft,
   AtSign,
   FileText,
   Image,
@@ -36,6 +39,7 @@ import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
 const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
+  composio_action: Activity,
   send_gmail: Mail,
   send_brevo_email: Mail,
   send_outlook_email: Mail,
@@ -129,7 +133,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   return (
     <div
       className={cn(
-        "relative w-[240px] overflow-hidden rounded-lg border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-all duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
+        "relative w-[240px] overflow-hidden rounded-lg border border-zinc-200 bg-white text-zinc-800 shadow-xl transition-[border-color,box-shadow] duration-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200",
         isEdit
           ? "border-zinc-300 ring-2 ring-blue-500/40 dark:border-neutral-700"
           : ""
@@ -144,7 +148,11 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
       {/* Header */}
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
-          <Activity className='h-4 w-4' />
+          {data.actionType === "composio_action" && data.composioLogo ? (
+            <img src={data.composioLogo} alt='' className='h-4 w-4 rounded object-contain' />
+          ) : (
+            <ArrowRightLeft className='h-4 w-4' />
+          )}
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"Action"} />
           </span>
@@ -239,6 +247,20 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                 </optgroup>
               </select>
             </div>
+
+            {data.actionType === "composio_action" && (
+              <ComposioCatalogFields
+                mode='action'
+                data={data}
+                onChange={(fields) => data.onNodeDataChange(id, fields)}
+              />
+            )}
+
+            {data.validationErrors?.length > 0 && (
+              <p className='rounded bg-red-500/10 px-2 py-1.5 text-[10px] text-red-600 dark:text-red-400'>
+                {data.validationErrors.join(" · ")}
+              </p>
+            )}
 
             {/* ── Send Email config ─────────────────────────── */}
             {(data.actionType === "send_gmail" ||
@@ -755,6 +777,15 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               </div>
             )}
 
+            {data.actionType === "generate_audio" && (
+              <ElevenLabsVoiceSelect
+                value={data.voiceId}
+                onChange={(voiceId, voiceName) =>
+                  data.onNodeDataChange(id, { voiceId, voiceName })
+                }
+              />
+            )}
+
             {/* ── Calendar event action ──────────────────────── */}
             {data.actionType === "add_calendar_event" && (
               <>
@@ -820,14 +851,24 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
             </h4>
             <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
               <span className='flex items-center gap-1.5 font-medium text-zinc-800 dark:text-neutral-200'>
-                {Icon && (
+                {data.actionType === "composio_action" && data.composioLogo ? (
+                  <img src={data.composioLogo} alt='' className='h-3.5 w-3.5 rounded object-contain' />
+                ) : Icon ? (
                   <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
-                )}
+                ) : null}
                 <span>{subtypeConfig?.label || data.actionType}</span>
               </span>
               <span className='mt-0.5 block text-[9px] text-zinc-500 dark:text-neutral-400'>
-                {subtypeConfig?.integration}
+                {data.actionType === "composio_action"
+                  ? data.composioToolkit || "Choose an app"
+                  : subtypeConfig?.integration}
               </span>
+              {data.actionType === "composio_action" &&
+                data.composioToolSlug && (
+                  <span className='mt-0.5 block truncate text-[9px] text-zinc-500'>
+                    {data.composioToolSlug}
+                  </span>
+                )}
               {data.recipientEmail && (
                 <span className='mt-0.5 block truncate text-[10px]'>
                   <LocalizedText text={"To:"} />
