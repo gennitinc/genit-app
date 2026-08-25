@@ -74,23 +74,7 @@ export function LandingMainNav() {
               <span className='block'>{item.name}</span>
             </a>
           ))}
-          {/* <div className="flex w-full flex-col gap-4">
-            <NavbarButton
-              onClick={() => setIsMobileMenuOpen(false)}
-              variant="primary"
-              className="w-full"
-            >
-              Login
-            </NavbarButton>
-            <NavbarButton
-              onClick={() => setIsMobileMenuOpen(false)}
-              variant="primary"
-              className="w-full"
-            >
-              <span>Start for $0</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </NavbarButton>
-          </div> */}
+          
           <div className='flex gap-4'>
             <Link
               className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-lg border border-transparent bg-transparent px-4 text-sm font-semibold outline-hidden transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'

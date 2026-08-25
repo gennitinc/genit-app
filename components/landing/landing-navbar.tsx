@@ -241,22 +241,23 @@ export function LandingNavbar() {
             {currentUser ? (
               <UserPopOver />
             ) : (
-              <div className='flex items-center gap-2'>
-                <Link
-                  className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-lg border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 md:flex'
-                  data-state='closed'
-                  href='/signin'
-                >
-                  {t("Sign in")}
-                </Link>
-                <Link
-                  className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border border-indigo-400/60 bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
-                  href='/signup'
-                >
-                  <span>{t("Start for $0")}</span>
-                  <ArrowRight className='ml-1 h-4 w-4' />
-                </Link>
-              </div>
+              // <div className='flex items-center gap-2'>
+              //   <Link
+              //     className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-lg border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 md:flex'
+              //     data-state='closed'
+              //     href='/signin'
+              //   >
+              //     {t("Sign in")}
+              //   </Link>
+              //   <Link
+              //     className='hover:shadow-button focus-visible:ring-primary/30 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border border-indigo-400/60 bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-[0_6px_20px_rgba(79,70,229,0.28)] outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
+              //     href='/signup'
+              //   >
+              //     <span>{t("Start for $0")}</span>
+              //     <ArrowRight className='ml-1 h-4 w-4' />
+              //   </Link>
+              // </div>
+              <div className=""></div>
             )}
 
             <Sheet>
