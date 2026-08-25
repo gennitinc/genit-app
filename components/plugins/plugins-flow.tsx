@@ -24,8 +24,7 @@ const NATIVE_PLUGINS: FlowPlugin[] = INTEGRATIONS.map((plugin) => ({
   Icon: plugin.icon,
 }));
 
-export function PluginsFlow({ className = "" }: { className?: string }) {
-  const { t } = useLanguage();
+export function useAvailablePlugins() {
   const { data: composioPlugins = [], isSuccess } = useComposioToolkits();
 
   const plugins = useMemo(() => {
@@ -46,12 +45,19 @@ export function PluginsFlow({ className = "" }: { className?: string }) {
     ];
   }, [composioPlugins]);
 
+  return { plugins, total: isSuccess ? plugins.length : 1387 };
+}
+
+export function PluginsFlow({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
+  const { plugins, total } = useAvailablePlugins();
+
   const loop = [...plugins, ...plugins];
 
   return (
     <section className={`relative space-y-4 pt-6 pb-10 ${className}`}>
       <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-        {t("with")} {isSuccess ? plugins.length : 1387} {t("marketing")}{" "}
+        {t("with")} {total} {t("marketing")}{" "}
         <Link
           href='/plugins'
           className='text-foreground font-medium underline underline-offset-4'

@@ -2,6 +2,7 @@
 
 import { IntegrationsExplorer } from "@/app/integrations/integrations-explorer";
 import { LocalizedText } from "@/components/localized-text";
+import { useAvailablePlugins } from "@/components/plugins/plugins-flow";
 import { ArrowRight, Code, Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -10,13 +11,20 @@ export function PluginsCatalog({
 }: {
   publicView?: boolean;
 }) {
+  const { total } = useAvailablePlugins();
+
   return (
     <section className='relative z-10'>
       <div className='mx-auto max-w-4xl px-4 pt-12 pb-20 sm:px-6 lg:px-8'>
         <div className='mb-10 text-left'>
-          <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
-            <LocalizedText text={"Plugins"} />
-          </h1>
+          <div className='flex items-center gap-3'>
+            <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
+              <LocalizedText text={"Plugins"} />
+            </h1>
+            <span className='border-border bg-muted/60 text-muted-foreground rounded-full border px-2.5 py-1 text-xs font-medium tabular-nums'>
+              {total.toLocaleString()} plugins
+            </span>
+          </div>
           <p className='mt-2 text-sm text-zinc-500 sm:text-base dark:text-zinc-400'>
             <LocalizedText
               text={"Work with Genit across your favorite tools"}
