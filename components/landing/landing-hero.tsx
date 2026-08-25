@@ -508,7 +508,7 @@ const LandingHero = () => {
       <div className='relative flex w-full flex-col items-center justify-center'>
         <main className='w-full flex-1'>
           <div className='mx-auto h-full w-full px-4 md:px-24 lg:px-32 xl:px-40'>
-            <div className='border-border relative flex h-fit pt-14 lg:pt-0 w-full flex-col items-center border-x border-dashed lg:min-h-[calc(100vh-80px)]'>
+            <div className='border-border relative flex h-fit w-full flex-col items-center border-x border-dashed lg:min-h-[calc(100vh-80px)]'>
               {/* <div className='border-border bg-background/80 mt-24 flex flex-wrap items-center justify-center gap-2 rounded-full border py-1.5 pr-4 pl-2.5 backdrop-blur-sm md:mt-32'>
                 <div className='relative flex size-3.5 items-center justify-center'>
                   <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-300 opacity-75 duration-300' />
@@ -518,7 +518,7 @@ const LandingHero = () => {
                   Built for Modern Brands
                 </p>
               </div> */}
-              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 md:mt-28 hover:dark:text-neutral-400'>
+              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 mt-20 hover:dark:text-neutral-400'>
                 <span className='text-xs'>
                   <LocalizedText text={"✨ Built for Modern Business"} />
                 </span>
