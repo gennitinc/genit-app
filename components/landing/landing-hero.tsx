@@ -562,18 +562,18 @@ const LandingHero = () => {
                   className='border-border bg-background text-foreground hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md border px-5 py-2.5 text-sm transition-[background-color,transform] duration-150 active:scale-[0.97]'
                 >
                   <Play className='size-4 fill-current opacity-70' />
-                  Watch Demo
+                  Learn More
                 </button>
 
                 {isMobileOrTablet ? (
-                  <Drawer open={isDemoOpen} onOpenChange={setIsDemoOpen}>
-                    <DrawerContent className='max-h-[90dvh] border-white/30 bg-white/65 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-24px_80px_rgba(0,0,0,0.28)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-zinc-950/65'>
-                      <DrawerTitle className='sr-only'>
+                  <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+                    <DialogContent className='w-[calc(100%-2rem)] max-w-5xl gap-0 overflow-hidden rounded-[22px] border-white/30 bg-white/60 p-2 shadow-[0_32px_120px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-zinc-950/60'>
+                      <DialogTitle className='sr-only'>
                         {t("Genit product demo")}
-                      </DrawerTitle>
+                      </DialogTitle>
                       {demoContent}
-                    </DrawerContent>
-                  </Drawer>
+                    </DialogContent>
+                  </Dialog>
                 ) : (
                   <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
                     <DialogContent className='w-[calc(100%-2rem)] max-w-5xl gap-0 overflow-hidden rounded-[22px] border-white/30 bg-white/60 p-2 shadow-[0_32px_120px_rgba(0,0,0,0.35)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/10 dark:bg-zinc-950/60'>
