@@ -504,7 +504,7 @@ const LandingHero = () => {
     };
   }, [language]);
   return (
-    <section className='bg-background relative w-full overflow-x-hidden px-2 py-10 md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
+    <section className='bg-background relative w-full overflow-x-hidden md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
         <main className='w-full flex-1'>
           <div className='mx-auto h-full w-full px-4 md:px-24 lg:px-32 xl:px-40'>
