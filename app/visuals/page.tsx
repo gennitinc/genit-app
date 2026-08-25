@@ -339,7 +339,7 @@ export default function VisualsHomePage() {
       <div className='mb-8 flex flex-col gap-y-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
-            <LocalizedText text={"Hello"} />
+            <LocalizedText text={"Hello "} />
             {current?.businessName || user?.username || "User"} 👋
           </h1>
           <div className='mt-4 flex items-center'>
