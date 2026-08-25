@@ -337,7 +337,7 @@ export function HomeCommandCenter({
                     variant='outline'
                     size='sm'
                     onClick={openCreate}
-                    className='rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
+                    className='rounded-md border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
                     <Plus className='mr-1 h-3.5 w-3.5' />{" "}
                     <LocalizedText text={"New post"} />
@@ -434,7 +434,7 @@ export function HomeCommandCenter({
                   <Button
                     onClick={openCreate}
                     variant='outline'
-                    className='mt-4 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
+                    className='mt-4 rounded-md border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
                     <Plus className='mr-1.5 h-4 w-4' />
                     <LocalizedText text={"New post"} />

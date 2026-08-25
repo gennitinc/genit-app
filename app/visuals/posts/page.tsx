@@ -1064,7 +1064,7 @@ export default function PostsPage() {
             </div>
             <Button
               onClick={openCreate}
-              className='mt-4 flex h-9 w-fit items-center gap-2 rounded-xl px-4 text-sm disabled:opacity-50'
+              className='mt-4 flex h-9 w-fit items-center gap-2 rounded-md px-4 text-sm disabled:opacity-50'
             >
               <LocalizedText text={"New Post"} />
               <Plus className='h-4 w-4' />
@@ -1236,7 +1236,7 @@ export default function PostsPage() {
             {view !== "live" && (
               <Button
                 variant='outline'
-                className='mt-5 rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
+                className='mt-5 rounded-md border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
                 onClick={openCreate}
               >
                 <Plus className='mr-2 h-4 w-4' />
