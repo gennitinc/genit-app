@@ -674,6 +674,14 @@ export default function PostsPage() {
     () => connected.filter((item) => !managedConnectionIds.has(item._id)),
     [connected, managedConnectionIds]
   );
+  const activeConnectionIds = useMemo(
+    () => new Set(connected.map((item) => item._id)),
+    [connected]
+  );
+  const activePlatforms = useMemo(
+    () => new Set(connected.map((item) => item.platform)),
+    [connected]
+  );
   const postsQuery = useInfiniteQuery({
     queryKey: ["social-posts", "pages"],
     queryFn: ({ pageParam }) =>
@@ -734,7 +742,13 @@ export default function PostsPage() {
   const live = useMemo(() => {
     const combined: DisplayPost[] = [
       ...(liveQuery.data || []),
-      ...workspacePosts.filter((post) => post.status === "published"),
+      ...workspacePosts.filter(
+        (post) =>
+          post.status === "published" &&
+          (post.integration
+            ? activeConnectionIds.has(String(post.integration))
+            : activePlatforms.has(post.platform))
+      ),
     ];
     return combined.filter(
       (post, index) =>
@@ -745,7 +759,7 @@ export default function PostsPage() {
             : post._id === candidate._id
         ) === index
     );
-  }, [liveQuery.data, workspacePosts]);
+  }, [activeConnectionIds, activePlatforms, liveQuery.data, workspacePosts]);
   const liveAnalyticsQueries = useQueries({
     queries: live.map((post) => ({
       queryKey: ["post-analytics", post._id],

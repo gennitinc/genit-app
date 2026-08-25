@@ -818,7 +818,7 @@ const SettingsHome = () => {
                         </p>
                         <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
                           <LocalizedText
-                            text={"We’ll send a six-digit code to"}
+                            text={"We’ll send a six-digit code to "}
                           />
                           {user?.email}.
                         </p>

@@ -55,7 +55,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface AutomationDocument {
   nodes: Array<{
@@ -280,12 +280,18 @@ export default function AutomationPage() {
   const { createProject } = useProjectDesign();
   const [automations, setAutomations] = useState<AutomationProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [nextPage, setNextPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [creating, setCreating] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<AutomationProject | null>(
     null
   );
   const [query, setQuery] = useState("");
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const requestIdRef = useRef(0);
 
   const organizationId =
     user?.currentOrganization?._id ||
@@ -293,29 +299,23 @@ export default function AutomationPage() {
       ? user.business._id
       : "");
 
-  const fetchAutomations = useCallback(async () => {
-    setLoading(true);
+  const fetchAutomations = useCallback(async (page = 1, append = false) => {
+    const requestId = append ? requestIdRef.current : ++requestIdRef.current;
+    append ? setLoadingMore(true) : setLoading(true);
     try {
-      const collected: Omit<AutomationProject, "enabled">[] = [];
-      let page = 1;
-      let hasNextPage = true;
-
-      while (hasNextPage) {
-        const response = await apiResponse.get(
-          `/project/myprojects?type=chat&page=${page}&limit=100`
-        );
-        const projects = response.data?.projects || [];
-        collected.push(
-          ...projects.filter(
-            (project: AutomationProject) => project.category === "automation"
-          )
-        );
-        hasNextPage = Boolean(response.data?.pagination?.hasNextPage);
-        page += 1;
-      }
+      const response = await apiResponse.get(`/project/myprojects`, {
+        params: {
+          type: "automation",
+          page,
+          limit: 12,
+          search: query.trim() || undefined,
+        },
+      });
+      const projects: Omit<AutomationProject, "enabled">[] =
+        response.data?.projects || [];
 
       const hydrated = await Promise.all(
-        collected.map(async (project) => {
+        projects.map(async (project) => {
           try {
             const response = await apiResponse.get(
               `/apps/automation/${project._id}`,
@@ -336,30 +336,52 @@ export default function AutomationPage() {
         })
       );
 
-      setAutomations(hydrated);
+      if (requestId !== requestIdRef.current) return;
+
+      setAutomations((current) =>
+        append
+          ? [...current, ...hydrated].filter(
+              (item, index, all) =>
+                all.findIndex((candidate) => candidate._id === item._id) ===
+                index
+            )
+          : hydrated
+      );
+      const pagination = response.data?.pagination;
+      setHasNextPage(Boolean(pagination?.hasNextPage));
+      setNextPage((pagination?.currentPage || page) + 1);
+      setTotalCount(pagination?.totalCount || hydrated.length);
     } catch (error: any) {
+      if (requestId !== requestIdRef.current) return;
       console.error("Failed to load automations:", error);
+      if (append) setHasNextPage(false);
       toast.error(
         error.response?.data?.message || "Could not load automations"
       );
     } finally {
-      setLoading(false);
+      if (requestId === requestIdRef.current) {
+        append ? setLoadingMore(false) : setLoading(false);
+      }
     }
-  }, []);
+  }, [query]);
 
   useEffect(() => {
-    if (user) fetchAutomations();
+    if (!user) return;
+    const timer = window.setTimeout(() => fetchAutomations(1, false), 250);
+    return () => window.clearTimeout(timer);
   }, [fetchAutomations, organizationId, user]);
 
-  const visibleAutomations = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    if (!normalized) return automations;
-    return automations.filter((automation) =>
-      (automation.title || automation.document?.name || "automation")
-        .toLowerCase()
-        .includes(normalized)
-    );
-  }, [automations, query]);
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasNextPage || loading || loadingMore) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) void fetchAutomations(nextPage, true);
+    }, { rootMargin: "240px" });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [fetchAutomations, hasNextPage, loading, loadingMore, nextPage]);
+
+  const visibleAutomations = automations;
 
   const handleCreate = async (initialPrompt?: string) => {
     if (creating) return;
@@ -453,6 +475,7 @@ export default function AutomationPage() {
       setAutomations((items) =>
         items.filter((item) => item._id !== deleteTarget._id)
       );
+      setTotalCount((count) => Math.max(0, count - 1));
       toast.success("Automation deleted");
       setDeleteTarget(null);
     } catch (error: any) {
@@ -533,9 +556,9 @@ export default function AutomationPage() {
               </div>
               <div className='mt-3 grid grid-cols-3 gap-2'>
                 {[
-                  { label: "Total", value: automations.length },
-                  { label: "Active", value: activeCount },
-                  { label: "Paused", value: automations.length - activeCount },
+                  { label: "Total", value: totalCount },
+                  { label: "Loaded", value: automations.length },
+                  { label: "Active loaded", value: activeCount },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -719,6 +742,9 @@ export default function AutomationPage() {
               </article>
             );
           })}
+          <div ref={loadMoreRef} className='col-span-full flex h-10 items-center justify-center'>
+            {loadingMore && <LoadingFileLoader size={20} />}
+          </div>
         </div>
       )}
 
