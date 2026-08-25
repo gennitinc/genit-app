@@ -525,13 +525,13 @@ const LandingHero = () => {
                 <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
               </AnimatedShinyText>
               <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
-                AI agents for{" "}
+             
                 <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
                   Marketing & Growth.
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
-                Agents that create, automate, and execute your daily task so you
+                AI Agents that create, automate, and execute your daily task so you
                 can focus on growing your business.
               </p>
               <div className='mt-7.5 flex gap-5'>
@@ -588,7 +588,7 @@ const LandingHero = () => {
               <div className='mt-11 w-full px-4'>
                 <img
                   className='border-border bg-muted mx-auto max-h-64 w-full max-w-[1100px] rounded-xl border object-cover object-top md:max-h-96'
-                  src='https://assets.prebuiltui.com/components/hero-section/hero-modern-dashboard.png'
+                  src='./hero.png'
                   alt='dashboard'
                 />
               </div>
