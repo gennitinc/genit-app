@@ -518,7 +518,7 @@ const LandingHero = () => {
                   Built for Modern Brands
                 </p>
               </div> */}
-              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 mt-20 hover:dark:text-neutral-400'>
+              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 mt-16 hover:dark:text-neutral-400'>
                 <span className='text-xs'>
                   <LocalizedText text={"✨ Built for Modern Business"} />
                 </span>
