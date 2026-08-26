@@ -19,7 +19,9 @@ type FlowPlugin = {
   logo?: string;
 };
 
-const NATIVE_PLUGINS: FlowPlugin[] = INTEGRATIONS.map((plugin) => ({
+const NATIVE_PLUGINS: FlowPlugin[] = INTEGRATIONS.filter(
+  (plugin) => plugin.baseStatus === "available"
+).map((plugin) => ({
   slug: plugin.appSlug || plugin.platform,
   name: plugin.name,
   Icon: plugin.icon,

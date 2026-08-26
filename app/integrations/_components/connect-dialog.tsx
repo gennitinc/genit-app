@@ -20,13 +20,7 @@ import {
   InstagramCandidate,
   IntegrationPlatform,
   completeComposioAuth,
-  connectBrevoWithApiKey,
-  connectLinkedInAdsWithAccountId,
-  connectMailchimpWithApiKey,
-  connectTelegramWithToken,
-  connectXAdsWithAccountId,
   fetchIntegrations,
-  isCredentialPlatform,
   isMetaSurface,
   isPlatformSupported,
   provisionFacebookSelected,
@@ -42,7 +36,6 @@ import {
   ArrowRight,
   CheckCircle2,
   CircleFadingArrowUp,
-  KeyRound,
   Loader2,
   Lock,
   ShieldCheck,
@@ -272,170 +265,11 @@ const PLATFORM_SCOPES: Partial<Record<IntegrationPlatform, string[]>> = {
   ],
 };
 
-const REQUIREMENTS: Partial<Record<IntegrationPlatform, string[]>> = {
-  facebook: [
-    "You must be an admin or editor of the Facebook Page you want to connect",
-  ],
-  instagram: [
-    "Instagram account must be Business or Creator",
-    "Instagram must be linked to a Facebook Page",
-  ],
-  meta_ads: [
-    "You must be admin on at least one ad account in Business Manager",
-    "Two-factor auth must be enabled on your Meta account",
-  ],
-  messenger: [
-    "You need admin access to the Facebook Page you want to connect",
-    "The Page must not be restricted from messaging users",
-  ],
-  threads: [
-    "You'll sign in directly with your Threads account",
-    "Threads uses a separate login from Facebook and Instagram",
-  ],
-  whatsapp: [
-    "Your phone number must be added to a WhatsApp Business Account",
-    "The WABA must live in a Meta Business Manager you own or admin",
-  ],
-  gmail: [
-    "genit is a verified Google app — if you see a warning screen, click Advanced → Continue",
-    "Workspace admins may need to allow third-party Gmail apps for the domain",
-  ],
-  telegram: [
-    "Create a bot in @BotFather, enable Business Mode, then copy its API token",
-    "After saving, connect the bot under Telegram Settings → Telegram Business → Chatbots",
-  ],
-  x: [
-    "Your X developer app must have OAuth 2.0 enabled with the User authentication settings",
-    "Posting requires a Free, Basic, or Pro X API plan — read-only plans cannot publish",
-  ],
-  linkedin: [
-    "Posting as a company page requires being an admin of that page in LinkedIn",
-    "We'll create one connection per page you can post as, plus one for your personal profile",
-  ],
-  tiktok: [
-    "Direct publish needs the Content Posting API approved on your TikTok developer app",
-    "The video URL you publish must be on a domain you've verified in the TikTok developer portal",
-  ],
-  youtube: [
-    "Your Google account must already have a YouTube channel — create one at youtube.com/create_channel first",
-    "Daily upload quota is a fixed cost per video in YouTube API units — uploading more than 6 a day on the default quota will fail",
-  ],
-  brevo: [
-    "Generate a v3 API key in Brevo → SMTP & API → API Keys (not the older v2 key)",
-    "Sending requires at least one verified sender address on your Brevo account",
-    "If your key has IP restrictions on, add this server's IP at app.brevo.com/security/authorised_ips first",
-  ],
-  outlook: [
-    "Your IT administrator may need to approve third-party app access in Microsoft Entra ID (Azure AD)",
-  ],
-  mailchimp: [
-    "You need an active Mailchimp account with at least one audience list configured",
-  ],
-  pinterest: [
-    "Your Pinterest app must be approved for the boards / pins scopes — apps in trial mode are limited to the app owner's account",
-    "Pin images must be publicly accessible https URLs at least 75×75 px",
-  ],
-  snapchat: [
-    "Your Snap dev app must be approved for the snapchat-marketing-api scope",
-    "You need at least one ad account in a Snap Business Manager you admin — we provision one connection per ad account",
-  ],
-  google_ads: [
-    "Set GOOGLE_ADS_DEVELOPER_TOKEN — apply at ads.google.com/aw/apicenter (test tokens work on test accounts only)",
-    "Connecting Google account must have access to at least one Google Ads customer; managers + children each become a separate connection",
-  ],
-  tiktok_ads: [
-    "Register a TikTok Business Marketing API app (separate from the regular TikTok developer app) and set TIKTOK_ADS_APP_ID / TIKTOK_ADS_SECRET",
-    "During the TikTok consent screen you choose which advertisers to authorize — we provision one connection per choice",
-  ],
-  linkedin_ads: [
-    "You must be an admin or billing admin on the LinkedIn ad account you want to manage",
-  ],
-  x_ads: [
-    "You must have an active X Ads account with a valid payment method configured",
-  ],
-  google_calendar: [
-    "genit is a verified Google app — if you see a warning screen, click Advanced → Continue",
-    "Workspace admins may need to allow third-party calendar apps for the domain",
-  ],
-  google_drive: [
-    "Drive's full-access scope is restricted — your Google Cloud app must be verified before going to production (development users work without verification)",
-    "Add /api/v1/integrations/google_drive/callback as an authorized redirect URI on your Google OAuth client",
-  ],
-  google_meet: [
-    "Enable the Google Meet REST API in the same Google Cloud project",
-    "Uses the existing Google Drive OAuth callback",
-  ],
-  google_sheets: [
-    "Enable Google Sheets API and Google Drive API",
-    "Uses the existing Google Drive OAuth callback",
-  ],
-  google_slides: [
-    "Enable Google Slides API and Google Drive API",
-    "Uses the existing Google Drive OAuth callback",
-  ],
-  google_docs: [
-    "Enable Google Docs API and Google Drive API",
-    "Uses the existing Google Drive OAuth callback",
-  ],
-};
-
-// Per-platform copy for the credential-entry flow (no OAuth). Used to build
-// the input field and the help text under it. Keyed by platform name.
-interface CredentialInputConfig {
-  label: string;
-  placeholder: string;
-  autoComplete?: string;
-  helpUrl?: string;
-  helpUrlLabel?: string;
-  helpSuffix?: string;
-}
-
-const CREDENTIAL_INPUT: Partial<
-  Record<IntegrationPlatform, CredentialInputConfig>
-> = {
-  telegram: {
-    label: "Business Bot API token",
-    placeholder: "123456789:ABCdefGHIjklMNOpqrSTUvwxYZ",
-    autoComplete: "off",
-    helpUrl: "https://t.me/BotFather",
-    helpUrlLabel: "@BotFather",
-    helpSuffix:
-      ". Enable Business Mode first; we'll encrypt the token before storing.",
-  },
-  brevo: {
-    label: "Brevo API key",
-    placeholder: "xkeysib-...",
-    autoComplete: "off",
-    helpUrl: "https://app.brevo.com/settings/keys/api",
-    helpUrlLabel: "your Brevo account",
-    helpSuffix: ". Keys are AES-encrypted at rest.",
-  },
-  mailchimp: {
-    label: "Mailchimp API key",
-    placeholder: "abcd1234-us1",
-    autoComplete: "off",
-    helpUrl: "https://mailchimp.com/help/about-api-keys/",
-    helpUrlLabel: "Mailchimp API keys",
-    helpSuffix: ". Include the datacenter suffix, for example -us1.",
-  },
-  linkedin_ads: {
-    label: "LinkedIn Ads account ID",
-    placeholder: "123456789",
-    autoComplete: "off",
-    helpUrl: "https://www.linkedin.com/campaignmanager/accounts",
-    helpUrlLabel: "Campaign Manager",
-    helpSuffix:
-      ". Connect LinkedIn first so Genit can reuse the authorized token.",
-  },
-  x_ads: {
-    label: "X Ads account ID",
-    placeholder: "18ce54d4x5t",
-    autoComplete: "off",
-    helpUrl: "https://ads.x.com/",
-    helpUrlLabel: "X Ads",
-    helpSuffix: ". Connect X first so Genit can reuse the authorized token.",
-  },
-};
+const REQUIREMENTS = [
+  "Sign in or enter your account credentials in the secure Composio window",
+  "Approve the permissions required for the actions you want Genit to perform",
+  "If Composio requires app setup, an administrator must configure it in the Composio dashboard",
+];
 
 // Turn any URL embedded in a requirement string into a clickable blue link.
 // Matches both full https:// URLs and bare domain forms like
@@ -477,8 +311,6 @@ export function ConnectDialog({
   const [phase, setPhase] = useState<Phase>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
-  const [credentialValue, setCredentialValue] = useState("");
-  const [useNativeCredentials, setUseNativeCredentials] = useState(false);
   // Instagram selection flow: candidates discovered by the server, the IDs
   // the user picks, and the in-flight POST state.
   const [igCandidates, setIgCandidates] = useState<InstagramCandidate[]>([]);
@@ -526,19 +358,12 @@ export function ConnectDialog({
       setPhase("idle");
       setErrorMessage(null);
       setConnectedAccount(null);
-      setCredentialValue("");
-      setUseNativeCredentials(false);
       // NOTE: we intentionally do NOT reset connectionResolvedRef here.
       // It is only reset when a new connection attempt starts (handleConnect).
       // Resetting here would allow a stale setTimeout from the poll to
       // flash an error after the dialog re-opens.
     }
   }, [open, closePopup]);
-
-  const isCredentialMode = platform
-    ? isCredentialPlatform(platform) && useNativeCredentials
-    : false;
-  const credentialConfig = platform ? CREDENTIAL_INPUT[platform] : undefined;
 
   const markConnected = useCallback(
     (accountName?: string) => {
@@ -656,16 +481,6 @@ export function ConnectDialog({
         : await requestConnectUrl(platform);
     } catch (err: any) {
       if (!isCurrentAttempt()) return;
-      if (
-        platform &&
-        isCredentialPlatform(platform) &&
-        !appSlug &&
-        err?.response?.status === 404
-      ) {
-        setUseNativeCredentials(true);
-        setPhase("idle");
-        return;
-      }
       const msg =
         err?.response?.data?.message ||
         err?.message ||
@@ -785,65 +600,6 @@ export function ConnectDialog({
     }
   }, [platform, platformName, appSlug, qc, orgId, markConnected, closePopup]);
 
-  const handleCredentialSubmit = useCallback(async () => {
-    if (!platform) return;
-    const value = credentialValue.trim();
-    if (!value) {
-      setErrorMessage("Token is required");
-      setPhase("error");
-      return;
-    }
-    setPhase("connecting");
-    setErrorMessage(null);
-    try {
-      let name: string | null = null;
-      if (platform === "telegram") {
-        const result = await connectTelegramWithToken(value);
-        name = result.username ? `@${result.username}` : `Bot ${result.botId}`;
-        if (result.warning) {
-          toast.warning(
-            "Telegram Business Bot saved, but webhook needs attention",
-            { description: result.warning }
-          );
-        } else if (!result.businessReady) {
-          toast.info("Authorize the bot in Telegram Business", {
-            description:
-              "Open Telegram Settings → Telegram Business → Chatbots and connect this bot. Genit will detect the authorization automatically.",
-          });
-        }
-      } else if (platform === "brevo") {
-        const result = await connectBrevoWithApiKey(value);
-        name = result.displayName || result.email;
-      } else if (platform === "mailchimp") {
-        const result = await connectMailchimpWithApiKey(value);
-        name = result.displayName || result.accountId;
-      } else if (platform === "linkedin_ads") {
-        const result = await connectLinkedInAdsWithAccountId(value);
-        name = result.displayName || result.accountId;
-      } else if (platform === "x_ads") {
-        const result = await connectXAdsWithAccountId(value);
-        name = result.displayName || result.accountId;
-      } else {
-        throw new Error(`Credential connect not implemented for ${platform}`);
-      }
-      setConnectedAccount(name);
-      setPhase("success");
-      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
-      toast.success(`Connected ${platformName}`, {
-        description: name ?? undefined,
-      });
-      return;
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to validate credential";
-      setErrorMessage(msg);
-      setPhase("error");
-      toast.error("Could not connect", { description: msg });
-    }
-  }, [platform, platformName, credentialValue, qc, orgId]);
-
   function handleDone() {
     onOpenChange(false);
     if (fetchCurrentUser) fetchCurrentUser();
@@ -920,7 +676,7 @@ export function ConnectDialog({
 
   const isSupported = platform ? isPlatformSupported(platform) : false;
   const scopes = platform ? (PLATFORM_SCOPES[platform] ?? []) : [];
-  const requirements = platform ? (REQUIREMENTS[platform] ?? []) : [];
+  const requirements = platform ? REQUIREMENTS : [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -1032,57 +788,7 @@ export function ConnectDialog({
                           </div>
                         )}
 
-                      {isCredentialMode && credentialConfig && (
-                        <div className='mt-4'>
-                          <label
-                            htmlFor='credential-input'
-                            className='text-muted-foreground mb-1.5 block text-xs font-medium tracking-wide uppercase'
-                          >
-                            {credentialConfig.label}
-                          </label>
-                          <div className='relative'>
-                            <KeyRound className='text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2' />
-                            <input
-                              id='credential-input'
-                              type='password'
-                              autoComplete={
-                                credentialConfig.autoComplete ?? "off"
-                              }
-                              spellCheck={false}
-                              value={credentialValue}
-                              onChange={(e) =>
-                                setCredentialValue(e.target.value)
-                              }
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                  e.preventDefault();
-                                  handleCredentialSubmit();
-                                }
-                              }}
-                              placeholder={credentialConfig.placeholder}
-                              className='border-border bg-card/60 text-foreground placeholder:text-muted-foreground w-full rounded-md border py-2 pr-3 pl-9 font-mono text-xs backdrop-blur transition focus:ring-1 focus:ring-cyan-500/40 focus:outline-none dark:border-white/10 dark:bg-white/5'
-                            />
-                          </div>
-                          <p className='text-muted-foreground mt-1.5 text-[11px]'>
-                            <LocalizedText text={"Paste the key from"} />{" "}
-                            {credentialConfig.helpUrl ? (
-                              <a
-                                href={credentialConfig.helpUrl}
-                                target='_blank'
-                                rel='noreferrer'
-                                className='text-foreground underline-offset-2 hover:underline'
-                              >
-                                {credentialConfig.helpUrlLabel ??
-                                  "the provider"}
-                              </a>
-                            ) : (
-                              (credentialConfig.helpUrlLabel ?? "the provider")
-                            )}
-                            {credentialConfig.helpSuffix ??
-                              ". We'll encrypt it before storing."}
-                          </p>
-                        </div>
-                      )}
+
                     </>
                   )}
                 </div>
@@ -1161,14 +867,10 @@ export function ConnectDialog({
                     </div>
                   </div>
                   <p className='text-foreground mt-4 text-sm font-medium'>
-                    {isCredentialMode
-                      ? `Validating with ${platformName}…`
-                      : `Waiting for ${platformName}…`}
+                    {`Waiting for ${platformName}…`}
                   </p>
                   <p className='text-muted-foreground mt-1 text-center text-xs'>
-                    {isCredentialMode
-                      ? "Checking the token with the platform. This usually takes a second."
-                      : "Complete sign-in in the popup window. This dialog will update automatically."}
+                    Complete sign-in in the Composio popup. This dialog will update automatically.
                   </p>
                 </div>
               )}
@@ -1216,18 +918,13 @@ export function ConnectDialog({
                 <Button
                   type='button'
                   size='sm'
-                  onClick={
-                    isCredentialMode ? handleCredentialSubmit : handleConnect
-                  }
-                  disabled={
-                    !isSupported ||
-                    (isCredentialMode && !credentialValue.trim())
-                  }
+                  onClick={handleConnect}
+                  disabled={!isSupported}
                   className='w-full bg-indigo-600 text-white transition-all hover:bg-linear-to-bl sm:w-auto'
                 >
                   {isSupported ? (
                     <>
-                      {isCredentialMode ? "Save key" : "Continue"}
+                      Continue
                       <ArrowRight className='ml-1 h-3.5 w-3.5' />
                     </>
                   ) : (
@@ -1312,7 +1009,7 @@ export function ConnectDialog({
                     size='sm'
                     onClick={() => {
                       setPhase("idle");
-                      if (!isCredentialMode) handleConnect();
+                      handleConnect();
                     }}
                     className='bg-linear-to-r from-cyan-500 to-blue-500 text-white'
                   >

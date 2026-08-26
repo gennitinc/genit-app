@@ -531,7 +531,7 @@ const LandingHero = () => {
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
-                AI Agents that create, automate, and execute your daily task so you
+                AI Agents that create, automate, and execute your business daily task so you
                 can focus on growing your business.
               </p>
               <div className='mt-7.5 flex gap-5'>

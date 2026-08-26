@@ -1,23 +1,13 @@
 "use client";
 
 import { AgentButton, AgentCard } from "./agent-card";
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import type { AgentIntegrationRequired } from "@/lib/agents-api";
-import { requestConnectUrl } from "@/lib/integrations-api";
-import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Loader2,
-  Plug,
-  ShieldCheck,
-} from "lucide-react";
-import { toast } from "sonner";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowRight, CheckCircle2, Plug, ShieldCheck } from "lucide-react";
+import { useState } from "react";
 
-// Inline "Connect this integration to continue" card shown inside an
-// in-progress agent message. After successful OAuth, the server's callback
-// auto-resumes the paused run — this component just drives the popup.
+// Use the same Composio verification and connection refresh flow as Plugins.
 export function ConnectIntegrationInline({
   required,
   onConnected,
@@ -25,167 +15,55 @@ export function ConnectIntegrationInline({
   required: AgentIntegrationRequired;
   onConnected?: () => void;
 }) {
-  const [phase, setPhase] = useState<
-    "idle" | "connecting" | "connected" | "error"
-  >("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const popupRef = useRef<Window | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const closePopup = useCallback(() => {
-    if (pollRef.current) {
-      clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-    if (popupRef.current && !popupRef.current.closed) {
-      popupRef.current.close();
-    }
-    popupRef.current = null;
-  }, []);
-
-  useEffect(() => {
-    function handleMessage(e: MessageEvent) {
-      const data = e.data as any;
-      if (!data || typeof data !== "object") return;
-      if (
-        data.type !== "genit:integration:connected" &&
-        data.type !== "genit:integration:error"
-      )
-        return;
-      if (data.platform !== required.platform) return;
-      closePopup();
-      if (data.type === "genit:integration:connected") {
-        setPhase("connected");
-        toast.success(`Connected ${required.platformName}`);
-        onConnected?.();
-      } else {
-        setPhase("error");
-        setErrorMessage(data.message || "Connection failed");
-      }
-    }
-    window.addEventListener("message", handleMessage);
-    return () => {
-      window.removeEventListener("message", handleMessage);
-      closePopup();
-    };
-  }, [required.platform, required.platformName, onConnected, closePopup]);
-
-  const handleConnect = useCallback(async () => {
-    setPhase("connecting");
-    setErrorMessage(null);
-    try {
-      const response = await requestConnectUrl(required.platform);
-      if (response.skipOAuth) {
-        setPhase("connected");
-        onConnected?.();
-        return;
-      }
-      const width = 600;
-      const height = 720;
-      const left = window.screenX + (window.outerWidth - width) / 2;
-      const top = window.screenY + (window.outerHeight - height) / 2;
-      const popup = window.open(
-        response.authorizeUrl,
-        "genit_oauth",
-        `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
-      );
-      if (!popup) throw new Error("Popup blocked. Allow popups and try again.");
-      popupRef.current = popup;
-      pollRef.current = setInterval(() => {
-        if (popupRef.current && popupRef.current.closed) {
-          if (pollRef.current) clearInterval(pollRef.current);
-          pollRef.current = null;
-          setPhase((p) => (p === "connecting" ? "error" : p));
-          setErrorMessage((m) => m ?? "Window closed before connecting");
-        }
-      }, 600);
-    } catch (err: any) {
-      setPhase("error");
-      setErrorMessage(err?.message || "Failed to start connection");
-    }
-  }, [required.platform, onConnected]);
+  const [open, setOpen] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   return (
-    <AgentCard
-      icon={<Plug className='h-3.5 w-3.5' />}
-      title='Connection required'
-      meta={required.platformName}
-      tone='neutral'
-    >
-      <div className='flex items-start gap-3'>
-        <div className='border-border/70 bg-muted/40 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border dark:border-white/10 dark:bg-white/[0.04]'>
-          <Plug className='text-foreground h-4 w-4' />
+    <>
+      <AgentCard
+        icon={<Plug className='h-3.5 w-3.5' />}
+        title='Connection required'
+        meta={required.platformName}
+        tone='neutral'
+      >
+        <div className='text-foreground text-sm font-medium'>
+          <LocalizedText text={"Connect"} /> {required.platformName}{" "}
+          <LocalizedText text={"to continue"} />
         </div>
-        <div className='min-w-0 flex-1'>
-          <div className='text-foreground text-sm leading-snug font-medium'>
-            <LocalizedText text={"Connect"} />
-            {required.platformName} <LocalizedText text={"to continue"} />
-          </div>
-          <p className='text-muted-foreground mt-1 text-[12.5px] leading-relaxed'>
-            {required.reason}
-          </p>
-          <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
-            <ShieldCheck className='h-3 w-3' />
-            <span>
-              <LocalizedText
-                text={
-                  "You'll authorize in a popup. We never see your password."
-                }
-              />
-            </span>
-          </div>
-
-          {errorMessage && phase === "error" && (
-            <p className='mt-2 text-[12px] text-rose-600 dark:text-rose-400'>
-              {errorMessage}
-            </p>
+        <p className='text-muted-foreground mt-1 text-[12.5px] leading-relaxed'>
+          {required.reason}
+        </p>
+        <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
+          <ShieldCheck className='h-3 w-3' />
+          <span>Connect securely through Composio.</span>
+        </div>
+        <div className='mt-3'>
+          {connected ? (
+            <div className='inline-flex items-center gap-1.5 text-[12px] font-medium text-emerald-600 dark:text-emerald-400'>
+              <CheckCircle2 className='h-3.5 w-3.5' />
+              <LocalizedText text={"Connected — resuming"} />
+            </div>
+          ) : (
+            <AgentButton type='button' variant='primary' onClick={() => setOpen(true)}>
+              <LocalizedText text={"Connect"} /> {required.platformName}
+              <ArrowRight className='h-3 w-3' />
+            </AgentButton>
           )}
-
-          <div className='mt-3 flex items-center gap-2'>
-            {phase === "connected" ? (
-              <div className='inline-flex items-center gap-1.5 text-[12px] font-medium text-emerald-600 dark:text-emerald-400'>
-                <CheckCircle2 className='h-3.5 w-3.5' />
-                <LocalizedText text={"Connected — resuming"} />
-              </div>
-            ) : (
-              <>
-                <AgentButton
-                  type='button'
-                  variant='primary'
-                  onClick={handleConnect}
-                  disabled={phase === "connecting"}
-                  className='h-8 px-3'
-                >
-                  {phase === "connecting" ? (
-                    <>
-                      <LoadingFileLoader size={14} />
-                      <LocalizedText text={"Connecting…"} />
-                    </>
-                  ) : (
-                    <>
-                      <LocalizedText text={"Connect"} />
-                      {required.platformName}
-                      <ArrowRight className='h-3 w-3' />
-                    </>
-                  )}
-                </AgentButton>
-                {phase === "error" && (
-                  <AgentButton
-                    type='button'
-                    variant='ghost'
-                    onClick={() => {
-                      setPhase("idle");
-                      setErrorMessage(null);
-                    }}
-                  >
-                    <LocalizedText text={"Dismiss"} />
-                  </AgentButton>
-                )}
-              </>
-            )}
-          </div>
         </div>
-      </div>
-    </AgentCard>
+      </AgentCard>
+      <ConnectDialog
+        open={open}
+        onOpenChange={setOpen}
+        platform={required.platform}
+        platformName={required.platformName}
+        platformDescription={required.reason}
+        Icon={Plug}
+        glow='rgba(99, 102, 241, 0.7)'
+        onConnected={() => {
+          setConnected(true);
+          onConnected?.();
+        }}
+      />
+    </>
   );
 }

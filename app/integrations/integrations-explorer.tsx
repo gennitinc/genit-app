@@ -197,10 +197,10 @@ export const INTEGRATIONS: Integration[] = [
     platform: "tiktok_ads",
     name: "TikTok Ads",
     description:
-      "List authorized advertiser campaigns and pull TikTok Marketing API reports for any date range.",
+      "TikTok Ads is not available through Composio yet.",
     category: "Ads Campaigns",
     icon: TikTokBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(12, 12, 12, 1)",
   },
   {
@@ -217,10 +217,10 @@ export const INTEGRATIONS: Integration[] = [
     platform: "x_ads",
     name: "X Ads",
     description:
-      "Run promoted posts and trend takeovers with autonomous creative iteration.",
+      "X Ads is not available through Composio yet.",
     category: "Ads Campaigns",
     icon: XBrand,
-    baseStatus: "available",
+    baseStatus: "soon",
     glow: "rgba(244, 244, 245, 0.6)",
   },
   {

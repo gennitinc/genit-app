@@ -1014,7 +1014,7 @@ export function IdeaSection() {
             {/* <span>Humans</span> */}
 
             <motion.p
-              className='text-foreground/80 mt-2 mb-6 max-w-full text-center text-sm lg:text-base'
+              className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'
               custom={2}
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -1032,7 +1032,7 @@ export function IdeaSection() {
             >
               <LocalizedText
                 text={
-                  "Autonomous AI marketing agents that work 24/7, so you don't have to."
+                  "AI Agents that create, automate, and execute your business daily task so you can focus on growing your business."
                 }
               />
             </motion.p>

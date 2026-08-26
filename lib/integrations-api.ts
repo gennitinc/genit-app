@@ -94,9 +94,7 @@ const SUPPORTED_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
   "pinterest",
   "snapchat",
   "google_ads",
-  "tiktok_ads",
   "linkedin_ads",
-  "x_ads",
   "google_calendar",
   "google_drive",
   "google_meet",
@@ -136,19 +134,6 @@ const FIRST_CLASS_COMPOSIO_TOOLKITS = new Set([
   "googledocs",
   "googleforms",
 ]);
-
-// Platforms that connect via a credential-entry form (no OAuth popup).
-const CREDENTIAL_PLATFORMS: ReadonlySet<IntegrationPlatform> = new Set([
-  "telegram",
-  "brevo",
-  "mailchimp",
-  "linkedin_ads",
-  "x_ads",
-]);
-
-export function isCredentialPlatform(platform: IntegrationPlatform): boolean {
-  return CREDENTIAL_PLATFORMS.has(platform);
-}
 
 export function isPlatformSupported(platform: IntegrationPlatform): boolean {
   return SUPPORTED_PLATFORMS.has(platform);
