@@ -34,7 +34,6 @@ import {
   IntegrationPlatform,
   isMetaSurface,
   isNativeOnlyComposioToolkit,
-  isNativeOnlyPlatform,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
@@ -419,7 +418,6 @@ export function connectionsForIntegration(
         connection.metadata?.appSlug === integration.appSlug
     );
   }
-  if (isNativeOnlyPlatform(integration.platform)) return connections;
   const managed = (byPlatform.get("composio") ?? []).filter(
     (connection) => connection.metadata?.nativePlatform === integration.platform
   );

@@ -154,10 +154,6 @@ export function isPlatformSupported(platform: IntegrationPlatform): boolean {
   return SUPPORTED_PLATFORMS.has(platform);
 }
 
-export function isNativeOnlyPlatform(platform: IntegrationPlatform): boolean {
-  return platform === "pinterest";
-}
-
 export function isNativeOnlyComposioToolkit(appSlug: string): boolean {
   return FIRST_CLASS_COMPOSIO_TOOLKITS.has(appSlug);
 }
