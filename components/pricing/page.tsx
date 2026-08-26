@@ -272,7 +272,7 @@ export default function PricingComponent({
 }) {
   const [localPricingCurrency, setLocalPricingCurrency] =
     useState(pricingCurrency);
-  const [isYearly, setIsYearly] = useState(false);
+  const [isYearly, setIsYearly] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { user, loading: userLoading } = useUserContext();
 
@@ -420,39 +420,7 @@ export default function PricingComponent({
           </div>
         )}
 
-        {/* Billing toggle */}
-        {/* <div className="flex justify-center mb-20">
-          <div className="inline-flex items-center rounded-full bg-secondary border border-border p-1 text-sm shadow-md">
-            <button
-              type="button"
-              onClick={() => setIsYearly(false)}
-              className={cn(
-                "rounded-full px-8 py-2.5 transition-all duration-200 font-medium",
-                !isYearly
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              Monthly
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsYearly(true)}
-              className={cn(
-                "rounded-full px-8 py-2.5 transition-all duration-200 flex items-center gap-2 font-medium",
-                isYearly
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              <span>Yearly</span>
-              <span className="bg-indigo-600 hover:bg-indigo-700/10 text-primary text-[10px] px-2 py-0.5 rounded-full border border-primary/20">
-                -30%
-              </span>
-            </button>
-          </div>
-        </div> */}
-
+       
         <>
           {/* Switch */}
           <div
