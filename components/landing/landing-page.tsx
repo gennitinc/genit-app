@@ -1,7 +1,8 @@
-"use client";
+import { pricingCurrencyForCountry } from "@/lib/pricing-currency";
 // import Communityproject from "../layout/community-project";
 import TemplateGrid from "../common/templateGrid";
 import { IdeaSection } from "../layout/idea-section";
+import PricingComponent from "../pricing/page";
 import LandingTestimonials from "./LandingTestimonials";
 import LandinngIntegrations from "./LandinngIntegrations";
 import PartnerLogos from "./Partners-Logos";
@@ -17,8 +18,20 @@ import { LandingNavbar } from "./landing-navbar";
 import LandingUnifiedInbox from "./landing-unified-inbox";
 import { LandingVoiceClone } from "./landing-voice-chat";
 import { Toaster } from "@/components/ui/sonner";
+import { headers } from "next/headers";
+import { getUsdRates } from "@/lib/pricing-rates";
 
-export function LandingPage() {
+export async function LandingPage() {
+  const headerList = await headers();
+  const country =
+    headerList.get("x-vercel-ip-country") ??
+    headerList.get("cf-ipcountry") ??
+    headerList.get("x-country-code");
+  const pricingCurrency = pricingCurrencyForCountry(
+    country,
+    await getUsdRates()
+  );
+
   return (
     <div className='min-h-screen w-full bg-white dark:bg-black'>
       <Toaster />
@@ -31,6 +44,7 @@ export function LandingPage() {
         <LandingUnifiedInbox />
         <LandingVoiceClone />
         <LandingCreator />
+        <PricingComponent pricingCurrency={pricingCurrency} />
         <LandingTestimonials />
         <ContactCtaLanding />
         <LandingFooter />

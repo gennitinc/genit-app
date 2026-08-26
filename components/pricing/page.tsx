@@ -397,7 +397,7 @@ export default function PricingComponent({
       <div
         className={cn(
           "mx-auto max-w-7xl px-0",
-          embedded ? "py-2" : "py-24 md:px-6 md:py-32 lg:px-8"
+          embedded ? "py-2" : "pt-24 md:px-6 pb-10 md:pt-32 lg:px-8"
         )}
       >
         {/* Header */}
