@@ -325,7 +325,7 @@ export function ConnectDialog({
   const connectionStartedAtRef = useRef(0);
   const connectionAttemptRef = useRef(0);
   const qc = useQueryClient();
-  const { user, fetchCurrentUser } = useUserContext();
+  const { user } = useUserContext();
   const { identityBySurface } = useIntegrations();
   const currentOrg = user?.currentOrganization;
   const orgId =
@@ -602,7 +602,6 @@ export function ConnectDialog({
 
   function handleDone() {
     onOpenChange(false);
-    if (fetchCurrentUser) fetchCurrentUser();
   }
 
   useEffect(() => {
@@ -610,10 +609,9 @@ export function ConnectDialog({
 
     const timeout = setTimeout(() => {
       onOpenChange(false);
-      if (fetchCurrentUser) fetchCurrentUser();
     }, 5000);
     return () => clearTimeout(timeout);
-  }, [open, phase, onOpenChange, fetchCurrentUser]);
+  }, [open, phase, onOpenChange]);
 
   // Final step of the connect flow: user picked accounts in the
   // select phase, now ask the server to actually create Integration rows
