@@ -14,7 +14,8 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   const checkout = getUrlState().getValue("checkout");
   const { user, updateUserPreferences } = useUserContext();
   const pathname = usePathname();
-  const isChatIdPage = /^\/chat\/[^/]+$/.test(pathname);
+  const isChatIdPage =
+    pathname !== "/chat/history" && /^\/chat\/[^/]+$/.test(pathname);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatSidebarOpen, setChatSidebarOpen] = useState(false);
 
