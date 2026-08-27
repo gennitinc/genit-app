@@ -349,7 +349,7 @@ export function ChatInput({
       {/* Bottom Input Area - with drag and drop handlers */}
       <div
         ref={inputSectionRef}
-        className='sticky bottom-0 z-10 w-full flex-none p-2 backdrop-blur-sm'
+        className='sticky bottom-0 z-10 w-full flex-none p-2 backdrop-blur-sm [overflow-anchor:none]'
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}

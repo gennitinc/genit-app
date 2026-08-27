@@ -121,9 +121,9 @@ export function TextChatContent({
   const distanceFromBottomRef = useRef(0);
   const isAtBottomRef = useRef(true);
   const hasScrollTargetRef = useRef(false);
+  const scrollFrameRef = useRef<number | null>(null);
 
   const [isAtBottom, setIsAtBottom] = useState(true);
-  const [showButton, setShowButton] = useState(false);
 
   const previousMessagesLengthRef = useRef(messages?.length || 0);
   const firstRenderRef = useRef(true);
@@ -132,31 +132,32 @@ export function TextChatContent({
     (opts?: { behavior?: ScrollBehavior }) => {
       const behavior = opts?.behavior || "auto";
 
-      // Multiple AFs to ensure DOM is settled after state updates
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (useDocumentScroll) {
-            window.scrollTo({
-              top: document.documentElement.scrollHeight,
-              behavior,
-            });
-          } else {
-            const el = scrollElRef.current;
-            if (!el) return;
-            try {
-              el.scrollTo({ top: el.scrollHeight, behavior });
-            } catch {
-              el.scrollTop = el.scrollHeight;
-            }
-          }
-          distanceFromBottomRef.current = 0;
-          isAtBottomRef.current = true;
-          setIsAtBottom(true);
-          setShowButton(false);
+      if (scrollFrameRef.current !== null) {
+        cancelAnimationFrame(scrollFrameRef.current);
+      }
+
+      scrollFrameRef.current = requestAnimationFrame(() => {
+        scrollFrameRef.current = null;
+        if (useDocumentScroll) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior,
+          });
+        } else {
+          const el = scrollElRef.current;
+          if (!el) return;
           try {
-            setShowScrollButton(false);
-          } catch {}
-        });
+            el.scrollTo({ top: el.scrollHeight, behavior });
+          } catch {
+            el.scrollTop = el.scrollHeight;
+          }
+        }
+        distanceFromBottomRef.current = 0;
+        isAtBottomRef.current = true;
+        setIsAtBottom(true);
+        try {
+          setShowScrollButton(false);
+        } catch {}
       });
     },
     [useDocumentScroll]
@@ -193,7 +194,6 @@ export function TextChatContent({
     distanceFromBottomRef.current = Math.max(0, distance);
     isAtBottomRef.current = atBottom;
     setIsAtBottom(atBottom);
-    setShowButton(!atBottom);
     try {
       setShowScrollButton(!atBottom);
     } catch {}
@@ -230,6 +230,10 @@ export function TextChatContent({
 
     return () => {
       scrollTarget.removeEventListener("scroll", onScroll);
+      if (scrollFrameRef.current !== null) {
+        cancelAnimationFrame(scrollFrameRef.current);
+        scrollFrameRef.current = null;
+      }
     };
   }, [useDocumentScroll, onScroll, doScrollToBottom]);
 
@@ -248,16 +252,13 @@ export function TextChatContent({
         doScrollToBottom({ behavior: "auto" });
       }
     } else {
-      const should =
-        (isNew && isAtBottom) ||
-        (streamingContent && streamingContent.length > 0 && isAtBottom) ||
-        (isGeneratingImage && isAtBottom);
+      const should = (isNew || isGeneratingImage) && isAtBottom;
 
       if (should) {
         if (isGeneratingImage && skeletonRef.current) {
-          if (!scrollSkeleton()) doScrollToBottom({ behavior: "smooth" });
+          if (!scrollSkeleton()) doScrollToBottom({ behavior: "auto" });
         } else {
-          doScrollToBottom({ behavior: "smooth" });
+          doScrollToBottom({ behavior: "auto" });
         }
       }
     }
@@ -266,7 +267,6 @@ export function TextChatContent({
     firstRenderRef.current = false;
   }, [
     allItems.length,
-    streamingContent,
     isGeneratingImage,
     generatingForMessageId,
     isAtBottom,
@@ -278,27 +278,31 @@ export function TextChatContent({
   // Force scroll when AI starts thinking/typing
   useEffect(() => {
     if (isTyping && isAtBottom) {
-      doScrollToBottom({ behavior: "smooth" });
+      doScrollToBottom({ behavior: "auto" });
     }
   }, [isTyping, isAtBottom, doScrollToBottom]);
 
   useEffect(() => {
+    if (!useDocumentScroll) return;
     const content = conversationContextRef.current?.contentRef.current;
     if (!content) return;
 
     const resizeObserver = new ResizeObserver(() => {
-      if (isAtBottom) {
-        doScrollToBottom({ behavior: "auto" });
+      if (isAtBottomRef.current) {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "auto",
+        });
       }
     });
 
     resizeObserver.observe(content);
     return () => resizeObserver.disconnect();
-  }, [isAtBottom, doScrollToBottom]);
+  }, [useDocumentScroll]);
 
   useEffect(() => {
     const handler = () => {
-      doScrollToBottom({ behavior: "smooth" });
+      doScrollToBottom({ behavior: "auto" });
     };
     window.addEventListener("scroll-chat-to-bottom", handler as EventListener);
     return () =>
@@ -399,8 +403,10 @@ export function TextChatContent({
       >
         <Conversation
           contextRef={conversationContextRef}
+          initial='instant'
+          resize='instant'
           className={cn(
-            "chat-scrollbar scroll-container m-0 px-0",
+            "chat-scrollbar scroll-container m-0 px-0 [overflow-anchor:none]",
             useDocumentScroll ? "overflow-visible" : "h-full"
           )}
         >

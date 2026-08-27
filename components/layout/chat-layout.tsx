@@ -154,7 +154,7 @@ function ChatLayoutInner() {
   return (
     <div
       className={cn(
-        "relative flex w-full",
+        "relative flex w-full [overflow-anchor:none]",
         useDocumentScroll ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"
       )}
     >
