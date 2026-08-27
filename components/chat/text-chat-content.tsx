@@ -18,10 +18,15 @@ import { LocalizedText } from "@/components/localized-text";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
+import { cn } from "@/lib/utils";
 import type { StickToBottomContext } from "use-stick-to-bottom";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function TextChatContent() {
+export function TextChatContent({
+  useDocumentScroll = false,
+}: {
+  useDocumentScroll?: boolean;
+}) {
   const {
     userName,
     retryLoading,
@@ -113,6 +118,9 @@ export function TextChatContent() {
   const skeletonRef = useRef<HTMLDivElement | null>(null);
   const scrollElRef = useRef<HTMLElement | null>(null);
   const conversationContextRef = useRef<StickToBottomContext | null>(null);
+  const distanceFromBottomRef = useRef(0);
+  const isAtBottomRef = useRef(true);
+  const hasScrollTargetRef = useRef(false);
 
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [showButton, setShowButton] = useState(false);
@@ -122,19 +130,27 @@ export function TextChatContent() {
 
   const doScrollToBottom = useCallback(
     (opts?: { behavior?: ScrollBehavior }) => {
-      const el = scrollElRef.current;
-      if (!el) return;
-
       const behavior = opts?.behavior || "auto";
 
       // Multiple AFs to ensure DOM is settled after state updates
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          try {
-            el.scrollTo({ top: el.scrollHeight, behavior });
-          } catch {
-            el.scrollTop = el.scrollHeight;
+          if (useDocumentScroll) {
+            window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior,
+            });
+          } else {
+            const el = scrollElRef.current;
+            if (!el) return;
+            try {
+              el.scrollTo({ top: el.scrollHeight, behavior });
+            } catch {
+              el.scrollTop = el.scrollHeight;
+            }
           }
+          distanceFromBottomRef.current = 0;
+          isAtBottomRef.current = true;
           setIsAtBottom(true);
           setShowButton(false);
           try {
@@ -143,7 +159,7 @@ export function TextChatContent() {
         });
       });
     },
-    []
+    [useDocumentScroll]
   );
 
   const scrollSkeleton = useCallback(() => {
@@ -164,39 +180,58 @@ export function TextChatContent() {
   }, [doScrollToBottom]);
 
   const onScroll = useCallback(() => {
-    const el = scrollElRef.current;
-    if (!el) return;
-    const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+    const distance = useDocumentScroll
+      ? document.documentElement.scrollHeight -
+        window.scrollY -
+        window.innerHeight
+      : (() => {
+          const el = scrollElRef.current;
+          return el ? el.scrollHeight - el.scrollTop - el.clientHeight : 0;
+        })();
     // Increased threshold for better auto-scroll persistence
     const atBottom = distance <= 150;
+    distanceFromBottomRef.current = Math.max(0, distance);
+    isAtBottomRef.current = atBottom;
     setIsAtBottom(atBottom);
     setShowButton(!atBottom);
     try {
       setShowScrollButton(!atBottom);
     } catch {}
-  }, []);
+  }, [useDocumentScroll]);
 
   useEffect(() => {
     // Track the scroll element owned by StickToBottom.
     const el = conversationContextRef.current?.scrollRef.current;
-    if (el) {
-      scrollElRef.current = el;
-      el.addEventListener("scroll", onScroll, { passive: true });
+    if (el) scrollElRef.current = el;
 
-      // Auto scroll on first mount
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
+    const scrollTarget = useDocumentScroll ? window : el;
+    if (!scrollTarget) return;
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
+
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (!hasScrollTargetRef.current || isAtBottomRef.current) {
           doScrollToBottom({ behavior: "auto" });
-        })
-      );
-    }
+        } else if (useDocumentScroll) {
+          window.scrollTo({
+            top:
+              document.documentElement.scrollHeight -
+              window.innerHeight -
+              distanceFromBottomRef.current,
+            behavior: "auto",
+          });
+        } else if (el) {
+          el.scrollTop =
+            el.scrollHeight - el.clientHeight - distanceFromBottomRef.current;
+        }
+        hasScrollTargetRef.current = true;
+      })
+    );
 
     return () => {
-      if (scrollElRef.current) {
-        scrollElRef.current.removeEventListener("scroll", onScroll);
-      }
+      scrollTarget.removeEventListener("scroll", onScroll);
     };
-  }, [onScroll, doScrollToBottom]);
+  }, [useDocumentScroll, onScroll, doScrollToBottom]);
 
   useEffect(() => {
     const el = scrollElRef.current;
@@ -351,11 +386,23 @@ export function TextChatContent() {
   };
 
   return (
-    <ChatInput placeholder='Ask a follow up message...' className='h-full'>
-      <div className='min-w-0 flex-1 overflow-hidden px-2 md:px-6'>
+    <ChatInput
+      placeholder='Ask a follow up message...'
+      className={useDocumentScroll ? "flex-1" : "h-full"}
+      useDocumentScroll={useDocumentScroll}
+    >
+      <div
+        className={cn(
+          "min-w-0 flex-1 px-2 md:px-6",
+          useDocumentScroll ? "overflow-visible" : "overflow-hidden"
+        )}
+      >
         <Conversation
           contextRef={conversationContextRef}
-          className='chat-scrollbar scroll-container m-0 h-full px-0'
+          className={cn(
+            "chat-scrollbar scroll-container m-0 px-0",
+            useDocumentScroll ? "overflow-visible" : "h-full"
+          )}
         >
           <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
             {allItems.map((item, index) => {

@@ -35,9 +35,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [project, setProject] = useState<IDesignProject | null>(null);
-  const [artifactPreview, setArtifactPreviewState] = useState<
-    IProjectDesignContext["artifactPreview"]
-  >(null);
+  const [artifactPreview, setArtifactPreviewState] =
+    useState<IProjectDesignContext["artifactPreview"]>(null);
   const router = useRouter();
   const user = useUserContext().user;
   const userId = String(user?._id);
@@ -67,11 +66,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       : (user?.allOrganizations || [])[0] || user?.business || null;
   const orgLogo = currentOrg?.businessLogo || null;
 
-  const userAvatar =
-    orgLogo ||
-    user?.userdp ||
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face";
-  const userName = user?.username || "User";
+  const userAvatar = orgLogo || user?.onboarding?.brandLogo || "";
+  const userName =
+    currentOrg?.businessName || user?.onboarding?.businessName || "Your brand";
   const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState("system");
   const [isVisibilityDialogOpen, setIsVisibilityDialogOpen] = useState(false);
@@ -1483,7 +1480,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (filtered.length === 0) return;
 
-    const accepted = filtered.slice(0, Math.max(0, maxFiles - attachedFiles.length));
+    const accepted = filtered.slice(
+      0,
+      Math.max(0, maxFiles - attachedFiles.length)
+    );
     if (accepted.length === 0) return;
 
     setAttachedFiles((prev) => [...prev, ...accepted]);

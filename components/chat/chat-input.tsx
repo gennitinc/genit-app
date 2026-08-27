@@ -54,6 +54,7 @@ interface ChatInputProps {
   placeholder?: string;
   className?: string;
   onHeightChange?: (height: number) => void;
+  useDocumentScroll?: boolean;
 }
 
 export function ChatInput({
@@ -61,6 +62,7 @@ export function ChatInput({
   placeholder = "Ask a follow up message...",
   className = "",
   onHeightChange,
+  useDocumentScroll = false,
 }: ChatInputProps) {
   const {
     inputValue,
@@ -335,7 +337,12 @@ export function ChatInput({
   return (
     <div className={cn("flex flex-col bg-transparent", className)}>
       {/* Chat Content Area */}
-      <div className='relative flex min-h-0 flex-1 flex-col overflow-hidden'>
+      <div
+        className={cn(
+          "relative flex flex-1 flex-col",
+          useDocumentScroll ? "overflow-visible" : "min-h-0 overflow-hidden"
+        )}
+      >
         {children}
       </div>
 
@@ -467,7 +474,7 @@ export function ChatInput({
               e.preventDefault();
               handlegenerateMessage();
             }}
-            className='group flex w-full flex-col gap-2 rounded-[1.5rem] border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
+            className='group relative flex w-full flex-col gap-2 overflow-hidden rounded-[1.5rem] border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
           >
             <div className='w-full min-w-0'>
               <div className='relative flex items-center'>

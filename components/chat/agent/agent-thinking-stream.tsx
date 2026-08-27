@@ -22,7 +22,7 @@ export function AgentThinkingStream({
   if (!text && !active) return null;
 
   return (
-    <div className='border-border/50 bg-muted-foreground/[0.04] my-2 overflow-hidden rounded-lg border text-[12.5px] dark:border-white/[0.07] dark:bg-white/[0.025]'>
+    <div className='border-border/50 bg-muted-foreground/[0.04] mb-2 overflow-hidden rounded-lg border text-[12.5px] dark:border-white/[0.07] dark:bg-white/[0.025]'>
       <button
         type='button'
         onClick={() => {

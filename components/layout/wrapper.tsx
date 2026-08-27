@@ -5,6 +5,7 @@ import { PricingDialog } from "../common/pricing-dialog";
 import { SidebarProvider } from "../ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useUrlState } from "@/hooks/use-url-state";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
@@ -12,11 +13,18 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   const preview = getUrlState().getValue("gen");
   const checkout = getUrlState().getValue("checkout");
   const { user, updateUserPreferences } = useUserContext();
+  const pathname = usePathname();
+  const isChatIdPage = /^\/chat\/[^/]+$/.test(pathname);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [chatSidebarOpen, setChatSidebarOpen] = useState(false);
 
   useEffect(() => {
     setSidebarOpen(user?.preferences?.sidebarOpen ?? true);
   }, [user?._id, user?.preferences?.sidebarOpen]);
+
+  useEffect(() => {
+    setChatSidebarOpen(false);
+  }, [pathname]);
 
   const handleSidebarOpenChange = useCallback(
     (open: boolean) => {
@@ -86,7 +94,10 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   // }, [pathName]);
 
   return (
-    <SidebarProvider open={sidebarOpen} onOpenChange={handleSidebarOpenChange}>
+    <SidebarProvider
+      open={isChatIdPage ? chatSidebarOpen : sidebarOpen}
+      onOpenChange={isChatIdPage ? setChatSidebarOpen : handleSidebarOpenChange}
+    >
       <div className='custom-scrollbar h-full w-full'>
         {children}
 

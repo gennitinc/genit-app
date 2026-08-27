@@ -5,22 +5,19 @@ import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
 import { LocalizedText } from "@/components/localized-text";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { RefObject, useEffect, useState } from "react";
 
 interface TopNavWithAuroraProps {
   scrollContainerRef?: RefObject<HTMLDivElement>;
-  isPreviewOpen?: boolean;
 }
 
 export default function TopNavWithAurora({
   scrollContainerRef: _scrollContainerRef,
-  isPreviewOpen = false,
 }: TopNavWithAuroraProps) {
   const { theme, setTheme } = useTheme();
   const pathName = usePathname();
@@ -29,11 +26,6 @@ export default function TopNavWithAurora({
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const isMobile = useIsMobile();
-
-  const params = useParams();
-  const isChatIdPage = !!params.id && pathName.startsWith("/chat");
 
   return (
     <header
@@ -45,9 +37,7 @@ export default function TopNavWithAurora({
     >
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
-          {(!isChatIdPage || isMobile || !isPreviewOpen) && (
-            <SidebarTrigger className='z-20 -ml-2' />
-          )}
+          <SidebarTrigger className='z-20 -ml-2' />
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
             <Logo className='h-9 w-9' />
             <span className='text-lg font-semibold'>

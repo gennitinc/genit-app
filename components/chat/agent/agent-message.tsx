@@ -240,7 +240,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   );
 }
 
-/** Small inline status badge that sits right next to the "genit" name in the header. */
+/** Run status shown opposite the agent identity while attention is still useful. */
 function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
@@ -263,14 +263,6 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
       <span className='inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10.5px] font-medium text-amber-600 dark:text-amber-400'>
         <span className='h-1.5 w-1.5 rounded-full bg-amber-500' />
         <LocalizedText text={"Connect account"} />
-      </span>
-    );
-  }
-  if (status === "completed") {
-    return (
-      <span className='inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10.5px] font-medium text-emerald-600 dark:text-emerald-400'>
-        <CheckCircle2 className='h-2.5 w-2.5' />
-        <LocalizedText text={"Done"} />
       </span>
     );
   }
@@ -369,6 +361,8 @@ export function AgentMessage({
             fallback='../../resources/images/genit2.png'
           />
         }
+        name={<LocalizedText text={"genit"} />}
+        status={<StatusBadge status={run.status} />}
         actions={
           isDone ? (
             <MessageActions
@@ -380,15 +374,7 @@ export function AgentMessage({
           ) : undefined
         }
       >
-        {/* Header row: name + inline status badge */}
-        <div className='mb-2 flex items-center gap-2'>
-          <span className='text-foreground text-[12px] font-medium tracking-tight'>
-            <LocalizedText text={"genit"} />
-          </span>
-          <StatusBadge status={run.status} />
-        </div>
-
-        <MessageContent variant='ai' className='bg-transparent'>
+        <MessageContent variant='ai' className='bg-transparent p-0'>
           <div className='space-y-1'>
             {/* Thinking stream — collapsible, same border/bg style as the rest */}
             <AgentThinkingStream

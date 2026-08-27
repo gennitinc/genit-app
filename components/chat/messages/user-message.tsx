@@ -147,6 +147,7 @@ export function UserMessage({
             fallback={userName.charAt(0).toUpperCase()}
           />
         }
+        name={userName}
         className={className}
       >
         <MessageEditor
@@ -173,6 +174,7 @@ export function UserMessage({
             fallback={userName.charAt(0).toUpperCase()}
           />
         }
+        name={userName}
         className={className}
       >
         <div

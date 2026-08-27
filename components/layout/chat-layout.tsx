@@ -105,6 +105,7 @@ function ChatLayoutInner() {
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const useDocumentScroll = !isDesktop || !isPreviewOpen;
   const prevActiveRef = useRef(false);
   const initialOpenForProjectRef = useRef<string | null>(null);
   const latestPreviewKeyRef = useRef<string | null>(null);
@@ -151,23 +152,37 @@ function ChatLayoutInner() {
   }, [hasAnyPreview]);
 
   return (
-    <div className='relative flex h-[100dvh] w-full overflow-hidden'>
-      <AppSidebar />
+    <div
+      className={cn(
+        "relative flex w-full",
+        useDocumentScroll ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"
+      )}
+    >
+      <AppSidebar
+        className={cn(
+          useDocumentScroll && isDesktop && "sticky top-0 h-[100dvh] self-start"
+        )}
+      />
       <div
         ref={scrollContainerRef}
-        className='relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-white dark:bg-black'
+        className={cn(
+          "relative flex min-w-0 flex-1 flex-col bg-white dark:bg-black",
+          useDocumentScroll ? "min-h-[100dvh]" : "h-full overflow-hidden"
+        )}
       >
-        <div className='flex-none'>
-          <TopNavWithAurora
-            scrollContainerRef={
-              scrollContainerRef as React.RefObject<HTMLDivElement>
-            }
-            isPreviewOpen={isPreviewOpen}
-          />
-        </div>
+        <TopNavWithAurora
+          scrollContainerRef={
+            scrollContainerRef as React.RefObject<HTMLDivElement>
+          }
+        />
 
         {isDesktop ? (
-          <div className='relative flex min-h-0 w-full flex-1 overflow-hidden'>
+          <div
+            className={cn(
+              "relative flex min-h-0 w-full flex-1",
+              isPreviewOpen ? "overflow-hidden" : "overflow-visible"
+            )}
+          >
             <motion.div
               layout
               transition={{
@@ -177,17 +192,21 @@ function ChatLayoutInner() {
                 mass: 0.8,
               }}
               className={cn(
-                "relative flex h-full min-w-0 flex-col overflow-hidden",
+                "relative flex min-w-0 flex-col",
+                isPreviewOpen
+                  ? "h-full overflow-hidden"
+                  : "flex-1 overflow-visible",
                 isFullscreen ? "hidden" : "flex-1"
               )}
             >
               <div
                 className={cn(
-                  "flex h-full w-full flex-col transition-[max-width] duration-300 ease-out",
+                  "flex w-full flex-col transition-[max-width] duration-300 ease-out",
+                  isPreviewOpen ? "h-full" : "flex-1",
                   !isPreviewOpen && "mx-auto max-w-2xl"
                 )}
               >
-                <TextChatContent />
+                <TextChatContent useDocumentScroll={!isPreviewOpen} />
               </div>
 
               {hasAnyPreview && (
@@ -259,9 +278,9 @@ function ChatLayoutInner() {
             </AnimatePresence>
           </div>
         ) : (
-          <div className='flex min-h-0 w-full flex-1 flex-col overflow-hidden'>
-            <div className='flex-1 overflow-hidden'>
-              <TextChatContent />
+          <div className='flex min-h-0 w-full flex-1 flex-col'>
+            <div className='flex flex-1 flex-col'>
+              <TextChatContent useDocumentScroll />
             </div>
           </div>
         )}

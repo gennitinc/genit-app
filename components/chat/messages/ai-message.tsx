@@ -138,6 +138,7 @@ export function AIMessage({
   return (
     <MessageContainer
       avatar={<AvatarDisplay variant='ai' alt='AI Logo' fallback='AI' />}
+      name={<LocalizedText text={"genit"} />}
       actions={
         <MessageActions
           onCopy={onCopy}
