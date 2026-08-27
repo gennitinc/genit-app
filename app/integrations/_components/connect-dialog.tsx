@@ -91,6 +91,7 @@ interface ConnectDialogProps {
   platformName: string;
   platformDescription: string;
   Icon: ComponentType<{ className?: string; style?: CSSProperties }>;
+  iconUrl?: string;
   glow: string;
   appSlug?: string;
   onConnected?: () => void;
@@ -304,6 +305,7 @@ export function ConnectDialog({
   platformName,
   platformDescription,
   Icon,
+  iconUrl,
   glow,
   appSlug,
   onConnected,
@@ -697,7 +699,15 @@ export function ConnectDialog({
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
                 <div className='border-border flex h-10 w-15 shrink-0 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
-                  <Icon className='h-7 w-7 rounded-none' />
+                  {iconUrl ? (
+                    <img
+                      src={iconUrl}
+                      alt=''
+                      className='h-7 w-7 rounded object-contain'
+                    />
+                  ) : (
+                    <Icon className='h-7 w-7 rounded-none' />
+                  )}
                 </div>
                 <div className='min-w-0'>
                   <DialogHeader className='space-y-0 text-left'>
@@ -785,8 +795,6 @@ export function ConnectDialog({
                             </p>
                           </div>
                         )}
-
-
                     </>
                   )}
                 </div>
@@ -868,7 +876,8 @@ export function ConnectDialog({
                     {`Waiting for ${platformName}…`}
                   </p>
                   <p className='text-muted-foreground mt-1 text-center text-xs'>
-                    Complete sign-in in the Composio popup. This dialog will update automatically.
+                    Complete sign-in in the Composio popup. This dialog will
+                    update automatically.
                   </p>
                 </div>
               )}

@@ -8,8 +8,7 @@ export function isComposioConnectionLink(
 ): boolean {
   if (!href || !CONNECTION_LABEL.test(label.trim())) return false;
   try {
-    const host = new URL(href).hostname.toLowerCase();
-    return host === "composio.dev" || host.endsWith(".composio.dev");
+    return ["http:", "https:"].includes(new URL(href).protocol);
   } catch {
     return false;
   }
@@ -27,8 +26,8 @@ export function normalizePluginLabel(value: string): string {
 
 export function resolveComposioToolkit(
   label: string,
-  toolkits: Pick<ComposioToolkit, "slug" | "name">[]
-): Pick<ComposioToolkit, "slug" | "name"> | undefined {
+  toolkits: Pick<ComposioToolkit, "slug" | "name" | "logo">[]
+): Pick<ComposioToolkit, "slug" | "name" | "logo"> | undefined {
   const target = normalizePluginLabel(label);
   if (!target) return undefined;
 
@@ -40,7 +39,5 @@ export function resolveComposioToolkit(
 }
 
 export function containsMarkdownConnectionLink(markdown: string): boolean {
-  return /\[(?:re)?connect\b[^\]]*\]\(https?:\/\/[^)]*composio\.dev[^)]*\)/i.test(
-    markdown
-  );
+  return /\[(?:re)?connect\b[^\]]*\]\(https?:\/\/[^)]+\)/i.test(markdown);
 }

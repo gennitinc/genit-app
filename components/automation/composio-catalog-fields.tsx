@@ -367,6 +367,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
         platformName={selectedToolkit?.name || toolkit}
         platformDescription={`Connect ${selectedToolkit?.name || toolkit} to use it in this automation.`}
         Icon={Plug}
+        iconUrl={selectedToolkit?.logo}
         glow='rgba(79, 70, 229, 0.7)'
         appSlug={toolkit}
         onConnected={() => {

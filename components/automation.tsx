@@ -1311,6 +1311,7 @@ export default function AutomationWorkflow({
         )}
         platformDescription='Connect this app to add its event to your automation.'
         Icon={Zap}
+        iconUrl={String(pendingConnectedApp?.initialData?.composioLogo || "")}
         glow='rgba(139,92,246,0.35)'
         appSlug={String(
           pendingConnectedApp?.initialData?.composioToolkit || ""

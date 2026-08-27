@@ -806,6 +806,7 @@ export function IntegrationsExplorer({
         platformName={connectFor?.name ?? ""}
         platformDescription={connectFor?.description ?? ""}
         Icon={connectFor?.icon ?? (() => null)}
+        iconUrl={connectFor?.remoteIcon}
         glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
         appSlug={connectFor?.appSlug}
       />

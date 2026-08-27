@@ -71,7 +71,13 @@ function PluginConnectionControl({
       const slug = integration.metadata?.toolkitSlug;
       if (typeof slug !== "string" || !slug) return [];
       const name = integration.metadata?.toolkitName;
-      return [{ slug, name: typeof name === "string" && name ? name : slug }];
+      return [
+        {
+          slug,
+          name: typeof name === "string" && name ? name : slug,
+          logo: integration.accountAvatar,
+        },
+      ];
     });
     return [...catalog, ...fromConnections];
   }, [catalog, integrations]);
@@ -138,6 +144,7 @@ function PluginConnectionControl({
         platformName={toolkit.name}
         platformDescription={`Connect ${toolkit.name} securely through Composio.`}
         Icon={Plug}
+        iconUrl={toolkit.logo}
         glow='rgba(79, 70, 229, 0.7)'
         appSlug={toolkit.slug}
         onConnected={() => {
