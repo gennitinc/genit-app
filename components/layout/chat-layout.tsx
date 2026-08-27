@@ -158,11 +158,16 @@ function ChatLayoutInner() {
         useDocumentScroll ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"
       )}
     >
-      <AppSidebar
+      <div
         className={cn(
+          "shrink-0",
           useDocumentScroll && isDesktop && "sticky top-0 h-[100dvh] self-start"
         )}
-      />
+      >
+        <AppSidebar
+          className={cn(useDocumentScroll && isDesktop && "h-full")}
+        />
+      </div>
       <div
         ref={scrollContainerRef}
         className={cn(
@@ -184,7 +189,7 @@ function ChatLayoutInner() {
             )}
           >
             <motion.div
-              layout
+              layout={isPreviewOpen}
               transition={{
                 type: "spring",
                 damping: 30,
