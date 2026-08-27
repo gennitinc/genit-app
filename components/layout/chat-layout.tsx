@@ -161,7 +161,9 @@ function ChatLayoutInner() {
       <div
         className={cn(
           "shrink-0",
-          useDocumentScroll && isDesktop && "sticky top-0 h-[100dvh] self-start"
+          useDocumentScroll &&
+            isDesktop &&
+            "sticky top-0 h-[100dvh] self-start [&>.peer]:h-full"
         )}
       >
         <AppSidebar
