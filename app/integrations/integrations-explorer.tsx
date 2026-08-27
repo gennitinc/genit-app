@@ -493,7 +493,7 @@ function IntegrationCard({
               className='inline-flex cursor-default items-center gap-1.5 rounded-md bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400'
             >
               <CheckCircle2 className='h-3.5 w-3.5' />
-              <LocalizedText text={""} />
+              <LocalizedText text={"Connected"} />
             </button>
             <button
               type='button'

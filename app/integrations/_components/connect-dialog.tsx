@@ -698,7 +698,7 @@ export function ConnectDialog({
               </button>
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
-                <div className='border-border flex h-10 w-15 shrink-0 items-center justify-center rounded-sm border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
+                <div className='border-border flex h-15 w-15 shrink-0 items-center justify-center rounded-lg border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
                   {iconUrl ? (
                     <img
                       src={iconUrl}

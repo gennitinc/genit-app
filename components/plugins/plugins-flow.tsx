@@ -4,7 +4,6 @@ import {
   INTEGRATIONS,
   type IntegrationIcon,
 } from "@/app/integrations/integrations-explorer";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useComposioToolkits } from "@/hooks/use-integrations";
 import { isNativeOnlyComposioToolkit } from "@/lib/integrations-api";
@@ -54,8 +53,6 @@ export function useAvailablePlugins() {
 export function PluginsFlow({ className = "" }: { className?: string }) {
   const { t } = useLanguage();
   const { plugins, total } = useAvailablePlugins();
-  const { user } = useUserContext();
-
   const loop = [...plugins, ...plugins];
 
   return (
@@ -63,7 +60,7 @@ export function PluginsFlow({ className = "" }: { className?: string }) {
       <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
         {t("with over")} {total} {t("marketing")}{" "}
         <Link
-          href={user ? "/plugins" : "/all/plugins"}
+          href='/plugins'
           className='text-foreground font-medium underline underline-offset-4'
         >
           {t("Plugins")}

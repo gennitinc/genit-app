@@ -50,7 +50,7 @@ export function LandingNavbar() {
     { name: t("Chat"), href: "/chat" },
     {
       name: t("Plugins"),
-      href: currentUser ? "/plugins" : "/all/plugins",
+      href: "/plugins",
     },
     ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
@@ -108,7 +108,7 @@ export function LandingNavbar() {
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1100px]:inline-flex'
-                  href={currentUser ? "/plugins" : "/all/plugins"}
+                  href='/plugins'
                 >
                   {t("Plugins")}
                 </Link>
@@ -257,7 +257,7 @@ export function LandingNavbar() {
               //     <ArrowRight className='ml-1 h-4 w-4' />
               //   </Link>
               // </div>
-              <div className=""></div>
+              <div className=''></div>
             )}
 
             <Sheet>

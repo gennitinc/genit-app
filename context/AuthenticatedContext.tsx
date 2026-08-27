@@ -10,7 +10,6 @@ import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import axios from "axios";
 import cookie from "js-cookie";
-import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
 const uToken = cookie.get("genituToken");
@@ -322,7 +321,6 @@ export function AuthenticatedContextProvider({
   const [isNetworkError, setIsNetworkError] = useState(false);
   const [isNetworkErrorWithDelay, setIsNetworkErrorWithDelay] = useState(false);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const [dataFetched, setDataFetched] = useState(false);
   const fetchCurrentUser = async () => {
     setLoading(true);
@@ -347,13 +345,12 @@ export function AuthenticatedContextProvider({
         setTimeout(() => setIsNetworkErrorWithDelay(true), 300);
         setDataFetched(false);
       } else {
-        // Authentication error (401, 403, etc.) - clear token and redirect to signin
+        // Clear an expired session without forcing public routes to sign-in.
+        // Protected pages own their redirect through withAuth.
         if (error.response.status === 401 || error.response.status === 403) {
           cookie.remove("genituToken");
           setuser(null);
           setDataFetched(false);
-          // Redirect to signin page
-          router.push("/signin");
         } else {
           // Other server errors - treat as network error
           setIsNetworkError(true);
