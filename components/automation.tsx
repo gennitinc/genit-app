@@ -16,7 +16,6 @@ import { TransformNode } from "./automation/transform-node";
 import { TriggerNode } from "./automation/trigger-node";
 import { UploadNode } from "./automation/upload-node";
 import { Button } from "./ui/button";
-import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import {
   BrevoBrand,
   EyeIcon as Eye,
@@ -29,19 +28,20 @@ import {
   WhatsAppBrand,
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
-import { cn } from "@/lib/utils";
 import {
+  type ComposioToolkit,
   fetchComposioToolkits,
   fetchIntegrations,
-  type ComposioToolkit,
 } from "@/lib/integrations-api";
+import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import {
-  ArrowLeftRight,
   AlertTriangle,
+  ArrowLeftRight,
   AtSign,
   CalendarDays,
   CalendarPlus,
@@ -71,8 +71,8 @@ import {
   Play,
   Plus,
   Redo2,
-  Search,
   SaveAll,
+  Search,
   Send,
   Settings,
   Share2,
@@ -186,7 +186,9 @@ export default function AutomationWorkflow({
   const [isEditMode, setIsEditMode] = useState(false);
   const [showAddComponent, setShowAddComponent] = useState(false);
   const [addSearch, setAddSearch] = useState("");
-  const [composioToolkits, setComposioToolkits] = useState<ComposioToolkit[]>([]);
+  const [composioToolkits, setComposioToolkits] = useState<ComposioToolkit[]>(
+    []
+  );
   const [connectedToolkits, setConnectedToolkits] = useState<Set<string>>(
     new Set()
   );
@@ -351,7 +353,9 @@ export default function AutomationWorkflow({
           suppressNextAutoSave.current = true;
           setNodes((current) =>
             current.map((node) => {
-              const saved = serverNodes.find((item: any) => item.id === node.id);
+              const saved = serverNodes.find(
+                (item: any) => item.id === node.id
+              );
               if (!saved) return node;
               return {
                 ...node,
@@ -360,9 +364,11 @@ export default function AutomationWorkflow({
                   composioStatus: saved.data?.composioStatus,
                   composioError: saved.data?.composioError,
                   composioTriggerId: saved.data?.composioTriggerId,
-                  integrationId: saved.data?.integrationId || node.data?.integrationId,
+                  integrationId:
+                    saved.data?.integrationId || node.data?.integrationId,
                   composioToolkitName:
-                    saved.data?.composioToolkitName || node.data?.composioToolkitName,
+                    saved.data?.composioToolkitName ||
+                    node.data?.composioToolkitName,
                   composioLogo:
                     saved.data?.composioLogo || node.data?.composioLogo,
                   webhookUrl: saved.data?.webhookUrl || node.data?.webhookUrl,
@@ -905,8 +911,13 @@ export default function AutomationWorkflow({
         setConnectedToolkits(
           new Set(
             connections.integrations
-              .filter((item) => item.platform === "composio" && item.status === "active")
-              .map((item) => String(item.metadata?.toolkitSlug || "").toLowerCase())
+              .filter(
+                (item) =>
+                  item.platform === "composio" && item.status === "active"
+              )
+              .map((item) =>
+                String(item.metadata?.toolkitSlug || "").toLowerCase()
+              )
               .filter(Boolean)
           )
         );
@@ -932,7 +943,8 @@ export default function AutomationWorkflow({
       )
       .slice(0, query ? 20 : 8);
     const appCategory = (type: "trigger" | "action"): AddNodeCategory => ({
-      label: type === "trigger" ? "Connected app triggers" : "Connected app actions",
+      label:
+        type === "trigger" ? "Connected app triggers" : "Connected app actions",
       items: visible.map((item) => ({
         type,
         subtype: type === "trigger" ? "composio_event" : "composio_action",
@@ -1142,77 +1154,82 @@ export default function AutomationWorkflow({
                           value={addSearch}
                           onChange={(event) => setAddSearch(event.target.value)}
                           placeholder='Search nodes and 1,000+ apps'
-                          className='border-border bg-muted/40 text-foreground placeholder:text-muted-foreground h-8 w-full rounded-md border pr-2 pl-7 text-xs outline-none transition-[border-color] duration-150 focus:border-violet-500/60'
+                          className='border-border bg-muted/40 text-foreground placeholder:text-muted-foreground h-8 w-full rounded-md border pr-2 pl-7 text-xs transition-[border-color] duration-150 outline-none focus:border-violet-500/60'
                         />
                       </div>
                     </div>
                     <div className='overflow-y-auto py-1'>
-                    {catalogLoading && !composioToolkits.length && (
-                      <div className='text-muted-foreground flex items-center gap-2 px-3 py-2 text-[10px]'>
-                        <Loader2 className='h-3 w-3 animate-spin' /> Loading connected apps
-                      </div>
-                    )}
-                    {addNodeMenu.map((category, catIdx) => (
-                      <div key={category.label}>
-                        <div
-                          className={cn(
-                            "text-muted-foreground px-3 py-1.5 text-[10px] font-semibold tracking-wider uppercase",
-                            catIdx > 0 ? "border-border/50 border-t" : ""
-                          )}
-                        >
-                          {category.label}
+                      {catalogLoading && !composioToolkits.length && (
+                        <div className='text-muted-foreground flex items-center gap-2 px-3 py-2 text-[10px]'>
+                          <Loader2 className='h-3 w-3 animate-spin' /> Loading
+                          connected apps
                         </div>
-                        {category.items.map((item) => {
-                          const IconComponent =
-                            MENU_ICONS[item.iconName] || Sparkles;
-                          return (
-                            <button
-                              key={`${item.type}-${item.subtype || item.label}`}
-                              onClick={() => {
-                                if (
-                                  item.connected === false &&
-                                  item.initialData?.composioToolkit
-                                ) {
-                                  setPendingConnectedApp(item);
-                                  setShowAddComponent(false);
-                                  setAddSearch("");
-                                  return;
-                                }
-                                addComponent(
-                                  item.type,
-                                  item.subtype,
-                                  item.initialData
-                                );
-                              }}
-                              className='hover:bg-muted text-foreground flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-[background-color,transform] duration-150 active:scale-[0.98]'
-                            >
-                              {item.iconUrl ? (
-                                <img
-                                  src={item.iconUrl}
-                                  alt=''
-                                  className='h-4 w-4 rounded object-contain'
-                                />
-                              ) : (
-                                <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
-                              )}
-                              <span className='min-w-0 flex-1 truncate'>{item.label}</span>
-                              {item.connected ? (
-                                <span className='h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500' title='Connected' />
-                              ) : item.initialData?.composioToolkit ? (
-                                <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
-                                  Connect
+                      )}
+                      {addNodeMenu.map((category, catIdx) => (
+                        <div key={category.label}>
+                          <div
+                            className={cn(
+                              "text-muted-foreground px-3 py-1.5 text-[10px] font-semibold tracking-wider uppercase",
+                              catIdx > 0 ? "border-border/50 border-t" : ""
+                            )}
+                          >
+                            {category.label}
+                          </div>
+                          {category.items.map((item) => {
+                            const IconComponent =
+                              MENU_ICONS[item.iconName] || Sparkles;
+                            return (
+                              <button
+                                key={`${item.type}-${item.subtype || item.label}`}
+                                onClick={() => {
+                                  if (
+                                    item.connected === false &&
+                                    item.initialData?.composioToolkit
+                                  ) {
+                                    setPendingConnectedApp(item);
+                                    setShowAddComponent(false);
+                                    setAddSearch("");
+                                    return;
+                                  }
+                                  addComponent(
+                                    item.type,
+                                    item.subtype,
+                                    item.initialData
+                                  );
+                                }}
+                                className='hover:bg-muted text-foreground flex w-full items-center gap-2.5 px-3 py-1.5 text-left transition-[background-color,transform] duration-150 active:scale-[0.98]'
+                              >
+                                {item.iconUrl ? (
+                                  <img
+                                    src={item.iconUrl}
+                                    alt=''
+                                    className='h-4 w-4 rounded object-contain'
+                                  />
+                                ) : (
+                                  <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
+                                )}
+                                <span className='min-w-0 flex-1 truncate'>
+                                  {item.label}
                                 </span>
-                              ) : null}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ))}
-                    {!catalogLoading && !addNodeMenu.length && (
-                      <p className='text-muted-foreground px-3 py-5 text-center text-[10px]'>
-                        No matching node or connected app
-                      </p>
-                    )}
+                                {item.connected ? (
+                                  <span className='inline-flex shrink-0 items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
+                                    <Check className='h-2.5 w-2.5' /> Connected
+                                  </span>
+                                ) : item.initialData?.composioToolkit ? (
+                                  <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
+                                    Connect
+                                  </span>
+                                ) : null}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ))}
+                      {!catalogLoading && !addNodeMenu.length && (
+                        <p className='text-muted-foreground px-3 py-5 text-center text-[10px]'>
+                          No matching node or connected app
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}

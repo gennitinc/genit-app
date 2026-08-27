@@ -13,6 +13,7 @@ import {
   MessageContainer,
   MessageContent,
 } from "@/components/chat/messages";
+import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useProjectDesign } from "@/context/DesignProject";
+import { containsMarkdownConnectionLink } from "@/lib/plugin-connection-link";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -176,6 +178,9 @@ export function AIMessage({
                 textContent = sanitizeTextContent(textContent);
                 if (!textContent) return null;
 
+                const hasManagedConnectionLink =
+                  containsMarkdownConnectionLink(textContent);
+
                 const lowerText = textContent.toLowerCase();
                 const needsAdBalanceTopUp =
                   lowerText.includes("ad balance") ||
@@ -250,10 +255,15 @@ export function AIMessage({
                     key={`${message.id}-${i}`}
                     className='flex flex-col gap-2'
                   >
-                    <Response isAnimating={isStreaming}>{textContent}</Response>
+                    <Response
+                      isAnimating={isStreaming}
+                      components={{ a: PluginConnectionLink }}
+                    >
+                      {textContent}
+                    </Response>
                     {(integrationToConnect || needsAdBalanceTopUp) && (
                       <div className='mt-2 flex flex-wrap gap-2'>
-                        {integrationToConnect && (
+                        {integrationToConnect && !hasManagedConnectionLink && (
                           <Button
                             asChild
                             size='sm'

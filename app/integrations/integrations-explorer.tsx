@@ -196,8 +196,7 @@ export const INTEGRATIONS: Integration[] = [
   {
     platform: "tiktok_ads",
     name: "TikTok Ads",
-    description:
-      "TikTok Ads is not available through Composio yet.",
+    description: "TikTok Ads is not available through Composio yet.",
     category: "Ads Campaigns",
     icon: TikTokBrand,
     baseStatus: "soon",
@@ -216,8 +215,7 @@ export const INTEGRATIONS: Integration[] = [
   {
     platform: "x_ads",
     name: "X Ads",
-    description:
-      "X Ads is not available through Composio yet.",
+    description: "X Ads is not available through Composio yet.",
     category: "Ads Campaigns",
     icon: XBrand,
     baseStatus: "soon",
@@ -488,21 +486,31 @@ function IntegrationCard({
             <LocalizedText text={"Soon"} />
           </button>
         ) : status === "connected" || status === "partial" ? (
-          <button
-            type='button'
-            onClick={onManage}
-            className='rounded-md p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
-            title={`Manage ${integration.name}`}
-          >
-            <MoreHorizontal className='h-5 w-5' />
-          </button>
+          <div className='flex items-center gap-1'>
+            <button
+              type='button'
+              disabled
+              className='inline-flex cursor-default items-center gap-1.5 rounded-md bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400'
+            >
+              <CheckCircle2 className='h-3.5 w-3.5' />
+              <LocalizedText text={"Connected"} />
+            </button>
+            <button
+              type='button'
+              onClick={onManage}
+              className='rounded-md p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
+              title={`Manage ${integration.name}`}
+            >
+              <MoreHorizontal className='h-5 w-5' />
+            </button>
+          </div>
         ) : (
           <button
             type='button'
             onClick={onConnect}
-            className='rounded-md border border-zinc-200/80 bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-all hover:bg-zinc-200 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800'
+            className='rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-[background-color,transform] hover:bg-indigo-700 active:scale-95'
           >
-            <LocalizedText text={"Add"} />
+            <LocalizedText text={"Connect"} />
           </button>
         )}
       </div>
@@ -558,7 +566,8 @@ export function IntegrationsExplorer({
         appSlug: app.slug,
         name: app.name,
         description:
-          app.description || `Connect ${app.name} and use its tools from Genit.`,
+          app.description ||
+          `Connect ${app.name} and use its tools from Genit.`,
         category: "More Plugins",
         icon: Blocks,
         remoteIcon: app.logo,

@@ -38,6 +38,7 @@ export interface AgentIntegrationRequired {
   platform: IntegrationPlatform;
   platformName: string;
   reason: string;
+  toolkitSlug?: string;
 }
 
 export interface AgentAttachedFile {

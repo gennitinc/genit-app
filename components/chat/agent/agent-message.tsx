@@ -14,6 +14,7 @@ import { MessageActions } from "@/components/chat/messages/message-actions";
 import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
 import { UserMessage } from "@/components/chat/messages/user-message";
+import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
@@ -422,7 +423,9 @@ export function AgentMessage({
             {/* Final text response */}
             {run.text && (
               <div className='text-foreground mt-1 text-sm'>
-                <Response>{run.text}</Response>
+                <Response components={{ a: PluginConnectionLink }}>
+                  {run.text}
+                </Response>
               </div>
             )}
 

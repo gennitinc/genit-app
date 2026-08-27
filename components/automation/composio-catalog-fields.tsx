@@ -1,16 +1,18 @@
 "use client";
 
+import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
+import { Button } from "@/components/ui/button";
 import {
+  type ComposioToolDefinition,
+  type ComposioToolkit,
+  type ComposioTriggerType,
   fetchComposioToolkits,
   fetchComposioTools,
   fetchComposioTriggers,
   fetchIntegrations,
-  type ComposioToolkit,
-  type ComposioToolDefinition,
-  type ComposioTriggerType,
 } from "@/lib/integrations-api";
 import { cn } from "@/lib/utils";
-import { ExternalLink, Loader2, Search } from "lucide-react";
+import { CheckCircle2, Loader2, Plug, Search } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 
 type Props = {
@@ -58,9 +60,12 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
   const [connectedToolkits, setConnectedToolkits] = useState<Set<string>>(
     new Set()
   );
+  const [connectOpen, setConnectOpen] = useState(false);
   const toolkit = String(data.composioToolkit || "");
   const selectedSlug = String(
-    mode === "trigger" ? data.composioTriggerSlug || "" : data.composioToolSlug || ""
+    mode === "trigger"
+      ? data.composioTriggerSlug || ""
+      : data.composioToolSlug || ""
   );
   const values =
     (mode === "trigger"
@@ -74,8 +79,13 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
         setConnectedToolkits(
           new Set(
             connections.integrations
-              .filter((item) => item.platform === "composio" && item.status === "active")
-              .map((item) => String(item.metadata?.toolkitSlug || "").toLowerCase())
+              .filter(
+                (item) =>
+                  item.platform === "composio" && item.status === "active"
+              )
+              .map((item) =>
+                String(item.metadata?.toolkitSlug || "").toLowerCase()
+              )
           )
         );
       })
@@ -94,21 +104,24 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
     let active = true;
     setLoading(true);
     setLoadError("");
-    const timer = setTimeout(() => {
-      const request =
-        mode === "trigger"
-          ? fetchComposioTriggers(toolkit)
-          : fetchComposioTools(toolkit, itemSearch);
-      request
-        .then((result) => active && setItems(result))
-        .catch(() => {
-          if (active) {
-            setItems([]);
-            setLoadError("Could not load the app catalog");
-          }
-        })
-        .finally(() => active && setLoading(false));
-    }, mode === "action" && itemSearch ? 250 : 0);
+    const timer = setTimeout(
+      () => {
+        const request =
+          mode === "trigger"
+            ? fetchComposioTriggers(toolkit)
+            : fetchComposioTools(toolkit, itemSearch);
+        request
+          .then((result) => active && setItems(result))
+          .catch(() => {
+            if (active) {
+              setItems([]);
+              setLoadError("Could not load the app catalog");
+            }
+          })
+          .finally(() => active && setLoading(false));
+      },
+      mode === "action" && itemSearch ? 250 : 0
+    );
     return () => {
       active = false;
       clearTimeout(timer);
@@ -179,7 +192,9 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
       </div>
 
       <div>
-        <label className={labelCls}>{mode === "trigger" ? "Event" : "Action"}</label>
+        <label className={labelCls}>
+          {mode === "trigger" ? "Event" : "Action"}
+        </label>
         {mode === "action" && toolkit && (
           <div className='relative mb-1.5'>
             <Search className='pointer-events-none absolute top-2 left-2 h-3 w-3 text-zinc-400' />
@@ -198,13 +213,24 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
             onChange={(event) =>
               onChange(
                 mode === "trigger"
-                  ? { composioTriggerSlug: event.target.value, composioTriggerConfig: {} }
-                  : { composioToolSlug: event.target.value, composioToolArguments: {} }
+                  ? {
+                      composioTriggerSlug: event.target.value,
+                      composioTriggerConfig: {},
+                    }
+                  : {
+                      composioToolSlug: event.target.value,
+                      composioToolArguments: {},
+                    }
               )
             }
-            className={cn(inputCls, "cursor-pointer appearance-none pr-7 disabled:opacity-50")}
+            className={cn(
+              inputCls,
+              "cursor-pointer appearance-none pr-7 disabled:opacity-50"
+            )}
           >
-            <option value=''>Select {mode === "trigger" ? "an event" : "an action"}</option>
+            <option value=''>
+              Select {mode === "trigger" ? "an event" : "an action"}
+            </option>
             {items.map((item) => (
               <option key={item.slug} value={item.slug}>
                 {item.name}
@@ -235,7 +261,10 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
         const label = `${key}${required.has(key) ? " *" : ""}`;
         if (fieldSchema.type === "boolean")
           return (
-            <label key={key} className='flex items-center gap-2 text-[10px] text-zinc-600 dark:text-neutral-300'>
+            <label
+              key={key}
+              className='flex items-center gap-2 text-[10px] text-zinc-600 dark:text-neutral-300'
+            >
               <input
                 type='checkbox'
                 checked={Boolean(values[key])}
@@ -270,7 +299,9 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
               <textarea
                 className={cn(inputCls, "min-h-16 resize-y font-mono")}
                 value={valueForInput(values[key], fieldSchema)}
-                onChange={(event) => updateValue(key, parseInput(event.target.value, fieldSchema))}
+                onChange={(event) =>
+                  updateValue(key, parseInput(event.target.value, fieldSchema))
+                }
                 placeholder={fieldSchema.description || `{{ event.${key} }}`}
               />
             ) : (
@@ -278,7 +309,9 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
                 className={inputCls}
                 type={fieldSchema.type === "number" ? "number" : "text"}
                 value={valueForInput(values[key], fieldSchema)}
-                onChange={(event) => updateValue(key, parseInput(event.target.value, fieldSchema))}
+                onChange={(event) =>
+                  updateValue(key, parseInput(event.target.value, fieldSchema))
+                }
                 placeholder={fieldSchema.description || `{{ event.${key} }}`}
               />
             )}
@@ -302,14 +335,45 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
             : data.composioError || data.composioStatus}
         </div>
       )}
-      {toolkit && !connectedToolkits.has(toolkit) && (
-        <a
-          href='/integrations'
-          className='flex items-center gap-1 text-[10px] font-medium text-violet-600 hover:text-violet-500'
-        >
-          Connect app <ExternalLink className='h-3 w-3' />
-        </a>
-      )}
+      {toolkit &&
+        (connectedToolkits.has(toolkit) ? (
+          <Button
+            type='button'
+            size='sm'
+            variant='secondary'
+            disabled
+            className='h-7 text-[10px] disabled:opacity-100'
+          >
+            <CheckCircle2 /> Connected
+          </Button>
+        ) : (
+          <Button
+            type='button'
+            size='sm'
+            className='h-7 text-[10px] active:scale-[0.97]'
+            onClick={(event) => {
+              event.stopPropagation();
+              setConnectOpen(true);
+            }}
+          >
+            <Plug /> Connect app
+          </Button>
+        ))}
+
+      <ConnectDialog
+        open={connectOpen}
+        onOpenChange={setConnectOpen}
+        platform='composio'
+        platformName={selectedToolkit?.name || toolkit}
+        platformDescription={`Connect ${selectedToolkit?.name || toolkit} to use it in this automation.`}
+        Icon={Plug}
+        glow='rgba(79, 70, 229, 0.7)'
+        appSlug={toolkit}
+        onConnected={() => {
+          setConnectedToolkits((current) => new Set(current).add(toolkit));
+          setConnectOpen(false);
+        }}
+      />
     </div>
   );
 }
