@@ -2725,7 +2725,7 @@ export default function InboxPage() {
                           ) : (
                             <CircleFadingArrowUp className='h-3.5 w-3.5' />
                           )}
-                          <LocalizedText text={"AI Write"} />
+                          <LocalizedText text={"AI"} />
                         </Button>
                       </div>
 
