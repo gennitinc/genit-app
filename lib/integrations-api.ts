@@ -135,8 +135,10 @@ const FIRST_CLASS_COMPOSIO_TOOLKITS = new Set([
   "googleforms",
 ]);
 
-export function isPlatformSupported(platform: IntegrationPlatform): boolean {
-  return SUPPORTED_PLATFORMS.has(platform);
+export function isPlatformSupported(
+  platform: string
+): platform is IntegrationPlatform {
+  return SUPPORTED_PLATFORMS.has(platform as IntegrationPlatform);
 }
 
 export function isNativeOnlyComposioToolkit(appSlug: string): boolean {
@@ -153,7 +155,13 @@ export function effectiveIntegrationPlatform(
   integration: IntegrationConnection
 ): IntegrationPlatform {
   if (integration.platform !== "composio") return integration.platform;
-  const nativePlatform = integration.metadata?.nativePlatform;
+  const configuredPlatform = String(
+    integration.metadata?.nativePlatform ||
+      integration.metadata?.toolkitSlug ||
+      ""
+  ).toLowerCase();
+  const nativePlatform =
+    configuredPlatform === "twitter" ? "x" : configuredPlatform;
   return isPlatformSupported(nativePlatform)
     ? nativePlatform
     : integration.platform;
@@ -165,7 +173,11 @@ export function asEffectiveIntegration(
   const platform = effectiveIntegrationPlatform(integration);
   return platform === integration.platform
     ? integration
-    : { ...integration, platform };
+    : {
+        ...integration,
+        platform,
+        metadata: { ...integration.metadata, provider: "composio" },
+      };
 }
 
 export async function fetchIntegrations(): Promise<{

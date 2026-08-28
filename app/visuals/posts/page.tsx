@@ -590,7 +590,7 @@ async function fetchLivePosts(
       return [];
     })
   );
-  return results.flatMap((result, index) => {
+  const posts = results.flatMap((result, index) => {
     if (result.status === "fulfilled") return result.value;
     // Do not make one unavailable provider hide posts from every other
     // connected account, but preserve the provider error for diagnostics.
@@ -600,6 +600,11 @@ async function fetchLivePosts(
     );
     return [];
   });
+  const failure = results.find(
+    (result): result is PromiseRejectedResult => result.status === "rejected"
+  );
+  if (!posts.length && failure) throw failure.reason;
+  return posts;
 }
 
 async function fetchPostAnalytics(post: DisplayPost) {
@@ -1253,8 +1258,12 @@ export default function PostsPage() {
                 ? "Create a draft here, or generate content in chat and it will appear automatically."
                 : view === "scheduled"
                   ? "Choose Scheduled while creating or editing a post to place it here."
-                  : connected.length
-                    ? "Publish on a connected platform, then refresh this view."
+                  : liveQuery.isError
+                    ? liveQuery.error instanceof Error
+                      ? liveQuery.error.message
+                      : "Could not load posts from the connected accounts."
+                    : connected.length
+                      ? "No published posts were returned by the connected accounts."
                     : "Connect a social account to bring its live posts into this workspace."}
             </p>
             {view !== "live" && (
