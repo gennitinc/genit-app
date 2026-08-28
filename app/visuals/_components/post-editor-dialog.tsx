@@ -296,7 +296,29 @@ export function PostEditorDialog({
   onEnhanceText,
 }: PostEditorDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  const validationErrors = getPostValidationErrors(form);
+  const connectedPlatforms = useMemo(
+    () =>
+      POST_PLATFORMS.filter((platform) =>
+        connected.some((account) => account.platform === platform)
+      ),
+    [connected]
+  );
+  const validationErrors = [
+    ...getPostValidationErrors(form),
+    ...form.platforms
+      .filter(
+        (platform) =>
+          !connected.some(
+            (account) =>
+              account.platform === platform &&
+              account._id === form.integrationIds[platform]
+          )
+      )
+      .map(
+        (platform) =>
+          `Choose a connected ${POST_PLATFORM_LABELS[platform] || platform} account.`
+      ),
+  ];
   const youtubeIntegrationId = form.integrationIds.youtube || "";
   const showYouTubePlaylist = form.platforms.includes("youtube");
   const [youtubePlaylists, setYoutubePlaylists] = useState<
@@ -400,56 +422,54 @@ export function PostEditorDialog({
               {form.platforms.length}
             </span>
           </div>
-          <div className='grid grid-cols-2 gap-2'>
-            {POST_PLATFORMS.map((platform) => {
-              const selected = form.platforms.includes(platform);
-              const isConnected = connected.some(
-                (item) => item.platform === platform
-              );
-              return (
-                <button
-                  key={platform}
-                  type='button'
-                  role='checkbox'
-                  aria-checked={selected}
-                  onClick={() => togglePlatform(platform)}
-                  className={cn(
-                    "relative flex items-center gap-2.5 rounded-xl border p-2.5 text-left text-xs font-medium transition-all duration-200",
-                    selected
-                      ? "border-indigo-500/40 bg-indigo-500/[0.06] text-white"
-                      : "border-zinc-800 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900/70"
-                  )}
-                >
-                  <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-950 ring-1 ring-zinc-800'>
-                    <PlatformIcon platform={platform} />
-                  </span>
-                  <span className='min-w-0'>
-                    <span className='block truncate'>
-                      {POST_PLATFORM_LABELS[platform]}
+          {connectedPlatforms.length ? (
+            <div className='grid grid-cols-2 gap-2'>
+              {connectedPlatforms.map((platform) => {
+                const selected = form.platforms.includes(platform);
+                return (
+                  <button
+                    key={platform}
+                    type='button'
+                    role='checkbox'
+                    aria-checked={selected}
+                    onClick={() => togglePlatform(platform)}
+                    className={cn(
+                      "relative flex items-center gap-2.5 rounded-xl border p-2.5 text-left text-xs font-medium transition-all duration-200",
+                      selected
+                        ? "border-indigo-500/40 bg-indigo-500/[0.06] text-white"
+                        : "border-zinc-800 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900/70"
+                    )}
+                  >
+                    <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-950 ring-1 ring-zinc-800'>
+                      <PlatformIcon platform={platform} />
                     </span>
-                    <span
-                      className={cn(
-                        "mt-1 block text-[9px]",
-                        isConnected
-                          ? "font-medium text-emerald-400"
-                          : "text-zinc-600"
-                      )}
-                    >
-                      {isConnected ? "Connected" : "No account"}
+                    <span className='min-w-0'>
+                      <span className='block truncate'>
+                        {POST_PLATFORM_LABELS[platform]}
+                      </span>
+                      <span className='mt-1 block text-[9px] font-medium text-emerald-400'>
+                        <LocalizedText text={"Connected"} />
+                      </span>
                     </span>
-                  </span>
-                  {selected && (
-                    <span className='absolute top-1.5 right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-indigo-600 text-white'>
-                      <Check className='h-2 w-2 stroke-[3]' />
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                    {selected && (
+                      <span className='absolute top-1.5 right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-indigo-600 text-white'>
+                        <Check className='h-2 w-2 stroke-[3]' />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className='rounded-xl border border-dashed border-zinc-800 bg-zinc-900/30 p-4 text-xs leading-5 text-zinc-500'>
+              <LocalizedText
+                text={"Connect a social account from Plugins to create a post."}
+              />
+            </div>
+          )}
         </div>
         {form.platforms.length > 0 && (
-          <div className='hidden gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 lg:grid'>
+          <div className='grid gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3'>
             <p className='text-[10px] font-semibold tracking-[0.16em] text-zinc-400 uppercase'>
               <LocalizedText text={"Connected accounts"} />
             </p>
@@ -471,7 +491,7 @@ export function PostEditorDialog({
                       <LocalizedText text={"account"} />
                     </Label>
                     <Select
-                      value={form.integrationIds[platform] || "none"}
+                      value={form.integrationIds[platform] || undefined}
                       onValueChange={(value) => {
                         if (platform === "youtube")
                           setIsCustomYoutubePlaylist(false);
@@ -493,12 +513,9 @@ export function PostEditorDialog({
                       }}
                     >
                       <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                        <SelectValue />
+                        <SelectValue placeholder='Select account' />
                       </SelectTrigger>
                       <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                        <SelectItem value='none'>
-                          <LocalizedText text={"No connected account"} />
-                        </SelectItem>
                         {accounts.map((account) => (
                           <SelectItem key={account._id} value={account._id}>
                             {account.accountName}

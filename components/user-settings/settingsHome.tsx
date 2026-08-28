@@ -692,7 +692,7 @@ const SettingsHome = () => {
                     type='button'
                     aria-current={selected ? "page" : undefined}
                     onClick={() => selectTab(tab.id)}
-                    className={`group flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-[background-color,color,box-shadow,transform] active:scale-[0.98] md:w-full ${
+                    className={`group flex shrink-0 items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm font-medium transition-[background-color,color,box-shadow,transform] active:scale-[0.98] md:w-full ${
                       selected
                         ? "bg-white text-zinc-950 shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:text-white dark:ring-white/10"
                         : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.05] dark:hover:text-white"
