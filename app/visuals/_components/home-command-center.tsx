@@ -5,6 +5,7 @@ import {
   POST_PLATFORMS,
   POST_PLATFORM_LABELS,
   PostEditorDialog,
+  getProviderTargetMetadata,
 } from "./post-editor-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
@@ -131,6 +132,7 @@ export function HomeCommandCenter({
           targets: form.platforms.map((platform) => ({
             platform,
             integrationId: form.integrationIds[platform] || undefined,
+            metadata: getProviderTargetMetadata(form, platform),
           })),
         });
         return form.status === "published"
@@ -142,6 +144,7 @@ export function HomeCommandCenter({
         targets: form.platforms.map((platform) => ({
           platform,
           integrationId: form.integrationIds[platform] || undefined,
+          metadata: getProviderTargetMetadata(form, platform),
         })),
       });
       return form.status === "published"
@@ -251,6 +254,20 @@ export function HomeCommandCenter({
       integrationIds: post.integration
         ? { [post.platform]: post.integration }
         : {},
+      providerTargetIds: {
+        [post.platform]:
+          (typeof post.metadata?.providerTargetId === "string" &&
+            post.metadata.providerTargetId) ||
+          (typeof post.metadata?.linkedInAuthorUrn === "string" &&
+            post.metadata.linkedInAuthorUrn) ||
+          (typeof post.metadata?.pinterestBoardId === "string" &&
+            post.metadata.pinterestBoardId) ||
+          "",
+      },
+      tiktokPrivacyLevel:
+        typeof post.metadata?.tiktokPrivacyLevel === "string"
+          ? post.metadata.tiktokPrivacyLevel
+          : "SELF_ONLY",
       status: post.status,
       scheduledFor: post.scheduledFor?.slice(0, 16) || "",
       youtubePlaylistId:

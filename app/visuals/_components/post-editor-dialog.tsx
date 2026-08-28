@@ -52,9 +52,13 @@ import type {
 import {
   type YouTubePlaylistSummary,
   type YouTubePrivacy,
-  listYouTubePlaylists,
 } from "@/lib/integrations-api";
-import type { SocialPostMedia, SocialPostStatus } from "@/lib/social-posts-api";
+import {
+  type SocialPostConnectionOptions,
+  type SocialPostMedia,
+  type SocialPostStatus,
+  getSocialPostConnectionOptions,
+} from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -104,6 +108,8 @@ export type PostEditorForm = {
   media: SocialPostMedia[];
   platforms: IntegrationPlatform[];
   integrationIds: Partial<Record<IntegrationPlatform, string>>;
+  providerTargetIds: Partial<Record<IntegrationPlatform, string>>;
+  tiktokPrivacyLevel: string;
   youtubePlaylistId: string;
   youtubePlaylistTitle: string;
   youtubePlaylistDescription: string;
@@ -122,6 +128,8 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   media: [],
   platforms: [],
   integrationIds: {},
+  providerTargetIds: {},
+  tiktokPrivacyLevel: "SELF_ONLY",
   youtubePlaylistId: "",
   youtubePlaylistTitle: "",
   youtubePlaylistDescription: "",
@@ -131,6 +139,25 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   status: "draft",
   scheduledFor: "",
 };
+
+export function getProviderTargetMetadata(
+  form: PostEditorForm,
+  platform: IntegrationPlatform
+) {
+  const providerTargetId = form.providerTargetIds[platform];
+  return {
+    ...(providerTargetId ? { providerTargetId } : {}),
+    ...(platform === "linkedin" && providerTargetId
+      ? { linkedInAuthorUrn: providerTargetId }
+      : {}),
+    ...(platform === "pinterest" && providerTargetId
+      ? { pinterestBoardId: providerTargetId }
+      : {}),
+    ...(platform === "tiktok"
+      ? { tiktokPrivacyLevel: form.tiktokPrivacyLevel }
+      : {}),
+  };
+}
 
 function PlatformIcon({ platform }: { platform: IntegrationPlatform }) {
   const props = { className: "h-5 w-5" };
@@ -303,7 +330,7 @@ export function PostEditorDialog({
       ),
     [connected]
   );
-  const validationErrors = [
+  const accountValidationErrors = [
     ...getPostValidationErrors(form),
     ...form.platforms
       .filter(
@@ -324,9 +351,33 @@ export function PostEditorDialog({
   const [youtubePlaylists, setYoutubePlaylists] = useState<
     YouTubePlaylistSummary[]
   >([]);
+  const [connectionOptions, setConnectionOptions] = useState<
+    Partial<Record<IntegrationPlatform, SocialPostConnectionOptions>>
+  >({});
+  const [connectionOptionErrors, setConnectionOptionErrors] = useState<
+    Partial<Record<IntegrationPlatform, string>>
+  >({});
   const [isCustomYoutubePlaylist, setIsCustomYoutubePlaylist] = useState(false);
   const [isLoadingYoutubePlaylists, setIsLoadingYoutubePlaylists] =
     useState(false);
+  const validationErrors = [
+    ...accountValidationErrors,
+    ...form.platforms
+      .filter((platform) => {
+        const targets = connectionOptions[platform]?.targets || [];
+        return (
+          platform !== "youtube" &&
+          targets.length > 0 &&
+          !targets.some(
+            (target) => target.id === form.providerTargetIds[platform]
+          )
+        );
+      })
+      .map(
+        (platform) =>
+          `Choose a ${POST_PLATFORM_LABELS[platform] || platform} destination.`
+      ),
+  ];
   const selectedYouTubePlaylistValue = useMemo(() => {
     if (form.youtubePlaylistId) return form.youtubePlaylistId;
     if (isCustomYoutubePlaylist || form.youtubePlaylistTitle) return "custom";
@@ -337,19 +388,103 @@ export function PostEditorDialog({
     isCustomYoutubePlaylist,
   ]);
 
+  const selectedConnectionsKey = form.platforms
+    .map((platform) => `${platform}:${form.integrationIds[platform] || ""}`)
+    .join("|");
+
   useEffect(() => {
     let cancelled = false;
-    if (!showYouTubePlaylist || !youtubeIntegrationId) {
+    const selected = form.platforms
+      .map((platform) => ({
+        platform,
+        integrationId: form.integrationIds[platform] || "",
+      }))
+      .filter((item) => item.integrationId);
+    if (!selected.length) {
+      setConnectionOptions({});
+      setConnectionOptionErrors({});
       setYoutubePlaylists([]);
       return;
     }
-    setIsLoadingYoutubePlaylists(true);
-    listYouTubePlaylists(youtubeIntegrationId, { maxResults: 50 })
-      .then((result) => {
-        if (!cancelled) setYoutubePlaylists(result.playlists);
+    setIsLoadingYoutubePlaylists(
+      selected.some((item) => item.platform === "youtube")
+    );
+    Promise.allSettled(
+      selected.map(async ({ platform, integrationId }) => ({
+        platform,
+        options: await getSocialPostConnectionOptions(integrationId),
+      }))
+    )
+      .then((results) => {
+        if (cancelled) return;
+        const fulfilled = results
+          .filter(
+            (
+              result
+            ): result is PromiseFulfilledResult<{
+              platform: IntegrationPlatform;
+              options: SocialPostConnectionOptions;
+            }> => result.status === "fulfilled"
+          )
+          .map((result) => result.value);
+        const options = Object.fromEntries(
+          fulfilled.map((result) => [result.platform, result.options])
+        ) as Partial<Record<IntegrationPlatform, SocialPostConnectionOptions>>;
+        const errors: Partial<Record<IntegrationPlatform, string>> = {};
+        results.forEach((result, index) => {
+          if (result.status === "rejected")
+            errors[selected[index].platform] =
+              result.reason?.response?.data?.msg ||
+              result.reason?.response?.data?.message ||
+              result.reason?.message ||
+              "Could not load account options.";
+        });
+        setConnectionOptions(options);
+        setConnectionOptionErrors(errors);
+        const youtube = options.youtube?.targets || [];
+        setYoutubePlaylists(
+          youtube.map((item) => ({
+            id: item.id,
+            snippet: { title: item.name, description: item.description },
+          }))
+        );
+        setForm((current) => {
+          const providerTargetIds = { ...current.providerTargetIds };
+          let tiktokPrivacyLevel = current.tiktokPrivacyLevel;
+          let changed = false;
+          for (const result of fulfilled) {
+            if (
+              result.platform !== "youtube" &&
+              result.options.targets.length &&
+              !result.options.targets.some(
+                (item) => item.id === providerTargetIds[result.platform]
+              )
+            ) {
+              providerTargetIds[result.platform] = result.options.targets[0].id;
+              changed = true;
+            }
+            if (
+              result.platform === "tiktok" &&
+              result.options.privacyLevels.length &&
+              !result.options.privacyLevels.some(
+                (item) => item.value === tiktokPrivacyLevel
+              )
+            ) {
+              tiktokPrivacyLevel = result.options.privacyLevels[0].value;
+              changed = true;
+            }
+          }
+          return changed
+            ? { ...current, providerTargetIds, tiktokPrivacyLevel }
+            : current;
+        });
       })
       .catch(() => {
-        if (!cancelled) setYoutubePlaylists([]);
+        if (!cancelled) {
+          setConnectionOptions({});
+          setConnectionOptionErrors({});
+          setYoutubePlaylists([]);
+        }
       })
       .finally(() => {
         if (!cancelled) setIsLoadingYoutubePlaylists(false);
@@ -357,7 +492,7 @@ export function PostEditorDialog({
     return () => {
       cancelled = true;
     };
-  }, [showYouTubePlaylist, youtubeIntegrationId]);
+  }, [selectedConnectionsKey, setForm]);
 
   function togglePlatform(platform: IntegrationPlatform) {
     setForm((current) => ({
@@ -478,6 +613,17 @@ export function PostEditorDialog({
                 const accounts = connected.filter(
                   (item) => item.platform === platform
                 );
+                const options = connectionOptions[platform];
+                const targetLabel =
+                  platform === "facebook"
+                    ? "Page"
+                    : platform === "instagram"
+                      ? "Instagram account"
+                      : platform === "linkedin"
+                        ? "Publish as"
+                        : platform === "pinterest"
+                          ? "Board"
+                          : "Destination";
                 return (
                   <div
                     key={platform}
@@ -523,6 +669,70 @@ export function PostEditorDialog({
                         ))}
                       </SelectContent>
                     </Select>
+                    {platform !== "youtube" && options?.targets.length ? (
+                      <div className='grid gap-1.5 pt-1'>
+                        <Label className='text-[11px] font-medium text-zinc-400'>
+                          <LocalizedText text={targetLabel} />
+                        </Label>
+                        <Select
+                          value={form.providerTargetIds[platform] || undefined}
+                          onValueChange={(value) =>
+                            setForm((current) => ({
+                              ...current,
+                              providerTargetIds: {
+                                ...current.providerTargetIds,
+                                [platform]: value,
+                              },
+                            }))
+                          }
+                        >
+                          <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
+                            <SelectValue
+                              placeholder={`Select ${targetLabel.toLowerCase()}`}
+                            />
+                          </SelectTrigger>
+                          <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
+                            {options.targets.map((target) => (
+                              <SelectItem key={target.id} value={target.id}>
+                                {target.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    ) : null}
+                    {platform === "tiktok" && options?.privacyLevels.length ? (
+                      <div className='grid gap-1.5 pt-1'>
+                        <Label className='text-[11px] font-medium text-zinc-400'>
+                          <LocalizedText text={"Who can view"} />
+                        </Label>
+                        <Select
+                          value={form.tiktokPrivacyLevel}
+                          onValueChange={(value) =>
+                            setForm((current) => ({
+                              ...current,
+                              tiktokPrivacyLevel: value,
+                            }))
+                          }
+                        >
+                          <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
+                            {options.privacyLevels.map((level) => (
+                              <SelectItem key={level.value} value={level.value}>
+                                {level.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    ) : null}
+                    {connectionOptionErrors[platform] ? (
+                      <p className='pt-1 text-[11px] leading-4 text-amber-300'>
+                        {connectionOptionErrors[platform]}
+                      </p>
+                    ) : null}
                   </div>
                 );
               })}

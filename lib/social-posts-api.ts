@@ -45,6 +45,13 @@ export type SocialPostInput = Pick<SocialPost, "platform" | "content"> &
 export type SocialPostTarget = {
   platform: IntegrationPlatform;
   integrationId?: string;
+  metadata?: Record<string, unknown>;
+};
+
+export type SocialPostConnectionOptions = {
+  platform: IntegrationPlatform;
+  targets: Array<{ id: string; name: string; description?: string }>;
+  privacyLevels: Array<{ value: string; label: string }>;
 };
 
 export type MultiSocialPostInput = Omit<
@@ -122,6 +129,25 @@ export async function listSocialPosts(): Promise<SocialPost[]> {
   const { data } = await apiResponse.get<{ posts: SocialPost[] }>(
     "/social-posts",
     { timeout: 15_000 }
+  );
+  return data.posts;
+}
+export async function getSocialPostConnectionOptions(
+  integrationId: string
+): Promise<SocialPostConnectionOptions> {
+  const { data } = await apiResponse.get<{
+    options: SocialPostConnectionOptions;
+  }>(`/social-posts/connections/${integrationId}/options`);
+  return data.options;
+}
+
+export async function listRemoteSocialPosts(
+  integrationId: string,
+  limit = 50
+): Promise<SocialPost[]> {
+  const { data } = await apiResponse.get<{ posts: SocialPost[] }>(
+    `/social-posts/connections/${integrationId}/posts?limit=${limit}`,
+    { timeout: 30_000 }
   );
   return data.posts;
 }

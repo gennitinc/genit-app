@@ -12,6 +12,7 @@ import {
 import {
   PostEditorDialog,
   type PostEditorForm,
+  getProviderTargetMetadata,
 } from "@/app/visuals/_components/post-editor-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
@@ -69,6 +70,7 @@ import {
   createSocialPosts,
   deleteSocialPost,
   generateSocialPostText,
+  listRemoteSocialPosts,
   listSocialPostsPage,
   publishSocialPosts,
   updateSocialPosts,
@@ -161,6 +163,8 @@ const EMPTY_FORM: PostEditorForm = {
   media: [] as SocialPostMedia[],
   platforms: [] as IntegrationPlatform[],
   integrationIds: {} as Partial<Record<IntegrationPlatform, string>>,
+  providerTargetIds: {} as Partial<Record<IntegrationPlatform, string>>,
+  tiktokPrivacyLevel: "SELF_ONLY",
   youtubePlaylistId: "",
   youtubePlaylistTitle: "",
   youtubePlaylistDescription: "",
@@ -429,6 +433,13 @@ async function fetchLivePosts(
 ): Promise<DisplayPost[]> {
   const results = await Promise.allSettled(
     connections.map(async (connection): Promise<DisplayPost[]> => {
+      if (connection.metadata?.provider === "composio")
+        return (await listRemoteSocialPosts(connection._id, 50)).map(
+          (post) => ({
+            ...post,
+            remote: true,
+          })
+        );
       const base = {
         integration: connection._id,
         accountName: connection.accountName,
@@ -670,10 +681,7 @@ export default function PostsPage() {
       ),
     [integrations]
   );
-  const liveConnections = useMemo(
-    () => connected.filter((item) => !managedConnectionIds.has(item._id)),
-    [connected, managedConnectionIds]
-  );
+  const liveConnections = connected;
   const activeConnectionIds = useMemo(
     () => new Set(connected.map((item) => item._id)),
     [connected]
@@ -843,6 +851,7 @@ export default function PostsPage() {
           targets: form.platforms.map((platform) => ({
             platform,
             integrationId: form.integrationIds[platform] || undefined,
+            metadata: getProviderTargetMetadata(form, platform),
           })),
         });
         return form.status === "published"
@@ -854,6 +863,7 @@ export default function PostsPage() {
         targets: form.platforms.map((platform) => ({
           platform,
           integrationId: form.integrationIds[platform] || undefined,
+          metadata: getProviderTargetMetadata(form, platform),
         })),
       });
       return form.status === "published"
@@ -963,6 +973,20 @@ export default function PostsPage() {
       integrationIds: post.integration
         ? { [post.platform]: post.integration }
         : {},
+      providerTargetIds: {
+        [post.platform]:
+          (typeof post.metadata?.providerTargetId === "string" &&
+            post.metadata.providerTargetId) ||
+          (typeof post.metadata?.linkedInAuthorUrn === "string" &&
+            post.metadata.linkedInAuthorUrn) ||
+          (typeof post.metadata?.pinterestBoardId === "string" &&
+            post.metadata.pinterestBoardId) ||
+          "",
+      },
+      tiktokPrivacyLevel:
+        typeof post.metadata?.tiktokPrivacyLevel === "string"
+          ? post.metadata.tiktokPrivacyLevel
+          : "SELF_ONLY",
       status: post.status,
       scheduledFor: post.scheduledFor?.slice(0, 16) || "",
       youtubePlaylistId:
@@ -1145,7 +1169,7 @@ export default function PostsPage() {
                 key={value}
                 onClick={() => setView(value)}
                 className={cn(
-                  "rounded-full px-4 py-2 text-xs font-medium transition",
+                  "rounded-lg px-4 py-2 text-xs font-medium transition",
                   view === value
                     ? "bg-white text-zinc-950 shadow-sm"
                     : "text-zinc-500 hover:text-zinc-950 dark:text-white/55 dark:hover:text-white"
