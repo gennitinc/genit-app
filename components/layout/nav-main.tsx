@@ -149,7 +149,13 @@ export function NavMain() {
     }
     // For routes without query params, use exact pathname matching
     // This prevents parent routes from being active when on child routes
-    return pathname === href;
+    if (href === "/user/settings" && searchParams.get("tab") === "billing") {
+      return false;
+    }
+    return (
+      pathname === href ||
+      (href === "/visuals" && pathname.startsWith("/visuals/"))
+    );
   };
 
   return (
