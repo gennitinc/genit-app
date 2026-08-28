@@ -95,9 +95,9 @@ export function NavMain() {
 
   const secondaryNavItems = [
     {
-      title: t("Pricing"),
+      title: t("Billing"),
       icon: CreditCard,
-      href: "/pricing",
+      href: "/user/settings?tab=billing",
     },
     {
       title: t("Blog"),
