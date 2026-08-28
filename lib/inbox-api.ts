@@ -114,9 +114,7 @@ export type UpdateConversationInput = Partial<
     InboxConversation,
     | "status"
     | "customerName"
-    | "customerId"
     | "customerAvatar"
-    | "customerHandle"
     | "subject"
     | "labels"
     | "notes"

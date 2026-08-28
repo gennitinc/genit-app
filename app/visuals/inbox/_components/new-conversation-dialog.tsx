@@ -7,6 +7,13 @@ import type { CreateConversationInput } from "@/lib/inbox-api";
 import type { IntegrationConnection } from "@/lib/integrations-api";
 import { useEffect, useState } from "react";
 
+const channelPlatform = (account?: IntegrationConnection) =>
+  String(
+    account?.platform === "composio"
+      ? account.metadata?.nativePlatform || account.metadata?.toolkitSlug
+      : account?.platform || ""
+  ).toLowerCase();
+
 export function NewConversationDialog({
   open,
   onOpenChange,
@@ -18,13 +25,15 @@ export function NewConversationDialog({
   onOpenChange: (open: boolean) => void;
   accounts: IntegrationConnection[];
   pending: boolean;
-  onCreate: (input: CreateConversationInput) => void;
+  onCreate: (input: CreateConversationInput, message: string) => void;
 }) {
   const [integrationId, setIntegrationId] = useState("");
   const [name, setName] = useState("");
   const [recipient, setRecipient] = useState("");
   const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
   const account = accounts.find((item) => item._id === integrationId);
+  const platform = channelPlatform(account);
 
   useEffect(() => {
     if (open && !integrationId) setIntegrationId(accounts[0]?._id || "");
@@ -36,6 +45,7 @@ export function NewConversationDialog({
     setName("");
     setRecipient("");
     setSubject("");
+    setMessage("");
   }, [open]);
 
   if (!open) return null;
@@ -50,14 +60,14 @@ export function NewConversationDialog({
     >
       <div className='shrink-0 border-b px-5 py-4 text-left'>
         <h2 id='new-conversation-title' className='font-semibold'>
-          <LocalizedText text={"New conversation"} />
+          <LocalizedText text={"New message"} />
         </h2>
         <p
           id='new-conversation-description'
           className='text-muted-foreground mt-1 text-sm'
         >
           <LocalizedText
-            text={"Start a thread through one of your connected channels."}
+            text={"Compose a message through one of your connected channels."}
           />
         </p>
       </div>
@@ -72,7 +82,8 @@ export function NewConversationDialog({
             >
               {accounts.map((item) => (
                 <option key={item._id} value={item._id}>
-                  {item.accountName || item.platform} · {item.platform}
+                  {item.accountName || channelPlatform(item)} ·{" "}
+                  {channelPlatform(item)}
                 </option>
               ))}
             </select>
@@ -93,29 +104,51 @@ export function NewConversationDialog({
               value={recipient}
               onChange={(event) => setRecipient(event.target.value)}
               placeholder={
-                account?.platform === "gmail" || account?.platform === "outlook"
+                ["gmail", "email", "outlook"].includes(platform)
                   ? "name@example.com"
-                  : account?.platform === "telegram"
-                    ? "Telegram chat ID"
-                    : account?.platform === "whatsapp"
-                      ? "WhatsApp number, e.g. 2348012345678"
-                      : account?.platform === "x"
-                        ? "X user ID"
-                        : "Provider recipient ID"
+                  : platform === "instagram"
+                    ? "Instagram-scoped recipient ID"
+                    : platform === "messenger"
+                      ? "Page-scoped recipient ID"
+                      : platform === "telegram"
+                        ? "Telegram chat ID"
+                        : platform === "whatsapp"
+                          ? "WhatsApp number, e.g. 2348012345678"
+                          : platform === "x"
+                            ? "X user ID"
+                            : "Provider recipient ID"
               }
             />
           </label>
-          {account &&
-            ["gmail", "email", "outlook"].includes(account.platform) && (
-              <label className='block text-sm font-medium'>
-                <LocalizedText text={"Subject (optional)"} />
-                <Input
-                  className='mt-2'
-                  value={subject}
-                  onChange={(event) => setSubject(event.target.value)}
-                />
-              </label>
-            )}
+          {account && ["gmail", "email", "outlook"].includes(platform) && (
+            <label className='block text-sm font-medium'>
+              <LocalizedText text={"Subject (optional)"} />
+              <Input
+                className='mt-2'
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+              />
+            </label>
+          )}
+          {platform === "whatsapp" ? (
+            <p className='text-muted-foreground rounded-md border px-3 py-2 text-sm'>
+              <LocalizedText
+                text={
+                  "WhatsApp requires an approved template to start a new conversation. You will choose one next."
+                }
+              />
+            </p>
+          ) : (
+            <label className='block text-sm font-medium'>
+              <LocalizedText text={"Message"} />
+              <textarea
+                className='bg-background focus-visible:ring-ring mt-2 min-h-32 w-full resize-y rounded-md border px-3 py-2 outline-none focus-visible:ring-2'
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+                placeholder='Write your message…'
+              />
+            </label>
+          )}
         </div>
       </div>
       <div className='flex shrink-0 flex-col-reverse gap-2 border-t px-5 py-4 sm:flex-row sm:justify-end'>
@@ -123,20 +156,37 @@ export function NewConversationDialog({
           <LocalizedText text={"Cancel"} />
         </Button>
         <Button
-          disabled={pending || !account || !name.trim() || !recipient.trim()}
+          disabled={
+            pending ||
+            !account ||
+            !name.trim() ||
+            !recipient.trim() ||
+            (platform !== "whatsapp" && !message.trim())
+          }
           onClick={() =>
             account &&
-            onCreate({
-              integrationId: account._id,
-              platform: account.platform as CreateConversationInput["platform"],
-              customerName: name.trim(),
-              customerId: recipient.trim(),
-              customerHandle: recipient.trim(),
-              subject: subject.trim() || undefined,
-            })
+            onCreate(
+              {
+                integrationId: account._id,
+                platform: platform as CreateConversationInput["platform"],
+                customerName: name.trim(),
+                customerId: recipient.trim(),
+                customerHandle: recipient.trim(),
+                subject: subject.trim() || undefined,
+              },
+              message.trim()
+            )
           }
         >
-          <LocalizedText text={"Create conversation"} />
+          <LocalizedText
+            text={
+              pending
+                ? "Sending…"
+                : platform === "whatsapp"
+                  ? "Choose template"
+                  : "Send message"
+            }
+          />
         </Button>
       </div>
     </div>

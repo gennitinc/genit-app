@@ -206,6 +206,39 @@ function ChatLayoutInner() {
                 isFullscreen ? "hidden" : "flex-1"
               )}
             >
+              {hasAnyPreview && (
+                <div className='pointer-events-none sticky top-4 z-30 h-0 w-full'>
+                  <button
+                    type='button'
+                    onClick={() => setIsPreviewOpen((v) => !v)}
+                    className='border-border/50 bg-background/80 hover:bg-accent pointer-events-auto mr-3 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+                    aria-label={
+                      isPreviewOpen
+                        ? "Close preview panel"
+                        : "Open preview panel"
+                    }
+                    title={isPreviewOpen ? "Hide preview" : "Show preview"}
+                  >
+                    <AnimatePresence initial={false} mode='wait'>
+                      <motion.span
+                        key={isPreviewOpen ? "close" : "open"}
+                        initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        exit={{ opacity: 0, scale: 0.7, rotate: 90 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
+                        className='inline-flex'
+                      >
+                        {isPreviewOpen ? (
+                          <PanelRightClose className='h-4 w-4' />
+                        ) : (
+                          <PanelRightOpen className='h-4 w-4' />
+                        )}
+                      </motion.span>
+                    </AnimatePresence>
+                  </button>
+                </div>
+              )}
+
               <div
                 className={cn(
                   "flex w-full flex-col transition-[max-width] duration-300 ease-out",
@@ -215,35 +248,6 @@ function ChatLayoutInner() {
               >
                 <TextChatContent useDocumentScroll={!isPreviewOpen} />
               </div>
-
-              {hasAnyPreview && (
-                <button
-                  type='button'
-                  onClick={() => setIsPreviewOpen((v) => !v)}
-                  className='border-border/50 bg-background/80 hover:bg-accent absolute top-0 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-                  aria-label={
-                    isPreviewOpen ? "Close preview panel" : "Open preview panel"
-                  }
-                  title={isPreviewOpen ? "Hide preview" : "Show preview"}
-                >
-                  <AnimatePresence initial={false} mode='wait'>
-                    <motion.span
-                      key={isPreviewOpen ? "close" : "open"}
-                      initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      exit={{ opacity: 0, scale: 0.7, rotate: 90 }}
-                      transition={{ duration: 0.18, ease: "easeOut" }}
-                      className='inline-flex'
-                    >
-                      {isPreviewOpen ? (
-                        <PanelRightClose className='h-4 w-4' />
-                      ) : (
-                        <PanelRightOpen className='h-4 w-4' />
-                      )}
-                    </motion.span>
-                  </AnimatePresence>
-                </button>
-              )}
             </motion.div>
 
             <AnimatePresence initial={false}>

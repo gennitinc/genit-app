@@ -33,6 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -99,6 +100,7 @@ import {
   type InboxDrafts,
   updateInboxDraft,
 } from "@/lib/inbox-drafts";
+import { inboxEmailPreview, isInboxEmailHtml } from "@/lib/inbox-email-content";
 import {
   type IntegrationConnection,
   type IntegrationPlatform,
@@ -371,7 +373,7 @@ function EmailMessageBody({
   );
 
   const srcDoc = safeHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{overflow:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}img{max-width:100%;height:auto}img[data-email-image-pending]{background:#f4f4f5}table{max-width:100%}a{color:#4f46e5}details[data-email-quote]{margin-top:12px;border-top:1px solid #e4e4e7;padding-top:8px}details[data-email-quote]>summary{cursor:pointer;color:#71717a;font-size:12px;font-weight:600;user-select:none}details[data-email-quote][open]>summary{margin-bottom:8px}</style></head><body>${safeHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data:; style-src 'unsafe-inline'; font-src https: http: data:;"><base target="_blank"><style>html{background:#fff;color:#18181b}html,body{max-width:100%;overflow-x:hidden}body{box-sizing:border-box;margin:0;padding:20px;font:14px/1.55 Arial,sans-serif;overflow-wrap:anywhere}body *{box-sizing:border-box}img{max-width:100%!important;height:auto!important}img[data-email-image-pending]{background:#f4f4f5}table,div{max-width:100%!important}p,td,th{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere}pre{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}a{color:#4f46e5;overflow-wrap:anywhere}details[data-email-quote]{margin-top:12px;border-top:1px solid #e4e4e7;padding-top:8px}details[data-email-quote]>summary{cursor:pointer;color:#71717a;font-size:12px;font-weight:600;user-select:none}details[data-email-quote][open]>summary{margin-bottom:8px}</style></head><body>${safeHtml}</body></html>`
     : "";
 
   if (!safeHtml) {
@@ -562,6 +564,29 @@ function AccountAvatar({ account }: { account: IntegrationConnection }) {
         <PlatformIcon platform={inboxPlatform(account)} className='h-3 w-3' />
       </span>
     </div>
+  );
+}
+
+function CustomerAvatar({
+  conversation,
+  className,
+}: {
+  conversation: InboxConversation;
+  className: string;
+}) {
+  return (
+    <Avatar className={className}>
+      {conversation.customerAvatar && (
+        <AvatarImage
+          src={conversation.customerAvatar}
+          alt={conversation.customerName}
+          className='object-cover'
+        />
+      )}
+      <AvatarFallback className='bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
+        {conversation.customerName.charAt(0).toUpperCase() || "?"}
+      </AvatarFallback>
+    </Avatar>
   );
 }
 
@@ -794,14 +819,18 @@ export default function InboxPage() {
   );
   const startableAccounts = useMemo(
     () =>
-      accounts.filter(
-        (account) =>
-          ["gmail", "email", "outlook"].includes(account.platform) ||
-          (account.platform === "telegram" &&
+      accounts.filter((account) => {
+        const platform = inboxPlatform(account);
+        return (
+          ["gmail", "email", "outlook", "instagram", "messenger"].includes(
+            platform
+          ) ||
+          (platform === "telegram" &&
             account.metadata?.telegramMode !== "business_bot") ||
-          account.platform === "whatsapp" ||
-          (account.platform === "x" && account.scopes.includes("dm.write"))
-      ),
+          platform === "whatsapp" ||
+          (platform === "x" && account.scopes.includes("dm.write"))
+        );
+      }),
     [accounts]
   );
   const selectedAccount = accounts.find(
@@ -1864,19 +1893,10 @@ export default function InboxPage() {
                           />
                         )}
                         <div className='relative shrink-0 cursor-pointer'>
-                          {conversation.customerAvatar ? (
-                            <img
-                              src={conversation.customerAvatar}
-                              alt=''
-                              className='h-11 w-11 rounded-full object-cover'
-                            />
-                          ) : (
-                            <span className='flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
-                              {conversation.customerName
-                                .charAt(0)
-                                .toUpperCase()}
-                            </span>
-                          )}
+                          <CustomerAvatar
+                            conversation={conversation}
+                            className='h-11 w-11'
+                          />
                           <span className='absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-white ring-2 ring-white dark:bg-zinc-950 dark:ring-zinc-950'>
                             <PlatformIcon
                               platform={conversation.platform}
@@ -1901,7 +1921,7 @@ export default function InboxPage() {
                             <span
                               className={`min-w-0 flex-1 truncate text-xs ${conversation.unreadCount ? "text-foreground font-medium" : "text-muted-foreground"}`}
                             >
-                              {conversation.lastMessage}
+                              {inboxEmailPreview(conversation.lastMessage)}
                             </span>
                             {conversation.unreadCount > 0 && (
                               <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white'>
@@ -2069,14 +2089,32 @@ export default function InboxPage() {
             open={showNewConversation}
             onOpenChange={setShowNewConversation}
             accounts={startableAccounts}
-            pending={createConversationMutation.isPending}
-            onCreate={(input) =>
+            pending={
+              createConversationMutation.isPending || sendMutation.isPending
+            }
+            onCreate={(input, message) =>
               createConversationMutation.mutate(input, {
                 onSuccess: (conversation) => {
                   setShowNewConversation(false);
                   setCreatedConversation(conversation);
                   setActiveId(conversation._id);
-                  toast.success("Conversation created");
+                  if (input.platform === "whatsapp") {
+                    toast.success("Choose an approved template to send");
+                    return;
+                  }
+                  sendMutation.mutate(
+                    { conversationId: conversation._id, content: message },
+                    {
+                      onSuccess: () => {
+                        toast.success("Message sent");
+                      },
+                      onError: (error: any) =>
+                        toast.error(
+                          error?.response?.data?.message ||
+                            "Message could not be sent"
+                        ),
+                    }
+                  );
                 },
                 onError: (error: any) =>
                   toast.error(
@@ -2103,27 +2141,20 @@ export default function InboxPage() {
                   >
                     <ChevronLeft className='h-5 w-5' />
                   </Button>
-                  {activeConversation.customerAvatar ? (
-                    <img
-                      src={activeConversation.customerAvatar}
-                      alt=''
-                      className='h-9 w-9 cursor-pointer rounded-full object-cover'
-                      onClick={() => {
-                        setActiveId(activeConversation._id);
-                        setShowDetails(true);
-                      }}
+                  <button
+                    type='button'
+                    className='shrink-0 rounded-full'
+                    onClick={() => {
+                      setActiveId(activeConversation._id);
+                      setShowDetails(true);
+                    }}
+                    aria-label={`View ${activeConversation.customerName}`}
+                  >
+                    <CustomerAvatar
+                      conversation={activeConversation}
+                      className='h-9 w-9'
                     />
-                  ) : (
-                    <span
-                      className='flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'
-                      onClick={() => {
-                        setActiveId(activeConversation._id);
-                        setShowDetails(true);
-                      }}
-                    >
-                      {activeConversation.customerName.charAt(0)}
-                    </span>
-                  )}
+                  </button>
                   <div className='min-w-0 flex-1'>
                     <div className='flex min-w-0 items-center gap-2'>
                       <h2 className='max-w-28 truncate text-sm font-semibold sm:max-w-48'>
@@ -2287,12 +2318,16 @@ export default function InboxPage() {
                   <div className='mx-auto max-w-3xl space-y-5'>
                     {messages.map((message) => {
                       const inbound = message.senderType === "customer";
-                      const emailHtml =
-                        ["gmail", "email", "outlook"].includes(
-                          activeConversation.platform
-                        ) && typeof message.metadata?.contentHtml === "string"
+                      const isEmail = ["gmail", "email", "outlook"].includes(
+                        activeConversation.platform
+                      );
+                      const emailHtml = isEmail
+                        ? typeof message.metadata?.contentHtml === "string"
                           ? message.metadata.contentHtml
-                          : "";
+                          : isInboxEmailHtml(message.content)
+                            ? message.content
+                            : ""
+                        : "";
                       return (
                         <div
                           key={message._id}
@@ -2301,8 +2336,14 @@ export default function InboxPage() {
                           <div
                             className={`group/message flex items-center gap-1 ${emailHtml ? "w-full max-w-full" : "max-w-[90%] sm:max-w-[82%]"} ${inbound ? "flex-row" : "flex-row-reverse"}`}
                           >
+                            {inbound && !emailHtml && (
+                              <CustomerAvatar
+                                conversation={activeConversation}
+                                className='h-7 w-7 self-end'
+                              />
+                            )}
                             <div
-                              className={`min-w-0 overflow-hidden rounded-lg text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-600 text-white" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                              className={`min-w-0 overflow-hidden rounded-lg text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-50 text-zinc-900 ring-1 ring-red-200 dark:bg-red-950/40 dark:text-zinc-100 dark:ring-red-900" : "rounded-tr-md bg-indigo-600 text-white"}`}
                             >
                               {message.attachments?.map((attachment) => (
                                 <div
@@ -2327,17 +2368,37 @@ export default function InboxPage() {
                                       <Paperclip className='h-4 w-4' />
                                       {attachment.name}
                                     </button>
+                                  ) : attachment.mimeType ===
+                                    "text/uri-list" ? (
+                                    <a
+                                      href={attachment.url}
+                                      target='_blank'
+                                      rel='noreferrer'
+                                      className='flex items-center gap-3 bg-black/[0.03] px-4 py-3 font-medium dark:bg-white/[0.05]'
+                                    >
+                                      <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-black/10 dark:bg-zinc-900 dark:ring-white/10'>
+                                        <PlatformIcon
+                                          platform={
+                                            activeConversation.platform
+                                          }
+                                          className='h-4 w-4'
+                                        />
+                                      </span>
+                                      <span className='min-w-0 truncate'>
+                                        {attachment.name}
+                                      </span>
+                                    </a>
                                   ) : attachment.kind === "image" ? (
                                     <img
                                       src={attachment.url}
                                       alt={attachment.name}
-                                      className='max-h-72 w-full object-cover'
+                                      className='max-h-[28rem] w-full bg-black/[0.03] object-contain dark:bg-white/[0.03]'
                                     />
                                   ) : attachment.kind === "video" ? (
                                     <video
                                       src={attachment.url}
                                       controls
-                                      className='max-h-72 w-full'
+                                      className='max-h-[28rem] w-full bg-black'
                                     />
                                   ) : attachment.kind === "audio" ? (
                                     <audio
@@ -2362,7 +2423,9 @@ export default function InboxPage() {
                                 (emailHtml ? (
                                   <EmailMessageBody
                                     html={emailHtml}
-                                    fallback={message.content}
+                                    fallback={inboxEmailPreview(
+                                      message.content
+                                    )}
                                   />
                                 ) : (
                                   <div className='px-4 py-3 wrap-anywhere whitespace-pre-wrap'>
@@ -2458,8 +2521,11 @@ export default function InboxPage() {
                               ))}
                           </span>
                           {message.status === "failed" && message.error && (
-                            <span className='max-w-xs px-1 text-right text-[10px] text-red-600'>
-                              {message.error}
+                            <span
+                              className='max-w-xs truncate px-1 text-right text-[10px] text-red-600'
+                              title={message.error}
+                            >
+                              Message wasn&apos;t sent
                             </span>
                           )}
                         </div>

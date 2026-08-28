@@ -1,13 +1,14 @@
 "use client";
 
 import { LocalizedText } from "@/components/localized-text";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type {
   InboxConversation,
   UpdateConversationInput,
 } from "@/lib/inbox-api";
-import { Check, Pencil, Tag, UserRound } from "lucide-react";
+import { Check, Pencil, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function ContactDetails({
@@ -23,7 +24,6 @@ export function ContactDetails({
 }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(conversation.customerName);
-  const [handle, setHandle] = useState(conversation.customerHandle || "");
   const [subject, setSubject] = useState(conversation.subject || "");
   const [notes, setNotes] = useState(conversation.notes || "");
   const [labels, setLabels] = useState((conversation.labels || []).join(", "));
@@ -31,7 +31,6 @@ export function ContactDetails({
   useEffect(() => {
     setEditing(false);
     setName(conversation.customerName);
-    setHandle(conversation.customerHandle || "");
     setSubject(conversation.subject || "");
     setNotes(conversation.notes || "");
     setLabels((conversation.labels || []).join(", "));
@@ -40,7 +39,6 @@ export function ContactDetails({
   const save = () =>
     onSave({
       customerName: name,
-      customerHandle: handle,
       subject,
       notes,
       labels: labels
@@ -81,17 +79,18 @@ export function ContactDetails({
       </div>
       <div className='space-y-6 p-4 text-sm'>
         <div className='flex items-center gap-3'>
-          {conversation.customerAvatar ? (
-            <img
-              src={conversation.customerAvatar}
-              alt=''
-              className='h-12 w-12 rounded-full object-cover'
-            />
-          ) : (
-            <span className='flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-600'>
-              <UserRound className='h-5 w-5' />
-            </span>
-          )}
+          <Avatar className='h-12 w-12'>
+            {conversation.customerAvatar && (
+              <AvatarImage
+                src={conversation.customerAvatar}
+                alt={conversation.customerName}
+                className='object-cover'
+              />
+            )}
+            <AvatarFallback className='bg-indigo-500/10 font-semibold text-indigo-600'>
+              {conversation.customerName.charAt(0).toUpperCase() || "?"}
+            </AvatarFallback>
+          </Avatar>
           <div className='min-w-0 flex-1'>
             {editing ? (
               <Input
@@ -110,9 +109,10 @@ export function ContactDetails({
         <Detail
           label='Contact'
           editing={editing}
-          value={handle}
-          onChange={setHandle}
+          value={conversation.customerHandle || conversation.customerId || ""}
           placeholder='Email, username, or phone'
+          disabled
+          hint={`Managed by ${conversation.platform}`}
         />
         <Detail
           label='Subject'
@@ -198,12 +198,16 @@ function Detail({
   value,
   onChange,
   placeholder,
+  disabled = false,
+  hint,
 }: {
   label: string;
   editing: boolean;
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder: string;
+  disabled?: boolean;
+  hint?: string;
 }) {
   return (
     <div>
@@ -211,12 +215,18 @@ function Detail({
       {editing ? (
         <Input
           value={value}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => onChange?.(event.target.value)}
           placeholder={placeholder}
+          disabled={disabled}
         />
       ) : (
         <p className='text-muted-foreground text-xs break-words'>
           {value || "Not provided"}
+        </p>
+      )}
+      {editing && disabled && hint && (
+        <p className='text-muted-foreground mt-1.5 text-xs capitalize'>
+          {hint}
         </p>
       )}
     </div>
