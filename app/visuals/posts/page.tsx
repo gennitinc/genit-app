@@ -1132,7 +1132,7 @@ export default function PostsPage() {
       </header>
 
       <section className='overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-        <div className='flex flex-col gap-4 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
+        <div className='flex flex-col gap-2 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
           <div className='inline-flex w-fit rounded-xl bg-zinc-100 p-1 dark:bg-white/[0.06]'>
             {(
               [
