@@ -724,10 +724,31 @@ export default function AutomationWorkflow({
 
     const socket = io(serverUrlSocket, { withCredentials: true });
 
-    socket.on("agent:run:end", (data: any) => {
+    socket.on("agent:run:end", async (data: any) => {
       // Only act if this event is for our project and run succeeded
       if (data.projectId !== projectId) return;
       if (data.status !== "completed") return;
+
+      // The server persists AI-created nodes and edges. Reload that graph so
+      // socket timing or a stale autosave can never leave the canvas unwired.
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+      hasUnsavedChanges.current = false;
+      try {
+        const res = await apiResponse.get(`/apps/automation/${projectId}`, {
+          withCredentials: true,
+        });
+        if (res.data?.success && res.data.data) {
+          const serverNodes = injectNodeCallbacks(res.data.data.nodes || []);
+          const serverEdges = res.data.data.edges || [];
+          nodesRef.current = serverNodes;
+          edgesRef.current = serverEdges;
+          suppressNextAutoSave.current = true;
+          setNodes(serverNodes);
+          setEdges(serverEdges);
+        }
+      } catch (error) {
+        console.error("Failed to refresh the completed automation:", error);
+      }
 
       // Give React a moment to flush all node/edge state updates, then fit
       setTimeout(() => {
@@ -741,7 +762,13 @@ export default function AutomationWorkflow({
       socket.off("agent:run:end");
       socket.disconnect();
     };
-  }, [projectId, reactFlowInstance]);
+  }, [
+    projectId,
+    reactFlowInstance,
+    injectNodeCallbacks,
+    setNodes,
+    setEdges,
+  ]);
 
   // ── Handle manual connection between nodes ──────────────────────────────
 
