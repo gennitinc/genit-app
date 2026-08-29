@@ -33,6 +33,35 @@ export function ChatLayout() {
   );
 }
 
+function PreviewToggle({
+  isOpen,
+  onToggle,
+  className,
+}: {
+  isOpen: boolean;
+  onToggle: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type='button'
+      onClick={onToggle}
+      className={cn(
+        "border-border/50 bg-background/90 hover:bg-accent pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-md border shadow-sm backdrop-blur transition-transform duration-150 active:scale-[0.97]",
+        className
+      )}
+      aria-label={isOpen ? "Close preview panel" : "Open preview panel"}
+      title={isOpen ? "Hide preview" : "Show preview"}
+    >
+      {isOpen ? (
+        <PanelRightClose className='h-4 w-4' />
+      ) : (
+        <PanelRightOpen className='h-4 w-4' />
+      )}
+    </button>
+  );
+}
+
 function ChatLayoutInner() {
   const searchParams = useSearchParams();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -178,7 +207,16 @@ function ChatLayoutInner() {
           }
         />
 
-
+        {isDesktop && hasAnyPreview && !isPreviewOpen && (
+          <div className='pointer-events-none sticky top-12 z-50 h-0 w-full shrink-0'>
+            <div className='mx-auto flex w-full max-w-2xl justify-end px-3'>
+              <PreviewToggle
+                isOpen={false}
+                onToggle={() => setIsPreviewOpen(true)}
+              />
+            </div>
+          </div>
+        )}
 
         {isDesktop ? (
           <div
@@ -187,25 +225,15 @@ function ChatLayoutInner() {
               isPreviewOpen ? "overflow-hidden" : "overflow-visible"
             )}
           >
-            {/* Single always-visible preview toggle */}
-            {hasAnyPreview && (
-              <motion.button
-                key='preview-toggle'
-                type='button'
-                animate={{ opacity: 1, scale: 1 }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-                onClick={() => setIsPreviewOpen((v) => !v)}
-                className='border-border/50 bg-background/80 hover:bg-accent absolute top-14 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-                aria-label={isPreviewOpen ? 'Close preview panel' : 'Open preview panel'}
-                title={isPreviewOpen ? 'Hide preview' : 'Show preview'}
-              >
-                {isPreviewOpen ? (
-                  <PanelRightClose className='h-4 w-4' />
-                ) : (
-                  <PanelRightOpen className='h-4 w-4' />
+            {hasAnyPreview && isPreviewOpen && (
+              <PreviewToggle
+                isOpen
+                onToggle={() => setIsPreviewOpen(false)}
+                className={cn(
+                  "absolute top-2 z-50",
+                  isFullscreen ? "left-3" : "left-[37.5%] -translate-x-1/2"
                 )}
-              </motion.button>
+              />
             )}
             <motion.div
               layout={isPreviewOpen}
