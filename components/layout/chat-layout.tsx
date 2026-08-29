@@ -178,7 +178,7 @@ function ChatLayoutInner() {
           }
         />
 
-        {/* Fixed top-right toggler — only visible when preview is hidden */}
+        {/* Absolute top-right toggler — only visible when preview is hidden */}
         <AnimatePresence>
           {isDesktop && hasAnyPreview && !isPreviewOpen && (
             <motion.button
@@ -189,11 +189,11 @@ function ChatLayoutInner() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
               onClick={() => setIsPreviewOpen(true)}
-              className='border-border/50 bg-background/80 hover:bg-accent fixed top-4 right-4 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+              className='border-border/50 bg-background/80 hover:bg-accent absolute top-3 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
               aria-label='Open preview panel'
               title='Show preview'
             >
-              <PanelRightOpen className='h-4 w-4' />
+              <PanelRightClose className='h-4 w-4' />
             </motion.button>
           )}
         </AnimatePresence>
