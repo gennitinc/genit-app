@@ -150,6 +150,22 @@ const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   GoogleDrive: GoogleDriveBrand,
 };
 
+const MANAGED_STATIC_ACTIONS = new Set([
+  "send_gmail",
+  "send_brevo_email",
+  "send_outlook_email",
+  "whatsapp_reply",
+  "whatsapp_template",
+  "messenger_reply",
+  "post_facebook",
+  "post_instagram",
+  "post_linkedin",
+  "post_x",
+  "post_tiktok",
+  "add_calendar_event",
+  "google_drive_upload",
+]);
+
 const nodeTypes: NodeTypes = {
   trigger: TriggerNode,
   action: ActionNode,
@@ -1025,11 +1041,24 @@ export default function AutomationWorkflow({
     const staticMenu = ADD_NODE_MENU.map((category) => ({
       ...category,
       items: category.items.filter(
-        (item) =>
-          (!visible.length ||
+        (item) => {
+          const toolkit = String(
+            item.initialData?.connectionToolkit ||
+              item.initialData?.connectionPlatform ||
+              ""
+          ).toLowerCase();
+          return (
+            (!visible.length ||
             (item.subtype !== "composio_event" &&
               item.subtype !== "composio_action")) &&
-          (!query || item.label.toLowerCase().includes(query))
+            (!query || item.label.toLowerCase().includes(query)) &&
+            !(
+              item.type === "action" &&
+              connectedToolkits.has(toolkit) &&
+              !MANAGED_STATIC_ACTIONS.has(String(item.subtype || ""))
+            )
+          );
+        }
       ).map((item) => {
         const platform = String(
           item.initialData?.connectionPlatform || ""
