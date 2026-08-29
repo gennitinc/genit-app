@@ -1,12 +1,13 @@
 "use client";
 
+import { ACTION_ICONS } from "./action-node";
+import { TRIGGER_ICONS } from "./trigger-node";
 import {
   ArrowRightLeft,
-  Bot,
-  Braces,
-  Clock3,
+  CircleFadingArrowUp,
+  Clock,
   GitBranch,
-  Globe2,
+  Globe,
   Sparkles,
   Upload,
   Zap,
@@ -16,18 +17,22 @@ import { Handle, Position } from "reactflow";
 const NODE_META = {
   trigger: { label: "Trigger", icon: Zap, color: "text-amber-400" },
   action: { label: "Action", icon: ArrowRightLeft, color: "text-sky-400" },
-  prompt: { label: "AI prompt", icon: Bot, color: "text-violet-400" },
+  prompt: { label: "AI prompt", icon: Sparkles, color: "text-violet-400" },
   condition: { label: "Condition", icon: GitBranch, color: "text-emerald-400" },
-  delay: { label: "Delay", icon: Clock3, color: "text-orange-400" },
+  delay: { label: "Delay", icon: Clock, color: "text-orange-400" },
   ai_generate: {
     label: "AI generate",
-    icon: Sparkles,
+    icon: CircleFadingArrowUp,
     color: "text-fuchsia-400",
   },
-  transform: { label: "Transform", icon: Braces, color: "text-cyan-400" },
+  transform: {
+    label: "Transform",
+    icon: ArrowRightLeft,
+    color: "text-cyan-400",
+  },
   http_request: {
     label: "HTTP request",
-    icon: Globe2,
+    icon: Globe,
     color: "text-indigo-400",
   },
   upload: { label: "Upload", icon: Upload, color: "text-teal-400" },
@@ -65,7 +70,16 @@ export function AutomationNodeView({
   kind: keyof typeof NODE_META;
 }) {
   const meta = NODE_META[kind];
-  const Icon = meta.icon;
+  const Icon =
+    kind === "trigger"
+      ? (TRIGGER_ICONS as Record<string, React.ComponentType<any>>)[
+          data.triggerType
+        ] || meta.icon
+      : kind === "action"
+        ? (ACTION_ICONS as Record<string, React.ComponentType<any>>)[
+            data.actionType
+          ] || meta.icon
+        : meta.icon;
   const subtitle = nodeSubtitle(kind, data);
 
   return (

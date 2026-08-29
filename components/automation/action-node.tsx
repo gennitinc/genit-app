@@ -38,7 +38,7 @@ import {
 import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
-const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
+export const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   composio_action: Activity,
   send_gmail: Mail,
   send_brevo_email: Mail,

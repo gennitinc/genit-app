@@ -37,7 +37,7 @@ import {
 import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
-const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
+export const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
   composio_event: Zap,
   schedule: Clock,
   webhook: Webhook,
