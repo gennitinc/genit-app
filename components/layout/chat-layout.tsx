@@ -178,25 +178,7 @@ function ChatLayoutInner() {
           }
         />
 
-        {/* Absolute top-right toggler — only visible when preview is hidden */}
-        <AnimatePresence>
-          {isDesktop && hasAnyPreview && !isPreviewOpen && (
-            <motion.button
-              key='preview-toggle'
-              type='button'
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              onClick={() => setIsPreviewOpen(true)}
-              className='border-border/50 bg-background/80 hover:bg-accent absolute top-3 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-              aria-label='Open preview panel'
-              title='Show preview'
-            >
-              <PanelRightClose className='h-4 w-4' />
-            </motion.button>
-          )}
-        </AnimatePresence>
+
 
         {isDesktop ? (
           <div
@@ -205,6 +187,26 @@ function ChatLayoutInner() {
               isPreviewOpen ? "overflow-hidden" : "overflow-visible"
             )}
           >
+            {/* Single always-visible preview toggle */}
+            {hasAnyPreview && (
+              <motion.button
+                key='preview-toggle'
+                type='button'
+                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                onClick={() => setIsPreviewOpen((v) => !v)}
+                className='border-border/50 bg-background/80 hover:bg-accent absolute top-3 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+                aria-label={isPreviewOpen ? 'Close preview panel' : 'Open preview panel'}
+                title={isPreviewOpen ? 'Hide preview' : 'Show preview'}
+              >
+                {isPreviewOpen ? (
+                  <PanelRightClose className='h-4 w-4' />
+                ) : (
+                  <PanelRightOpen className='h-4 w-4' />
+                )}
+              </motion.button>
+            )}
             <motion.div
               layout={isPreviewOpen}
               transition={{
