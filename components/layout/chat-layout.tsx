@@ -20,12 +20,7 @@ import {
 } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Maximize2,
-  Minimize2,
-  PanelRightClose,
-  PanelRightOpen,
-} from "lucide-react";
+import { PanelRightClose, PanelRightOpen } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -183,6 +178,26 @@ function ChatLayoutInner() {
           }
         />
 
+        {/* Fixed top-right toggler — only visible when preview is hidden */}
+        <AnimatePresence>
+          {isDesktop && hasAnyPreview && !isPreviewOpen && (
+            <motion.button
+              key='preview-toggle'
+              type='button'
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              onClick={() => setIsPreviewOpen(true)}
+              className='border-border/50 bg-background/80 hover:bg-accent fixed top-4 right-4 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+              aria-label='Open preview panel'
+              title='Show preview'
+            >
+              <PanelRightOpen className='h-4 w-4' />
+            </motion.button>
+          )}
+        </AnimatePresence>
+
         {isDesktop ? (
           <div
             className={cn(
@@ -206,39 +221,6 @@ function ChatLayoutInner() {
                 isFullscreen ? "hidden" : "flex-1"
               )}
             >
-              {hasAnyPreview && (
-                <div className='pointer-events-none sticky top-4 z-30 h-0 w-full'>
-                  <button
-                    type='button'
-                    onClick={() => setIsPreviewOpen((v) => !v)}
-                    className='border-border/50 bg-background/80 hover:bg-accent pointer-events-auto mr-3 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
-                    aria-label={
-                      isPreviewOpen
-                        ? "Close preview panel"
-                        : "Open preview panel"
-                    }
-                    title={isPreviewOpen ? "Hide preview" : "Show preview"}
-                  >
-                    <AnimatePresence initial={false} mode='wait'>
-                      <motion.span
-                        key={isPreviewOpen ? "close" : "open"}
-                        initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        exit={{ opacity: 0, scale: 0.7, rotate: 90 }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                        className='inline-flex'
-                      >
-                        {isPreviewOpen ? (
-                          <PanelRightClose className='h-4 w-4' />
-                        ) : (
-                          <PanelRightOpen className='h-4 w-4' />
-                        )}
-                      </motion.span>
-                    </AnimatePresence>
-                  </button>
-                </div>
-              )}
-
               <div
                 className={cn(
                   "flex w-full flex-col transition-[max-width] duration-300 ease-out",
