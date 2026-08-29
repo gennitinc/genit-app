@@ -486,9 +486,8 @@ export default function AutomationWorkflow({
         return next;
       });
       hasUnsavedChanges.current = true;
-      scheduleAutoSave();
     },
-    [setNodes, setEdges, scheduleAutoSave]
+    [setNodes, setEdges]
   );
 
   const onNodeDataChange = useCallback(
