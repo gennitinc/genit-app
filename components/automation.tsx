@@ -33,6 +33,7 @@ import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import {
   type ComposioToolkit,
+  type IntegrationPlatform,
   fetchComposioToolkits,
   fetchIntegrations,
 } from "@/lib/integrations-api";
@@ -161,6 +162,19 @@ const nodeTypes: NodeTypes = {
   upload: UploadNode,
 };
 
+function automationTraceSummary(trace: any[] = []) {
+  return trace
+    .map((step) => {
+      if (step.type === "condition")
+        return `${step.nodeId}: ${step.outcome} branch`;
+      if (step.type === "delay")
+        return `${step.nodeId}: delay checked${step.skippedDuringTest ? " (not waited during test)" : ""}`;
+      if (step.status) return `${step.nodeId}: ${step.status}`;
+      return `${step.nodeId}: ${step.type}`;
+    })
+    .join("\n");
+}
+
 // ── MAIN AUTOMATION WORKFLOW COMPONENT ──────────────────────────────────────
 
 interface AutomationWorkflowProps {
@@ -190,6 +204,9 @@ export default function AutomationWorkflow({
     []
   );
   const [connectedToolkits, setConnectedToolkits] = useState<Set<string>>(
+    new Set()
+  );
+  const [connectedPlatforms, setConnectedPlatforms] = useState<Set<string>>(
     new Set()
   );
   const [catalogLoading, setCatalogLoading] = useState(false);
@@ -343,6 +360,7 @@ export default function AutomationWorkflow({
 
       if (res.data?.success) {
         const serverNodes = res.data.data?.nodes || [];
+        const serverEdges = res.data.data?.edges || [];
         if (serverNodes.length) {
           const validationByNode = new Map<string, string[]>(
             (res.data.validationErrors || []).map((item: any) => [
@@ -377,6 +395,8 @@ export default function AutomationWorkflow({
               };
             })
           );
+          edgesRef.current = serverEdges;
+          setEdges(serverEdges);
         }
         hasUnsavedChanges.current = false;
         setSaveStatus("saved");
@@ -461,9 +481,10 @@ export default function AutomationWorkflow({
           { nodeId }
         );
         if (res.data?.success) {
+          const trace = automationTraceSummary(res.data?.data?.trace);
           toast.success(
             res.data.message || `Test run completed successfully.`,
-            { id: `test-run-${nodeId}` }
+            { id: `test-run-${nodeId}`, description: trace || undefined }
           );
         } else {
           toast.error("Test run failed", { id: `test-run-${nodeId}` });
@@ -474,10 +495,11 @@ export default function AutomationWorkflow({
         const errorMessage = data?.message || "Failed to trigger test run";
         const errorDetails =
           data?.errors?.length > 0 ? data.errors.join("\n") : undefined;
+        const trace = automationTraceSummary(data?.data?.trace);
 
         toast.error(errorMessage, {
           id: `test-run-${nodeId}`,
-          description: errorDetails,
+          description: [errorDetails, trace].filter(Boolean).join("\n"),
         });
       } finally {
         onNodeDataChange(nodeId, { isTesting: false });
@@ -779,7 +801,9 @@ export default function AutomationWorkflow({
       setEdges((eds) => {
         const isDuplicate = eds.some(
           (e) =>
-            e.source === connection.source && e.target === connection.target
+            e.source === connection.source &&
+            e.target === connection.target &&
+            (e.sourceHandle || null) === (connection.sourceHandle || null)
         );
         if (isDuplicate) return eds;
 
@@ -787,6 +811,9 @@ export default function AutomationWorkflow({
           id: `edge-${connection.source}-${connection.target}-${Date.now()}`,
           source: connection.source!,
           target: connection.target!,
+          ...(connection.sourceHandle
+            ? { sourceHandle: connection.sourceHandle }
+            : {}),
           animated: true,
         };
         return [...eds, newEdge];
@@ -948,6 +975,14 @@ export default function AutomationWorkflow({
               .filter(Boolean)
           )
         );
+        setConnectedPlatforms(
+          new Set(
+            connections.integrations
+              .filter((item) => item.status === "active")
+              .filter((item) => item.platform !== "composio")
+              .map((item) => String(item.platform).toLowerCase())
+          )
+        );
       })
       .catch(() => setComposioToolkits([]))
       .finally(() => setCatalogLoading(false));
@@ -995,12 +1030,31 @@ export default function AutomationWorkflow({
             (item.subtype !== "composio_event" &&
               item.subtype !== "composio_action")) &&
           (!query || item.label.toLowerCase().includes(query))
-      ),
+      ).map((item) => {
+        const platform = String(
+          item.initialData?.connectionPlatform || ""
+        ).toLowerCase();
+        const toolkit = String(
+          item.initialData?.connectionToolkit || platform
+        ).toLowerCase();
+        return {
+          ...item,
+          ...(platform
+            ? {
+                connected:
+                  connectedPlatforms.has(platform) ||
+                  ((item.type === "action" ||
+                    ["gmail", "outlook"].includes(platform)) &&
+                    connectedToolkits.has(toolkit)),
+              }
+            : {}),
+        };
+      }),
     })).filter((category) => category.items.length);
     return visible.length
       ? [appCategory("trigger"), appCategory("action"), ...staticMenu]
       : staticMenu;
-  }, [addSearch, composioToolkits, connectedToolkits]);
+  }, [addSearch, composioToolkits, connectedPlatforms, connectedToolkits]);
 
   // ── Close dropdown on outside click ─────────────────────────────────────
 
@@ -1211,7 +1265,8 @@ export default function AutomationWorkflow({
                                 onClick={() => {
                                   if (
                                     item.connected === false &&
-                                    item.initialData?.composioToolkit
+                                    (item.initialData?.composioToolkit ||
+                                      item.initialData?.connectionPlatform)
                                   ) {
                                     setPendingConnectedApp(item);
                                     setShowAddComponent(false);
@@ -1331,12 +1386,17 @@ export default function AutomationWorkflow({
       <ConnectDialog
         open={Boolean(pendingConnectedApp)}
         onOpenChange={(open) => !open && setPendingConnectedApp(null)}
-        platform='composio'
+        platform={String(
+          pendingConnectedApp?.initialData?.composioToolkit
+            ? "composio"
+            : pendingConnectedApp?.initialData?.connectionPlatform || ""
+        ) as IntegrationPlatform}
         platformName={String(
           pendingConnectedApp?.initialData?.composioToolkitName ||
+            pendingConnectedApp?.initialData?.connectionPlatformName ||
             "Connected app"
         )}
-        platformDescription='Connect this app to add its event to your automation.'
+        platformDescription='Connect this app to use this automation node.'
         Icon={Zap}
         iconUrl={String(pendingConnectedApp?.initialData?.composioLogo || "")}
         glow='rgba(139,92,246,0.35)'
@@ -1347,7 +1407,13 @@ export default function AutomationWorkflow({
           const item = pendingConnectedApp;
           if (!item) return;
           const toolkit = String(item.initialData?.composioToolkit || "");
-          setConnectedToolkits((current) => new Set(current).add(toolkit));
+          const platform = String(
+            item.initialData?.connectionPlatform || ""
+          );
+          if (toolkit)
+            setConnectedToolkits((current) => new Set(current).add(toolkit));
+          if (platform)
+            setConnectedPlatforms((current) => new Set(current).add(platform));
           addComponent(item.type, item.subtype, item.initialData);
           setPendingConnectedApp(null);
         }}

@@ -98,7 +98,7 @@ export const TRIGGER_SUBTYPES: TriggerSubtypeConfig[] = [
   {
     id: "facebook_message",
     label: "Facebook Message",
-    integration: "Facebook",
+    integration: "Messenger",
     iconName: "Facebook",
   },
   {
@@ -476,6 +476,44 @@ export interface AddNodeItem {
   connected?: boolean;
 }
 
+const connectionPlatform = (integration: string) =>
+  ({
+    Gmail: "gmail",
+    Brevo: "brevo",
+    Outlook: "outlook",
+    WhatsApp: "whatsapp",
+    Messenger: "messenger",
+    Facebook: "facebook",
+    Instagram: "instagram",
+    LinkedIn: "linkedin",
+    X: "x",
+    TikTok: "tiktok",
+    Pinterest: "pinterest",
+    YouTube: "youtube",
+    Threads: "threads",
+    "Google Calendar": "google_calendar",
+    "Google Drive": "google_drive",
+  })[integration];
+
+const connectionData = (integration: string) => {
+  const platform = connectionPlatform(integration);
+  const toolkit = platform
+    ? ({
+        messenger: "facebook",
+        x: "twitter",
+        google_calendar: "googlecalendar",
+        google_drive: "googledrive",
+      } as Record<string, string>)[platform] || platform
+    : undefined;
+  return platform
+    ? {
+        connectionPlatform: platform,
+        connectionPlatformName: integration,
+        connectionToolkit: toolkit,
+      }
+    : undefined;
+};
+
 export const ADD_NODE_MENU: AddNodeCategory[] = [
   {
     label: "Triggers",
@@ -484,6 +522,7 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
       subtype: t.id,
       label: t.label,
       iconName: t.iconName,
+      initialData: connectionData(t.integration),
     })),
   },
   {
@@ -494,6 +533,7 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
         subtype: a.id,
         label: a.label,
         iconName: a.iconName,
+        initialData: connectionData(a.integration),
       })
     ),
   },
@@ -502,8 +542,9 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
     items: ACTION_SUBTYPES.filter((a) => a.category === "social").map((a) => ({
       type: "action" as AutomationNodeType,
       subtype: a.id,
-      label: a.label,
-      iconName: a.iconName,
+    label: a.label,
+    iconName: a.iconName,
+    initialData: connectionData(a.integration),
     })),
   },
   {
@@ -511,8 +552,9 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
     items: ACTION_SUBTYPES.filter((a) => a.category === "ai").map((a) => ({
       type: "action" as AutomationNodeType,
       subtype: a.id,
-      label: a.label,
-      iconName: a.iconName,
+    label: a.label,
+    iconName: a.iconName,
+    initialData: connectionData(a.integration),
     })),
   },
   {
@@ -523,6 +565,7 @@ export const ADD_NODE_MENU: AddNodeCategory[] = [
         subtype: a.id,
         label: a.label,
         iconName: a.iconName,
+        initialData: connectionData(a.integration),
       })
     ),
   },
