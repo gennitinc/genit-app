@@ -85,7 +85,7 @@ const LandingUnifiedInbox = () => {
           ) : isDarkMode ? (
             <Image
               key='unified-inbox-dark'
-              src='/dm2.png'
+              src='/dm1.png'
               alt={t(
                 "Unified social media DM dashboard for managing brand conversations in dark mode"
               )}
