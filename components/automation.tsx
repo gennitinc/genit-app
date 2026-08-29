@@ -664,6 +664,12 @@ export default function AutomationWorkflow({
 
       if (!data.actions || data.actions.length === 0) return;
 
+      // These changes are already persisted by the agent tools. Never let the
+      // canvas autosave an intermediate socket snapshot back over the server.
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+      hasUnsavedChanges.current = false;
+      suppressNextAutoSave.current = true;
+
       // Process the full batch — collect all new nodes/edges in local arrays
       // so we can apply them together and then call fitView once.
       const createdNodes: Node[] = [];
@@ -725,10 +731,29 @@ export default function AutomationWorkflow({
 
       // Apply nodes then edges atomically
       if (createdNodes.length > 0) {
-        setNodes((nds) => [...nds, ...createdNodes]);
+        setNodes((nds) => {
+          const byId = new Map(nds.map((node) => [node.id, node]));
+          for (const node of createdNodes) byId.set(node.id, node);
+          const next = [...byId.values()];
+          nodesRef.current = next;
+          return next;
+        });
       }
       if (createdEdges.length > 0) {
-        setEdges((eds) => [...eds, ...createdEdges]);
+        setEdges((eds) => {
+          const next = [...eds];
+          for (const edge of createdEdges) {
+            const exists = next.some(
+              (current) =>
+                current.source === edge.source &&
+                current.target === edge.target &&
+                (current.sourceHandle || null) === (edge.sourceHandle || null)
+            );
+            if (!exists) next.push(edge);
+          }
+          edgesRef.current = next;
+          return next;
+        });
       }
       if (layoutPositions.length > 0) {
         const positions = new Map(
