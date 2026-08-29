@@ -196,7 +196,7 @@ function ChatLayoutInner() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 onClick={() => setIsPreviewOpen((v) => !v)}
-                className='border-border/50 bg-background/80 hover:bg-accent absolute top-8 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
+                className='border-border/50 bg-background/80 hover:bg-accent absolute top-14 right-3 z-50 inline-flex h-8 w-8 items-center justify-center rounded-md border backdrop-blur'
                 aria-label={isPreviewOpen ? 'Close preview panel' : 'Open preview panel'}
                 title={isPreviewOpen ? 'Hide preview' : 'Show preview'}
               >
