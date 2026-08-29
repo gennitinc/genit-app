@@ -249,7 +249,7 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         key={`sidebar-${SIDEBAR_WIDTH}-${SIDEBAR_WIDTH_ICON}`}
-        className='group peer text-foreground flex'
+        className='group peer text-foreground flex h-svh'
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
@@ -261,7 +261,7 @@ const Sidebar = React.forwardRef<
       >
         <div
           className={cn(
-            "relative z-10 h-svh transition-[width] duration-200 ease-linear md:flex",
+            "relative z-10 h-full transition-[width] duration-200 ease-linear md:flex",
             // Adjust the padding for floating and inset variants.
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
