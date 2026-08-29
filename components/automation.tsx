@@ -1294,8 +1294,8 @@ export default function AutomationWorkflow({
                                   {item.label}
                                 </span>
                                 {item.connected ? (
-                                  <span className='inline-flex shrink-0 items-center gap-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
-                                    <Check className='h-2.5 w-2.5' /> Connected
+                                  <span className='inline-flex shrink-0 items-center gap-1 rounded bg-neutral px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
+                                    <Check className='h-2.5 w-2.5' /> 
                                   </span>
                                 ) : item.initialData?.composioToolkit ? (
                                   <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
