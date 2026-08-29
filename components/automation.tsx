@@ -2,6 +2,7 @@
 
 import { ActionNode } from "./automation/action-node";
 import { AIGenerateNode } from "./automation/ai-generate-node";
+import { AutomationNodeView } from "./automation/automation-node-view";
 import {
   ADD_NODE_MENU,
   type AddNodeCategory,
@@ -91,6 +92,7 @@ import ReactFlow, {
   Background,
   type Connection,
   type Edge,
+  MarkerType,
   type Node,
   type NodeTypes,
   Position,
@@ -166,16 +168,30 @@ const MANAGED_STATIC_ACTIONS = new Set([
   "google_drive_upload",
 ]);
 
+const automationNode = (
+  EditNode: React.ComponentType<any>,
+  kind: React.ComponentProps<typeof AutomationNodeView>["kind"]
+) => {
+  const NodeRenderer = (props: any) =>
+    props.data.isEditMode ? (
+      <EditNode {...props} />
+    ) : (
+      <AutomationNodeView data={props.data} kind={kind} />
+    );
+  NodeRenderer.displayName = `${kind}AutomationNode`;
+  return NodeRenderer;
+};
+
 const nodeTypes: NodeTypes = {
-  trigger: TriggerNode,
-  action: ActionNode,
-  prompt: PromptNode,
-  condition: ConditionNode,
-  delay: DelayNode,
-  ai_generate: AIGenerateNode,
-  transform: TransformNode,
-  http_request: HttpRequestNode,
-  upload: UploadNode,
+  trigger: automationNode(TriggerNode, "trigger"),
+  action: automationNode(ActionNode, "action"),
+  prompt: automationNode(PromptNode, "prompt"),
+  condition: automationNode(ConditionNode, "condition"),
+  delay: automationNode(DelayNode, "delay"),
+  ai_generate: automationNode(AIGenerateNode, "ai_generate"),
+  transform: automationNode(TransformNode, "transform"),
+  http_request: automationNode(HttpRequestNode, "http_request"),
+  upload: automationNode(UploadNode, "upload"),
 };
 
 function automationTraceSummary(trace: any[] = []) {
@@ -559,7 +575,7 @@ export default function AutomationWorkflow({
     const fetchAutomation = async () => {
       try {
         setIsLoading(true);
-        const res = await apiResponse.get(`/apps/automation/${slug}`, {
+        const res = await apiResponse.get(`/apps/automation/${slug}?layout=1`, {
           withCredentials: true,
         });
 
@@ -613,6 +629,17 @@ export default function AutomationWorkflow({
     );
   }, [isEditMode, setNodes]);
 
+  // Node dimensions and handle direction change between edit and view modes.
+  // Refit after that render so the complete workflow stays comfortably visible.
+  useEffect(() => {
+    if (isLoading || !reactFlowInstance || nodes.length === 0) return;
+    const timer = setTimeout(
+      () => reactFlowInstance.fitView({ duration: 500, padding: 0.25 }),
+      100
+    );
+    return () => clearTimeout(timer);
+  }, [isLoading, isEditMode, reactFlowInstance, nodes.length]);
+
   // ── Socket listener for AI updates ──────────────────────────────────────
 
   useEffect(() => {
@@ -630,6 +657,10 @@ export default function AutomationWorkflow({
       // so we can apply them together and then call fitView once.
       const createdNodes: Node[] = [];
       const createdEdges: Edge[] = [];
+      let layoutPositions: Array<{
+        id: string;
+        position: { x: number; y: number };
+      }> = [];
 
       data.actions.forEach((action: any) => {
         if (action.name === "create_node") {
@@ -676,6 +707,8 @@ export default function AutomationWorkflow({
             animated: true,
           };
           createdEdges.push(newEdge);
+        } else if (action.name === "layout_nodes") {
+          layoutPositions = action.args?.positions || [];
         }
       });
 
@@ -686,9 +719,25 @@ export default function AutomationWorkflow({
       if (createdEdges.length > 0) {
         setEdges((eds) => [...eds, ...createdEdges]);
       }
+      if (layoutPositions.length > 0) {
+        const positions = new Map(
+          layoutPositions.map((item) => [item.id, item.position])
+        );
+        setNodes((nds) => {
+          const next = nds.map((node) => ({
+            ...node,
+            position: positions.get(node.id) || node.position,
+          }));
+          nodesRef.current = next;
+          return next;
+        });
+      }
 
       // After nodes settle, fit the view so the user sees the full canvas
-      if (createdNodes.length > 0 && reactFlowInstance) {
+      if (
+        (createdNodes.length > 0 || layoutPositions.length > 0) &&
+        reactFlowInstance
+      ) {
         setTimeout(() => {
           reactFlowInstance.fitView({ duration: 600, padding: 0.25 });
         }, 150);
@@ -772,9 +821,12 @@ export default function AutomationWorkflow({
       if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
       hasUnsavedChanges.current = false;
       try {
-        const res = await apiResponse.get(`/apps/automation/${projectId}`, {
-          withCredentials: true,
-        });
+        const res = await apiResponse.get(
+          `/apps/automation/${projectId}?layout=1`,
+          {
+            withCredentials: true,
+          }
+        );
         if (res.data?.success && res.data.data) {
           const serverNodes = injectNodeCallbacks(res.data.data.nodes || []);
           const serverEdges = res.data.data.edges || [];
@@ -800,13 +852,7 @@ export default function AutomationWorkflow({
       socket.off("agent:run:end");
       socket.disconnect();
     };
-  }, [
-    projectId,
-    reactFlowInstance,
-    injectNodeCallbacks,
-    setNodes,
-    setEdges,
-  ]);
+  }, [projectId, reactFlowInstance, injectNodeCallbacks, setNodes, setEdges]);
 
   // ── Handle manual connection between nodes ──────────────────────────────
 
@@ -1040,8 +1086,8 @@ export default function AutomationWorkflow({
     });
     const staticMenu = ADD_NODE_MENU.map((category) => ({
       ...category,
-      items: category.items.filter(
-        (item) => {
+      items: category.items
+        .filter((item) => {
           const toolkit = String(
             item.initialData?.connectionToolkit ||
               item.initialData?.connectionPlatform ||
@@ -1049,8 +1095,8 @@ export default function AutomationWorkflow({
           ).toLowerCase();
           return (
             (!visible.length ||
-            (item.subtype !== "composio_event" &&
-              item.subtype !== "composio_action")) &&
+              (item.subtype !== "composio_event" &&
+                item.subtype !== "composio_action")) &&
             (!query || item.label.toLowerCase().includes(query)) &&
             !(
               item.type === "action" &&
@@ -1058,27 +1104,27 @@ export default function AutomationWorkflow({
               !MANAGED_STATIC_ACTIONS.has(String(item.subtype || ""))
             )
           );
-        }
-      ).map((item) => {
-        const platform = String(
-          item.initialData?.connectionPlatform || ""
-        ).toLowerCase();
-        const toolkit = String(
-          item.initialData?.connectionToolkit || platform
-        ).toLowerCase();
-        return {
-          ...item,
-          ...(platform
-            ? {
-                connected:
-                  connectedPlatforms.has(platform) ||
-                  ((item.type === "action" ||
-                    ["gmail", "outlook"].includes(platform)) &&
-                    connectedToolkits.has(toolkit)),
-              }
-            : {}),
-        };
-      }),
+        })
+        .map((item) => {
+          const platform = String(
+            item.initialData?.connectionPlatform || ""
+          ).toLowerCase();
+          const toolkit = String(
+            item.initialData?.connectionToolkit || platform
+          ).toLowerCase();
+          return {
+            ...item,
+            ...(platform
+              ? {
+                  connected:
+                    connectedPlatforms.has(platform) ||
+                    ((item.type === "action" ||
+                      ["gmail", "outlook"].includes(platform)) &&
+                      connectedToolkits.has(toolkit)),
+                }
+              : {}),
+          };
+        }),
     })).filter((category) => category.items.length);
     return visible.length
       ? [appCategory("trigger"), appCategory("action"), ...staticMenu]
@@ -1323,8 +1369,8 @@ export default function AutomationWorkflow({
                                   {item.label}
                                 </span>
                                 {item.connected ? (
-                                  <span className='inline-flex shrink-0 items-center gap-1 rounded bg-neutral px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
-                                    <Check className='h-2.5 w-2.5' /> 
+                                  <span className='bg-neutral inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
+                                    <Check className='h-2.5 w-2.5' />
                                   </span>
                                 ) : item.initialData?.composioToolkit ? (
                                   <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
@@ -1382,7 +1428,12 @@ export default function AutomationWorkflow({
       </div>
 
       {/* ── React Flow Canvas ──────────────────────────────────────── */}
-      <div className='relative z-0 min-h-0 flex-1'>
+      <div
+        className={cn(
+          "relative z-0 min-h-0 flex-1 transition-colors",
+          !isEditMode && "bg-[#101113]"
+        )}
+      >
         <ReactFlow
           proOptions={{ hideAttribution: true }}
           nodes={nodes}
@@ -1402,24 +1453,36 @@ export default function AutomationWorkflow({
           defaultViewport={viewport}
           fitView
           fitViewOptions={{ padding: 0.3 }}
+          defaultEdgeOptions={{
+            type: "smoothstep",
+            animated: false,
+            markerEnd: { type: MarkerType.ArrowClosed, color: "#a1a1aa" },
+            style: { stroke: "#a1a1aa", strokeWidth: 1.6 },
+          }}
           minZoom={0.1}
           maxZoom={2}
           panOnDrag={true}
           zoomOnScroll={true}
           zoomOnPinch={true}
         >
-          <Background color='#e5e5e5' gap={20} size={1} />
+          <Background
+            color={isEditMode ? "#d4d4d8" : "#34363b"}
+            gap={24}
+            size={1}
+          />
         </ReactFlow>
       </div>
 
       <ConnectDialog
         open={Boolean(pendingConnectedApp)}
         onOpenChange={(open) => !open && setPendingConnectedApp(null)}
-        platform={String(
-          pendingConnectedApp?.initialData?.composioToolkit
-            ? "composio"
-            : pendingConnectedApp?.initialData?.connectionPlatform || ""
-        ) as IntegrationPlatform}
+        platform={
+          String(
+            pendingConnectedApp?.initialData?.composioToolkit
+              ? "composio"
+              : pendingConnectedApp?.initialData?.connectionPlatform || ""
+          ) as IntegrationPlatform
+        }
         platformName={String(
           pendingConnectedApp?.initialData?.composioToolkitName ||
             pendingConnectedApp?.initialData?.connectionPlatformName ||
@@ -1436,9 +1499,7 @@ export default function AutomationWorkflow({
           const item = pendingConnectedApp;
           if (!item) return;
           const toolkit = String(item.initialData?.composioToolkit || "");
-          const platform = String(
-            item.initialData?.connectionPlatform || ""
-          );
+          const platform = String(item.initialData?.connectionPlatform || "");
           if (toolkit)
             setConnectedToolkits((current) => new Set(current).add(toolkit));
           if (platform)
