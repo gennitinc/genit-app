@@ -81,8 +81,9 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
         </div>
         {isEdit && (
           <button
+            type='button'
             onClick={() => data.onRemoveNode(id)}
-            className='rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
+            className='nodrag nopan rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
           >
             <Trash2 className='h-3.5 w-3.5' />
           </button>

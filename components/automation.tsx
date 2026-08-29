@@ -230,6 +230,8 @@ export default function AutomationWorkflow({
   const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 0.8 });
   const [isLoading, setIsLoading] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
+  const isEditModeRef = useRef(isEditMode);
+  isEditModeRef.current = isEditMode;
   const [showAddComponent, setShowAddComponent] = useState(false);
   const [addSearch, setAddSearch] = useState("");
   const [composioToolkits, setComposioToolkits] = useState<ComposioToolkit[]>(
@@ -471,12 +473,22 @@ export default function AutomationWorkflow({
 
   const removeNode = useCallback(
     (nodeId: string) => {
-      setNodes((nds) => nds.filter((n) => n.id !== nodeId));
-      setEdges((eds) =>
-        eds.filter((e) => e.source !== nodeId && e.target !== nodeId)
-      );
+      setNodes((nds) => {
+        const next = nds.filter((node) => node.id !== nodeId);
+        nodesRef.current = next;
+        return next;
+      });
+      setEdges((eds) => {
+        const next = eds.filter(
+          (edge) => edge.source !== nodeId && edge.target !== nodeId
+        );
+        edgesRef.current = next;
+        return next;
+      });
+      hasUnsavedChanges.current = true;
+      scheduleAutoSave();
     },
-    [setNodes, setEdges]
+    [setNodes, setEdges, scheduleAutoSave]
   );
 
   const onNodeDataChange = useCallback(
@@ -555,7 +567,7 @@ export default function AutomationWorkflow({
           data: {
             ...node.data,
             ...(legacyEmailTrigger ? { triggerType: "gmail_received" } : {}),
-            isEditMode,
+            isEditMode: isEditModeRef.current,
             onRemoveNode: removeNode,
             onNodeDataChange: onNodeDataChange,
             onTestRun: onTestRun,
@@ -563,7 +575,7 @@ export default function AutomationWorkflow({
         };
       });
     },
-    [isEditMode, removeNode, onNodeDataChange, onTestRun]
+    [removeNode, onNodeDataChange, onTestRun]
   );
 
   // ── Fetch automation state ──────────────────────────────────────────────
