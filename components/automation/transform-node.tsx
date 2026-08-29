@@ -169,7 +169,7 @@ export function TransformNode({ id, data }: NodeProps<TransformNodeData>) {
                   inputCls,
                   "min-h-[36px] resize-none font-mono text-[10px]"
                 )}
-                placeholder='e.g. {{ input.name.toUpperCase() }}'
+                placeholder='e.g. {{ previous_step.output }}'
               />
             </div>
           </>
