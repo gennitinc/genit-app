@@ -9,6 +9,7 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import {
+  CheckSquare2,
   Download,
   Eye,
   File,
@@ -51,7 +52,9 @@ export default function BlogLibraryPage() {
     usagePercent: number;
   } | null>(null);
   const [selectedAsset, setSelectedAsset] = useState<MediaAsset | null>(null);
-  const [deleteAsset, setDeleteAsset] = useState<MediaAsset | null>(null);
+  const [deleteAssets, setDeleteAssets] = useState<MediaAsset[]>([]);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isDeleting, setIsDeleting] = useState(false);
   const [dimensions, setDimensions] = useState<{
     width: number;
@@ -131,18 +134,57 @@ export default function BlogLibraryPage() {
     }
   };
 
-  const remove = async (asset: MediaAsset) => {
-    try {
-      const response = await apiResponse.delete(`/blog/library/${asset._id}`);
-      setAssets((current) => current.filter((item) => item._id !== asset._id));
-      if (response.data.storage) setStorage(response.data.storage);
-      toast.success("Media item deleted");
-      return true;
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Delete failed");
-      return false;
+  const remove = async (targets: MediaAsset[]) => {
+    const deletedIds = new Set<string>();
+    let latestStorage = null;
+    let lastError = "";
+
+    for (const asset of targets) {
+      try {
+        const response = await apiResponse.delete(`/blog/library/${asset._id}`);
+        deletedIds.add(asset._id);
+        latestStorage = response.data.storage || latestStorage;
+      } catch (error: any) {
+        lastError = error.response?.data?.message || "Delete failed";
+      }
     }
+
+    if (deletedIds.size) {
+      setAssets((current) =>
+        current.filter((item) => !deletedIds.has(item._id))
+      );
+      setSelectedIds((current) => {
+        const next = new Set(current);
+        deletedIds.forEach((id) => next.delete(id));
+        return next;
+      });
+      if (latestStorage) setStorage(latestStorage);
+      toast.success(
+        `${deletedIds.size} media ${deletedIds.size === 1 ? "item" : "items"} deleted`
+      );
+    }
+    if (deletedIds.size !== targets.length) {
+      toast.error(lastError || "Some media items could not be deleted");
+    }
+    return deletedIds;
   };
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const closeSelection = () => {
+    setSelectionMode(false);
+    setSelectedIds(new Set());
+  };
+
+  const allSelected = assets.length > 0 && selectedIds.size === assets.length;
+  const selectedAssets = assets.filter((asset) => selectedIds.has(asset._id));
 
   const download = async (asset: MediaAsset) => {
     try {
@@ -162,7 +204,7 @@ export default function BlogLibraryPage() {
   };
 
   const previewContent = selectedAsset ? (
-    <div className='group relative mx-auto w-full max-w-3xl overflow-hidden rounded-3xl px-0 md:p-2 ring-1 ring-black/5 lg:p-6 lg:px-0 dark:bg-white/[0.04] dark:ring-white/10'>
+    <div className='group relative mx-auto w-full max-w-3xl overflow-hidden rounded-3xl px-0 ring-1 ring-black/5 md:p-2 lg:p-6 lg:px-0 dark:bg-white/[0.04] dark:ring-white/10'>
       <GradientFrame />
 
       <div className='relative z-10 flex flex-col gap-5 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 md:flex-row dark:bg-[#0a0a0a] dark:ring-white/10'>
@@ -223,7 +265,7 @@ export default function BlogLibraryPage() {
                 </button>
                 <button
                   type='button'
-                  onClick={() => setDeleteAsset(selectedAsset)}
+                  onClick={() => setDeleteAssets([selectedAsset])}
                   className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-red-500/10 px-3 text-xs font-medium text-red-600 transition hover:bg-red-500/20 dark:text-red-400'
                 >
                   <Trash2 className='h-3.5 w-3.5' />{" "}
@@ -231,7 +273,10 @@ export default function BlogLibraryPage() {
                 </button>
               </div>
             </div>
-            <p className='text-foreground mt-4 text-xl font-semibold tracking-tight break-words dark:text-white'>
+            <p
+              title={selectedAsset.name}
+              className='text-foreground mt-4 truncate text-base font-normal dark:text-white'
+            >
               {selectedAsset.name}
             </p>
 
@@ -312,7 +357,57 @@ export default function BlogLibraryPage() {
               : "Your personal uploads and generated media"}
           </p>
         </div>
-        <div className='flex items-center gap-2'>
+        <div className='flex flex-wrap items-center justify-end gap-2'>
+          {selectionMode && (
+            <>
+              <button
+                type='button'
+                onClick={() =>
+                  setSelectedIds(
+                    allSelected
+                      ? new Set()
+                      : new Set(assets.map((asset) => asset._id))
+                  )
+                }
+                className='flex items-center gap-1.5 rounded-md border border-black/10 px-3 py-2 text-xs font-normal transition hover:bg-zinc-100 dark:border-white/10 dark:hover:bg-zinc-900'
+              >
+                <input
+                  type='checkbox'
+                  checked={allSelected}
+                  readOnly
+                  tabIndex={-1}
+                  className='pointer-events-none h-3.5 w-3.5 accent-indigo-600'
+                />
+                <LocalizedText
+                  text={allSelected ? "Clear all" : "Select all"}
+                />
+              </button>
+              <button
+                type='button'
+                disabled={!selectedIds.size}
+                onClick={() => setDeleteAssets(selectedAssets)}
+                className='flex items-center gap-1.5 rounded-md bg-red-600 px-3 py-2 text-xs font-normal text-white transition hover:bg-red-500 disabled:opacity-40'
+              >
+                <Trash2 className='h-3.5 w-3.5' />
+                Delete{selectedIds.size ? ` (${selectedIds.size})` : ""}
+              </button>
+            </>
+          )}
+          <button
+            type='button'
+            onClick={() =>
+              selectionMode ? closeSelection() : setSelectionMode(true)
+            }
+            aria-pressed={selectionMode}
+            className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-xs font-normal transition ${
+              selectionMode
+                ? "bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-white"
+                : "border border-black/10 hover:bg-zinc-100 dark:border-white/10 dark:hover:bg-zinc-900"
+            }`}
+          >
+            <CheckSquare2 className='h-3.5 w-3.5' />
+            {selectionMode ? "Cancel" : "Select"}
+          </button>
           <div className='flex rounded-md bg-zinc-100 p-1 dark:bg-zinc-900'>
             <button
               type='button'
@@ -411,8 +506,21 @@ export default function BlogLibraryPage() {
                 {assets.map((asset) => (
                   <div
                     key={asset._id}
-                    className='group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'
+                    className={`group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 ring-offset-2 ring-offset-black dark:bg-zinc-900 ${
+                      selectedIds.has(asset._id) ? "ring-2 ring-indigo-500" : ""
+                    }`}
                   >
+                    {selectionMode && (
+                      <label className='absolute top-2 left-2 z-20 flex h-7 w-7 cursor-pointer items-center justify-center rounded-md bg-black/70 shadow-sm backdrop-blur-sm'>
+                        <input
+                          type='checkbox'
+                          checked={selectedIds.has(asset._id)}
+                          onChange={() => toggleSelection(asset._id)}
+                          aria-label={`Select ${asset.name}`}
+                          className='h-4 w-4 accent-indigo-600'
+                        />
+                      </label>
+                    )}
                     {asset.mimeType.startsWith("image") ? (
                       <img
                         src={asset.url}
@@ -456,7 +564,7 @@ export default function BlogLibraryPage() {
                       <button
                         type='button'
                         aria-label={`Delete ${asset.name}`}
-                        onClick={() => setDeleteAsset(asset)}
+                        onClick={() => setDeleteAssets([asset])}
                         className='rounded-full bg-white/95 p-2.5 text-red-600 shadow-lg transition hover:scale-105 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none'
                       >
                         <Trash2 className='h-4 w-4' />
@@ -470,8 +578,19 @@ export default function BlogLibraryPage() {
                 {assets.map((asset) => (
                   <div
                     key={asset._id}
-                    className='flex items-center gap-3 border-b border-black/5 p-3 last:border-b-0 dark:border-white/10'
+                    className={`flex items-center gap-3 border-b border-black/5 p-3 last:border-b-0 dark:border-white/10 ${
+                      selectedIds.has(asset._id) ? "bg-indigo-500/5" : ""
+                    }`}
                   >
+                    {selectionMode && (
+                      <input
+                        type='checkbox'
+                        checked={selectedIds.has(asset._id)}
+                        onChange={() => toggleSelection(asset._id)}
+                        aria-label={`Select ${asset.name}`}
+                        className='h-4 w-4 shrink-0 accent-indigo-600'
+                      />
+                    )}
                     <div className='flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'>
                       {asset.mimeType.startsWith("image") ? (
                         <img
@@ -525,7 +644,7 @@ export default function BlogLibraryPage() {
                     <button
                       type='button'
                       aria-label={`Delete ${asset.name}`}
-                      onClick={() => setDeleteAsset(asset)}
+                      onClick={() => setDeleteAssets([asset])}
                       className='rounded-full p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30'
                     >
                       <Trash2 className='h-4 w-4' />
@@ -565,8 +684,8 @@ export default function BlogLibraryPage() {
       )}
 
       <Dialog
-        open={Boolean(deleteAsset)}
-        onOpenChange={(open) => !open && setDeleteAsset(null)}
+        open={deleteAssets.length > 0}
+        onOpenChange={(open) => !open && setDeleteAssets([])}
       >
         <DialogContent className='max-w-md overflow-hidden rounded-3xl border-0 bg-black/[0.02] p-5 shadow-none ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
           <GradientFrame />
@@ -582,7 +701,9 @@ export default function BlogLibraryPage() {
                 <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
                   <LocalizedText text={"Are you sure you want to delete"} />{" "}
                   <span className='text-foreground font-medium dark:text-white'>
-                    {deleteAsset?.name}
+                    {deleteAssets.length === 1
+                      ? deleteAssets[0]?.name
+                      : `${deleteAssets.length} selected media items`}
                   </span>
                   <LocalizedText text={"? This action cannot be undone."} />
                 </p>
@@ -593,7 +714,7 @@ export default function BlogLibraryPage() {
               <button
                 type='button'
                 disabled={isDeleting}
-                onClick={() => setDeleteAsset(null)}
+                onClick={() => setDeleteAssets([])}
                 className='text-foreground px-4 py-2 text-sm font-medium ring-1 ring-black/10 transition'
               >
                 <LocalizedText text={"Cancel"} />
@@ -602,17 +723,27 @@ export default function BlogLibraryPage() {
                 type='button'
                 disabled={isDeleting}
                 onClick={async () => {
-                  if (deleteAsset) {
+                  if (deleteAssets.length) {
+                    const targets = deleteAssets;
                     setIsDeleting(true);
-                    await remove(deleteAsset);
+                    const deletedIds = await remove(targets);
                     setIsDeleting(false);
-                    setDeleteAsset(null);
-                    closePreview();
+                    setDeleteAssets([]);
+                    if (selectedAsset && deletedIds.has(selectedAsset._id))
+                      closePreview();
+                    if (selectionMode && deletedIds.size === targets.length)
+                      closeSelection();
                   }
                 }}
                 className='flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50'
               >
-                {isDeleting ? <LoadingFileLoader size={16} /> : "Delete"}
+                {isDeleting ? (
+                  <LoadingFileLoader size={16} />
+                ) : deleteAssets.length > 1 ? (
+                  `Delete ${deleteAssets.length} items`
+                ) : (
+                  "Delete"
+                )}
               </button>
             </div>
           </div>
