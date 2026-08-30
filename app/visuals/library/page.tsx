@@ -506,9 +506,7 @@ export default function BlogLibraryPage() {
                 {assets.map((asset) => (
                   <div
                     key={asset._id}
-                    className={`group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 ring-offset-2 ring-offset-black dark:bg-zinc-900 ${
-                      selectedIds.has(asset._id) ? "ring-2 ring-indigo-500" : ""
-                    }`}
+                    className='group relative block w-full break-inside-avoid overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900'
                   >
                     {selectionMode && (
                       <label className='absolute top-2 left-2 z-20 flex h-7 w-7 cursor-pointer items-center justify-center rounded-md bg-black/70 shadow-sm backdrop-blur-sm'>
