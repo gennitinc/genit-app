@@ -487,14 +487,7 @@ function IntegrationCard({
           </button>
         ) : status === "connected" || status === "partial" ? (
           <div className='flex items-center gap-1'>
-            <button
-              type='button'
-              disabled
-              className='inline-flex cursor-default items-center gap-1.5 rounded-md bg-gray-200 dark:bg-gray-800 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400'
-            >
-              <CheckCircle2 className='h-3.5 w-3.5' />
-              
-            </button>
+            
             <button
               type='button'
               onClick={onManage}
