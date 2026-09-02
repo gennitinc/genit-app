@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import YouTubeWorkflow from "@/components/youtube-workflow";
 
 export default function WorkflowPage() {
-  redirect("/apps/workflow/create");
+  return <YouTubeWorkflow slug='create' />;
 }

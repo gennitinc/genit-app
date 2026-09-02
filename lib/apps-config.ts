@@ -38,20 +38,21 @@ export const APP_SECTIONS: AppSection[] = [
         imageSrc:
           "https://cdn.dribbble.com/users/4874/screenshots/3252414/interncomms-final.gif?utm_source=Pinterest&utm_medium=organic",
       },
-      // {
-      //   id: "workflow",
-      //   href: "/apps/workflow",
-      //   title: "AI Workflow",
-      //   description: "Automate your creative process with AI nodes",
-      //   type: "image",
-      //   imageSrc:
-      //     "https://i.pinimg.com/1200x/2e/29/24/2e29246282d5e2cc89abedaef9dc4fcd.jpg",
-      //   badge: {
-      //     text: "New",
-      //     bgColor: "rgb(16, 185, 129)", // Emerald 500
-      //     textColor: "rgb(255, 255, 255)",
-      //   },
-      // },
+      {
+        id: "workflow",
+        href: "/apps/workflow",
+        title: "YouTube Studio AI",
+        description:
+          "Turn any title or storyline into a complete visual storyboard",
+        type: "video",
+        imageSrc:
+          "https://i.pinimg.com/1200x/2e/29/24/2e29246282d5e2cc89abedaef9dc4fcd.jpg",
+        badge: {
+          text: "New",
+          bgColor: "rgb(220, 38, 38)",
+          textColor: "rgb(255, 255, 255)",
+        },
+      },
       {
         id: "angles-reshape",
         href: "/apps/angles-reshape",

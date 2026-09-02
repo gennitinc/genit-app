@@ -277,6 +277,29 @@ export function ChatInput({
           }
         }
 
+        const selectedInspiration = selectedFiles[0];
+        if (
+          selectedInspiration &&
+          !uploadedFiles?.some((file) => file.url === selectedInspiration)
+        ) {
+          if (!uploadedFiles) uploadedFiles = [];
+          const extension = selectedInspiration
+            .split("?")[0]
+            .split(".")
+            .pop()
+            ?.toLowerCase();
+          uploadedFiles.push({
+            name: "selected-design-inspiration",
+            type:
+              extension === "png"
+                ? "image/png"
+                : extension === "webp"
+                  ? "image/webp"
+                  : "image/jpeg",
+            url: selectedInspiration,
+          });
+        }
+
         await startAgent(
           formattedInput,
           uploadedFiles,

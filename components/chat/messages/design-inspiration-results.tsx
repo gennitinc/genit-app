@@ -12,6 +12,7 @@ import {
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
+import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
@@ -55,6 +56,7 @@ export function DesignInspirationResults({
     setInputMode,
     setGenerationMode,
     project,
+    setProject,
     isGenerating,
     isGeneratingImage,
     generateMessage,
@@ -75,46 +77,84 @@ export function DesignInspirationResults({
   const isAutoSelected = safeResults.some((r: any) => r.isAutoSelected);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // 🔒 Lock Logic
-  const savedInspiration =
+  const historicalInspiration =
     message?.metadata?.selectedInspirationUrl ||
     message?.metadata?.finalizedSelections?.selectedInspirations?.[0];
-  const isLocked = !!savedInspiration;
-
-  // override local selections if locked
-  const effectiveSelectedFiles = isLocked ? [savedInspiration] : selectedFiles;
-  const hasSelection = safeResults.some((pin) =>
-    effectiveSelectedFiles?.includes(pin.image)
-  );
+  const persistedInspiration = project?.metadata?.selectedInspirationUrl;
+  const effectiveSelectedFiles = selectedFiles.length
+    ? selectedFiles
+    : persistedInspiration
+      ? [persistedInspiration]
+      : historicalInspiration
+        ? [historicalInspiration]
+        : [];
+  const hasAnySelection = effectiveSelectedFiles.length > 0;
 
   // Remove chunking - we want a continuous carousel
 
   const isSelected = (image: string) =>
     effectiveSelectedFiles?.includes(image) ?? false;
 
-  const handleSelect = (image: string) => {
-    if (isLocked) return;
+  const handleSelect = async (image: string) => {
     autoPickedRef.current = true;
-    setSelectedFiles((current: string[]) => {
-      const next = current.includes(image) ? [] : [image];
+    const previous = effectiveSelectedFiles.slice(0, 1);
+    const next = previous.includes(image) ? [] : [image];
+    const nextInspiration = next[0] || null;
+
+    setSelectedFiles(next);
+    setProject((current) =>
+      current
+        ? {
+            ...current,
+            metadata: {
+              ...(current.metadata || {}),
+              selectedInspirationUrl: nextInspiration || undefined,
+            },
+          }
+        : current
+    );
+    if (storageKey) {
+      nextInspiration
+        ? window.localStorage.setItem(storageKey, nextInspiration)
+        : window.localStorage.removeItem(storageKey);
+    }
+
+    try {
+      await apiResponse.patch(`/project/${project?._id}/inspiration`, {
+        inspirationUrl: nextInspiration,
+      });
+    } catch (error) {
+      console.error("Failed to save selected design inspiration", error);
+      setSelectedFiles(previous);
       if (storageKey) {
-        next.length
-          ? window.localStorage.setItem(storageKey, next[0])
+        previous[0]
+          ? window.localStorage.setItem(storageKey, previous[0])
           : window.localStorage.removeItem(storageKey);
       }
-      return next;
-    });
+      setProject((current) =>
+        current
+          ? {
+              ...current,
+              metadata: {
+                ...(current.metadata || {}),
+                selectedInspirationUrl: previous[0] || undefined,
+              },
+            }
+          : current
+      );
+    }
   };
 
   useEffect(() => {
-    if (isLocked || !storageKey || selectedFiles.length) return;
-    const saved = window.localStorage.getItem(storageKey);
+    if (!storageKey || selectedFiles.length) return;
+    const saved =
+      persistedInspiration || window.localStorage.getItem(storageKey);
     if (saved && safeResults.some((pin) => pin.image === saved)) {
       autoPickedRef.current = true;
       setSelectedFiles([saved]);
     }
   }, [
-    isLocked,
+    persistedInspiration,
     safeResults,
     selectedFiles.length,
     setSelectedFiles,
@@ -129,9 +169,8 @@ export function DesignInspirationResults({
 
   useEffect(() => {
     if (
-      isLocked ||
       isCountdownPaused ||
-      hasSelection ||
+      hasAnySelection ||
       autoPickedRef.current ||
       !safeResults.length
     ) {
@@ -142,11 +181,7 @@ export function DesignInspirationResults({
       const randomPin =
         safeResults[Math.floor(Math.random() * safeResults.length)];
       if (randomPin?.image) {
-        autoPickedRef.current = true;
-        setSelectedFiles([randomPin.image]);
-        if (storageKey) {
-          window.localStorage.setItem(storageKey, randomPin.image);
-        }
+        void handleSelect(randomPin.image);
       }
       return;
     }
@@ -156,15 +191,7 @@ export function DesignInspirationResults({
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [
-    countdown,
-    hasSelection,
-    isCountdownPaused,
-    isLocked,
-    safeResults,
-    setSelectedFiles,
-    storageKey,
-  ]);
+  }, [countdown, hasAnySelection, isCountdownPaused, safeResults]);
 
   // Sync carousel position when dialog opens
   useEffect(() => {
@@ -191,7 +218,7 @@ export function DesignInspirationResults({
         </p>
       </div>
 
-      {!isLocked && !hasSelection && (
+      {!hasAnySelection && (
         <div className='flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2'>
           <p className='text-muted-foreground text-[11px]'>
             {isCountdownPaused
