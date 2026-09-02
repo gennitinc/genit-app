@@ -17,6 +17,7 @@ import {
   getItemPreviewType,
   getLatestAgentPreview,
   getLatestMessagePreview,
+  isGraphicsProjectCategory,
 } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -120,7 +121,9 @@ function ChatLayoutInner() {
         : project?.category?.includes("website") ||
             project?.category?.includes("landing")
           ? "website"
-          : null;
+          : isGraphicsProjectCategory(project?.category)
+            ? "graphics"
+            : null;
   const previewType =
     focusedPreviewType || latestPreview?.type || categoryPreviewType;
 

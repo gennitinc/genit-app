@@ -9,6 +9,24 @@ export interface PreviewSelection {
   createdAt: number;
 }
 
+const GRAPHICS_PROJECT_CATEGORIES = new Set([
+  "flier",
+  "image",
+  "instagram_post",
+  "poster",
+  "youtube_thumbnail",
+  "facebook_post",
+  "facebook_cover",
+  "banner",
+  "logo",
+  "presentation",
+  "auto",
+  "generic_design",
+]);
+
+export const isGraphicsProjectCategory = (category?: string) =>
+  GRAPHICS_PROJECT_CATEGORIES.has(category || "");
+
 export const getItemPreviewType = (item: any): CanvasPreviewType | null => {
   const type = item?.type || "";
   if (type === "application/json+automation") return "automation";
