@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import type { StickToBottomContext } from "use-stick-to-bottom";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -609,7 +610,7 @@ export function TextChatContent({
             {(isLoadingProject || isProcessingDraft) &&
               allItems.length === 0 && (
                 <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-4'>
-                  <Loader size={32} className='text-primary animate-spin' />
+                  <Loading size={12} />
                   <div className='flex w-full max-w-sm flex-col items-center gap-3 px-6'>
                     <div className='h-3 w-2/3 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
                     <div className='h-3 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />

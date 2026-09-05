@@ -24,13 +24,13 @@ const ChatIdPage = () => {
     fetchProject(projectId);
   }, [projectId, fetchProject, router]);
 
-  // if (isLoadingProject || (!project && !error)) {
-  //   return (
-  //     <div className='flex h-screen items-center justify-center bg-white dark:bg-black'>
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
+  if (isLoadingProject || (!project && !error)) {
+    return (
+      <div className='flex h-screen items-center justify-center bg-white dark:bg-black'>
+        <Loading size={12} />
+      </div>
+    );
+  }
 
   if (error && !project) {
     return (

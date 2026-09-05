@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
 import type { CanvasPreviewType } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
-import { LoadingFileLoader } from "@/utils/Loading";
+import Loading from "@/utils/Loading";
 import {
   Download,
   ExternalLink,
@@ -80,7 +80,7 @@ const PreviewPanelContent = ({
   if (isLoadingProject) {
     return (
       <div className='bg-muted/90 flex h-full w-full items-center justify-center rounded-3xl border border-zinc-200 shadow-2xl dark:border-zinc-800/50'>
-        <LoadingFileLoader />
+        <Loading size={12} />
       </div>
     );
   }
