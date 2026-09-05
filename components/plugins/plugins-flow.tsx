@@ -53,7 +53,8 @@ export function useAvailablePlugins() {
 export function PluginsFlow({ className = "" }: { className?: string }) {
   const { t } = useLanguage();
   const { plugins, total } = useAvailablePlugins();
-  const loop = [...plugins, ...plugins];
+  const featuredPlugins = plugins.slice(0, 18);
+  const loop = [...featuredPlugins, ...featuredPlugins];
 
   return (
     <section className={`relative space-y-4 pt-6 pb-10 ${className}`}>
@@ -72,7 +73,7 @@ export function PluginsFlow({ className = "" }: { className?: string }) {
           <div
             className='animate-marquee flex w-max gap-10 hover:[animation-play-state:paused] motion-reduce:animate-none'
             style={{
-              animationDuration: `${Math.max(40, plugins.length * 2)}s`,
+              animationDuration: `${Math.max(40, featuredPlugins.length * 2)}s`,
             }}
           >
             {loop.map((plugin, index) => {
