@@ -314,8 +314,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Initialize socket connection once on mount
   useEffect(() => {
-    // Only create socket if it doesn't exist
-    if (socketRef.current) {
+    // Public pages do not need the project realtime connection.
+    if (!project?._id || socketRef.current) {
       return;
     }
 
@@ -559,7 +559,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         socketRef.current = null;
       }
     };
-  }, [transformMessages]);
+  }, [project?._id, transformMessages]);
 
   // Auto-save brand identity when it changes (Debounced)
   useEffect(() => {
