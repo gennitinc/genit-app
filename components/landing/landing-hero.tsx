@@ -434,7 +434,7 @@ const LandingHero = () => {
               </p>
               <div className='mt-7.5 flex gap-5'>
                 <Link
-                  href={user ? "/chat" : "/signup"}
+                  href={user ? "/visuals" : "/signup"}
                   className='flex cursor-pointer items-center gap-1 rounded-md bg-indigo-600 px-5 py-2.5 text-sm text-white transition duration-300 hover:scale-105 active:scale-100'
                 >
                   Get Started

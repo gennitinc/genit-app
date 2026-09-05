@@ -332,8 +332,8 @@ export default function PricingComponent({
         action: user ? "open_product" : "redirect_signup",
       });
       window.location.href = user
-        ? "/chat"
-        : `/signup?redirect=${encodeURIComponent("/chat")}`;
+        ? "/visuals"
+        : `/signup?redirect=${encodeURIComponent("/visuals")}`;
       return;
     }
 
