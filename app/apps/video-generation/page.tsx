@@ -750,7 +750,7 @@ function VideoGenerationPage() {
         model_id: selectedVideoModel?._id,
       });
       const creditsRemaining = user?.creditsRemaining ?? 0;
-      if (creditsRemaining <= 10) {
+      if (String(error?.message || "").toLowerCase().includes("insufficient credits")) {
         const isBasic = String(user?.userPlan) === "Basic";
         toast.error(`Low Credits`, {
           description: `You have ${creditsRemaining} credits remaining.`,

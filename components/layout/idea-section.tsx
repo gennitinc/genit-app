@@ -711,14 +711,14 @@ export function IdeaSection() {
 
       // Check for low credits
       const creditsRemaining = user?.creditsRemaining ?? 0;
-      if (creditsRemaining <= 10) {
+      if (creditsRemaining === 0) {
         const isBasic = String(user?.userPlan) === "Basic";
         trackFeatureUsed("idea_low_credits_blocked_submit", {
           credits_remaining: creditsRemaining,
           user_plan: user?.userPlan,
         });
         toast.error(`Low Credits`, {
-          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
+          description: `You have ${creditsRemaining} credits remaining.`,
           action: {
             label: isBasic ? "Upgrade" : "Buy Credits",
             onClick: () => {

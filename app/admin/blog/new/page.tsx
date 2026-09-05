@@ -337,7 +337,7 @@ export default function NewBlogPostPage() {
                         : "border border-zinc-800 bg-zinc-900 text-zinc-500"
                     }`}
                   >
-                    {withAiImage ? "+10 credits" : "No image"}
+                    {withAiImage ? "+8 credits" : "No image"}
                   </span>
                 </span>
               </label>
@@ -672,14 +672,14 @@ export default function NewBlogPostPage() {
                   <LocalizedText text={"Generation Cost"} />
                 </span>
                 <span className='font-bold text-white'>
-                  <LocalizedText text={"15 Credits"} />
+                  <LocalizedText text={withAiImage ? "10 Credits" : "2 Credits"} />
                 </span>
                 <span className='text-zinc-500'>|</span>
                 <span className='text-zinc-400'>
                   <LocalizedText text={"Your Balance"} />
                 </span>
                 <span
-                  className={`font-bold ${user?.creditsRemaining && user.creditsRemaining >= 15 ? "text-emerald-400" : "text-rose-400"}`}
+                  className={`font-bold ${user?.creditsRemaining && user.creditsRemaining >= (withAiImage ? 10 : 2) ? "text-emerald-400" : "text-rose-400"}`}
                 >
                   {user?.creditsRemaining ?? 0}{" "}
                   <LocalizedText text={"Credits"} />

@@ -118,7 +118,7 @@ export function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
   const router = useRouter();
-  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
+  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 0;
   const activeOrg =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -189,14 +189,14 @@ export function ChatInput({
   const handlegenerateMessage = async () => {
     // Check for low credits
     const creditsRemaining = user?.creditsRemaining ?? 0;
-    if (creditsRemaining <= 10) {
+    if (creditsRemaining === 0) {
       const isBasic = String(user?.userPlan) === "Basic";
       trackEvent("low_credits_prompt_shown", {
         credits_remaining: creditsRemaining,
         user_plan: user?.userPlan,
       });
       toast.error(`Low Credits`, {
-        description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
+        description: `You have ${creditsRemaining} credits remaining.`,
         action: {
           label: isBasic ? "Upgrade" : "Buy Credits",
           onClick: () => {

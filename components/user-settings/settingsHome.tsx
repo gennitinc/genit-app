@@ -82,6 +82,7 @@ const SettingsHome = () => {
     useAccountActions();
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
+  const [creditTransactions, setCreditTransactions] = useState<any[]>([]);
   const [openingBillingPortal, setOpeningBillingPortal] = useState(false);
   const [savingAuto, setSavingAuto] = useState(false);
   const [isAutoModeDialogOpen, setIsAutoModeDialogOpen] = useState(false);
@@ -139,6 +140,7 @@ const SettingsHome = () => {
       try {
         const resp = await apiResponse.get("/payment/billing-history");
         setBillingHistory(resp.data?.billingHistory || []);
+        setCreditTransactions(resp.data?.creditTransactions || []);
       } catch (e) {
         console.warn("Could not fetch billing history", e);
       }
@@ -2265,6 +2267,51 @@ const SettingsHome = () => {
                             </div>
                           </div>
                         ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
+                    <CardTitle className='text-base'>
+                      <LocalizedText text={"Credit activity"} />
+                    </CardTitle>
+                    <CardDescription className='mt-1'>
+                      <LocalizedText text={"Successful charges and automatic refunds."} />
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className='p-0'>
+                    {creditTransactions.length === 0 ? (
+                      <p className='px-5 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400'>
+                        <LocalizedText text={"No credit activity yet"} />
+                      </p>
+                    ) : (
+                      <div className='divide-y divide-zinc-200 dark:divide-white/10'>
+                        {creditTransactions.map((transaction: any) => {
+                          const charged = transaction.settledAmount ?? transaction.amount;
+                          const refunded = transaction.status === "refunded";
+                          const credited = transaction.direction === "credit";
+                          return (
+                            <div key={transaction._id} className='flex items-center justify-between gap-4 px-5 py-4'>
+                              <div className='min-w-0'>
+                                <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
+                                  {String(transaction.reason).replaceAll("_", " ")}
+                                </p>
+                                <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
+                                  {new Date(transaction.createdAt).toLocaleString()} · {transaction.balanceAfter} remaining
+                                </p>
+                              </div>
+                              <Badge variant={refunded || credited ? "secondary" : "outline"}>
+                                {refunded
+                                  ? `Refunded ${transaction.amount}`
+                                  : credited
+                                    ? `+${charged} credits`
+                                    : `−${charged} credits`}
+                              </Badge>
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </CardContent>

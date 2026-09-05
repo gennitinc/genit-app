@@ -348,10 +348,10 @@ export default function TemplateGrid() {
 
       // Check for low credits
       const creditsRemaining = user?.creditsRemaining ?? 0;
-      if (creditsRemaining <= 10) {
+      if (creditsRemaining === 0) {
         const isBasic = String(user?.userPlan) === "Basic";
         toast.error(`Low Credits`, {
-          description: `You have ${creditsRemaining} credit${creditsRemaining !== 1 ? "s" : ""} remaining.`,
+          description: `You have ${creditsRemaining} credits remaining.`,
           action: {
             label: isBasic ? "Upgrade" : "Buy Credits",
             onClick: () => {
@@ -491,7 +491,7 @@ export default function TemplateGrid() {
     );
   };
 
-  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 10;
+  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 0;
 
   const isSubmitDisabled =
     isGenerating ||

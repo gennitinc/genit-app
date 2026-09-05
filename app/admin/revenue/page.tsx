@@ -60,10 +60,9 @@ export default function RevenuePage() {
   const financialStats = {
     revenue: {
       total: data.overview.revenue.total,
-      growth: "+14.2%",
-      mrr: data.overview.revenue.total / 12, // Mock MRR calculation
     },
     plans: data.overview.plans,
+    credits: data.overview.credits,
   };
 
   return (
@@ -96,28 +95,28 @@ export default function RevenuePage() {
           {
             label: "Total Revenue",
             value: `$${financialStats.revenue.total.toLocaleString()}`,
-            trend: "+2.4%",
+            trend: `${data.overview.revenue.orders} payments`,
             icon: DollarSign,
             color: "text-emerald-500",
           },
           {
-            label: "Est. Monthly Revenue",
-            value: `$${Math.round(financialStats.revenue.mrr).toLocaleString()}`,
-            trend: "+1.2%",
+            label: "Tracked AI Cost",
+            value: `$${Number(financialStats.credits.estimatedProviderCostUsd || 0).toFixed(2)}`,
+            trend: `${financialStats.credits.meteredRuns} metered runs`,
             icon: TrendingUp,
             color: "text-blue-500",
           },
           {
-            label: "Active Subscriptions",
-            value: data.overview.users.total,
-            trend: "+18%",
+            label: "Credits Consumed",
+            value: Number(financialStats.credits.settled || 0).toLocaleString(),
+            trend: "settled only",
             icon: Users,
             color: "text-primary",
           },
           {
-            label: "Avg Revenue/User",
-            value: `$${Math.round(financialStats.revenue.total / data.overview.users.total)}`,
-            trend: "-2%",
+            label: "Credits Refunded",
+            value: Number(financialStats.credits.refunded || 0).toLocaleString(),
+            trend: "failed or partial runs",
             icon: PieChart,
             color: "text-amber-500",
           },
@@ -139,7 +138,7 @@ export default function RevenuePage() {
                 {stat.value}
               </span>
               <span
-                className={`mb-1 text-xs font-bold ${stat.trend.startsWith("+") ? "text-emerald-500" : "text-rose-500"}`}
+                className='text-muted-foreground mb-1 text-xs font-medium'
               >
                 {stat.trend}
               </span>
@@ -215,18 +214,15 @@ export default function RevenuePage() {
           <div className='from-primary/10 to-background border-primary/20 group relative flex flex-col justify-center overflow-hidden rounded-[2rem] border bg-gradient-to-br p-8 text-center'>
             <div className='absolute inset-0 bg-indigo-600 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-indigo-700/5' />
             <h3 className='mb-4 text-2xl font-bold tracking-tight'>
-              <LocalizedText text={"Financial Health: Excellent"} />
+              <LocalizedText text={"Unit economics coverage"} />
             </h3>
             <p className='text-muted-foreground mx-auto mb-8 max-w-sm'>
               <LocalizedText
                 text={
-                  "The platform's revenue retention is currently at 94.2%. Conversion rates for the 'Pro' tier have increased by 8% this week."
+                  `${financialStats.credits.meteredRuns || 0} AI runs currently include provider-cost telemetry. Use tracked costs and settled credits to tune prices as coverage grows.`
                 }
               />
             </p>
-            <Button className='mx-auto w-fit rounded-xl px-10'>
-              <LocalizedText text={"Optimize Pricing"} />
-            </Button>
           </div>
         </div>
       </div>
