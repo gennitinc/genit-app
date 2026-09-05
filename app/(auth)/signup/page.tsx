@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign Up – Genit AI",
   description:
-    "Create your Genit AI account and start creating stunning AI-powered media designs.",
+    "Create your Genit account and start planning, creating, publishing, and optimizing marketing with autonomous AI agents.",
   robots: {
     index: false,
     follow: false,

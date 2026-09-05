@@ -18,19 +18,9 @@ import { LandingNavbar } from "./landing-navbar";
 import LandingUnifiedInbox from "./landing-unified-inbox";
 import { LandingVoiceClone } from "./landing-voice-chat";
 import { Toaster } from "@/components/ui/sonner";
-import { headers } from "next/headers";
-import { getUsdRates } from "@/lib/pricing-rates";
 
-export async function LandingPage() {
-  const headerList = await headers();
-  const country =
-    headerList.get("x-vercel-ip-country") ??
-    headerList.get("cf-ipcountry") ??
-    headerList.get("x-country-code");
-  const pricingCurrency = pricingCurrencyForCountry(
-    country,
-    await getUsdRates()
-  );
+export function LandingPage() {
+  const pricingCurrency = pricingCurrencyForCountry(null);
 
   return (
     <div className='min-h-screen w-full bg-white dark:bg-black'>

@@ -5,7 +5,6 @@ import { LocalizedText } from "../localized-text";
 import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
-import { MarketingRobot3D } from "./marketing-robot-3d";
 import {
   BrevoBrand,
   FacebookBrand,
@@ -294,12 +293,12 @@ const ReelsCarousel = () => {
                     videoRefs.current[index] = el;
                   }}
                   src={video.videoUrl}
+                  poster={video.thumbnailUrl}
                   className='aspect-[9/10] w-full object-cover'
                   muted
                   playsInline
                   loop
-                  preload='auto'
-                  autoPlay
+                  preload='metadata'
                 />
                 {/* Dot indicators */}
                 <div className='absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 transform gap-1.5'>
@@ -383,12 +382,12 @@ const LandingHero = () => {
     ...message,
     text: t(message.text),
   }));
-  const [visibleMessages, setVisibleMessages] = useState<number>(0);
-  const [isTyping, setIsTyping] = useState(false);
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
-  const [streamingText, setStreamingText] = useState<{ [key: number]: string }>(
-    {}
+  const visibleMessages = localizedMessages.length;
+  const isTyping = false;
+  const streamingText = Object.fromEntries(
+    localizedMessages.map((message, index) => [index, message.text])
   );
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -402,107 +401,6 @@ const LandingHero = () => {
     />
   );
 
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [visibleMessages, streamingText, isTyping]);
-
-  useEffect(() => {
-    const totalMessages = localizedMessages.length;
-    let currentIndex = 0;
-    let timeoutIds: NodeJS.Timeout[] = [];
-    let streamingInterval: NodeJS.Timeout | null = null;
-
-    const streamText = (
-      messageIndex: number,
-      fullText: string,
-      onComplete: () => void
-    ) => {
-      let currentChar = 0;
-      setStreamingText((prev) => ({ ...prev, [messageIndex]: "" }));
-
-      streamingInterval = setInterval(() => {
-        if (currentChar < fullText.length) {
-          setStreamingText((prev) => ({
-            ...prev,
-            [messageIndex]: fullText.substring(0, currentChar + 1),
-          }));
-          currentChar++;
-        } else {
-          if (streamingInterval) {
-            clearInterval(streamingInterval);
-            streamingInterval = null;
-          }
-          // Mark as complete and wait a bit before showing image and next message
-          setTimeout(() => {
-            setStreamingText((prev) => ({ ...prev, [messageIndex]: fullText }));
-            onComplete();
-          }, 500);
-        }
-      }, 30); // Stream one character every 30ms
-    };
-
-    const showNextMessage = () => {
-      if (currentIndex >= totalMessages) {
-        // Reset and restart after showing all messages
-        setIsTyping(false);
-        setVisibleMessages(0);
-        setStreamingText({});
-        currentIndex = 0;
-        const resetTimeout = setTimeout(() => {
-          showNextMessage();
-        }, 2000);
-        timeoutIds.push(resetTimeout);
-        return;
-      }
-
-      const currentMessage = localizedMessages[currentIndex];
-
-      // Show typing indicator for AI messages
-      if (currentMessage.type === "ai") {
-        setIsTyping(true);
-        const typingTimeout = setTimeout(() => {
-          setIsTyping(false);
-          setVisibleMessages(currentIndex + 1);
-          // Start streaming the AI response
-          streamText(currentIndex, currentMessage.text, () => {
-            // After streaming completes, wait a bit for image, then show next message
-            const imageWait = currentMessage.image ? 1500 : 1000;
-            const nextTimeout = setTimeout(() => {
-              currentIndex++;
-              showNextMessage();
-            }, imageWait);
-            timeoutIds.push(nextTimeout);
-          });
-        }, 1000); // Show typing for 1 second
-        timeoutIds.push(typingTimeout);
-      } else {
-        // User message appears immediately
-        setVisibleMessages(currentIndex + 1);
-        currentIndex++;
-        const nextTimeout = setTimeout(() => {
-          showNextMessage();
-        }, 2000); // Wait 2 seconds before next message
-        timeoutIds.push(nextTimeout);
-      }
-    };
-
-    // Start the animation after initial delay
-    const initialTimeout = setTimeout(() => {
-      showNextMessage();
-    }, 800);
-    timeoutIds.push(initialTimeout);
-
-    return () => {
-      timeoutIds.forEach((id) => clearTimeout(id));
-      if (streamingInterval) {
-        clearInterval(streamingInterval);
-      }
-    };
-  }, [language]);
   return (
     <section className='bg-background relative w-full overflow-x-hidden md:px-12 lg:px-20 lg:py-0 lg:pb-16 xl:px-24'>
       <div className='relative flex w-full flex-col items-center justify-center'>
@@ -536,7 +434,7 @@ const LandingHero = () => {
               </p>
               <div className='mt-7.5 flex gap-5'>
                 <Link
-                  href='/visuals'
+                  href={user ? "/chat" : "/signup"}
                   className='flex cursor-pointer items-center gap-1 rounded-md bg-indigo-600 px-5 py-2.5 text-sm text-white transition duration-300 hover:scale-105 active:scale-100'
                 >
                   Get Started

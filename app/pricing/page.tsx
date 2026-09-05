@@ -2,17 +2,15 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import PricingComponent from "@/components/pricing/page";
 import { pricingCurrencyForCountry } from "@/lib/pricing-currency";
-import { getUsdRates } from "@/lib/pricing-rates";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "Pricing – Genit AI | Affordable Plans for Media Design",
+  title: "Pricing – Genit AI Marketing Automation Plans",
   description:
-    "Explore Genit AI pricing plans. Free tier for individuals, paid plans for teams and enterprises. Get started with AI-powered media design today.",
+    "Compare Genit plans for autonomous marketing agents, content publishing, campaign automation, brand management, and team collaboration.",
   keywords: [
     "pricing",
-    "AI media design pricing",
+    "AI marketing automation pricing",
     "subscription plans",
     "free trial",
     "monthly subscription",
@@ -21,7 +19,8 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Pricing – Genit AI",
-    description: "Affordable AI-powered media design plans for all users",
+    description:
+      "Plans for autonomous marketing, campaign execution, and cross-channel publishing.",
     url: "https://www.trygenit.com/pricing",
     images: [
       {
@@ -34,16 +33,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Pricing() {
-  const headerList = await headers();
-  const country =
-    headerList.get("x-vercel-ip-country") ??
-    headerList.get("cf-ipcountry") ??
-    headerList.get("x-country-code");
-  const pricingCurrency = pricingCurrencyForCountry(
-    country,
-    await getUsdRates()
-  );
+export default function Pricing() {
+  const pricingCurrency = pricingCurrencyForCountry(null);
 
   return (
     <div className='min-h-screen bg-white dark:bg-black'>

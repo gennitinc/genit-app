@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing Plans - Genit AI",
+  title: "Pricing – Genit AI Marketing Automation Plans",
   description:
-    "Choose the perfect plan for your creative needs. Free tier available for AI image and video generation.",
-  keywords: ["AI generator pricing", "free AI tools", "genit subscription"],
+    "Choose a Genit plan for autonomous marketing agents, campaigns, publishing, and team collaboration.",
+  keywords: [
+    "AI marketing pricing",
+    "marketing automation plans",
+    "Genit subscription",
+  ],
 };
 
 export default function PricingLayout({

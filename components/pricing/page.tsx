@@ -274,7 +274,7 @@ export default function PricingComponent({
     useState(pricingCurrency);
   const [isYearly, setIsYearly] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-  const { user, loading: userLoading } = useUserContext();
+  const { user } = useUserContext();
 
   useEffect(() => {
     trackEvent("pricing_page_viewed", {
@@ -324,20 +324,21 @@ export default function PricingComponent({
       plan_price: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
     });
 
-    if (!user) {
-      window.location.href = `/signin?redirect=${encodeURIComponent("/pricing")}`;
-      return;
-    }
-
     if (plan.monthlyPrice === 0) {
-      // Handle free plan - redirect to signup or dashboard
       trackEvent("checkout_intent", {
         plan_id: plan.id,
         plan_name: plan.name,
         billing_cycle: billing,
-        action: "redirect_signup",
+        action: user ? "open_product" : "redirect_signup",
       });
-      window.location.href = "/signup";
+      window.location.href = user
+        ? "/chat"
+        : `/signup?redirect=${encodeURIComponent("/chat")}`;
+      return;
+    }
+
+    if (!user) {
+      window.location.href = `/signup?redirect=${encodeURIComponent("/pricing")}`;
       return;
     }
 
@@ -645,7 +646,7 @@ export default function PricingComponent({
                           })()
                         : handleCheckout(plan)
                     }
-                    disabled={userLoading || loadingPlan === plan.name}
+                    disabled={loadingPlan === plan.name}
                     className={cn(
                       "mt-4 mb-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-transparent px-2 py-1.5 transition duration-200 active:scale-[0.98]",
                       plan.popular

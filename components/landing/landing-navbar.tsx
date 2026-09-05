@@ -135,16 +135,14 @@ export function LandingNavbar() {
                   {t("Blog")}
                 </Link>
                 <Link
-                  target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
                   href={currentUser ? "/user/settings?tab=billing" : "/pricing"}
                 >
                   {currentUser ? t("Billing") : t("Pricing")}
                 </Link>
                 {currentUser && (
-                  <Link
-                    target=''
-                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
+                <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                     href='/chat/history'
                   >
                     {t("History")}

@@ -160,8 +160,6 @@ export const SignupComp = () => {
       const response = await apiResponse.post("auth/sign-up", signupData, {
         withCredentials: true,
       });
-      const User = response?.data;
-      const userId = User?.user?._id.toString();
       if (response.status === 200) {
         toast.success(
           "Account Created Successfully! Please check your email to verify your account."
@@ -175,12 +173,7 @@ export const SignupComp = () => {
           // sameSite: "strict",
         });
 
-        // Fetch current user data to check verification and onboarding status
-        await fetchCurrentUser();
-
-        // Check verification and onboarding status, redirect accordingly
-        const userData = await apiResponse.get("/user/active-user");
-        const currentUser = userData.data.user;
+        const currentUser = response.data.user;
         identifyAndTrackAuth(
           {
             id: currentUser._id,
@@ -196,21 +189,12 @@ export const SignupComp = () => {
           { auth_method: "password" }
         );
 
-        if (!currentUser.emailVerified) {
-          // Not verified - redirect to verification
-          router.push(
-            withAuthRedirect(
-              `/account/verify?email=${encodeURIComponent(currentUser.email)}`,
-              redirect
-            )
-          );
-        } else if (!currentUser.onboarding?.onboardingCompleted) {
-          // Verified but not onboarded - redirect to onboarding
-          router.push(withAuthRedirect("/onboarding", redirect));
-        } else {
-          // Verified and onboarded - go to inspire create
-          router.push(redirect);
-        }
+        router.push(
+          withAuthRedirect(
+            `/account/verify?email=${encodeURIComponent(currentUser.email)}`,
+            redirect
+          )
+        );
       }
     } catch (error: any) {
       setLoading(false);
@@ -219,7 +203,10 @@ export const SignupComp = () => {
         reason: error?.response?.data?.message || error?.message,
       });
 
-      toast.error(error?.response?.data.message);
+      toast.error(
+        error?.response?.data?.message ||
+          "We couldn't create your account. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -248,8 +235,6 @@ export const SignupComp = () => {
       const response = await apiResponse.post("auth/google", Formdata, {
         withCredentials: true,
       });
-      const User = response?.data;
-      const userId = User?.user?._id.toString();
       if (response.status === 200) {
         toast.success("Account Created Successfully!");
 
@@ -261,12 +246,8 @@ export const SignupComp = () => {
           // sameSite: "strict",
         });
 
-        // Fetch current user data to check verification and onboarding status
         await fetchCurrentUser();
-
-        // Check verification and onboarding status, redirect accordingly
-        const userData = await apiResponse.get("/user/active-user");
-        const currentUser = userData.data.user;
+        const currentUser = response.data.user;
         identifyAndTrackAuth(
           {
             id: currentUser._id,
@@ -282,21 +263,7 @@ export const SignupComp = () => {
           { auth_method: "google" }
         );
 
-        if (!currentUser.emailVerified) {
-          // Not verified - redirect to verification
-          router.push(
-            withAuthRedirect(
-              `/account/verify?email=${encodeURIComponent(currentUser.email)}`,
-              redirect
-            )
-          );
-        } else if (!currentUser.onboarding?.onboardingCompleted) {
-          // Verified but not onboarded - redirect to onboarding
-          router.push(withAuthRedirect("/onboarding", redirect));
-        } else {
-          // Verified and onboarded - go to inspire create
-          router.push(redirect);
-        }
+        router.push(redirect);
       }
     } catch (error: any) {
       setLoading2(false);
@@ -305,7 +272,10 @@ export const SignupComp = () => {
         reason: error?.response?.data?.message || error?.message,
       });
 
-      toast.error(error?.response?.data.message);
+      toast.error(
+        error?.response?.data?.message ||
+          "We couldn't complete Google sign up. Please try again."
+      );
     } finally {
       setLoading2(false);
     }

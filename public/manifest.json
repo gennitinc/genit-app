@@ -1,7 +1,7 @@
 {
-  "name": "Genit AI – Intelligent Media Design",
+  "name": "Genit AI – Autonomous Marketing Agents",
   "short_name": "Genit AI",
-  "description": "AI-powered media design platform for creators, marketers, and businesses. Generate high-quality graphics, videos, animations, and brand assets at scale.",
+  "description": "Autonomous AI agents that plan, create, publish, and optimize marketing across your connected channels.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
@@ -70,21 +70,21 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["design", "productivity", "business"],
+  "categories": ["business", "productivity", "marketing"],
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "Create Image",
-      "short_name": "Image",
-      "description": "Create AI-generated images",
-      "url": "/inspire/create?mode=ai-image-gen",
+      "name": "Open Genit Chat",
+      "short_name": "Chat",
+      "description": "Plan and execute marketing with your AI agent",
+      "url": "/chat",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Create Video",
-      "short_name": "Video",
-      "description": "Create AI-generated videos",
-      "url": "/inspire/create?mode=ai-video-gen",
+      "name": "Open Visual Flow",
+      "short_name": "Visual Flow",
+      "description": "Create and publish cross-channel marketing",
+      "url": "/visuals",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]

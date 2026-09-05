@@ -267,8 +267,6 @@ export function LandingFooter() {
               <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
                 <Link
                   href='/signup'
-                  target='_blank'
-                  rel='noopener noreferrer'
                   className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                 >
                   {t("Start for $0")}
@@ -290,8 +288,6 @@ export function LandingFooter() {
                 </Link>
                 <Link
                   href='/contact'
-                  target='_blank'
-                  rel='noopener noreferrer'
                   className='ring-offset-background focus-visible:ring-ring inline-flex h-12 items-center justify-center gap-2 rounded-full px-8 text-base font-medium whitespace-nowrap text-gray-400 transition-colors hover:text-gray-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'
                 >
                   {t("Get in touch")}

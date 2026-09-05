@@ -12,8 +12,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/suggest",
     "/signin",
     "/signup",
-    "/apps",
-    "/apps2",
     "/blog",
     // "/community",
     "/creators-program",
@@ -23,14 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/legal/terms-of-service",
     "/legal/privacy-policy",
     "/inspire/create",
-    "/apps/character",
-    "/apps/logo-animation2",
-    "/apps/image-generation",
-    "/apps/skin-enhancer",
-    "/apps/workflow",
-    "/apps/text-to-speech",
-    "/apps/angles-reshape",
-    "/apps/video-generation",
   ];
 
   const sitemapEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
