@@ -385,7 +385,7 @@ const GraphicsCanvasContent = ({
 
             <div className='flex h-full w-full items-center justify-center'>
               <div className='flex flex-col items-center gap-4'>
-                <LoadingFileLoader size={14} />
+                <LoadingFileLoader size={12} />
 
                 <div className='flex flex-col items-center gap-1.5 px-2'>
                   <p className='text-[11px] font-bold tracking-[0.2em] text-black uppercase dark:text-white/80'>

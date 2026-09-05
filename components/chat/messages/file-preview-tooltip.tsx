@@ -2,7 +2,8 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { useFilePreview } from "@/hooks/message/use-file-preview";
-import { AlertCircle, FileText, Loader, Play, Volume2 } from "lucide-react";
+import Loading from "@/utils/Loading";
+import { AlertCircle, FileText, Play, Volume2 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 
@@ -45,7 +46,7 @@ export function FilePreviewTooltip({
     if (isLoading) {
       return (
         <div className='flex items-center justify-center p-4'>
-          <Loader className='text-muted-foreground h-6 w-6 animate-spin' />
+          <Loading size={12} />
           <span className='text-muted-foreground ml-2 text-sm'>
             <LocalizedText text={"Loading preview..."} />
           </span>

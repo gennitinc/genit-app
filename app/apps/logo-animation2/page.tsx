@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   CheckCircle2,
@@ -293,7 +294,7 @@ const LogoAnimationPage = () => {
                 >
                   {isGenerating ? (
                     <>
-                      <RefreshCw className='size-5 animate-spin' />
+                      <Loading size={20} />
                       <LocalizedText text={"Animating..."} />
                     </>
                   ) : (
@@ -356,7 +357,10 @@ const LogoAnimationPage = () => {
                   <div className='flex flex-col items-center gap-6'>
                     <div className='relative size-20'>
                       <div className='absolute inset-0 animate-ping rounded-full border-2 border-cyan-500/30' />
-                      <div className='absolute inset-0 animate-spin rounded-full border-2 border-t-cyan-500' />
+                      <Loading
+                        size={20}
+                        className='absolute inset-0 flex items-center justify-center'
+                      />
                     </div>
                     <div className='text-center'>
                       <p className='text-sm font-bold text-white'>
@@ -427,7 +431,7 @@ const LogoAnimationPage = () => {
           <div className='space-y-4'>
             {isLoadingHistory ? (
               <div className='flex justify-center p-12'>
-                <RefreshCw className='text-muted-foreground size-6 animate-spin' />
+                <Loading size={24} />
               </div>
             ) : history.length === 0 ? (
               <div className='text-muted-foreground p-12 text-center text-sm'>

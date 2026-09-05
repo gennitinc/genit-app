@@ -18,13 +18,13 @@ import { ProjectActionModal } from "@/components/user/project-action-moda";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   Archive,
   ChevronRight,
   Clock,
   Image as ImageIcon,
-  Loader,
   MessageSquare,
   MoreHorizontal,
   Presentation,
@@ -494,9 +494,11 @@ function ChatHistoryPage() {
                   disabled={loading}
                   className='gap-2'
                 >
-                  <RefreshCw
-                    className={`h-3 w-3 ${loading ? "animate-spin" : ""}`}
-                  />
+                  {loading ? (
+                    <Loading size={12} />
+                  ) : (
+                    <RefreshCw className='h-3 w-3' />
+                  )}
                   <LocalizedText text={"Refresh"} />
                 </Button>
               </div>
@@ -529,7 +531,7 @@ function ChatHistoryPage() {
             <div className='space-y-2'>
               {loading ? (
                 <div className='py-16 text-center'>
-                  <Loader className='mx-auto mb-3 h-8 w-8 animate-spin rounded-full' />
+                  <Loading size={12} />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
                     <LocalizedText text={"Loading conversations..."} />
                   </h3>
@@ -666,7 +668,7 @@ function ChatHistoryPage() {
                   ))}
                   {loadingMore && (
                     <div className='py-8 text-center'>
-                      <Loader className='text-muted-foreground mx-auto mb-2 h-6 w-6 animate-spin rounded-full' />
+                      <Loading size={12} />
                       <p className='text-muted-foreground text-xs'>
                         <LocalizedText text={"Loading more..."} />
                       </p>

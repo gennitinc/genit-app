@@ -81,7 +81,7 @@ export function ElicitationCard({
                     : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 }
               >
-                {isPicked && submitting && <LoadingFileLoader size={14} />}
+                {isPicked && submitting && <LoadingFileLoader size={12} />}
                 {opt.label}
               </button>
             );
@@ -111,7 +111,7 @@ export function ElicitationCard({
             aria-label='Send'
           >
             {submitting ? (
-              <LoadingFileLoader size={14} />
+              <LoadingFileLoader size={12} />
             ) : (
               <Send className='h-3 w-3' />
             )}

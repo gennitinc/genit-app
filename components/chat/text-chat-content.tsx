@@ -6,7 +6,6 @@ import {
   Conversation,
   ConversationContent,
 } from "@/components/ai-elements/conversation";
-import { Loader } from "@/components/ai-elements/loader";
 import {
   AIMessage,
   AIThinkingContent,
@@ -566,7 +565,7 @@ export function TextChatContent({
               return null;
             })}
 
-            {status === "submitted" && <Loader />}
+            {status === "submitted" && <Loading size={12} />}
 
             {isTyping &&
               (streamingContent && streamingContent.length > 0 ? (

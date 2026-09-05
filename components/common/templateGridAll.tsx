@@ -32,6 +32,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
@@ -816,7 +817,7 @@ export default function TemplateGridAll() {
       </div>
       {isFetchingMore && (
         <div className='mt-4 flex justify-center'>
-          <Loader className='h-5 w-5 animate-spin' />
+          <Loading size={20} />
         </div>
       )}
 

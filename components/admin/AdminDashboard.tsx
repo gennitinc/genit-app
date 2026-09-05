@@ -99,7 +99,11 @@ export const AdminDashboard = () => {
           disabled={loading}
           className='bg-background/50 gap-2 self-start backdrop-blur-sm'
         >
-          <RefreshCcw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          {loading ? (
+            <LoadingFileLoader size={16} />
+          ) : (
+            <RefreshCcw className='h-4 w-4' />
+          )}
           <LocalizedText text={"Refresh Stats"} />
         </Button>
       </div>

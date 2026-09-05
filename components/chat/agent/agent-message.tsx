@@ -28,14 +28,7 @@ import type {
   AgentToolCall,
 } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  AlertTriangle,
-  CalendarCheck2,
-  CheckCircle2,
-  Clock,
-  Loader2,
-  XCircle,
-} from "lucide-react";
+import { CalendarCheck2, CheckCircle2, XCircle } from "lucide-react";
 import { useState } from "react";
 
 export interface AgentRunView {
@@ -104,10 +97,16 @@ function formatErrorMessage(error: string | undefined): string {
     }
   }
 
-  return error;
+  return "We couldn't complete this request. Please try again.";
 }
 
-function ToolCallView({ call }: { call: AgentToolCall }) {
+function ToolCallView({
+  call,
+  onInspirationSelect,
+}: {
+  call: AgentToolCall;
+  onInspirationSelect?: (image: string) => void | Promise<void>;
+}) {
   // Hide request_user_input tool calls from the tool call UI list completely,
   // since the elicitation card itself handles asking the user, and a tool card
   // for "request_user_input" is redundant and clutters the UI.
@@ -134,7 +133,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
   if (!call.result) {
     return (
       <div className='border-border/70 bg-card text-muted-foreground my-3 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_1px_0_rgba(0,0,0,0.02)] dark:border-white/10 dark:bg-white/[0.02] dark:shadow-none'>
-        <LoadingFileLoader size={14} />
+        <LoadingFileLoader size={12} />
         <span className='text-foreground font-medium'>{pendingLabel}</span>
         <span className='text-muted-foreground'>
           <LocalizedText text={"running…"} />
@@ -145,17 +144,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
 
   // Failed.
   if (!call.result.ok) {
-    return (
-      <AgentCard
-        icon={<AlertTriangle className='h-3.5 w-3.5' />}
-        title={`${humanizeToolName(call.name)} failed`}
-        tone='error'
-      >
-        <p className='text-foreground text-[12.5px] leading-relaxed'>
-          {formatErrorMessage(call.result.error)}
-        </p>
-      </AgentCard>
-    );
+    return null;
   }
 
   const data = call.result.data || {};
@@ -222,6 +211,7 @@ function ToolCallView({ call }: { call: AgentToolCall }) {
       <DesignInspirationResults
         results={results}
         query={call.args?.query || "design inspiration"}
+        onSelect={onInspirationSelect}
       />
     );
   }
@@ -245,7 +235,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "running") {
     return (
       <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
-        <LoadingFileLoader size={14} />
+        <LoadingFileLoader size={12} />
         <LocalizedText text={"Working"} />
       </span>
     );
@@ -299,6 +289,13 @@ export function AgentMessage({
   const inspirationCalls = run.toolCalls.filter(
     (call) => call.render === "design_inspiration"
   );
+  const awaitsInspiration =
+    run.status === "awaiting_input" &&
+    !!run.elicitation?.question.toLowerCase().includes("inspiration");
+  const safeText =
+    /\b(gpt-|input_fidelity|api error|[45]\d\d the model)\b/i.test(run.text)
+      ? "I couldn't complete this request. Please try again."
+      : run.text;
   const displayedToolCalls =
     inspirationCalls.length <= 1
       ? run.toolCalls
@@ -389,7 +386,15 @@ export function AgentMessage({
             {displayedToolCalls
               .filter((tc) => shouldDisplayToolCall(tc, run.status))
               .map((tc) => (
-                <ToolCallView key={tc.id} call={tc} />
+                <ToolCallView
+                  key={tc.id}
+                  call={tc}
+                  onInspirationSelect={
+                    awaitsInspiration
+                      ? (image) => resumeAgentRunUserInput(run.runId, image)
+                      : undefined
+                  }
+                />
               ))}
 
             {/* Integration connect prompt */}
@@ -399,18 +404,20 @@ export function AgentMessage({
               )}
 
             {/* Elicitation — user clarification needed */}
-            {run.elicitation && run.status === "awaiting_input" && (
-              <ElicitationCard
-                elicitation={run.elicitation}
-                onSubmit={(v) => resumeAgentRunUserInput(run.runId, v)}
-              />
-            )}
+            {run.elicitation &&
+              run.status === "awaiting_input" &&
+              !awaitsInspiration && (
+                <ElicitationCard
+                  elicitation={run.elicitation}
+                  onSubmit={(v) => resumeAgentRunUserInput(run.runId, v)}
+                />
+              )}
 
             {/* Final text response */}
-            {run.text && (
+            {safeText && (
               <div className='text-foreground mt-1 text-sm'>
                 <Response components={{ a: PluginConnectionLink }}>
-                  {run.text}
+                  {safeText}
                 </Response>
               </div>
             )}

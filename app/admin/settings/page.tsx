@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import Loading from "@/utils/Loading";
 import {
   AlertTriangle,
   Globe,
@@ -44,11 +45,7 @@ export default function SettingsPage() {
           disabled={loading}
           className='h-11 gap-2 rounded-xl px-6'
         >
-          {loading ? (
-            <RefreshCw className='h-4 w-4 animate-spin' />
-          ) : (
-            <Save className='h-4 w-4' />
-          )}
+          {loading ? <Loading size={16} /> : <Save className='h-4 w-4' />}
           <LocalizedText text={"Save Configuration"} />
         </Button>
       </div>

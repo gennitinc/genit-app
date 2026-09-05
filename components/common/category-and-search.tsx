@@ -3,6 +3,7 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useUrlState } from "@/hooks/use-url-state";
+import Loading from "@/utils/Loading";
 import { Loader, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
@@ -69,7 +70,7 @@ export default function CategoryAndSearch({
               className='btn-gradient text-primary-foreground absolute top-1/2 right-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full p-0 shadow-sm transition-all duration-200 disabled:opacity-50'
             >
               {searchLoading ? (
-                <Loader className='h-4 w-4 animate-spin' />
+                <Loading size={16} />
               ) : (
                 <Search className='h-4 w-4' />
               )}

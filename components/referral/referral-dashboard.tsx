@@ -269,9 +269,11 @@ export default function ReferralDashboard() {
           disabled={refreshing}
           className='self-start sm:self-auto'
         >
-          <RefreshCw
-            className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
-          />
+          {refreshing ? (
+            <LoadingFileLoader size={16} />
+          ) : (
+            <RefreshCw className='mr-2 h-4 w-4' />
+          )}
           <LocalizedText text={"Refresh"} />
         </Button>
       </header>

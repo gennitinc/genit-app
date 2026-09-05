@@ -11,6 +11,7 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { templateApi } from "@/utils/inspire-api";
@@ -28,7 +29,6 @@ import {
   GitBranch,
   Image as ImageIcon,
   LayoutGrid,
-  Loader,
   Play,
   RefreshCw,
   RotateCcw,
@@ -354,7 +354,7 @@ export function VersioningMessage({
       edited: <Edit className='h-2.5 w-2.5 text-blue-500' />,
       stopped: <Square className='h-2.5 w-2.5 text-orange-500' />,
       error: <AlertTriangle className='h-2.5 w-2.5 text-red-500' />,
-      generating: <Loader className='h-2.5 w-2.5 animate-spin text-blue-500' />,
+      generating: <Loading size={12} />,
     };
     return (
       iconMap[status] || (
@@ -715,30 +715,11 @@ export function VersioningMessage({
         <div className='relative z-10 flex items-center gap-2 rounded-md px-1.5 py-2 sm:gap-3'>
           <div className='flex-shrink-0'>
             <div className='relative z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-blue-500/50 bg-blue-500/20 shadow-sm sm:h-5 sm:w-5'>
-              <Loader className='h-2 w-2 animate-spin text-blue-500 sm:h-2.5 sm:w-2.5' />
+              <Loading size={12} />
             </div>
           </div>
           <div className='min-w-0 flex-1'>
-            <svg
-              className='mr-3 -ml-1 h-4 w-4 animate-spin text-white'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-            >
-              <circle
-                className='opacity-25'
-                cx='12'
-                cy='12'
-                r='10'
-                stroke='currentColor'
-                strokeWidth='4'
-              ></circle>
-              <path
-                className='opacity-75'
-                fill='currentColor'
-                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-              ></path>
-            </svg>
+            <Loading size={12} />
             <p className='text-muted-foreground text-xs'>
               <LocalizedText text={"Fetching files..."} />
             </p>
@@ -1024,7 +1005,7 @@ export function VersioningMessage({
                           className='h-9 w-full gap-1.5 rounded-xl bg-violet-600 px-4 text-white hover:bg-violet-700 sm:w-auto'
                         >
                           {isInpainting ? (
-                            <Loader className='h-3.5 w-3.5 animate-spin' />
+                            <Loading size={12} />
                           ) : (
                             <Send className='h-3.5 w-3.5' />
                           )}
@@ -1082,7 +1063,7 @@ export function VersioningMessage({
                           className='h-7 w-fit gap-1.5 px-2 text-xs'
                         >
                           {publishing === item.id ? (
-                            <Loader className='h-3 w-3 animate-spin' />
+                            <Loading size={12} />
                           ) : (
                             <Sparkles className='h-3 w-3' />
                           )}
@@ -1185,7 +1166,7 @@ export function VersioningMessage({
                         className='h-7 w-fit gap-1.5 px-2 text-xs'
                       >
                         {publishing === item.id ? (
-                          <Loader className='h-3 w-3 animate-spin' />
+                          <Loading size={12} />
                         ) : (
                           <Sparkles className='h-3 w-3' />
                         )}

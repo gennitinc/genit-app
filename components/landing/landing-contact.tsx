@@ -28,6 +28,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import emailjs from "@emailjs/browser";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -572,7 +573,7 @@ export default function LandingContact() {
                       >
                         {loading ? (
                           <div className='flex items-center justify-center text-sm'>
-                            <div className='mr-3 size-5 animate-spin rounded-full border-2 border-white/20 border-t-white' />
+                            <Loading size={20} />
                             {t("Sending Inquiry...")}
                           </div>
                         ) : (

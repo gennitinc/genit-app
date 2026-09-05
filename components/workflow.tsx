@@ -1200,7 +1200,7 @@ const GenittWorkflow = ({
   if (isLoading) {
     return (
       <div className='bg-background flex h-screen flex-col items-center justify-center'>
-        <LoadingFileLoader />
+        <LoadingFileLoader size={12} />
       </div>
     );
   }
@@ -1517,7 +1517,7 @@ const GenittWorkflow = ({
                   disabled={!projectName.trim() || isCreating}
                   className='text-primary-foreground bg-indigo-600 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'
                 >
-                  {isCreating ? <LoadingFileLoader size={16} /> : "Create"}
+                  {isCreating ? <LoadingFileLoader size={12} /> : "Create"}
                 </Button>
               </div>
             </div>
@@ -1541,7 +1541,7 @@ const GenittWorkflow = ({
               <div className='custom-scrollbar mb-6 max-h-[200px] space-y-2 overflow-y-auto pr-1'>
                 {isHistoryLoading ? (
                   <div className='flex justify-center p-4'>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={12} />
                   </div>
                 ) : historyProjects.length > 0 ? (
                   historyProjects.map((project) => (

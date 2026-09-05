@@ -7,7 +7,8 @@ import {
   isComposioConnectionLink,
   resolveComposioToolkit,
 } from "@/lib/plugin-connection-link";
-import { CheckCircle2, Loader2, Plug } from "lucide-react";
+import Loading from "@/utils/Loading";
+import { CheckCircle2, Plug } from "lucide-react";
 import {
   type AnchorHTMLAttributes,
   Children,
@@ -100,7 +101,7 @@ function PluginConnectionControl({
     if (waiting) {
       return (
         <Button className='my-2 w-fit' size='sm' disabled>
-          <Loader2 className='animate-spin' />
+          <Loading size={12} />
           Checking connection…
         </Button>
       );

@@ -32,8 +32,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -2378,9 +2378,7 @@ export default function InboxPage() {
                                     >
                                       <span className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white ring-1 ring-black/10 dark:bg-zinc-900 dark:ring-white/10'>
                                         <PlatformIcon
-                                          platform={
-                                            activeConversation.platform
-                                          }
+                                          platform={activeConversation.platform}
                                           className='h-4 w-4'
                                         />
                                       </span>
@@ -2586,7 +2584,7 @@ export default function InboxPage() {
                     </p>
                     {templatesLoading ? (
                       <div className='flex items-center gap-2'>
-                        <Loader2 className='h-4 w-4 animate-spin' />{" "}
+                        <LoadingFileLoader size={16} />{" "}
                         <LocalizedText text={"Loading templates…"} />
                       </div>
                     ) : whatsappTemplates.length ? (
@@ -2633,7 +2631,7 @@ export default function InboxPage() {
                           disabled={sendTemplateMutation.isPending}
                         >
                           {sendTemplateMutation.isPending && (
-                            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                            <LoadingFileLoader size={16} />
                           )}
                           <LocalizedText text={"Send template"} />
                         </Button>

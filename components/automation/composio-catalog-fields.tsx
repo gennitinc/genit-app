@@ -12,6 +12,7 @@ import {
   fetchIntegrations,
 } from "@/lib/integrations-api";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { CheckCircle2, Loader2, Plug, Search } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 
@@ -237,9 +238,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
               </option>
             ))}
           </select>
-          {loading && (
-            <Loader2 className='absolute top-2 right-2 h-3 w-3 animate-spin text-violet-500' />
-          )}
+          {loading && <Loading size={12} className='absolute top-2 right-2' />}
         </div>
         {selected?.description && (
           <p className='mt-1.5 line-clamp-3 text-[10px] leading-4 text-zinc-500'>

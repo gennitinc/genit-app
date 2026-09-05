@@ -4,6 +4,7 @@ import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   Link as LinkIcon,
@@ -198,7 +199,7 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               >
                 {joining ? (
                   <>
-                    <RefreshCw className='mr-2 h-5 w-5 animate-spin' />
+                    <Loading size={20} />
                     <LocalizedText text={"processing..."} />
                   </>
                 ) : (

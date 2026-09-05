@@ -1,6 +1,7 @@
 "use client";
 
 import type { ElevenLabsVoice } from "@/types/inspire";
+import Loading from "@/utils/Loading";
 import { voiceApi } from "@/utils/inspire-api";
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -57,20 +58,21 @@ export function ElevenLabsVoiceSelect({ value, onChange }: Props) {
             const voice = voices.find((item) => item.id === event.target.value);
             onChange(event.target.value, voice?.name || "Voice");
           }}
-          className='w-full cursor-pointer rounded border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 pr-7 text-xs text-zinc-800 outline-none transition-colors focus:border-violet-500/50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200'
+          className='w-full cursor-pointer rounded border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 pr-7 text-xs text-zinc-800 transition-colors outline-none focus:border-violet-500/50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200'
         >
           {loading && <option>Loading voices…</option>}
           {error && <option>{error}</option>}
-          {!loading && !error && !voices.length && <option>No voices available</option>}
+          {!loading && !error && !voices.length && (
+            <option>No voices available</option>
+          )}
           {voices.map((voice) => (
             <option key={voice.id} value={voice.id}>
-              {voice.name}{voice.id === defaultVoiceId ? " (Default)" : ""}
+              {voice.name}
+              {voice.id === defaultVoiceId ? " (Default)" : ""}
             </option>
           ))}
         </select>
-        {loading && (
-          <Loader2 className='absolute top-2 right-2 h-3 w-3 animate-spin text-violet-500' />
-        )}
+        {loading && <Loading size={12} className='absolute top-2 right-2' />}
       </div>
     </div>
   );

@@ -4,7 +4,8 @@ import { FileUpload } from "@/components/chat/messages";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useMessageEditor } from "@/hooks/message/use-message-editor";
-import { AlertCircle, Loader } from "lucide-react";
+import Loading from "@/utils/Loading";
+import { AlertCircle } from "lucide-react";
 import type React from "react";
 
 interface MessageEditorProps {
@@ -147,7 +148,7 @@ export function MessageEditor({
             <div className='relative flex items-center gap-2'>
               {isLoading ? (
                 <>
-                  <Loader className='h-4 w-4 animate-spin' />
+                  <Loading size={12} />
                   <span className='font-medium'>
                     <LocalizedText text={"Saving..."} />
                   </span>

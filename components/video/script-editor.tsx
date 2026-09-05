@@ -4,6 +4,7 @@ import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import {
   CircleFadingArrowUp,
   Mic,
@@ -128,7 +129,7 @@ export function ScriptEditor({
             >
               {isGenerating ? (
                 <>
-                  <RefreshCw className='mr-2 h-4 w-4 animate-spin' />
+                  <Loading size={16} />
                   <LocalizedText text={"Generating..."} />
                 </>
               ) : (

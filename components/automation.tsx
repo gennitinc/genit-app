@@ -1190,7 +1190,7 @@ export default function AutomationWorkflow({
   if (isLoading) {
     return (
       <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center'>
-        <LoadingFileLoader />
+        <LoadingFileLoader size={12} />
       </div>
     );
   }
@@ -1353,8 +1353,7 @@ export default function AutomationWorkflow({
                     <div className='overflow-y-auto py-1'>
                       {catalogLoading && !composioToolkits.length && (
                         <div className='text-muted-foreground flex items-center gap-2 px-3 py-2 text-[10px]'>
-                          <Loader2 className='h-3 w-3 animate-spin' /> Loading
-                          connected apps
+                          <LoadingFileLoader size={12} /> Loading connected apps
                         </div>
                       )}
                       {addNodeMenu.map((category, catIdx) => (
@@ -1444,7 +1443,7 @@ export default function AutomationWorkflow({
           <div className='text-muted-foreground flex items-center gap-1 px-1.5 text-[10px]'>
             {saveStatus === "saving" && (
               <>
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={12} />
                 {/* <span>Saving</span> */}
               </>
             )}

@@ -42,12 +42,14 @@ interface DesignInspirationResultsProps {
   results: ScrapedPin[];
   query: string;
   message?: any;
+  onSelect?: (image: string) => void | Promise<void>;
 }
 
 export function DesignInspirationResults({
   results,
   query,
   message,
+  onSelect,
 }: DesignInspirationResultsProps) {
   const safeResults = results || [];
   const {
@@ -123,6 +125,7 @@ export function DesignInspirationResults({
       await apiResponse.patch(`/project/${project?._id}/inspiration`, {
         inspirationUrl: nextInspiration,
       });
+      if (nextInspiration) await onSelect?.(nextInspiration);
     } catch (error) {
       console.error("Failed to save selected design inspiration", error);
       setSelectedFiles(previous);

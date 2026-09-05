@@ -787,9 +787,7 @@ const SettingsHome = () => {
                         }
                         className='rounded-xl active:scale-[0.97]'
                       >
-                        {savingProfile && (
-                          <Loader2 className='mr-2 size-4 animate-spin' />
-                        )}
+                        {savingProfile && <LoadingFileLoader size={16} />}
                         <LocalizedText text={"Save account"} />
                       </Button>
                     </div>
@@ -832,9 +830,7 @@ const SettingsHome = () => {
                       disabled={sendingPasswordReset}
                       className='shrink-0 rounded-xl active:scale-[0.97]'
                     >
-                      {sendingPasswordReset && (
-                        <Loader2 className='mr-2 size-4 animate-spin' />
-                      )}
+                      {sendingPasswordReset && <LoadingFileLoader size={16} />}
                       <LocalizedText text={"Reset password"} />
                     </Button>
                   </CardContent>
@@ -1971,9 +1967,11 @@ const SettingsHome = () => {
                         disabled={loadingRuns}
                         onClick={fetchAutomationRuns}
                       >
-                        <RefreshCw
-                          className={`mr-2 h-4 w-4 ${loadingRuns ? "animate-spin" : ""}`}
-                        />
+                        {loadingRuns ? (
+                          <LoadingFileLoader size={16} />
+                        ) : (
+                          <RefreshCw className='mr-2 h-4 w-4' />
+                        )}
                         <LocalizedText text={"Refresh"} />
                       </Button>
                     </div>
@@ -2191,9 +2189,7 @@ const SettingsHome = () => {
                       disabled={openingBillingPortal}
                       className='rounded-xl active:scale-[0.97]'
                     >
-                      {openingBillingPortal && (
-                        <Loader2 className='mr-2 size-4 animate-spin' />
-                      )}
+                      {openingBillingPortal && <LoadingFileLoader size={16} />}
                       <LocalizedText text={"Invoices & receipts"} />
                     </Button>
                   </CardHeader>
@@ -2278,7 +2274,9 @@ const SettingsHome = () => {
                       <LocalizedText text={"Credit activity"} />
                     </CardTitle>
                     <CardDescription className='mt-1'>
-                      <LocalizedText text={"Successful charges and automatic refunds."} />
+                      <LocalizedText
+                        text={"Successful charges and automatic refunds."}
+                      />
                     </CardDescription>
                   </CardHeader>
                   <CardContent className='p-0'>
@@ -2289,20 +2287,34 @@ const SettingsHome = () => {
                     ) : (
                       <div className='divide-y divide-zinc-200 dark:divide-white/10'>
                         {creditTransactions.map((transaction: any) => {
-                          const charged = transaction.settledAmount ?? transaction.amount;
+                          const charged =
+                            transaction.settledAmount ?? transaction.amount;
                           const refunded = transaction.status === "refunded";
                           const credited = transaction.direction === "credit";
                           return (
-                            <div key={transaction._id} className='flex items-center justify-between gap-4 px-5 py-4'>
+                            <div
+                              key={transaction._id}
+                              className='flex items-center justify-between gap-4 px-5 py-4'
+                            >
                               <div className='min-w-0'>
                                 <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
-                                  {String(transaction.reason).replaceAll("_", " ")}
+                                  {String(transaction.reason).replaceAll(
+                                    "_",
+                                    " "
+                                  )}
                                 </p>
                                 <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
-                                  {new Date(transaction.createdAt).toLocaleString()} · {transaction.balanceAfter} remaining
+                                  {new Date(
+                                    transaction.createdAt
+                                  ).toLocaleString()}{" "}
+                                  · {transaction.balanceAfter} remaining
                                 </p>
                               </div>
-                              <Badge variant={refunded || credited ? "secondary" : "outline"}>
+                              <Badge
+                                variant={
+                                  refunded || credited ? "secondary" : "outline"
+                                }
+                              >
                                 {refunded
                                   ? `Refunded ${transaction.amount}`
                                   : credited

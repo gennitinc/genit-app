@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
   ChevronLeft,
@@ -192,7 +193,7 @@ const GeneratedCarousel = ({
           title='Delete this image'
         >
           {deletingId === img.id ? (
-            <div className='size-3 animate-spin rounded-full border border-white border-t-transparent' />
+            <Loading size={12} />
           ) : (
             <Trash className='size-3.5' />
           )}
@@ -309,11 +310,7 @@ const HistoryCard = ({
           disabled={deletingJob}
           className='flex size-6 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20 disabled:opacity-50'
         >
-          {deletingJob ? (
-            <div className='size-3 animate-spin rounded-full border border-red-400 border-t-transparent' />
-          ) : (
-            <Trash2 className='size-3' />
-          )}
+          {deletingJob ? <Loading size={12} /> : <Trash2 className='size-3' />}
         </button>
       </div>
 
@@ -338,7 +335,7 @@ const HistoryCard = ({
                 className='absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover/img:opacity-100 hover:bg-red-600'
               >
                 {deletingImage === img._id ? (
-                  <div className='size-2 animate-spin rounded-full border border-white border-t-transparent' />
+                  <Loading size={8} />
                 ) : (
                   <Trash className='size-2.5' />
                 )}
@@ -934,7 +931,10 @@ const SkinEnhancerPage = () => {
                     <div className='flex flex-1 flex-col items-center justify-center gap-4 border-2 border-dashed border-gray-200 p-8 dark:border-white/10'>
                       <div className='relative size-16'>
                         <div className='absolute inset-0 animate-ping rounded-full border-2 border-blue-500/30' />
-                        <div className='absolute inset-0 animate-spin rounded-full border-2 border-t-blue-500' />
+                        <Loading
+                          size={20}
+                          className='absolute inset-0 flex items-center justify-center'
+                        />
                         <div className='absolute inset-2 rounded-full bg-gradient-to-br from-blue-500/20 to-pink-500/20' />
                       </div>
                       <div className='text-center'>
@@ -1018,7 +1018,7 @@ const SkinEnhancerPage = () => {
               <div className='flex-1 space-y-3 overflow-y-auto px-4 py-4'>
                 {historyLoading ? (
                   <div className='flex items-center justify-center py-12'>
-                    <div className='border-primary size-8 animate-spin rounded-full border-2 border-t-transparent' />
+                    <Loading size={32} />
                   </div>
                 ) : history.length === 0 ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
