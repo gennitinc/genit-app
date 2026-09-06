@@ -96,7 +96,7 @@ function withAuth(
     if (loading || isCheckingAuth) {
       return (
         <div className='flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-black'>
-          <Loading size={32} />
+          <Loading size={14} />
         </div>
       );
     }

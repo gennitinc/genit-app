@@ -80,7 +80,7 @@ const PreviewPanelContent = ({
   if (isLoadingProject) {
     return (
       <div className='bg-muted/90 flex h-full w-full items-center justify-center rounded-3xl border border-zinc-200 shadow-2xl dark:border-zinc-800/50'>
-        <Loading size={32} />
+        <Loading size={14} />
       </div>
     );
   }

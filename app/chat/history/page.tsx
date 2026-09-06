@@ -535,7 +535,7 @@ function ChatHistoryPage() {
             <div className='space-y-2'>
               {loading ? (
                 <div className='flex flex-col items-center justify-center gap-3 py-16 text-center'>
-                  <Loading size={32} />
+                  <Loading size={14} />
                   <h3 className='text-foreground text-sm font-medium'>
                     <LocalizedText text={"Loading conversations..."} />
                   </h3>

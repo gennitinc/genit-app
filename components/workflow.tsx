@@ -1200,7 +1200,7 @@ const GenittWorkflow = ({
   if (isLoading) {
     return (
       <div className='bg-background flex h-screen flex-col items-center justify-center'>
-        <LoadingFileLoader size={32} />
+        <LoadingFileLoader size={14} />
       </div>
     );
   }

@@ -1018,7 +1018,7 @@ const SkinEnhancerPage = () => {
               <div className='flex-1 space-y-3 overflow-y-auto px-4 py-4'>
                 {historyLoading ? (
                   <div className='flex items-center justify-center py-12'>
-                    <Loading size={32} />
+                    <Loading size={14} />
                   </div>
                 ) : history.length === 0 ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
