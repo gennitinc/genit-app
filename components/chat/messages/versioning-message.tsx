@@ -719,7 +719,6 @@ export function VersioningMessage({
             </div>
           </div>
           <div className='min-w-0 flex-1'>
-            <Loading size={12} />
             <p className='text-muted-foreground text-xs'>
               <LocalizedText text={"Fetching files..."} />
             </p>

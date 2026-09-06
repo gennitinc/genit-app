@@ -499,7 +499,7 @@ function ChatHistoryPage() {
                   className='gap-2'
                 >
                   {loading ? (
-                    <Loading size={12} />
+                    <Loading size={16} />
                   ) : (
                     <RefreshCw className='h-3 w-3' />
                   )}
@@ -534,9 +534,9 @@ function ChatHistoryPage() {
             {/* Chat History List */}
             <div className='space-y-2'>
               {loading ? (
-                <div className='py-16 text-center'>
-                  <Loading size={12} />
-                  <h3 className='text-foreground mb-1 text-sm font-medium'>
+                <div className='flex flex-col items-center justify-center gap-3 py-16 text-center'>
+                  <Loading size={32} />
+                  <h3 className='text-foreground text-sm font-medium'>
                     <LocalizedText text={"Loading conversations..."} />
                   </h3>
                 </div>
@@ -671,8 +671,8 @@ function ChatHistoryPage() {
                     </Card>
                   ))}
                   {loadingMore && (
-                    <div className='py-8 text-center'>
-                      <Loading size={12} />
+                    <div className='flex flex-col items-center justify-center gap-2 py-8 text-center'>
+                      <Loading size={20} />
                       <p className='text-muted-foreground text-xs'>
                         <LocalizedText text={"Loading more..."} />
                       </p>

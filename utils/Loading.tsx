@@ -10,9 +10,14 @@ const Loading = ({
   className?: string;
 }) => {
   return (
-    <div className={className}>
+    <span
+      role='status'
+      aria-label='Loading'
+      className={`inline-flex shrink-0 items-center justify-center align-middle leading-none ${className || ""}`}
+    >
       <svg
-        className='animate-spin'
+        aria-hidden='true'
+        className='block animate-spin'
         height={size}
         strokeLinejoin='round'
         style={{ color: "currentcolor" }}
@@ -83,7 +88,7 @@ const Loading = ({
           </clipPath>
         </defs>
       </svg>
-    </div>
+    </span>
   );
 };
 
