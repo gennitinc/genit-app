@@ -13,19 +13,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  Check,
-  CircleFadingArrowUp,
-  Globe2,
-  Loader2,
-  Pause,
-  Play,
-  Plus,
-  Sparkles,
-  X,
-  ZoomIn,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Check, Globe2, Plus, Sparkles, ZoomIn } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 // import { ColorManagement } from "./color-management";
@@ -36,6 +25,10 @@ interface ScrapedPin {
   alt: string;
   url: string;
   boardName?: string;
+  score?: number;
+  reason?: string;
+  source?: "pinterest" | "rag";
+  isRecommended?: boolean;
 }
 
 interface DesignInspirationResultsProps {
@@ -45,6 +38,8 @@ interface DesignInspirationResultsProps {
   onSelect?: (image: string) => void | Promise<void>;
 }
 
+const AUTO_SELECT_SECONDS = 10;
+
 export function DesignInspirationResults({
   results,
   query,
@@ -52,31 +47,17 @@ export function DesignInspirationResults({
   onSelect,
 }: DesignInspirationResultsProps) {
   const safeResults = results || [];
-  const {
-    selectedFiles,
-    setSelectedFiles,
-    setInputMode,
-    setGenerationMode,
-    project,
-    setProject,
-    isGenerating,
-    isGeneratingImage,
-    generateMessage,
-    selectedColorScales,
-    primaryFont,
-  } = useProjectDesign();
+  const { selectedFiles, setSelectedFiles, project, setProject } =
+    useProjectDesign();
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
-  const [countdown, setCountdown] = useState(10);
-  const [isCountdownPaused, setIsCountdownPaused] = useState(false);
-  const autoPickedRef = useRef(false);
+  const [countdown, setCountdown] = useState(AUTO_SELECT_SECONDS);
   const storageKey = project?._id
     ? `design-inspiration-selection:${project._id}`
     : null;
 
-  const isAutoSelected = safeResults.some((r: any) => r.isAutoSelected);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const historicalInspiration =
@@ -91,6 +72,7 @@ export function DesignInspirationResults({
         ? [historicalInspiration]
         : [];
   const hasAnySelection = effectiveSelectedFiles.length > 0;
+  const resultKey = safeResults.map((pin) => pin.image).join("|");
 
   // Remove chunking - we want a continuous carousel
 
@@ -98,7 +80,6 @@ export function DesignInspirationResults({
     effectiveSelectedFiles?.includes(image) ?? false;
 
   const handleSelect = async (image: string) => {
-    autoPickedRef.current = true;
     const previous = effectiveSelectedFiles.slice(0, 1);
     const next = previous.includes(image) ? [] : [image];
     const nextInspiration = next[0] || null;
@@ -153,7 +134,6 @@ export function DesignInspirationResults({
     const saved =
       persistedInspiration || window.localStorage.getItem(storageKey);
     if (saved && safeResults.some((pin) => pin.image === saved)) {
-      autoPickedRef.current = true;
       setSelectedFiles([saved]);
     }
   }, [
@@ -165,36 +145,23 @@ export function DesignInspirationResults({
   ]);
 
   useEffect(() => {
-    autoPickedRef.current = false;
-    setCountdown(10);
-    setIsCountdownPaused(false);
-  }, [query, safeResults]);
+    setCountdown(AUTO_SELECT_SECONDS);
+  }, [query, resultKey]);
 
   useEffect(() => {
-    if (
-      isCountdownPaused ||
-      hasAnySelection ||
-      autoPickedRef.current ||
-      !safeResults.length
-    ) {
-      return;
-    }
+    if (hasAnySelection || !safeResults[0]) return;
 
     if (countdown <= 0) {
-      const randomPin =
-        safeResults[Math.floor(Math.random() * safeResults.length)];
-      if (randomPin?.image) {
-        void handleSelect(randomPin.image);
-      }
+      void handleSelect(safeResults[0].image);
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      setCountdown((seconds) => seconds - 1);
-    }, 1000);
-
+    const timer = window.setTimeout(
+      () => setCountdown((seconds) => seconds - 1),
+      1000
+    );
     return () => window.clearTimeout(timer);
-  }, [countdown, hasAnySelection, isCountdownPaused, safeResults]);
+  }, [countdown, hasAnySelection, resultKey]);
 
   // Sync carousel position when dialog opens
   useEffect(() => {
@@ -211,10 +178,7 @@ export function DesignInspirationResults({
       <div className='flex items-center gap-2'>
         <Globe2 className='text-primary h-3 w-3 shrink-0' />
         <p className='line-clamp-1 truncate text-[11px] text-blue-500'>
-          {isAutoSelected
-            ? "AI Selected Foundation"
-            : "Deep Internet Search Results"}{" "}
-          —{" "}
+          Pinterest + saved inspiration results ({safeResults.length}) —{" "}
           <span className='text-foreground/70 font-mono normal-case italic'>
             "{query}"
           </span>
@@ -224,26 +188,18 @@ export function DesignInspirationResults({
       {!hasAnySelection && (
         <div className='flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2'>
           <p className='text-muted-foreground text-[11px]'>
-            {isCountdownPaused
-              ? "Auto-pick paused until you select an inspiration."
-              : `Auto-picking a random inspiration in ${countdown}s.`}
+            Choose within {countdown}s, or AI will select the highest-ranked
+            match.
           </p>
-          <button
+          <Button
             type='button'
-            className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/8 text-white/70 hover:bg-white/12 hover:text-white'
-            onClick={() => setIsCountdownPaused((paused) => !paused)}
-            aria-label={
-              isCountdownPaused
-                ? "Resume inspiration countdown"
-                : "Pause inspiration countdown"
-            }
+            size='sm'
+            className='h-7 shrink-0 gap-1.5 rounded-full bg-indigo-600 px-3 text-[11px] hover:bg-indigo-700'
+            onClick={() => handleSelect(safeResults[0].image)}
           >
-            {isCountdownPaused ? (
-              <Play className='h-3.5 w-3.5' />
-            ) : (
-              <Pause className='h-3.5 w-3.5' />
-            )}
-          </button>
+            <Sparkles className='h-3 w-3' />
+            Let AI choose
+          </Button>
         </div>
       )}
 
@@ -313,6 +269,9 @@ export function DesignInspirationResults({
                           <Plus className='h-3.5 w-3.5' />
                         )}
                       </button>
+                      <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-0.5 text-[8px] font-medium tracking-wide text-white/75 uppercase'>
+                        {pin.source === "rag" ? "Saved" : "Pinterest"}
+                      </span>
                       <button
                         type='button'
                         className='absolute right-2 bottom-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white shadow-lg hover:bg-black/80'
@@ -342,9 +301,9 @@ export function DesignInspirationResults({
 
         <div className='mt-4'>
           <p className='text-muted-foreground text-[11px]'>
-            {isAutoSelected
-              ? "The AI has automatically selected a design foundation to begin generating your concept."
-              : "Tap inspirations to use them as references for your next design."}
+            {hasAnySelection
+              ? "Your selected inspiration will guide the next design."
+              : "Results are ranked by relevance. Tap any inspiration to use it."}
           </p>
         </div>
       </div>

@@ -187,6 +187,10 @@ function ChatHistoryPage() {
           setLoading(false);
           setIsRestored(true);
 
+          // Show the cache immediately, then refresh it so newly created chats
+          // are not hidden by an older session snapshot.
+          void fetchAllProjects(1, false, cachedSearchQuery || "");
+
           // Wait for the next tick to ensure DOM is rendered, then scroll
           setTimeout(() => {
             if (scrollContainerRef.current && cachedScrollTop) {
