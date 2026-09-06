@@ -1190,7 +1190,7 @@ export default function AutomationWorkflow({
   if (isLoading) {
     return (
       <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center'>
-        <LoadingFileLoader size={14} />
+        <LoadingFileLoader size={20} />
       </div>
     );
   }

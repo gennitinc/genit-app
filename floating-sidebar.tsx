@@ -1835,7 +1835,7 @@ export function FloatingSidebar({
                   <label htmlFor='audio-upload' className='cursor-pointer'>
                     {isUploading ? (
                       <div className='flex flex-col items-center'>
-                        <LoadingFileLoader size={16} />
+                        <LoadingFileLoader size={20} />
                         <p className='text-primary text-sm font-medium'>
                           Uploading audio...
                         </p>
@@ -2209,7 +2209,7 @@ export function FloatingSidebar({
               <label htmlFor='image-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading image...
                     </p>
@@ -2617,7 +2617,7 @@ export function FloatingSidebar({
               <label htmlFor='video-upload' className='cursor-pointer'>
                 {isUploading ? (
                   <div className='flex flex-col items-center'>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                     <p className='text-primary text-sm font-medium'>
                       Uploading video...
                     </p>
@@ -4138,7 +4138,7 @@ export function FloatingSidebar({
                 >
                   {isUploading ? (
                     <>
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                       Uploading...
                     </>
                   ) : (

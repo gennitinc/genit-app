@@ -1177,7 +1177,7 @@ export const LoginComp = () => {
               >
                 {loading2 ? (
                   <div className='flex items-center justify-center'>
-                    <Loading size={16} />
+                    <Loading size={20} />
                     <LocalizedText text={"Signing in..."} />
                   </div>
                 ) : (
@@ -1378,7 +1378,7 @@ export const LoginComp = () => {
               >
                 {loading ? (
                   <div className='flex items-center justify-center'>
-                    <Loading size={16} />
+                    <Loading size={20} />
                     <LocalizedText text={"Signing in..."} />
                   </div>
                 ) : (

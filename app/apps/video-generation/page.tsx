@@ -1767,7 +1767,7 @@ function VideoGenerationPage() {
                     >
                       {isGenerating ? (
                         <div className='flex items-center gap-2'>
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                           <span>{generationProgress}%</span>
                         </div>
                       ) : (

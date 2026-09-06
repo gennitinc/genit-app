@@ -46,7 +46,7 @@ export function FilePreviewTooltip({
     if (isLoading) {
       return (
         <div className='flex items-center justify-center p-4'>
-          <Loading size={16} />
+          <Loading size={20} />
           <span className='text-muted-foreground ml-2 text-sm'>
             <LocalizedText text={"Loading preview..."} />
           </span>

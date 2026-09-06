@@ -1219,7 +1219,7 @@ export const SignupComp = () => {
               >
                 {loading2 ? (
                   <div className='flex items-center justify-center'>
-                    <Loading size={16} />
+                    <Loading size={20} />
                     <LocalizedText text={"Signing up..."} />
                   </div>
                 ) : (
@@ -1418,7 +1418,7 @@ export const SignupComp = () => {
               >
                 {loading ? (
                   <div className='flex items-center justify-center'>
-                    <Loading size={16} />
+                    <Loading size={20} />
                     <LocalizedText text={"Creating account..."} />
                   </div>
                 ) : (

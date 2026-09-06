@@ -69,7 +69,7 @@ export const AccountActionModal = ({
             disabled={loading}
             className='min-w-[120px]'
           >
-            {loading ? <LoadingFileLoader size={16} /> : confirmLabel}
+            {loading ? <LoadingFileLoader size={20} /> : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

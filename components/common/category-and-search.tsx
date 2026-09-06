@@ -70,7 +70,7 @@ export default function CategoryAndSearch({
               className='btn-gradient text-primary-foreground absolute top-1/2 right-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full p-0 shadow-sm transition-all duration-200 disabled:opacity-50'
             >
               {searchLoading ? (
-                <Loading size={16} />
+                <Loading size={20} />
               ) : (
                 <Search className='h-4 w-4' />
               )}

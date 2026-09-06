@@ -270,7 +270,7 @@ export default function ReferralDashboard() {
           className='self-start sm:self-auto'
         >
           {refreshing ? (
-            <LoadingFileLoader size={16} />
+            <LoadingFileLoader size={20} />
           ) : (
             <RefreshCw className='mr-2 h-4 w-4' />
           )}

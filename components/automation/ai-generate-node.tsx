@@ -168,7 +168,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                     </option>
                   ))}
                 </select>
-                {isLoadingModels && <LoadingFileLoader size={16} />}
+                {isLoadingModels && <LoadingFileLoader size={20} />}
               </div>
             </div>
 

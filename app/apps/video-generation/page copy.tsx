@@ -2254,7 +2254,7 @@ function VideoCreatePage() {
                     >
                       {isGenerating ? (
                         <>
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                           Generating...
                         </>
                       ) : (

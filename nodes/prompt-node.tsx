@@ -238,7 +238,7 @@ export function PromptNode({
           {isGenerating && (
             <div className='bg-background/60 absolute inset-0 z-10 flex items-center justify-center rounded-b-3xl backdrop-blur-sm'>
               <div className='text-muted-foreground flex items-center gap-2 text-xs'>
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={20} />
                 Generating…
               </div>
             </div>

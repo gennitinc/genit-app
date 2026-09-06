@@ -1138,7 +1138,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={16} />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}
@@ -1167,7 +1167,7 @@ export default function TemplateGridAll() {
                             {/* Button content */}
                             <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                               {isGenerating || isSubmitting ? (
-                                <LoadingFileLoader size={16} />
+                                <LoadingFileLoader size={20} />
                               ) : (
                                 <svg
                                   className='h-4 w-4 text-white'
@@ -1506,7 +1506,7 @@ export default function TemplateGridAll() {
                               className='from-transparent via-blue-500 to-transparent'
                             />
                             {isGenerating || isSubmitting ? (
-                              <LoadingFileLoader size={16} />
+                              <LoadingFileLoader size={20} />
                             ) : (
                               <WandSparklesIcon className='h-4 w-4' />
                             )}
@@ -1535,7 +1535,7 @@ export default function TemplateGridAll() {
                             {/* Button content */}
                             <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                               {isGenerating || isSubmitting ? (
-                                <LoadingFileLoader size={16} />
+                                <LoadingFileLoader size={20} />
                               ) : (
                                 <svg
                                   className='h-4 w-4 text-white'

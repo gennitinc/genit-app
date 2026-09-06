@@ -1635,7 +1635,7 @@ export default function InboxPage() {
                 }
               >
                 {markAllMutation.isPending ? (
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <CheckCheck className='mr-2 h-4 w-4' />
                 )}
@@ -1646,7 +1646,7 @@ export default function InboxPage() {
                 onSelect={() => syncChannels(false)}
               >
                 {syncMutation.isPending ? (
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <RefreshCw className='mr-2 h-4 w-4' />
                 )}
@@ -1757,7 +1757,7 @@ export default function InboxPage() {
 
               {/* {isFetching && (
                 <div className=''>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 </div>
               )} */}
             </div>
@@ -2080,7 +2080,7 @@ export default function InboxPage() {
                   ref={loadMoreRef}
                   className='flex h-10 items-center justify-center'
                 >
-                  {isFetchingNextPage && <LoadingFileLoader size={16} />}
+                  {isFetchingNextPage && <LoadingFileLoader size={20} />}
                 </div>
               </>
             )}
@@ -2497,7 +2497,7 @@ export default function InboxPage() {
                             {relativeTime(message.createdAt)}
                             {!inbound &&
                               (message.status === "sending" ? (
-                                <LoadingFileLoader size={16} />
+                                <LoadingFileLoader size={20} />
                               ) : message.status === "failed" ? (
                                 <button
                                   className='flex items-center gap-1 text-red-600 hover:underline'
@@ -2584,7 +2584,7 @@ export default function InboxPage() {
                     </p>
                     {templatesLoading ? (
                       <div className='flex items-center gap-2'>
-                        <LoadingFileLoader size={16} />{" "}
+                        <LoadingFileLoader size={20} />{" "}
                         <LocalizedText text={"Loading templates…"} />
                       </div>
                     ) : whatsappTemplates.length ? (
@@ -2631,7 +2631,7 @@ export default function InboxPage() {
                           disabled={sendTemplateMutation.isPending}
                         >
                           {sendTemplateMutation.isPending && (
-                            <LoadingFileLoader size={16} />
+                            <LoadingFileLoader size={20} />
                           )}
                           <LocalizedText text={"Send template"} />
                         </Button>
@@ -2737,7 +2737,7 @@ export default function InboxPage() {
                           }
                         >
                           {isUploading ? (
-                            <LoadingFileLoader size={16} />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <Paperclip className='h-4 w-4' />
                           )}
@@ -2785,7 +2785,7 @@ export default function InboxPage() {
                           onClick={writeWithAi}
                         >
                           {isWriting ? (
-                            <LoadingFileLoader size={14} />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <CircleFadingArrowUp className='h-3.5 w-3.5' />
                           )}
@@ -2822,7 +2822,7 @@ export default function InboxPage() {
                         {/* Button content */}
                         <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
                           {sendMutation.isPending || isUploading ? (
-                            <LoadingFileLoader size={16} />
+                            <LoadingFileLoader size={20} />
                           ) : (
                             <svg
                               className='h-4 w-4 text-white'

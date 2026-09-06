@@ -303,7 +303,7 @@ export function VideoPreviewTab({
           {/* Generating State */}
           {isGenerating && (
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
               <h3 className='mb-2 text-base font-semibold text-neutral-900 dark:text-white'>
                 <LocalizedText text={"Generating video"} />
               </h3>
@@ -527,7 +527,7 @@ export function VideoPreviewTab({
             >
               {publishing ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Publishing..."} />
                 </>
               ) : isPublished ? (

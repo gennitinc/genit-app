@@ -50,7 +50,7 @@ export const AdminDashboard = () => {
   if (loading) {
     return (
       <div className='flex h-[600px] flex-col items-center justify-center gap-4'>
-        <LoadingFileLoader size={16} />
+        <LoadingFileLoader size={20} />
         <p className='text-muted-foreground animate-pulse text-sm'>
           <LocalizedText text={"Loading analytics dashboard..."} />
         </p>
@@ -100,7 +100,7 @@ export const AdminDashboard = () => {
           className='bg-background/50 gap-2 self-start backdrop-blur-sm'
         >
           {loading ? (
-            <LoadingFileLoader size={16} />
+            <LoadingFileLoader size={20} />
           ) : (
             <RefreshCcw className='h-4 w-4' />
           )}

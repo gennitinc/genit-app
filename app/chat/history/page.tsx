@@ -499,7 +499,7 @@ function ChatHistoryPage() {
                   className='gap-2'
                 >
                   {loading ? (
-                    <Loading size={16} />
+                    <Loading size={20} />
                   ) : (
                     <RefreshCw className='h-3 w-3' />
                   )}
@@ -535,7 +535,7 @@ function ChatHistoryPage() {
             <div className='space-y-2'>
               {loading ? (
                 <div className='flex flex-col items-center justify-center gap-3 py-16 text-center'>
-                  <Loading size={14} />
+                  <Loading size={20} />
                   <h3 className='text-foreground text-sm font-medium'>
                     <LocalizedText text={"Loading conversations..."} />
                   </h3>

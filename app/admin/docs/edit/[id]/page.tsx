@@ -43,7 +43,7 @@ export default function EditDocPage({ params }: EditDocPageProps) {
   if (isLoading) {
     return (
       <div className='flex h-[60vh] flex-col items-center justify-center gap-4'>
-        <LoadingFileLoader size={16} />
+        <LoadingFileLoader size={20} />
         <p className='text-sm text-zinc-500'>
           <LocalizedText text={"Loading documentation..."} />
         </p>

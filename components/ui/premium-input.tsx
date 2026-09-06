@@ -261,7 +261,7 @@ export function PremiumInput({
                 }
               >
                 {isEnhancingPrompt ? (
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <CircleFadingArrowUp className='h-3.5 w-3.5' />
                 )}

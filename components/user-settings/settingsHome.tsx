@@ -787,7 +787,7 @@ const SettingsHome = () => {
                         }
                         className='rounded-xl active:scale-[0.97]'
                       >
-                        {savingProfile && <LoadingFileLoader size={16} />}
+                        {savingProfile && <LoadingFileLoader size={20} />}
                         <LocalizedText text={"Save account"} />
                       </Button>
                     </div>
@@ -830,7 +830,7 @@ const SettingsHome = () => {
                       disabled={sendingPasswordReset}
                       className='shrink-0 rounded-xl active:scale-[0.97]'
                     >
-                      {sendingPasswordReset && <LoadingFileLoader size={16} />}
+                      {sendingPasswordReset && <LoadingFileLoader size={20} />}
                       <LocalizedText text={"Reset password"} />
                     </Button>
                   </CardContent>
@@ -1968,7 +1968,7 @@ const SettingsHome = () => {
                         onClick={fetchAutomationRuns}
                       >
                         {loadingRuns ? (
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <RefreshCw className='mr-2 h-4 w-4' />
                         )}
@@ -2189,7 +2189,7 @@ const SettingsHome = () => {
                       disabled={openingBillingPortal}
                       className='rounded-xl active:scale-[0.97]'
                     >
-                      {openingBillingPortal && <LoadingFileLoader size={16} />}
+                      {openingBillingPortal && <LoadingFileLoader size={20} />}
                       <LocalizedText text={"Invoices & receipts"} />
                     </Button>
                   </CardHeader>
@@ -2466,7 +2466,7 @@ const SettingsHome = () => {
                     >
                       {isSigningOut ? (
                         <>
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                           <LocalizedText text={"Signing out..."} />
                         </>
                       ) : (
@@ -2499,7 +2499,7 @@ const SettingsHome = () => {
                     >
                       {isDeletingAccount ? (
                         <>
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                           <LocalizedText text={"Deleting..."} />
                         </>
                       ) : (

@@ -655,7 +655,7 @@ export default function PricingComponent({
                     )}
                   >
                     {loadingPlan === plan.name ? (
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                     ) : plan.id === "enterprise" ? (
                       "Contact Sales"
                     ) : (

@@ -31,7 +31,7 @@ export default function CreateRedirectPage() {
   return (
     <div className='flex h-screen w-full items-center justify-center bg-white dark:bg-black'>
       <div className='flex flex-col items-center gap-4'>
-        <LoadingFileLoader size={16} />
+        <LoadingFileLoader size={20} />
         <p className='text-muted-foreground text-sm font-medium'>
           <LocalizedText text={"Redirecting to newer app experience..."} />
         </p>

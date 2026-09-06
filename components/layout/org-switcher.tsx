@@ -440,7 +440,7 @@ export function OrgSwitcher({
                         {org.businessName}
                       </span>
                       {switchingId === org._id ? (
-                        <LoadingFileLoader size={16} />
+                        <LoadingFileLoader size={20} />
                       ) : isActive ? (
                         <Check className='h-3 w-3 opacity-70' />
                       ) : null}
@@ -465,7 +465,7 @@ export function OrgSwitcher({
                       </DropdownMenuLabel>
                       {loadingTeamsFor === org._id ? (
                         <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                           <LocalizedText text={"Loading teams…"} />
                         </div>
                       ) : (teamsByOrg[org._id] || []).length === 0 ? (
@@ -699,7 +699,7 @@ export function OrgSwitcher({
               onClick={handleSubmitCreate}
               disabled={!name.trim() || submitting}
             >
-              {submitting ? <LoadingFileLoader size={16} /> : null}
+              {submitting ? <LoadingFileLoader size={20} /> : null}
               <LocalizedText text={"Create"} />
             </Button>
           </DialogFooter>
@@ -786,7 +786,7 @@ export function OrgSwitcher({
               disabled={!inviteEmail.trim() || inviting}
             >
               {inviting ? (
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={20} />
               ) : (
                 <Mail className='mr-2 h-4 w-4' />
               )}

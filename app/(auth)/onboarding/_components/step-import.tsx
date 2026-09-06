@@ -216,7 +216,7 @@ export function StepImport({
             >
               {isSkipping ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Skipping..."} />
                 </>
               ) : (
@@ -503,7 +503,7 @@ function ManualSetup({
             )}
             {isUploading && (
               <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-white backdrop-blur-sm dark:bg-neutral-950/60'>
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={20} />
               </div>
             )}
           </button>

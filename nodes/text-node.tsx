@@ -150,7 +150,7 @@ export const TextNode = memo(
                   className='borber-primary/20 text-primary h-7 gap-1 bg-indigo-600 px-2 text-[10px] hover:bg-indigo-700/5'
                 >
                   {isAnalyzing ? (
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                   ) : (
                     <Sparkles className='h-3 w-3' />
                   )}

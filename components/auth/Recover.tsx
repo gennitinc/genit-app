@@ -161,7 +161,7 @@ export const RecoverComp = () => {
             >
               {loading ? (
                 <div className='flex items-center justify-center'>
-                  <Loading size={16} />
+                  <Loading size={20} />
                   <LocalizedText text={"Sending..."} />
                 </div>
               ) : (

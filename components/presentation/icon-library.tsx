@@ -421,7 +421,7 @@ export function IconLibrary({
             onChange={(e) => setSearchQuery(e.target.value)}
             className='h-9 pl-9 text-sm'
           />
-          {isSearching && <LoadingFileLoader size={16} />}
+          {isSearching && <LoadingFileLoader size={20} />}
         </div>
 
         {/* Icon Customization (when selected) */}
@@ -491,7 +491,7 @@ export function IconLibrary({
           <div ref={scrollAreaRef}>
             {isSearching && displayedIcons.length === 0 ? (
               <div className='flex h-32 items-center justify-center'>
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={20} />
               </div>
             ) : displayedIcons.length === 0 ? (
               <div className='flex h-32 items-center justify-center'>
@@ -556,7 +556,7 @@ export function IconLibrary({
                 </div>
                 {isLoadingMore && (
                   <div className='flex items-center justify-center py-4'>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                   </div>
                 )}
               </>

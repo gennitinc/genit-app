@@ -212,7 +212,7 @@ export function MediaPicker({
           )}
           {uploading && (
             <div className='absolute inset-0 flex items-center justify-center bg-black/70'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           )}
         </div>
@@ -261,7 +261,7 @@ export function MediaPicker({
             <div className='max-h-[65vh] overflow-y-auto p-5'>
               {loading ? (
                 <div className='flex h-48 items-center justify-center'>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 </div>
               ) : assets.length === 0 ? (
                 <div className='flex h-48 flex-col items-center justify-center gap-2 text-zinc-500'>

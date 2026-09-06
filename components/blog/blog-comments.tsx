@@ -391,7 +391,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               disabled={isSubmitting || !newComment.trim() || !user}
               className='flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600 disabled:opacity-50'
             >
-              {isSubmitting && <LoadingFileLoader size={16} />}
+              {isSubmitting && <LoadingFileLoader size={20} />}
               <LocalizedText text={"Post Comment"} />
             </button>
           </div>
@@ -401,7 +401,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
       {/* Comments List */}
       {loading ? (
         <div className='flex justify-center py-12'>
-          <LoadingFileLoader size={16} />
+          <LoadingFileLoader size={20} />
         </div>
       ) : comments.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-200 py-12 text-center dark:border-zinc-800'>

@@ -318,7 +318,7 @@ export function HomeCommandCenter({
         {postsQuery.isLoading ? (
           <div className='flex h-[20px] items-center justify-center'>
             <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           </div>
         ) : postsQuery.isError ? (
@@ -572,7 +572,7 @@ export function HomeCommandCenter({
                 deleteTarget && deleteMutation.mutate(deleteTarget._id)
               }
             >
-              {deleteMutation.isPending && <LoadingFileLoader size={16} />}
+              {deleteMutation.isPending && <LoadingFileLoader size={20} />}
               <LocalizedText text={"Delete post"} />
             </Button>
           </DialogFooter>

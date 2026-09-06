@@ -616,7 +616,7 @@ export const PromptInputSubmit = ({
   let Icon = <SendIcon className='size-4' />;
 
   if (status === "submitted") {
-    Icon = <LoadingFileLoader size={16} />;
+    Icon = <LoadingFileLoader size={20} />;
   } else if (status === "streaming") {
     Icon = <SquareIcon className='size-4' />;
   } else if (status === "error") {

@@ -323,7 +323,7 @@ export default function AdminModelsPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <LoadingFileLoader size={16} />
+          <LoadingFileLoader size={20} />
         </div>
       ) : filteredModels.length === 0 ? (
         <div className='text-muted-foreground py-12 text-center'>
@@ -778,7 +778,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Creating..."} />
                 </>
               ) : (
@@ -1140,7 +1140,7 @@ export default function AdminModelsPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Updating..."} />
                 </>
               ) : (
@@ -1185,7 +1185,7 @@ export default function AdminModelsPage() {
             >
               {isDeleting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Deleting..."} />
                 </>
               ) : (

@@ -1172,7 +1172,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       >
                         {generatingAssets ? (
                           <>
-                            <LoadingFileLoader size={14} /> Generating{" "}
+                            <LoadingFileLoader size={20} /> Generating{" "}
                             {generationProgress}%
                           </>
                         ) : (
@@ -1190,7 +1190,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       >
                         {exporting ? (
                           <>
-                            <LoadingFileLoader size={14} /> Exporting{" "}
+                            <LoadingFileLoader size={20} /> Exporting{" "}
                             {exportProgress}%
                           </>
                         ) : (
@@ -1681,7 +1681,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                   ))}
                   {chatBusy && (
                     <div className='flex items-center gap-2 text-xs text-zinc-500'>
-                      <LoadingFileLoader size={14} /> Agent is working…
+                      <LoadingFileLoader size={20} /> Agent is working…
                     </div>
                   )}
                 </div>

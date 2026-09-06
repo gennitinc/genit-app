@@ -576,7 +576,7 @@ export function VoiceSelector({
         <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -612,7 +612,7 @@ export function VoiceSelector({
         <div className='max-h-[60vh] overflow-y-auto pr-2'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           ) : userVoices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -834,7 +834,7 @@ export function VoiceSelector({
                 >
                   {isProcessing ? (
                     <>
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                       <LocalizedText text={"Saving Voice..."} />
                     </>
                   ) : (
@@ -899,7 +899,7 @@ export function VoiceSelector({
           </h3>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           ) : voices.length === 0 ? (
             <div className='py-8 text-center text-sm text-neutral-500 dark:text-neutral-400'>
@@ -937,7 +937,7 @@ export function VoiceSelector({
         <div className='space-y-4 py-4'>
           {loading ? (
             <div className='flex items-center justify-center py-8'>
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             </div>
           ) : userVoices.length === 0 ? (
             <div className='py-4 text-center'>
@@ -1162,7 +1162,7 @@ export function VoiceSelector({
                 >
                   {isProcessing ? (
                     <>
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                       <LocalizedText text={"Saving Voice..."} />
                     </>
                   ) : (

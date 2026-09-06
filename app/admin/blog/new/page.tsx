@@ -352,7 +352,7 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingBody ? (
                   <>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                     <LocalizedText text={"Generating..."} />
                   </>
                 ) : (
@@ -564,7 +564,7 @@ export default function NewBlogPostPage() {
               >
                 {isSubmitting ? (
                   <>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                     <LocalizedText text={"Publishing..."} />
                   </>
                 ) : (
@@ -705,7 +705,7 @@ export default function NewBlogPostPage() {
               >
                 {isGeneratingAi ? (
                   <>
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                     <LocalizedText text={"Writing Article..."} />
                   </>
                 ) : (

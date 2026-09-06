@@ -869,7 +869,7 @@ export function ConnectDialog({
                       // style={{ background: glow, opacity: 0.5 }}
                     />
                     <div className='border-border bg-card relative flex h-14 w-14 items-center justify-center rounded-full border dark:border-white/10'>
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                     </div>
                   </div>
                   <p className='text-foreground mt-4 text-sm font-medium'>
@@ -978,7 +978,7 @@ export function ConnectDialog({
                   >
                     {provisionLoading ? (
                       <>
-                        <LoadingFileLoader size={16} />
+                        <LoadingFileLoader size={20} />
                         <LocalizedText text={"Connecting…"} />
                       </>
                     ) : (

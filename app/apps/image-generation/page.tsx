@@ -692,7 +692,7 @@ function ImageGenerationPage() {
                     className='flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-transform hover:bg-indigo-700 active:scale-95'
                   >
                     {isGenerating ? (
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                     ) : (
                       <Wand2 size={16} />
                     )}

@@ -382,7 +382,7 @@ export default function AdminVoicesPage() {
 
       {isLoading ? (
         <div className='flex items-center justify-center py-12'>
-          <LoadingFileLoader size={16} />
+          <LoadingFileLoader size={20} />
         </div>
       ) : filteredVoices.length === 0 ? (
         <div className='py-12 text-center'>
@@ -701,7 +701,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(false)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Creating..."} />
                 </>
               ) : (
@@ -850,7 +850,7 @@ export default function AdminVoicesPage() {
             <Button onClick={() => handleSubmit(true)} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Updating..."} />
                 </>
               ) : (
@@ -892,7 +892,7 @@ export default function AdminVoicesPage() {
             >
               {isDeleting ? (
                 <>
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                   <LocalizedText text={"Deleting..."} />
                 </>
               ) : (

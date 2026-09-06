@@ -656,7 +656,7 @@ export default function CreatorProfilePage() {
                   className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                 >
                   {isUploadingCover ? (
-                    <LoadingFileLoader size={16} />
+                    <LoadingFileLoader size={20} />
                   ) : (
                     <Camera className='h-5 w-5 text-white' />
                   )}
@@ -702,7 +702,7 @@ export default function CreatorProfilePage() {
                         className='z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <Camera className='h-5 w-5 text-white' />
                         )}
@@ -893,7 +893,7 @@ export default function CreatorProfilePage() {
                               disabled={isSavingSettings}
                             >
                               {isSavingSettings ? (
-                                <LoadingFileLoader size={16} />
+                                <LoadingFileLoader size={20} />
                               ) : null}
                               <LocalizedText text={"Save"} />
                             </Button>
@@ -942,7 +942,7 @@ export default function CreatorProfilePage() {
                         className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black/80'
                       >
                         {isUploadingProfile ? (
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <Camera className='h-5 w-5 text-white' />
                         )}
@@ -1331,7 +1331,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <LoadingFileLoader size={16} />
+                              <LoadingFileLoader size={20} />
                             ) : null}
                             <LocalizedText text={"Save"} />
                           </Button>
@@ -1351,7 +1351,7 @@ export default function CreatorProfilePage() {
                     )}
                   >
                     {following ? (
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                     ) : isFollowing ? (
                       "Following"
                     ) : (
@@ -1554,7 +1554,7 @@ export default function CreatorProfilePage() {
                             disabled={isSavingSettings}
                           >
                             {isSavingSettings ? (
-                              <LoadingFileLoader size={16} />
+                              <LoadingFileLoader size={20} />
                             ) : null}
                             <LocalizedText text={"Save"} />
                           </Button>
@@ -1574,7 +1574,7 @@ export default function CreatorProfilePage() {
                     )}
                   >
                     {following ? (
-                      <LoadingFileLoader size={16} />
+                      <LoadingFileLoader size={20} />
                     ) : isFollowing ? (
                       "Following"
                     ) : (

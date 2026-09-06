@@ -344,7 +344,7 @@ const PresenterPage = () => {
                         className='h-fit w-full bg-gradient-to-r from-blue-500 to-cyan-500'
                       >
                         {isGenerating ? (
-                          <LoadingFileLoader size={16} />
+                          <LoadingFileLoader size={20} />
                         ) : (
                           <Sparkles className='mr-2' size={16} />
                         )}
@@ -360,7 +360,7 @@ const PresenterPage = () => {
                       className='text-md h-fit w-full'
                     >
                       {isCreating ? (
-                        <LoadingFileLoader size={16} />
+                        <LoadingFileLoader size={20} />
                       ) : (
                         <SaveIcon className='mr-2' />
                       )}
@@ -476,7 +476,7 @@ const PresenterPage = () => {
                         />
                         {isGenerating && (
                           <div className='absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm'>
-                            <LoadingFileLoader size={16} />
+                            <LoadingFileLoader size={20} />
                           </div>
                         )}
                       </div>

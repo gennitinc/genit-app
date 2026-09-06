@@ -442,7 +442,7 @@ export default function BlogLibraryPage() {
             className='flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-500 disabled:opacity-50'
           >
             {uploading ? (
-              <LoadingFileLoader size={16} />
+              <LoadingFileLoader size={20} />
             ) : (
               <UploadIcon className='h-4 w-4 font-bold' />
             )}{" "}
@@ -736,7 +736,7 @@ export default function BlogLibraryPage() {
                 className='flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50'
               >
                 {isDeleting ? (
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 ) : deleteAssets.length > 1 ? (
                   `Delete ${deleteAssets.length} items`
                 ) : (

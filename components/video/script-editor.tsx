@@ -129,7 +129,7 @@ export function ScriptEditor({
             >
               {isGenerating ? (
                 <>
-                  <Loading size={16} />
+                  <Loading size={20} />
                   <LocalizedText text={"Generating..."} />
                 </>
               ) : (

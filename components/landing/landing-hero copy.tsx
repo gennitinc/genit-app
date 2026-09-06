@@ -1444,7 +1444,7 @@ const LandingHero = () => {
             >
               {visibleMessages === 0 && (
                 <div className='flex h-full items-center justify-center text-neutral-400'>
-                  <Loading size={14} />
+                  <Loading size={20} />
                 </div>
               )}
               {messages.map((message, index) => {

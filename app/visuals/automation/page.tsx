@@ -522,7 +522,7 @@ export default function AutomationPage() {
                 className='h-9 shrink-0 gap-2 rounded-xl px-4'
               >
                 {creating ? (
-                  <LoadingFileLoader size={16} />
+                  <LoadingFileLoader size={20} />
                 ) : (
                   <Plus className='h-4 w-4' />
                 )}
@@ -602,7 +602,7 @@ export default function AutomationPage() {
               className='mt-5 gap-2 rounded-xl px-5 text-xs'
             >
               {creating ? (
-                <LoadingFileLoader size={16} />
+                <LoadingFileLoader size={20} />
               ) : (
                 <Plus className='h-3.5 w-3.5' />
               )}
@@ -718,7 +718,7 @@ export default function AutomationPage() {
                       aria-label={`Delete ${title}`}
                     >
                       {isBusy ? (
-                        <LoadingFileLoader size={16} />
+                        <LoadingFileLoader size={20} />
                       ) : (
                         <Trash2 className='h-3.5 w-3.5' />
                       )}
