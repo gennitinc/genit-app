@@ -429,6 +429,24 @@ export function LandingFooter() {
                     {t("Team")}
                   </Link>
                   <Link
+                    href='/creators-program'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    {t("Creators Program")}
+                  </Link>
+                  <Link
+                    href='/suggest'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    {t("Feature Requests")}
+                  </Link>
+                  <Link
+                    href='/contact'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    {t("Contact")}
+                  </Link>
+                  <Link
                     href='/legal/privacy-policy'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
@@ -460,12 +478,18 @@ export function LandingFooter() {
                   >
                     {t("Home")}
                   </Link>
-                  {/* <Link
-                href="/inspirations"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Inspirations
-              </Link> */}
+                  <Link
+                    href='/visuals'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    {t("Visual Flow")}
+                  </Link>
+                  <Link
+                    href='/chat'
+                    className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                  >
+                    {t("AI Chat")}
+                  </Link>
                   <Link
                     href='/pricing'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
@@ -476,31 +500,25 @@ export function LandingFooter() {
                     href='/plugins'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    {t("Plugin")}
+                    {t("Plugins")}
                   </Link>
                   <Link
-                    href='/creators-program'
-                    className='text-muted-foreground hover:text-foreground transition-colors'
-                  >
-                    {t("Creators Program")}
-                  </Link>
-                  {/* <Link
-                    href='/community'
+                    href='/templates'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    {t("Community")}
-                  </Link> */}
+                    {t("Templates")}
+                  </Link>
                   <Link
-                    href='/creators-program'
+                    href='/inspirations'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Inspirations")}
                   </Link>
                   <Link
-                    href='/contact'
+                    href='/chat/history'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    {t("Contact")}
+                    {t("Chat History")}
                   </Link>
                 </ul>
               </div>
@@ -512,7 +530,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/apps/image-generation?mode=ai-image-gen'
+                      href='/chat'
                     >
                       {t("Graphic Design")}
                     </Link>
@@ -607,9 +625,9 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/#'
+                      href='/docs'
                     >
-                      {t("Video Tutorials")}
+                      {t("Documentation")}
                     </Link>
                   </li>
                   <li>
@@ -623,9 +641,41 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/#'
+                      href='/templates'
+                    >
+                      {t("Templates")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/inspirations'
+                    >
+                      {t("Inspiration Gallery")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/creators-program'
                     >
                       {t("Creator Resources")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/suggest'
+                    >
+                      {t("Suggest a Feature")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/plugin/removal-instructions'
+                    >
+                      {t("Plugin Help & Data Removal")}
                     </Link>
                   </li>
                 </ul>
