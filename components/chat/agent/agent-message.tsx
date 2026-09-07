@@ -19,6 +19,7 @@ import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
+import { extractResultLinks, type ResultLink } from "@/lib/result-links";
 import type {
   AgentAttachedFile,
   AgentElicitation,
@@ -28,7 +29,7 @@ import type {
   AgentToolCall,
 } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { CalendarCheck2, CheckCircle2, XCircle } from "lucide-react";
+import { CalendarCheck2, CheckCircle2, ExternalLink, XCircle } from "lucide-react";
 import { useState } from "react";
 
 export interface AgentRunView {
@@ -98,6 +99,41 @@ function formatErrorMessage(error: string | undefined): string {
   }
 
   return "We couldn't complete this request. Please try again.";
+}
+
+function ResultLinkAnchor({ link }: { link: ResultLink }) {
+  return (
+    <a
+      href={link.url}
+      target='_blank'
+      rel='noopener noreferrer'
+      className='text-foreground hover:text-foreground/80 inline-flex items-center gap-1 text-[12px] font-medium underline-offset-2 hover:underline'
+    >
+      {link.label}
+      <ExternalLink className='h-3 w-3' />
+    </a>
+  );
+}
+
+function ToolResultLinks({ links }: { links: ResultLink[] }) {
+  if (!links.length) return null;
+  const primary = links.slice(0, 6);
+  const remaining = links.slice(6);
+  return (
+    <div className='border-border/70 bg-card my-2 flex flex-wrap items-center gap-2 rounded-xl border px-3.5 py-2.5 dark:border-white/10 dark:bg-white/[0.02]'>
+      {primary.map((link) => <ResultLinkAnchor key={link.url} link={link} />)}
+      {remaining.length > 0 && (
+        <details className='w-full text-[12px]'>
+          <summary className='text-muted-foreground hover:text-foreground cursor-pointer select-none'>
+            {remaining.length} more {remaining.length === 1 ? "link" : "links"}
+          </summary>
+          <div className='mt-2 flex flex-wrap gap-2'>
+            {remaining.map((link) => <ResultLinkAnchor key={link.url} link={link} />)}
+          </div>
+        </details>
+      )}
+    </div>
+  );
 }
 
 function ToolCallView({
@@ -386,15 +422,19 @@ export function AgentMessage({
             {displayedToolCalls
               .filter((tc) => shouldDisplayToolCall(tc, run.status))
               .map((tc) => (
-                <ToolCallView
-                  key={tc.id}
-                  call={tc}
-                  onInspirationSelect={
-                    awaitsInspiration
-                      ? (image) => resumeAgentRunUserInput(run.runId, image)
-                      : undefined
-                  }
-                />
+                <div key={tc.id}>
+                  <ToolCallView
+                    call={tc}
+                    onInspirationSelect={
+                      awaitsInspiration
+                        ? (image) => resumeAgentRunUserInput(run.runId, image)
+                        : undefined
+                    }
+                  />
+                  {tc.result?.ok && (
+                    <ToolResultLinks links={extractResultLinks(tc.result.data)} />
+                  )}
+                </div>
               ))}
 
             {/* Integration connect prompt */}

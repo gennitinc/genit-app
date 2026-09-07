@@ -20,8 +20,6 @@ const GRAPHICS_PROJECT_CATEGORIES = new Set([
   "banner",
   "logo",
   "presentation",
-  "auto",
-  "generic_design",
 ]);
 
 export const isGraphicsProjectCategory = (category?: string) =>

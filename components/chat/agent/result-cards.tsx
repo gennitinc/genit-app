@@ -375,6 +375,33 @@ export function DriveFilesCard({ data }: { data: any }) {
   );
 }
 
+export function GoogleFormCard({ data }: { data: any }) {
+  const form = data?.result || data || {};
+  const formUrl = form.formUrl || form.responderUri || form.url;
+  const fieldCount = form.verifiedFieldCount ?? form.items?.length;
+
+  return (
+    <AgentCard
+      icon={<FileText className='h-3.5 w-3.5' />}
+      title={form.info?.title || "Google Form ready"}
+      meta={
+        typeof fieldCount === "number" ? `${fieldCount} fields` : data?.account
+      }
+      tone='success'
+    >
+      {formUrl ? (
+        <ExternalLinkInline href={formUrl}>
+          <LocalizedText text={"Open the form"} />
+        </ExternalLinkInline>
+      ) : (
+        <div className='text-muted-foreground text-[12.5px]'>
+          <LocalizedText text={"Google did not return a form link."} />
+        </div>
+      )}
+    </AgentCard>
+  );
+}
+
 // ─── Campaign list (Meta Ads / Google Ads / TikTok Ads / Snapchat / Brevo) ───
 function statusDotClass(status?: string): string {
   const s = String(status || "").toLowerCase();
@@ -1188,6 +1215,8 @@ export function renderToolResult(
     case "drive_files":
     case "drive_file_detail":
       return <DriveFilesCard data={data} />;
+    case "google_form":
+      return <GoogleFormCard data={data} />;
     case "contact_list":
     case "contact_created":
       return <ContactListCard data={data} />;
