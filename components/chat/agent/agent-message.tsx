@@ -432,6 +432,7 @@ export function AgentMessage({
                     }
                   />
                   {tc.result?.ok &&
+                    tc.name !== "request_user_input" &&
                     tc.render !== "design_inspiration" &&
                     tc.render !== "web_search_results" && (
                       <ToolResultLinks

@@ -14,7 +14,14 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { motion } from "framer-motion";
-import { Check, Globe2, Pause, Play, Plus, ZoomIn } from "lucide-react";
+import {
+  CheckSquare2,
+  Globe2,
+  Pause,
+  Play,
+  Square,
+  ZoomIn,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 // import { ColorManagement } from "./color-management";
@@ -55,6 +62,8 @@ export function DesignInspirationResults({
   const [api, setApi] = useState<CarouselApi>();
   const [countdown, setCountdown] = useState(AUTO_SELECT_SECONDS);
   const [isCountdownPaused, setIsCountdownPaused] = useState(false);
+  const [isSelecting, setIsSelecting] = useState(false);
+  const selectionInFlight = useRef(false);
   const storageKey = project?._id
     ? `design-inspiration-selection:${project._id}`
     : null;
@@ -81,6 +90,10 @@ export function DesignInspirationResults({
     effectiveSelectedFiles?.includes(image) ?? false;
 
   const handleSelect = async (image: string) => {
+    if (selectionInFlight.current) return;
+    selectionInFlight.current = true;
+    setIsSelecting(true);
+
     const previous = effectiveSelectedFiles.slice(0, 1);
     const next = previous.includes(image) ? [] : [image];
     const nextInspiration = next[0] || null;
@@ -127,6 +140,9 @@ export function DesignInspirationResults({
             }
           : current
       );
+    } finally {
+      selectionInFlight.current = false;
+      setIsSelecting(false);
     }
   };
 
@@ -180,7 +196,7 @@ export function DesignInspirationResults({
       <div className='flex items-center gap-2'>
         <Globe2 className='text-primary h-3 w-3 shrink-0' />
         <p className='line-clamp-1 truncate text-[11px] text-blue-500'>
-          Pinterest + saved inspiration results ({safeResults.length}) —{" "}
+          Internet search results ({safeResults.length}) —{" "}
           <span className='text-foreground/70 font-mono normal-case italic'>
             "{query}"
           </span>
@@ -243,12 +259,13 @@ export function DesignInspirationResults({
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: i * 0.04 }}
                       className={cn(
-                        "group/card relative aspect-square cursor-pointer overflow-hidden rounded-xl border transition-all duration-300",
+                        "group/card relative aspect-square overflow-hidden rounded-xl border transition-all duration-300",
+                        isSelecting ? "cursor-wait" : "cursor-pointer",
                         selected
                           ? "border-primary/60 ring-primary/30 ring-1"
                           : "border-white/8 hover:border-white/20"
                       )}
-                      onClick={() => handleSelect(pin.image)}
+                      onClick={() => void handleSelect(pin.image)}
                     >
                       <img
                         src={pin.image}
@@ -263,27 +280,28 @@ export function DesignInspirationResults({
                       <button
                         type='button'
                         className={cn(
-                          "absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full shadow-lg",
+                          "absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-md shadow-lg",
                           selected
                             ? "bg-indigo-600 text-white hover:bg-indigo-700"
                             : "bg-black/60 text-white hover:bg-black/80"
                         )}
                         onClick={(event) => {
                           event.stopPropagation();
-                          handleSelect(pin.image);
+                          void handleSelect(pin.image);
                         }}
+                        disabled={isSelecting}
                         aria-label={
                           selected ? "Remove inspiration" : "Use inspiration"
                         }
                       >
                         {selected ? (
-                          <Check className='h-3.5 w-3.5' />
+                          <CheckSquare2 className='h-3.5 w-3.5' />
                         ) : (
-                          <Plus className='h-3.5 w-3.5' />
+                          <Square className='h-3.5 w-3.5' />
                         )}
                       </button>
                       <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-0.5 text-[8px] font-medium tracking-wide text-white/75 uppercase'>
-                        {pin.source === "rag" ? "Saved" : "Pinterest"}
+                        {pin.isRecommended ? "Recommended" : "Inspiration"}
                       </span>
                       <button
                         type='button'
