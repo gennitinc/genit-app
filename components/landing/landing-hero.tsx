@@ -460,7 +460,7 @@ const LandingHero = () => {
                   className='border-border bg-background text-foreground hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md border px-5 py-2.5 text-sm transition-[background-color,transform] duration-150 active:scale-[0.97]'
                 >
                   <Play className='size-4 fill-current opacity-70' />
-                  Learn More
+                  Why AI?
                 </button>
 
                 {isMobileOrTablet ? (
