@@ -506,66 +506,97 @@ export function LandingFooter() {
               </div>
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  {t("Apps")}
+                  {t("Use cases")}
                 </h4>
                 <ul className='space-y-3'>
-                  {/* <li>
-                    <Link
-                      href='/apps/chat'
-                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                    >
-                      Chat
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/apps/angle-reshape'
-                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                    >
-                      Angle Reshape
-                    </Link>
-                  </li> */}
-                  {/* <li>
-                    <Link
-                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/apps/skin-enhancer'
-                    >
-                      Skin Enhancer
-                    </Link>
-                  </li>
-                  */}
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/logo-animation'
+                      href='/apps/image-generation?mode=ai-image-gen'
                     >
-                      {t("Logo Animation")}
+                      {t("Graphic Design")}
                     </Link>
                   </li>
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/face-swap'
+                      href='/apps/video-generation?mode=ai-video-gen'
                     >
-                      {t("Face Swap")}
+                      {t("AI Video Creation")}
                     </Link>
                   </li>
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/relight'
+                      href='/visuals/inbox'
                     >
-                      {t("Glow Control")}
+                      {t("Unified Inbox")}
                     </Link>
                   </li>
-                  {/* <li>
+                  <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/apps'
+                      href='/chat'
                     >
-                      More Apps
+                      {t("AI Chat Agents")}
                     </Link>
-                  </li> */}
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/teams'
+                    >
+                      {t("Team & Organization Management")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/plugins'
+                    >
+                      {t("1,500+ External Apps & Plugins")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/visuals/automation'
+                    >
+                      {t("Marketing Automation")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/visuals/campaigns'
+                    >
+                      {t("Ad Campaigns")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/visuals/calendar'
+                    >
+                      {t("Content Calendar")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/visuals/posts'
+                    >
+                      {t("Social Publishing")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+                      href='/visuals/library'
+                    >
+                      {t("Digital Asset Library")}
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
