@@ -466,7 +466,6 @@ export function OrgSwitcher({
                       {loadingTeamsFor === org._id ? (
                         <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
                           <LoadingFileLoader size={20} />
-                          <LocalizedText text={"Loading teams…"} />
                         </div>
                       ) : (teamsByOrg[org._id] || []).length === 0 ? (
                         <div className='text-muted-foreground px-2 py-1.5 text-xs'>
