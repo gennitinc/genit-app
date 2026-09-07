@@ -21,7 +21,8 @@ export default function ComposioCallbackPage() {
     void (async () => {
       let message: Record<string, unknown>;
       try {
-        if (!toolkit || params.get("error")) throw new Error("Connection failed");
+        if (!toolkit || params.get("error"))
+          throw new Error("Connection failed");
         const integration = await syncComposioConnection(toolkit, platform);
         message = {
           type: "genit:integration:connected",
@@ -33,11 +34,15 @@ export default function ComposioCallbackPage() {
         message = {
           type: "genit:integration:error",
           platform,
-          message: error?.message || "The Composio connection did not complete.",
+          message:
+            error?.response?.data?.message ||
+            error?.message ||
+            "The Composio connection did not complete.",
         };
       }
       if (window.opener) {
-        for (const origin of origins) window.opener.postMessage(message, origin);
+        for (const origin of origins)
+          window.opener.postMessage(message, origin);
       }
       window.close();
     })();

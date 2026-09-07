@@ -27,6 +27,7 @@ import {
   provisionInstagramSelected,
   requestComposioConnectUrl,
   requestConnectUrl,
+  syncComposioConnection,
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiOrigin } from "@/utils/apiResponse";
@@ -382,6 +383,43 @@ export function ConnectDialog({
     [closePopup, onConnected, orgId, platformName, qc]
   );
 
+  const reconcileComposioConnection = useCallback(
+    async (fallbackMessage?: string) => {
+      if (!appSlug || !platform) {
+        setErrorMessage(fallbackMessage || "Connection failed");
+        setPhase("error");
+        return;
+      }
+
+      const attemptId = connectionAttemptRef.current;
+      let lastError: any;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        if (attempt > 0)
+          await new Promise((resolve) => window.setTimeout(resolve, 1_500));
+        if (attemptId !== connectionAttemptRef.current) return;
+        try {
+          const integration = await syncComposioConnection(appSlug, platform);
+          if (attemptId !== connectionAttemptRef.current) return;
+          markConnected(integration.accountName);
+          return;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      if (attemptId !== connectionAttemptRef.current) return;
+      setErrorMessage(
+        lastError?.response?.data?.message ||
+          fallbackMessage ||
+          lastError?.message ||
+          "The connection was authorized, but Genit could not finish syncing it."
+      );
+      setPhase("error");
+      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+    },
+    [appSlug, markConnected, orgId, platform, qc]
+  );
+
   useEffect(() => {
     if (!platform) return;
     const activePlatform = platform;
@@ -403,12 +441,11 @@ export function ConnectDialog({
           .catch((error: any) => {
             connectionResolvedRef.current = true;
             closePopup();
-            setErrorMessage(
+            void reconcileComposioConnection(
               error?.response?.data?.message ||
                 error?.message ||
                 "Composio verification failed"
             );
-            setPhase("error");
           });
         return;
       }
@@ -454,14 +491,19 @@ export function ConnectDialog({
           4_000
         );
       } else {
-        setErrorMessage(data.message || "Connection failed");
-        setPhase("error");
-        qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+        void reconcileComposioConnection(data.message || "Connection failed");
       }
     }
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [platform, qc, orgId, closePopup, markConnected]);
+  }, [
+    platform,
+    qc,
+    orgId,
+    closePopup,
+    markConnected,
+    reconcileComposioConnection,
+  ]);
 
   const handleConnect = useCallback(async () => {
     if (!platform) return;
