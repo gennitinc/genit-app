@@ -25,6 +25,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
+import Link from "next/link";
 
 export function NavProjects({
   projects,
@@ -56,7 +57,7 @@ export function NavProjects({
               asChild
               tooltip={state === "collapsed" ? item.name : undefined}
             >
-              <a
+              <Link
                 href={item.url}
                 className='flex items-center'
                 onClick={handleLinkClick}
@@ -74,7 +75,7 @@ export function NavProjects({
                 >
                   {item.name}
                 </span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

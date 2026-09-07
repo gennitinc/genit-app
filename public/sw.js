@@ -1,5 +1,5 @@
-const CACHE_NAME = "genit-ai-v4";
-const RUNTIME_CACHE = "genit-runtime-v4";
+const CACHE_NAME = "genit-ai-v5";
+const RUNTIME_CACHE = "genit-runtime-v5";
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
@@ -60,18 +60,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  const url = new URL(event.request.url);
+
+  // Let the browser and Next.js own route transitions. Intercepting App Router
+  // payloads here can hold navigation behind the service worker's network path.
+  if (
+    event.request.mode === "navigate" ||
+    url.searchParams.has("_rsc") ||
+    event.request.headers.get("RSC") === "1" ||
+    event.request.headers.has("Next-Router-Prefetch") ||
+    event.request.headers.has("Next-Router-State-Tree")
+  ) {
+    return;
+  }
+
   // Skip API requests and socket.io
   if (
     event.request.url.includes("/api/") ||
     event.request.url.includes("/socket.io/")
   ) {
-    return;
-  }
-
-  // Never cache or fallback HTML documents. Stale app-shell HTML can point to
-  // old Next chunks and crash client-side routes until the user refreshes.
-  if (event.request.mode === "navigate") {
-    event.respondWith(fetch(event.request));
     return;
   }
 

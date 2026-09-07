@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "About genit – Your AI Marketing Team & Agent Platform",
@@ -118,12 +119,12 @@ export default function About2() {
               </p>
               <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 <LocalizedText text={"That's why we are excited to offer"} />{" "}
-                <a
+                <Link
                   className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
                   href='/pricing'
                 >
                   <LocalizedText text={"our free Basic plan"} />
-                </a>
+                </Link>
                 <LocalizedText
                   text={
                     ", which allows startups, small business owners, and creators to connect their website, onboard their brand voice, and let AI agents start automating their first marketing activities without upfront investment."

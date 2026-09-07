@@ -1434,7 +1434,6 @@ export const SignupComp = () => {
                 <Link
                   href={withAuthRedirect("/signin", redirect)}
                   className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
-                  prefetch={false}
                 >
                   <LocalizedText text={"Log in"} />
                 </Link>

@@ -88,6 +88,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
   const [streamingAnalysis, setStreamingAnalysis] = useState<string>("");
   const [isProcessingDraft, setIsProcessingDraft] = useState(false);
   const hasProcessedDraftRef = useRef(false);
+  const pendingDraftRef = useRef<{
+    projectId: string;
+    prompt: string;
+    files: File[];
+    selectedFiles: string[];
+    metadata: Record<string, any>;
+  } | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const lastFetchedProjectIdRef = useRef<string | null>(null);
   const socketRef = useRef<any>(null);
@@ -839,18 +846,22 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       ) {
         return;
       }
-      const draft = localStorage.getItem("newData");
+      const storedDraft = localStorage.getItem("newData");
+      const inMemoryDraft =
+        pendingDraftRef.current?.projectId === String(project._id)
+          ? pendingDraftRef.current
+          : null;
 
-      if (!draft) return;
+      if (!storedDraft && !inMemoryDraft) return;
 
       try {
         setIsProcessingDraft(true);
         hasProcessedDraftRef.current = true;
-        const parsed = JSON.parse(draft);
+        const parsed = inMemoryDraft ?? JSON.parse(storedDraft as string);
         const prompt = parsed.prompt;
         const metadata = parsed.metadata || {};
 
-        const filesFromStorage = parsed.files || [];
+        const filesFromStorage = inMemoryDraft ? [] : parsed.files || [];
         const selectedFiles = parsed.selectedFiles || [];
 
         if (!prompt) {
@@ -863,7 +874,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (filesFromStorage.length > 0) {
           try {
-            const newData = JSON.parse(draft);
+            const newData = JSON.parse(storedDraft as string);
 
             // handle single or nested arrays safely
             const fileArray = Array.isArray(newData.files?.[0])
@@ -876,6 +887,10 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           } catch (err) {
             console.error("Error restoring files:", err);
           }
+        }
+
+        if (inMemoryDraft?.files.length) {
+          restoredFiles = inMemoryDraft.files;
         }
 
         // Set restored files to attachedFiles state so they show in the UI
@@ -953,9 +968,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           );
         }
         // Remove draft after successful generation
+        pendingDraftRef.current = null;
         localStorage.removeItem("newData");
       } catch (error) {
         console.error("Error processing localStorage draft:", error);
+        pendingDraftRef.current = null;
         localStorage.removeItem("newData");
       } finally {
         setIsProcessingDraft(false);
@@ -1037,37 +1054,21 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             ? [attachedFiles]
             : [];
 
-        // Convert File objects to data URLs for localStorage storage
-        const filesForStorage = await Promise.all(
-          filesArray.map(
-            (file: File) =>
-              new Promise<{
-                name: string;
-                type: string;
-                size: number;
-                dataUrl: string;
-              }>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                  resolve({
-                    name: file.name,
-                    type: file.type,
-                    size: file.size,
-                    dataUrl: reader.result as string,
-                  });
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-              })
-          )
-        );
+        pendingDraftRef.current = {
+          projectId,
+          prompt: value,
+          files: filesArray,
+          selectedFiles: selectedFiles || [],
+          metadata: metadata || {},
+        };
 
-        // 🧠 Save all data in localStorage
+        // Keep the lightweight parts as a reload fallback. File objects remain in
+        // this provider across client navigation, avoiding slow base64 conversion.
         localStorage.setItem(
           "newData",
           JSON.stringify({
             prompt: value,
-            files: filesForStorage,
+            files: [],
             selectedFiles: selectedFiles || [],
             designType: designTypeId || null,
             projectId,

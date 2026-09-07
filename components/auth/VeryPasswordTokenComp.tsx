@@ -34,14 +34,14 @@ export function VerifyPasswordTokenComp() {
           setLoading(false);
           setverifymessage(data?.message);
           setTimeout(() => {
-            router.push(`/auth/updatepassword?token=${token}`);
+            router.push(`/update-password?token=${token}`);
           }, 1000);
           return;
         } else {
           setLoading(false);
           alert(data.message);
           setTimeout(() => {
-            router.push("/auth/recover");
+            router.push("/recover");
           }, 1000);
           return;
         }
@@ -88,9 +88,8 @@ export function VerifyPasswordTokenComp() {
               </div>
 
               <Link
-                href={`/auth/updatepassword?token=${token}`}
+                href={`/update-password?token=${token}`}
                 className='focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
-                prefetch={false}
               >
                 <LocalizedText text={"Update Password"} />
               </Link>
@@ -153,9 +152,8 @@ export function VerifyPasswordTokenComp() {
               </div>
 
               <Link
-                href='/auth/recover'
+                href='/recover'
                 className='focus:ring-primary/30 dark:focus:ring-primary/40 inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
-                prefetch={false}
               >
                 <LocalizedText text={"Back to Recovery"} />
               </Link>

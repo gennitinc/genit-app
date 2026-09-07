@@ -1399,7 +1399,6 @@ export const LoginComp = () => {
                 <Link
                   href={withAuthRedirect("/signup", redirect)}
                   className='text-TextLight2 dark:text-TextDark2 font-medium underline hover:no-underline'
-                  prefetch={false}
                 >
                   <LocalizedText text={"Sign Up"} />
                 </Link>
@@ -1414,7 +1413,6 @@ export const LoginComp = () => {
                 <Link
                   href={withAuthRedirect("/recover", redirect)}
                   className='text-TextLight2 dark:text-TextDark2 text-sm font-medium underline hover:no-underline'
-                  prefetch={false}
                 >
                   <LocalizedText text={"recover"} />
                 </Link>

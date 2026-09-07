@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Filter } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
@@ -84,7 +85,7 @@ const AppCard = ({
 }: AppCardProps) => (
   <div className='max-w-[248px] shrink-0 md:min-w-0 lg:max-w-none'>
     <div className='h-full'>
-      <a
+      <Link
         className='react-aria-Link'
         href={href}
         style={{ touchAction: "pan-x pan-y pinch-zoom" }}
@@ -152,7 +153,7 @@ const AppCard = ({
             <TryNowButton />
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   </div>
 );

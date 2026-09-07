@@ -2,6 +2,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Data & Plugin Removal Instructions – Genit AI",
@@ -145,9 +146,9 @@ export default function RemovalInstructionsPage() {
             </li>
             <li>
               <LocalizedText text={"Open"} />{" "}
-              <a className={LINK_CLASS} href='/plugins'>
+              <Link className={LINK_CLASS} href='/plugins'>
                 <LocalizedText text={"Plugin"} />
-              </a>{" "}
+              </Link>{" "}
               <LocalizedText text={"from the navigation menu."} />
             </li>
             <li>
@@ -211,9 +212,9 @@ export default function RemovalInstructionsPage() {
           <ol className={ORDERED_CLASS}>
             <li>
               <LocalizedText text={"Open"} />{" "}
-              <a className={LINK_CLASS} href='/plugins'>
+              <Link className={LINK_CLASS} href='/plugins'>
                 <LocalizedText text={"Plugin"} />
-              </a>{" "}
+              </Link>{" "}
               <LocalizedText text={"in genit."} />
             </li>
             <li>
@@ -516,9 +517,9 @@ export default function RemovalInstructionsPage() {
               <LocalizedText text={"30 days"} />
             </strong>
             <LocalizedText text={", in line with our"} />{" "}
-            <a className={LINK_CLASS} href='/legal/privacy-policy'>
+            <Link className={LINK_CLASS} href='/legal/privacy-policy'>
               <LocalizedText text={"Privacy Policy"} />
-            </a>
+            </Link>
             <LocalizedText
               text={
                 ". You will receive a confirmation email once the deletion is done."
