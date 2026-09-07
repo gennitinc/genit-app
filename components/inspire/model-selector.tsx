@@ -156,7 +156,7 @@ export function ModelSelector({
     return (
       <div className='space-y-2'>
         <div className='flex items-center justify-center py-2'>
-          <LoadingFileLoader size={20} />
+          <LoadingFileLoader size={14} />
         </div>
       </div>
     );
