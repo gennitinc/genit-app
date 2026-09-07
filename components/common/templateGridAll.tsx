@@ -817,7 +817,7 @@ export default function TemplateGridAll() {
       </div>
       {isFetchingMore && (
         <div className='mt-4 flex justify-center'>
-          <Loading size={20} />
+          <Loading size={14} />
         </div>
       )}
 
