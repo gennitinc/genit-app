@@ -404,6 +404,14 @@ export function ConnectDialog({
           return;
         } catch (error) {
           lastError = error;
+          const message = String(
+            (error as any)?.response?.data?.message ||
+              (error as any)?.message ||
+              ""
+          );
+          const status = Number((error as any)?.response?.status);
+          if ((status >= 400 && status < 500) || /^4\d\d\b/.test(message))
+            break;
         }
       }
 
