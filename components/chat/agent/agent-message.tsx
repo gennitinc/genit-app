@@ -431,9 +431,13 @@ export function AgentMessage({
                         : undefined
                     }
                   />
-                  {tc.result?.ok && (
-                    <ToolResultLinks links={extractResultLinks(tc.result.data)} />
-                  )}
+                  {tc.result?.ok &&
+                    tc.render !== "design_inspiration" &&
+                    tc.render !== "web_search_results" && (
+                      <ToolResultLinks
+                        links={extractResultLinks(tc.result.data)}
+                      />
+                    )}
                 </div>
               ))}
 

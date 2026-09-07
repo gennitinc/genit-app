@@ -14,7 +14,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { motion } from "framer-motion";
-import { Check, Globe2, Plus, Sparkles, ZoomIn } from "lucide-react";
+import { Check, Globe2, Pause, Play, Plus, ZoomIn } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 // import { ColorManagement } from "./color-management";
@@ -54,6 +54,7 @@ export function DesignInspirationResults({
   const [previewIndex, setPreviewIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
   const [countdown, setCountdown] = useState(AUTO_SELECT_SECONDS);
+  const [isCountdownPaused, setIsCountdownPaused] = useState(false);
   const storageKey = project?._id
     ? `design-inspiration-selection:${project._id}`
     : null;
@@ -146,10 +147,11 @@ export function DesignInspirationResults({
 
   useEffect(() => {
     setCountdown(AUTO_SELECT_SECONDS);
+    setIsCountdownPaused(false);
   }, [query, resultKey]);
 
   useEffect(() => {
-    if (hasAnySelection || !safeResults[0]) return;
+    if (hasAnySelection || isCountdownPaused || !safeResults[0]) return;
 
     if (countdown <= 0) {
       void handleSelect(safeResults[0].image);
@@ -161,7 +163,7 @@ export function DesignInspirationResults({
       1000
     );
     return () => window.clearTimeout(timer);
-  }, [countdown, hasAnySelection, resultKey]);
+  }, [countdown, hasAnySelection, isCountdownPaused, resultKey]);
 
   // Sync carousel position when dialog opens
   useEffect(() => {
@@ -188,17 +190,28 @@ export function DesignInspirationResults({
       {!hasAnySelection && (
         <div className='flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2'>
           <p className='text-muted-foreground text-[11px]'>
-            Choose within {countdown}s, or AI will select the highest-ranked
-            match.
+            {isCountdownPaused
+              ? `Paused at ${countdown}s. Take your time choosing an inspiration.`
+              : `Choose within ${countdown}s, or AI will select the highest-ranked match.`}
           </p>
           <Button
             type='button'
             size='sm'
             className='h-7 shrink-0 gap-1.5 rounded-full bg-indigo-600 px-3 text-[11px] hover:bg-indigo-700'
-            onClick={() => handleSelect(safeResults[0].image)}
+            variant={isCountdownPaused ? "default" : "outline"}
+            onClick={() => setIsCountdownPaused((paused) => !paused)}
+            aria-label={
+              isCountdownPaused
+                ? "Resume AI selection countdown"
+                : "Pause AI selection countdown"
+            }
           >
-            <Sparkles className='h-3 w-3' />
-            Let AI choose
+            {isCountdownPaused ? (
+              <Play className='h-3 w-3' />
+            ) : (
+              <Pause className='h-3 w-3' />
+            )}
+            {isCountdownPaused ? "Play" : "Pause"}
           </Button>
         </div>
       )}

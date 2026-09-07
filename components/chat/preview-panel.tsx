@@ -8,6 +8,7 @@ import {
 } from "../ai-elements/web-preview";
 import AutomationWorkflow from "../automation";
 import GenittWorkflow from "../workflow";
+import { AgentThinkingOverlay } from "./agent-thinking-overlay";
 import { GraphicsCanvas } from "./graphics-canvas";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,6 @@ import {
   ExternalLink,
   Eye,
   Globe,
-  Image as ImageIcon,
   Layout,
   Maximize2,
   Minimize2,
@@ -74,7 +74,8 @@ const PreviewPanelContent = ({
   isFullscreen?: boolean;
   onToggleFullscreen?: () => void;
 }) => {
-  const { artifactPreview, project, isLoadingProject } = useProjectDesign();
+  const { artifactPreview, project, isLoadingProject, aiStatus } =
+    useProjectDesign();
   const [artifactReloadKey, setArtifactReloadKey] = React.useState(0);
 
   if (isLoadingProject) {
@@ -244,26 +245,7 @@ const PreviewPanelContent = ({
     );
   }
 
-  // Default fallback
   return (
-    <div className='bg-muted/90 flex h-full flex-col items-center justify-center rounded-3xl border border-zinc-200 p-4 py-4 shadow-2xl dark:border-zinc-800/50'>
-      <div className='max-w-md space-y-4 text-center'>
-        <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700/10'>
-          <ImageIcon className='text-primary h-8 w-8' />
-        </div>
-        <h3 className='text-xl font-bold'>
-          <LocalizedText text={"Interactive Preview Coming Soon"} />
-        </h3>
-        <p className='text-muted-foreground text-sm'>
-          <LocalizedText text={'We are building the perfect workspace for "'} />
-          {project.category}
-          <LocalizedText
-            text={
-              '" projects. Expect a world-class canvas experience very soon!'
-            }
-          />
-        </p>
-      </div>
-    </div>
+    <AgentThinkingOverlay status={aiStatus} />
   );
 };
