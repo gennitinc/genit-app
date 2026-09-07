@@ -527,7 +527,7 @@ export function WorkflowPremiumInput({
                   )}
                 </span>
                 {isLoadingModels
-                  ? "Loading..."
+                  ? "Loading"
                   : activeModel?.name || "Select Model"}
                 <ChevronDown className='h-3 w-3 opacity-50' />
               </button>

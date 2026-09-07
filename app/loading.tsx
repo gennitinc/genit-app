@@ -8,7 +8,6 @@ export default function RouteLoading() {
     >
       <div className='flex items-center gap-3'>
         <Loading size={20} />
-        <span className='text-sm font-medium'>Loading...</span>
       </div>
     </main>
   );

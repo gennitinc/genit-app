@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { LoadingFileLoader } from "@/utils/Loading";
+import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import {
   Captions,
   CircleFadingArrowUp,
@@ -376,8 +376,8 @@ export const AudioNode = memo(
                 >
                   {!isAudioReady ? (
                     <>
-                      <div className='mr-1 h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent' />
-                      Loading...
+                      <Loading size={16} />
+                      Loading
                     </>
                   ) : isPlaying ? (
                     <>
