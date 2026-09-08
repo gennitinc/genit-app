@@ -424,7 +424,7 @@ const LandingHero = () => {
               </AnimatedShinyText>
               <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
                 <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
-                  Your autonomous AI marketing team.
+                  AI marketing team.
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
