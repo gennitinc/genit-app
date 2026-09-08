@@ -609,7 +609,7 @@ export function TextChatContent({
             {(isLoadingProject || isProcessingDraft) &&
               allItems.length === 0 && (
                 <div className='flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-4'>
-                  <Loading size={14} />
+                  <Loading size={20} />
                   <div className='flex w-full max-w-sm flex-col items-center gap-3 px-6'>
                     <div className='h-3 w-2/3 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
                     <div className='h-3 w-1/2 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800' />
