@@ -33,7 +33,7 @@ interface BlogPost {
   commentsCount?: number;
 }
 
-const staticFallbackPosts: Record<string, BlogPost> = {
+const retiredUnverifiedFallbackPosts: Record<string, BlogPost> = {
   "how-sentry-uses-genit": {
     _id: "1",
     title: "How Sentry uses Genit to build what can't be bought",
@@ -162,6 +162,9 @@ const staticFallbackPosts: Record<string, BlogPost> = {
   },
 };
 
+// Do not publish customer stories unless they come from the verified content API.
+const staticFallbackPosts: Record<string, BlogPost> = {};
+
 // Next.js App Router dynamic metadata generator
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -181,6 +184,7 @@ export async function generateMetadata(props: {
   if (!post) {
     return {
       title: "Blog Post Not Found | Genit AI",
+      alternates: { canonical: `/blog/${slug}` },
     };
   }
 
@@ -192,6 +196,7 @@ export async function generateMetadata(props: {
   return {
     title: `${post.title} – Genit AI Blog`,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,

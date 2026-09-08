@@ -22,7 +22,10 @@ export default function ReferralLandingPage() {
       <LandingNavbar />
       <main className='relative flex-grow'>
         <div className='w-full'>
-          <JoinReferralCard onJoinSuccess={handleJoinSuccess} />
+          <JoinReferralCard
+            onJoinSuccess={handleJoinSuccess}
+            headingLevel='h1'
+          />
         </div>
       </main>
       <LandingFooter />

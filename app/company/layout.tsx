@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us - Genit AI",
+  title: "About Genit | AI Marketing Execution Platform",
   description:
-    "Learn about Genit AI, our mission to democratize design through artificial intelligence, and the team behind the platform.",
+    "Learn about Genit's mission to give businesses an autonomous AI marketing team for planning, creation, automation, publishing, communication, and growth.",
 };
 
 export default function CompanyLayout({

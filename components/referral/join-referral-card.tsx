@@ -20,6 +20,7 @@ import { useState } from "react";
 
 interface JoinReferralCardProps {
   onJoinSuccess: () => void;
+  headingLevel?: "h1" | "h2";
 }
 
 interface ChartBarProps {
@@ -59,7 +60,11 @@ function ChartBar({ value, height, month, isDark }: ChartBarProps) {
   );
 }
 
-export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
+export function JoinReferralCard({
+  onJoinSuccess,
+  headingLevel = "h2",
+}: JoinReferralCardProps) {
+  const Heading = headingLevel;
   const [joining, setJoining] = useState(false);
   const { theme } = useTheme();
   const { user } = useUserContext();
@@ -171,16 +176,16 @@ export function JoinReferralCard({ onJoinSuccess }: JoinReferralCardProps) {
               </div>
             </div>
 
-            <h2
+            <Heading
               className={`mt-5 text-2xl font-semibold tracking-tight text-balance sm:text-3xl lg:text-4xl ${isDark ? "text-white" : "text-gray-900"}`}
             >
               <LocalizedText text={"Creators Program"} />
-            </h2>
+            </Heading>
             <div>
               <p className='text-muted-foreground mt-2 text-lg sm:text-lg lg:text-sm'>
                 <LocalizedText
                   text={
-                    "Become an an affiliate and start earning, Get a unique referral link, QR code, and media kit to promote your profile"
+                    "Join the Genit referral program, get a unique referral link and media kit, and earn rewards from eligible referrals."
                   }
                 />
               </p>

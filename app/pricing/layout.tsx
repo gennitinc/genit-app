@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     "marketing automation plans",
     "Genit subscription",
   ],
+  alternates: { canonical: "/pricing" },
 };
 
 export default function PricingLayout({

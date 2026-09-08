@@ -4,11 +4,7 @@ import { initMixpanel, trackPageView } from "../lib/mixpanelClient";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-export default function MixpanelProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MixpanelProvider() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -22,5 +18,5 @@ export default function MixpanelProvider({
     trackPageView(pathWithQuery, { source: "router" });
   }, [pathname, searchParams]);
 
-  return <>{children}</>;
+  return null;
 }

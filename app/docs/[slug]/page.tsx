@@ -11,6 +11,7 @@ export async function generateMetadata(props: {
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")} | Genit Docs`,
+    alternates: { canonical: `/docs/${slug}` },
   };
 }
 

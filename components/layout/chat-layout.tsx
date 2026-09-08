@@ -210,7 +210,7 @@ function ChatLayoutInner() {
           }
         />
 
-        {isDesktop && hasAnyPreview && !isPreviewOpen && (
+        {isDesktop && !isPreviewOpen && (
           <div className='pointer-events-none sticky top-12 z-50 h-0 w-full shrink-0'>
             <div className='mx-auto flex w-full max-w-2xl justify-end px-3'>
               <PreviewToggle
@@ -228,7 +228,7 @@ function ChatLayoutInner() {
               isPreviewOpen ? "overflow-hidden" : "overflow-visible"
             )}
           >
-            {hasAnyPreview && isPreviewOpen && (
+            {isPreviewOpen && (
               <PreviewToggle
                 isOpen
                 onToggle={() => setIsPreviewOpen(false)}

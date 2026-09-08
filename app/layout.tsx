@@ -8,9 +8,9 @@ import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const title = "Genit AI – Autonomous Marketing Agents for Business Growth";
+const title = "Genit AI Marketing Platform | Agents, Automation & Campaigns";
 const description =
-  "Plan, create, publish, and optimize marketing across your connected channels with autonomous AI agents built for modern businesses.";
+  "Genit is an end-to-end AI marketing platform for agents, automation, content, campaigns, publishing, inbox management, analytics, and 1,000+ app integrations.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.trygenit.com"),
@@ -25,6 +25,8 @@ export const metadata: Metadata = {
     "marketing workflow automation",
     "automated content publishing",
     "AI campaign management",
+    "AI marketing platform",
+    "agentic marketing platform",
     "business growth automation",
   ],
   authors: [{ name: "Genit" }],
@@ -35,7 +37,6 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
-  alternates: { canonical: "/" },
   robots: {
     index: true,
     follow: true,
@@ -50,7 +51,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "/",
     siteName: "Genit AI",
     title,
     description,
@@ -89,6 +89,12 @@ const structuredData = {
       url: "https://www.trygenit.com",
       logo: "https://www.trygenit.com/logo.jpeg",
       description,
+      sameAs: [
+        "https://www.linkedin.com/company/genit-ai/",
+        "https://x.com/genit_ai",
+        "https://instagram.com/genitai",
+        "https://www.youtube.com/@genitai",
+      ],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
@@ -111,12 +117,32 @@ const structuredData = {
         "Unified social inbox",
         "Brand identity automation",
         "Marketing analytics",
+        "Visual marketing workflow builder",
+        "Unified email and social inbox",
+        "Go-to-market campaign planning and outbound workflows",
+        "AI image, video, document, and presentation creation",
+        "1,000+ business app integrations",
       ],
+      browserRequirements: "Requires a modern web browser",
+      isAccessibleForFree: true,
+      publisher: { "@id": "https://www.trygenit.com/#organization" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.trygenit.com/#website",
+      url: "https://www.trygenit.com",
+      name: "Genit AI",
+      description,
+      publisher: { "@id": "https://www.trygenit.com/#organization" },
     },
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang='en' suppressHydrationWarning>
       <head>

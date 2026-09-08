@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "test:acquisition": "node lib/acquisition-flow.test.mjs",
+    "test:seo": "node lib/seo-foundation.test.mjs",
     "i18n:translate": "node scripts/translate-i18n.mjs",
     "start": "next start",
     "lint": "next lint",

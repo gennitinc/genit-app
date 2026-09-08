@@ -46,6 +46,7 @@ export function LandingNavbar() {
   const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
+    { name: t("Platform"), href: "/platform" },
     { name: t("Visual Flow"), href: "/visuals" },
     { name: t("Chat"), href: "/chat" },
     {
@@ -95,6 +96,12 @@ export function LandingNavbar() {
             <div className='flex items-center gap-2 sm:gap-2'>
               <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                 <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
+                  href='/platform'
+                >
+                  {t("Platform")}
+                </Link>
+                <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
                   href='/visuals'
                 >
@@ -141,8 +148,8 @@ export function LandingNavbar() {
                   {currentUser ? t("Billing") : t("Pricing")}
                 </Link>
                 {currentUser && (
-                <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
+                  <Link
+                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
                     href='/chat/history'
                   >
                     {t("History")}

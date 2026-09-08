@@ -1,9 +1,7 @@
-import { pricingCurrencyForCountry } from "@/lib/pricing-currency";
 // import Communityproject from "../layout/community-project";
 import TemplateGrid from "../common/templateGrid";
 import { IdeaSection } from "../layout/idea-section";
 import PricingComponent from "../pricing/page";
-import LandingTestimonials from "./LandingTestimonials";
 import LandinngIntegrations from "./LandinngIntegrations";
 import PartnerLogos from "./Partners-Logos";
 import ContactCtaLanding from "./contact-cta-landing";
@@ -15,9 +13,11 @@ import LandingCreator from "./landing-creator";
 import { LandingFooter } from "./landing-footer";
 import LandingHero from "./landing-hero";
 import { LandingNavbar } from "./landing-navbar";
+import { LandingPlatformOverview } from "./landing-platform-overview";
 import LandingUnifiedInbox from "./landing-unified-inbox";
 import { LandingVoiceClone } from "./landing-voice-chat";
 import { Toaster } from "@/components/ui/sonner";
+import { pricingCurrencyForCountry } from "@/lib/pricing-currency";
 
 export function LandingPage() {
   const pricingCurrency = pricingCurrencyForCountry(null);
@@ -34,8 +34,8 @@ export function LandingPage() {
         <LandingUnifiedInbox />
         <LandingVoiceClone />
         <LandingCreator />
-        <PricingComponent pricingCurrency={pricingCurrency} />
-        <LandingTestimonials />
+        <LandingPlatformOverview />
+        <PricingComponent pricingCurrency={pricingCurrency} headingLevel='h2' />
         <ContactCtaLanding />
         <LandingFooter />
       </div>

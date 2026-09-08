@@ -40,7 +40,6 @@ import {
   FileText,
   Mail,
   Paperclip,
-  Star,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -121,7 +120,7 @@ export default function LandingContact() {
       </div>
 
       <p style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-        genit Inc • ${new Date().toLocaleString()}
+        Genit • ${new Date().toLocaleString()}
       </p>
     </div>
   </div>`;
@@ -167,13 +166,13 @@ export default function LandingContact() {
               <h1 className='text-4xl font-extrabold md:text-xl lg:text-5xl'>
                 {t("Ready. Set.")}{" "}
                 <span className='from-primary via-accent to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent'>
-                  {t("Design")}
+                  {t("Grow")}
                 </span>
               </h1>
 
               <div className='text-muted-foreground max-w-2xl text-sm lg:leading-relaxed'>
                 {t(
-                  "genit is your AI-powered media designer. Create stunning flyers, logos, posters, and social media graphics in seconds — no design skills required. Just describe what you want and let AI do the work."
+                  "Genit is your end-to-end AI marketing platform. Plan campaigns, create content, automate workflows, publish across channels, manage conversations, and improve performance with autonomous agents and connected tools."
                 )}
               </div>
             </div>
@@ -182,58 +181,17 @@ export default function LandingContact() {
               <div className='space-y-16 pb-20 lg:pb-0'>
                 <div className='space-y-8'>
                   <div className='mt-12 flex flex-col space-y-6'>
-                    <div className='flex items-center space-x-4'>
-                      <div className='flex -space-x-3 overflow-hidden'>
-                        {[1, 2, 3, 4].map((i) => (
-                          <div
-                            key={i}
-                            className='border-background bg-muted inline-block size-10 rounded-full border-2'
-                          >
-                            <img
-                              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`}
-                              alt='Avatar'
-                              className='size-full rounded-full'
-                            />
-                          </div>
-                        ))}
-                        <div className='border-background text-primary-foreground flex size-10 items-center justify-center rounded-full border-2 bg-indigo-600 text-[10px] font-bold hover:bg-indigo-700'>
-                          {t("50k+")}
-                        </div>
-                      </div>
-                      <div className='text-sm font-medium'>
-                        <span className='text-primary font-bold'>5000+</span>{" "}
-                        {t("creators trust us")}
-                      </div>
-                    </div>
-                    <div className='flex flex-col space-y-2'>
-                      <div className='flex items-center gap-1'>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className='size-4 fill-yellow-400 text-yellow-400'
-                          />
-                        ))}
-                        <span className='text-foreground/80 ml-2 text-sm font-semibold italic'>
-                          {t(
-                            '"Absolutely life-changing for my small business"'
-                          )}
-                        </span>
-                      </div>
-                      <p className='text-muted-foreground text-xs'>
-                        {t("Average 4.9/5 rating across all platforms")}
-                      </p>
-                    </div>
                     <div className='space-y-6'>
                       <p className='from-foreground to-foreground/60 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent'>
-                        {t("Why creators choose genit")}
+                        {t("Why teams choose Genit")}
                       </p>
 
                       <div className='grid gap-6'>
                         {[
-                          "Create flyers, logos & social media designs in seconds",
-                          "Thousands of design inspirations built-in",
-                          "No design skills or experience needed",
-                          "Perfect for businesses, creators & marketers",
+                          "Autonomous agents that plan and execute multi-step marketing work",
+                          "Campaigns, content, publishing, inbox, and analytics in one workspace",
+                          "Brand-aware copy, images, video, documents, and presentations",
+                          "1,000+ integrations for the tools your business already uses",
                         ].map((benefit, idx) => (
                           <div
                             key={idx}

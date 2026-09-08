@@ -42,9 +42,9 @@ const LandingUnifiedInbox = () => {
   return (
     <section className='mt-14 mr-auto ml-auto max-w-6xl px-2 pt-20 md:px-6 md:pt-5'>
       {/* Heading */}
-      <h1 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
+      <h2 className='text-foreground mt-6 text-center text-4xl font-semibold tracking-tight md:text-6xl dark:text-white'>
         {t("Unified Inbox")}
-      </h1>
+      </h2>
       <p className='text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-base font-normal md:text-lg dark:text-white/70'>
         {t(
           "Bring all your DMs together, reply to all and never miss a conversation"

@@ -4,14 +4,15 @@ import { PricingDialog } from "../common/pricing-dialog";
 // import { ProjectPreview } from "../community/project-preview";
 import { SidebarProvider } from "../ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useUrlState } from "@/hooks/use-url-state";
-import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
+
+function CheckoutPricingDialog() {
+  const checkout = useSearchParams().get("checkout");
+  return <PricingDialog open={Boolean(checkout)} />;
+}
 
 function Wrapper({ children }: { children: React.ReactNode }) {
-  const { getUrlState } = useUrlState();
-  const preview = getUrlState().getValue("gen");
-  const checkout = getUrlState().getValue("checkout");
   const { user, updateUserPreferences } = useUserContext();
   const pathname = usePathname();
   const isChatIdPage =
@@ -102,8 +103,9 @@ function Wrapper({ children }: { children: React.ReactNode }) {
       <div className='custom-scrollbar h-full w-full'>
         {children}
 
-        {/* {preview && <ProjectPreview new />} */}
-        <PricingDialog open={!!checkout} />
+        <Suspense fallback={null}>
+          <CheckoutPricingDialog />
+        </Suspense>
       </div>
     </SidebarProvider>
   );

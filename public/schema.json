@@ -7,7 +7,13 @@
       "name": "Genit AI",
       "url": "https://www.trygenit.com",
       "logo": "https://www.trygenit.com/logo.jpeg",
-      "description": "Autonomous AI agents that plan, create, publish, and optimize marketing across connected business channels.",
+      "description": "End-to-end AI marketing platform where autonomous agents plan, create, automate, publish, communicate, and optimize across connected business tools.",
+      "sameAs": [
+        "https://www.linkedin.com/company/genit-ai/",
+        "https://x.com/genit_ai",
+        "https://instagram.com/genitai",
+        "https://www.youtube.com/@genitai"
+      ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "customer support",
@@ -22,15 +28,22 @@
       "url": "https://www.trygenit.com",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
-      "description": "Plan, create, publish, and optimize marketing across your connected channels with autonomous AI agents built for modern businesses.",
+      "description": "Plan, create, automate, publish, communicate, and optimize from one AI marketing platform.",
       "featureList": [
         "Autonomous marketing agents",
         "Cross-platform content creation and publishing",
         "Campaign management and optimization",
         "Unified social inbox",
         "Brand identity automation",
-        "Marketing analytics"
-      ]
+        "Marketing analytics",
+        "Visual marketing workflow builder",
+        "Unified email and social inbox",
+        "Go-to-market campaign planning and outbound workflows",
+        "AI image, video, document, and presentation creation",
+        "1,000+ business app integrations"
+      ],
+      "isAccessibleForFree": true,
+      "publisher": { "@id": "https://www.trygenit.com/#organization" }
     }
   ]
 }

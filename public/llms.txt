@@ -1,0 +1,30 @@
+# Genit AI
+
+> Genit is an end-to-end AI marketing platform where autonomous agents plan, create, automate, publish, communicate, and optimize across connected business tools.
+
+Genit is not only an AI media designer. Image, video, copy, document, presentation, and brand asset generation are creative capabilities inside a broader marketing execution platform.
+
+## Core capabilities
+
+- [AI Marketing Agents](https://www.trygenit.com/platform/ai-marketing-agents): Brand-aware agents that plan multi-step work and take approved actions.
+- [Marketing Automation](https://www.trygenit.com/platform/marketing-automation): Visual and conversational workflows with triggers, logic, schedules, webhooks, AI steps, and connected apps.
+- [Social Media Management](https://www.trygenit.com/platform/social-media-management): Create, adapt, schedule, publish, and monitor social content.
+- [Content Creation](https://www.trygenit.com/platform/content-creation): Generate copy, images, video, voice-assisted prompts, documents, reports, spreadsheets, and presentations.
+- [Campaign Management](https://www.trygenit.com/platform/campaign-management): Plan audiences, funnels, calendars, KPIs, outbound work, attribution, and optimization.
+- [Unified Inbox](https://www.trygenit.com/platform/unified-inbox): Manage supported social, messaging, and email conversations in one workspace.
+- [Brand Intelligence](https://www.trygenit.com/platform/brand-intelligence): Turn a website and user guidance into reusable brand, product, audience, voice, and visual context.
+- [Marketing Integrations](https://www.trygenit.com/platform/marketing-integrations): Connect agents and workflows to social, email, ads, Google Workspace, commerce, CRM, and more than 1,000 business apps.
+
+## Important pages
+
+- [Platform](https://www.trygenit.com/platform)
+- [Integrations](https://www.trygenit.com/plugins)
+- [Pricing](https://www.trygenit.com/pricing)
+- [Company](https://www.trygenit.com/company)
+- [Documentation](https://www.trygenit.com/docs)
+- [Blog](https://www.trygenit.com/blog)
+- [Contact](https://www.trygenit.com/contact)
+
+## Product boundaries
+
+Actions available through an integration depend on the connected provider, account permissions, API availability, and user approval settings. Genit keeps users in control of consequential external actions.

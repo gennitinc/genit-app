@@ -423,10 +423,10 @@ export function LandingFooter() {
                     {t("About")}
                   </Link>
                   <Link
-                    href='/teams'
+                    href='/platform'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
-                    {t("Team")}
+                    {t("Platform")}
                   </Link>
                   <Link
                     href='/creators-program'
@@ -562,7 +562,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/teams'
+                      href='/platform'
                     >
                       {t("Team & Organization Management")}
                     </Link>
@@ -572,7 +572,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/plugins'
                     >
-                      {t("1,500+ External Apps & Plugins")}
+                      {t("1,000+ External Apps & Plugins")}
                     </Link>
                   </li>
                   <li>

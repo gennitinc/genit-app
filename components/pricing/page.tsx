@@ -266,10 +266,13 @@ const plans = process.env.NODE_ENV == "production" ? plansProd : plansDev;
 export default function PricingComponent({
   pricingCurrency,
   embedded = false,
+  headingLevel = "h1",
 }: {
   pricingCurrency: PricingCurrency;
   embedded?: boolean;
+  headingLevel?: "h1" | "h2";
 }) {
+  const Heading = headingLevel;
   const [localPricingCurrency, setLocalPricingCurrency] =
     useState(pricingCurrency);
   const [isYearly, setIsYearly] = useState(true);
@@ -398,18 +401,18 @@ export default function PricingComponent({
       <div
         className={cn(
           "mx-auto max-w-7xl px-0",
-          embedded ? "py-2" : "pt-24 md:px-6 pb-10 md:pt-32 lg:px-8"
+          embedded ? "py-2" : "pt-24 pb-10 md:px-6 md:pt-32 lg:px-8"
         )}
       >
         {/* Header */}
         {!embedded && (
           <div className='animate-fadeInUp text-center'>
-            <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
+            <Heading className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
               <LocalizedText text={"Choose Your"} />{" "}
               <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
                 <LocalizedText text={"Plan"} />
               </span>
-            </h1>
+            </Heading>
             <p
               className='text-muted-foreground animate-fadeInUp my-5 text-sm md:text-lg'
               style={{ animationDelay: "0.2s" }}
@@ -421,7 +424,6 @@ export default function PricingComponent({
           </div>
         )}
 
-       
         <>
           {/* Switch */}
           <div

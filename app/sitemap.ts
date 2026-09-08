@@ -1,3 +1,4 @@
+import { marketingCapabilities } from "@/lib/marketing-capabilities";
 import { apiResponse } from "@/utils/apiResponse";
 import type { MetadataRoute } from "next";
 
@@ -7,27 +8,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
     "/pricing",
+    "/platform",
     "/company",
     "/contact",
-    "/suggest",
-    "/signin",
-    "/signup",
     "/blog",
-    // "/community",
-    "/creators-program",
-    "/inspirations",
     "/plugins",
     "/templates",
     "/legal/terms-of-service",
     "/legal/privacy-policy",
-    "/inspire/create",
+    "/docs",
+    ...marketingCapabilities.map(({ slug }) => `/platform/${slug}`),
   ];
 
   const sitemapEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.8,
+    priority: route === "" ? 1 : route.startsWith("/platform") ? 0.9 : 0.7,
   }));
 
   // Fetch dynamic blog posts
@@ -45,21 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
   } catch (error) {
-    // Fallback to known static posts if API is unreachable
-    const fallbackSlugs = [
-      "how-sentry-uses-genit",
-      "how-appdirect-turned-non-technical-teams-into-builders-with-genit",
-      "how-thinkific-uses-genit-to-prototype",
-      "build-apps-from-a-link-with-genit",
-    ];
-    fallbackSlugs.forEach((slug) => {
-      sitemapEntries.push({
-        url: `${baseUrl}/blog/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
-    });
+    // Keep the sitemap accurate when the content API is unavailable.
   }
 
   return sitemapEntries;

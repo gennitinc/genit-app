@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: { canonical: "/legal/privacy-policy" },
 };
 
 export default function About2() {
@@ -55,7 +56,7 @@ export default function About2() {
             </div>
             <h2
               id='1-introduction'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#1-introduction' className='relative'>
                 <LocalizedText text={"1. Introduction"} />
@@ -83,7 +84,7 @@ export default function About2() {
             <p className='my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               <LocalizedText
                 text={
-                  "Welcome to genit - Your AI Agent Brand Management Platform."
+                  "Welcome to Genit, an end-to-end AI marketing agent and automation platform."
                 }
               />
             </p>
@@ -154,7 +155,7 @@ export default function About2() {
             </p>
             <h2
               id='2-definitions'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#2-definitions' className='relative'>
                 <LocalizedText text={"2. Definitions"} />
@@ -270,7 +271,7 @@ export default function About2() {
             </p>
             <h2
               id='3-information-collection-and-use'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#3-information-collection-and-use' className='relative'>
                 <LocalizedText text={"3. Information Collection and Use"} />
@@ -304,7 +305,7 @@ export default function About2() {
             </p>
             <h2
               id='4-types-of-data-collected'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#4-types-of-data-collected' className='relative'>
                 <LocalizedText text={"4. Types of Data Collected"} />
@@ -331,7 +332,7 @@ export default function About2() {
             </h2>
             <h3
               id='personal-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#personal-data' className='relative'>
                 <LocalizedText text={"Personal Data"} />
@@ -372,7 +373,7 @@ export default function About2() {
             </p>
             <h3
               id='usage-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#usage-data' className='relative'>
                 <LocalizedText text={"Usage Data"} />
@@ -420,7 +421,7 @@ export default function About2() {
             </p>
             <h2
               id='5-use-of-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#5-use-of-data' className='relative'>
                 <LocalizedText text={"5. Use of Data"} />
@@ -632,7 +633,7 @@ export default function About2() {
             </p>
             <h2
               id='6-retention-of-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#6-retention-of-data' className='relative'>
                 <LocalizedText text={"6. Retention of Data"} />
@@ -673,7 +674,7 @@ export default function About2() {
             </p>
             <h2
               id='7-transfer-of-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#7-transfer-of-data' className='relative'>
                 <LocalizedText text={"7. Transfer of Data"} />
@@ -728,7 +729,7 @@ export default function About2() {
             </p>
             <h2
               id='8-disclosure-of-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#8-disclosure-of-data' className='relative'>
                 <LocalizedText text={"8. Disclosure of Data"} />
@@ -762,7 +763,7 @@ export default function About2() {
             </p>
             <h3
               id='disclosure-for-law-enforcement'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#disclosure-for-law-enforcement' className='relative'>
                 <LocalizedText text={"Disclosure for Law Enforcement."} />
@@ -796,7 +797,7 @@ export default function About2() {
             </p>
             <h3
               id='other-cases-we-may-disclose-your-information-also'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#other-cases-we-may-disclose-your-information-also'
@@ -845,7 +846,7 @@ export default function About2() {
             </ol>
             <h2
               id='9-security-of-data'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#9-security-of-data' className='relative'>
                 <LocalizedText text={"9. Security of Data"} />
@@ -879,7 +880,7 @@ export default function About2() {
             </p>
             <h2
               id='10-your-data-protection-rights-under-general-data-protection-regulation-gdpr'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#10-your-data-protection-rights-under-general-data-protection-regulation-gdpr'
@@ -1016,7 +1017,7 @@ export default function About2() {
             </p>
             <h2
               id='11-your-data-protection-rights-under-the-california-privacy-protection-act-caloppa'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#11-your-data-protection-rights-under-the-california-privacy-protection-act-caloppa'
@@ -1124,7 +1125,7 @@ export default function About2() {
             </p>
             <h2
               id='12-your-data-protection-rights-under-the-california-consumer-privacy-act-ccpa'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#12-your-data-protection-rights-under-the-california-consumer-privacy-act-ccpa'
@@ -1165,7 +1166,7 @@ export default function About2() {
             </p>
             <h3
               id='a-what-personal-information-we-have-about-you'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#a-what-personal-information-we-have-about-you'
@@ -1260,7 +1261,7 @@ export default function About2() {
             </p>
             <h3
               id='b-to-delete-your-personal-information'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#b-to-delete-your-personal-information'
@@ -1299,7 +1300,7 @@ export default function About2() {
             </p>
             <h3
               id='c-to-stop-selling-your-personal-information'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a
                 href='#c-to-stop-selling-your-personal-information'
@@ -1368,7 +1369,7 @@ export default function About2() {
             </p>
             <h2
               id='13-service-providers'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#13-service-providers' className='relative'>
                 <LocalizedText text={"13. Service Providers"} />
@@ -1409,7 +1410,7 @@ export default function About2() {
             </p>
             <h2
               id='14-analytics'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#14-analytics' className='relative'>
                 <LocalizedText text={"14. Analytics"} />
@@ -1443,7 +1444,7 @@ export default function About2() {
             </p>
             <h3
               id='google-analytics'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#google-analytics' className='relative'>
                 <LocalizedText text={"Google Analytics"} />
@@ -1510,7 +1511,7 @@ export default function About2() {
             </p>
             <h3
               id='mixpanel'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#mixpanel' className='relative'>
                 <LocalizedText text={"Mixpanel"} />
@@ -1562,7 +1563,7 @@ export default function About2() {
             </p>
             <h3
               id='segmentio'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#segmentio' className='relative'>
                 <LocalizedText text={"Segment.io"} />
@@ -1605,7 +1606,7 @@ export default function About2() {
             </p>
             <h2
               id='15-cicd-tools'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#15-cicd-tools' className='relative'>
                 <LocalizedText text={"15. CI/CD tools"} />
@@ -1639,7 +1640,7 @@ export default function About2() {
             </p>
             <h3
               id='circleci'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#circleci' className='relative'>
                 <LocalizedText text={"CircleCI"} />
@@ -1694,7 +1695,7 @@ export default function About2() {
             </p>
             <h2
               id='16-payments'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#16-payments' className='relative'>
                 <LocalizedText text={"16. Payments"} />
@@ -1740,7 +1741,7 @@ export default function About2() {
             </p>
             <h3
               id='stripe'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-lg font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#stripe' className='relative'>
                 <LocalizedText text={"Stripe"} />
@@ -1778,7 +1779,7 @@ export default function About2() {
             </p>
             <h2
               id='17-links-to-other-sites'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#17-links-to-other-sites' className='relative'>
                 <LocalizedText text={"17. Links to Other Sites"} />
@@ -1819,7 +1820,7 @@ export default function About2() {
             </p>
             <h2
               id='18-childrens-privacy'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#18-childrens-privacy' className='relative'>
                 <LocalizedText text={"18. Children's Privacy"} />
@@ -1868,7 +1869,7 @@ export default function About2() {
             </p>
             <h2
               id='19-changes-to-this-privacy-policy'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#19-changes-to-this-privacy-policy' className='relative'>
                 <LocalizedText text={"19. Changes to This Privacy Policy"} />
@@ -1916,7 +1917,7 @@ export default function About2() {
             </p>
             <h2
               id='20-contact-us'
-              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-white'
+              className='group relative mt-12 mb-2 scroll-mt-20 text-2xl font-semibold text-neutral-950 dark:text-white'
             >
               <a href='#20-contact-us' className='relative'>
                 <LocalizedText text={"20. Contact Us"} />

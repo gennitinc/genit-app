@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description:
     "Start your design with professionally crafted AI templates. Customize images and videos in seconds.",
   keywords: ["AI templates", "design templates", "video templates"],
+  alternates: { canonical: "/templates" },
 };
 
 export default function TemplatesLayout({

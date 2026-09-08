@@ -344,11 +344,11 @@ const LandingCreator = () => {
                 </div>
               </div>
               <div className='mt-4 flex flex-col items-start'>
-                <h1 className='text-foreground text-start text-xl font-semibold tracking-tight md:text-4xl'>
+                <h3 className='text-foreground text-start text-xl font-semibold tracking-tight md:text-4xl'>
                   <span className='inline-block'>{t("Track")}</span>{" "}
                   <span className='inline-block'>{t("referrals,")}</span>{" "}
                   <span className='inline-block'>{t("effortlessly")}</span>
-                </h1>
+                </h3>
                 <p className='text-muted-foreground mt-2 w-[90%] text-start text-sm md:mt-4 md:w-[70%]'>
                   {t(
                     "Visualize your referral performance with detailed analytics and insights"

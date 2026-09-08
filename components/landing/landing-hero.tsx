@@ -416,21 +416,21 @@ const LandingHero = () => {
                   Built for Modern Brands
                 </p>
               </div> */}
-              <AnimatedShinyText className='inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 mt-16 hover:dark:text-neutral-400'>
+              <AnimatedShinyText className='mt-16 inline-flex items-center justify-center rounded-full border-2 px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400'>
                 <span className='text-xs'>
                   <LocalizedText text={"✨ Built for Modern Business"} />
                 </span>
                 <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
               </AnimatedShinyText>
               <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
-             
                 <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
-                  Marketing & Growth.
+                  Your autonomous AI marketing team.
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
-                AI Agents that create, automate, and execute your business daily task so you
-                can focus on growing your business.
+                Plan campaigns, create content, automate workflows, publish
+                across channels, manage conversations, and optimize growth from
+                one AI marketing platform.
               </p>
               <div className='mt-7.5 flex gap-5'>
                 <Link

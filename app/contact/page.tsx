@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     "partnership",
     "business inquiry",
   ],
+  alternates: { canonical: "/contact" },
   openGraph: {
     title: "Contact Us – Genit AI",
     description:

@@ -38,11 +38,12 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
                 storageKey='genit-theme'
               >
                 <ProjectProvider>
-                  <Suspense>
-                    <Wrapper>
-                      <MixpanelProvider>{children}</MixpanelProvider>
-                    </Wrapper>
-                  </Suspense>
+                  <Wrapper>
+                    {children}
+                    <Suspense fallback={null}>
+                      <MixpanelProvider />
+                    </Suspense>
+                  </Wrapper>
                 </ProjectProvider>
               </ThemeProvider>
             </LanguageProvider>
