@@ -993,20 +993,7 @@ export function IdeaSection() {
               animate='visible'
             >
               Grow without Hiring!
-              {/* <PointerHighlight
-                rectangleClassName='
-      bg-blue-100 dark:bg-blue-900
-      border-blue-300 dark:border-blue-700
-      rounded-base
-      px-1 sm:px-2 ml-1
-      py-0.5
-    '
-                pointerClassName='text-blue-500 h-2.5 w-2.5 sm:h-3 sm:w-3'
-                containerClassName='inline-flex items-center'
-              >
-                <span className='relative z-10 px-1 sm:px-2'>Hiring!</span>
-              </PointerHighlight> */}
-              {/* <span>Humans</span> */}
+              
             </motion.h1>
 
             <motion.p

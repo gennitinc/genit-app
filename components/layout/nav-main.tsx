@@ -86,11 +86,11 @@ export function NavMain() {
       icon: Gift,
       href: `/user/referral`,
     },
-    {
-      title: t("Profile"),
-      icon: UserPlus,
-      href: `/creator/${user?.username}`,
-    },
+    // {
+    //   title: t("Profile"),
+    //   icon: UserPlus,
+    //   href: `/creator/${user?.username}`,
+    // },
   ];
 
   const secondaryNavItems = [
