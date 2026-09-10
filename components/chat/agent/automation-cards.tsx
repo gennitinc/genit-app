@@ -327,3 +327,57 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
     </AgentCard>
   );
 }
+
+export function AutomationWorkflowSummaryCard({
+  nodes,
+  connectionCount,
+}: {
+  nodes: any[];
+  connectionCount: number;
+}) {
+  const { setFocusedGenerationId } = useProjectDesign();
+  const nodeCount = nodes.length;
+
+  return (
+    <AgentCard
+      icon={<LayoutGrid className='h-3.5 w-3.5' />}
+      title='Workflow created'
+      meta={`${nodeCount} ${nodeCount === 1 ? "node" : "nodes"} · ${connectionCount} ${connectionCount === 1 ? "connection" : "connections"}`}
+      tone='success'
+    >
+      <div className='space-y-2'>
+        {nodeCount > 0 && (
+          <details className='group rounded-lg border border-white/10 bg-white/[0.02]'>
+            <summary className='text-foreground flex cursor-pointer list-none items-center justify-between px-3 py-2 text-xs font-medium'>
+              View nodes
+              <span className='text-muted-foreground transition-transform group-open:rotate-180'>
+                ⌄
+              </span>
+            </summary>
+            <ul className='divide-border/70 max-h-64 divide-y overflow-y-auto border-t border-white/10 dark:divide-white/10'>
+              {nodes.map((node) => (
+                <li key={node.nodeId} className='px-3 py-2'>
+                  <div className='text-foreground truncate text-xs font-medium'>
+                    {node.title || "Untitled node"}
+                  </div>
+                  <div className='text-muted-foreground mt-0.5 text-[10.5px] capitalize'>
+                    {(node.type || "action").replace(/_/g, " ")}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+        <Button
+          variant='outline'
+          size='sm'
+          className='h-7 gap-1.5 px-2 text-xs'
+          onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
+        >
+          <LayoutGrid className='h-3 w-3' />
+          <LocalizedText text={"View workflow in canvas"} />
+        </Button>
+      </div>
+    </AgentCard>
+  );
+}

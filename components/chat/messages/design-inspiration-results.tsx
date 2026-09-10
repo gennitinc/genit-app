@@ -64,6 +64,7 @@ export function DesignInspirationResults({
   const [isCountdownPaused, setIsCountdownPaused] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const selectionInFlight = useRef(false);
+  const selectionCommitted = useRef(false);
   const storageKey = project?._id
     ? `design-inspiration-selection:${project._id}`
     : null;
@@ -97,6 +98,8 @@ export function DesignInspirationResults({
     const previous = effectiveSelectedFiles.slice(0, 1);
     const next = previous.includes(image) ? [] : [image];
     const nextInspiration = next[0] || null;
+    selectionCommitted.current = Boolean(nextInspiration);
+    setIsCountdownPaused(Boolean(nextInspiration));
 
     setSelectedFiles(next);
     setProject((current) =>
@@ -116,14 +119,22 @@ export function DesignInspirationResults({
         : window.localStorage.removeItem(storageKey);
     }
 
+    let saved = false;
     try {
       await apiResponse.patch(`/project/${project?._id}/inspiration`, {
         inspirationUrl: nextInspiration,
       });
+      saved = true;
       if (nextInspiration) await onSelect?.(nextInspiration);
     } catch (error) {
+      if (saved) {
+        console.error("Failed to continue after selecting inspiration", error);
+        return;
+      }
       console.error("Failed to save selected design inspiration", error);
       setSelectedFiles(previous);
+      selectionCommitted.current = Boolean(previous[0]);
+      setIsCountdownPaused(Boolean(previous[0]));
       if (storageKey) {
         previous[0]
           ? window.localStorage.setItem(storageKey, previous[0])
@@ -167,7 +178,13 @@ export function DesignInspirationResults({
   }, [query, resultKey]);
 
   useEffect(() => {
-    if (hasAnySelection || isCountdownPaused || !safeResults[0]) return;
+    if (
+      selectionCommitted.current ||
+      hasAnySelection ||
+      isCountdownPaused ||
+      !safeResults[0]
+    )
+      return;
 
     if (countdown <= 0) {
       void handleSelect(safeResults[0].image);

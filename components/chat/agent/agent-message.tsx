@@ -5,6 +5,7 @@ import { DesignInspirationResults } from "../messages/design-inspiration-results
 import { AgentCard } from "./agent-card";
 import { AgentPlan } from "./agent-plan";
 import { AgentThinkingStream } from "./agent-thinking-stream";
+import { AutomationWorkflowSummaryCard } from "./automation-cards";
 import { CalendarEventsCard } from "./calendar-events-card";
 import { ConnectIntegrationInline } from "./connect-integration-inline";
 import { ElicitationCard } from "./elicitation-card";
@@ -19,7 +20,6 @@ import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
 import { resumeAgentRunUserInput } from "@/lib/agents-api";
-import { extractResultLinks, type ResultLink } from "@/lib/result-links";
 import type {
   AgentAttachedFile,
   AgentElicitation,
@@ -28,8 +28,15 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
+import { getAutomationWorkflowSummary } from "@/lib/automation-workflow-summary";
+import { type ResultLink, extractResultLinks } from "@/lib/result-links";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { CalendarCheck2, CheckCircle2, ExternalLink, XCircle } from "lucide-react";
+import {
+  CalendarCheck2,
+  CheckCircle2,
+  ExternalLink,
+  XCircle,
+} from "lucide-react";
 import { useState } from "react";
 
 export interface AgentRunView {
@@ -121,14 +128,18 @@ function ToolResultLinks({ links }: { links: ResultLink[] }) {
   const remaining = links.slice(6);
   return (
     <div className='border-border/70 bg-card my-2 flex flex-wrap items-center gap-2 rounded-xl border px-3.5 py-2.5 dark:border-white/10 dark:bg-white/[0.02]'>
-      {primary.map((link) => <ResultLinkAnchor key={link.url} link={link} />)}
+      {primary.map((link) => (
+        <ResultLinkAnchor key={link.url} link={link} />
+      ))}
       {remaining.length > 0 && (
         <details className='w-full text-[12px]'>
           <summary className='text-muted-foreground hover:text-foreground cursor-pointer select-none'>
             {remaining.length} more {remaining.length === 1 ? "link" : "links"}
           </summary>
           <div className='mt-2 flex flex-wrap gap-2'>
-            {remaining.map((link) => <ResultLinkAnchor key={link.url} link={link} />)}
+            {remaining.map((link) => (
+              <ResultLinkAnchor key={link.url} link={link} />
+            ))}
           </div>
         </details>
       )}
@@ -361,6 +372,12 @@ export function AgentMessage({
               });
             return { ...call, result: { ok: true, data } };
           });
+  const automationSummary = getAutomationWorkflowSummary(displayedToolCalls);
+  const nonAutomationToolCalls = displayedToolCalls.filter(
+    (call) =>
+      call.render !== "automation_node_created" &&
+      call.render !== "automation_nodes_connected"
+  );
 
   return (
     <div className='flex flex-col gap-4'>
@@ -419,7 +436,7 @@ export function AgentMessage({
             <AgentPlan tasks={run.plan} />
 
             {/* Tool calls */}
-            {displayedToolCalls
+            {nonAutomationToolCalls
               .filter((tc) => shouldDisplayToolCall(tc, run.status))
               .map((tc) => (
                 <div key={tc.id}>
@@ -441,6 +458,11 @@ export function AgentMessage({
                     )}
                 </div>
               ))}
+
+            {(automationSummary.nodes.length > 0 ||
+              automationSummary.connectionCount > 0) && (
+              <AutomationWorkflowSummaryCard {...automationSummary} />
+            )}
 
             {/* Integration connect prompt */}
             {run.integrationRequired &&
