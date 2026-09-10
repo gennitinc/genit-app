@@ -200,31 +200,31 @@ export default function CampaignsPage() {
         </h2>
         <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-5'>
           <MetricCard
-            label='Total campaigns'
+            label='Total'
             value={String(summary.totalCampaigns)}
             detail={`${summary.activeCampaigns} active`}
             icon={Layers3}
           />
           <MetricCard
-            label='Active campaigns'
+            label='Active'
             value={String(summary.activeCampaigns)}
             detail={`${summary.draftCampaigns} drafts ready`}
             icon={Activity}
           />
           <MetricCard
-            label='Pipeline Generated value'
+            label='Pipeline '
             value={compact(summary.pipelineValue)}
             detail='Attributed across '
             icon={CircleDollarSign}
           />
           <MetricCard
-            label='Conversions Records'
+            label='Conversions'
             value={String(summary.conversions)}
             detail='Recorded outcomes'
             icon={Target}
           />
           <MetricCard
-            label='Sequences ready'
+            label='Sequences'
             value={String(summary.sequencesReady)}
             detail={`${summary.totalCampaigns - summary.sequencesReady} need a sequence`}
             icon={MessageSquareText}
