@@ -212,7 +212,7 @@ export default function CampaignsPage() {
             icon={Activity}
           />
           <MetricCard
-            label='Pipeline Gen value'
+            label='Pipeline Generated value'
             value={compact(summary.pipelineValue)}
             detail='Attributed across '
             icon={CircleDollarSign}
