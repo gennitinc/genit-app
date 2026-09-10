@@ -6,12 +6,24 @@ import {
   VideoCommunityTab,
 } from "@/components/inspire";
 import { LocalizedText } from "@/components/localized-text";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Compass } from "lucide-react";
+import { Compass, ListFilter } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function CommunityComp() {
+export default function CommunityComp({
+  filter = false,
+}: {
+  filter?: boolean;
+}) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"video" | "image" | "designs">(
     "designs"
@@ -58,20 +70,60 @@ export default function CommunityComp() {
                 </span>{" "}
               </div>
 
-              <TabsList className='grid w-fit grid-cols-3'>
-                <TabsTrigger
-                  value='designs'
-                  className='flex items-center gap-2'
-                >
-                  <LocalizedText text={"Designs"} />
-                </TabsTrigger>
-                <TabsTrigger value='video' className='flex items-center gap-2'>
-                  <LocalizedText text={"Videos"} />
-                </TabsTrigger>
-                <TabsTrigger value='image' className='flex items-center gap-2'>
-                  <LocalizedText text={"Images"} />
-                </TabsTrigger>
-              </TabsList>
+              {filter ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='active:scale-[0.97]'
+                      aria-label='Filter discover content'
+                    >
+                      <ListFilter />
+                      <LocalizedText text={"Filter"} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end'>
+                    <DropdownMenuRadioGroup
+                      value={activeTab}
+                      onValueChange={(value) =>
+                        setActiveTab(value as "video" | "image" | "designs")
+                      }
+                    >
+                      <DropdownMenuRadioItem value='designs'>
+                        <LocalizedText text={"Designs"} />
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value='video'>
+                        <LocalizedText text={"Videos"} />
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value='image'>
+                        <LocalizedText text={"Images"} />
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <TabsList className='grid w-fit grid-cols-3'>
+                  <TabsTrigger
+                    value='designs'
+                    className='flex items-center gap-2'
+                  >
+                    <LocalizedText text={"Designs"} />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value='video'
+                    className='flex items-center gap-2'
+                  >
+                    <LocalizedText text={"Videos"} />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value='image'
+                    className='flex items-center gap-2'
+                  >
+                    <LocalizedText text={"Images"} />
+                  </TabsTrigger>
+                </TabsList>
+              )}
             </div>
 
             <TabsContent value='video' className='mt-0'>

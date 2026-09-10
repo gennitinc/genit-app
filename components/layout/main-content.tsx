@@ -16,7 +16,7 @@ export function MainContent() {
 
       {/* AI Team Features */}
       <div className='mt-6 lg:mt-0'>
-        <CommunityComp />
+        <CommunityComp filter />
       </div>
 
       {/* <HomeInfoGrid /> */}
