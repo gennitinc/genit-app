@@ -2,6 +2,7 @@ import { apiResponse } from "@/utils/apiResponse";
 
 export type GtmCampaign = {
   _id: string;
+  chatId?: string;
   name: string;
   objective: string;
   audience?: string;
@@ -81,11 +82,51 @@ export type GtmAttribution = {
   roi: number | null;
 };
 
-export async function listGtmCampaigns(): Promise<GtmCampaign[]> {
-  const { data } = await apiResponse.get<{ campaigns: GtmCampaign[] }>(
-    "/gtm/campaigns"
+export type GtmCampaignPage = {
+  campaigns: GtmCampaign[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  summary: {
+    totalCampaigns: number;
+    activeCampaigns: number;
+    draftCampaigns: number;
+    pipelineValue: number;
+    conversions: number;
+    sequencesReady: number;
+  };
+};
+
+export async function listGtmCampaigns(
+  input: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: GtmCampaign["status"] | "all";
+  } = {}
+): Promise<GtmCampaignPage> {
+  const params = new URLSearchParams();
+  if (input.page) params.set("page", String(input.page));
+  if (input.limit) params.set("limit", String(input.limit));
+  if (input.search) params.set("search", input.search);
+  if (input.status && input.status !== "all")
+    params.set("status", input.status);
+  const { data } = await apiResponse.get<GtmCampaignPage>(
+    `/gtm/campaigns?${params}`
   );
-  return data.campaigns;
+  return data;
+}
+
+export async function regenerateGtmPlan(id: string): Promise<GtmCampaign> {
+  const { data } = await apiResponse.post<{ campaign: GtmCampaign }>(
+    `/gtm/campaigns/${id}/plan`
+  );
+  return data.campaign;
 }
 
 export async function createGtmCampaign(input: {
@@ -112,6 +153,10 @@ export async function updateGtmCampaign(
     input
   );
   return data.campaign;
+}
+
+export async function deleteGtmCampaign(id: string): Promise<void> {
+  await apiResponse.delete(`/gtm/campaigns/${id}`);
 }
 
 export async function scheduleGtmEmail(

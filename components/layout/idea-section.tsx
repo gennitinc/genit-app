@@ -85,7 +85,7 @@ import {
 } from "lucide-react";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { div } from "three/src/nodes/math/OperatorNode.js";
 import type React from "react";
@@ -548,6 +548,15 @@ export function IdeaSection() {
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const innerContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const promptFromUrl = searchParams.get("prompt");
+  const categoryFromUrl = searchParams.get("category");
+
+  useEffect(() => {
+    if (promptFromUrl) setInputValue(promptFromUrl);
+    if (categoryFromUrl === "automation")
+      setSelectedDesignTypeId("automation");
+  }, [categoryFromUrl, promptFromUrl, setInputValue]);
 
   const placeholderText = useTypewriterEffect({
     words: localizedPlaceholders,
@@ -996,7 +1005,7 @@ export function IdeaSection() {
               initial='hidden'
               animate='visible'
             >
-              <LocalizedText text={"Grow without Hiring!"} />
+              <LocalizedText text={"Zuri!"} />
             </motion.h1>
             {/* <PointerHighlight
                 rectangleClassName='

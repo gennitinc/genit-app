@@ -14,21 +14,11 @@ import {
   YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { LocalizedText } from "@/components/localized-text";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { DeleteConfirmDialog } from "@/components/ui/delete-confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import { useProjectDesign } from "@/context/DesignProject";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
@@ -41,7 +31,6 @@ import {
   Code2,
   GitBranch,
   Globe,
-  Loader2,
   Mail,
   Play,
   Plus,
@@ -277,14 +266,12 @@ function isDocumentEnabled(document?: AutomationDocument) {
 export default function AutomationPage() {
   const router = useRouter();
   const { user } = useUserContext();
-  const { createProject } = useProjectDesign();
   const [automations, setAutomations] = useState<AutomationProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [nextPage, setNextPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [creating, setCreating] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<AutomationProject | null>(
     null
@@ -299,71 +286,74 @@ export default function AutomationPage() {
       ? user.business._id
       : "");
 
-  const fetchAutomations = useCallback(async (page = 1, append = false) => {
-    const requestId = append ? requestIdRef.current : ++requestIdRef.current;
-    append ? setLoadingMore(true) : setLoading(true);
-    try {
-      const response = await apiResponse.get(`/project/myprojects`, {
-        params: {
-          type: "automation",
-          page,
-          limit: 12,
-          search: query.trim() || undefined,
-        },
-      });
-      const projects: Omit<AutomationProject, "enabled">[] =
-        response.data?.projects || [];
+  const fetchAutomations = useCallback(
+    async (page = 1, append = false) => {
+      const requestId = append ? requestIdRef.current : ++requestIdRef.current;
+      append ? setLoadingMore(true) : setLoading(true);
+      try {
+        const response = await apiResponse.get(`/project/myprojects`, {
+          params: {
+            type: "automation",
+            page,
+            limit: 12,
+            search: query.trim() || undefined,
+          },
+        });
+        const projects: Omit<AutomationProject, "enabled">[] =
+          response.data?.projects || [];
 
-      const hydrated = await Promise.all(
-        projects.map(async (project) => {
-          try {
-            const response = await apiResponse.get(
-              `/apps/automation/${project._id}`,
-              {
-                withCredentials: true,
-              }
-            );
-            const document = response.data?.data as
-              AutomationDocument | undefined;
-            return {
-              ...project,
-              document,
-              enabled: isDocumentEnabled(document),
-            };
-          } catch {
-            return { ...project, enabled: project.status !== "paused" };
-          }
-        })
-      );
+        const hydrated = await Promise.all(
+          projects.map(async (project) => {
+            try {
+              const response = await apiResponse.get(
+                `/apps/automation/${project._id}`,
+                {
+                  withCredentials: true,
+                }
+              );
+              const document = response.data?.data as
+                AutomationDocument | undefined;
+              return {
+                ...project,
+                document,
+                enabled: isDocumentEnabled(document),
+              };
+            } catch {
+              return { ...project, enabled: project.status !== "paused" };
+            }
+          })
+        );
 
-      if (requestId !== requestIdRef.current) return;
+        if (requestId !== requestIdRef.current) return;
 
-      setAutomations((current) =>
-        append
-          ? [...current, ...hydrated].filter(
-              (item, index, all) =>
-                all.findIndex((candidate) => candidate._id === item._id) ===
-                index
-            )
-          : hydrated
-      );
-      const pagination = response.data?.pagination;
-      setHasNextPage(Boolean(pagination?.hasNextPage));
-      setNextPage((pagination?.currentPage || page) + 1);
-      setTotalCount(pagination?.totalCount || hydrated.length);
-    } catch (error: any) {
-      if (requestId !== requestIdRef.current) return;
-      console.error("Failed to load automations:", error);
-      if (append) setHasNextPage(false);
-      toast.error(
-        error.response?.data?.message || "Could not load automations"
-      );
-    } finally {
-      if (requestId === requestIdRef.current) {
-        append ? setLoadingMore(false) : setLoading(false);
+        setAutomations((current) =>
+          append
+            ? [...current, ...hydrated].filter(
+                (item, index, all) =>
+                  all.findIndex((candidate) => candidate._id === item._id) ===
+                  index
+              )
+            : hydrated
+        );
+        const pagination = response.data?.pagination;
+        setHasNextPage(Boolean(pagination?.hasNextPage));
+        setNextPage((pagination?.currentPage || page) + 1);
+        setTotalCount(pagination?.totalCount || hydrated.length);
+      } catch (error: any) {
+        if (requestId !== requestIdRef.current) return;
+        console.error("Failed to load automations:", error);
+        if (append) setHasNextPage(false);
+        toast.error(
+          error.response?.data?.message || "Could not load automations"
+        );
+      } finally {
+        if (requestId === requestIdRef.current) {
+          append ? setLoadingMore(false) : setLoading(false);
+        }
       }
-    }
-  }, [query]);
+    },
+    [query]
+  );
 
   useEffect(() => {
     if (!user) return;
@@ -374,33 +364,24 @@ export default function AutomationPage() {
   useEffect(() => {
     const target = loadMoreRef.current;
     if (!target || !hasNextPage || loading || loadingMore) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) void fetchAutomations(nextPage, true);
-    }, { rootMargin: "240px" });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) void fetchAutomations(nextPage, true);
+      },
+      { rootMargin: "240px" }
+    );
     observer.observe(target);
     return () => observer.disconnect();
   }, [fetchAutomations, hasNextPage, loading, loadingMore, nextPage]);
 
   const visibleAutomations = automations;
 
-  const handleCreate = async (initialPrompt?: string) => {
-    if (creating) return;
-    setCreating(true);
-    try {
-      const result = await createProject(
-        initialPrompt || "Help me create a new automation",
-        undefined,
-        undefined,
-        "automation"
-      );
-      if (result.type && result.id) {
-        router.push(`/chat/${result.id}?preview=automation`);
-        return;
-      }
-      toast.error(result.message || "Could not create automation");
-    } finally {
-      setCreating(false);
-    }
+  const handleCreate = (initialPrompt = "Help me create a new automation") => {
+    const params = new URLSearchParams({
+      prompt: initialPrompt,
+      category: "automation",
+    });
+    router.push(`/chat?${params}`);
   };
 
   const handleStatusChange = async (
@@ -492,7 +473,7 @@ export default function AutomationPage() {
   ).length;
 
   return (
-    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 px-0 md:p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in slide-in-from-bottom-4 flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 px-0 text-zinc-950 duration-500 md:p-2 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] lg:items-center'>
           <div className='flex min-w-0 flex-col items-start justify-center py-1'>
@@ -518,14 +499,9 @@ export default function AutomationPage() {
               </div>
               <Button
                 onClick={() => handleCreate()}
-                disabled={creating}
                 className='h-9 shrink-0 gap-2 rounded-xl px-4'
               >
-                {creating ? (
-                  <LoadingFileLoader size={20} />
-                ) : (
-                  <Plus className='h-4 w-4' />
-                )}
+                <Plus className='h-4 w-4' />
                 <span className=''>
                   <LocalizedText text={"New"} />
                 </span>
@@ -598,14 +574,9 @@ export default function AutomationPage() {
           {!query && (
             <Button
               onClick={() => handleCreate()}
-              disabled={creating}
               className='mt-5 gap-2 rounded-xl px-5 text-xs'
             >
-              {creating ? (
-                <LoadingFileLoader size={20} />
-              ) : (
-                <Plus className='h-3.5 w-3.5' />
-              )}
+              <Plus className='h-3.5 w-3.5' />
               <LocalizedText text={"Create automation"} />
             </Button>
           )}
@@ -742,7 +713,10 @@ export default function AutomationPage() {
               </article>
             );
           })}
-          <div ref={loadMoreRef} className='col-span-full flex h-10 items-center justify-center'>
+          <div
+            ref={loadMoreRef}
+            className='col-span-full flex h-10 items-center justify-center'
+          >
             {loadingMore && <LoadingFileLoader size={20} />}
           </div>
         </div>
@@ -788,10 +762,9 @@ export default function AutomationPage() {
                 <div className='mt-4 border-t border-zinc-200 pt-3 dark:border-white/10'>
                   <Button
                     onClick={() => handleCreate(tmpl.prompt)}
-                    disabled={creating}
                     className='group rounded-lg px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60'
                   >
-                    <span>{creating ? "Creating..." : "Use Template"}</span>
+                    <span>Use Template</span>
                     <ArrowRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-1' />
                   </Button>
                 </div>
@@ -801,37 +774,19 @@ export default function AutomationPage() {
         </div>
       </section>
 
-      <AlertDialog
+      <DeleteConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              <LocalizedText text={"Delete this automation?"} />
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              "{deleteTarget?.title || "Untitled automation"}
-              <LocalizedText
-                text={
-                  '" and its workflow will be permanently deleted. This cannot be undone.'
-                }
-              />
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>
-              <LocalizedText text={"Cancel"} />
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-            >
-              <LocalizedText text={"Delete automation"} />
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        description={
+          <>
+            “{deleteTarget?.title || "Untitled automation"}” and its workflow
+            will be permanently deleted. This action cannot be undone.
+          </>
+        }
+        onConfirm={() => void handleDelete()}
+        loading={busyId === deleteTarget?._id}
+        confirmLabel='Delete automation'
+      />
     </div>
   );
 }

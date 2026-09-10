@@ -851,6 +851,7 @@ export function DesignInspirationCard({ data }: { data: any }) {
 }
 
 export function GtmCampaignCard({ data }: { data: any }) {
+  const router = useRouter();
   const campaign = data?.campaign || data?.campaigns?.[0] || data;
   const campaigns = data?.campaigns || (campaign?._id ? [campaign] : []);
   return (
@@ -875,6 +876,15 @@ export function GtmCampaignCard({ data }: { data: any }) {
           </p>
         </div>
       ))}
+      <Button
+        variant='outline'
+        size='sm'
+        className='mt-3 h-7 px-2 text-xs active:scale-[0.97]'
+        onClick={() => router.push("/visuals/campaigns")}
+      >
+        <BarChart3 className='h-3 w-3' />
+        <LocalizedText text='Open campaign dashboard' />
+      </Button>
     </AgentCard>
   );
 }
