@@ -80,6 +80,27 @@ type TemplateItem = {
   isPendingPublished?: boolean;
 };
 
+function TemplateImage({ template }: { template: TemplateItem }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <>
+      {!loaded && (
+        <Skeleton className='bg-muted/60 absolute inset-0 size-full rounded-lg' />
+      )}
+      <img
+        className={cn(
+          "w-full rounded-lg object-cover transition-opacity duration-150",
+          loaded ? "h-auto opacity-100" : "aspect-[4/5] opacity-0"
+        )}
+        src={template.src}
+        alt={template.alt || "Template"}
+        onLoad={() => setLoaded(true)}
+      />
+    </>
+  );
+}
+
 const keepPendingPublished = (
   current: TemplateItem[],
   fetched: TemplateItem[]
@@ -731,11 +752,7 @@ export default function TemplateGridAll() {
               style={{ breakInside: "avoid" }}
             >
               <div className='relative'>
-                <img
-                  className='h-auto max-w-full rounded-lg object-cover'
-                  src={t.src}
-                  alt={t.alt || "Template"}
-                />
+                <TemplateImage template={t} />
                 {t.category && (
                   <Badge
                     variant='secondary'
@@ -812,9 +829,9 @@ export default function TemplateGridAll() {
             </div>
           );
         })}
-        {/* Sentinel for infinite scroll */}
-        <div ref={loadMoreRef} className='col-span-full h-10'></div>
       </div>
+      {/* Keep the sentinel outside CSS columns so it cannot be fragmented. */}
+      <div ref={loadMoreRef} className='h-10' />
       {isFetchingMore && (
         <div className='mt-4 flex justify-center'>
           <Loading size={14} />
