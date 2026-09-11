@@ -304,7 +304,7 @@ export function LandingFooter() {
       </section>
 
       <footer className='relative min-h-[400px] overflow-hidden'>
-        <div className='relative z-10 mx-auto px-4 py-16 md:px-12 lg:px-20 lg:py-20 xl:px-24'>
+        <div className='relative z-10 mx-auto px-4 pt-16 pb-5 md:px-12 lg:px-20 xl:px-24'>
           <div className='flex flex-col justify-between gap-12 lg:flex-row lg:gap-24'>
             <div className='lg:max-w-sm'>
               <div className='flex flex-col'>

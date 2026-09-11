@@ -1,19 +1,9 @@
 "use client";
 
-// import type { Metadata } from "next";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -26,39 +16,22 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import axios from "axios";
-import { AlertCircle, CheckCircle2, Upload } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  ArrowRight,
+  Cpu,
+  FileText,
+  Layers,
+  Paperclip,
+  Sparkles,
+  Upload,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { ChangeEvent, FormEvent, useState } from "react";
 
-// export const metadata: Metadata = {
-//   title: "Support & Suggestions – Genit AI",
-//   description:
-//     "Submit support tickets or feature suggestions to the Genit AI team. We value your feedback and are here to help.",
-//   keywords: [
-//     "support",
-//     "suggestions",
-//     "feedback",
-//     "bug report",
-//     "feature request",
-//     "help",
-//   ],
-//   openGraph: {
-//     title: "Support & Suggestions – Genit AI",
-//     description: "Submit support tickets and feature suggestions to Genit AI",
-//     url: "https://www.trygenit.com/suggest",
-//     images: [
-//       {
-//         url: "https://www.trygenit.com/opengraph-image.png",
-//         width: 1200,
-//         height: 630,
-//         alt: "Genit AI Support",
-//       },
-//     ],
-//   },
-// };
-
-function Page() {
+export default function SuggestPage() {
   // Support form state
   const [supportName, setSupportName] = useState("");
   const [supportEmail, setSupportEmail] = useState("");
@@ -148,42 +121,28 @@ function Page() {
         "customer/support",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         }
       );
 
       if (response.status === 201) {
-        enqueueSnackbar("Support submitted successfully", {
+        enqueueSnackbar("Support ticket submitted successfully", {
           variant: "success",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",
           },
-
           action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              {" "}
-              <svg
-                width='1em'
-                height='1em'
-                viewBox='0 0 24 24'
-                className=''
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
-                  stroke='#fff'
-                  strokeWidth={2}
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+            <button
+              onClick={() => closeSnackbar(key)}
+              className='text-white hover:opacity-80'
+            >
+              ✕
             </button>
           ),
         });
+
         setSupportSubmitted(true);
         setSupportName("");
         setSupportEmail("");
@@ -194,33 +153,19 @@ function Page() {
       }
     } catch (err) {
       console.error("Error submitting support ticket", err);
-      enqueueSnackbar("error processing request", {
+      enqueueSnackbar("Error processing support ticket", {
         variant: "error",
         autoHideDuration: 3000,
         anchorOrigin: {
           vertical: "bottom",
           horizontal: "center",
         },
-
         action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            {" "}
-            <svg
-              width='1em'
-              height='1em'
-              viewBox='0 0 24 24'
-              className=''
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
-                stroke='#fff'
-                strokeWidth={2}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
+          <button
+            onClick={() => closeSnackbar(key)}
+            className='text-white hover:opacity-80'
+          >
+            ✕
           </button>
         ),
       });
@@ -235,7 +180,7 @@ function Page() {
     setIsSubmitting(true);
     setError(null);
     try {
-      let newData = {
+      const newData = {
         name: suggestionName,
         email: suggestionEmail,
         title: suggestionSubject,
@@ -252,33 +197,19 @@ function Page() {
       );
 
       if (response.status === 201) {
-        enqueueSnackbar("Congratulation 🎉, your business is live", {
+        enqueueSnackbar("Thank you! Your suggestion has been recorded.", {
           variant: "success",
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",
           },
-
           action: (key) => (
-            <button onClick={() => closeSnackbar(key)}>
-              {" "}
-              <svg
-                width='1em'
-                height='1em'
-                viewBox='0 0 24 24'
-                className=''
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
-                  stroke='#fff'
-                  strokeWidth={2}
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+            <button
+              onClick={() => closeSnackbar(key)}
+              className='text-white hover:opacity-80'
+            >
+              ✕
             </button>
           ),
         });
@@ -289,36 +220,21 @@ function Page() {
         setSuggestionSubject("");
         setSuggestionDescription("");
       }
-    } catch (error) {
-      console.error("Error submitting suggestion", error);
-
-      enqueueSnackbar("error processing request", {
+    } catch (err) {
+      console.error("Error submitting suggestion", err);
+      enqueueSnackbar("Error processing suggestion", {
         variant: "error",
         autoHideDuration: 3000,
         anchorOrigin: {
           vertical: "bottom",
           horizontal: "center",
         },
-
         action: (key) => (
-          <button onClick={() => closeSnackbar(key)}>
-            {" "}
-            <svg
-              width='1em'
-              height='1em'
-              viewBox='0 0 24 24'
-              className=''
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M21 21l-9-9m0 0L3 3m9 9l9-9m-9 9l-9 9'
-                stroke='#fff'
-                strokeWidth={2}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
+          <button
+            onClick={() => closeSnackbar(key)}
+            className='text-white hover:opacity-80'
+          >
+            ✕
           </button>
         ),
       });
@@ -329,371 +245,465 @@ function Page() {
   };
 
   return (
-    <div className='h-full bg-white dark:bg-black'>
+    <div className='min-h-screen bg-white text-neutral-900 dark:bg-black dark:text-neutral-100'>
       <SnackbarProvider
         autoHideDuration={3000}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
-      <div className='sticky top-0 z-40'>
-        <LandingNavbar />
-      </div>
-      <div className='hidden lg:block'>
-        {/* <h1 className="text-3xl font-semibold text-center mx-auto">
-          Powerful Features
-        </h1>
-        <p className="text-sm text-slate-500 text-center mt-2 max-w-md mx-auto">
-          Everything you need to manage, track, and grow your finances, securely
-          and efficiently.
-        </p> */}
-        <div className='mt-16 flex flex-wrap items-center justify-center gap-10'>
-          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
-            <img
-              className='rounded-xl'
-              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-1.png'
-              alt=''
-            />
-            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              <LocalizedText text={"Feedback analyser"} />
-            </h3>
-            <p className='mt-1 text-sm text-neutral-400'>
-              <LocalizedText
-                text={
-                  "Get instant insights into your finances with live dashboards."
-                }
-              />
-            </p>
-          </div>
-          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
-            <img
-              className='rounded-xl'
-              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-2.png'
-              alt=''
-            />
-            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              <LocalizedText text={"User management"} />
-            </h3>
-            <p className='mt-1 text-sm text-neutral-400'>
-              <LocalizedText
-                text={
-                  "Get instant insights into your finances with live dashboards."
-                }
-              />
-            </p>
-          </div>
-          <div className='max-w-80 transition duration-300 hover:-translate-y-0.5'>
-            <img
-              className='rounded-xl'
-              src='https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-3.png'
-              alt=''
-            />
-            <h3 className='mt-4 text-base font-semibold text-neutral-300'>
-              <LocalizedText text={"Better invoicing"} />
-            </h3>
-            <p className='mt-1 text-sm text-neutral-400'>
-              <LocalizedText
-                text={
-                  "Get instant insights into your finances with live dashboards."
-                }
-              />
-            </p>
-          </div>
-        </div>
-      </div>
+      <LandingNavbar />
 
-      <section className='mt-10 mb-20 flex flex-col items-center justify-center gap-10 max-md:px-4 md:flex-row'>
-        <div className='text-sm text-neutral-400 lg:max-w-[60%]'>
-          <div className='flex items-center justify-center'>
-            <Tabs
-              defaultValue='support'
-              className='flex w-full flex-col items-center justify-center lg:max-w-5xl lg:px-16'
+      <main className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
+        {/* Header Section */}
+        <div className='max-w-3xl'>
+          <div className='flex items-center gap-2 font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+            <Link
+              href='/'
+              className='transition-colors hover:text-neutral-900 dark:hover:text-white'
             >
-              <div className='bg-BackgroundDark dark:bg-BackgroundDark sticky top-16 z-10 my-4 mt-2 flex w-full items-center justify-center py-2 lg:top-14'>
-                <TabsList className='bg-card bg-BackgroundDark dark:bg-BackgroundDark sm:w-start mt-1 flex w-fit justify-start gap-2 overflow-x-auto overflow-y-hidden rounded-md border border-neutral-900 p-1 sm:max-w-screen-lg lg:overscroll-none dark:border-neutral-900'>
-                  <TabsTrigger
-                    value='support'
-                    className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
-                  >
-                    <LocalizedText text={"Support"} />
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value='suggestion'
-                    className='data-[state=active]:text-TextDark1 dark:data-[state=active]:text-TextDark1 text-TextDark1 dark:text-TextDark1 w-fit px-4 py-2 hover:bg-indigo-700 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-600'
-                  >
-                    <LocalizedText text={"Suggestion"} />
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-              <TabsContent value='support'>
-                <Card className='bg-BackgroundDark dark:bg-BackgroundDark w-full max-w-2xl border border-neutral-900 dark:border-neutral-900'>
-                  <CardHeader>
-                    {/* <CardTitle>Submit a Support Ticket</CardTitle> */}
-                    <CardDescription className='text-neutral-400'>
-                      <LocalizedText
-                        text={"Need help? Submit a support ticket and we"}
-                      />
-                      {`'`}
-                      <LocalizedText
-                        text={"ll get back to you as soon as possible."}
-                      />
-                    </CardDescription>
-                  </CardHeader>
-                  <form
-                    onSubmit={onSupportSubmit}
-                    encType='multipart/form-data'
-                  >
-                    <CardContent className='space-y-4'>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-name'
-                        >
-                          <LocalizedText text={"Name"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='support-name'
-                          name='name'
-                          placeholder='Your name'
-                          value={supportName}
-                          onChange={handleSupportChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-email'
-                        >
-                          <LocalizedText text={"Email"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='support-email'
-                          name='email'
-                          type='email'
-                          placeholder='Your email'
-                          value={supportEmail}
-                          onChange={handleSupportChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-type'
-                        >
-                          <LocalizedText text={"Ticket Type"} />
-                        </Label>
-                        <Select
-                          onValueChange={handleSupportTicketTypeChange}
-                          value={supportTicketType}
-                        >
-                          <SelectTrigger
-                            id='support-type'
-                            className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          >
-                            <SelectValue placeholder='Select ticket type' />
-                          </SelectTrigger>
-                          <SelectContent className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 border border-neutral-900 dark:border-neutral-900'>
-                            <SelectItem value='technical'>
-                              <LocalizedText text={"Technical Issue"} />
-                            </SelectItem>
-                            <SelectItem value='billing'>
-                              <LocalizedText text={"Billing Question"} />
-                            </SelectItem>
-                            <SelectItem value='feature'>
-                              <LocalizedText text={"Feature Request"} />
-                            </SelectItem>
-                            <SelectItem value='other'>
-                              <LocalizedText text={"Other"} />
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-subject'
-                        >
-                          <LocalizedText text={"Subject"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='support-subject'
-                          name='subject'
-                          placeholder='Brief description of the issue'
-                          value={supportSubject}
-                          onChange={handleSupportChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-description'
-                        >
-                          <LocalizedText text={"Description"} />
-                        </Label>
-                        <Textarea
-                          id='support-description'
-                          name='description'
-                          placeholder='Please provide details about your issue'
-                          value={supportDescription}
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          onChange={handleSupportChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='support-file'
-                        >
-                          <LocalizedText text={"Attach File (optional)"} />
-                        </Label>
-                        <div className='flex w-full items-center space-x-2'>
-                          <Input
-                            id='support-file'
-                            name='support-file'
-                            type='file'
-                            onChange={handleSupportFileChange}
-                            className='hidden'
-                          />
-                          <Button
-                            type='button'
-                            variant='outline'
-                            onClick={() =>
-                              document.getElementById("support-file")?.click()
-                            }
-                            className='flex-shrink-0'
-                          >
-                            <Upload className='mr-2 h-4 w-4' />
-                            <LocalizedText text={"Choose File"} />
-                          </Button>
-                          <span className='flex-1 text-sm text-gray-500'>
-                            {supportFile ? supportFile.name : "No file chosen"}
-                          </span>
-                        </div>
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <Button
-                        type='submit'
-                        className='bg-BackgroundLight2 dark:bg-BackgroundLight2 hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 w-full text-black hover:text-black dark:text-black dark:hover:text-black'
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting
-                          ? "Submitting..."
-                          : "Submit Support Ticket"}
-                      </Button>
-                    </CardFooter>
-                  </form>
-                </Card>
-              </TabsContent>
-              <TabsContent value='suggestion'>
-                <Card className='bg-BackgroundDark dark:bg-BackgroundDark w-full max-w-2xl border border-neutral-900 dark:border-neutral-900'>
-                  <CardHeader>
-                    {/* <CardTitle>Submit a Suggestion</CardTitle> */}
-                    <CardDescription className='text-neutral-400'>
-                      <LocalizedText
-                        text={"Have an idea to improve our service? We"}
-                      />
-                      {`'`}
-                      <LocalizedText text={"d love to hear it!"} />
-                    </CardDescription>
-                  </CardHeader>
-                  <form onSubmit={onSuggestionSubmit}>
-                    <CardContent className='space-y-4'>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='suggestion-name'
-                        >
-                          <LocalizedText text={"Name"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='suggestion-name'
-                          name='name'
-                          placeholder='Your name'
-                          value={suggestionName}
-                          onChange={handleSuggestionChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='suggestion-email'
-                        >
-                          <LocalizedText text={"Email"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='suggestion-email'
-                          name='email'
-                          type='email'
-                          placeholder='Your email'
-                          value={suggestionEmail}
-                          onChange={handleSuggestionChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='suggestion-subject'
-                        >
-                          <LocalizedText text={"Suggestion Title"} />
-                        </Label>
-                        <Input
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full border border-neutral-900 dark:border-neutral-900'
-                          id='suggestion-subject'
-                          name='subject'
-                          placeholder='Brief title for your suggestion'
-                          value={suggestionSubject}
-                          onChange={handleSuggestionChange}
-                          required
-                        />
-                      </div>
-                      <div className='w-full space-y-2'>
-                        <Label
-                          className='text-neutral-400'
-                          htmlFor='suggestion-description'
-                        >
-                          <LocalizedText text={"Description"} />
-                        </Label>
-                        <Textarea
-                          id='suggestion-description'
-                          name='description'
-                          className='bg-BackgroundDark2 dark:bg-BackgroundDark2 text-TextDark2 dark:text-TextDark2 w-full resize-none border border-neutral-900 dark:border-neutral-900'
-                          placeholder='Please provide details about your suggestion'
-                          value={suggestionDescription}
-                          onChange={handleSuggestionChange}
-                          required
-                        />
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <Button
-                        type='submit'
-                        className='bg-BackgroundLight2 dark:bg-BackgroundLight2 hover:bg-BackgroundLight2 hover:dark:bg-BackgroundLight2 w-full text-black hover:text-black dark:text-black dark:hover:text-black'
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? "Submitting..." : "Submit Suggestion"}
-                      </Button>
-                    </CardFooter>
-                  </form>
-                </Card>
-              </TabsContent>
-            </Tabs>
+              Home
+            </Link>
+            <span className='text-neutral-300 dark:text-neutral-700'>/</span>
+            <span>Support &amp; Feedback</span>
+          </div>
+
+          <h1 className='mt-6 text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
+            Help shape the future of Genit.
+          </h1>
+          <p className='mt-5 text-pretty text-base leading-7 text-neutral-600 sm:text-lg dark:text-neutral-400'>
+            Have an idea for a new marketing agent capability, want a tool
+            integration added, or need technical assistance with your workspace?
+            Our product and engineering teams review every submission.
+          </p>
+        </div>
+
+        {/* Hero Figure 01: Product Collaboration */}
+        <figure className='mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[500px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+            alt='Product design, wireframing, and user feedback in Genit'
+          />
+          <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+            <span>Figure 01: Product architecture evolving through user feedback &amp; continuous iteration</span>
+            <span>Genit Engineering &amp; Design</span>
+          </figcaption>
+        </figure>
+
+        {/* 3 Architectural Pillars */}
+        <div className='mt-16 grid grid-cols-1 gap-6 border-y border-neutral-200 py-10 sm:grid-cols-3 dark:border-neutral-800'>
+          <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+            <div className='flex items-center gap-2 text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+              <Cpu className='size-3.5' />
+              <span>01 // Agents &amp; Skills</span>
+            </div>
+            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"Agent Capabilities"} />
+            </h3>
+            <p className='mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400 text-pretty'>
+              <LocalizedText
+                text={
+                  "Suggest new workflows, creative formats, or autonomous execution skills for Genit agents."
+                }
+              />
+            </p>
+          </div>
+
+          <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+            <div className='flex items-center gap-2 text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+              <Layers className='size-3.5' />
+              <span>02 // Integrations</span>
+            </div>
+            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"Connected Tools"} />
+            </h3>
+            <p className='mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400 text-pretty'>
+              <LocalizedText
+                text={
+                  "Request connections for ad networks, CRM software, ecommerce stores, or niche social channels."
+                }
+              />
+            </p>
+          </div>
+
+          <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+            <div className='flex items-center gap-2 text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+              <Sparkles className='size-3.5' />
+              <span>03 // Support</span>
+            </div>
+            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"Direct Assistance"} />
+            </h3>
+            <p className='mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400 text-pretty'>
+              <LocalizedText
+                text={
+                  "Open an engineering ticket for debugging, billing questions, or personalized workspace setup."
+                }
+              />
+            </p>
           </div>
         </div>
-      </section>
+
+        {/* Tabbed Interactive Section */}
+        <section className='mt-16 flex flex-col items-center justify-center'>
+          <Tabs
+            defaultValue='support'
+            className='flex w-full flex-col items-center justify-center max-w-2xl'
+          >
+            <div className='my-6 flex w-full justify-center'>
+              <TabsList className='flex rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-800 dark:bg-neutral-900'>
+                <TabsTrigger
+                  value='support'
+                  className='rounded-full px-6 py-2 text-xs font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-neutral-950 data-[state=active]:shadow-xs dark:data-[state=active]:bg-neutral-800 dark:data-[state=active]:text-white'
+                >
+                  <LocalizedText text={"Support Ticket"} />
+                </TabsTrigger>
+                <TabsTrigger
+                  value='suggestion'
+                  className='rounded-full px-6 py-2 text-xs font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-neutral-950 data-[state=active]:shadow-xs dark:data-[state=active]:bg-neutral-800 dark:data-[state=active]:text-white'
+                >
+                  <LocalizedText text={"Feature Suggestion"} />
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Support Form Tab */}
+            <TabsContent value='support' className='w-full'>
+              <div className='rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-9 dark:border-neutral-800 dark:bg-neutral-950/60'>
+                <div className='mb-6 space-y-1.5'>
+                  <h2 className='text-xl font-semibold tracking-tight text-neutral-950 dark:text-white'>
+                    <LocalizedText text={"Submit a Support Ticket"} />
+                  </h2>
+                  <p className='text-sm text-neutral-600 dark:text-neutral-400'>
+                    <LocalizedText
+                      text={
+                        "Encountering an issue? Describe what happened and our engineering team will assist."
+                      }
+                    />
+                  </p>
+                </div>
+
+                <form onSubmit={onSupportSubmit} className='space-y-5'>
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='support-name'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Name"} /> *
+                      </Label>
+                      <Input
+                        id='support-name'
+                        name='name'
+                        value={supportName}
+                        onChange={handleSupportChange}
+                        placeholder='Alex Morgan'
+                        required
+                        className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                      />
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='support-email'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Email"} /> *
+                      </Label>
+                      <Input
+                        id='support-email'
+                        name='email'
+                        type='email'
+                        value={supportEmail}
+                        onChange={handleSupportChange}
+                        placeholder='alex@company.com'
+                        required
+                        className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                      />
+                    </div>
+                  </div>
+
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='support-subject'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Subject"} /> *
+                      </Label>
+                      <Input
+                        id='support-subject'
+                        name='subject'
+                        value={supportSubject}
+                        onChange={handleSupportChange}
+                        placeholder='Integration auth error'
+                        required
+                        className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                      />
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='support-ticket-type'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Ticket Type"} /> *
+                      </Label>
+                      <Select
+                        value={supportTicketType}
+                        onValueChange={handleSupportTicketTypeChange}
+                        required
+                      >
+                        <SelectTrigger
+                          id='support-ticket-type'
+                          className='h-11 w-full rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus:ring-1 focus:ring-neutral-950 dark:focus:ring-white'
+                        >
+                          <SelectValue placeholder='Select category' />
+                        </SelectTrigger>
+                        <SelectContent className='border-neutral-200 dark:border-neutral-800'>
+                          <SelectItem value='bug'>
+                            <LocalizedText text={"Bug Report"} />
+                          </SelectItem>
+                          <SelectItem value='billing'>
+                            <LocalizedText text={"Billing & Subscription"} />
+                          </SelectItem>
+                          <SelectItem value='account'>
+                            <LocalizedText text={"Account Access"} />
+                          </SelectItem>
+                          <SelectItem value='integration'>
+                            <LocalizedText text={"Tool Integration"} />
+                          </SelectItem>
+                          <SelectItem value='other'>
+                            <LocalizedText text={"Other Technical Support"} />
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label
+                      htmlFor='support-description'
+                      className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                    >
+                      <LocalizedText text={"Description"} /> *
+                    </Label>
+                    <Textarea
+                      id='support-description'
+                      name='description'
+                      value={supportDescription}
+                      onChange={handleSupportChange}
+                      placeholder='Please describe the issue in detail, including steps to reproduce...'
+                      required
+                      className='min-h-[120px] resize-none rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                    />
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label
+                      htmlFor='support-file'
+                      className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                    >
+                      <LocalizedText text={"Attachment (Optional)"} />
+                    </Label>
+                    <div className='flex flex-col gap-2'>
+                      <div
+                        className={cn(
+                          "group relative flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed transition-colors",
+                          supportFile
+                            ? "border-neutral-900 bg-neutral-100/80 dark:border-neutral-100 dark:bg-neutral-900/80"
+                            : "border-neutral-300 bg-white hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-600"
+                        )}
+                        onClick={() =>
+                          document.getElementById("support-file")?.click()
+                        }
+                      >
+                        <input
+                          id='support-file'
+                          type='file'
+                          className='hidden'
+                          onChange={handleSupportFileChange}
+                        />
+
+                        {supportFile ? (
+                          <div className='flex flex-col items-center px-4'>
+                            <div className='flex items-center gap-2'>
+                              <FileText className='size-5 text-neutral-900 dark:text-white' />
+                              <span className='max-w-[260px] truncate text-sm font-semibold text-neutral-900 dark:text-white'>
+                                {supportFile.name}
+                              </span>
+                            </div>
+                            <span className='mt-1 font-mono text-[11px] text-neutral-500'>
+                              {(supportFile.size / (1024 * 1024)).toFixed(2)} MB
+                            </span>
+                          </div>
+                        ) : (
+                          <div className='flex flex-col items-center gap-1.5 text-neutral-500 dark:text-neutral-400'>
+                            <Paperclip className='size-5' />
+                            <span className='text-xs font-medium'>
+                              <LocalizedText text={"Click to attach brief, log, or screenshot"} />
+                            </span>
+                            <span className='text-[10px] text-neutral-400 dark:text-neutral-500'>
+                              PDF, DOCX, PNG, JPG, LOG (Max 10MB)
+                            </span>
+                          </div>
+                        )}
+
+                        {supportFile && (
+                          <button
+                            type='button'
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSupportFile(null);
+                              const input = document.getElementById(
+                                "support-file"
+                              ) as HTMLInputElement;
+                              if (input) input.value = "";
+                            }}
+                            className='absolute top-3 right-3 rounded-full border border-neutral-200 bg-white p-1 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
+                            title='Remove file'
+                          >
+                            <X className='size-3.5' />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <Button
+                    type='submit'
+                    disabled={isSubmitting}
+                    className='mt-4 h-12 w-full rounded-full bg-neutral-950 font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
+                  >
+                    {isSubmitting ? (
+                      <LocalizedText text={"Submitting ticket..."} />
+                    ) : (
+                      <div className='flex items-center justify-center gap-2'>
+                        <LocalizedText text={"Submit Support Ticket"} />
+                        <ArrowRight className='size-4' />
+                      </div>
+                    )}
+                  </Button>
+                </form>
+              </div>
+            </TabsContent>
+
+            {/* Feature Suggestion Tab */}
+            <TabsContent value='suggestion' className='w-full'>
+              <div className='rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-9 dark:border-neutral-800 dark:bg-neutral-950/60'>
+                <div className='mb-6 space-y-1.5'>
+                  <h2 className='text-xl font-semibold tracking-tight text-neutral-950 dark:text-white'>
+                    <LocalizedText text={"Submit a Feature Suggestion"} />
+                  </h2>
+                  <p className='text-sm text-neutral-600 dark:text-neutral-400'>
+                    <LocalizedText
+                      text={
+                        "Tell us what capability or tool integration would make Genit more powerful for your team."
+                      }
+                    />
+                  </p>
+                </div>
+
+                <form onSubmit={onSuggestionSubmit} className='space-y-5'>
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='suggestion-name'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Name"} /> *
+                      </Label>
+                      <Input
+                        id='suggestion-name'
+                        name='name'
+                        value={suggestionName}
+                        onChange={handleSuggestionChange}
+                        placeholder='Alex Morgan'
+                        required
+                        className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                      />
+                    </div>
+
+                    <div className='space-y-2'>
+                      <Label
+                        htmlFor='suggestion-email'
+                        className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                      >
+                        <LocalizedText text={"Email"} /> *
+                      </Label>
+                      <Input
+                        id='suggestion-email'
+                        name='email'
+                        type='email'
+                        value={suggestionEmail}
+                        onChange={handleSuggestionChange}
+                        placeholder='alex@company.com'
+                        required
+                        className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                      />
+                    </div>
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label
+                      htmlFor='suggestion-subject'
+                      className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                    >
+                      <LocalizedText text={"Feature Title"} /> *
+                    </Label>
+                    <Input
+                      id='suggestion-subject'
+                      name='subject'
+                      value={suggestionSubject}
+                      onChange={handleSuggestionChange}
+                      placeholder='e.g. Automated Pinterest carousel publishing'
+                      required
+                      className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                    />
+                  </div>
+
+                  <div className='space-y-2'>
+                    <Label
+                      htmlFor='suggestion-description'
+                      className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'
+                    >
+                      <LocalizedText text={"Feature Details & Use Case"} /> *
+                    </Label>
+                    <Textarea
+                      id='suggestion-description'
+                      name='description'
+                      value={suggestionDescription}
+                      onChange={handleSuggestionChange}
+                      placeholder='Describe how this feature would work and the impact it would have on your marketing workflow...'
+                      required
+                      className='min-h-[140px] resize-none rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                    />
+                  </div>
+
+                  <Button
+                    type='submit'
+                    disabled={isSubmitting}
+                    className='mt-4 h-12 w-full rounded-full bg-neutral-950 font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
+                  >
+                    {isSubmitting ? (
+                      <LocalizedText text={"Submitting suggestion..."} />
+                    ) : (
+                      <div className='flex items-center justify-center gap-2'>
+                        <LocalizedText text={"Submit Feature Suggestion"} />
+                        <ArrowRight className='size-4' />
+                      </div>
+                    )}
+                  </Button>
+                </form>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </section>
+
+        {/* Supporting Figure 02: Collaborative Engineering Triage */}
+        
+      </main>
 
       <LandingFooter />
     </div>
   );
 }
-
-export default Page;

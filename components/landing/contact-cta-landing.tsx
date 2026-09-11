@@ -119,7 +119,7 @@ const ContactCtaLanding = () => {
           </p>
           <Link
             href='/platform'
-            className='mt-5 inline-flex font-semibold text-indigo-600 hover:text-indigo-500'
+            className='mt-5 inline-flex font-semibold text-neutral-900 dark:text-neutral-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
           >
             {t("Explore the platform")} →
           </Link>

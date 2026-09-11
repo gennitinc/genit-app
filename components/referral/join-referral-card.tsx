@@ -2,62 +2,29 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import {
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  DollarSign,
+  Gift,
   Link as LinkIcon,
-  RefreshCw,
+  Percent,
+  ShieldCheck,
   TrendingUp,
-  UserPlus,
+  Users,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { toast } from "sonner";
-import { useState } from "react";
 
 interface JoinReferralCardProps {
   onJoinSuccess: () => void;
   headingLevel?: "h1" | "h2";
-}
-
-interface ChartBarProps {
-  value: number;
-  height: string;
-  month: string;
-  isDark: boolean;
-}
-
-function ChartBar({ value, height, month, isDark }: ChartBarProps) {
-  return (
-    <div className='group relative flex min-w-0 flex-1 flex-col items-center space-y-1.5 sm:space-y-2'>
-      <div
-        className={`absolute top-2 z-10 hidden rounded-full px-1.5 py-0.5 text-[10px] whitespace-nowrap group-hover:block sm:px-2 sm:py-1 sm:text-xs ${
-          isDark
-            ? "border border-gray-700 bg-gray-800 text-gray-100"
-            : "bg-black text-white"
-        }`}
-      >
-        {value}
-      </div>
-      <div
-        className={`mx-auto flex h-24 w-full max-w-[20px] items-end rounded-full group-hover:cursor-pointer sm:h-32 sm:max-w-[24px] ${
-          isDark ? "bg-gray-800" : "bg-slate-200"
-        }`}
-      >
-        <div
-          className={`${height} w-full rounded-full ${isDark ? "bg-blue-500" : "bg-blue-600"}`}
-        />
-      </div>
-      <div
-        className={`text-[10px] sm:text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
-      >
-        {month}
-      </div>
-    </div>
-  );
 }
 
 export function JoinReferralCard({
@@ -66,28 +33,10 @@ export function JoinReferralCard({
 }: JoinReferralCardProps) {
   const Heading = headingLevel;
   const [joining, setJoining] = useState(false);
-  const { theme } = useTheme();
   const { user } = useUserContext();
   const router = useRouter();
-  const isDark = theme === "dark";
-
-  const chartData = [
-    { value: 10, height: "h-10", month: "Jan" },
-    { value: 12, height: "h-8", month: "Feb" },
-    { value: 20, height: "h-20", month: "Mar" },
-    { value: 16, height: "h-16", month: "Apr" },
-    { value: 8, height: "h-8", month: "May" },
-    { value: 12, height: "h-12", month: "Jun" },
-    { value: 8, height: "h-8", month: "Jul" },
-    { value: 16, height: "h-16", month: "Aug" },
-    { value: 12, height: "h-12", month: "Sep" },
-    { value: 6, height: "h-6", month: "Oct" },
-    { value: 16, height: "h-16", month: "Nov" },
-    { value: 12, height: "h-12", month: "Dec" },
-  ];
 
   const handleJoinReferralProgram = async () => {
-    // Check if user is authenticated
     if (!user) {
       toast.info("Please sign in to join the referral program", {
         description: "Redirecting to sign in...",
@@ -107,16 +56,15 @@ export function JoinReferralCard({
       );
 
       if (response.status === 200 || response.status === 201) {
-        toast.success("Welcome to the Referral Program!", {
+        toast.success("Welcome to the Creators Program!", {
           description:
-            "You've successfully joined. Start earning by sharing your referral link!",
+            "You've successfully joined. Start earning by sharing your unique link!",
         });
         onJoinSuccess();
       }
     } catch (error: any) {
       console.error("Failed to join referral program:", error);
 
-      // Handle 401/403 errors - redirect to sign in
       if (error?.response?.status === 401 || error?.response?.status === 403) {
         toast.error("Please sign in to join the referral program", {
           description: "Redirecting to sign in...",
@@ -134,336 +82,266 @@ export function JoinReferralCard({
     }
   };
 
+  const chartMonths = [
+    { month: "Jan", height: "h-8", amount: "$320" },
+    { month: "Feb", height: "h-12", amount: "$480" },
+    { month: "Mar", height: "h-16", amount: "$640" },
+    { month: "Apr", height: "h-14", amount: "$560" },
+    { month: "May", height: "h-20", amount: "$820" },
+    { month: "Jun", height: "h-24", amount: "$1,050" },
+    { month: "Jul", height: "h-28", amount: "$1,280" },
+    { month: "Aug", height: "h-32", amount: "$1,620" },
+  ];
+
   return (
     <div className='w-full'>
-      <div className='mx-auto mt-16 flex max-w-7xl flex-col px-4 sm:px-6 lg:mt-0 lg:pl-8'>
-        <div className='relative isolate mx-auto items-center after:pointer-events-none lg:flex lg:pt-0'>
-          <div className='mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left'>
-            <div className='mt-6 flex justify-center sm:mt-8 lg:justify-start'>
-              <div className='flex items-center'>
-                <div className='flex -space-x-2'>
-                  <img
-                    className={`inline-block h-8 w-8 rounded-full ring-2 sm:h-10 sm:w-10 ${
-                      isDark ? "ring-gray-800" : "ring-white"
-                    }`}
-                    src='https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                  <img
-                    className={`inline-block h-8 w-8 rounded-full ring-2 sm:h-10 sm:w-10 ${
-                      isDark ? "ring-gray-800" : "ring-white"
-                    }`}
-                    src='https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                  <img
-                    className={`inline-block h-8 w-8 rounded-full ring-2 sm:h-10 sm:w-10 ${
-                      isDark ? "ring-gray-800" : "ring-white"
-                    }`}
-                    src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div
-                  className={`ml-3 rounded-full px-2 py-0.5 text-[10px] sm:ml-4 sm:px-3 sm:py-1 sm:text-xs ${
-                    isDark
-                      ? "bg-purple-900/30 text-purple-200"
-                      : "bg-purple-100 text-purple-700"
-                  }`}
-                >
-                  + 287
-                </div>
-              </div>
-            </div>
+      <div className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
+        {/* Breadcrumb indicator */}
+        <div className='flex items-center gap-2 font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+          <Link
+            href='/'
+            className='transition-colors hover:text-neutral-900 dark:hover:text-white'
+          >
+            Home
+          </Link>
+          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
+          <span>Partnerships</span>
+          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
+          <span className='text-neutral-900 dark:text-white'>Creators</span>
+        </div>
 
-            <Heading
-              className={`mt-5 text-2xl font-semibold tracking-tight text-balance sm:text-3xl lg:text-4xl ${isDark ? "text-white" : "text-gray-900"}`}
-            >
-              <LocalizedText text={"Creators Program"} />
+        {/* Hero Section: 2 Columns */}
+        <div className='mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16'>
+          {/* Left Column */}
+          <div className='space-y-6 lg:col-span-7'>
+            <span className='inline-block font-mono text-xs font-semibold tracking-wider text-blue-600 uppercase dark:text-blue-400'>
+              Partnership &amp; Affiliates
+            </span>
+
+            <Heading className='text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
+              Partner with Genit.
             </Heading>
-            <div>
-              <p className='text-muted-foreground mt-2 text-lg sm:text-lg lg:text-sm'>
-                <LocalizedText
-                  text={
-                    "Join the Genit referral program, get a unique referral link and media kit, and earn rewards from eligible referrals."
-                  }
-                />
-              </p>
-            </div>
 
-            <div className='mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 sm:flex-row sm:gap-x-6 lg:justify-start'>
+            <p className='text-pretty text-base leading-8 text-neutral-600 sm:text-lg dark:text-neutral-400'>
+              Join the Genit Creators Program. Introduce founders, growth teams,
+              and agencies to our autonomous AI marketing platform and earn
+              recurring monthly commissions on every eligible subscription.
+            </p>
+
+            {/* Left border value statements */}
+            <ul className='space-y-4 pt-2 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                <strong className='font-semibold text-neutral-950 dark:text-white'>
+                  20% Recurring Commission:
+                </strong>{" "}
+                Earn continuous revenue for the active lifetime of every referred
+                customer.
+              </li>
+              <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                <strong className='font-semibold text-neutral-950 dark:text-white'>
+                  Complete Creator Media Kit:
+                </strong>{" "}
+                Get official platform graphics, product recordings, case
+                studies, and suggested messaging.
+              </li>
+              <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                <strong className='font-semibold text-neutral-950 dark:text-white'>
+                  Real-Time Analytics &amp; Prompt Payouts:
+                </strong>{" "}
+                Monitor impressions, conversions, and monthly payouts directly in
+                your creator portal.
+              </li>
+            </ul>
+
+            <div className='flex flex-wrap items-center gap-4 pt-4'>
               <Button
                 onClick={handleJoinReferralProgram}
                 disabled={joining}
-                className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 ${
-                  isDark
-                    ? "bg-white text-black focus-visible:outline-white"
-                    : "bg-gray-900 hover:bg-gray-800 focus-visible:outline-gray-900"
-                }`}
+                className='h-12 rounded-full bg-neutral-950 px-7 font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
                 size='lg'
               >
                 {joining ? (
-                  <>
-                    <Loading size={20} />
-                    <LocalizedText text={"processing..."} />
-                  </>
+                  <div className='flex items-center gap-2'>
+                    <Loading size={18} />
+                    <span>Processing...</span>
+                  </div>
                 ) : (
-                  "Become an affiliate"
+                  <div className='flex items-center gap-2'>
+                    <span>Become a Creator Partner</span>
+                    <ArrowRight className='size-4' />
+                  </div>
                 )}
               </Button>
 
               <Link
                 href='/legal/terms-of-service'
-                className={`text-sm/6 font-semibold transition-opacity hover:opacity-80 ${
-                  isDark ? "text-white" : "text-gray-900"
-                }`}
+                className='inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white'
               >
-                <LocalizedText text={"Read terms"} />
-                <span aria-hidden='true' className='ml-2'>
-                  →
-                </span>
+                <span>Read affiliate terms</span>
+                <span>→</span>
               </Link>
             </div>
           </div>
-          <div className='mt-8 h-fit w-full lg:mt-0'>
-            <div className='relative flex flex-col items-center justify-center overflow-hidden py-4 sm:py-6 lg:py-12'>
-              <div
-                className={`relative w-full max-w-md overflow-hidden rounded-xl border p-4 py-3 pt-4 sm:rounded-lg sm:p-5 sm:pt-5 md:w-fit lg:max-w-xl ${
-                  isDark
-                    ? "border-neutral-800 bg-neutral-900"
-                    : "border-gray-200 bg-white"
-                }`}
-                id='widget'
-              >
-                <div className='absolute inset-0 opacity-10'>
-                  <div className='absolute top-0 right-0 h-16 w-32 translate-x-8 -translate-y-8 rounded-full bg-neutral-800 sm:h-24 sm:w-56 sm:translate-x-12 sm:-translate-y-12 dark:bg-neutral-200' />
-                  <div className='absolute bottom-0 left-0 h-12 w-12 -translate-x-6 translate-y-6 rounded-full bg-neutral-800 sm:h-16 sm:w-16 sm:-translate-x-8 sm:translate-y-8 dark:bg-neutral-200' />
+
+          {/* Right Column: Architectural Dashboard Preview */}
+          <div className='lg:col-span-5'>
+            <div className='overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 sm:p-8 dark:border-neutral-800 dark:bg-neutral-950/60'>
+              <div className='flex items-center justify-between border-b border-neutral-200 pb-4 dark:border-neutral-800'>
+                <div>
+                  <span className='font-mono text-xs text-neutral-400 uppercase dark:text-neutral-500'>
+                    Partner Telemetry
+                  </span>
+                  <p className='text-sm font-semibold text-neutral-950 dark:text-white'>
+                    Creator Performance
+                  </p>
+                </div>
+              </div>
+
+              <div className='mt-6 grid grid-cols-2 gap-4'>
+                <div className='rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900'>
+                  <span className='font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                    Avg. Monthly Payout
+                  </span>
+                  <p className='mt-1 text-2xl font-bold tracking-tight text-neutral-950 dark:text-white'>
+                    $1,620
+                  </p>
+                  <span className='mt-1 flex items-center font-mono text-xs text-emerald-600 dark:text-emerald-400'>
+                    +38% vs prev
+                  </span>
                 </div>
 
-                <div className='mb-6 flex items-center justify-between sm:mb-8'>
-                  <div>
-                    <div
-                      className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      <LocalizedText text={"It's amazing!"} />
-                    </div>
-                    <div
-                      className={`text-lg font-medium sm:text-xl ${isDark ? "text-gray-200" : "text-gray-700"}`}
-                    >
-                      <LocalizedText text={"5 day streak"} />
-                    </div>
-                  </div>
-                  <div className='text-2xl sm:text-3xl'>🎉</div>
+                <div className='rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900'>
+                  <span className='font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                    Conversion Rate
+                  </span>
+                  <p className='mt-1 text-2xl font-bold tracking-tight text-neutral-950 dark:text-white'>
+                    18.4%
+                  </p>
+                  <span className='mt-1 flex items-center font-mono text-xs text-neutral-500'>
+                    Above average
+                  </span>
                 </div>
-                <div
-                  className={`w-full border-t ${isDark ? "border-gray-800" : "border-gray-200"} -mx-4 px-4 sm:-mx-5 sm:px-5`}
-                />
-                <div className='relative -mt-3 flex space-x-3 overflow-x-auto pb-2 sm:space-x-5 lg:space-x-8'>
-                  <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-500'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-4 text-white'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                  </div>
-                  <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-500'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-4 text-white'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                  </div>
-                  <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-500'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-4 text-white'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                  </div>
-                  <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-500'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-4 text-white'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                  </div>
-                  <div className='flex h-6 w-6 items-center justify-center rounded-full bg-green-500'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-4 text-white'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                    >
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                  </div>
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full border border-green-500 ${
-                      isDark ? "bg-green-900/30" : "bg-green-100"
-                    }`}
-                  />
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full border border-green-500 ${
-                      isDark ? "bg-green-900/30" : "bg-green-100"
-                    }`}
-                  />
-                </div>
-                {/* <div className="mt-6 flex justify-between border-t border-gray-100 p-2">
-                  
-                </div> */}
+              </div>
 
-                <div className={`mt-6 w-full rounded-xl sm:mt-3`} id='widget'>
-                  <h6
-                    className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
-                  >
-                    <LocalizedText text={"Total earnings"} />
-                  </h6>
-                  <div
-                    className={`mt-2 flex text-lg font-semibold sm:text-xl ${isDark ? "text-gray-100" : "text-gray-900"}`}
-                  >
-                    <span>$256</span>
-                    <span
-                      className={`ml-2 flex items-center text-xs ${isDark ? "text-green-400" : "text-green-600"}`}
+              {/* Mini Bar Chart */}
+              <div className='mt-6 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900'>
+                <div className='flex items-center justify-between text-xs font-mono text-neutral-500'>
+                  <span>Monthly Trajectory</span>
+                  <span>Trailing 8 Months</span>
+                </div>
+
+                <div className='mt-6 flex h-36 items-end justify-between gap-2 pt-2'>
+                  {chartMonths.map((col) => (
+                    <div
+                      key={col.month}
+                      className='group flex flex-1 flex-col items-center gap-1.5'
                     >
-                      31%
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='h-3 w-3'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          d='M7 11l5-5m0 0l5 5m-5-5v12'
+                      <div className='relative flex h-28 w-full items-end justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
+                        <div
+                          className={`w-full rounded-sm bg-neutral-900 transition-all group-hover:bg-blue-600 dark:bg-neutral-100 dark:group-hover:bg-blue-400 ${col.height}`}
                         />
-                      </svg>
-                    </span>
-                  </div>
-                  <div className='mt-6 flex w-full items-end justify-between gap-1 sm:mt-8 sm:gap-2 lg:mt-2'>
-                    {chartData.map((data) => (
-                      <ChartBar
-                        key={data.month}
-                        value={data.value}
-                        height={data.height}
-                        month={data.month}
-                        isDark={isDark}
-                      />
-                    ))}
-                  </div>
+                      </div>
+                      <span className='font-mono text-[10px] text-neutral-400 dark:text-neutral-500'>
+                        {col.month}
+                      </span>
+                    </div>
+                  ))}
                 </div>
+              </div>
+
+              <div className='mt-4 flex items-center justify-between font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                <span>Automated monthly payouts</span>
+                <span>Direct wire &amp; Stripe</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='mb-6 max-w-4xl rounded-xl border border-gray-200 bg-white p-4 sm:mb-8 sm:p-6 md:mx-8 lg:mx-12 lg:max-w-5xl xl:mx-16 dark:border-neutral-800 dark:bg-neutral-900'>
-          <div className='mb-4 sm:mb-6'>
-            <h2 className='mb-2 text-lg font-bold text-gray-900 sm:text-lg dark:text-white'>
-              <LocalizedText text={"How It Works"} />
+        {/* Hero Figure 01: Creator Studio Imagery */}
+        <figure className='mt-16 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[520px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+            alt='Creator producing multimedia marketing campaigns with Genit'
+          />
+          <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+            <span>Figure 01: Creator studio &amp; multimedia campaign production</span>
+            <span>Genit Creators Program</span>
+          </figcaption>
+        </figure>
+
+        {/* Section 2: 3-Step Execution Pipeline */}
+        <div className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'>
+          <div className='max-w-2xl'>
+            <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+              01 // Workflow
+            </span>
+            <h2 className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl dark:text-white'>
+              How the Creators Program works.
             </h2>
-            <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-              <LocalizedText
-                text={
-                  "Our referral process is simple and rewarding for everyone involved."
-                }
-              />
+            <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              A streamlined, transparent partnership model built for content
+              creators, educators, and industry consultants.
             </p>
           </div>
-          <div className='space-y-4 sm:space-y-6'>
-            <div className='flex gap-3 sm:gap-4'>
-              <div className='flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:h-8 sm:w-8 dark:bg-neutral-800'>
-                <span className='text-lg font-bold text-gray-600 sm:text-lg lg:text-sm dark:text-gray-400'>
-                  1
-                </span>
+
+          <div className='mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-neutral-200 divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0 dark:border-neutral-800 dark:divide-neutral-800'>
+            <div className='bg-white p-7 sm:p-8 dark:bg-neutral-950/60'>
+              <div className='flex items-center justify-between font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                <span>Step 01</span>
+                <span className='uppercase'>Join</span>
               </div>
-              <div className='min-w-0 flex-1'>
-                <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  <LocalizedText text={"Share Your Referral Link"} />
-                </h3>
-                <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  <LocalizedText
-                    text={
-                      "Get your unique referral link from your dashboard and share it with friends, family, or on social media."
-                    }
-                  />
-                </p>
-              </div>
+              <h3 className='mt-4 text-lg font-semibold text-neutral-950 dark:text-white'>
+                Get Your Partner Link
+              </h3>
+              <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                Join in one click with your Genit account to unlock your unique
+                tracking link and access the full creator media kit.
+              </p>
             </div>
-            <div className='flex gap-3 sm:gap-4'>
-              <div className='flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:h-8 sm:w-8 dark:bg-neutral-800'>
-                <span className='text-lg font-bold text-gray-600 sm:text-lg lg:text-sm dark:text-gray-400'>
-                  2
-                </span>
+
+            <div className='bg-white p-7 sm:p-8 dark:bg-neutral-950/60'>
+              <div className='flex items-center justify-between font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                <span>Step 02</span>
+                <span className='uppercase'>Share</span>
               </div>
-              <div className='min-w-0 flex-1'>
-                <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  <LocalizedText text={"Friend signs up"} />
-                </h3>
-                <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  <LocalizedText
-                    text={
-                      "When someone uses your referral link to create an account and complete their profile, they become your referral."
-                    }
-                  />
-                </p>
-              </div>
+              <h3 className='mt-4 text-lg font-semibold text-neutral-950 dark:text-white'>
+                Share with Your Community
+              </h3>
+              <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                Publish tutorials, reviews, or social posts highlighting how
+                autonomous AI marketing agents streamline execution.
+              </p>
             </div>
-            <div className='flex gap-3 sm:gap-4'>
-              <div className='flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gray-100 sm:h-8 sm:w-8 dark:bg-neutral-800'>
-                <span className='text-sm font-normal text-gray-600 sm:text-lg lg:text-sm dark:text-gray-400'>
-                  3
-                </span>
+
+            <div className='bg-white p-7 sm:p-8 dark:bg-neutral-950/60'>
+              <div className='flex items-center justify-between font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                <span>Step 03</span>
+                <span className='uppercase'>Earn</span>
               </div>
-              <div className='min-w-0 flex-1'>
-                <h3 className='mb-1 text-lg font-normal text-gray-900 sm:text-lg lg:text-sm dark:text-white'>
-                  <LocalizedText text={"Earn rewards"} />
-                </h3>
-                <p className='text-sm text-gray-500 md:text-lg lg:text-sm dark:text-gray-400'>
-                  <LocalizedText
-                    text={
-                      "Once your referral makes their first subscription, you earn rewards. The more referrals, the more you earn."
-                    }
-                  />
-                </p>
-              </div>
+              <h3 className='mt-4 text-lg font-semibold text-neutral-950 dark:text-white'>
+                Earn Recurring Rewards
+              </h3>
+              <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                Receive 20% recurring commissions every month for as long as your
+                referred subscribers maintain their plan.
+              </p>
             </div>
           </div>
         </div>
+
+        {/* Community & Growth Figure 02 */}
+        <figure className='mt-16 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[460px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+            alt='Growth teams and creators collaborating with Genit'
+          />
+          <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+            <span>Figure 02: Sharing autonomous agent workflows with brand communities</span>
+            <span>Ecosystem Growth</span>
+          </figcaption>
+        </figure>
       </div>
     </div>
   );

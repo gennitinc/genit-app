@@ -4,12 +4,6 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -30,26 +24,23 @@ import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import emailjs from "@emailjs/browser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRight,
-  Building2,
-  Calendar,
-  Check,
+  Clock,
   FileText,
+  Globe2,
   Mail,
   Paperclip,
+  ShieldCheck,
   X,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import React, { useState } from "react";
 
-// Define the schema for form validation
 const createFormSchema = (t: (text: string) => string) =>
   z.object({
     fullName: z
@@ -67,12 +58,12 @@ const createFormSchema = (t: (text: string) => string) =>
     attachment: z.any().optional(),
   });
 
-// Define the type for the form data
 type ContactFormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 export default function LandingContact() {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(createFormSchema(t)),
     defaultValues: {
@@ -88,21 +79,12 @@ export default function LandingContact() {
 
   const selectedFile = form.watch("attachment");
 
-  // const client = new SMTPClient({
-  //   user: "user",
-  //   password: "password",
-  //   host: "smtp.your-email.com",
-  //   ssl: true,
-  // });
-
-  // Apply the ContactFormData type to the onSubmit function
   const onSubmit = async (data: ContactFormData) => {
     setLoading(true);
 
     const htmlMessage = `
   <div style="font-family: Arial, sans-serif;">
     <div style="max-width: 500px; margin: auto; background: #ffffff; border-radius: 10px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-      
       <h2 style="color: #333; margin-bottom: 10px;">New Contact Form Submission</h2>
       <p style="color: #555; font-size: 14px; margin-top: 0;">You have received a new message from your website contact form.</p>
 
@@ -127,7 +109,7 @@ export default function LandingContact() {
 
     const formData = new FormData();
     formData.append("email", data.email);
-    formData.append("subject", "genit contact request");
+    formData.append("subject", "Genit contact request");
     formData.append("message", htmlMessage);
 
     if (data.attachment && data.attachment instanceof File) {
@@ -143,7 +125,7 @@ export default function LandingContact() {
       });
 
       if (response.status === 200) {
-        toast.success(t("Form submitted successfully"));
+        toast.success(t("Message sent successfully. We'll be in touch soon."));
         form.reset();
       }
       setLoading(false);
@@ -155,421 +137,429 @@ export default function LandingContact() {
   };
 
   return (
-    <div>
+    <div className='min-h-screen bg-white text-neutral-900 dark:bg-black dark:text-neutral-100'>
       <LandingNavbar />
-      <section className='relative px-2 py-24 md:px-12 md:py-32 lg:px-20 xl:px-24'>
-        {/* <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-background"></div>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,hsl(var(--primary)/20%),transparent_80%)]"></div> */}
-        <div className='grid w-full grid-cols-1 gap-x-32 overflow-hidden px-4 md:px-8 lg:grid-cols-2 lg:px-16'>
-          <div className='w-full pb-10 md:space-y-10 md:pb-0'>
-            <div className='space-y-6 md:max-w-[40rem]'>
-              <h1 className='text-4xl font-extrabold md:text-xl lg:text-5xl'>
-                {t("Ready. Set.")}{" "}
-                <span className='from-primary via-accent to-primary animate-gradient-x bg-gradient-to-r bg-clip-text text-transparent'>
-                  {t("Grow")}
-                </span>
+
+      <main className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
+    
+
+        <div className='mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16'>
+          {/* Left Column: Narrative & Channels */}
+          <div className='space-y-8 lg:col-span-5'>
+            <div>
+              <span className='font-mono text-xs font-semibold tracking-wider text-blue-600 uppercase dark:text-blue-400'>
+                {t("Get In Touch")}
+              </span>
+              <h1 className='mt-3 text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
+                {t("Let’s discuss.")}
               </h1>
-
-              <div className='text-muted-foreground max-w-2xl text-sm lg:leading-relaxed'>
+              {/* <p className='mt-5 text-pretty text-base leading-7 text-neutral-600 dark:text-neutral-400'>
                 {t(
-                  "Genit is your end-to-end AI marketing platform. Plan campaigns, create content, automate workflows, publish across channels, manage conversations, and improve performance with autonomous agents and connected tools."
+                  "Whether you’re exploring autonomous agents for your team, need custom tool integrations, or have questions about our platform architecture, we’re ready to assist."
                 )}
-              </div>
+              </p> */}
             </div>
 
-            <div className='hidden md:block'>
-              <div className='space-y-16 pb-20 lg:pb-0'>
-                <div className='space-y-8'>
-                  <div className='mt-12 flex flex-col space-y-6'>
-                    <div className='space-y-6'>
-                      <p className='from-foreground to-foreground/60 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent'>
-                        {t("Why teams choose Genit")}
-                      </p>
-
-                      <div className='grid gap-6'>
-                        {[
-                          "Autonomous agents that plan and execute multi-step marketing work",
-                          "Campaigns, content, publishing, inbox, and analytics in one workspace",
-                          "Brand-aware copy, images, video, documents, and presentations",
-                          "1,000+ integrations for the tools your business already uses",
-                        ].map((benefit, idx) => (
-                          <div
-                            key={idx}
-                            className='group flex items-start space-x-4'
-                          >
-                            <div className='flex size-7 shrink-0 items-center justify-center rounded-xl bg-indigo-600 transition-colors group-hover:bg-indigo-600 hover:bg-indigo-700/10 hover:bg-indigo-700/20'>
-                              <Check className='text-primary size-4' />
-                            </div>
-                            <p className='text-muted-foreground group-hover:text-foreground text-sm font-medium transition-colors'>
-                              {t(benefit)}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>{" "}
-                  </div>
+            {/* Direct Communication Channels */}
+            <div className='space-y-4 rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 dark:border-neutral-800 dark:bg-neutral-950/60'>
+              <div className='flex items-start gap-3.5'>
+                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+                  <Mail className='size-4 text-neutral-700 dark:text-neutral-300' />
                 </div>
-
-                <div className='space-y-4'>
-                  {/* Optional future logos / partners section */}
+                <div>
+                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+                    Direct Inquiries
+                  </p>
+                  <a
+                    href='mailto:support@trygenit.com'
+                    className='text-sm font-semibold text-neutral-900 hover:underline dark:text-white'
+                  >
+                    support@trygenit.com
+                  </a>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className='flex w-full justify-center lg:mt-2.5'>
-            <Card className='bg-background/40 relative flex h-fit w-full max-w-[32rem] min-w-80 flex-col items-center overflow-visible border-white/10 shadow-2xl ring-1 ring-white/10 backdrop-blur-xl dark:bg-neutral-900'>
-              <CardContent className='w-full px-4 py-8 lg:px-10'>
-                <div className='mb-8 space-y-2'>
-                  <h3 className='text-2xl font-bold'>{t("Contact Us")}</h3>
-                  <p className='text-muted-foreground text-sm'>
-                    {t("We usually respond within a few hours.")}
+
+              <div className='flex items-start gap-3.5 pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80'>
+                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+                  <Clock className='size-4 text-neutral-700 dark:text-neutral-300' />
+                </div>
+                <div>
+                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+                    Response Time
+                  </p>
+                  <p className='text-sm text-neutral-700 dark:text-neutral-300'>
+                    Within 4 business hours
                   </p>
                 </div>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className='w-full space-y-6'
-                  >
-                    <div className='grid gap-5'>
-                      <FormField
-                        control={form.control}
-                        name='fullName'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("Full name")}</FormLabel>
+              </div>
+
+              <div className='flex items-start gap-3.5 pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80'>
+                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
+                  <Globe2 className='size-4 text-neutral-700 dark:text-neutral-300' />
+                </div>
+                <div>
+                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
+                    Global Operations
+                  </p>
+                  <p className='text-sm text-neutral-700 dark:text-neutral-300'>
+                    Support available across US, EMEA &amp; APAC time zones
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            
+
+            {/* Editorial solutions photo */}
+            <figure className='overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+              <img
+                className='h-auto max-h-[300px] w-full object-cover'
+                src='https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+                alt='Dedicated client solutions and onboarding team'
+              />
+              <figcaption className='border-t border-neutral-200 px-4 py-2.5 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+                Figure 01: Dedicated client solutions &amp; onboarding team
+              </figcaption>
+            </figure>
+
+            {/* Why Genit - Left Border Editorial Style */}
+            <div className='space-y-4 pt-2'>
+              <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+                Platform Standards
+              </span>
+
+              <ul className='space-y-4 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                  <strong className='font-semibold text-neutral-950 dark:text-white'>
+                    End-to-End Autonomy:
+                  </strong>{" "}
+                  From goal research to cross-channel publishing in one unified system.
+                </li>
+                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                  <strong className='font-semibold text-neutral-950 dark:text-white'>
+                    Strict Human Verification:
+                  </strong>{" "}
+                  Define precise approval checkpoints before consequential actions occur.
+                </li>
+                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
+                  <strong className='font-semibold text-neutral-950 dark:text-white'>
+                    Persistent Brand Memory:
+                  </strong>{" "}
+                  Never re-prompt tone, constraints, or guidelines across campaigns.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Right Column: Architectural Form */}
+          <div className='lg:col-span-7'>
+            <div className='rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-9 dark:border-neutral-800 dark:bg-neutral-950/60'>
+              <div className='mb-8 space-y-1.5'>
+                <h2 className='text-xl font-semibold tracking-tight text-neutral-950 dark:text-white'>
+                  {t("Send a Message")}
+                </h2>
+                <p className='text-sm text-neutral-600 dark:text-neutral-400'>
+                  {t(
+                    "Fill in your details below and our team will get back to you promptly."
+                  )}
+                </p>
+              </div>
+
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className='space-y-6'
+                >
+                  <FormField
+                    control={form.control}
+                    name='fullName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                          {t("Full name")} *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder='Alex Morgan'
+                            className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+                    <FormField
+                      control={form.control}
+                      name='email'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                            {t("Email address")} *
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type='email'
+                              placeholder='alex@company.com'
+                              className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name='phone'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                            {t("Phone number")} *
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='+1 (555) 000-0000'
+                              className='h-11 rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+                    <FormField
+                      control={form.control}
+                      name='country'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                            {t("Country")} *
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
-                              <Input placeholder='John Doe' {...field} />
+                              <SelectTrigger className='h-11 w-full rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus:ring-1 focus:ring-neutral-950 dark:focus:ring-white'>
+                                <SelectValue placeholder={t("Select your country")} />
+                              </SelectTrigger>
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            <SelectContent className='border-neutral-200 dark:border-neutral-800'>
+                              <SelectItem value='us'>{t("United States")}</SelectItem>
+                              <SelectItem value='uk'>{t("United Kingdom")}</SelectItem>
+                              <SelectItem value='ca'>{t("Canada")}</SelectItem>
+                              <SelectItem value='au'>{t("Australia")}</SelectItem>
+                              <SelectItem value='de'>{t("Germany")}</SelectItem>
+                              <SelectItem value='fr'>{t("France")}</SelectItem>
+                              <SelectItem value='ie'>{t("Ireland")}</SelectItem>
+                              <SelectItem value='jp'>{t("Japan")}</SelectItem>
+                              <SelectItem value='ng'>{t("Nigeria")}</SelectItem>
+                              <SelectItem value='gh'>{t("Ghana")}</SelectItem>
+                              <SelectItem value='ke'>{t("Kenya")}</SelectItem>
+                              <SelectItem value='za'>{t("South Africa")}</SelectItem>
+                              <SelectItem value='ug'>{t("Uganda")}</SelectItem>
+                              <SelectItem value='rw'>{t("Rwanda")}</SelectItem>
+                              <SelectItem value='other'>{t("Other")}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                      <div className='grid w-full grid-cols-1 gap-5 sm:grid-cols-2'>
-                        <FormField
-                          control={form.control}
-                          name='email'
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("Email")}</FormLabel>
-                              <FormControl>
-                                <Input
-                                  type='email'
-                                  placeholder='you@xyz.com'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name='phone'
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("Phone number")}</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder='+1 (555) 000-0000'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className='grid w-full grid-cols-1 gap-5 sm:grid-cols-2'>
-                        <FormField
-                          control={form.control}
-                          name='country'
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{t("Country")}</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className='w-full'>
-                                    <SelectValue placeholder='Select your country' />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value='us'>
-                                    {t("United States")}
-                                  </SelectItem>
-                                  <SelectItem value='uk'>
-                                    {t("United Kingdom")}
-                                  </SelectItem>
-                                  <SelectItem value='ca'>
-                                    {t("Canada")}
-                                  </SelectItem>
-                                  <SelectItem value='au'>
-                                    {t("Australia")}
-                                  </SelectItem>
-                                  <SelectItem value='ie'>
-                                    {t("Ireland")}
-                                  </SelectItem>
-                                  <SelectItem value='de'>
-                                    {t("Germany")}
-                                  </SelectItem>
-                                  <SelectItem value='fr'>
-                                    {t("France")}
-                                  </SelectItem>
-                                  <SelectItem value='jp'>
-                                    {t("Japan")}
-                                  </SelectItem>
-                                  <SelectItem value='ng'>
-                                    {t("Nigeria")}
-                                  </SelectItem>
-                                  <SelectItem value='gh'>
-                                    {t("Ghana")}
-                                  </SelectItem>
-                                  <SelectItem value='ke'>
-                                    {t("Kenya")}
-                                  </SelectItem>
-                                  <SelectItem value='za'>
-                                    {t("South Africa")}
-                                  </SelectItem>
-                                  <SelectItem value='ug'>
-                                    {t("Uganda")}
-                                  </SelectItem>
-                                  <SelectItem value='rw'>
-                                    {t("Rwanda")}
-                                  </SelectItem>
-
-                                  <SelectItem value='other'>
-                                    {t("Other")}
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name='referral'
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>
-                                {t("How did you hear about us?")}{" "}
-                                {/* <span className="text-muted-foreground">
-                                  (Optional)
-                                </span> */}
-                              </FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className='w-full'>
-                                    <SelectValue placeholder='Select source' />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent className='w-full'>
-                                  <SelectItem value='search'>
-                                    {t("Search Engine")}
-                                  </SelectItem>
-                                  <SelectItem value='social'>
-                                    {t("Social Media")}
-                                  </SelectItem>
-                                  <SelectItem value='friend'>
-                                    {t("Friend/Colleague")}
-                                  </SelectItem>
-                                  <SelectItem value='conference'>
-                                    {t("Conference/Event")}
-                                  </SelectItem>
-                                  <SelectItem value='advertisement'>
-                                    {t("Advertisement")}
-                                  </SelectItem>
-                                  <SelectItem value='other'>
-                                    {t("Other")}
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <FormField
-                        control={form.control}
-                        name='message'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              {t("What are you looking to achieve?")}{" "}
-                              <span className='text-muted-foreground'>
-                                {t("(Optional)")}
-                              </span>
-                            </FormLabel>
+                    <FormField
+                      control={form.control}
+                      name='referral'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                            {t("Discovery Source")}
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
-                              <Textarea
-                                placeholder='Tell us about your goals and challenges...'
-                                className='resize-none'
-                                {...field}
-                              />
+                              <SelectTrigger className='h-11 w-full rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus:ring-1 focus:ring-neutral-950 dark:focus:ring-white'>
+                                <SelectValue placeholder={t("How did you find us?")} />
+                              </SelectTrigger>
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            <SelectContent className='border-neutral-200 dark:border-neutral-800'>
+                              <SelectItem value='search'>{t("Search Engine")}</SelectItem>
+                              <SelectItem value='social'>{t("Social Media")}</SelectItem>
+                              <SelectItem value='friend'>{t("Colleague / Recommendation")}</SelectItem>
+                              <SelectItem value='conference'>{t("Event / Conference")}</SelectItem>
+                              <SelectItem value='advertisement'>{t("Online Media")}</SelectItem>
+                              <SelectItem value='other'>{t("Other")}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-                      <FormField
-                        control={form.control}
-                        name='attachment'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className='text-muted-foreground/80 text-xs font-bold tracking-wider uppercase'>
-                              {t("Attachment (Optional)")}
-                            </FormLabel>
-                            <FormControl>
-                              <div className='flex flex-col gap-2'>
-                                <div
-                                  className={cn(
-                                    "group/upload relative flex h-32 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition-all duration-500",
-                                    selectedFile
-                                      ? "border-primary bg-indigo-600 shadow-[0_0_20px_rgba(var(--primary),0.1)] hover:bg-indigo-700/5"
-                                      : "border-muted-foreground/20 hover:border-primary/50 hover:bg-indigo-600 hover:bg-indigo-700/5"
-                                  )}
-                                  onClick={() =>
-                                    document
-                                      .getElementById("file-upload")
-                                      ?.click()
+                  <FormField
+                    control={form.control}
+                    name='message'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                          {t("Project / Inquiry Details")}
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder={t(
+                              "Describe your marketing goals, current challenges, or required integrations..."
+                            )}
+                            className='min-h-[120px] resize-none rounded-lg border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Refined File Attachment Box */}
+                  <FormField
+                    control={form.control}
+                    name='attachment'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='text-xs font-mono uppercase text-neutral-600 dark:text-neutral-400'>
+                          {t("Attachment (Optional)")}
+                        </FormLabel>
+                        <FormControl>
+                          <div className='flex flex-col gap-2'>
+                            <div
+                              className={cn(
+                                "group relative flex h-28 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed transition-colors",
+                                selectedFile
+                                  ? "border-neutral-900 bg-neutral-100/80 dark:border-neutral-100 dark:bg-neutral-900/80"
+                                  : "border-neutral-300 bg-white hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-600"
+                              )}
+                              onClick={() =>
+                                document.getElementById("file-upload")?.click()
+                              }
+                            >
+                              <input
+                                id='file-upload'
+                                type='file'
+                                className='hidden'
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    field.onChange(file);
                                   }
-                                >
-                                  <input
-                                    id='file-upload'
-                                    type='file'
-                                    className='hidden'
-                                    onChange={(e) => {
-                                      const file = e.target.files?.[0];
-                                      if (file) {
-                                        field.onChange(file);
-                                      }
-                                    }}
-                                  />
+                                }}
+                              />
 
-                                  <div className='from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity duration-500 group-hover/upload:opacity-100' />
-
-                                  <div className='relative z-10 flex flex-col items-center gap-3'>
-                                    {selectedFile ? (
-                                      <div className='animate-in zoom-in flex flex-col items-center duration-300'>
-                                        <div className='mb-2 rounded-full bg-indigo-600 p-3 hover:bg-indigo-700/10'>
-                                          <FileText className='text-primary size-8' />
-                                        </div>
-                                        <span className='text-primary max-w-[240px] truncate px-4 text-sm font-semibold'>
-                                          {(selectedFile as File).name}
-                                        </span>
-                                        <span className='text-primary/60 mt-1 text-[10px]'>
-                                          {(
-                                            (selectedFile as File).size /
-                                            (1024 * 1024)
-                                          ).toFixed(2)}{" "}
-                                          {t("MB")}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <div className='flex flex-col items-center transition-transform duration-500 group-hover/upload:scale-110'>
-                                        <div className='bg-muted mb-2 rounded-full p-3 transition-colors group-hover/upload:bg-indigo-600 hover:bg-indigo-700/10'>
-                                          <Paperclip className='text-muted-foreground group-hover/upload:text-primary size-8 transition-colors' />
-                                        </div>
-                                        <span className='text-foreground/70 group-hover/upload:text-primary text-sm font-medium'>
-                                          {t("Click to attach a file")}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  {selectedFile && (
-                                    <button
-                                      type='button'
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        field.onChange(undefined);
-                                        const input = document.getElementById(
-                                          "file-upload"
-                                        ) as HTMLInputElement;
-                                        if (input) input.value = "";
-                                      }}
-                                      className='bg-background border-border text-muted-foreground group/remove absolute top-4 right-4 z-20 rounded-full border p-1.5 shadow-md transition-all duration-300 hover:border-red-200 hover:bg-red-50 hover:text-red-500'
-                                      title='Remove file'
-                                    >
-                                      <X className='size-4 transition-transform duration-300 group-hover/remove:rotate-90' />
-                                    </button>
-                                  )}
-                                </div>
-                                <div className='flex items-center justify-between px-1'>
-                                  <span className='text-muted-foreground/60 text-[10px] font-medium'>
-                                    {t("PDF, DOCX, PNG, JPG (Max 5MB)")}
-                                  </span>
-                                  {selectedFile && (
-                                    <span className='text-primary animate-pulse text-[10px] font-bold'>
-                                      {t("File Ready")}
+                              {selectedFile ? (
+                                <div className='flex flex-col items-center px-4'>
+                                  <div className='flex items-center gap-2'>
+                                    <FileText className='size-5 text-neutral-900 dark:text-white' />
+                                    <span className='max-w-[260px] truncate text-sm font-semibold text-neutral-900 dark:text-white'>
+                                      {(selectedFile as File).name}
                                     </span>
-                                  )}
+                                  </div>
+                                  <span className='mt-1 font-mono text-[11px] text-neutral-500'>
+                                    {(
+                                      (selectedFile as File).size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)}{" "}
+                                    MB
+                                  </span>
                                 </div>
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                              ) : (
+                                <div className='flex flex-col items-center gap-1.5 text-neutral-500 dark:text-neutral-400'>
+                                  <Paperclip className='size-5' />
+                                  <span className='text-xs font-medium'>
+                                    {t("Click to attach brief or guideline")}
+                                  </span>
+                                  <span className='text-[10px] text-neutral-400 dark:text-neutral-500'>
+                                    PDF, DOCX, PNG, JPG (Max 5MB)
+                                  </span>
+                                </div>
+                              )}
 
-                    <CardFooter className='flex w-full flex-col justify-end space-y-3 p-0 pt-0'>
-                      <Button
-                        type='submit'
-                        disabled={loading}
-                        className='focus:ring-primary/30 dark:focus:ring-primary/40 w-full rounded-lg bg-indigo-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus:ring-4 focus:outline-none'
+                              {selectedFile && (
+                                <button
+                                  type='button'
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    field.onChange(undefined);
+                                    const input = document.getElementById(
+                                      "file-upload"
+                                    ) as HTMLInputElement;
+                                    if (input) input.value = "";
+                                  }}
+                                  className='absolute top-3 right-3 rounded-full border border-neutral-200 bg-white p-1 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
+                                  title='Remove file'
+                                >
+                                  <X className='size-3.5' />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Submission */}
+                  <div className='pt-2 space-y-4'>
+                    <Button
+                      type='submit'
+                      disabled={loading}
+                      className='h-12 w-full rounded-full bg-neutral-950 font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
+                    >
+                      {loading ? (
+                        <div className='flex items-center justify-center gap-2'>
+                          <Loading size={18} />
+                          <span>{t("Submitting inquiry...")}</span>
+                        </div>
+                      ) : (
+                        <div className='flex items-center justify-center gap-2'>
+                          <span>{t("Send Inquiry")}</span>
+                          <ArrowRight className='size-4' />
+                        </div>
+                      )}
+                    </Button>
+
+                    <p className='text-center text-xs text-neutral-500 dark:text-neutral-500'>
+                      {t("By continuing, you agree to our")}{" "}
+                      <Link
+                        href='/legal/terms-of-service'
+                        className='text-neutral-900 underline underline-offset-2 dark:text-neutral-300'
                       >
-                        {loading ? (
-                          <div className='flex items-center justify-center text-sm'>
-                            <Loading size={20} />
-                            {t("Sending Inquiry...")}
-                          </div>
-                        ) : (
-                          <div className='flex flex-row items-center gap-2 text-sm'>
-                            {" "}
-                            {t("Send Message")}
-                            <ArrowRight className='size-5 transition-all group-hover:translate-x-2' />
-                          </div>
-                        )}
-                      </Button>
-
-                      <div className='text-muted-foreground text-center text-xs'>
-                        {t("By continuing, you agree to our")}{" "}
-                        <Link
-                          href='/legal/terms-of-service'
-                          target='_blank'
-                          className='text-primary hover:underline'
-                        >
-                          {t("Terms")}
-                        </Link>{" "}
-                        {t("and")}{" "}
-                        <Link
-                          href='/legal/privacy-policy'
-                          target='_blank'
-                          className='text-primary hover:underline'
-                        >
-                          {t("Privacy Policy")}
-                        </Link>
-                        .
-                      </div>
-                    </CardFooter>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+                        {t("Terms")}
+                      </Link>{" "}
+                      {t("and")}{" "}
+                      <Link
+                        href='/legal/privacy-policy'
+                        className='text-neutral-900 underline underline-offset-2 dark:text-neutral-300'
+                      >
+                        {t("Privacy Policy")}
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </form>
+              </Form>
+            </div>
           </div>
         </div>
-      </section>
+      </main>
+
       <LandingFooter />
     </div>
   );

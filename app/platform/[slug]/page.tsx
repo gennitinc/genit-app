@@ -21,13 +21,14 @@ export async function generateMetadata({
   const capability = getMarketingCapability(slug);
   if (!capability) return {};
   return {
-    title: `${capability.name} Software | Genit`,
+    title: `${capability.name} | Genit Marketing Platform`,
     description: capability.description,
     alternates: { canonical: `/platform/${slug}` },
     openGraph: {
       title: capability.title,
       description: capability.description,
       url: `/platform/${slug}`,
+      type: "website",
     },
   };
 }
@@ -40,6 +41,10 @@ export default async function CapabilityPage({
   const { slug } = await params;
   const capability = getMarketingCapability(slug);
   if (!capability) notFound();
+
+  const otherCapabilities = marketingCapabilities.filter(
+    (c) => c.slug !== capability.slug
+  );
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -89,147 +94,262 @@ export default async function CapabilityPage({
   };
 
   return (
-    <div className='min-h-screen bg-white text-zinc-950 dark:bg-black dark:text-white'>
+    <div className='min-h-screen bg-white text-neutral-900 dark:bg-black dark:text-neutral-100'>
       <LandingNavbar />
-      <main>
-        <section className='mx-auto max-w-6xl px-5 py-24 md:py-32'>
+      <main className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
+        {/* Breadcrumb Navigation */}
+        <div className='flex items-center gap-2 font-mono text-xs tracking-widest text-neutral-500 uppercase'>
           <Link
             href='/platform'
-            className='text-sm font-semibold text-indigo-600'
+            className='transition-colors hover:text-neutral-900 dark:hover:text-white'
           >
-            ← Genit platform
+            Platform
           </Link>
-          <p className='mt-10 text-sm font-semibold tracking-widest text-indigo-600 uppercase'>
+          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
+          <span>Capabilities</span>
+          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
+          <span className='text-neutral-900 dark:text-white'>
+            {capability.name}
+          </span>
+        </div>
+
+        {/* Header & Proposition */}
+        <section className='mt-8 max-w-4xl' aria-labelledby='capability-title'>
+          <span className='inline-block font-mono text-xs font-semibold tracking-wider text-blue-600 uppercase dark:text-blue-400'>
             {capability.eyebrow}
-          </p>
-          <h1 className='mt-4 max-w-4xl text-5xl font-semibold tracking-tight md:text-7xl'>
+          </span>
+          <h1
+            id='capability-title'
+            className='mt-4 text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl md:text-6xl dark:text-white'
+          >
             {capability.title}
           </h1>
-          <p className='text-muted-foreground mt-7 max-w-3xl text-lg leading-8'>
+          <p className='mt-6 text-pretty text-base leading-8 text-neutral-600 sm:text-lg dark:text-neutral-400'>
             {capability.description}
           </p>
-          <div className='mt-9 flex gap-3'>
-            <Link
-              href='/signup'
-              className='rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-700'
-            >
-              Start for $0
-            </Link>
-            <Link
-              href='/contact'
-              className='rounded-xl border border-zinc-300 px-6 py-3 font-semibold dark:border-zinc-700'
-            >
-              Talk to us
-            </Link>
-          </div>
         </section>
 
-        <section className='border-y border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950'>
-          <div className='mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2'>
-            <div>
-              <h2 className='text-3xl font-semibold tracking-tight'>
-                More than a generated asset
+        {/* Primary Hero Figure */}
+        <figure className='mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[560px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+            alt={`${capability.name} autonomous workspace`}
+          />
+          <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+            <span>{capability.name} — Architecture &amp; Execution Engine</span>
+            <span>Genit Autonomous System</span>
+          </figcaption>
+        </figure>
+
+        {/* Section 1: Architectural Thesis & Verified Outcomes */}
+        <section
+          className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'
+          aria-labelledby='thesis-heading'
+        >
+          <div className='grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16'>
+            <div className='space-y-6 lg:col-span-5'>
+              <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+                01 // Architectural Thesis
+              </span>
+              <h2 id='thesis-heading' className='sr-only'>
+                Architectural Thesis
               </h2>
-              <p className='text-muted-foreground mt-5 text-lg leading-8'>
+              <blockquote className='border-l-2 border-neutral-900 py-1 ps-5 text-xl font-medium tracking-tight text-neutral-950 dark:border-neutral-100 dark:text-white'>
+                &ldquo;{capability.eyebrow}: Moving from isolated prompts to
+                autonomous marketing execution.&rdquo;
+              </blockquote>
+              <p className='text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
                 {capability.summary}
               </p>
             </div>
-            <ul className='space-y-4'>
-              {capability.outcomes.map((outcome) => (
-                <li
-                  key={outcome}
-                  className='rounded-xl border border-zinc-200 bg-white p-4 font-medium dark:border-zinc-800 dark:bg-black'
-                >
-                  ✓ {outcome}
-                </li>
-              ))}
-            </ul>
+
+            <div className='space-y-6 lg:col-span-7'>
+              <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+                Key Outcomes &amp; Impact
+              </span>
+              <div className='space-y-6'>
+                {capability.outcomes.map((outcome, idx) => (
+                  <div
+                    key={idx}
+                    className='border-l border-neutral-300 ps-5 dark:border-neutral-700'
+                  >
+                    <div className='font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                      Outcome 0{idx + 1}
+                    </div>
+                    <p className='mt-1 text-sm font-medium leading-6 text-neutral-900 dark:text-neutral-100'>
+                      {outcome}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
+        {/* Section 2: Execution Pipeline (How It Works) */}
         <section
-          className='mx-auto max-w-6xl px-5 py-20'
-          aria-labelledby='how-it-works'
+          className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'
+          aria-labelledby='workflow-heading'
         >
+          <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+            02 // Execution Pipeline
+          </span>
           <h2
-            id='how-it-works'
-            className='text-3xl font-semibold tracking-tight md:text-5xl'
+            id='workflow-heading'
+            className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl dark:text-white'
           >
-            How it works
+            How {capability.name} operates.
           </h2>
-          <div className='mt-10 grid gap-5 md:grid-cols-3'>
-            {capability.workflow.map((step, index) => (
-              <article
+          <p className='mt-3 max-w-2xl text-pretty text-sm text-neutral-600 dark:text-neutral-400'>
+            A deterministic, three-stage pipeline that pairs autonomous agent
+            action with structured verification.
+          </p>
+
+          <div className='mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-neutral-200 divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0 dark:border-neutral-800 dark:divide-neutral-800'>
+            {capability.workflow.map((step, idx) => (
+              <div
                 key={step.title}
-                className='rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800'
+                className='flex flex-col justify-between bg-white p-7 sm:p-8 dark:bg-neutral-950/60'
               >
-                <span className='text-sm font-semibold text-indigo-600'>
-                  Step {index + 1}
-                </span>
-                <h3 className='mt-4 text-xl font-semibold'>{step.title}</h3>
-                <p className='text-muted-foreground mt-3 leading-7'>
-                  {step.description}
-                </p>
-              </article>
+                <div>
+                  <div className='flex items-center justify-between font-mono text-xs text-neutral-400 dark:text-neutral-500'>
+                    <span>Step 0{idx + 1}</span>
+                    <span className='uppercase'>Phase</span>
+                  </div>
+                  <h3 className='mt-4 text-lg font-semibold text-neutral-950 dark:text-white'>
+                    {step.title}
+                  </h3>
+                  <p className='mt-3 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                    {step.description}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
+
+          <figure className='mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+            <img
+              className='h-auto max-h-[480px] w-full object-cover'
+              src='https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+              alt={`${capability.name} workflow execution and tool connections`}
+            />
+            <figcaption className='border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+              Figure 03: Automated workflow execution &amp; integration hooks
+            </figcaption>
+          </figure>
         </section>
 
+        {/* Section 3: Deep Specifications & Features */}
         <section
-          className='mx-auto max-w-6xl px-5 py-20'
-          aria-labelledby='features'
+          className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'
+          aria-labelledby='specs-heading'
         >
+          <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+            03 // Specifications
+          </span>
           <h2
-            id='features'
-            className='text-3xl font-semibold tracking-tight md:text-5xl'
+            id='specs-heading'
+            className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl dark:text-white'
           >
-            What you can do with Genit
+            System capabilities &amp; feature specifications.
           </h2>
-          <div className='mt-10 grid gap-x-12 gap-y-10 md:grid-cols-2'>
+
+          <div className='mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-neutral-200 divide-y divide-neutral-200 md:grid-cols-2 dark:border-neutral-800 dark:divide-neutral-800'>
             {capability.features.map((feature) => (
-              <article key={feature.title}>
-                <h3 className='text-xl font-semibold'>{feature.title}</h3>
-                <p className='text-muted-foreground mt-2 leading-7'>
+              <div
+                key={feature.title}
+                className='bg-white p-7 sm:p-8 dark:bg-neutral-950/60'
+              >
+                <h3 className='text-base font-semibold text-neutral-950 dark:text-white'>
+                  {feature.title}
+                </h3>
+                <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
                   {feature.description}
                 </p>
-              </article>
+              </div>
             ))}
           </div>
         </section>
 
-        <section className='mx-auto max-w-4xl px-5 py-20' aria-labelledby='faq'>
+        {/* Section 4: Inquiries & FAQ */}
+        <section
+          className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'
+          aria-labelledby='faq-heading'
+        >
+          <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+            04 // Inquiries
+          </span>
           <h2
-            id='faq'
-            className='text-3xl font-semibold tracking-tight md:text-5xl'
+            id='faq-heading'
+            className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl dark:text-white'
           >
-            Frequently asked questions
+            Frequently asked questions.
           </h2>
-          <div className='mt-8 divide-y divide-zinc-200 dark:divide-zinc-800'>
+
+          <div className='mt-10 border-y border-neutral-200 divide-y divide-neutral-200 dark:border-neutral-800 dark:divide-neutral-800'>
             {capability.faq.map(({ question, answer }) => (
-              <details key={question} className='group py-5'>
-                <summary className='cursor-pointer list-none text-lg font-semibold'>
+              <div key={question} className='py-6 sm:py-8'>
+                <h3 className='text-base font-semibold text-neutral-950 dark:text-white'>
                   {question}
-                </summary>
-                <p className='text-muted-foreground mt-3 leading-7'>{answer}</p>
-              </details>
+                </h3>
+                <p className='mt-3 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                  {answer}
+                </p>
+              </div>
             ))}
           </div>
         </section>
 
-        <section className='mx-auto mb-20 max-w-6xl rounded-3xl bg-zinc-950 px-6 py-14 text-center text-white dark:bg-zinc-900'>
-          <h2 className='text-3xl font-semibold'>
-            Put {capability.name.toLowerCase()} to work
-          </h2>
-          <p className='mx-auto mt-3 max-w-2xl text-zinc-300'>
-            Start with your brand and a goal. Genit helps turn both into
-            coordinated marketing execution.
-          </p>
-          <Link
-            href='/signup'
-            className='mt-7 inline-block rounded-xl bg-white px-6 py-3 font-semibold text-zinc-950'
-          >
-            Start for $0
-          </Link>
+        {/* Section 5: Adjacent Modules & Callout */}
+        <section
+          className='mt-24 border-t border-neutral-200 pt-16 dark:border-neutral-800'
+          aria-labelledby='adjacent-heading'
+        >
+          <div className='mx-auto max-w-2xl text-center'>
+            <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
+              Ecosystem Navigation
+            </span>
+            <h2
+              id='adjacent-heading'
+              className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl dark:text-white'
+            >
+              Adjacent capabilities in the ecosystem.
+            </h2>
+            <p className='mt-3 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              Genit agents share memory across all modules. Inspect another
+              specialized capability or deploy {capability.name.toLowerCase()} in
+              your brand workspace.
+            </p>
+
+            <div className='mt-6 flex flex-wrap justify-center gap-2'>
+              {otherCapabilities.map((other) => (
+                <Link
+                  key={other.slug}
+                  href={`/platform/${other.slug}`}
+                  className='inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3.5 py-2 text-xs font-medium text-neutral-800 transition-colors hover:bg-neutral-200 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800'
+                >
+                  <span>{other.name}</span>
+                  <span className='text-neutral-400'>→</span>
+                </Link>
+              ))}
+            </div>
+
+            <div className='mt-8 flex items-center justify-center gap-4'>
+              <Link
+                href='/signup'
+                className='rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
+              >
+                Get started with {capability.name}
+              </Link>
+              <Link
+                href='/platform'
+                className='rounded-full border border-neutral-300 px-6 py-2.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-900'
+              >
+                All platform capabilities
+              </Link>
+            </div>
+          </div>
         </section>
       </main>
       <LandingFooter />

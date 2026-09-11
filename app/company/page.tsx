@@ -18,24 +18,6 @@ export const metadata: Metadata = {
   },
 };
 
-const principles = [
-  {
-    title: "Execution over output",
-    description:
-      "A useful marketing agent should do more than produce a draft. Genit is designed to move work from an idea through planning, creation, approval, and action.",
-  },
-  {
-    title: "One brand context",
-    description:
-      "Products, audience, voice, visual identity, and goals should not be re-entered for every task. Genit makes brand knowledge reusable across the workspace.",
-  },
-  {
-    title: "Automation with control",
-    description:
-      "Routine work can run automatically while people retain oversight of consequential external actions and connected accounts.",
-  },
-];
-
 export default function CompanyPage() {
   const structuredData = {
     "@context": "https://schema.org",
@@ -47,148 +29,133 @@ export default function CompanyPage() {
   };
 
   return (
-    <div className='min-h-screen bg-white text-zinc-950 dark:bg-black dark:text-white'>
+    <div className='bg-white dark:bg-black'>
       <LandingNavbar />
-      <main>
-        <section className='mx-auto max-w-6xl px-5 py-24 md:py-32'>
-          <p className='text-sm font-semibold tracking-widest text-indigo-600 uppercase'>
-            About Genit
-          </p>
-          <h1 className='mt-4 max-w-5xl text-5xl font-semibold tracking-tight md:text-7xl'>
-            We’re building the AI marketing team every business should have.
-          </h1>
-          <p className='text-muted-foreground mt-7 max-w-3xl text-lg leading-8'>
-            Genit is an end-to-end AI marketing platform. It gives businesses
-            one place to understand their brand, plan growth, create campaign
-            assets, automate workflows, publish across connected channels,
-            manage conversations, and learn from performance.
-          </p>
-          <div className='mt-9 flex flex-wrap gap-3'>
-            <Link
-              href='/platform'
-              className='rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-700'
-            >
-              Explore the platform
-            </Link>
-            <Link
-              href='/contact'
-              className='rounded-xl border border-zinc-300 px-6 py-3 font-semibold dark:border-zinc-700'
-            >
-              Contact Genit
-            </Link>
-          </div>
-        </section>
-
-        <section className='border-y border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950'>
-          <div className='mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-[1fr_1.4fr]'>
-            <div>
-              <p className='text-sm font-semibold tracking-widest text-indigo-600 uppercase'>
-                Our mission
-              </p>
-              <h2 className='mt-3 text-3xl font-semibold tracking-tight md:text-5xl'>
-                Turn marketing goals into coordinated action
-              </h2>
-            </div>
-            <div className='text-muted-foreground space-y-5 text-lg leading-8'>
-              <p>
-                Businesses often split marketing across writing tools, design
-                tools, calendars, social dashboards, email platforms,
-                advertising accounts, spreadsheets, and automation software. The
-                context gets lost between every handoff.
-              </p>
-              <p>
-                Genit brings those steps into one agentic workspace. A team can
-                begin with a goal, use shared brand intelligence, create the
-                required work, and act through authorized integrations without
-                rebuilding the campaign in a different product at every stage.
-              </p>
-              <p>
-                Creative generation is an important part of Genit, but it is not
-                the whole product. The larger goal is dependable marketing
-                execution with clear human control.
+      <main className='mx-auto my-20 max-w-3xl px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-10'>
+        <article className='max-w-2xl'>
+          <div className='space-y-5 md:space-y-8'>
+            <div className='space-y-3'>
+              <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
+                We’re building the{" "}
+                <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
+                  AI marketing team
+                </span>{" "}
+                every business should have.
+              </h1>
+              <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+                Genit is an end-to-end AI marketing platform. It gives
+                businesses one place to understand their brand, plan growth,
+                create campaign assets, automate workflows, publish across
+                connected channels, manage conversations, and learn from
+                performance.
               </p>
             </div>
-          </div>
-        </section>
 
-        <section
-          className='mx-auto max-w-6xl px-5 py-20'
-          aria-labelledby='principles'
-        >
-          <h2
-            id='principles'
-            className='text-3xl font-semibold tracking-tight md:text-5xl'
-          >
-            What guides the product
-          </h2>
-          <div className='mt-10 grid gap-5 md:grid-cols-3'>
-            {principles.map((principle) => (
-              <article
-                key={principle.title}
-                className='rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800'
+            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Businesses often split marketing across writing tools, design
+              tools, calendars, social dashboards, email platforms, advertising
+              accounts, spreadsheets, and automation software. The context gets
+              lost between every handoff.
+            </p>
+
+            <figure>
+              <img
+                className='w-full rounded-xl object-cover'
+                src='https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
+                alt='AI technology representing connected marketing execution'
+              />
+              <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
+                AI agents executing end-to-end marketing activities from a
+                single workspace.
+              </figcaption>
+            </figure>
+
+            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Genit brings those steps into one agentic workspace. A team can
+              begin with a goal, use shared brand intelligence, create the
+              required work, and act through authorized integrations without
+              rebuilding the campaign in a different product at every stage.
+            </p>
+
+            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Creative generation is an important part of Genit, but it is not
+              the whole product. The larger goal is dependable marketing
+              execution with clear human control. Businesses can start with{" "}
+              <Link
+                className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
+                href='/pricing'
               >
-                <h3 className='text-xl font-semibold'>{principle.title}</h3>
-                <p className='text-muted-foreground mt-3 leading-7'>
-                  {principle.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
+                the free Basic plan
+              </Link>{" "}
+              and grow into more advanced workflows as their needs expand.
+            </p>
 
-        <section
-          className='mx-auto max-w-6xl px-5 py-20'
-          aria-labelledby='capabilities'
-        >
-          <div className='flex flex-col justify-between gap-5 md:flex-row md:items-end'>
-            <div>
-              <p className='text-sm font-semibold tracking-widest text-indigo-600 uppercase'>
-                One connected platform
+            <blockquote className='p-4 text-center sm:px-7'>
+              <p className='text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200'>
+                Creative generation is part of Genit. Coordinated marketing
+                execution is the product.
               </p>
-              <h2
-                id='capabilities'
-                className='mt-3 text-3xl font-semibold tracking-tight md:text-5xl'
-              >
+              <p className='mt-5 text-gray-800 dark:text-neutral-200'>
+                The principle behind Genit
+              </p>
+            </blockquote>
+
+            <figure>
+              <img
+                className='w-full rounded-xl object-cover'
+                src='https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
+                alt='AI technology representing automated brand workflows'
+              />
+              <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
+                AI agents and marketing integrations automating brand workflows.
+              </figcaption>
+            </figure>
+
+            <div className='space-y-3'>
+              <h2 className='text-2xl font-semibold dark:text-white'>
                 Built around the full marketing lifecycle
               </h2>
+              <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+                Genit turns marketing goals into coordinated action. Its AI
+                marketing agents use shared brand intelligence to research,
+                plan, create, automate, publish, manage conversations, and
+                optimize work across connected business tools.
+              </p>
             </div>
-            <Link href='/platform' className='font-semibold text-indigo-600'>
-              View every capability →
-            </Link>
-          </div>
-          <div className='mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2'>
-            {marketingCapabilities.slice(0, 6).map((capability) => (
-              <Link
-                key={capability.slug}
-                href={`/platform/${capability.slug}`}
-                className='group border-t border-zinc-200 pt-5 dark:border-zinc-800'
-              >
-                <h3 className='text-xl font-semibold group-hover:text-indigo-600'>
-                  {capability.name}
-                </h3>
-                <p className='text-muted-foreground mt-2 leading-7'>
-                  {capability.description}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </section>
 
-        <section className='mx-auto mb-20 max-w-6xl rounded-3xl bg-zinc-950 px-6 py-14 text-center text-white dark:bg-zinc-900'>
-          <h2 className='text-3xl font-semibold'>
-            Build your AI marketing team
-          </h2>
-          <p className='mx-auto mt-3 max-w-2xl text-zinc-300'>
-            Start with your website and a marketing goal. Genit helps turn both
-            into an executable plan.
-          </p>
-          <Link
-            href='/signup'
-            className='mt-7 inline-block rounded-xl bg-white px-6 py-3 font-semibold text-zinc-950'
-          >
-            Start for $0
-          </Link>
-        </section>
+            <ul className='space-y-5 text-lg text-gray-800 dark:text-neutral-200'>
+              {marketingCapabilities.map((capability) => (
+                <li
+                  key={capability.slug}
+                  className='border-l border-gray-200 ps-4 dark:border-neutral-800 text-sm leading-7 text-pretty text-neutral-400 dark:text-neutral-200'
+                >
+                  {capability.name}. {capability.description}
+                </li>
+              ))}
+            </ul>
+
+            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Genit is guided by three principles: execution over output, one
+              reusable brand context, and automation with human control. The
+              result is an autonomous AI marketing platform that can move work
+              from an idea through planning, creation, approval, and action
+              without forcing teams to rebuild campaigns across disconnected
+              tools.
+            </p>
+
+            <div>
+              {marketingCapabilities.map((capability) => (
+                <Link
+                  key={capability.slug}
+                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
+                  href={`/platform/${capability.slug}`}
+                >
+                  {capability.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </article>
       </main>
       <LandingFooter />
       <script
