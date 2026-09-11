@@ -428,9 +428,8 @@ const LandingHero = () => {
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
-                Plan campaigns, create content, automate workflows, publish
-                across channels, manage conversations, and optimize growth from
-                one AI marketing platform.
+                Agents that plan campaigns, create content, automate workflows, publish
+                across channels, manage conversations, and optimize your brand growth. 
               </p>
               <div className='mt-7.5 flex gap-5'>
                 <Link
