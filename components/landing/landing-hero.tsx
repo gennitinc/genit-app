@@ -483,7 +483,7 @@ const LandingHero = () => {
                   </Dialog>
                 )}
               </div>
-              <div className='mt-11 w-full px-4'>
+              <div className='mt-11 w-full lg:px-4'>
                 <img
                   className='border-border bg-muted mx-auto max-h-64 w-full max-w-[1100px] rounded-t-xl border object-cover object-top md:max-h-96'
                   src='./hero.png'
