@@ -96,19 +96,7 @@ export function JoinReferralCard({
   return (
     <div className='w-full'>
       <div className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
-        {/* Breadcrumb indicator */}
-        <div className='flex items-center gap-2 font-mono text-xs tracking-widest text-neutral-500 uppercase'>
-          <Link
-            href='/'
-            className='transition-colors hover:text-neutral-900 dark:hover:text-white'
-          >
-            Home
-          </Link>
-          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
-          <span>Partnerships</span>
-          <span className='text-neutral-300 dark:text-neutral-700'>/</span>
-          <span className='text-neutral-900 dark:text-white'>Creators</span>
-        </div>
+    
 
         {/* Hero Section: 2 Columns */}
         <div className='mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16'>

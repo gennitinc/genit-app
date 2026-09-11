@@ -77,7 +77,7 @@ export default function PlatformPage() {
             An operating system for autonomous marketing execution.
           </h1>
 
-          <p className='mt-6 max-w-3xl text-pretty text-base leading-8 text-neutral-600 sm:text-lg dark:text-neutral-400'>
+          <p className='mt-6 max-w-3xl text-base leading-8 text-pretty text-neutral-600 sm:text-lg dark:text-neutral-400'>
             Genit bridges brand strategy, creative generation, and live
             execution. Instead of fragmented tools and ephemeral prompts,
             autonomous agents run on persistent brand intelligence to plan,
@@ -129,12 +129,12 @@ export default function PlatformPage() {
               >
                 The continuous execution lifecycle.
               </h2>
-              <p className='text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              <p className='text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 Traditional marketing breaks context whenever work transitions
                 between planning, creation, and publishing. In Genit, five
                 continuous phases operate on a single shared memory layer.
               </p>
-              <blockquote className='mt-8 border-l-2 border-neutral-900 py-1 ps-4 text-sm font-medium italic text-neutral-800 dark:border-neutral-100 dark:text-neutral-200'>
+              <blockquote className='mt-8 border-l-2 border-neutral-900 py-1 ps-4 text-sm font-medium text-neutral-800 italic dark:border-neutral-100 dark:text-neutral-200'>
                 &ldquo;Creative generation is part of the system. Coordinated
                 marketing execution is the product.&rdquo;
               </blockquote>
@@ -154,7 +154,7 @@ export default function PlatformPage() {
                   <h3 className='mt-1 text-lg font-semibold text-neutral-950 dark:text-white'>
                     {name}
                   </h3>
-                  <p className='mt-2 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                  <p className='mt-2 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                     {description}
                   </p>
                 </div>
@@ -186,7 +186,22 @@ export default function PlatformPage() {
             </p>
           </div>
 
-          <div className='grid grid-cols-1 overflow-hidden rounded-2xl border border-neutral-200 divide-y divide-neutral-200 md:grid-cols-2 dark:border-neutral-800 dark:divide-neutral-800'>
+          <figure className='my-10 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+            <img
+              className='h-auto max-h-[440px] w-full object-cover'
+              src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
+              alt='Engineers and designers reviewing platform capability requests'
+            />
+            <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
+              <span>
+                Figure 02: Collaborative triage &amp; feature roadmap
+                prioritization
+              </span>
+              <span>Customer-Led Engineering</span>
+            </figcaption>
+          </figure>
+
+          <div className='grid grid-cols-1 divide-y divide-neutral-200 overflow-hidden rounded-2xl border border-neutral-200 md:grid-cols-2 dark:divide-neutral-800 dark:border-neutral-800'>
             {marketingCapabilities.map((capability, idx) => (
               <Link
                 key={capability.slug}
@@ -206,7 +221,7 @@ export default function PlatformPage() {
                       →
                     </span>
                   </h3>
-                  <p className='mt-3 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+                  <p className='mt-3 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                     {capability.description}
                   </p>
                 </div>
@@ -248,7 +263,7 @@ export default function PlatformPage() {
               >
                 Autonomous capability with uncompromising human control.
               </h2>
-              <p className='text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+              <p className='text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 Every external action—publishing a post, sending an email
                 campaign, or adjusting advertising spend—is guarded by strict
                 permissioning and approval checkpoints. Teams define which tasks
@@ -260,8 +275,8 @@ export default function PlatformPage() {
                   <strong className='font-semibold text-neutral-950 dark:text-white'>
                     Deterministic Permissions:
                   </strong>{" "}
-                  Granular controls configure exactly which social channels,
-                  ad accounts, and audience lists agents can modify.
+                  Granular controls configure exactly which social channels, ad
+                  accounts, and audience lists agents can modify.
                 </li>
                 <li className='border-l border-neutral-300 ps-4 text-sm leading-7 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400'>
                   <strong className='font-semibold text-neutral-950 dark:text-white'>
@@ -297,7 +312,7 @@ export default function PlatformPage() {
             >
               Explore every dimension of the platform.
             </h2>
-            <p className='mt-3 text-pretty text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
+            <p className='mt-3 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
               Jump directly into any specialized capability or start building on
               the free Basic plan.
             </p>
