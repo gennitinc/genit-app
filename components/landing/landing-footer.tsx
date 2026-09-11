@@ -572,7 +572,7 @@ export function LandingFooter() {
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                       href='/plugins'
                     >
-                      {t("1,000+ External Apps & Plugins")}
+                      {t("1,500+ External Apps & Plugins")}
                     </Link>
                   </li>
                   <li>
