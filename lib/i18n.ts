@@ -230,7 +230,7 @@ const es: Record<string, string> = {
   "Start creating": "Empieza a crear",
   "Advisory Board Member": "Miembro del consejo asesor",
   "Ready? Set, Genit.": "¿Listo? Genit.",
-  "Join a community of Creatives who have created":
+  "Join a community of businesses driving real growth with AI-powered marketing.":
     "Únete a una comunidad de creativos que ya han creado",
   "Light mode": "Modo claro",
   "Dark mode": "Modo oscuro",
@@ -667,7 +667,7 @@ const fr: Record<string, string> = {
   "Start creating": "Commencer à créer",
   "Advisory Board Member": "Membre du conseil consultatif",
   "Ready? Set, Genit.": "Prêt ? Genit.",
-  "Join a community of Creatives who have created":
+  "Join a community of businesses driving real growth with AI-powered marketing.":
     "Rejoignez une communauté de créatifs qui ont déjà créé",
   "Light mode": "Mode clair",
   "Dark mode": "Mode sombre",

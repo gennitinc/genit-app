@@ -262,7 +262,7 @@ export function LandingFooter() {
                 {t("Ready? Set, Genit.")}
               </h2>
               <p className='mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-400'>
-                {t("Join a community of Creatives who have created")}
+                {t("Join a community of businesses driving real growth with AI-powered marketing.")}
               </p>
               <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
                 <Link
