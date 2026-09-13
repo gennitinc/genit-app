@@ -17,6 +17,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  DAY_MS,
+  DateRangePicker,
+  isoDate,
+} from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -68,36 +73,6 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-type CreditActivityGrouping = "day" | "month";
-
-function groupCreditTransactions(
-  transactions: any[],
-  grouping: CreditActivityGrouping
-) {
-  const sorted = [...transactions].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
-  const groups = new Map<string, { label: string; transactions: any[] }>();
-
-  for (const transaction of sorted) {
-    const date = new Date(transaction.createdAt);
-    const key =
-      grouping === "day"
-        ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-        : `${date.getFullYear()}-${date.getMonth()}`;
-    const label = date.toLocaleDateString(undefined, {
-      month: "long",
-      year: "numeric",
-      ...(grouping === "day" ? { day: "numeric" as const } : {}),
-    });
-    const group = groups.get(key) || { label, transactions: [] };
-    group.transactions.push(transaction);
-    groups.set(key, group);
-  }
-
-  return Array.from(groups, ([key, group]) => ({ key, ...group }));
-}
-
 const SettingsHome = () => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("account");
@@ -119,9 +94,13 @@ const SettingsHome = () => {
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
   const [creditTransactions, setCreditTransactions] = useState<any[]>([]);
-  const [creditActivityGrouping, setCreditActivityGrouping] =
-    useState<CreditActivityGrouping>("month");
-  const [isCreditActivityOpen, setIsCreditActivityOpen] = useState(true);
+  const [creditActivityFrom, setCreditActivityFrom] = useState(() =>
+    isoDate(new Date(Date.now() - DAY_MS * 29))
+  );
+  const [creditActivityTo, setCreditActivityTo] = useState(() =>
+    isoDate(new Date())
+  );
+  const [isCreditActivityOpen, setIsCreditActivityOpen] = useState(false);
   const [openingBillingPortal, setOpeningBillingPortal] = useState(false);
   const [savingAuto, setSavingAuto] = useState(false);
   const [isAutoModeDialogOpen, setIsAutoModeDialogOpen] = useState(false);
@@ -155,11 +134,6 @@ const SettingsHome = () => {
   const [username, setUsername] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
-  const creditTransactionGroups = groupCreditTransactions(
-    creditTransactions,
-    creditActivityGrouping
-  );
-
   const fetchAutomationRuns = async () => {
     if (!currentOrg?._id) return;
     setLoadingRuns(true);
@@ -181,7 +155,14 @@ const SettingsHome = () => {
   useEffect(() => {
     const fetchBilling = async () => {
       try {
-        const resp = await apiResponse.get("/payment/billing-history");
+        const creditFrom = new Date(`${creditActivityFrom}T00:00:00`);
+        const creditTo = new Date(`${creditActivityTo}T23:59:59.999`);
+        const resp = await apiResponse.get("/payment/billing-history", {
+          params: {
+            creditFrom: creditFrom.toISOString(),
+            creditTo: creditTo.toISOString(),
+          },
+        });
         setBillingHistory(resp.data?.billingHistory || []);
         setCreditTransactions(resp.data?.creditTransactions || []);
       } catch (e) {
@@ -190,7 +171,7 @@ const SettingsHome = () => {
     };
 
     if (activeTab === "billing") fetchBilling();
-  }, [activeTab]);
+  }, [activeTab, creditActivityFrom, creditActivityTo]);
 
   useEffect(() => {
     if (activeTab === "automation") void fetchAutomationRuns();
@@ -2328,23 +2309,14 @@ const SettingsHome = () => {
                         </CardDescription>
                       </div>
                       <div className='flex shrink-0 items-center justify-end gap-2'>
-                        <Select
-                          value={creditActivityGrouping}
-                          onValueChange={(value: CreditActivityGrouping) =>
-                            setCreditActivityGrouping(value)
-                          }
-                        >
-                          <SelectTrigger
-                            size='sm'
-                            aria-label='Group credit activity'
-                          >
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value='month'>By month</SelectItem>
-                            <SelectItem value='day'>By day</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <DateRangePicker
+                          from={creditActivityFrom}
+                          to={creditActivityTo}
+                          onChange={(from, to) => {
+                            setCreditActivityFrom(from);
+                            setCreditActivityTo(to);
+                          }}
+                        />
                         <CollapsibleTrigger asChild>
                           <Button
                             variant='ghost'
@@ -2373,60 +2345,48 @@ const SettingsHome = () => {
                           </p>
                         ) : (
                           <div className='divide-y divide-zinc-200 dark:divide-white/10'>
-                            {creditTransactionGroups.map((group) => (
-                              <section key={group.key}>
-                                <h3 className='bg-zinc-50 px-5 py-2 text-xs font-semibold text-zinc-500 dark:bg-white/[0.025] dark:text-zinc-400'>
-                                  {group.label}
-                                </h3>
-                                <div className='divide-y divide-zinc-200 dark:divide-white/10'>
-                                  {group.transactions.map(
-                                    (transaction: any) => {
-                                      const charged =
-                                        transaction.settledAmount ??
-                                        transaction.amount;
-                                      const refunded =
-                                        transaction.status === "refunded";
-                                      const credited =
-                                        transaction.direction === "credit";
-                                      return (
-                                        <div
-                                          key={transaction._id}
-                                          className='flex items-center justify-between gap-4 px-5 py-4'
-                                        >
-                                          <div className='min-w-0'>
-                                            <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
-                                              {String(
-                                                transaction.reason
-                                              ).replaceAll("_", " ")}
-                                            </p>
-                                            <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
-                                              {new Date(
-                                                transaction.createdAt
-                                              ).toLocaleString()}{" "}
-                                              · {transaction.balanceAfter}{" "}
-                                              remaining
-                                            </p>
-                                          </div>
-                                          <Badge
-                                            variant={
-                                              refunded || credited
-                                                ? "secondary"
-                                                : "outline"
-                                            }
-                                          >
-                                            {refunded
-                                              ? `Refunded ${transaction.amount}`
-                                              : credited
-                                                ? `+${charged} credits`
-                                                : `−${charged} credits`}
-                                          </Badge>
-                                        </div>
-                                      );
+                            {creditTransactions.map((transaction: any) => {
+                              const charged =
+                                transaction.settledAmount ?? transaction.amount;
+                              const refunded =
+                                transaction.status === "refunded";
+                              const credited =
+                                transaction.direction === "credit";
+                              return (
+                                <div
+                                  key={transaction._id}
+                                  className='flex items-center justify-between gap-4 px-5 py-4'
+                                >
+                                  <div className='min-w-0'>
+                                    <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
+                                      {String(transaction.reason).replaceAll(
+                                        "_",
+                                        " "
+                                      )}
+                                    </p>
+                                    <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
+                                      {new Date(
+                                        transaction.createdAt
+                                      ).toLocaleString()}{" "}
+                                      · {transaction.balanceAfter} remaining
+                                    </p>
+                                  </div>
+                                  <Badge
+                                    variant={
+                                      refunded || credited
+                                        ? "secondary"
+                                        : "outline"
                                     }
-                                  )}
+                                  >
+                                    {refunded
+                                      ? `Refunded ${transaction.amount}`
+                                      : credited
+                                        ? `+${charged} credits`
+                                        : `−${charged} credits`}
+                                  </Badge>
                                 </div>
-                              </section>
-                            ))}
+                              );
+                            })}
                           </div>
                         )}
                       </CardContent>

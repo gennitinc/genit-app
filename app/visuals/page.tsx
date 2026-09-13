@@ -12,10 +12,11 @@ import {
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DAY_MS,
+  DateRangePicker,
+  dateFromIso,
+  isoDate,
+} from "@/components/ui/date-range-picker";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useIntegrations } from "@/hooks/use-integrations";
 import {
@@ -24,16 +25,7 @@ import {
 } from "@/lib/integrations-api";
 import { getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
-import {
-  BarChart3,
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Folder,
-  Layers3,
-  PenLine,
-  Plus,
-} from "lucide-react";
+import { BarChart3, Folder, Layers3, PenLine, Plus } from "lucide-react";
 import Link from "next/link";
 import {
   Area,
@@ -48,123 +40,17 @@ import {
 } from "recharts";
 import React, { useMemo, useState } from "react";
 
-const dayMs = 86_400_000;
-
-function isoDate(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function dateFromIso(value: string) {
-  return new Date(`${value}T12:00:00`);
-}
-
-function prettyDateRange(from: string, to: string) {
-  const format = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  return `${format.format(dateFromIso(from))} - ${format.format(
-    dateFromIso(to)
-  )}`;
-}
-
-function addMonths(date: Date, months: number) {
-  return new Date(date.getFullYear(), date.getMonth() + months, 1);
-}
-
-function monthTitle(date: Date) {
-  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-}
-
-function sameDay(a: Date, b: Date) {
-  return isoDate(a) === isoDate(b);
-}
-
-function isBetween(day: Date, from: Date, to: Date) {
-  return day.getTime() > from.getTime() && day.getTime() < to.getTime();
-}
-
-function monthCells(month: Date) {
-  const start = new Date(month.getFullYear(), month.getMonth(), 1);
-  const first = new Date(start);
-  first.setDate(first.getDate() - first.getDay());
-  return Array.from({ length: 42 }, (_, index) => {
-    const date = new Date(first);
-    date.setDate(first.getDate() + index);
-    return date;
-  });
-}
-
-function DateRangeMonth({
-  month,
-  from,
-  to,
-  onSelect,
-}: {
-  month: Date;
-  from: Date;
-  to: Date;
-  onSelect: (date: Date) => void;
-}) {
-  return (
-    <div>
-      <h3 className='mb-4 text-center text-sm font-semibold text-zinc-950 dark:text-white'>
-        {monthTitle(month)}
-      </h3>
-      <div className='mb-2 grid grid-cols-7 text-center text-xs text-zinc-500 dark:text-white/45'>
-        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-          <span key={day}>{day}</span>
-        ))}
-      </div>
-      <div className='grid grid-cols-7 gap-y-1'>
-        {monthCells(month).map((day) => {
-          const muted = day.getMonth() !== month.getMonth();
-          const selected = sameDay(day, from) || sameDay(day, to);
-          const ranged = isBetween(day, from, to);
-          return (
-            <button
-              key={day.toISOString()}
-              type='button'
-              onClick={() => onSelect(day)}
-              className={[
-                "mx-auto flex h-9 w-9 items-center justify-center rounded-lg text-sm transition",
-                muted
-                  ? "text-zinc-300 dark:text-white/25"
-                  : "text-zinc-700 hover:bg-zinc-100 dark:text-white/65 dark:hover:bg-white/10",
-                ranged ? "bg-sky-500/10 text-sky-600 dark:text-sky-300" : "",
-                selected
-                  ? "bg-sky-500 text-white shadow-sm shadow-sky-500/20 hover:bg-sky-500 dark:bg-sky-500 dark:text-white"
-                  : "",
-              ].join(" ")}
-            >
-              {day.getDate()}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 export default function VisualsHomePage() {
   const today = useMemo(() => new Date(), []);
   const [from, setFrom] = useState(() =>
-    isoDate(new Date(Date.now() - dayMs * 29))
+    isoDate(new Date(Date.now() - DAY_MS * 29))
   );
   const [to, setTo] = useState(() => isoDate(today));
-  const [isPickingRangeEnd, setIsPickingRangeEnd] = useState(false);
   const [rangeStart, rangeEnd] = useMemo(() => {
     const start = dateFromIso(from);
     const end = dateFromIso(to);
     return start <= end ? [start, end] : [end, start];
   }, [from, to]);
-  const [visibleMonth, setVisibleMonth] = useState(
-    () => new Date(today.getFullYear(), today.getMonth(), 1)
-  );
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const {
@@ -230,7 +116,7 @@ export default function VisualsHomePage() {
       (stats?.activity || []).map((day) => [day.date, day])
     );
     const days =
-      Math.round((rangeEnd.getTime() - rangeStart.getTime()) / dayMs) + 1;
+      Math.round((rangeEnd.getTime() - rangeStart.getTime()) / DAY_MS) + 1;
     return Array.from({ length: Math.max(1, days) }, (_, index) => {
       const date = new Date(rangeStart);
       date.setDate(rangeStart.getDate() + index);
@@ -272,22 +158,6 @@ export default function VisualsHomePage() {
   const manageConnections = manageFor
     ? connectionsForIntegration(manageFor, byPlatform)
     : [];
-
-  const selectRangeDate = (date: Date) => {
-    if (!isPickingRangeEnd) {
-      setFrom(isoDate(date));
-      setTo(isoDate(date));
-      setIsPickingRangeEnd(true);
-      return;
-    }
-    if (date < rangeStart) {
-      setFrom(isoDate(date));
-      setIsPickingRangeEnd(false);
-      return;
-    }
-    setTo(isoDate(date));
-    setIsPickingRangeEnd(false);
-  };
 
   const statCards = [
     {
@@ -335,7 +205,7 @@ export default function VisualsHomePage() {
   const chartGridColor = "var(--border)";
 
   return (
-    <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 px-0 md:p-2 text-zinc-950 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 px-0 text-zinc-950 md:p-2 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <div className='mb-8 flex flex-col gap-y-4 md:flex-row md:items-start md:justify-between'>
         <div>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
@@ -372,57 +242,14 @@ export default function VisualsHomePage() {
           </div>
         </div>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <button
-              type='button'
-              className='flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-sm text-zinc-700 shadow-sm transition hover:bg-zinc-100 sm:w-auto dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:shadow-none dark:hover:bg-white/[0.07]'
-            >
-              <CalendarDays className='h-4 w-4 text-zinc-500 dark:text-white/55' />
-              {prettyDateRange(from, to)}
-            </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align='end'
-            className='w-[min(calc(100vw-2rem),760px)] rounded-lg border-zinc-200 bg-white p-4 text-zinc-950 dark:border-white/10 dark:bg-[#0b0b0b] dark:text-white'
-          >
-            <div className='mb-4 flex items-center justify-between'>
-              <button
-                type='button'
-                onClick={() => setVisibleMonth((month) => addMonths(month, -1))}
-                className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
-                aria-label='Previous month'
-              >
-                <ChevronLeft className='h-4 w-4' />
-              </button>
-              <p className='text-sm font-medium text-zinc-600 dark:text-white/60'>
-                {prettyDateRange(from, to)}
-              </p>
-              <button
-                type='button'
-                onClick={() => setVisibleMonth((month) => addMonths(month, 1))}
-                className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
-                aria-label='Next month'
-              >
-                <ChevronRight className='h-4 w-4' />
-              </button>
-            </div>
-            <div className='grid gap-6 md:grid-cols-2'>
-              <DateRangeMonth
-                month={visibleMonth}
-                from={rangeStart}
-                to={rangeEnd}
-                onSelect={selectRangeDate}
-              />
-              <DateRangeMonth
-                month={addMonths(visibleMonth, 1)}
-                from={rangeStart}
-                to={rangeEnd}
-                onSelect={selectRangeDate}
-              />
-            </div>
-          </PopoverContent>
-        </Popover>
+        <DateRangePicker
+          from={from}
+          to={to}
+          onChange={(nextFrom, nextTo) => {
+            setFrom(nextFrom);
+            setTo(nextTo);
+          }}
+        />
       </div>
 
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
