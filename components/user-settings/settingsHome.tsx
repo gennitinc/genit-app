@@ -12,6 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -41,6 +46,7 @@ import {
   Bell,
   Bot,
   Check,
+  ChevronDown,
   CreditCard,
   Download,
   KeyRound,
@@ -61,6 +67,36 @@ import {
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
+type CreditActivityGrouping = "day" | "month";
+
+function groupCreditTransactions(
+  transactions: any[],
+  grouping: CreditActivityGrouping
+) {
+  const sorted = [...transactions].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+  const groups = new Map<string, { label: string; transactions: any[] }>();
+
+  for (const transaction of sorted) {
+    const date = new Date(transaction.createdAt);
+    const key =
+      grouping === "day"
+        ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+        : `${date.getFullYear()}-${date.getMonth()}`;
+    const label = date.toLocaleDateString(undefined, {
+      month: "long",
+      year: "numeric",
+      ...(grouping === "day" ? { day: "numeric" as const } : {}),
+    });
+    const group = groups.get(key) || { label, transactions: [] };
+    group.transactions.push(transaction);
+    groups.set(key, group);
+  }
+
+  return Array.from(groups, ([key, group]) => ({ key, ...group }));
+}
 
 const SettingsHome = () => {
   const { t } = useLanguage();
@@ -83,6 +119,9 @@ const SettingsHome = () => {
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [billingHistory, setBillingHistory] = useState<any[]>([]);
   const [creditTransactions, setCreditTransactions] = useState<any[]>([]);
+  const [creditActivityGrouping, setCreditActivityGrouping] =
+    useState<CreditActivityGrouping>("month");
+  const [isCreditActivityOpen, setIsCreditActivityOpen] = useState(true);
   const [openingBillingPortal, setOpeningBillingPortal] = useState(false);
   const [savingAuto, setSavingAuto] = useState(false);
   const [isAutoModeDialogOpen, setIsAutoModeDialogOpen] = useState(false);
@@ -116,6 +155,10 @@ const SettingsHome = () => {
   const [username, setUsername] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
+  const creditTransactionGroups = groupCreditTransactions(
+    creditTransactions,
+    creditActivityGrouping
+  );
 
   const fetchAutomationRuns = async () => {
     if (!currentOrg?._id) return;
@@ -2268,66 +2311,128 @@ const SettingsHome = () => {
                   </CardContent>
                 </Card>
 
-                <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-                  <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
-                    <CardTitle className='text-base'>
-                      <LocalizedText text={"Credit activity"} />
-                    </CardTitle>
-                    <CardDescription className='mt-1'>
-                      <LocalizedText
-                        text={"Successful charges and automatic refunds."}
-                      />
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className='p-0'>
-                    {creditTransactions.length === 0 ? (
-                      <p className='px-5 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400'>
-                        <LocalizedText text={"No credit activity yet"} />
-                      </p>
-                    ) : (
-                      <div className='divide-y divide-zinc-200 dark:divide-white/10'>
-                        {creditTransactions.map((transaction: any) => {
-                          const charged =
-                            transaction.settledAmount ?? transaction.amount;
-                          const refunded = transaction.status === "refunded";
-                          const credited = transaction.direction === "credit";
-                          return (
-                            <div
-                              key={transaction._id}
-                              className='flex items-center justify-between gap-4 px-5 py-4'
-                            >
-                              <div className='min-w-0'>
-                                <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
-                                  {String(transaction.reason).replaceAll(
-                                    "_",
-                                    " "
-                                  )}
-                                </p>
-                                <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
-                                  {new Date(
-                                    transaction.createdAt
-                                  ).toLocaleString()}{" "}
-                                  · {transaction.balanceAfter} remaining
-                                </p>
-                              </div>
-                              <Badge
-                                variant={
-                                  refunded || credited ? "secondary" : "outline"
-                                }
-                              >
-                                {refunded
-                                  ? `Refunded ${transaction.amount}`
-                                  : credited
-                                    ? `+${charged} credits`
-                                    : `−${charged} credits`}
-                              </Badge>
-                            </div>
-                          );
-                        })}
+                <Collapsible
+                  open={isCreditActivityOpen}
+                  onOpenChange={setIsCreditActivityOpen}
+                >
+                  <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
+                    <CardHeader className='items-stretch justify-between gap-4 border-b border-zinc-200 p-5 sm:flex-row sm:items-center dark:border-white/10'>
+                      <div>
+                        <CardTitle className='text-base'>
+                          <LocalizedText text={"Credit activity"} />
+                        </CardTitle>
+                        <CardDescription className='mt-1'>
+                          <LocalizedText
+                            text={"Successful charges and automatic refunds."}
+                          />
+                        </CardDescription>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
+                      <div className='flex shrink-0 items-center justify-end gap-2'>
+                        <Select
+                          value={creditActivityGrouping}
+                          onValueChange={(value: CreditActivityGrouping) =>
+                            setCreditActivityGrouping(value)
+                          }
+                        >
+                          <SelectTrigger
+                            size='sm'
+                            aria-label='Group credit activity'
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='month'>By month</SelectItem>
+                            <SelectItem value='day'>By day</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <CollapsibleTrigger asChild>
+                          <Button
+                            variant='ghost'
+                            size='icon'
+                            aria-label={
+                              isCreditActivityOpen
+                                ? "Collapse credit activity"
+                                : "Expand credit activity"
+                            }
+                            className='size-8 rounded-lg'
+                          >
+                            <ChevronDown
+                              className={`size-4 transition-transform ${
+                                isCreditActivityOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </Button>
+                        </CollapsibleTrigger>
+                      </div>
+                    </CardHeader>
+                    <CollapsibleContent>
+                      <CardContent className='p-0'>
+                        {creditTransactions.length === 0 ? (
+                          <p className='px-5 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400'>
+                            <LocalizedText text={"No credit activity yet"} />
+                          </p>
+                        ) : (
+                          <div className='divide-y divide-zinc-200 dark:divide-white/10'>
+                            {creditTransactionGroups.map((group) => (
+                              <section key={group.key}>
+                                <h3 className='bg-zinc-50 px-5 py-2 text-xs font-semibold text-zinc-500 dark:bg-white/[0.025] dark:text-zinc-400'>
+                                  {group.label}
+                                </h3>
+                                <div className='divide-y divide-zinc-200 dark:divide-white/10'>
+                                  {group.transactions.map(
+                                    (transaction: any) => {
+                                      const charged =
+                                        transaction.settledAmount ??
+                                        transaction.amount;
+                                      const refunded =
+                                        transaction.status === "refunded";
+                                      const credited =
+                                        transaction.direction === "credit";
+                                      return (
+                                        <div
+                                          key={transaction._id}
+                                          className='flex items-center justify-between gap-4 px-5 py-4'
+                                        >
+                                          <div className='min-w-0'>
+                                            <p className='truncate text-sm font-medium text-zinc-900 capitalize dark:text-zinc-100'>
+                                              {String(
+                                                transaction.reason
+                                              ).replaceAll("_", " ")}
+                                            </p>
+                                            <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
+                                              {new Date(
+                                                transaction.createdAt
+                                              ).toLocaleString()}{" "}
+                                              · {transaction.balanceAfter}{" "}
+                                              remaining
+                                            </p>
+                                          </div>
+                                          <Badge
+                                            variant={
+                                              refunded || credited
+                                                ? "secondary"
+                                                : "outline"
+                                            }
+                                          >
+                                            {refunded
+                                              ? `Refunded ${transaction.amount}`
+                                              : credited
+                                                ? `+${charged} credits`
+                                                : `−${charged} credits`}
+                                          </Badge>
+                                        </div>
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </section>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Card>
+                </Collapsible>
 
                 <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
                   <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
