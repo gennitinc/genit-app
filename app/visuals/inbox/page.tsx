@@ -1,5 +1,6 @@
 "use client";
 
+import { CallDialog } from "./_components/call-dialog";
 import { ContactDetails } from "./_components/contact-details";
 import { NewConversationDialog } from "./_components/new-conversation-dialog";
 import {
@@ -132,6 +133,7 @@ import {
   PanelRight,
   Paperclip,
   Pencil,
+  Phone,
   Pin,
   PinOff,
   Plus,
@@ -669,6 +671,7 @@ export default function InboxPage() {
   const [bulkBusy, setBulkBusy] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
+  const [showCallDialog, setShowCallDialog] = useState(false);
   const [createdConversation, setCreatedConversation] =
     useState<InboxConversation | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
@@ -2185,6 +2188,15 @@ export default function InboxPage() {
                   <Button
                     variant='ghost'
                     size='icon'
+                    className='rounded-full'
+                    onClick={() => setShowCallDialog(true)}
+                    aria-label={`Call ${activeConversation.customerName}`}
+                  >
+                    <Phone className='h-5 w-5' />
+                  </Button>
+                  <Button
+                    variant='ghost'
+                    size='icon'
                     className='rounded-full 2xl:hidden'
                     onClick={() => setShowDetails(true)}
                     aria-label='View contact details'
@@ -2885,6 +2897,13 @@ export default function InboxPage() {
           )}
         </main>
         <aside className='hidden min-h-0 border-l 2xl:block'>
+          {activeConversation && (
+            <CallDialog
+              conversation={activeConversation}
+              open={showCallDialog}
+              onOpenChange={setShowCallDialog}
+            />
+          )}
           {activeConversation && (
             <ContactDetails
               conversation={activeConversation}

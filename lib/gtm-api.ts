@@ -1,5 +1,52 @@
 import { apiResponse } from "@/utils/apiResponse";
 
+export type OutreachChannel =
+  | "gmail"
+  | "outlook"
+  | "brevo"
+  | "whatsapp"
+  | "messenger"
+  | "instagram"
+  | "telegram"
+  | "x"
+  | "slack";
+
+export type OutreachVariant = {
+  id: string;
+  channel: OutreachChannel;
+  name: string;
+  content: string;
+  subject?: string;
+  templateName?: string;
+  templateLanguage?: string;
+  weight: number;
+};
+
+export type CampaignRecipient = {
+  _id: string;
+  channel: OutreachChannel;
+  address: string;
+  name: string;
+  consent: {
+    status: "opted_in" | "unknown" | "opted_out";
+    source?: string;
+    capturedAt?: string;
+  };
+  status:
+    | "pending"
+    | "scheduled"
+    | "sent"
+    | "delivered"
+    | "read"
+    | "replied"
+    | "suppressed"
+    | "failed";
+  variantId?: string;
+  lastError?: string;
+  sentAt?: string;
+  repliedAt?: string;
+};
+
 export type GtmCampaign = {
   _id: string;
   chatId?: string;
@@ -25,6 +72,13 @@ export type GtmCampaign = {
       body: string;
       status: "draft" | "scheduled" | "sent";
     }>;
+  };
+  outreach: {
+    status: "draft" | "running" | "paused" | "completed";
+    throttlePerMinute: number;
+    integrations: Partial<Record<OutreachChannel, string>>;
+    variants: OutreachVariant[];
+    launchedAt?: string;
   };
   conversions: Array<{ value: number; source?: string; medium?: string }>;
   recommendations: Array<{
@@ -289,4 +343,80 @@ export async function exportGtmReport(id: string): Promise<{
     report: { url: string; fileName: string; campaignName: string };
   }>(`/gtm/campaigns/${id}/report`, undefined, { timeout: 120_000 });
   return data.report;
+}
+
+export type CampaignOutreachSnapshot = {
+  campaign: GtmCampaign;
+  recipients: CampaignRecipient[];
+  stats: Partial<Record<CampaignRecipient["status"], number>>;
+  jobs: Array<{
+    _id: string;
+    status: string;
+    error?: string;
+    runAt: string;
+    payload: { recipientId: string; variantId: string };
+  }>;
+};
+
+export async function getCampaignOutreach(id: string) {
+  const { data } = await apiResponse.get<CampaignOutreachSnapshot>(
+    `/gtm/campaigns/${id}/outreach`
+  );
+  return data;
+}
+
+export async function updateCampaignOutreach(
+  id: string,
+  input: {
+    throttlePerMinute?: number;
+    integrations?: Partial<Record<OutreachChannel, string>>;
+    variants?: OutreachVariant[];
+  }
+) {
+  const { data } = await apiResponse.patch<{ campaign: GtmCampaign }>(
+    `/gtm/campaigns/${id}/outreach`,
+    input
+  );
+  return data.campaign;
+}
+
+export async function addCampaignRecipients(
+  id: string,
+  recipients: Array<{
+    channel: OutreachChannel;
+    address: string;
+    name?: string;
+    consentStatus: "opted_in" | "unknown" | "opted_out";
+    consentSource?: string;
+  }>
+) {
+  const { data } = await apiResponse.post<{ recipients: CampaignRecipient[] }>(
+    `/gtm/campaigns/${id}/outreach/recipients`,
+    { recipients }
+  );
+  return data.recipients;
+}
+
+export async function launchCampaignOutreach(id: string) {
+  const { data } = await apiResponse.post<{
+    scheduled: number;
+    rejected: Array<{ recipientId: string; reason: string }>;
+  }>(`/gtm/campaigns/${id}/outreach/launch`);
+  return data;
+}
+
+export async function pauseCampaignOutreach(id: string) {
+  const { data } = await apiResponse.post<{ campaign: GtmCampaign }>(
+    `/gtm/campaigns/${id}/outreach/pause`
+  );
+  return data.campaign;
+}
+
+export async function suppressCampaignRecipient(
+  campaignId: string,
+  recipientId: string
+) {
+  await apiResponse.post(
+    `/gtm/campaigns/${campaignId}/outreach/recipients/${recipientId}/suppress`
+  );
 }

@@ -89,6 +89,45 @@ export interface WhatsAppTemplate {
   components?: Array<{ type?: string; text?: string }>;
 }
 
+export interface CallSession {
+  _id: string;
+  mode: "meeting_link" | "whatsapp_native";
+  callType: "audio" | "video";
+  direction: "inbound" | "outbound";
+  status:
+    | "permission_requested"
+    | "invited"
+    | "ringing"
+    | "answered"
+    | "declined"
+    | "missed"
+    | "ended"
+    | "failed";
+  joinUrl?: string;
+  error?: string;
+  metadata?: { meetingProvider?: "google_meet" | "microsoft_teams" } & Record<
+    string,
+    unknown
+  >;
+  createdAt: string;
+  answeredAt?: string;
+  endedAt?: string;
+}
+
+export interface CallCapabilities {
+  meetingLink: {
+    available: boolean;
+    provider?: "google_meet" | "microsoft_teams";
+    providers?: Array<"google_meet" | "microsoft_teams">;
+  };
+  whatsappNative: {
+    available: boolean;
+    permissionGranted: boolean;
+    gatewayConfigured: boolean;
+    reason?: string;
+  };
+}
+
 export interface InboxFilters {
   platform?: string;
   integrationId?: string;
@@ -200,6 +239,53 @@ export async function sendConversationWhatsAppTemplate(
     input
   );
   return res.data.message;
+}
+
+export async function fetchConversationCalls(conversationId: string): Promise<{
+  capabilities: CallCapabilities;
+  calls: CallSession[];
+}> {
+  const res = await apiResponse.get(
+    `/inbox/conversations/${conversationId}/calls`
+  );
+  return { capabilities: res.data.capabilities, calls: res.data.calls };
+}
+
+export async function createConversationCall(
+  conversationId: string,
+  input: {
+    mode: "meeting_link" | "whatsapp_native";
+    callType: "audio" | "video";
+    meetingProvider?: "google_meet" | "microsoft_teams";
+    message?: string;
+  }
+): Promise<CallSession> {
+  const res = await apiResponse.post(
+    `/inbox/conversations/${conversationId}/calls`,
+    input
+  );
+  return res.data.call;
+}
+
+export async function requestConversationCallPermission(
+  conversationId: string,
+  input: {
+    message?: string;
+    template?: { name: string; language: string; components?: unknown[] };
+  } = {}
+): Promise<CallSession> {
+  const res = await apiResponse.post(
+    `/inbox/conversations/${conversationId}/call-permission`,
+    input
+  );
+  return res.data.call;
+}
+
+export async function endConversationCall(
+  callId: string
+): Promise<CallSession> {
+  const res = await apiResponse.post(`/inbox/calls/${callId}/end`);
+  return res.data.call;
 }
 
 export async function uploadInboxAttachment(

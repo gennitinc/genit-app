@@ -29,6 +29,7 @@ import {
   ChevronRight,
   CircleDollarSign,
   Layers3,
+  Megaphone,
   MessageSquareText,
   RefreshCw,
   Search,
@@ -322,6 +323,18 @@ export default function CampaignsPage() {
                           </td>
                           <td className='px-5 py-2'>
                             <div className='flex justify-end gap-2'>
+                              <Button
+                                asChild
+                                variant='outline'
+                                size='sm'
+                                className='active:scale-[0.97]'
+                              >
+                                <Link
+                                  href={`/visuals/campaigns/${campaign._id}`}
+                                >
+                                  <Megaphone /> Outreach
+                                </Link>
+                              </Button>
                               {campaign.chatId ? (
                                 <Button
                                   asChild
