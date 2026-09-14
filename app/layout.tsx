@@ -3,10 +3,15 @@ import "./globals.css";
 import { ClientProviders } from "@/components/layout/client-providers";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Instrument_Serif, Inter } from "next/font/google";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-instrument-serif-family",
+  weight: "400",
+});
 
 const title = "Genit AI Marketing Platform | Agents, Automation & Campaigns";
 const description =
@@ -159,7 +164,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className={`${inter.className} custom-scrollbar`}>
+      <body
+        className={`${inter.variable} ${instrumentSerif.variable} custom-scrollbar font-sans`}
+      >
         <ClientProviders>{children}</ClientProviders>
         <Analytics />
       </body>

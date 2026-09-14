@@ -5,38 +5,10 @@ import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/sonner";
 import SettingsHome from "@/components/user-settings/settingsHome";
 import withAuth from "@/helper/hoc/withAuth";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 function SettingsPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Add the font link to the document head
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-
-    // Add the font styles
-    const style = document.createElement("style");
-    style.textContent = `
-      * {
-        font-family: 'Source Sans Pro';
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Cleanup function to remove the added elements when component unmounts
-    return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
-      }
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
-      }
-    };
-  }, []);
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
