@@ -34,7 +34,7 @@ export function LandingPage() {
         <LandingUnifiedInbox />
         <LandingVoiceClone />
         <LandingCreator />
-        <LandingPlatformOverview />
+        {/* <LandingPlatformOverview /> */}
         <PricingComponent pricingCurrency={pricingCurrency} headingLevel='h2' />
         <ContactCtaLanding />
         <LandingFooter />
