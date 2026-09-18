@@ -2,7 +2,12 @@
 
 import { useProjectDesign } from "@/context/DesignProject";
 import { type AgentRunView, useAgentRuns } from "@/hooks/use-agent-runs";
-import { type AgentAttachedFile, startAgentRun } from "@/lib/agents-api";
+import {
+  type AgentAttachedFile,
+  continueAgentRun,
+  startAgentRun,
+  stopAgentRun,
+} from "@/lib/agents-api";
 import {
   type ReactNode,
   createContext,
@@ -19,6 +24,8 @@ interface AgentRunsContextValue {
     selectedIntegrations?: Record<string, string>,
     useBrandIdentity?: boolean
   ) => Promise<{ runId: string } | null>;
+  stopAgent: (runId: string) => Promise<void>;
+  continueAgent: (runId: string) => Promise<void>;
   clear: () => void;
   deleteRun: (runId: string) => Promise<void>;
 }
@@ -42,6 +49,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
         const { runId } = await startAgentRun({
           projectId,
           prompt,
+          requestId: crypto.randomUUID(),
           attachedFiles,
           selectedIntegrations,
           useBrandIdentity,
@@ -56,9 +64,17 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
     [projectId, registerNewRun]
   );
 
+  const stopAgent = useCallback(async (runId: string) => {
+    await stopAgentRun(runId);
+  }, []);
+
+  const continueAgent = useCallback(async (runId: string) => {
+    await continueAgentRun(runId);
+  }, []);
+
   const value = useMemo<AgentRunsContextValue>(
-    () => ({ runs, startAgent, clear, deleteRun }),
-    [runs, startAgent, clear, deleteRun]
+    () => ({ runs, startAgent, stopAgent, continueAgent, clear, deleteRun }),
+    [runs, startAgent, stopAgent, continueAgent, clear, deleteRun]
   );
 
   return (

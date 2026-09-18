@@ -101,15 +101,13 @@ export function ChatInput({
     selectedFiles,
   } = useProjectDesign();
 
-  const { startAgent, runs } = useAgentRunsContext();
+  const { startAgent, stopAgent, continueAgent, runs } = useAgentRunsContext();
   // Spin + disable while the agent is actively processing tool calls in the background.
   const isAgentRunning = runs.some((r) => r.status === "running");
   // Disable (no spin) when the agent is paused waiting for the user to reply in-thread.
   const isAgentAwaitingInput = runs.some(
     (r) => r.status === "awaiting_input" || r.status === "awaiting_integration"
   );
-  const isAiResponding = isGenerating || isAgentRunning;
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -144,6 +142,13 @@ export function ChatInput({
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<any>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [isStopping, setIsStopping] = useState(false);
+  const sendInFlightRef = useRef(false);
+  const isAiResponding = isGenerating || isAgentRunning || isSending;
+  const activeRun = [...runs].reverse().find((run) => run.status === "running");
+  const latestRun = runs.at(-1);
+  const stoppedRun = latestRun?.status === "cancelled" ? latestRun : undefined;
 
   useEffect(() => {
     setSelectedModel(null);
@@ -184,6 +189,8 @@ export function ChatInput({
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
+    if (sendInFlightRef.current || isAgentRunning) return;
+
     // Check for low credits
     const creditsRemaining = user?.creditsRemaining ?? 0;
     if (creditsRemaining === 0) {
@@ -219,7 +226,18 @@ export function ChatInput({
       return;
     }
 
+    sendInFlightRef.current = true;
+    setIsSending(true);
     try {
+      if (
+        stoppedRun &&
+        /^(continue|resume|go on|keep going)[.!]?$/i.test(inputValue.trim())
+      ) {
+        await continueAgent(stoppedRun.runId);
+        clearInput();
+        return;
+      }
+
       trackEvent("generation_requested", {
         prompt_length: inputValue.trim().length,
         attachment_count: attachedFiles.length,
@@ -311,6 +329,9 @@ export function ChatInput({
       trackEvent("generation_request_failed", {
         project_id: project?._id,
       });
+    } finally {
+      sendInFlightRef.current = false;
+      setIsSending(false);
     }
   };
 
@@ -323,6 +344,19 @@ export function ChatInput({
       handlegenerateMessage();
     }
     handleKeyDown(event);
+  };
+
+  const handleStop = async () => {
+    if (!activeRun || isStopping) return;
+    setIsStopping(true);
+    try {
+      await stopAgent(activeRun.runId);
+    } catch (error) {
+      console.error("Failed to stop agent:", error);
+      toast.error("Could not stop Genit");
+    } finally {
+      setIsStopping(false);
+    }
   };
 
   const formatFileSize = (bytes: number) => {
@@ -492,7 +526,7 @@ export function ChatInput({
                         ? "Listening... speak now ✦"
                         : placeholder
                   }
-                  disabled={isGenerating || isProcessingDraft}
+                  disabled={isGenerating || isSending || isProcessingDraft}
                   className='placeholder:text-muted-foreground/60 max-h-[300px] w-full resize-none scrollbar-none border-none bg-transparent px-3 py-2 pr-10 text-[16px] leading-snug transition-colors duration-150 ease-in-out outline-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base'
                   style={{ height: "60px", minHeight: "60px" }}
                 />
@@ -598,6 +632,7 @@ export function ChatInput({
                   disabled={
                     !isSupported ||
                     isGenerating ||
+                    isSending ||
                     isAgentRunning ||
                     isAgentAwaitingInput ||
                     isProcessingDraft
@@ -607,14 +642,19 @@ export function ChatInput({
                 </button>
 
                 <button
-                  type='submit'
+                  type={isAgentRunning ? "button" : "submit"}
+                  onClick={isAgentRunning ? handleStop : undefined}
                   disabled={
-                    isGenerating ||
-                    isAgentRunning ||
-                    isAgentAwaitingInput ||
-                    isProcessingDraft ||
-                    (inputValue.trim().length < 2 && attachedFiles.length === 0)
+                    isAgentRunning
+                      ? isStopping
+                      : isGenerating ||
+                        isSending ||
+                        isAgentAwaitingInput ||
+                        isProcessingDraft ||
+                        (inputValue.trim().length < 2 &&
+                          attachedFiles.length === 0)
                   }
+                  aria-label={isAgentRunning ? "Stop Genit" : "Send message"}
                   className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   {/* Border effects behind content */}
@@ -635,7 +675,13 @@ export function ChatInput({
 
                   {/* Button content */}
                   <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
-                    {isAiResponding ? (
+                    {isAgentRunning ? (
+                      isStopping ? (
+                        <LoadingFileLoader size={14} />
+                      ) : (
+                        <span className='h-3 w-3 rounded-[2px] bg-white' />
+                      )
+                    ) : isAiResponding ? (
                       <LoadingFileLoader size={14} />
                     ) : (
                       <svg

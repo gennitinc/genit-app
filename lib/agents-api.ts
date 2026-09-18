@@ -7,7 +7,8 @@ export type AgentRunStatus =
   | "awaiting_input"
   | "awaiting_integration"
   | "completed"
-  | "failed";
+  | "failed"
+  | "cancelled";
 
 export interface AgentTask {
   id: string;
@@ -52,6 +53,7 @@ export interface AgentAttachedFile {
 export async function startAgentRun(input: {
   projectId: string;
   prompt: string;
+  requestId?: string;
   attachedFiles?: AgentAttachedFile[];
   selectedIntegrations?: Record<string, string>;
   useBrandIdentity?: boolean;
@@ -81,6 +83,14 @@ export async function resumeAgentRunIntegration(
     kind: "integration_connected",
     platform,
   });
+}
+
+export async function stopAgentRun(runId: string): Promise<void> {
+  await apiResponse.post(`/agents/${runId}/stop`);
+}
+
+export async function continueAgentRun(runId: string): Promise<void> {
+  await apiResponse.post(`/agents/${runId}/continue`);
 }
 
 export async function listAgentRuns(projectId: string): Promise<any[]> {

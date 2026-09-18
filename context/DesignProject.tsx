@@ -948,6 +948,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           await startAgentRun({
             projectId: project._id,
             prompt,
+            requestId: `initial:${project._id}`,
             attachedFiles: agentFiles.length > 0 ? agentFiles : undefined,
           });
         } catch (err) {

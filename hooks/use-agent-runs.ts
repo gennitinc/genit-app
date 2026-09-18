@@ -213,6 +213,13 @@ export function useAgentRuns(projectId: string | undefined) {
       upsert(p.runId, undefined, (r) => ({
         ...r,
         status: "running",
+        text: r.status === "cancelled" ? "" : r.text,
+        error: undefined,
+        plan: r.plan.map((task) =>
+          task.status === "failed" && task.detail === "Stopped by user"
+            ? { ...task, status: "pending", detail: undefined }
+            : task
+        ),
         elicitation: undefined,
         integrationRequired: undefined,
       }));
