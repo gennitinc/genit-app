@@ -5,7 +5,7 @@ import {
 } from "../components/chat/messages/brand-identity-panel";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
-import { classifyPrompt, startAgentRun } from "@/lib/agents-api";
+import { startAgentRun } from "@/lib/agents-api";
 import { stripClientTimeContext } from "@/lib/utils";
 import {
   IDesignProject,
@@ -737,7 +737,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           parts: [
             {
               type: "text" as const,
-              text: messageContent,
+              text: stripClientTimeContext(messageContent),
             },
           ],
           fileAttachments: attachedFiles.length > 0 ? attachedFiles : undefined,
@@ -898,74 +898,60 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           setAttachedFiles(restoredFiles);
         }
 
-        // Use backend AI classifier to decide routing — handles typos + follow-ups correctly
-        const isAgenticPrompt = await classifyPrompt(prompt);
+        try {
+          let agentFiles: any[] = [];
 
-        if (isAgenticPrompt) {
-          try {
-            let agentFiles: any[] = [];
-
-            if (restoredFiles.length > 0) {
-              const formData = new FormData();
-              let hasUploads = false;
-              for (const file of restoredFiles as any[]) {
-                if (file instanceof File || file instanceof Blob) {
-                  formData.append("files", file);
-                  hasUploads = true;
-                }
-              }
-
-              if (hasUploads) {
-                const res = await apiResponseFileUpload.post(
-                  "/agents/upload",
-                  formData
-                );
-                agentFiles = res.data.files || [];
-              } else {
-                agentFiles = restoredFiles.map((f: any) => ({
-                  name: f.name || "file",
-                  type: f.type || "application/octet-stream",
-                  url: f.filePath || f.url,
-                  size: f.size,
-                }));
+          if (restoredFiles.length > 0) {
+            const formData = new FormData();
+            let hasUploads = false;
+            for (const file of restoredFiles as any[]) {
+              if (file instanceof File || file instanceof Blob) {
+                formData.append("files", file);
+                hasUploads = true;
               }
             }
 
-            if (selectedFiles && selectedFiles.length > 0) {
-              const selectedAgentFiles = selectedFiles.map((url: string) => {
-                const name = url.split("/").pop() || "selected-file";
-                const ext = name.split(".").pop()?.toLowerCase();
-                const type =
-                  ext === "png"
-                    ? "image/png"
-                    : ext === "mov"
-                      ? "video/quicktime"
-                      : ["mp4", "mov", "avi", "mkv", "webm"].includes(ext || "")
-                        ? `video/${ext}`
-                        : "image/jpeg";
-
-                return { name, type, url };
-              });
-              agentFiles = [...agentFiles, ...selectedAgentFiles];
+            if (hasUploads) {
+              const res = await apiResponseFileUpload.post(
+                "/agents/upload",
+                formData
+              );
+              agentFiles = res.data.files || [];
+            } else {
+              agentFiles = restoredFiles.map((f: any) => ({
+                name: f.name || "file",
+                type: f.type || "application/octet-stream",
+                url: f.filePath || f.url,
+                size: f.size,
+              }));
             }
-
-            await startAgentRun({
-              projectId: project._id,
-              prompt,
-              attachedFiles: agentFiles.length > 0 ? agentFiles : undefined,
-            });
-          } catch (err) {
-            console.error("Failed to start agent run", err);
           }
-        } else {
-          // Pass restored File objects to generateMessage
-          await generateMessage(
+
+          if (selectedFiles && selectedFiles.length > 0) {
+            const selectedAgentFiles = selectedFiles.map((url: string) => {
+              const name = url.split("/").pop() || "selected-file";
+              const ext = name.split(".").pop()?.toLowerCase();
+              const type =
+                ext === "png"
+                  ? "image/png"
+                  : ext === "mov"
+                    ? "video/quicktime"
+                    : ["mp4", "mov", "avi", "mkv", "webm"].includes(ext || "")
+                      ? `video/${ext}`
+                      : "image/jpeg";
+
+              return { name, type, url };
+            });
+            agentFiles = [...agentFiles, ...selectedAgentFiles];
+          }
+
+          await startAgentRun({
+            projectId: project._id,
             prompt,
-            restoredFiles.length > 0 ? restoredFiles : null,
-            project._id,
-            selectedFiles,
-            metadata
-          );
+            attachedFiles: agentFiles.length > 0 ? agentFiles : undefined,
+          });
+        } catch (err) {
+          console.error("Failed to start agent run", err);
         }
         // Remove draft after successful generation
         pendingDraftRef.current = null;
@@ -979,7 +965,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         clearInput();
       }
     },
-    [setAttachedFiles, generateMessage]
+    [setAttachedFiles]
   );
 
   const clearError = () => setError(null);

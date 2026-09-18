@@ -17,5 +17,5 @@ export function appendClientTimeContext(prompt: string): string {
 
 export function stripClientTimeContext(text: string): string {
   if (!text || typeof text !== "string") return text;
-  return text.replace(/\n\n\[SystemTimeContext:.*?\]/g, "").trim();
+  return text.replace(/\s*\[SystemTimeContext:[^\]]*\]\s*/g, " ").trim();
 }

@@ -16,7 +16,6 @@ import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
-import { classifyPrompt } from "@/lib/agents-api";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -89,7 +88,6 @@ export function ChatInput({
     autoResize: contextAutoResize,
     clearInput,
     removeAttachedFile,
-    generateMessage,
     isGenerating,
     project,
     error,
@@ -110,8 +108,7 @@ export function ChatInput({
   const isAgentAwaitingInput = runs.some(
     (r) => r.status === "awaiting_input" || r.status === "awaiting_integration"
   );
-  const [isClassifying, setIsClassifying] = useState(false);
-  const isAiResponding = isGenerating || isClassifying || isAgentRunning;
+  const isAiResponding = isGenerating || isAgentRunning;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputSectionRef = useRef<HTMLDivElement>(null);
@@ -229,97 +226,79 @@ export function ChatInput({
         project_id: project._id,
       });
 
-      // Ask the backend AI classifier to decide routing — reasoning-based, not keyword-based.
-      // This handles typos ("calender"), short follow-ups ("delete them", "yes", "do it"), etc.
-      setIsClassifying(true);
-      const isAgentic = await classifyPrompt(inputValue);
-      setIsClassifying(false);
-
       const formattedInput = appendClientTimeContext(inputValue);
 
-      if (isAgentic) {
-        // Build uploaded file list for the agent
-        let uploadedFiles:
-          | { name: string; type: string; url: string; size?: number }[]
-          | undefined;
+      let uploadedFiles:
+        | { name: string; type: string; url: string; size?: number }[]
+        | undefined;
 
-        if (attachedFiles.length > 0) {
-          const formData = new FormData();
-          for (const file of attachedFiles as any[]) {
-            if (file instanceof File || file instanceof Blob) {
-              formData.append("files", file);
-            } else if (file && (file.url || file.filePath)) {
-              if (!uploadedFiles) uploadedFiles = [];
-              uploadedFiles.push({
-                name: file.name || "file",
-                type: file.type || "application/octet-stream",
-                url: file.url || file.filePath,
-                size: file.size,
-              });
-            }
-          }
-
-          if (formData.has("files")) {
-            toast.loading("Uploading files...", { id: "agent-upload" });
-            try {
-              const res = await apiResponseFileUpload.post(
-                "/agents/upload",
-                formData
-              );
-              if (!uploadedFiles) uploadedFiles = [];
-              uploadedFiles.push(...res.data.files);
-              toast.dismiss("agent-upload");
-            } catch (err) {
-              toast.dismiss("agent-upload");
-              toast.error("Failed to upload files");
-              throw err;
-            }
+      if (attachedFiles.length > 0) {
+        const formData = new FormData();
+        for (const file of attachedFiles as any[]) {
+          if (file instanceof File || file instanceof Blob) {
+            formData.append("files", file);
+          } else if (file && (file.url || file.filePath)) {
+            if (!uploadedFiles) uploadedFiles = [];
+            uploadedFiles.push({
+              name: file.name || "file",
+              type: file.type || "application/octet-stream",
+              url: file.url || file.filePath,
+              size: file.size,
+            });
           }
         }
 
-        const selectedInspiration = selectedFiles[0];
-        if (
-          selectedInspiration &&
-          !uploadedFiles?.some((file) => file.url === selectedInspiration)
-        ) {
-          if (!uploadedFiles) uploadedFiles = [];
-          const extension = selectedInspiration
-            .split("?")[0]
-            .split(".")
-            .pop()
-            ?.toLowerCase();
-          uploadedFiles.push({
-            name: "selected-design-inspiration",
-            type:
-              extension === "png"
-                ? "image/png"
-                : extension === "webp"
-                  ? "image/webp"
-                  : "image/jpeg",
-            url: selectedInspiration,
-          });
+        if (formData.has("files")) {
+          toast.loading("Uploading files...", { id: "agent-upload" });
+          try {
+            const res = await apiResponseFileUpload.post(
+              "/agents/upload",
+              formData
+            );
+            if (!uploadedFiles) uploadedFiles = [];
+            uploadedFiles.push(...res.data.files);
+            toast.dismiss("agent-upload");
+          } catch (err) {
+            toast.dismiss("agent-upload");
+            toast.error("Failed to upload files");
+            throw err;
+          }
         }
-
-        await startAgent(
-          formattedInput,
-          uploadedFiles,
-          undefined,
-          brandIdentityEnabled
-        );
-      } else {
-        // Design/image/text generation flow
-        await generateMessage(
-          formattedInput,
-          attachedFiles,
-          project._id,
-          selectedFiles,
-          { useBrandIdentity: brandIdentityEnabled }
-        );
       }
+
+      const selectedInspiration = selectedFiles[0];
+      if (
+        selectedInspiration &&
+        !uploadedFiles?.some((file) => file.url === selectedInspiration)
+      ) {
+        if (!uploadedFiles) uploadedFiles = [];
+        const extension = selectedInspiration
+          .split("?")[0]
+          .split(".")
+          .pop()
+          ?.toLowerCase();
+        uploadedFiles.push({
+          name: "selected-design-inspiration",
+          type:
+            extension === "png"
+              ? "image/png"
+              : extension === "webp"
+                ? "image/webp"
+                : "image/jpeg",
+          url: selectedInspiration,
+        });
+      }
+
+      await startAgent(
+        formattedInput,
+        uploadedFiles,
+        undefined,
+        brandIdentityEnabled
+      );
 
       trackEvent("generation_request_submitted", {
         project_id: project._id,
-        routed_to: isAgentic ? "agent" : "design",
+        routed_to: "agent",
       });
 
       clearInput();
@@ -328,7 +307,6 @@ export function ChatInput({
         window.dispatchEvent(new Event("scroll-chat-to-bottom"));
       }, 100);
     } catch (error) {
-      setIsClassifying(false);
       console.error("Failed to send message:", error);
       trackEvent("generation_request_failed", {
         project_id: project?._id,
@@ -622,7 +600,6 @@ export function ChatInput({
                     isGenerating ||
                     isAgentRunning ||
                     isAgentAwaitingInput ||
-                    isClassifying ||
                     isProcessingDraft
                   }
                 >
@@ -633,7 +610,6 @@ export function ChatInput({
                   type='submit'
                   disabled={
                     isGenerating ||
-                    isClassifying ||
                     isAgentRunning ||
                     isAgentAwaitingInput ||
                     isProcessingDraft ||

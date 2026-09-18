@@ -92,28 +92,3 @@ export async function listAgentRuns(projectId: string): Promise<any[]> {
 export async function deleteAgentRun(runId: string): Promise<void> {
   await apiResponse.delete(`/agents/${runId}`);
 }
-
-export async function classifyPrompt(prompt: string): Promise<boolean> {
-  try {
-    const { data } = await apiResponse.post<{
-      success: boolean;
-      isAgentic: boolean;
-    }>("/agents/classify", { prompt });
-    console.debug(
-      "[classify] prompt:",
-      prompt.slice(0, 60),
-      "→ isAgentic:",
-      data.isAgentic
-    );
-    return !!data.isAgentic;
-  } catch (err: any) {
-    // Log full error details so we can diagnose in the browser console
-    console.warn(
-      "[classify] backend unreachable — defaulting to AGENT flow.",
-      err?.response?.status,
-      err?.response?.data ?? err?.message
-    );
-    // Fail OPEN: treat as agentic so calender/schedule/etc never silently fall through to chat
-    return true;
-  }
-}
