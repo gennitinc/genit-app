@@ -42,7 +42,7 @@ import {
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -70,6 +70,7 @@ function errorMessage(error: unknown, fallback: string) {
 
 export default function CampaignOutreachPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const {
     orgId,
     integrations,
@@ -93,6 +94,10 @@ export default function CampaignOutreachPage() {
     setLoading(true);
     try {
       const data = await getCampaignOutreach(id);
+      if (data.campaign.chatId) {
+        router.replace(`/chat/${data.campaign.chatId}`);
+        return;
+      }
       setSnapshot(data);
       setThrottle(data.campaign.outreach?.throttlePerMinute || 20);
       setSenders(data.campaign.outreach?.integrations || {});
@@ -102,7 +107,7 @@ export default function CampaignOutreachPage() {
     } finally {
       setLoading(false);
     }
-  }, [id, orgId]);
+  }, [id, orgId, router]);
 
   useEffect(() => void load(), [load]);
 

@@ -851,7 +851,6 @@ export function DesignInspirationCard({ data }: { data: any }) {
 }
 
 export function GtmCampaignCard({ data }: { data: any }) {
-  const router = useRouter();
   const campaign = data?.campaign || data?.campaigns?.[0] || data;
   const campaigns = data?.campaigns || (campaign?._id ? [campaign] : []);
   return (
@@ -874,17 +873,72 @@ export function GtmCampaignCard({ data }: { data: any }) {
           <p className='text-muted-foreground mt-1 line-clamp-2 text-[12.5px]'>
             {item.objective || item.plan?.summary}
           </p>
+          {campaigns.length === 1 && (
+            <div className='mt-3 space-y-3 text-[12.5px]'>
+              <dl className='grid grid-cols-2 gap-x-4 gap-y-2'>
+                {[
+                  ["Audience", item.audience],
+                  ["Offer", item.offer],
+                  ["Timeline", item.timeline],
+                  ["Success", item.successMetric],
+                  ["Channels", item.channels?.join(", ")],
+                  ["Budget", item.budget != null ? `$${item.budget}` : null],
+                ]
+                  .filter(([, value]) => value)
+                  .map(([label, value]) => (
+                    <div key={label}>
+                      <dt className='text-muted-foreground text-[10.5px] uppercase'>
+                        {label}
+                      </dt>
+                      <dd className='text-foreground mt-0.5'>{value}</dd>
+                    </div>
+                  ))}
+              </dl>
+
+              {item.research?.summary && (
+                <div>
+                  <div className='text-foreground font-medium'>Research</div>
+                  <p className='text-muted-foreground mt-1 leading-relaxed'>
+                    {item.research.summary}
+                  </p>
+                  {item.research.sources?.length > 0 && (
+                    <div className='mt-2 flex flex-wrap gap-x-3 gap-y-1'>
+                      {item.research.sources
+                        .slice(0, 4)
+                        .map((source: any, index: number) => (
+                          <ExternalLinkInline
+                            key={`${source.url}-${index}`}
+                            href={source.url}
+                          >
+                            {source.title}
+                          </ExternalLinkInline>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {item.plan?.funnel?.length > 0 && (
+                <div>
+                  <div className='text-foreground font-medium'>
+                    Campaign plan
+                  </div>
+                  <ol className='mt-1.5 space-y-1.5'>
+                    {item.plan.funnel.map((stage: any) => (
+                      <li key={stage.stage}>
+                        <span className='text-foreground'>{stage.stage}:</span>{" "}
+                        <span className='text-muted-foreground'>
+                          {stage.goal}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
-      <Button
-        variant='outline'
-        size='sm'
-        className='mt-3 h-7 px-2 text-xs active:scale-[0.97]'
-        onClick={() => router.push("/visuals/campaigns")}
-      >
-        <BarChart3 className='h-3 w-3' />
-        <LocalizedText text='Open campaign dashboard' />
-      </Button>
     </AgentCard>
   );
 }
@@ -924,20 +978,33 @@ export function GtmLeadsCard({ data }: { data: any }) {
 
 export function GtmOutboundCard({ data }: { data: any }) {
   const jobs: any[] = data?.jobs || [];
+  const recipients: any[] = data?.recipients || [];
+  const stats = data?.stats || {};
+  const scheduled = data?.scheduled ?? stats.scheduled ?? jobs.length;
+  const imported = stats.imported ?? recipients.length;
   return (
     <AgentCard
       icon={<Mail className='h-3.5 w-3.5' />}
-      title='Outbound scheduled'
-      meta={`${jobs.length} email${jobs.length === 1 ? "" : "s"}`}
+      title={scheduled > 0 ? "Campaign outreach" : "Campaign recipients"}
+      meta={`${scheduled || imported} ${scheduled > 0 ? "scheduled" : "ready"}`}
       tone='success'
     >
-      <p className='text-muted-foreground text-[12.5px]'>
-        <LocalizedText
-          text={
-            "Personalized sequence jobs were queued. Suppressed, unsubscribed, and invalid leads were skipped."
-          }
-        />
-      </p>
+      <div className='grid grid-cols-2 gap-2 text-[12.5px]'>
+        {Object.entries(stats).map(([label, value]) => (
+          <div key={label} className='rounded-md border px-2.5 py-2'>
+            <div className='text-muted-foreground capitalize'>{label}</div>
+            <div className='text-foreground mt-0.5 font-semibold'>
+              {String(value)}
+            </div>
+          </div>
+        ))}
+      </div>
+      {data?.rejected?.length > 0 && (
+        <p className='text-muted-foreground mt-2 text-[12px]'>
+          {data.rejected.length} recipient(s) were skipped; their reasons remain
+          available in this campaign’s chat history.
+        </p>
+      )}
     </AgentCard>
   );
 }

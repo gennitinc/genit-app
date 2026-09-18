@@ -55,6 +55,12 @@ export type GtmCampaign = {
   audience?: string;
   offer?: string;
   budget?: number;
+  timeline?: string;
+  successMetric?: string;
+  research?: {
+    summary: string;
+    sources: Array<{ title: string; url: string; insight?: string }>;
+  };
   status: "draft" | "active" | "paused" | "completed";
   channels: string[];
   plan: {
