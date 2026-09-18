@@ -33,6 +33,30 @@ export function ElicitationCard({
   };
 
   const hasOptions = !!elicitation.options && elicitation.options.length > 0;
+  const isVisualSizePicker = ["image_size", "video_size"].includes(
+    elicitation.presentation || ""
+  );
+
+  const imageSizes: Record<
+    string,
+    { orientation: string; dimensions: string }
+  > = {
+    "1:1": { orientation: "Square", dimensions: "1024 × 1024" },
+    "4:5": { orientation: "Portrait", dimensions: "1024 × 1280" },
+    "2:3": { orientation: "Tall portrait", dimensions: "1024 × 1536" },
+    "9:16": { orientation: "Story", dimensions: "1080 × 1920" },
+    "3:2": { orientation: "Landscape", dimensions: "1536 × 1024" },
+    "16:9": { orientation: "Wide", dimensions: "1920 × 1080" },
+    "4:3": { orientation: "Standard", dimensions: "1440 × 1080" },
+  };
+  const videoSizes: typeof imageSizes = {
+    "1:1": { orientation: "Square", dimensions: "1080 × 1080" },
+    "9:16": { orientation: "Vertical", dimensions: "1080 × 1920" },
+    "16:9": { orientation: "Landscape", dimensions: "1920 × 1080" },
+    "4:3": { orientation: "Standard", dimensions: "1440 × 1080" },
+  };
+  const visualSizes =
+    elicitation.presentation === "video_size" ? videoSizes : imageSizes;
 
   return (
     <AgentCard
@@ -60,12 +84,17 @@ export function ElicitationCard({
 
       {hasOptions ? (
         <div
-          className='mt-3 flex flex-wrap gap-1.5'
+          className={
+            isVisualSizePicker
+              ? "mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3"
+              : "mt-3 flex flex-wrap gap-1.5"
+          }
           role='radiogroup'
           aria-label='Answer choices'
         >
           {elicitation.options!.map((opt) => {
             const isPicked = pickedValue === opt.value;
+            const imageSize = visualSizes[opt.value];
             return (
               <button
                 key={opt.value}
@@ -76,13 +105,42 @@ export function ElicitationCard({
                 onClick={() => submit(opt.value)}
                 title={opt.description}
                 className={
-                  isPicked
-                    ? "bg-foreground text-background inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60"
-                    : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                  isVisualSizePicker
+                    ? isPicked
+                      ? "bg-foreground text-background flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60"
+                      : "border-border/70 bg-background text-foreground hover:bg-accent flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                    : isPicked
+                      ? "bg-foreground text-background inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60"
+                      : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 }
               >
                 {isPicked && submitting && <LoadingFileLoader size={12} />}
-                {opt.label}
+                {isVisualSizePicker && imageSize ? (
+                  <>
+                    <span
+                      className='block max-h-9 max-w-12 rounded-[2px] border border-current/60'
+                      style={{
+                        aspectRatio: opt.value.replace(":", "/"),
+                        height:
+                          Number(opt.value.split(":")[0]) <=
+                          Number(opt.value.split(":")[1])
+                            ? "36px"
+                            : "auto",
+                        width:
+                          Number(opt.value.split(":")[0]) >
+                          Number(opt.value.split(":")[1])
+                            ? "48px"
+                            : "auto",
+                      }}
+                    />
+                    <span>{imageSize.orientation}</span>
+                    <span className='opacity-65'>
+                      {opt.value} · {imageSize.dimensions}
+                    </span>
+                  </>
+                ) : (
+                  opt.label
+                )}
               </button>
             );
           })}

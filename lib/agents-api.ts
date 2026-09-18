@@ -32,6 +32,7 @@ export interface AgentToolCall {
 export interface AgentElicitation {
   question: string;
   options?: { value: string; label: string; description?: string }[];
+  presentation?: "buttons" | "image_size" | "video_size";
 }
 
 export interface AgentIntegrationRequired {

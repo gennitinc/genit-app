@@ -485,6 +485,7 @@ export function ContactListCard({ data }: { data: any }) {
 // ─── Generated Design/Video ───
 export function GeneratedDesignCard({ data }: { data: any }) {
   const isVideo = data.url?.endsWith(".mp4") || data.message?.includes("video");
+  const isGeneratedImage = !isVideo && data.assetKind === "image";
   const { project, setFocusedGenerationId } = useProjectDesign();
   const { user } = useUserContext();
   const router = useRouter();
@@ -667,7 +668,13 @@ export function GeneratedDesignCard({ data }: { data: any }) {
           <FileIcon className='h-3.5 w-3.5' />
         )
       }
-      title={isVideo ? "Generated Video" : "Generated Design"}
+      title={
+        isVideo
+          ? "Generated Video"
+          : isGeneratedImage
+            ? "Generated Image"
+            : "Generated Design"
+      }
       tone='success'
       meta={
         downloadUrl ? (
@@ -686,7 +693,8 @@ export function GeneratedDesignCard({ data }: { data: any }) {
       }
     >
       <div className='text-foreground text-[13.5px] font-medium'>
-        {data.name || "Design generated"}
+        {data.name ||
+          (isGeneratedImage ? "Image generated" : "Design generated")}
       </div>
       {isVideo ? (
         <video

@@ -1,14 +1,17 @@
 "use client";
 
 import type {
+  AgentAttachedFile,
   AgentElicitation,
   AgentIntegrationRequired,
   AgentRunStatus,
   AgentTask,
   AgentToolCall,
-  AgentAttachedFile,
 } from "@/lib/agents-api";
-import { listAgentRuns, deleteAgentRun as deleteAgentRunApi } from "@/lib/agents-api";
+import {
+  deleteAgentRun as deleteAgentRunApi,
+  listAgentRuns,
+} from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import { Socket, io as ioClient } from "socket.io-client";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -178,7 +181,11 @@ export function useAgentRuns(projectId: string | undefined) {
       if (!matchProject(p)) return;
       upsert(p.runId, undefined, (r) => ({
         ...r,
-        elicitation: { question: p.question, options: p.options },
+        elicitation: {
+          question: p.question,
+          options: p.options,
+          presentation: p.presentation,
+        },
         status: "awaiting_input",
       }));
     };
@@ -261,11 +268,7 @@ export function useAgentRuns(projectId: string | undefined) {
 
   // Insert a placeholder so the UI can render immediately after the POST.
   const registerNewRun = useCallback(
-    (
-      runId: string,
-      prompt: string,
-      attachedFiles?: AgentAttachedFile[]
-    ) => {
+    (runId: string, prompt: string, attachedFiles?: AgentAttachedFile[]) => {
       upsert(runId, prompt, (r) => ({
         ...r,
         prompt,
