@@ -81,7 +81,7 @@ const UserPopOver = () => {
         </Avatar>
       </PopoverTrigger>
       <PopoverContent
-        className='bg-background/95 border-border w-64 rounded-xl border p-0 shadow-xl backdrop-blur-sm'
+        className='bg-background/95 border-border w-64 rounded-md border p-0 shadow-xl backdrop-blur-sm'
         align='end'
       >
         <div className='p-4'>
