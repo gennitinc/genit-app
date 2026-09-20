@@ -224,7 +224,7 @@ export const LandingBrandDNA = () => {
                     <div className='rounded-lg bg-black/5 p-3 ring-1 ring-black/5 dark:bg-black/40 dark:ring-white/5'>
                       <p className='text-muted-foreground line-clamp-3 text-xs italic dark:text-white/60'>
                         {t(
-                          "&quot;We build tools that get out of your way. Our software empowers creators to focus on the art, while we handle the boring stuff. Stop manually updating spreadsheets and start scaling your vision.&quot;"
+                          "We build tools that get out of your way. Our software empowers creators to focus on the art, while we handle the boring stuff. Stop manually updating spreadsheets and start scaling your vision.&quot;"
                         )}
                       </p>
                     </div>
