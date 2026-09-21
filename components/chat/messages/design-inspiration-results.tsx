@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Carousel,
   type CarouselApi,
@@ -16,6 +17,8 @@ import { motion } from "framer-motion";
 import {
   CheckSquare2,
   Globe2,
+  Pause,
+  Play,
   Square,
   ZoomIn,
 } from "lucide-react";
@@ -42,6 +45,8 @@ interface DesignInspirationResultsProps {
   onSelect?: (image: string) => void | Promise<void>;
 }
 
+const AUTO_SELECT_SECONDS = 10;
+
 export function DesignInspirationResults({
   results,
   query,
@@ -55,8 +60,14 @@ export function DesignInspirationResults({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+  const [countdown, setCountdown] = useState(AUTO_SELECT_SECONDS);
+  const [isCountdownPaused, setIsCountdownPaused] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const selectionInFlight = useRef(false);
+  const selectionCommitted = useRef(false);
+  const storageKey = project?._id
+    ? `design-inspiration-selection:${project._id}`
+    : null;
 
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -72,6 +83,7 @@ export function DesignInspirationResults({
         ? [historicalInspiration]
         : [];
   const hasAnySelection = effectiveSelectedFiles.length > 0;
+  const resultKey = safeResults.map((pin) => pin.image).join("|");
 
   // Remove chunking - we want a continuous carousel
 
@@ -86,6 +98,8 @@ export function DesignInspirationResults({
     const previous = effectiveSelectedFiles.slice(0, 1);
     const next = previous.includes(image) ? [] : [image];
     const nextInspiration = next[0] || null;
+    selectionCommitted.current = Boolean(nextInspiration);
+    setIsCountdownPaused(Boolean(nextInspiration));
 
     setSelectedFiles(next);
     setProject((current) =>
@@ -99,16 +113,19 @@ export function DesignInspirationResults({
           }
         : current
     );
+    if (storageKey) {
+      nextInspiration
+        ? window.localStorage.setItem(storageKey, nextInspiration)
+        : window.localStorage.removeItem(storageKey);
+    }
+
     let saved = false;
     try {
       await apiResponse.patch(`/project/${project?._id}/inspiration`, {
         inspirationUrl: nextInspiration,
       });
       saved = true;
-      if (nextInspiration && onSelect) {
-        await onSelect(nextInspiration);
-        setSelectedFiles([]);
-      }
+      if (nextInspiration) await onSelect?.(nextInspiration);
     } catch (error) {
       if (saved) {
         console.error("Failed to continue after selecting inspiration", error);
@@ -116,6 +133,13 @@ export function DesignInspirationResults({
       }
       console.error("Failed to save selected design inspiration", error);
       setSelectedFiles(previous);
+      selectionCommitted.current = Boolean(previous[0]);
+      setIsCountdownPaused(Boolean(previous[0]));
+      if (storageKey) {
+        previous[0]
+          ? window.localStorage.setItem(storageKey, previous[0])
+          : window.localStorage.removeItem(storageKey);
+      }
       setProject((current) =>
         current
           ? {
@@ -132,6 +156,47 @@ export function DesignInspirationResults({
       setIsSelecting(false);
     }
   };
+
+  useEffect(() => {
+    if (!storageKey || selectedFiles.length) return;
+    const saved =
+      persistedInspiration || window.localStorage.getItem(storageKey);
+    if (saved && safeResults.some((pin) => pin.image === saved)) {
+      setSelectedFiles([saved]);
+    }
+  }, [
+    persistedInspiration,
+    safeResults,
+    selectedFiles.length,
+    setSelectedFiles,
+    storageKey,
+  ]);
+
+  useEffect(() => {
+    setCountdown(AUTO_SELECT_SECONDS);
+    setIsCountdownPaused(false);
+  }, [query, resultKey]);
+
+  useEffect(() => {
+    if (
+      selectionCommitted.current ||
+      hasAnySelection ||
+      isCountdownPaused ||
+      !safeResults[0]
+    )
+      return;
+
+    if (countdown <= 0) {
+      void handleSelect(safeResults[0].image);
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => setCountdown((seconds) => seconds - 1),
+      1000
+    );
+    return () => window.clearTimeout(timer);
+  }, [countdown, hasAnySelection, isCountdownPaused, resultKey]);
 
   // Sync carousel position when dialog opens
   useEffect(() => {
@@ -154,6 +219,35 @@ export function DesignInspirationResults({
           </span>
         </p>
       </div>
+
+      {!hasAnySelection && (
+        <div className='flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2'>
+          <p className='text-muted-foreground text-[11px]'>
+            {isCountdownPaused
+              ? `Paused at ${countdown}s. Take your time choosing an inspiration.`
+              : `Choose within ${countdown}s, or AI will select the highest-ranked match.`}
+          </p>
+          <Button
+            type='button'
+            size='sm'
+            className='h-7 shrink-0 gap-1.5 rounded-full bg-indigo-600 px-3 text-[11px] hover:bg-indigo-700'
+            variant={isCountdownPaused ? "default" : "outline"}
+            onClick={() => setIsCountdownPaused((paused) => !paused)}
+            aria-label={
+              isCountdownPaused
+                ? "Resume AI selection countdown"
+                : "Pause AI selection countdown"
+            }
+          >
+            {isCountdownPaused ? (
+              <Play className='h-3 w-3' />
+            ) : (
+              <Pause className='h-3 w-3' />
+            )}
+            {isCountdownPaused ? "Play" : "Pause"}
+          </Button>
+        </div>
+      )}
 
       {/* ─── Design Grid Carousel (fixed height, no overflow) ─── */}
       <div ref={gridRef} className='w-full'>
