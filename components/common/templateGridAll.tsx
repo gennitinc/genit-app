@@ -78,6 +78,7 @@ type TemplateItem = {
   author?: string;
   isUserGenerated?: boolean;
   isPendingPublished?: boolean;
+  isLiveInspiration?: boolean;
 };
 
 function TemplateImage({ template }: { template: TemplateItem }) {
@@ -108,7 +109,9 @@ const keepPendingPublished = (
   const fetchedUrls = new Set(fetched.map((item) => item.src));
   return [
     ...current.filter(
-      (item) => item.isPendingPublished && !fetchedUrls.has(item.src)
+      (item) =>
+        (item.isPendingPublished || item.isLiveInspiration) &&
+        !fetchedUrls.has(item.src)
     ),
     ...fetched,
   ];
@@ -135,7 +138,6 @@ export default function TemplateGridAll() {
   const [templates, setTemplates] = useState<TemplateItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [new_error, setNewError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState(20);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   // Pagination & search
@@ -144,7 +146,7 @@ export default function TemplateGridAll() {
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchParams = useSearchParams();
-  const [pins, setPins] = useState([]);
+  const kimiFetchStarted = useRef(false);
 
   const [designType, setDesigntype] = useState<ImageDesignType[]>([
     "logo",
@@ -159,38 +161,45 @@ export default function TemplateGridAll() {
   ]);
 
   const fetchPins = async () => {
-    setLoading(true);
-    setNewError(null);
-
     try {
       const randomDesignType =
         designType[Math.floor(Math.random() * designType.length)];
+      const response = await fetch("/api/kimi-webbridge/pinterest", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          query: `${randomDesignType.replaceAll("_", " ")} design inspiration`,
+          limit: 12,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.error);
 
-      // 👇 Fetch from your Express backend with randomized query and category
-      const res = await apiResponse.get(
-        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const data = await res.data();
-
-      if (data.success) {
-        setPins(data.pins || []);
-      } else {
-        setNewError(data.error || "Failed to load");
-      }
-    } catch (err) {
-      setNewError("Network error");
-    } finally {
-      setLoading(false);
+      const liveTemplates: TemplateItem[] = data.pins.map((pin: any) => ({
+        id: `pinterest-${pin.id}`,
+        src: pin.image,
+        alt: pin.alt,
+        category: randomDesignType,
+        author: "Pinterest",
+        isLiveInspiration: true,
+      }));
+      setTemplates((current) => {
+        const liveUrls = new Set(liveTemplates.map((item) => item.src));
+        return [
+          ...liveTemplates,
+          ...current.filter((item) => !liveUrls.has(item.src)),
+        ];
+      });
+    } catch (error) {
+      console.info("Kimi WebBridge Pinterest search unavailable:", error);
     }
   };
 
-  // useEffect(() => {
-  //   fetchPins();
-  // }, []);
+  useEffect(() => {
+    if (kimiFetchStarted.current) return;
+    kimiFetchStarted.current = true;
+    void fetchPins();
+  }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(

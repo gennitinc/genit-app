@@ -213,6 +213,7 @@ export function useAgentRuns(projectId: string | undefined) {
       upsert(p.runId, undefined, (r) => ({
         ...r,
         status: "running",
+        thinkingActive: false,
         text: r.status === "cancelled" ? "" : r.text,
         error: undefined,
         plan: r.plan.map((task) =>
@@ -229,6 +230,7 @@ export function useAgentRuns(projectId: string | undefined) {
       upsert(p.runId, undefined, (r) => ({
         ...r,
         status: p.status,
+        thinkingActive: false,
         text: p.finalText || r.text,
         error: p.error,
         // When run resumes (e.g. integration_connected), clear the awaiting flags.

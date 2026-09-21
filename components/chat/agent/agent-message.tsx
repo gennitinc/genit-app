@@ -4,6 +4,7 @@ import { DeleteConfirmation } from "../messages/delete-confirmation";
 import { DesignInspirationResults } from "../messages/design-inspiration-results";
 import { AgentCard } from "./agent-card";
 import { AgentPlan } from "./agent-plan";
+import { AgentThinkingStream } from "./agent-thinking-stream";
 import { AutomationWorkflowSummaryCard } from "./automation-cards";
 import { CalendarEventsCard } from "./calendar-events-card";
 import { ConnectIntegrationInline } from "./connect-integration-inline";
@@ -425,6 +426,11 @@ export function AgentMessage({
       >
         <MessageContent variant='ai' className='bg-transparent p-0'>
           <div className='space-y-1'>
+            <AgentThinkingStream
+              text={run.thinking}
+              active={run.thinkingActive && run.status === "running"}
+            />
+
             {/* Plan — only shown while running or if not all done */}
             <AgentPlan tasks={run.plan} />
 

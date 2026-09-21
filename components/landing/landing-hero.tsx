@@ -6,13 +6,10 @@ import { AnimatedShinyText } from "../ui/animated-shinny-text";
 import { BorderBeam } from "../ui/border-beam";
 import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
 import {
-  BrevoBrand,
   FacebookBrand,
   InstagramBrand,
   LinkedinBrand,
   TikTokBrand,
-  XBrand,
-  YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { PluginsFlow } from "@/components/plugins/plugins-flow";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +20,25 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Loading from "@/utils/Loading";
-import { ArrowRightIcon, ChevronRight, Play, SendIcon, X } from "lucide-react";
+import {
+  ArrowRightIcon,
+  BellRing,
+  CalendarClock,
+  CheckCircle2,
+  ChevronRight,
+  CircleFadingArrowUp,
+  Clock3,
+  ImageIcon,
+  Palette,
+  Play,
+  SendIcon,
+  Share2,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -71,7 +86,17 @@ const reelsVideos = [
   },
 ];
 
-const messages = [
+type LandingChatMessage = {
+  type: "user" | "ai";
+  text: string;
+  image?: string;
+  icons?: Array<"instagram" | "facebook" | "x" | "linkedin" | "brevo">;
+};
+
+type LandingWidgetKind =
+  "brief" | "plan" | "approval" | "results" | "monitoring";
+
+const messages: LandingChatMessage[] = [
   {
     type: "user",
     text: "Generate a brand-tailored promotional visual for our upcoming product launch.",
@@ -126,6 +151,264 @@ const messages = [
     icons: ["brevo"],
   },
 ];
+
+const widgetsByMessageIndex: Partial<Record<number, LandingWidgetKind>> = {
+  1: "brief",
+  3: "approval",
+  5: "results",
+  7: "plan",
+  9: "monitoring",
+};
+
+function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
+  const { t } = useLanguage();
+  const channels = [
+    {
+      label: "Instagram",
+      icon: <InstagramBrand className='size-6' />,
+    },
+    {
+      label: "Facebook",
+      icon: <FacebookBrand className='size-6' />,
+    },
+    {
+      label: "LinkedIn",
+      icon: <LinkedinBrand className='size-6' />,
+    },
+  ];
+
+  if (kind === "brief") {
+    return (
+      <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
+        <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
+          <div className='flex items-center gap-2'>
+            <span className='flex size-7 items-center justify-center rounded-lg bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'>
+              <Target className='size-3.5' />
+            </span>
+            <div>
+              <p className='text-[11px] font-semibold'>
+                {t("Campaign context")}
+              </p>
+              <p className='text-[9px] text-neutral-500'>
+                {t("Synced from your brand workspace")}
+              </p>
+            </div>
+          </div>
+          <CheckCircle2 className='size-4 text-emerald-500' />
+        </div>
+        <div className='space-y-1.5 p-3'>
+          {[
+            [
+              "Goal",
+              "New collection launch",
+              <Target key='goal' className='size-3.5' />,
+            ],
+            [
+              "Audience",
+              "Style-conscious professionals",
+              <Users key='audience' className='size-3.5' />,
+            ],
+            [
+              "Assets",
+              "12 brand-approved files",
+              <ImageIcon key='assets' className='size-3.5' />,
+            ],
+          ].map(([label, value, icon]) => (
+            <div
+              key={String(label)}
+              className='flex items-center gap-2 rounded-lg bg-white px-2.5 py-2 dark:bg-neutral-950'
+            >
+              <span className='text-neutral-500'>{icon}</span>
+              <div className='min-w-0 flex-1'>
+                <p className='text-[9px] text-neutral-500'>
+                  {t(String(label))}
+                </p>
+                <p className='truncate text-[10px] font-medium'>
+                  {t(String(value))}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "plan") {
+    return (
+      <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
+        <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
+          <div className='flex items-center gap-2'>
+            <span className='flex size-7 items-center justify-center rounded-lg bg-neutral-900 text-white shadow-sm dark:bg-neutral-100 dark:text-neutral-900'>
+              <CircleFadingArrowUp  className='size-3.5' />
+            </span>
+            <div>
+              <p className='text-[11px] font-semibold'>{t("Agent plan")}</p>
+              <p className='text-[9px] text-neutral-500'>
+                {t("3 coordinated actions")}
+              </p>
+            </div>
+          </div>
+          <span className='rounded-full bg-neutral-200 px-2 py-1 text-[9px] font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300'>
+            67%
+          </span>
+        </div>
+        <div className='h-1 bg-neutral-200 dark:bg-neutral-800'>
+          <div className='h-full w-2/3 bg-neutral-600 dark:bg-neutral-400' />
+        </div>
+        <div className='grid grid-cols-3 gap-2 p-3'>
+          {[
+            ["Creative", "done", <Palette key='creative' className='size-4' />],
+            [
+              "Channels",
+              "active",
+              <Share2 key='channels' className='size-4' />,
+            ],
+            [
+              "Schedule",
+              "queued",
+              <CalendarClock key='schedule' className='size-4' />,
+            ],
+          ].map(([label, status, icon]) => (
+            <div
+              key={String(label)}
+              className='relative flex min-w-0 flex-col items-center rounded-lg border border-neutral-200 bg-white p-2 text-center dark:border-neutral-700 dark:bg-neutral-950'
+            >
+              <span className='mb-1.5 flex size-7 items-center justify-center rounded-md bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200'>
+                {icon}
+              </span>
+              <span className='text-[9px] font-medium'>{t(String(label))}</span>
+              <span className='mt-1'>
+                {status === "done" ? (
+                  <CheckCircle2 className='size-3 text-emerald-500' />
+                ) : status === "active" ? (
+                  <span className='block size-3 animate-spin rounded-full border-2 border-neutral-500 border-t-transparent' />
+                ) : (
+                  <Clock3 className='size-3 text-neutral-400' />
+                )}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "approval") {
+    return (
+      <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
+        <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2 dark:border-neutral-700'>
+          <p className='text-[11px] font-semibold'>{t("Channels")}</p>
+          <span className='rounded-full bg-neutral-200 px-2 py-1 text-[9px] font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300'>
+            {t("Approve")}
+          </span>
+        </div>
+        <div className='grid grid-cols-3 gap-2 p-3'>
+          {channels.map((channel) => (
+            <div
+              key={channel.label}
+              className='relative flex flex-col items-center rounded-lg border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-950'
+            >
+              {channel.icon}
+              <span className='mt-1.5 max-w-full truncate text-[9px] font-medium'>
+                {channel.label}
+              </span>
+              {/* <CheckCircle2 className='absolute top-1.5 right-1.5 size-3 text-emerald-500' /> */}
+            </div>
+          ))}
+        </div>
+        <div className='mx-3 mb-3 flex items-center justify-between rounded-lg bg-white/80 px-3 py-2 dark:bg-neutral-950/80'>
+          <span className='flex items-center gap-1.5 text-[10px] text-neutral-500'>
+            <CalendarClock className='size-3.5' />
+            {t("Tues. · 10:00 AM")}
+          </span>
+          <span className='bg-foreground text-background rounded-md px-2.5 py-1 text-[9px] font-semibold'>
+            {t("Approve")}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (kind === "monitoring") {
+    return (
+      <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
+        <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
+          <div className='flex items-center gap-2 text-[11px] font-semibold'>
+            <BellRing className='size-3.5' />
+            {t("Workflow")}
+          </div>
+          <span className='flex items-center gap-1 text-[9px] text-neutral-500'>
+            <span className='size-1.5 animate-pulse rounded-full bg-emerald-500' />
+            {t("Always on")}
+          </span>
+        </div>
+        <div className='space-y-1.5 p-3'>
+          {[
+            ["Budget pacing", "Within target"],
+            ["Creative fatigue", "Watching"],
+            ["Approval requests", "Notify me"],
+          ].map(([label, status]) => (
+            <div
+              key={label}
+              className='flex items-center justify-between rounded-lg bg-white px-2.5 py-2 dark:bg-neutral-950'
+            >
+              <span className='text-[10px] font-medium'>{t(label)}</span>
+              <span className='flex items-center gap-1 text-[9px] text-neutral-500'>
+                <CheckCircle2 className='size-3 text-emerald-500' />
+                {t(status)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
+      <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
+        <div className='flex items-center gap-2 text-[11px] font-semibold text-neutral-700 dark:text-neutral-200'>
+          <span className='size-2 animate-pulse rounded-full bg-emerald-500' />
+          {t("Campaign live")}
+        </div>
+        <div className='flex items-center gap-1 text-[9px] font-medium text-neutral-500'>
+          <TrendingUp className='size-3.5' />
+          {t("Optimizing")}
+        </div>
+      </div>
+      <div className='grid grid-cols-3 gap-2 p-3 pb-2'>
+        {[
+          ["Reach", "24.8K"],
+          ["Clicks", "1,284"],
+          ["CTR", "5.2%"],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className='rounded-md bg-white/80 p-2 dark:bg-neutral-900/70'
+          >
+            <p className='text-[10px] text-neutral-500'>{t(label)}</p>
+            <p className='mt-0.5 flex items-center gap-1 text-xs font-semibold text-neutral-800 dark:text-neutral-100'>
+              {value}
+              {label === "CTR" && (
+                <TrendingUp className='size-3 text-emerald-500' />
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className='mx-3 mb-3 flex h-14 items-end gap-1 rounded-lg bg-white/80 px-3 pt-2 dark:bg-neutral-950/70'>
+        {[28, 42, 35, 54, 48, 68, 62, 82, 74, 94].map((height, index) => (
+          <span
+            key={index}
+            className='flex-1 rounded-t-sm bg-neutral-500/60'
+            style={{ height: `${height}%` }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function InputLandingMediaChat() {
   const { t } = useLanguage();
@@ -384,12 +667,81 @@ const LandingHero = () => {
   }));
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
-  const visibleMessages = localizedMessages.length;
-  const isTyping = false;
-  const streamingText = Object.fromEntries(
-    localizedMessages.map((message, index) => [index, message.text])
+  const [visibleMessages, setVisibleMessages] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [streamingText, setStreamingText] = useState<Record<number, string>>(
+    {}
   );
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [visibleMessages, streamingText, isTyping]);
+
+  useEffect(() => {
+    let messageIndex = 0;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+
+    const schedule = (callback: () => void, delay: number) => {
+      timeoutId = setTimeout(callback, delay);
+    };
+
+    const showNextMessage = () => {
+      if (messageIndex >= localizedMessages.length) {
+        setVisibleMessages(0);
+        setStreamingText({});
+        messageIndex = 0;
+        schedule(showNextMessage, 2000);
+        return;
+      }
+
+      const currentMessageIndex = messageIndex;
+      const message = localizedMessages[currentMessageIndex];
+      if (message.type === "user") {
+        setVisibleMessages(currentMessageIndex + 1);
+        messageIndex = currentMessageIndex + 1;
+        schedule(showNextMessage, 2000);
+        return;
+      }
+
+      setIsTyping(true);
+      schedule(() => {
+        setIsTyping(false);
+        setVisibleMessages(currentMessageIndex + 1);
+        let characterIndex = 0;
+        setStreamingText((current) => ({
+          ...current,
+          [currentMessageIndex]: "",
+        }));
+
+        intervalId = setInterval(() => {
+          characterIndex += 1;
+          setStreamingText((current) => ({
+            ...current,
+            [currentMessageIndex]: message.text.slice(0, characterIndex),
+          }));
+
+          if (characterIndex >= message.text.length) {
+            clearInterval(intervalId);
+            intervalId = undefined;
+            messageIndex = currentMessageIndex + 1;
+            schedule(showNextMessage, message.image ? 1500 : 1000);
+          }
+        }, 30);
+      }, 1000);
+    };
+
+    schedule(showNextMessage, 800);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [language]);
 
   const demoContent = (
     <iframe
@@ -428,8 +780,8 @@ const LandingHero = () => {
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
-                Agents that plan campaigns, create content, automate workflows, publish
-                across channels, manage, and optimize your brand growth. 
+                Agents that plan campaigns, create content, automate workflows,
+                publish across channels, manage, and optimize your brand growth.
               </p>
               <div className='mt-7.5 flex gap-5'>
                 <Link
@@ -825,6 +1177,7 @@ const LandingHero = () => {
               {localizedMessages.map((message, index) => {
                 const isVisible = index < visibleMessages;
                 const isUser = message.type === "user";
+                const widget = widgetsByMessageIndex[index];
                 const streamedText = streamingText[index];
                 const isStreaming =
                   isVisible &&
@@ -839,6 +1192,11 @@ const LandingHero = () => {
                       : "";
                 const showImage =
                   message.image &&
+                  isVisible &&
+                  !isStreaming &&
+                  streamedText === message.text;
+                const showWidget =
+                  widget &&
                   isVisible &&
                   !isStreaming &&
                   streamedText === message.text;
@@ -857,36 +1215,15 @@ const LandingHero = () => {
                     ) : (
                       <div className='max-w-[80%] space-y-2'>
                         <div className='rounded-lg rounded-tl-sm border border-neutral-200 bg-white px-4 py-2.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800'>
-                          <p className='text-sm text-neutral-700 dark:text-neutral-200'>
+                          <p className='text-sm whitespace-pre-line text-neutral-700 dark:text-neutral-200'>
                             {displayText}
                             {isStreaming && (
                               <span className='ml-1 inline-block h-4 w-0.5 animate-pulse bg-neutral-700 dark:bg-neutral-300' />
                             )}
                           </p>
-                          {!isStreaming && message.icons && (
-                            <div className='animate-in fade-in zoom-in mt-3 flex gap-2 duration-500'>
-                              {message.icons.map((icon) => (
-                                <div
-                                  key={icon}
-                                  className='flex h-7 w-7 items-center justify-center rounded-md bg-neutral-100 dark:bg-neutral-900'
-                                >
-                                  {icon === "instagram" && (
-                                    <InstagramBrand className='h-4 w-4' />
-                                  )}
-                                  {icon === "facebook" && (
-                                    <FacebookBrand className='h-4 w-4' />
-                                  )}
-                                  {icon === "x" && (
-                                    <XBrand className='h-4 w-4' />
-                                  )}
-                                  {icon === "linkedin" && (
-                                    <LinkedinBrand className='h-4 w-4' />
-                                  )}
-                                  {icon === "brevo" && (
-                                    <BrevoBrand className='h-4 w-4' />
-                                  )}
-                                </div>
-                              ))}
+                          {showWidget && (
+                            <div className='animate-in fade-in slide-in-from-bottom-1 duration-500'>
+                              <LandingAgentWidget kind={widget} />
                             </div>
                           )}
                         </div>
