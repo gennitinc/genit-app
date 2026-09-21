@@ -114,17 +114,6 @@ const keepPendingPublished = (
   ];
 };
 
-type ImageDesignType =
-  | "logo"
-  | "flier"
-  | "poster"
-  | "youtube_thumbnail"
-  | "instagram_post"
-  | "generic_design"
-  | "banner"
-  | "facebook_post"
-  | "facebook_cover";
-
 export default function TemplateGridAll() {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -135,7 +124,6 @@ export default function TemplateGridAll() {
   const [templates, setTemplates] = useState<TemplateItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [new_error, setNewError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState(20);
   const [isBrandSettingsOpen, setIsBrandSettingsOpen] = useState(false);
   // Pagination & search
@@ -144,53 +132,6 @@ export default function TemplateGridAll() {
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchParams = useSearchParams();
-  const [pins, setPins] = useState([]);
-
-  const [designType, setDesigntype] = useState<ImageDesignType[]>([
-    "logo",
-    "flier",
-    // "poster",
-    "youtube_thumbnail",
-    // "instagram_post",
-    // "generic_design",
-    "banner",
-    // "facebook_post",
-    // "facebook_cover",
-  ]);
-
-  const fetchPins = async () => {
-    setLoading(true);
-    setNewError(null);
-
-    try {
-      const randomDesignType =
-        designType[Math.floor(Math.random() * designType.length)];
-
-      // 👇 Fetch from your Express backend with randomized query and category
-      const res = await apiResponse.get(
-        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(randomDesignType)}&limit=12&category=${randomDesignType}`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const data = await res.data();
-
-      if (data.success) {
-        setPins(data.pins || []);
-      } else {
-        setNewError(data.error || "Failed to load");
-      }
-    } catch (err) {
-      setNewError("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPins();
-  }, []);
 
   // Fetch a page of templates
   const fetchTemplatesPage = useCallback(

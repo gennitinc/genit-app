@@ -4,10 +4,28 @@ import { MainContent } from "@/components/layout/main-content";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/sonner";
 import withAuth from "@/helper/hoc/withAuth";
-import { useRef } from "react";
+import { apiResponse } from "@/utils/apiResponse";
+import { useEffect, useRef } from "react";
+
+const DESIGN_TYPES = ["logo", "flier", "youtube_thumbnail", "banner"];
 
 function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrapeStartedRef = useRef(false);
+
+  useEffect(() => {
+    if (scrapeStartedRef.current) return;
+    scrapeStartedRef.current = true;
+
+    const designType =
+      DESIGN_TYPES[Math.floor(Math.random() * DESIGN_TYPES.length)];
+
+    void apiResponse
+      .get(
+        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(designType)}&limit=12&category=${designType}`
+      )
+      .catch((error) => console.error("Failed to scrape Pinterest:", error));
+  }, []);
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>

@@ -15,7 +15,7 @@ export function MainContent() {
       </div>
 
       {/* AI Team Features */}
-      <div className='mt-6 lg:mt-0'>
+      <div className='lg:mt-0'>
         <CommunityComp filter />
       </div>
 

@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Compass, ListFilter } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import TemplateGridAll from "../common/templateGridAll";
 
 export default function CommunityComp({
   filter = false,
@@ -51,7 +52,7 @@ export default function CommunityComp({
     <div className='container mx-auto flex min-h-screen w-full flex-col bg-white px-2 py-8 dark:bg-black'>
       <div className=''>
         <div className='mb-8 w-full'>
-          <Tabs
+          {/* <Tabs
             value={activeTab}
             onValueChange={(v) => {
               // Use requestAnimationFrame to prevent hanging
@@ -146,7 +147,8 @@ export default function CommunityComp({
                 onTabChange={handleTabChange}
               />
             </TabsContent>
-          </Tabs>
+          </Tabs> */}
+          <TemplateGridAll />
         </div>
       </div>
     </div>
