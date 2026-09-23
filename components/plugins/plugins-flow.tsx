@@ -59,7 +59,7 @@ export function PluginsFlow({ className = "" }: { className?: string }) {
   return (
     <section className={`relative space-y-4 pt-6 ${className}`}>
       <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-        {t("with over")} {total} {t("marketing")}{" "}
+        {t("with over")} {total} {t("Productivity")}{" "}
         <Link
           href='/plugins'
           className='text-foreground font-medium underline underline-offset-4'

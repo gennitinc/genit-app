@@ -1455,7 +1455,7 @@ export function IdeaSection() {
 
         <section className='relative mt-16 space-y-4 pt-6 pb-10 lg:mt-6'>
           <h2 className='text-muted-foreground text-center text-sm tracking-tight md:text-base'>
-            with over {INTEGRATIONS.length}+ marketing{" "}
+            with over {INTEGRATIONS.length}+ Productivity{" "}
             <Link
               href='/plugins'
               target='_blank'
