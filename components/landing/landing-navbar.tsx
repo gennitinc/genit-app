@@ -3,7 +3,28 @@
 import { Logo } from "../logo";
 import Aurora from "../ui/aurora";
 import UserPopOver from "../user/userPopOver";
+import {
+  FacebookBrand,
+  GmailBrand,
+  GoogleCalendarBrand,
+  GoogleDocsBrand,
+  GoogleDriveBrand,
+  GoogleMeetBrand,
+  GoogleSheetsBrand,
+  InstagramBrand,
+  LinkedinBrand,
+  MailChimpBrand,
+  MessengerBrand,
+  MicrosoftOutlookBrand,
+  PinterestBrand,
+  SlackBrand,
+  TelegramBrand,
+  TikTokBrand,
+  WhatsAppBrand,
+  YoutubeBrand,
+} from "@/app/(auth)/onboarding/_components/social-icons";
 import { PricingDialog } from "@/components/common/pricing-dialog";
+import { useAvailablePlugins } from "@/components/plugins/plugins-flow";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +40,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
-import { ArrowRight, PanelRight } from "lucide-react";
+import { ArrowRight, ChevronDown, PanelRight } from "lucide-react";
 import {
   BadgeCheck,
   Bell,
@@ -33,14 +54,120 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const featuredPlugins = [
+  {
+    name: "Instagram",
+    description: "Publish posts, reels and stories.",
+    icon: InstagramBrand,
+  },
+  {
+    name: "Facebook",
+    description: "Manage posts, comments and Page DMs.",
+    icon: FacebookBrand,
+  },
+  {
+    name: "LinkedIn",
+    description: "Post to profiles and company pages.",
+    icon: LinkedinBrand,
+  },
+  {
+    name: "Gmail",
+    description: "Send, draft and automate email replies.",
+    icon: GmailBrand,
+  },
+  {
+    name: "Google Drive",
+    description: "Browse, upload and share files.",
+    icon: GoogleDriveBrand,
+  },
+  {
+    name: "Google Calendar",
+    description: "Create events and schedule meetings.",
+    icon: GoogleCalendarBrand,
+  },
+  {
+    name: "Slack",
+    description: "Read channels and send messages.",
+    icon: SlackBrand,
+  },
+  {
+    name: "WhatsApp",
+    description: "Run customer chats and campaigns.",
+    icon: WhatsAppBrand,
+  },
+  {
+    name: "YouTube",
+    description: "Upload videos and manage comments.",
+    icon: YoutubeBrand,
+  },
+  {
+    name: "Pinterest",
+    description: "Create pins and track performance.",
+    icon: PinterestBrand,
+  },
+  {
+    name: "TikTok",
+    description: "Publish videos and read analytics.",
+    icon: TikTokBrand,
+  },
+  {
+    name: "Outlook",
+    description: "Connect enterprise email workflows.",
+    icon: MicrosoftOutlookBrand,
+  },
+  {
+    name: "Mailchimp",
+    description: "Build newsletters and email automations.",
+    icon: MailChimpBrand,
+  },
+  {
+    name: "Messenger",
+    description: "Automate replies and customer DMs.",
+    icon: MessengerBrand,
+  },
+  {
+    name: "Telegram",
+    description: "Manage chats with your AI agent.",
+    icon: TelegramBrand,
+  },
+  {
+    name: "Google Meet",
+    description: "Schedule and launch video meetings.",
+    icon: GoogleMeetBrand,
+  },
+  {
+    name: "Google Sheets",
+    description: "Create, edit and sync spreadsheets.",
+    icon: GoogleSheetsBrand,
+  },
+  {
+    name: "Google Docs",
+    description: "Create and edit documents with AI.",
+    icon: GoogleDocsBrand,
+  },
+];
 
 export function LandingNavbar() {
   const { t } = useLanguage();
   const FARMNET_EMAIL = "farmnetent@gmail.com";
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
+  const { total: totalPlugins } = useAvailablePlugins();
   const [mounted, setMounted] = useState(false);
+  const [pluginsOpen, setPluginsOpen] = useState(false);
+  const pluginsCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openPlugins = () => {
+    if (pluginsCloseTimer.current) clearTimeout(pluginsCloseTimer.current);
+    setPluginsOpen(true);
+  };
+
+  const closePluginsSoon = () => {
+    if (pluginsCloseTimer.current) clearTimeout(pluginsCloseTimer.current);
+    pluginsCloseTimer.current = setTimeout(() => setPluginsOpen(false), 120);
+  };
 
   const currentUser = mounted ? user : null;
   const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
@@ -76,6 +203,10 @@ export function LandingNavbar() {
 
   useEffect(() => {
     setMounted(true);
+
+    return () => {
+      if (pluginsCloseTimer.current) clearTimeout(pluginsCloseTimer.current);
+    };
   }, []);
 
   return (
@@ -113,12 +244,75 @@ export function LandingNavbar() {
                 >
                   {t("Chat")}
                 </Link>
-                <Link
-                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1100px]:inline-flex'
-                  href='/plugins'
+                <DropdownMenu
+                  modal={false}
+                  open={pluginsOpen}
+                  onOpenChange={setPluginsOpen}
                 >
-                  {t("Plugins")}
-                </Link>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type='button'
+                      onPointerEnter={(event) => {
+                        if (event.pointerType === "mouse") openPlugins();
+                      }}
+                      onPointerLeave={closePluginsSoon}
+                      onPointerDown={(event) => {
+                        if (event.pointerType === "mouse")
+                          event.preventDefault();
+                      }}
+                      className='group text-foreground/60 hover:text-foreground/80 data-[state=open]:bg-accent data-[state=open]:text-foreground mr-3 hidden h-9 items-center gap-1 rounded-lg px-3 text-sm font-medium transition-[color,background-color,transform] duration-150 outline-none active:scale-[0.97] min-[1100px]:inline-flex'
+                    >
+                      {t("Plugins")}
+                      <ChevronDown className='size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180' />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align='center'
+                    sideOffset={12}
+                    onPointerEnter={openPlugins}
+                    onPointerLeave={closePluginsSoon}
+                    onCloseAutoFocus={(event) => event.preventDefault()}
+                    className='border-border/80 bg-popover/95 w-[min(1000px,calc(100vw-2rem))] overflow-x-hidden overflow-y-auto rounded-2xl p-2 shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:shadow-[0_24px_80px_rgba(0,0,0,0.5)]'
+                  >
+                    <DropdownMenuGroup className='grid grid-cols-3 gap-1 p-2'>
+                      {featuredPlugins.map((plugin) => {
+                        const Icon = plugin.icon;
+
+                        return (
+                          <DropdownMenuItem key={plugin.name} asChild>
+                            <Link
+                              href='/plugins'
+                              className='focus:bg-accent hover:bg-accent flex min-w-0 cursor-pointer items-center gap-3 rounded-xl px-3 py-3.5 transition-colors outline-none'
+                            >
+                              <span className='border-border/70 bg-background flex size-11 shrink-0 items-center justify-center rounded-xl border shadow-sm'>
+                                <Icon className='size-6' />
+                              </span>
+                              <span className='min-w-0'>
+                                <span className='text-foreground block truncate text-sm font-semibold'>
+                                  {plugin.name}
+                                </span>
+                                <span className='text-muted-foreground mt-0.5 block truncate text-xs'>
+                                  {plugin.description}
+                                </span>
+                              </span>
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator className='mx-2' />
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href='/plugins'
+                        className='text-foreground focus:bg-accent hover:bg-accent mx-auto my-2 flex h-12 w-fit cursor-pointer items-center justify-center gap-2 rounded-xl border px-6 text-sm font-semibold transition-[background-color,transform] outline-none active:scale-[0.99]'
+                      >
+                        {t("View all")} {totalPlugins.toLocaleString()}+{" "}
+                        {t("plugins")}
+                        <ArrowRight className='size-4' />
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 {isFarmnetUser && (
                   <Link
