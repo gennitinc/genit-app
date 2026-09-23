@@ -26,9 +26,9 @@ function ChatPageForAuthenticatedUsers() {
       .catch((error) => console.error("Failed to scrape Pinterest:", error));
   };
 
-  useEffect(() => {
-    ScrapePinterest();
-  }, []);
+  // useEffect(() => {
+  //   ScrapePinterest();
+  // }, []);
 
   return (
     <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
