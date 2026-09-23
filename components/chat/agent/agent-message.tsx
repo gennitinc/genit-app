@@ -161,6 +161,11 @@ function ToolCallView({
     return null;
   }
 
+  // Keep provider plumbing private; useful result links render separately.
+  if (call.name.toUpperCase().startsWith("COMPOSIO_")) {
+    return null;
+  }
+
   // Friendlier in-progress label for automation tools
   const pendingLabel = (() => {
     if (call.name === "web_search") {

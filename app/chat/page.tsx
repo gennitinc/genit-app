@@ -4,16 +4,15 @@ import { MainContent } from "@/components/layout/main-content";
 import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { Toaster } from "@/components/ui/sonner";
 import withAuth from "@/helper/hoc/withAuth";
+import { DESIGN_TYPES } from "@/lib/design-types";
 import { apiResponse } from "@/utils/apiResponse";
 import { useEffect, useRef } from "react";
-
-const DESIGN_TYPES = ["logo", "flier", "youtube_thumbnail", "banner"];
 
 function ChatPageForAuthenticatedUsers() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const scrapeStartedRef = useRef(false);
 
-  useEffect(() => {
+  const ScrapePinterest = async () => {
     if (scrapeStartedRef.current) return;
     scrapeStartedRef.current = true;
 
@@ -22,9 +21,13 @@ function ChatPageForAuthenticatedUsers() {
 
     void apiResponse
       .get(
-        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(designType)}&limit=12&category=${designType}`
+        `/designinspirations/scrape/pins/search?q=${encodeURIComponent(designType)}&limit=30&category=${designType}`
       )
       .catch((error) => console.error("Failed to scrape Pinterest:", error));
+  };
+
+  useEffect(() => {
+    ScrapePinterest();
   }, []);
 
   return (

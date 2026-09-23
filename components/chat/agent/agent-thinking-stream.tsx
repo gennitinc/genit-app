@@ -41,7 +41,7 @@ export function AgentThinkingStream({
           }
         />
         <span className='text-foreground text-[12px] font-medium tracking-tight'>
-          {active ? "Thinking…" : "Thought"}
+          {active ? "Thinking…" : "Thought process"}
         </span>
         {active && (
           <span className='ml-0.5 inline-flex gap-0.5'>
