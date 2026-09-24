@@ -197,6 +197,7 @@ export function useAgentRuns(projectId: string | undefined) {
           platform: p.platform,
           platformName: p.platformName,
           reason: p.reason,
+          toolkitSlug: p.toolkitSlug,
         },
         status: "awaiting_integration",
       }));

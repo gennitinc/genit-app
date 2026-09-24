@@ -19,7 +19,10 @@ import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
-import { resumeAgentRunUserInput } from "@/lib/agents-api";
+import {
+  resumeAgentRunIntegration,
+  resumeAgentRunUserInput,
+} from "@/lib/agents-api";
 import type {
   AgentAttachedFile,
   AgentElicitation,
@@ -471,7 +474,15 @@ export function AgentMessage({
             {/* Integration connect prompt */}
             {run.integrationRequired &&
               run.status === "awaiting_integration" && (
-                <ConnectIntegrationInline required={run.integrationRequired} />
+                <ConnectIntegrationInline
+                  required={run.integrationRequired}
+                  onConnected={() =>
+                    resumeAgentRunIntegration(
+                      run.runId,
+                      run.integrationRequired!.platform
+                    )
+                  }
+                />
               )}
 
             {/* Elicitation — user clarification needed */}
