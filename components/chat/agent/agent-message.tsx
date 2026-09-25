@@ -18,6 +18,7 @@ import { UserMessage } from "@/components/chat/messages/user-message";
 import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
+import { Button } from "@/components/ui/button";
 import { shouldDisplayToolCall } from "@/lib/agent-tool-display";
 import {
   resumeAgentRunIntegration,
@@ -32,6 +33,7 @@ import type {
   AgentToolCall,
 } from "@/lib/agents-api";
 import { getAutomationWorkflowSummary } from "@/lib/automation-workflow-summary";
+import { isCapabilityUnavailable } from "@/lib/capability-feedback";
 import { type ResultLink, extractResultLinks } from "@/lib/result-links";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -40,6 +42,7 @@ import {
   CircleAlert,
   ExternalLink,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export interface AgentRunView {
@@ -353,6 +356,8 @@ export function AgentMessage({
     /\b(gpt-|input_fidelity|api error|[45]\d\d the model)\b/i.test(run.text)
       ? "I couldn't complete this request. Please try again."
       : run.text;
+  const showCapabilityFeedback =
+    run.status === "failed" && isCapabilityUnavailable(run.text, run.error);
   const displayedToolCalls =
     inspirationCalls.length <= 1
       ? run.toolCalls
@@ -519,6 +524,33 @@ export function AgentMessage({
                   <p className='text-muted-foreground mt-0.5 text-xs leading-relaxed'>
                     {formatErrorMessage(run.error)}
                   </p>
+                </div>
+              </div>
+            )}
+
+            {showCapabilityFeedback && (
+              <div className='border-border/70 bg-muted/20 mt-2 rounded-lg border px-3 py-3'>
+                <p className='text-foreground text-xs font-medium'>
+                  Want Genit to support this capability?
+                </p>
+                <p className='text-muted-foreground mt-1 text-xs leading-relaxed'>
+                  Send the request to our team or raise a support ticket if you
+                  expected it to work already.
+                </p>
+                <div className='mt-2.5 flex flex-wrap gap-2'>
+                  <Button asChild size='sm' className='h-8 text-xs'>
+                    <Link href='/feedback?tab=suggestion'>
+                      Request this feature
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size='sm'
+                    variant='outline'
+                    className='h-8 text-xs'
+                  >
+                    <Link href='/feedback?tab=support'>Contact support</Link>
+                  </Button>
                 </div>
               </div>
             )}

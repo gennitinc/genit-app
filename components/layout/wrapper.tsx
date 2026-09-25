@@ -48,7 +48,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   //     "/company",
   //     "/contact",
   //     "/inspirations",
-  //     "/suggest",
+  //     "/feedback",
   //     "/legal/privacy-policy",
   //     "/legal/terms-of-service",
   //   ];

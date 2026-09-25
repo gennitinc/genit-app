@@ -64,7 +64,7 @@ This document outlines the comprehensive SEO implementation across the Genit AI 
 - Template and inspiration keywords
 - Gallery/browse related metadata
 
-#### Support/Suggest Page (`app/suggest/page.tsx`)
+#### Support/Feedback Page (`app/feedback/page.tsx`)
 
 ✅ **Added:**
 

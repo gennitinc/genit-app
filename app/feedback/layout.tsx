@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     "AI marketing feedback",
     "developer requests",
   ],
-  alternates: { canonical: "/suggest" },
+  alternates: { canonical: "/feedback" },
   openGraph: {
     title: "Feature Requests & Support | Genit AI",
     description:
       "Help shape the future of autonomous marketing. Submit suggestions or reach our engineering and support team.",
-    url: "https://www.trygenit.com/suggest",
+    url: "https://www.trygenit.com/feedback",
     type: "website",
     images: [
       {
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SuggestLayout({
+export default function FeedbackLayout({
   children,
 }: {
   children: React.ReactNode;

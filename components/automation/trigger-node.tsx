@@ -103,7 +103,11 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           {data.triggerType === "composio_event" && data.composioLogo ? (
-            <img src={data.composioLogo} alt='' className='h-4 w-4 rounded object-contain' />
+            <img
+              src={data.composioLogo}
+              alt=''
+              className='h-4 w-4 rounded object-contain'
+            />
           ) : (
             <Power className='h-4 w-4' />
           )}
@@ -205,6 +209,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   {[
                     "Once",
                     "Every 5 minutes",
+                    "Every 10 minutes",
+                    "Every 15 minutes",
+                    "Every 30 minutes",
                     "Hourly",
                     "Daily",
                     "Every Monday",
@@ -418,7 +425,11 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
             <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
               <div className='flex items-center gap-1.5'>
                 {data.triggerType === "composio_event" && data.composioLogo ? (
-                  <img src={data.composioLogo} alt='' className='h-3.5 w-3.5 rounded object-contain' />
+                  <img
+                    src={data.composioLogo}
+                    alt=''
+                    className='h-3.5 w-3.5 rounded object-contain'
+                  />
                 ) : (
                   <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
                 )}

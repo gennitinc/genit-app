@@ -262,7 +262,9 @@ export function LandingFooter() {
                 {t("Ready? Set, Genit.")}
               </h2>
               <p className='mx-auto mb-10 max-w-xl text-lg leading-relaxed text-gray-400'>
-                {t("Join a community of businesses driving real growth with AI-powered marketing.")}
+                {t(
+                  "Join a community of businesses driving real growth with AI-powered marketing."
+                )}
               </p>
               <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
                 <Link
@@ -435,7 +437,7 @@ export function LandingFooter() {
                     {t("Creators Program")}
                   </Link>
                   <Link
-                    href='/suggest'
+                    href='/feedback'
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Feature Requests")}
@@ -665,7 +667,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/suggest'
+                      href='/feedback'
                     >
                       {t("Suggest a Feature")}
                     </Link>
