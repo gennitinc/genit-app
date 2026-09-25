@@ -14,21 +14,41 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-function PluginLogo({ icon, label }: { icon?: string; label: string }) {
+export function PluginLogo({
+  icon,
+  label,
+  compact = false,
+}: {
+  icon?: string;
+  label: string;
+  compact?: boolean;
+}) {
   const [failed, setFailed] = useState(false);
 
   return (
-    <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border'>
+    <span
+      className={
+        compact
+          ? "border-border/70 bg-background flex size-5 shrink-0 items-center justify-center overflow-hidden rounded border"
+          : "border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border"
+      }
+    >
       {icon && !failed ? (
         <img
           src={icon}
           alt={`${label} logo`}
-          className='size-7 object-contain'
+          className={
+            compact ? "size-4 object-contain" : "size-7 object-contain"
+          }
           onError={() => setFailed(true)}
         />
       ) : (
         <span
-          className='text-foreground text-sm font-semibold'
+          className={
+            compact
+              ? "text-foreground text-[10px] font-semibold"
+              : "text-foreground text-sm font-semibold"
+          }
           aria-hidden='true'
         >
           {label.trim().charAt(0).toUpperCase() || "?"}

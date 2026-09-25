@@ -1,6 +1,7 @@
 "use client";
 
 import { AgentButton, AgentCard } from "./agent-card";
+import { PluginLogo } from "./elicitation-card";
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { useComposioToolkits } from "@/hooks/use-integrations";
@@ -20,22 +21,27 @@ export function ConnectIntegrationInline({
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
   const { data: toolkits = [] } = useComposioToolkits();
-  const toolkitSlug =
-    required.toolkitSlug ||
-    (required.platform === "composio"
-      ? resolveComposioToolkit(required.platformName, toolkits)?.slug
-      : undefined);
+  const toolkit =
+    toolkits.find((item) => item.slug === required.toolkitSlug) ||
+    resolveComposioToolkit(required.platformName, toolkits);
+  const toolkitSlug = required.toolkitSlug || toolkit?.slug;
+  const pluginName = toolkit?.name || required.platformName;
 
   return (
     <>
       <AgentCard
         icon={<Plug className='h-3.5 w-3.5' />}
         title='Connection required'
-        meta={required.platformName}
+        meta={
+          <span className='flex items-center gap-1.5'>
+            <PluginLogo icon={toolkit?.logo} label={pluginName} compact />
+            <span>{pluginName}</span>
+          </span>
+        }
         tone='neutral'
       >
         <div className='text-foreground text-sm font-medium'>
-          <LocalizedText text={"Connect"} /> {required.platformName}{" "}
+          <LocalizedText text={"Connect"} /> {pluginName}{" "}
           <LocalizedText text={"to continue"} />
         </div>
         <p className='text-muted-foreground mt-1 text-[12.5px] leading-relaxed'>
@@ -57,7 +63,8 @@ export function ConnectIntegrationInline({
               variant='primary'
               onClick={() => setOpen(true)}
             >
-              <LocalizedText text={"Connect"} /> {required.platformName}
+              <PluginLogo icon={toolkit?.logo} label={pluginName} compact />
+              <LocalizedText text={"Connect"} /> {pluginName}
               <ArrowRight className='h-3 w-3' />
             </AgentButton>
           )}
@@ -67,9 +74,10 @@ export function ConnectIntegrationInline({
         open={open}
         onOpenChange={setOpen}
         platform={required.platform}
-        platformName={required.platformName}
+        platformName={pluginName}
         platformDescription={required.reason}
         Icon={Plug}
+        iconUrl={toolkit?.logo}
         glow='rgba(99, 102, 241, 0.7)'
         appSlug={toolkitSlug}
         onConnected={() => {
