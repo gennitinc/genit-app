@@ -9,11 +9,34 @@ import {
   CheckCircle2,
   Loader2,
   MessageCircleQuestion,
-  Plug,
   Plus,
   Send,
 } from "lucide-react";
 import { useState } from "react";
+
+function PluginLogo({ icon, label }: { icon?: string; label: string }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border'>
+      {icon && !failed ? (
+        <img
+          src={icon}
+          alt={`${label} logo`}
+          className='size-7 object-contain'
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span
+          className='text-foreground text-sm font-semibold'
+          aria-hidden='true'
+        >
+          {label.trim().charAt(0).toUpperCase() || "?"}
+        </span>
+      )}
+    </span>
+  );
+}
 
 export function ElicitationCard({
   elicitation,
@@ -131,17 +154,7 @@ export function ElicitationCard({
               >
                 {isPluginPicker ? (
                   <>
-                    <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border'>
-                      {opt.icon ? (
-                        <img
-                          src={opt.icon}
-                          alt={`${opt.label} logo`}
-                          className='size-7 object-contain'
-                        />
-                      ) : (
-                        <Plug className='text-muted-foreground size-5' />
-                      )}
-                    </span>
+                    <PluginLogo icon={opt.icon} label={opt.label} />
                     <span className='min-w-0 flex-1'>
                       <span className='flex items-center gap-1.5 text-sm font-semibold'>
                         <span>{opt.label}</span>
@@ -152,7 +165,7 @@ export function ElicitationCard({
                         )}
                       </span>
                       {opt.description && (
-                        <span className='text-muted-foreground mt-0.5 line-clamp-1 block text-[11px] font-normal'>
+                        <span className='text-muted-foreground mt-0.5 block truncate text-[11px] font-normal'>
                           {opt.description}
                         </span>
                       )}
