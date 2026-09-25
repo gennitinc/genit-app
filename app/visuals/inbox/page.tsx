@@ -96,6 +96,7 @@ import {
   generateInboxDraft,
   uploadInboxAttachment,
 } from "@/lib/inbox-api";
+import { supportsInboxCalling } from "@/lib/inbox-calling";
 import {
   EMPTY_INBOX_DRAFT,
   type InboxDrafts,
@@ -2185,15 +2186,17 @@ export default function InboxPage() {
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    className='rounded-full'
-                    onClick={() => setShowCallDialog(true)}
-                    aria-label={`Call ${activeConversation.customerName}`}
-                  >
-                    <Phone className='h-5 w-5' />
-                  </Button>
+                  {supportsInboxCalling(activeConversation.platform) && (
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='rounded-full'
+                      onClick={() => setShowCallDialog(true)}
+                      aria-label={`Call ${activeConversation.customerName}`}
+                    >
+                      <Phone className='h-5 w-5' />
+                    </Button>
+                  )}
                   <Button
                     variant='ghost'
                     size='icon'
@@ -2897,13 +2900,14 @@ export default function InboxPage() {
           )}
         </main>
         <aside className='hidden min-h-0 border-l 2xl:block'>
-          {activeConversation && (
-            <CallDialog
-              conversation={activeConversation}
-              open={showCallDialog}
-              onOpenChange={setShowCallDialog}
-            />
-          )}
+          {activeConversation &&
+            supportsInboxCalling(activeConversation.platform) && (
+              <CallDialog
+                conversation={activeConversation}
+                open={showCallDialog}
+                onOpenChange={setShowCallDialog}
+              />
+            )}
           {activeConversation && (
             <ContactDetails
               conversation={activeConversation}
