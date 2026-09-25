@@ -3,7 +3,7 @@
 import { AgentCard } from "./agent-card";
 import type { AgentTask } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { CheckCircle2, Circle, ListTodo, Loader2, XCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, Circle, ListTodo } from "lucide-react";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running") return <LoadingFileLoader size={12} />;
@@ -12,7 +12,7 @@ function Icon({ status }: { status: AgentTask["status"] }) {
       <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
     );
   if (status === "failed")
-    return <XCircle className='h-3.5 w-3.5 text-rose-600 dark:text-rose-400' />;
+    return <AlertCircle className='h-3.5 w-3.5 text-amber-500' />;
   return <Circle className='text-muted-foreground/40 h-3.5 w-3.5' />;
 }
 
@@ -37,7 +37,7 @@ export function AgentPlan({ tasks }: { tasks: AgentTask[] }) {
                   t.status === "done"
                     ? "text-muted-foreground decoration-muted-foreground/40 line-through"
                     : t.status === "failed"
-                      ? "text-rose-700 dark:text-rose-300"
+                      ? "text-foreground font-medium"
                       : t.status === "running"
                         ? "text-foreground font-medium"
                         : "text-foreground"

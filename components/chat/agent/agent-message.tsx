@@ -37,8 +37,8 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import {
   CalendarCheck2,
   CheckCircle2,
+  CircleAlert,
   ExternalLink,
-  XCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -108,7 +108,9 @@ function formatErrorMessage(error: string | undefined): string {
     }
   }
 
-  return "We couldn't complete this request. Please try again.";
+  return error.length <= 500
+    ? error
+    : "We couldn't complete this request. Please try again.";
 }
 
 function ResultLinkAnchor({ link }: { link: ResultLink }) {
@@ -313,9 +315,9 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   }
   if (status === "failed") {
     return (
-      <span className='inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-[10.5px] font-medium text-rose-600 dark:text-rose-400'>
-        <XCircle className='h-2.5 w-2.5' />
-        <LocalizedText text={"Failed"} />
+      <span className='bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium'>
+        <CircleAlert className='h-2.5 w-2.5 text-amber-500' />
+        <LocalizedText text={"Needs attention"} />
       </span>
     );
   }
@@ -491,12 +493,14 @@ export function AgentMessage({
               !awaitsInspiration && (
                 <ElicitationCard
                   elicitation={run.elicitation}
-                  onSubmit={(v) => resumeAgentRunUserInput(run.runId, v)}
+                  onSubmit={(v, metadata) =>
+                    resumeAgentRunUserInput(run.runId, v, metadata)
+                  }
                 />
               )}
 
             {/* Final text response */}
-            {safeText && (
+            {safeText && !(run.status === "failed" && run.error) && (
               <div className='text-foreground mt-1 text-sm'>
                 <Response components={{ a: PluginConnectionLink }}>
                   {safeText}
@@ -506,8 +510,16 @@ export function AgentMessage({
 
             {/* Error */}
             {run.error && (
-              <div className='my-2 rounded-md border border-rose-500/30 bg-rose-500/[0.04] px-3 py-2 text-xs text-rose-700 dark:bg-rose-500/[0.06] dark:text-rose-300'>
-                {formatErrorMessage(run.error)}
+              <div className='border-border/70 bg-muted/30 my-2 flex items-start gap-2.5 rounded-lg border px-3 py-2.5'>
+                <CircleAlert className='mt-0.5 size-4 shrink-0 text-amber-500' />
+                <div className='min-w-0'>
+                  <p className='text-foreground text-xs font-medium'>
+                    Action needs attention
+                  </p>
+                  <p className='text-muted-foreground mt-0.5 text-xs leading-relaxed'>
+                    {formatErrorMessage(run.error)}
+                  </p>
+                </div>
               </div>
             )}
           </div>

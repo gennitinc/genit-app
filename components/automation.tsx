@@ -255,6 +255,7 @@ export default function AutomationWorkflow({
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
     "idle"
   );
+  const [workflowReady, setWorkflowReady] = useState<boolean | null>(null);
   const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasUnsavedChanges = useRef(false);
   const initialLoadDone = useRef(false);
@@ -393,6 +394,7 @@ export default function AutomationWorkflow({
       );
 
       if (res.data?.success) {
+        setWorkflowReady(Boolean(res.data.ready));
         const serverNodes = res.data.data?.nodes || [];
         const serverEdges = res.data.data?.edges || [];
         if (serverNodes.length) {
@@ -459,6 +461,7 @@ export default function AutomationWorkflow({
       return;
     }
     hasUnsavedChanges.current = true;
+    setWorkflowReady(null);
     scheduleAutoSave();
   }, [nodes, edges, scheduleAutoSave]);
 
@@ -593,7 +596,22 @@ export default function AutomationWorkflow({
         if (res.data?.success && res.data.data) {
           const autoData = res.data.data;
           setProjectName(autoData.name || "Automation");
-          const loadedNodes = injectNodeCallbacks(autoData.nodes || []);
+          const validationByNode = new Map<string, string[]>(
+            (res.data.validationErrors || []).map((item: any) => [
+              item.nodeId,
+              item.errors || [],
+            ])
+          );
+          setWorkflowReady(Boolean(res.data.ready));
+          const loadedNodes = injectNodeCallbacks(
+            (autoData.nodes || []).map((node: any) => ({
+              ...node,
+              data: {
+                ...node.data,
+                validationErrors: validationByNode.get(node.id) || [],
+              },
+            }))
+          );
           const loadedEdges = autoData.edges || [];
           setNodes(loadedNodes);
           setEdges(loadedEdges);
@@ -680,6 +698,28 @@ export default function AutomationWorkflow({
       }> = [];
 
       data.actions.forEach((action: any) => {
+        if (action.name === "update_node") {
+          setNodes((current) => {
+            const next = current.map((node) =>
+              node.id === action.args.nodeId
+                ? {
+                    ...node,
+                    data: {
+                      ...node.data,
+                      ...action.args.data,
+                      isEditMode,
+                      onRemoveNode: removeNode,
+                      onNodeDataChange,
+                      onTestRun,
+                    },
+                  }
+                : node
+            );
+            nodesRef.current = next;
+            return next;
+          });
+          return;
+        }
         if (action.name === "create_node") {
           const nodeArgs = action.args;
           const newNodeId = nodeArgs.nodeId || `${nodeArgs.type}-${Date.now()}`;
@@ -864,7 +904,22 @@ export default function AutomationWorkflow({
           }
         );
         if (res.data?.success && res.data.data) {
-          const serverNodes = injectNodeCallbacks(res.data.data.nodes || []);
+          const validationByNode = new Map<string, string[]>(
+            (res.data.validationErrors || []).map((item: any) => [
+              item.nodeId,
+              item.errors || [],
+            ])
+          );
+          setWorkflowReady(Boolean(res.data.ready));
+          const serverNodes = injectNodeCallbacks(
+            (res.data.data.nodes || []).map((node: any) => ({
+              ...node,
+              data: {
+                ...node.data,
+                validationErrors: validationByNode.get(node.id) || [],
+              },
+            }))
+          );
           const serverEdges = res.data.data.edges || [];
           nodesRef.current = serverNodes;
           edgesRef.current = serverEdges;
@@ -1431,6 +1486,28 @@ export default function AutomationWorkflow({
 
           {/* Auto-save indicator */}
           <div className='bg-border h-5 w-px' />
+          {workflowReady !== null && (
+            <div
+              className={cn(
+                "flex items-center gap-1 rounded px-1.5 py-1 text-[10px] font-medium",
+                workflowReady
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+              )}
+              title={
+                workflowReady
+                  ? "All fields and connections are verified; this workflow can run"
+                  : "Saved as a draft; complete the highlighted configuration before it can run"
+              }
+            >
+              {workflowReady ? (
+                <Check className='h-3 w-3' />
+              ) : (
+                <AlertTriangle className='h-3 w-3' />
+              )}
+              {workflowReady ? "Verified" : "Draft"}
+            </div>
+          )}
           {validationCount > 0 && (
             <div
               className='flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-1 text-[10px] font-medium text-amber-600 dark:text-amber-400'

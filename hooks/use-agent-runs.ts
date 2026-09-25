@@ -170,7 +170,12 @@ export function useAgentRuns(projectId: string | undefined) {
           c.id === p.toolCallId
             ? {
                 ...c,
-                result: { ok: !!p.ok, data: p.data, error: p.error },
+                result: {
+                  ok: !!p.ok,
+                  data: p.data,
+                  error: p.error,
+                  verification: p.verification,
+                },
                 render: p.render,
               }
             : c

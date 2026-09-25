@@ -44,7 +44,10 @@ export function ElicitationCard({
   disabled,
 }: {
   elicitation: AgentElicitation;
-  onSubmit: (value: string) => Promise<void> | void;
+  onSubmit: (
+    value: string,
+    metadata?: { isOther: boolean }
+  ) => Promise<void> | void;
   disabled?: boolean;
 }) {
   const [value, setValue] = useState("");
@@ -52,12 +55,12 @@ export function ElicitationCard({
   const [pickedValue, setPickedValue] = useState<string | null>(null);
   const [showOther, setShowOther] = useState(false);
 
-  const submit = async (v: string) => {
+  const submit = async (v: string, isOther = false) => {
     if (!v.trim()) return;
     setSubmitting(true);
     setPickedValue(v);
     try {
-      await onSubmit(v);
+      await onSubmit(v, { isOther });
     } finally {
       setSubmitting(false);
     }
@@ -239,7 +242,7 @@ export function ElicitationCard({
           className='mt-3 flex items-center gap-2'
           onSubmit={(e) => {
             e.preventDefault();
-            submit(value);
+            submit(value, showOther);
           }}
         >
           <AgentInput

@@ -26,6 +26,11 @@ export interface AgentToolCall {
     data?: any;
     error?: string;
     providerLogId?: string;
+    verification?: {
+      status: "verified";
+      evidence: string[];
+      checkedAt: string;
+    };
   };
   render?: string;
 }
@@ -74,11 +79,13 @@ export async function startAgentRun(input: {
 
 export async function resumeAgentRunUserInput(
   runId: string,
-  value: string
+  value: string,
+  metadata?: { isOther: boolean }
 ): Promise<void> {
   await apiResponse.post(`/agents/${runId}/resume`, {
     kind: "user_input",
     value,
+    isOther: metadata?.isOther,
   });
 }
 
