@@ -5,7 +5,14 @@ import { LocalizedText } from "@/components/localized-text";
 import { BorderBeam } from "@/components/ui/border-beam";
 import type { AgentElicitation } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { Loader2, MessageCircleQuestion, Send } from "lucide-react";
+import {
+  CheckCircle2,
+  Loader2,
+  MessageCircleQuestion,
+  Plug,
+  Plus,
+  Send,
+} from "lucide-react";
 import { useState } from "react";
 
 export function ElicitationCard({
@@ -20,6 +27,7 @@ export function ElicitationCard({
   const [value, setValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [pickedValue, setPickedValue] = useState<string | null>(null);
+  const [showOther, setShowOther] = useState(false);
 
   const submit = async (v: string) => {
     if (!v.trim()) return;
@@ -36,6 +44,7 @@ export function ElicitationCard({
   const isVisualSizePicker = ["image_size", "video_size"].includes(
     elicitation.presentation || ""
   );
+  const isPluginPicker = elicitation.presentation === "plugin_choice";
 
   const imageSizes: Record<
     string,
@@ -82,12 +91,14 @@ export function ElicitationCard({
         {elicitation.question}
       </p>
 
-      {hasOptions ? (
+      {hasOptions && (
         <div
           className={
             isVisualSizePicker
               ? "mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3"
-              : "mt-3 flex flex-wrap gap-1.5"
+              : isPluginPicker
+                ? "mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2"
+                : "mt-3 flex flex-wrap gap-1.5"
           }
           role='radiogroup'
           aria-label='Answer choices'
@@ -109,13 +120,50 @@ export function ElicitationCard({
                     ? isPicked
                       ? "bg-foreground text-background flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60"
                       : "border-border/70 bg-background text-foreground hover:bg-accent flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
-                    : isPicked
-                      ? "bg-foreground text-background inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60"
-                      : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                    : isPluginPicker
+                      ? isPicked
+                        ? "border-foreground bg-accent text-foreground flex min-h-16 items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-[background-color,border-color,transform] active:scale-[0.98] disabled:opacity-60"
+                        : "border-border/70 bg-background text-foreground hover:bg-accent flex min-h-16 items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-[background-color,border-color,transform] active:scale-[0.98] disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                      : isPicked
+                        ? "bg-foreground text-background inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60"
+                        : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 }
               >
-                {isPicked && submitting && <LoadingFileLoader size={12} />}
-                {isVisualSizePicker && imageSize ? (
+                {isPluginPicker ? (
+                  <>
+                    <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border'>
+                      {opt.icon ? (
+                        <img
+                          src={opt.icon}
+                          alt={`${opt.label} logo`}
+                          className='size-7 object-contain'
+                        />
+                      ) : (
+                        <Plug className='text-muted-foreground size-5' />
+                      )}
+                    </span>
+                    <span className='min-w-0 flex-1'>
+                      <span className='flex items-center gap-1.5 text-sm font-semibold'>
+                        <span>{opt.label}</span>
+                        {opt.connected && (
+                          <span className='shrink-0 text-[10px] font-medium text-emerald-500'>
+                            Connected
+                          </span>
+                        )}
+                      </span>
+                      {opt.description && (
+                        <span className='text-muted-foreground mt-0.5 line-clamp-1 block text-[11px] font-normal'>
+                          {opt.description}
+                        </span>
+                      )}
+                    </span>
+                    {isPicked && submitting ? (
+                      <LoadingFileLoader size={12} />
+                    ) : opt.connected ? (
+                      <CheckCircle2 className='size-3.5 shrink-0 text-emerald-500' />
+                    ) : null}
+                  </>
+                ) : isVisualSizePicker && imageSize ? (
                   <>
                     <span
                       className='block max-h-9 max-w-12 rounded-[2px] border border-current/60'
@@ -144,8 +192,36 @@ export function ElicitationCard({
               </button>
             );
           })}
+          {elicitation.allowOther && (
+            <button
+              type='button'
+              disabled={disabled || submitting}
+              onClick={() => setShowOther(true)}
+              className={
+                isPluginPicker
+                  ? "border-border/70 bg-background text-foreground hover:bg-accent flex min-h-16 items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-[background-color,border-color,transform] active:scale-[0.98] disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+                  : "border-border/70 bg-background text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
+              }
+            >
+              {isPluginPicker && (
+                <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center rounded-lg border'>
+                  <Plus className='text-muted-foreground size-5' />
+                </span>
+              )}
+              <span>
+                <span className='block text-xs font-semibold'>Other</span>
+                {isPluginPicker && (
+                  <span className='text-muted-foreground mt-0.5 block text-[11px] font-normal'>
+                    Enter another plugin or describe what you need
+                  </span>
+                )}
+              </span>
+            </button>
+          )}
         </div>
-      ) : (
+      )}
+
+      {(!hasOptions || showOther) && (
         <form
           className='mt-3 flex items-center gap-2'
           onSubmit={(e) => {
@@ -158,7 +234,11 @@ export function ElicitationCard({
             value={value}
             onChange={(e) => setValue(e.target.value)}
             disabled={disabled || submitting}
-            placeholder='Type your answer…'
+            placeholder={
+              showOther
+                ? "Name another plugin or describe what you need…"
+                : "Type your answer…"
+            }
             autoFocus
           />
           <AgentButton

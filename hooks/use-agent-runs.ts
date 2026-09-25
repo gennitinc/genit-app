@@ -185,6 +185,7 @@ export function useAgentRuns(projectId: string | undefined) {
           question: p.question,
           options: p.options,
           presentation: p.presentation,
+          allowOther: p.allowOther,
         },
         status: "awaiting_input",
       }));
