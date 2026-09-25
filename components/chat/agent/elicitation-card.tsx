@@ -29,8 +29,8 @@ export function PluginLogo({
     <span
       className={
         compact
-          ? "border-border/70 bg-background flex size-5 shrink-0 items-center justify-center overflow-hidden rounded border"
-          : "border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border"
+          ? "border-border/30 bg-background flex size-5 shrink-0 items-center justify-center overflow-hidden rounded border"
+          : "border-border/30 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border"
       }
     >
       {icon && !failed ? (
