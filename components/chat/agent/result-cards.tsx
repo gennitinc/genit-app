@@ -23,7 +23,9 @@ import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
 import {
   BarChart3,
+  Check,
   CheckCircle2,
+  Copy,
   Download,
   ExternalLink,
   File as FileIcon,
@@ -39,6 +41,8 @@ import {
   Target,
   TrendingUp,
   Users,
+  Video,
+  Youtube,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -72,6 +76,65 @@ function ExternalLinkInline({
       {children}
       <ExternalLink className='h-3 w-3' />
     </a>
+  );
+}
+
+function VideoTranscriptCard({ data }: { data: any }) {
+  const [copied, setCopied] = useState(false);
+  const transcript = String(data?.transcript || "");
+  const platform = String(data?.platform || "video");
+  const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+
+  const copyTranscript = async () => {
+    await navigator.clipboard.writeText(transcript);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <AgentCard
+      icon={
+        platform === "youtube" ? (
+          <Youtube className='h-3.5 w-3.5' />
+        ) : (
+          <Video className='h-3.5 w-3.5' />
+        )
+      }
+      title={`${platformName} transcript`}
+      meta={data?.language ? String(data.language).toUpperCase() : undefined}
+      tone='success'
+      footer={
+        <div className='flex items-center justify-between gap-3'>
+          <ExternalLinkInline href={data?.sourceUrl || "#"}>
+            Open video
+          </ExternalLinkInline>
+          <button
+            type='button'
+            onClick={copyTranscript}
+            className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[12px] font-medium'
+          >
+            {copied ? (
+              <Check className='h-3 w-3' />
+            ) : (
+              <Copy className='h-3 w-3' />
+            )}
+            {copied ? "Copied" : "Copy transcript"}
+          </button>
+        </div>
+      }
+    >
+      <div className='text-muted-foreground mb-2 text-[11px]'>
+        {data?.title ? `${data.title} · ` : ""}
+        {Number(
+          data?.characterCount || transcript.length
+        ).toLocaleString()}{" "}
+        characters
+        {data?.truncated ? " · shortened for analysis" : ""}
+      </div>
+      <div className='text-foreground/90 max-h-80 overflow-y-auto text-[12.5px] leading-relaxed whitespace-pre-wrap'>
+        {transcript}
+      </div>
+    </AgentCard>
   );
 }
 
@@ -1332,6 +1395,9 @@ export function renderToolResult(
       return <DocumentArtifactCard data={data} />;
     case "document_list":
       return <DocumentListCard data={data} />;
+    case "youtube_transcript":
+    case "video_transcript":
+      return <VideoTranscriptCard data={data} />;
     default:
       return null;
   }
