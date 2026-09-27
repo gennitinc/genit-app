@@ -675,9 +675,9 @@ export default function About2() {
               />{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:team@trygenit.com'
+                href='mailto:hello@trygenit.com'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>
               .
             </p>
@@ -1007,9 +1007,9 @@ export default function About2() {
               />{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:team@trygenit.com'
+                href='mailto:hello@trygenit.com'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>
               <LocalizedText
                 text={
@@ -1073,9 +1073,9 @@ export default function About2() {
               />{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:team@trygenit.com'
+                href='mailto:hello@trygenit.com'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>
             </p>
             <h2
@@ -1109,9 +1109,9 @@ export default function About2() {
               <LocalizedText text={"You may provide us either directly at"} />{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:team@trygenit.com'
+                href='mailto:hello@trygenit.com'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>{" "}
               <LocalizedText
                 text={
@@ -1628,9 +1628,9 @@ export default function About2() {
               />{" "}
               <a
                 className='border-slate-11 text-slate-11 hover:text-slate-12 hover:border-slate-12 border-b-[.0375rem] border-solid font-medium transition-colors duration-200 ease-in-out'
-                href='mailto:team@trygenit.com'
+                href='mailto:hello@trygenit.com'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>
               .
             </p>

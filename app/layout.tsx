@@ -103,7 +103,7 @@ const structuredData = {
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
-        email: "team@trygenit.com",
+        email: "hello@trygenit.com",
         availableLanguage: "English",
       },
     },

@@ -482,9 +482,9 @@ export default function RemovalInstructionsPage() {
               <LocalizedText text={"Email"} />{" "}
               <a
                 className={LINK_CLASS}
-                href='mailto:team@trygenit.com?subject=Data%20deletion%20request'
+                href='mailto:hello@trygenit.com?subject=Data%20deletion%20request'
               >
-                <LocalizedText text={"team@trygenit.com"} />
+                <LocalizedText text={"hello@trygenit.com"} />
               </a>{" "}
               <LocalizedText
                 text={
@@ -534,8 +534,8 @@ export default function RemovalInstructionsPage() {
                 "If anything in these steps doesn&apos;t work for you, or if you can&apos;t find the genit entry in the third-party platform&apos;s settings, please reach us at"
               }
             />{" "}
-            <a className={LINK_CLASS} href='mailto:team@trygenit.com'>
-              <LocalizedText text={"team@trygenit.com"} />
+            <a className={LINK_CLASS} href='mailto:hello@trygenit.com'>
+              <LocalizedText text={"hello@trygenit.com"} />
             </a>{" "}
             <LocalizedText
               text={"and we&apos;ll help you complete the removal manually."}

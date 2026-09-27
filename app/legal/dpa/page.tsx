@@ -28,7 +28,7 @@ export default function DpaPage() {
           data-processing requirements.
         </p>
         <a
-          href='mailto:team@trygenit.com?subject=Genit%20Data%20Processing%20Addendum'
+          href='mailto:hello@trygenit.com?subject=Genit%20Data%20Processing%20Addendum'
           className='mt-8 inline-block rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-700'
         >
           Request the DPA
