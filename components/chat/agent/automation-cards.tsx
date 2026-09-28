@@ -156,6 +156,10 @@ const ACTION_TYPE_LABELS: Record<string, { icon: ReactNode; label: string }> = {
     icon: <Video className='h-3 w-3' />,
     label: "Post to TikTok",
   },
+  post_youtube: {
+    icon: <Video className='h-3 w-3' />,
+    label: "Upload to YouTube",
+  },
   generate_image: {
     icon: <Image className='h-3 w-3' />,
     label: "Generate Image",
@@ -168,6 +172,10 @@ const ACTION_TYPE_LABELS: Record<string, { icon: ReactNode; label: string }> = {
   generate_audio: {
     icon: <Mic className='h-3 w-3' />,
     label: "Generate Audio",
+  },
+  generate_story_video: {
+    icon: <Video className='h-3 w-3' />,
+    label: "Generate Story Video",
   },
   add_calendar_event: {
     icon: <Calendar className='h-3 w-3' />,

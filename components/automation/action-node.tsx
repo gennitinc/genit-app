@@ -13,6 +13,7 @@ import {
   TikTokBrand,
   WhatsAppBrand,
   XBrand,
+  YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
@@ -50,10 +51,12 @@ export const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   post_linkedin: LinkedinBrand,
   post_x: XBrand,
   post_tiktok: TikTokBrand,
+  post_youtube: YoutubeBrand,
   generate_image: ImagePlus,
   generate_video: Video,
   generate_text: FileText,
   generate_audio: Mic,
+  generate_story_video: Video,
   add_calendar_event: GoogleCalendarBrand,
   google_drive_upload: GoogleDriveBrand,
   messenger_reply: MessengerBrand,
@@ -109,6 +112,16 @@ interface ActionNodeData {
   categoryId?: string;
   tags?: string;
   privacyStatus?: string;
+  playlistId?: string;
+  madeForKids?: boolean;
+  brief?: string;
+  targetDuration?: number;
+  characterDescription?: string;
+  narrationScript?: string;
+  scenes?: Array<{ prompt: string; narration?: string }>;
+  imageModelId?: string;
+  videoModelId?: string;
+  audioModelId?: string;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -393,9 +406,11 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               data.actionType === "post_instagram" ||
               data.actionType === "post_linkedin" ||
               data.actionType === "post_x" ||
-              data.actionType === "post_tiktok") && (
+              data.actionType === "post_tiktok" ||
+              data.actionType === "post_youtube") && (
               <>
-                {data.actionType === "post_tiktok" && (
+                {(data.actionType === "post_tiktok" ||
+                  data.actionType === "post_youtube") && (
                   <div>
                     <label className={labelCls}>
                       <LocalizedText text={"Title"} />
@@ -464,6 +479,79 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                       </option>
                     </select>
                   </div>
+                )}
+                {data.actionType === "post_youtube" && (
+                  <>
+                    <div>
+                      <label className={labelCls}>
+                        <LocalizedText text={"Privacy"} />
+                      </label>
+                      <select
+                        value={data.privacyStatus || "public"}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            privacyStatus: e.target.value,
+                          })
+                        }
+                        className={selectCls}
+                      >
+                        <option value='public'>Public</option>
+                        <option value='unlisted'>Unlisted</option>
+                        <option value='private'>Private</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Category ID</label>
+                      <input
+                        type='text'
+                        value={data.categoryId || "22"}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            categoryId: e.target.value,
+                          })
+                        }
+                        className={inputCls}
+                        placeholder='22'
+                      />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Tags</label>
+                      <input
+                        type='text'
+                        value={data.tags || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, { tags: e.target.value })
+                        }
+                        className={inputCls}
+                        placeholder='business, tips, daily'
+                      />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Playlist ID (optional)</label>
+                      <input
+                        type='text'
+                        value={data.playlistId || ""}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            playlistId: e.target.value,
+                          })
+                        }
+                        className={inputCls}
+                      />
+                    </div>
+                    <label className='flex items-center gap-2 text-xs text-zinc-600 dark:text-neutral-300'>
+                      <input
+                        type='checkbox'
+                        checked={data.madeForKids || false}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            madeForKids: e.target.checked,
+                          })
+                        }
+                      />
+                      Made for kids
+                    </label>
+                  </>
                 )}
               </>
             )}
@@ -776,6 +864,82 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   placeholder='Describe what to generate...'
                 />
               </div>
+            )}
+
+            {data.actionType === "generate_story_video" && (
+              <>
+                <div>
+                  <label className={labelCls}>Story / ad brief</label>
+                  <textarea
+                    value={data.brief || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { brief: e.target.value })
+                    }
+                    className={cn(inputCls, "min-h-[72px] resize-y")}
+                    placeholder='Describe the story, audience, characters, and outcome'
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Exact duration (seconds)</label>
+                  <input
+                    type='number'
+                    min={5}
+                    max={300}
+                    value={data.targetDuration || 30}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        targetDuration: Number(e.target.value),
+                      })
+                    }
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Locked characters</label>
+                  <textarea
+                    value={data.characterDescription || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        characterDescription: e.target.value,
+                      })
+                    }
+                    className={cn(inputCls, "min-h-[56px] resize-y")}
+                    placeholder='Appearance, clothing, colors, personality, and identity'
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Narration / dialogue</label>
+                  <textarea
+                    value={data.narrationScript || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        narrationScript: e.target.value,
+                      })
+                    }
+                    className={cn(inputCls, "min-h-[56px] resize-y")}
+                  />
+                </div>
+                {[
+                  ["Image model ID", "imageModelId"],
+                  ["Video model ID", "videoModelId"],
+                  ["Audio model ID", "audioModelId"],
+                ].map(([label, field]) => (
+                  <div key={field}>
+                    <label className={labelCls}>{label}</label>
+                    <input
+                      type='text'
+                      value={String(data[field] || "")}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, {
+                          [field]: e.target.value,
+                        })
+                      }
+                      className={inputCls}
+                      placeholder='Selected in chat before workflow creation'
+                    />
+                  </div>
+                ))}
+              </>
             )}
 
             {data.actionType === "generate_audio" && (

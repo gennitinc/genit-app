@@ -28,6 +28,7 @@ import {
   TikTokBrand,
   WhatsAppBrand,
   XBrand,
+  YoutubeBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
@@ -148,6 +149,7 @@ const MENU_ICONS: Record<string, React.ComponentType<any>> = {
   GoogleCalendar: GoogleCalendarBrand,
   X: XBrand,
   TikTok: TikTokBrand,
+  YouTube: YoutubeBrand,
   Linkedin: LinkedinBrand,
   GoogleDrive: GoogleDriveBrand,
 };
@@ -164,6 +166,7 @@ const MANAGED_STATIC_ACTIONS = new Set([
   "post_linkedin",
   "post_x",
   "post_tiktok",
+  "post_youtube",
   "add_calendar_event",
   "google_drive_upload",
 ]);

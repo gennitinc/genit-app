@@ -149,10 +149,12 @@ export type ActionSubtype =
   | "post_linkedin"
   | "post_x"
   | "post_tiktok"
+  | "post_youtube"
   | "generate_image"
   | "generate_video"
   | "generate_text"
   | "generate_audio"
+  | "generate_story_video"
   | "add_calendar_event"
   | "google_drive_upload"
   | "update_facebook_post"
@@ -263,6 +265,13 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
     category: "social",
   },
   {
+    id: "post_youtube",
+    label: "Upload to YouTube",
+    integration: "YouTube",
+    iconName: "YouTube",
+    category: "social",
+  },
+  {
     id: "generate_image",
     label: "Generate Image",
     integration: "Genit AI",
@@ -288,6 +297,13 @@ export const ACTION_SUBTYPES: ActionSubtypeConfig[] = [
     label: "Generate Audio",
     integration: "Genit AI",
     iconName: "Mic",
+    category: "ai",
+  },
+  {
+    id: "generate_story_video",
+    label: "Generate Story Video",
+    integration: "Genit AI",
+    iconName: "Video",
     category: "ai",
   },
   {
