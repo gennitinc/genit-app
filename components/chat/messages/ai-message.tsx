@@ -14,6 +14,7 @@ import {
   MessageContent,
 } from "@/components/chat/messages";
 import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
+import { PluginName } from "@/components/chat/plugin-logo";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +39,26 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+function safeJsonErrorMessage(value: any): string | undefined {
+  let message = value?.error?.message || value?.message;
+  if (typeof message !== "string") return undefined;
+  try {
+    const nested = JSON.parse(message);
+    message = nested?.error?.message || nested?.message || message;
+  } catch {
+    // Plain provider message.
+  }
+  const clean = String(message).replace(/\s+/g, " ").trim();
+  if (
+    !clean ||
+    /(?:authorization|api[_ -]?key|access[_ -]?token|refresh[_ -]?token|bearer\s+[\w.-]+)/i.test(
+      clean
+    )
+  )
+    return undefined;
+  return clean.length <= 500 ? clean : `${clean.slice(0, 497)}...`;
+}
+
 /** Strip raw JSON / API error dumps from AI text and replace with a friendly message. */
 function sanitizeTextContent(text: string): string {
   if (!text) return text;
@@ -57,9 +78,15 @@ function sanitizeTextContent(text: string): string {
           return "We're experiencing high demand right now. Please try again in a moment.";
         }
         if (code === 401 || code === 403) {
-          return "There was an authentication issue. Please reconnect your account and try again.";
+          return (
+            safeJsonErrorMessage(parsed) ||
+            "The connected account rejected the request. Check its permissions and try again."
+          );
         }
-        return "Something went wrong while processing your request. Please try again.";
+        return (
+          safeJsonErrorMessage(parsed) ||
+          "The service failed without returning diagnostic details. Please retry; if it happens again, contact support."
+        );
       }
     } catch {
       // Not valid JSON, fall through
@@ -69,9 +96,16 @@ function sanitizeTextContent(text: string): string {
   const jsonErrorMatch = trimmed.match(/\{"error":\{[\s\S]*\}\}/);
   if (jsonErrorMatch && jsonErrorMatch[0].length > text.length * 0.5) {
     const cleaned = text.replace(jsonErrorMatch[0], "").trim();
+    let detail: string | undefined;
+    try {
+      detail = safeJsonErrorMessage(JSON.parse(jsonErrorMatch[0]));
+    } catch {
+      // Malformed provider payload.
+    }
     return (
       cleaned ||
-      "Something went wrong while processing your request. Please try again."
+      detail ||
+      "The service failed without returning diagnostic details. Please retry; if it happens again, contact support."
     );
   }
   return text;
@@ -273,7 +307,7 @@ export function AIMessage({
                           >
                             <Link href='/plugins'>
                               {isReconnect ? "Reconnect / Manage" : "Connect"}{" "}
-                              {integrationToConnect}
+                              <PluginName name={integrationToConnect} />
                             </Link>
                           </Button>
                         )}

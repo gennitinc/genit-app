@@ -1,5 +1,6 @@
 "use client";
 
+import { PluginLogo } from "../plugin-logo";
 import { AgentCard } from "./agent-card";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
@@ -194,12 +195,41 @@ const CONTENT_TYPE_LABELS: Record<string, string> = {
   audio: "Audio",
 };
 
+function nodePlugin(data: any): { name: string; slug: string } | undefined {
+  const slug = String(data?.composioToolkit || "").toLowerCase();
+  if (slug)
+    return {
+      slug,
+      name: slug
+        .replace(/[_-]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
+    };
+  const type = String(data?.actionType || data?.triggerType || "");
+  const match = type.match(
+    /(?:post_|send_|upload_to_|^)(facebook|instagram|linkedin|tiktok|youtube|brevo|gmail|outlook|whatsapp|google_drive)/
+  );
+  if (!match) return undefined;
+  const names: Record<string, string> = {
+    google_drive: "Google Drive",
+    linkedin: "LinkedIn",
+    tiktok: "TikTok",
+    youtube: "YouTube",
+    whatsapp: "WhatsApp",
+  };
+  return {
+    slug: match[1],
+    name:
+      names[match[1]] || match[1].charAt(0).toUpperCase() + match[1].slice(1),
+  };
+}
+
 // ─── Node Created Card ───
 
 export function AutomationNodeCreatedCard({ data }: { data: any }) {
   const { setFocusedGenerationId } = useProjectDesign();
   const nodeType = data?.type || "action";
   const config = NODE_TYPE_CONFIG[nodeType] || NODE_TYPE_CONFIG.action;
+  const plugin = nodePlugin(data);
 
   // Determine the subtype label and icon
   let subtypeInfo: { icon: ReactNode; label: string } | null = null;
@@ -271,7 +301,11 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
         {subtypeInfo && (
           <div className='flex items-center gap-1.5'>
             <span className='bg-foreground/[0.06] text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium dark:bg-white/[0.06]'>
-              {subtypeInfo.icon}
+              {plugin ? (
+                <PluginLogo label={plugin.name} slug={plugin.slug} compact />
+              ) : (
+                subtypeInfo.icon
+              )}
               {subtypeInfo.label}
             </span>
           </div>
@@ -363,16 +397,28 @@ export function AutomationWorkflowSummaryCard({
               </span>
             </summary>
             <ul className='divide-border/70 max-h-64 divide-y overflow-y-auto border-t border-white/10 dark:divide-white/10'>
-              {nodes.map((node) => (
-                <li key={node.nodeId} className='px-3 py-2'>
-                  <div className='text-foreground truncate text-xs font-medium'>
-                    {node.title || "Untitled node"}
-                  </div>
-                  <div className='text-muted-foreground mt-0.5 text-[10.5px] capitalize'>
-                    {(node.type || "action").replace(/_/g, " ")}
-                  </div>
-                </li>
-              ))}
+              {nodes.map((node) => {
+                const plugin = nodePlugin(node);
+                return (
+                  <li key={node.nodeId} className='px-3 py-2'>
+                    <div className='text-foreground flex items-center gap-1.5 truncate text-xs font-medium'>
+                      {plugin && (
+                        <PluginLogo
+                          label={plugin.name}
+                          slug={plugin.slug}
+                          compact
+                        />
+                      )}
+                      <span className='truncate'>
+                        {node.title || "Untitled node"}
+                      </span>
+                    </div>
+                    <div className='text-muted-foreground mt-0.5 text-[10.5px] capitalize'>
+                      {(node.type || "action").replace(/_/g, " ")}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </details>
         )}

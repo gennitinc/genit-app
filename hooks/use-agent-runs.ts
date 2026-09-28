@@ -3,6 +3,7 @@
 import type {
   AgentAttachedFile,
   AgentElicitation,
+  AgentErrorCode,
   AgentIntegrationRequired,
   AgentRunStatus,
   AgentTask,
@@ -29,6 +30,8 @@ export interface AgentRunView {
   elicitation?: AgentElicitation;
   integrationRequired?: AgentIntegrationRequired;
   error?: string;
+  errorCode?: AgentErrorCode;
+  errorProvider?: string;
   createdAt: number;
 }
 
@@ -174,6 +177,8 @@ export function useAgentRuns(projectId: string | undefined) {
                   ok: !!p.ok,
                   data: p.data,
                   error: p.error,
+                  errorCode: p.errorCode,
+                  provider: p.provider,
                   verification: p.verification,
                 },
                 render: p.render,
@@ -224,6 +229,8 @@ export function useAgentRuns(projectId: string | undefined) {
         thinkingActive: false,
         text: r.status === "cancelled" ? "" : r.text,
         error: undefined,
+        errorCode: undefined,
+        errorProvider: undefined,
         plan: r.plan.map((task) =>
           task.status === "failed" && task.detail === "Stopped by user"
             ? { ...task, status: "pending", detail: undefined }
@@ -241,6 +248,8 @@ export function useAgentRuns(projectId: string | undefined) {
         thinkingActive: false,
         text: p.finalText || r.text,
         error: p.error,
+        errorCode: p.errorCode,
+        errorProvider: p.provider,
         // When run resumes (e.g. integration_connected), clear the awaiting flags.
         ...(p.status === "running" || p.status === "completed"
           ? {

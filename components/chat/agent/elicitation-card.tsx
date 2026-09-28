@@ -1,5 +1,6 @@
 "use client";
 
+import { PluginLogo } from "../plugin-logo";
 import { AgentButton, AgentCard, AgentInput } from "./agent-card";
 import { LocalizedText } from "@/components/localized-text";
 import { BorderBeam } from "@/components/ui/border-beam";
@@ -13,50 +14,6 @@ import {
   Send,
 } from "lucide-react";
 import { useState } from "react";
-
-export function PluginLogo({
-  icon,
-  label,
-  compact = false,
-}: {
-  icon?: string;
-  label: string;
-  compact?: boolean;
-}) {
-  const [failed, setFailed] = useState(false);
-
-  return (
-    <span
-      className={
-        compact
-          ? "bg-background flex size-5 shrink-0 items-center justify-center overflow-hidden rounded border border-black/10"
-          : "border-border/70 bg-background flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border"
-      }
-    >
-      {icon && !failed ? (
-        <img
-          src={icon}
-          alt={`${label} logo`}
-          className={
-            compact ? "size-4 object-contain" : "size-7 object-contain"
-          }
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        <span
-          className={
-            compact
-              ? "text-foreground text-[10px] font-semibold"
-              : "text-foreground text-sm font-semibold"
-          }
-          aria-hidden='true'
-        >
-          {label.trim().charAt(0).toUpperCase() || "?"}
-        </span>
-      )}
-    </span>
-  );
-}
 
 export function ElicitationCard({
   elicitation,

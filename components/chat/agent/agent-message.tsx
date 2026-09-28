@@ -16,6 +16,7 @@ import { MessageContainer } from "@/components/chat/messages/message-container";
 import { MessageContent } from "@/components/chat/messages/message-content";
 import { UserMessage } from "@/components/chat/messages/user-message";
 import { PluginConnectionLink } from "@/components/chat/plugin-connection-link";
+import { PluginLogo, PluginName } from "@/components/chat/plugin-logo";
 import { LocalizedText } from "@/components/localized-text";
 import { AvatarDisplay } from "@/components/ui/avatar-display";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ import {
 import type {
   AgentAttachedFile,
   AgentElicitation,
+  AgentErrorCode,
   AgentIntegrationRequired,
   AgentRunStatus,
   AgentTask,
@@ -36,12 +38,7 @@ import { getAutomationWorkflowSummary } from "@/lib/automation-workflow-summary"
 import { isCapabilityUnavailable } from "@/lib/capability-feedback";
 import { type ResultLink, extractResultLinks } from "@/lib/result-links";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  CalendarCheck2,
-  CheckCircle2,
-  CircleAlert,
-  ExternalLink,
-} from "lucide-react";
+import { CheckCircle2, CircleAlert, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -57,6 +54,8 @@ export interface AgentRunView {
   elicitation?: AgentElicitation;
   integrationRequired?: AgentIntegrationRequired;
   error?: string;
+  errorCode?: AgentErrorCode;
+  errorProvider?: string;
   attachedFiles?: AgentAttachedFile[];
 }
 
@@ -218,9 +217,11 @@ function ToolCallView({
   if (call.render === "calendar_event_created") {
     return (
       <AgentCard
-        icon={<CalendarCheck2 className='h-3.5 w-3.5' />}
+        icon={
+          <PluginLogo label='Google Calendar' slug='google_calendar' compact />
+        }
         title='Event created'
-        meta={data.account}
+        meta={<PluginName name='Google Calendar' slug='google_calendar' />}
         tone='success'
       >
         <div className='text-foreground text-[13.5px] leading-snug font-medium'>
@@ -283,8 +284,19 @@ function ToolCallView({
   // Unknown render type — confirm completion without exposing provider payloads.
   return (
     <AgentCard
-      icon={<CheckCircle2 className='h-3.5 w-3.5' />}
+      icon={
+        data?.provider ? (
+          <PluginLogo label={data.provider} slug={data.providerSlug} compact />
+        ) : (
+          <CheckCircle2 className='h-3.5 w-3.5' />
+        )
+      }
       title={humanizeToolName(call.name)}
+      meta={
+        data?.provider ? (
+          <PluginName name={data.provider} slug={data.providerSlug} />
+        ) : undefined
+      }
       tone='success'
     />
   );
@@ -356,8 +368,39 @@ export function AgentMessage({
     /\b(gpt-|input_fidelity|api error|[45]\d\d the model)\b/i.test(run.text)
       ? "I couldn't complete this request. Please try again."
       : run.text;
+  const failedTool = [...run.toolCalls]
+    .reverse()
+    .find((call) => call.result?.ok === false);
+  const errorCode = failedTool?.result?.errorCode || run.errorCode;
+  const errorProvider = failedTool?.result?.provider || run.errorProvider;
   const showCapabilityFeedback =
-    run.status === "failed" && isCapabilityUnavailable(run.text, run.error);
+    run.status === "failed" && isCapabilityUnavailable(errorCode);
+  const errorTitle = (() => {
+    switch (errorCode) {
+      case "provider_plan_required":
+        return `${errorProvider || "Provider"} plan required`;
+      case "provider_quota_limited":
+        return `${errorProvider || "Provider"} limit reached`;
+      case "provider_authentication_required":
+        return `Reconnect ${errorProvider || "provider"}`;
+      case "provider_permission_denied":
+        return `${errorProvider || "Provider"} permission required`;
+      case "provider_action_unavailable":
+        return `${errorProvider || "Provider"} action unavailable`;
+      case "provider_temporarily_unavailable":
+        return `${errorProvider || "Provider"} temporarily unavailable`;
+      case "request_invalid":
+        return "Check the request";
+      case "resource_not_found":
+        return "Requested item not found";
+      case "execution_incomplete":
+        return "Workflow did not finish";
+      case "verification_failed":
+        return "Final verification failed";
+      default:
+        return "Action needs attention";
+    }
+  })();
   const displayedToolCalls =
     inspirationCalls.length <= 1
       ? run.toolCalls
@@ -519,7 +562,12 @@ export function AgentMessage({
                 <CircleAlert className='mt-0.5 size-4 shrink-0 text-amber-500' />
                 <div className='min-w-0'>
                   <p className='text-foreground text-xs font-medium'>
-                    Action needs attention
+                    <span className='inline-flex items-center gap-1.5'>
+                      {errorProvider && (
+                        <PluginLogo label={errorProvider} compact />
+                      )}
+                      <span>{errorTitle}</span>
+                    </span>
                   </p>
                   <p className='text-muted-foreground mt-0.5 text-xs leading-relaxed'>
                     {formatErrorMessage(run.error)}

@@ -1,7 +1,7 @@
 "use client";
 
+import { PluginLogo } from "../plugin-logo";
 import { AgentButton, AgentCard } from "./agent-card";
-import { PluginLogo } from "./elicitation-card";
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { useComposioToolkits } from "@/hooks/use-integrations";

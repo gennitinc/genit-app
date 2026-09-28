@@ -1,5 +1,6 @@
 "use client";
 
+import { PluginLogo, PluginName } from "../plugin-logo";
 import { AgentCard } from "./agent-card";
 import {
   AutomationNodeCreatedCard,
@@ -41,8 +42,6 @@ import {
   Target,
   TrendingUp,
   Users,
-  Video,
-  Youtube,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -79,6 +78,24 @@ function ExternalLinkInline({
   );
 }
 
+function ProviderMeta({
+  data,
+  detail,
+}: {
+  data: any;
+  detail?: React.ReactNode;
+}) {
+  if (!data?.provider) return <>{detail || data?.account}</>;
+  return (
+    <span className='inline-flex items-center gap-1.5'>
+      <PluginName name={data.provider} slug={data.providerSlug} />
+      {(detail || data?.account) && (
+        <span className='max-w-28 truncate'>· {detail || data.account}</span>
+      )}
+    </span>
+  );
+}
+
 function VideoTranscriptCard({ data }: { data: any }) {
   const [copied, setCopied] = useState(false);
   const transcript = String(data?.transcript || "");
@@ -93,13 +110,7 @@ function VideoTranscriptCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={
-        platform === "youtube" ? (
-          <Youtube className='h-3.5 w-3.5' />
-        ) : (
-          <Video className='h-3.5 w-3.5' />
-        )
-      }
+      icon={<PluginLogo label={platformName} slug={platform} compact />}
       title={`${platformName} transcript`}
       meta={data?.language ? String(data.language).toUpperCase() : undefined}
       tone='success'
@@ -151,7 +162,7 @@ export function SocialPostPublishedCard({ data }: { data: any }) {
     <AgentCard
       icon={<CheckCircle2 className='h-3.5 w-3.5' />}
       title={item?.name || "Post published"}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
       tone='success'
     >
       {item?.text && (
@@ -193,7 +204,7 @@ export function PostListCard({ data }: { data: any }) {
     <AgentCard
       icon={<FileText className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? label : `${label}s`}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -237,7 +248,7 @@ export function CommentsListCard({ data }: { data: any }) {
     <AgentCard
       icon={<MessageSquare className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "comment" : "comments"}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -286,14 +297,23 @@ export function InsightsCard({ data }: { data: any }) {
   const entries =
     typeof metrics === "object" && metrics
       ? Object.entries(metrics)
-          .filter(([k]) => !["status", "actionItem", "account"].includes(k))
+          .filter(
+            ([k]) =>
+              ![
+                "status",
+                "actionItem",
+                "account",
+                "provider",
+                "providerSlug",
+              ].includes(k)
+          )
           .slice(0, 8)
       : [];
   return (
     <AgentCard
       icon={<TrendingUp className='h-3.5 w-3.5' />}
       title='Insights'
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {entries.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -325,7 +345,7 @@ export function EmailSentCard({ data }: { data: any }) {
     <AgentCard
       icon={<Send className='h-3.5 w-3.5' />}
       title='Email sent'
-      meta={d.to || data?.to}
+      meta={<ProviderMeta data={data} detail={d.to || data?.to} />}
       tone='success'
     >
       {(d.subject || data?.subject) && (
@@ -349,7 +369,7 @@ export function EmailListCard({ data }: { data: any }) {
     <AgentCard
       icon={<Mail className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "email" : "emails"}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -383,7 +403,7 @@ export function MessageSentCard({ data }: { data: any }) {
     <AgentCard
       icon={<Send className='h-3.5 w-3.5' />}
       title='Message sent'
-      meta={d.recipient || d.chat || d.to}
+      meta={<ProviderMeta data={data} detail={d.recipient || d.chat || d.to} />}
       tone='success'
     >
       {(d.message || d.text) && (
@@ -402,7 +422,7 @@ export function DriveFilesCard({ data }: { data: any }) {
     <AgentCard
       icon={<Folder className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "file" : "files"}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -445,7 +465,7 @@ export function GoogleFormCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<PluginLogo label='Google Forms' slug='googleforms' compact />}
       title={form.info?.title || "Google Form ready"}
       meta={
         typeof fieldCount === "number" ? `${fieldCount} fields` : data?.account
@@ -482,7 +502,7 @@ export function CampaignListCard({ data }: { data: any }) {
     <AgentCard
       icon={<BarChart3 className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "campaign" : "campaigns"}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>
@@ -524,7 +544,7 @@ export function ContactListCard({ data }: { data: any }) {
     <AgentCard
       icon={<Users className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "contact" : "contacts"}`}
-      meta={data?.account}
+      meta={<ProviderMeta data={data} />}
     >
       {items.length === 0 ? (
         <div className='text-muted-foreground text-[12.5px]'>

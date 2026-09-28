@@ -10,6 +10,20 @@ export type AgentRunStatus =
   | "failed"
   | "cancelled";
 
+export type AgentErrorCode =
+  | "genit_feature_missing"
+  | "provider_action_unavailable"
+  | "provider_plan_required"
+  | "provider_quota_limited"
+  | "provider_authentication_required"
+  | "provider_permission_denied"
+  | "provider_temporarily_unavailable"
+  | "request_invalid"
+  | "resource_not_found"
+  | "execution_incomplete"
+  | "verification_failed"
+  | "unknown";
+
 export interface AgentTask {
   id: string;
   title: string;
@@ -25,6 +39,8 @@ export interface AgentToolCall {
     ok: boolean;
     data?: any;
     error?: string;
+    errorCode?: AgentErrorCode;
+    provider?: string;
     providerLogId?: string;
     verification?: {
       status: "verified";

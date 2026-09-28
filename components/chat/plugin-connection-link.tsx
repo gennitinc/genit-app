@@ -1,6 +1,7 @@
 "use client";
 
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
+import { PluginLogo } from "@/components/chat/plugin-logo";
 import { Button } from "@/components/ui/button";
 import { useComposioToolkits, useIntegrations } from "@/hooks/use-integrations";
 import {
@@ -8,7 +9,7 @@ import {
   resolveComposioToolkit,
 } from "@/lib/plugin-connection-link";
 import Loading from "@/utils/Loading";
-import { CheckCircle2, Plug } from "lucide-react";
+import { Plug } from "lucide-react";
 import {
   type AnchorHTMLAttributes,
   Children,
@@ -117,7 +118,7 @@ function PluginConnectionControl({
           target='_blank'
           rel='noopener noreferrer'
         >
-          <Plug />
+          <PluginLogo label={label} compact />
           {label}
         </a>
       </Button>
@@ -135,7 +136,12 @@ function PluginConnectionControl({
         aria-label={connected ? `${toolkit.name} connected` : label}
         onClick={() => setOpen(true)}
       >
-        {connected ? <CheckCircle2 /> : <Plug />}
+        <PluginLogo
+          icon={toolkit.logo}
+          label={toolkit.name}
+          slug={toolkit.slug}
+          compact
+        />
         {connected ? "Connected" : `Connect ${toolkit.name}`}
       </Button>
       <ConnectDialog

@@ -1,8 +1,9 @@
 "use client";
 
+import { PluginLogo, PluginName } from "../plugin-logo";
 import { AgentCard } from "./agent-card";
 import { LocalizedText } from "@/components/localized-text";
-import { Calendar, ExternalLink, MapPin, Users } from "lucide-react";
+import { ExternalLink, MapPin, Users } from "lucide-react";
 
 type GcalEvent = {
   id?: string;
@@ -82,9 +83,16 @@ export function CalendarEventsCard({
 }) {
   return (
     <AgentCard
-      icon={<Calendar className='h-3.5 w-3.5' />}
+      icon={
+        <PluginLogo label='Google Calendar' slug='google_calendar' compact />
+      }
       title={`${events.length} ${events.length === 1 ? "event" : "events"}`}
-      meta={account}
+      meta={
+        <span className='inline-flex items-center gap-1.5'>
+          <PluginName name='Google Calendar' slug='google_calendar' />
+          {account && <span>· {account}</span>}
+        </span>
+      }
     >
       {events.length === 0 ? (
         <div className='text-muted-foreground py-2 text-center text-[12.5px]'>
