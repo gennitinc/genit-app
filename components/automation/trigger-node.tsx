@@ -398,12 +398,11 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                 </button>
                 <button
                   onClick={() => data.onTestRun!(id)}
-                  disabled={data.isActive === false || data.isTesting}
+                  disabled={data.isTesting}
+                  title='Simulate the complete workflow without generating, publishing, or using credits'
                   className={cn(
                     "flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-[background-color,border-color,transform] duration-150 active:scale-[0.97]",
-                    data.isActive === false
-                      ? "cursor-not-allowed border-transparent bg-zinc-100 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                      : "border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:border-blue-800/50 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40",
+                    "border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:border-blue-800/50 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40",
                     data.isTesting && "cursor-not-allowed opacity-50"
                   )}
                 >
@@ -412,7 +411,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   ) : (
                     <Play className='h-3.5 w-3.5' />
                   )}
-                  {data.isTesting ? "Testing..." : "Test Run"}
+                  {data.isTesting ? "Simulating..." : "Dry Run"}
                 </button>
               </div>
             )}

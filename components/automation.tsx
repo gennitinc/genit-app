@@ -201,9 +201,11 @@ function automationTraceSummary(trace: any[] = []) {
   return trace
     .map((step) => {
       if (step.type === "condition")
-        return `${step.nodeId}: ${step.outcome} branch`;
+        return step.outcome
+          ? `${step.nodeId}: ${step.outcome} branch`
+          : `${step.nodeId}: ${step.detail || step.status || "validated"}`;
       if (step.type === "delay")
-        return `${step.nodeId}: delay checked${step.skippedDuringTest ? " (not waited during test)" : ""}`;
+        return `${step.nodeId}: ${step.detail || "delay validated without waiting"}`;
       if (step.status) return `${step.nodeId}: ${step.status}`;
       return `${step.nodeId}: ${step.type}`;
     })
@@ -524,7 +526,7 @@ export default function AutomationWorkflow({
       }
       try {
         onNodeDataChange(nodeId, { isTesting: true });
-        toast.loading("Triggering test run...", { id: `test-run-${nodeId}` });
+        toast.loading("Running zero-credit dry run...", { id: `test-run-${nodeId}` });
         const res = await apiResponse.post(
           `/apps/automation/${projectId}/test-run`,
           { nodeId }
@@ -532,16 +534,16 @@ export default function AutomationWorkflow({
         if (res.data?.success) {
           const trace = automationTraceSummary(res.data?.data?.trace);
           toast.success(
-            res.data.message || `Test run completed successfully.`,
+            res.data.message || `Zero-credit dry run passed.`,
             { id: `test-run-${nodeId}`, description: trace || undefined }
           );
         } else {
-          toast.error("Test run failed", { id: `test-run-${nodeId}` });
+          toast.error("Dry run found issues", { id: `test-run-${nodeId}` });
         }
       } catch (err: any) {
         console.error(err);
         const data = err.response?.data;
-        const errorMessage = data?.message || "Failed to trigger test run";
+        const errorMessage = data?.message || "Dry run failed";
         const errorDetails =
           data?.errors?.length > 0 ? data.errors.join("\n") : undefined;
         const trace = automationTraceSummary(data?.data?.trace);

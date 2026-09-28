@@ -162,8 +162,8 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                   </option>
                   {serverModels.map((m) => (
                     <option
-                      key={m.modelId}
-                      value={m.modelId}
+                      key={m._id || m.modelId}
+                      value={m._id || m.modelId}
                       className='bg-white text-zinc-800 dark:bg-neutral-900 dark:text-neutral-200'
                     >
                       {m.name}
