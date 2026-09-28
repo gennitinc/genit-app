@@ -73,6 +73,7 @@ export function ElicitationCard({
   const [value, setValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [pickedValue, setPickedValue] = useState<string | null>(null);
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [showOther, setShowOther] = useState(false);
 
   const submit = async (v: string, isOther = false) => {
@@ -91,6 +92,14 @@ export function ElicitationCard({
     elicitation.presentation || ""
   );
   const isPluginPicker = elicitation.presentation === "plugin_choice";
+  const isMultiple = elicitation.multiple === true;
+
+  const toggle = (option: string) =>
+    setSelectedValues((current) =>
+      current.includes(option)
+        ? current.filter((value) => value !== option)
+        : [...current, option]
+    );
 
   const imageSizes: Record<
     string,
@@ -146,20 +155,24 @@ export function ElicitationCard({
                 ? "mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2"
                 : "mt-3 flex flex-wrap gap-1.5"
           }
-          role='radiogroup'
+          role={isMultiple ? "group" : "radiogroup"}
           aria-label='Answer choices'
         >
           {elicitation.options!.map((opt) => {
-            const isPicked = pickedValue === opt.value;
+            const isPicked = isMultiple
+              ? selectedValues.includes(opt.value)
+              : pickedValue === opt.value;
             const imageSize = visualSizes[opt.value];
             return (
               <button
                 key={opt.value}
                 type='button'
-                role='radio'
+                role={isMultiple ? "checkbox" : "radio"}
                 aria-checked={isPicked}
                 disabled={disabled || submitting}
-                onClick={() => submit(opt.value)}
+                onClick={() =>
+                  isMultiple ? toggle(opt.value) : submit(opt.value)
+                }
                 title={opt.description}
                 className={
                   isVisualSizePicker
@@ -255,6 +268,19 @@ export function ElicitationCard({
             </button>
           )}
         </div>
+      )}
+
+      {hasOptions && isMultiple && (
+        <AgentButton
+          type='button'
+          variant='primary'
+          disabled={disabled || submitting || selectedValues.length === 0}
+          className='mt-3 h-8'
+          onClick={() => submit(JSON.stringify(selectedValues))}
+        >
+          {submitting ? <LoadingFileLoader size={12} /> : null}
+          <LocalizedText text={"Continue"} /> ({selectedValues.length})
+        </AgentButton>
       )}
 
       {(!hasOptions || showOther) && (

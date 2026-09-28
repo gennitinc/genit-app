@@ -16,6 +16,8 @@ interface AIGenerateNodeData {
   aspectRatio: string;
   voiceId?: string;
   voiceName?: string;
+  dynamicMode?: "static" | "new_each_run" | "continue_series";
+  creativeSeriesKey?: string;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -240,6 +242,35 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
                 placeholder='Describe what to generate...'
               />
             </div>
+            <div>
+              <label className={labelCls}>Creative behavior</label>
+              <select
+                value={data.dynamicMode || "static"}
+                onChange={(e) =>
+                  data.onNodeDataChange(id, { dynamicMode: e.target.value })
+                }
+                className={selectCls}
+              >
+                <option value='static'>Same brief each run</option>
+                <option value='new_each_run'>New concept each run</option>
+                <option value='continue_series'>Continue the series</option>
+              </select>
+            </div>
+            {data.dynamicMode && data.dynamicMode !== "static" && (
+              <div>
+                <label className={labelCls}>Series memory key</label>
+                <input
+                  value={data.creativeSeriesKey || ""}
+                  onChange={(e) =>
+                    data.onNodeDataChange(id, {
+                      creativeSeriesKey: e.target.value,
+                    })
+                  }
+                  className={inputCls}
+                  placeholder='e.g. daily-product-stories'
+                />
+              </div>
+            )}
           </>
         ) : (
           <div className='space-y-1.5'>
@@ -265,6 +296,13 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
               {data.prompt && (
                 <p className='truncate text-[10px] text-zinc-500 dark:text-neutral-400'>
                   {data.prompt}
+                </p>
+              )}
+              {data.dynamicMode && data.dynamicMode !== "static" && (
+                <p className='text-[10px] text-violet-600 dark:text-violet-400'>
+                  {data.dynamicMode === "continue_series"
+                    ? "Continues previous installment"
+                    : "Creates a new concept every run"}
                 </p>
               )}
             </div>

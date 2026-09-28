@@ -191,6 +191,7 @@ export function useAgentRuns(projectId: string | undefined) {
           options: p.options,
           presentation: p.presentation,
           allowOther: p.allowOther,
+          multiple: p.multiple,
         },
         status: "awaiting_input",
       }));

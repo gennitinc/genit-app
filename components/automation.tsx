@@ -1039,6 +1039,7 @@ export default function AutomationWorkflow({
         break;
       case "action":
         baseData.actionType = subtype || "send_gmail";
+        baseData.dynamicMode = "static";
         baseData.recipientEmail = "";
         baseData.subject = "";
         baseData.messageBody = "";
@@ -1067,6 +1068,7 @@ export default function AutomationWorkflow({
         baseData.prompt = "";
         baseData.model = "";
         baseData.aspectRatio = "16:9";
+        baseData.dynamicMode = "static";
         break;
       case "transform":
         baseData.mappings = [{ key: "", value: "" }];

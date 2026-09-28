@@ -46,6 +46,7 @@ export interface AgentElicitation {
   }[];
   presentation?: "buttons" | "image_size" | "video_size" | "plugin_choice";
   allowOther?: boolean;
+  multiple?: boolean;
 }
 
 export interface AgentIntegrationRequired {

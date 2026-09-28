@@ -122,6 +122,8 @@ interface ActionNodeData {
   imageModelId?: string;
   videoModelId?: string;
   audioModelId?: string;
+  dynamicMode?: "static" | "new_each_run" | "continue_series";
+  creativeSeriesKey?: string;
   isEditMode: boolean;
   nodeId: string;
   onRemoveNode: (id: string) => void;
@@ -894,6 +896,37 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     className={inputCls}
                   />
                 </div>
+                <div>
+                  <label className={labelCls}>Creative behavior</label>
+                  <select
+                    value={data.dynamicMode || "static"}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, {
+                        dynamicMode: e.target.value,
+                      })
+                    }
+                    className={selectCls}
+                  >
+                    <option value='static'>Same story each run</option>
+                    <option value='new_each_run'>New story each run</option>
+                    <option value='continue_series'>Continue the story</option>
+                  </select>
+                </div>
+                {data.dynamicMode && data.dynamicMode !== "static" && (
+                  <div>
+                    <label className={labelCls}>Series memory key</label>
+                    <input
+                      value={data.creativeSeriesKey || ""}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, {
+                          creativeSeriesKey: e.target.value,
+                        })
+                      }
+                      className={inputCls}
+                      placeholder='e.g. daily-brand-stories'
+                    />
+                  </div>
+                )}
                 <div>
                   <label className={labelCls}>Locked characters</label>
                   <textarea
