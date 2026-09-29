@@ -81,6 +81,10 @@ type PopupMessage =
       }>;
     }
   | {
+      type: "genit:composio:authorized";
+      platform: IntegrationPlatform;
+    }
+  | {
       type: "genit:composio:verify";
       sessionUri: string;
     };
@@ -440,6 +444,7 @@ export function ConnectDialog({
         data.type !== "genit:integration:connected" &&
         data.type !== "genit:integration:error" &&
         data.type !== "genit:integration:select_target" &&
+        data.type !== "genit:composio:authorized" &&
         data.type !== "genit:composio:verify"
       )
         return;
@@ -458,6 +463,15 @@ export function ConnectDialog({
         return;
       }
       if (data.platform !== activePlatform) return;
+
+      if (data.type === "genit:composio:authorized") {
+        connectionResolvedRef.current = true;
+        closePopup();
+        void reconcileComposioConnection(
+          "The account was authorized, but Genit could not finish saving the connection."
+        );
+        return;
+      }
 
       // Mark as resolved BEFORE any React state updates so the popup poll
       // can never race ahead and flash an error.
@@ -526,6 +540,27 @@ export function ConnectDialog({
     connectionResolvedRef.current = false;
     connectionStartedAtRef.current = Date.now();
 
+    // Open synchronously while this function still has the user's click.
+    // Mobile browsers otherwise treat the post-request window.open as a
+    // blocked or broken navigation.
+    const width = 600;
+    const height = 720;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    const popup = window.open(
+      "/plugin/composio/connect",
+      "genit_oauth",
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+    );
+    if (!popup) {
+      setErrorMessage(
+        "Popup blocked. Allow popups for this site and try again."
+      );
+      setPhase("error");
+      return;
+    }
+    popupRef.current = popup;
+
     let response: ConnectUrlResponse;
     try {
       response = appSlug
@@ -539,6 +574,7 @@ export function ConnectDialog({
         "Failed to start connection";
       setErrorMessage(msg);
       setPhase("error");
+      closePopup();
       toast.error("Could not start connection", { description: msg });
       return;
     }
@@ -547,6 +583,7 @@ export function ConnectDialog({
     // Smart-connect fast path: the org already has a Meta identity with
     // sufficient scopes for this surface. No popup needed.
     if (response.skipOAuth) {
+      closePopup();
       // Instagram fast-path: server returns candidates instead of
       // provisioned rows. Show the picker, same as the OAuth route.
       if (response.surface === "instagram" && "candidates" in response) {
@@ -573,21 +610,12 @@ export function ConnectDialog({
     }
 
     try {
-      const width = 600;
-      const height = 720;
-      const left = window.screenX + (window.outerWidth - width) / 2;
-      const top = window.screenY + (window.outerHeight - height) / 2;
-      const popup = window.open(
-        response.authorizeUrl,
-        "genit_oauth",
-        `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
-      );
-      if (!popup) {
-        throw new Error(
-          "Popup blocked. Allow popups for this site and try again."
-        );
-      }
-      popupRef.current = popup;
+      if (popup.closed) throw new Error("Connection window was closed.");
+      const authorizeUrl = new URL(response.authorizeUrl);
+      if (authorizeUrl.protocol !== "https:")
+        throw new Error("The provider returned an invalid connection URL.");
+      popup.location.replace(authorizeUrl.toString());
+      popup.focus();
       connectionResolvedRef.current = false;
       const poll = setInterval(() => {
         if (!isCurrentAttempt()) {
@@ -646,6 +674,7 @@ export function ConnectDialog({
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || err?.message || "Failed to open popup";
+      closePopup();
       setErrorMessage(msg);
       setPhase("error");
       toast.error("Could not start connection", { description: msg });

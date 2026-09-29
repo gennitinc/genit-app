@@ -62,6 +62,7 @@ import {
   Moon,
   Plus,
   Sun,
+  Trash2,
   User as UserIcon,
   UserMinus,
   Users,
@@ -82,6 +83,7 @@ export function OrgSwitcher({
     user,
     switchOrganization,
     createOrganization,
+    deleteOrganization,
     createTeam,
     inviteToTeam,
     leaveTeam,
@@ -132,6 +134,8 @@ export function OrgSwitcher({
   const [leaving, setLeaving] = useState(false);
 
   const [orgOnboardingOpen, setOrgOnboardingOpen] = useState(false);
+  const [deleteContext, setDeleteContext] = useState<Organization | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const socialsFromBrand = (socials: BrandData["socials"]) =>
     Object.entries(socials)
@@ -188,7 +192,7 @@ export function OrgSwitcher({
       setSwitchingId(orgId);
       try {
         await switchOrganization(orgId);
-        toast.success("Switched organization");
+        window.location.reload();
       } catch {
         toast.error("Couldn't switch organization");
       } finally {
@@ -197,6 +201,25 @@ export function OrgSwitcher({
     },
     [current?._id, switchOrganization]
   );
+
+  const handleDeleteOrganization = async () => {
+    if (!deleteContext) return;
+    setDeleting(true);
+    try {
+      await deleteOrganization(deleteContext._id);
+      toast.success(`Deleted ${deleteContext.businessName}`);
+      setDeleteContext(null);
+      window.location.reload();
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Couldn't delete organization"
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const loadTeams = useCallback(
     async (orgId: string) => {
@@ -534,6 +557,16 @@ export function OrgSwitcher({
                             <Plus className='mr-2 h-4 w-4' />
                             <LocalizedText text={"Create team"} />
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={(e) => {
+                              e.preventDefault();
+                              setDeleteContext(org);
+                            }}
+                            className='text-destructive focus:bg-destructive/10 focus:text-destructive'
+                          >
+                            <Trash2 className='mr-2 h-4 w-4' />
+                            <LocalizedText text={"Delete organization"} />
+                          </DropdownMenuItem>
                         </>
                       )}
                     </DropdownMenuSubContent>
@@ -803,6 +836,16 @@ export function OrgSwitcher({
         title='Sign out?'
         description="You'll be signed out of your session on this device."
         confirmLabel='Sign out'
+      />
+
+      <AccountActionModal
+        open={!!deleteContext}
+        onClose={() => setDeleteContext(null)}
+        onConfirm={handleDeleteOrganization}
+        loading={deleting}
+        title={`Delete ${deleteContext?.businessName || "organization"}?`}
+        description="This permanently deletes the organization and removes every member's access. This can't be undone."
+        confirmLabel='Delete organization'
       />
 
       <AccountActionModal

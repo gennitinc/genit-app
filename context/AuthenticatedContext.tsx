@@ -180,7 +180,7 @@ export interface User {
   emailtemplatetourguide: boolean;
   formtourguide: boolean;
   __v: number;
-  business: Organization;
+  business: Organization | null;
   allOrganizations?: Organization[];
   currentOrganization?: Organization | null;
   userPlan: Plan;
@@ -272,6 +272,7 @@ interface AuthenticatedContextInt {
     orgId: string,
     updates: Partial<Organization> & Record<string, any>
   ) => Promise<Organization | null>;
+  deleteOrganization: (orgId: string) => Promise<void>;
   createTeam: (
     orgId: string,
     payload: { name: string; description?: string; color?: string }
@@ -469,6 +470,28 @@ export function AuthenticatedContextProvider({
     }
   };
 
+  const deleteOrganization = async (orgId: string) => {
+    try {
+      const response = await apiResponse.delete(`/orgs/${orgId}`);
+      if (response.status === 200) {
+        setuser((prev) =>
+          prev
+            ? {
+                ...prev,
+                allOrganizations: response.data.organizations || [],
+                currentOrganization: response.data.currentOrganization || null,
+                business: prev.business?._id === orgId ? null : prev.business,
+              }
+            : prev
+        );
+        trackEvent("organization_deleted", { organization_id: orgId });
+      }
+    } catch (error) {
+      console.error("Failed to delete organization:", error);
+      throw error;
+    }
+  };
+
   const createTeam = async (
     orgId: string,
     payload: { name: string; description?: string; color?: string }
@@ -634,6 +657,7 @@ export function AuthenticatedContextProvider({
         switchOrganization,
         createOrganization,
         updateOrganization,
+        deleteOrganization,
         createTeam,
         inviteToTeam,
         leaveTeam,
