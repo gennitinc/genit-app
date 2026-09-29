@@ -8,12 +8,12 @@ export function ServiceWorkerRegister() {
       return;
     }
 
-    const reloadForStaleChunk = async (error: unknown) => {
+    const recoverNavigation = async (error: unknown) => {
       const message = String(
         error instanceof Error ? error.message : (error as any)?.reason || error
       );
       if (
-        !/ChunkLoadError|Loading chunk|failed to fetch dynamically imported module/i.test(
+        !/ChunkLoadError|Loading chunk|failed to fetch dynamically imported module|failed to fetch RSC payload|Connection closed|Minified React error #412/i.test(
           message
         )
       ) {
@@ -43,9 +43,10 @@ export function ServiceWorkerRegister() {
       ]);
       window.location.reload();
     };
-    const handleError = (event: ErrorEvent) => reloadForStaleChunk(event.error);
+    const handleError = (event: ErrorEvent) =>
+      recoverNavigation(event.error || event.message);
     const handleRejection = (event: PromiseRejectionEvent) =>
-      reloadForStaleChunk(event.reason);
+      recoverNavigation(event.reason);
 
     window.addEventListener("error", handleError);
     window.addEventListener("unhandledrejection", handleRejection);
