@@ -51,26 +51,21 @@ export function ServiceWorkerRegister() {
     window.addEventListener("error", handleError);
     window.addEventListener("unhandledrejection", handleRejection);
 
-    // The worker no longer provides offline behavior. Remove old registrations
-    // and Genit caches so stale Next.js assets cannot control future loads.
-    void Promise.allSettled([
-      navigator.serviceWorker
-        .getRegistrations()
-        .then((registrations) =>
-          Promise.all(
-            registrations.map((registration) => registration.unregister())
-          )
-        ),
-      caches
-        .keys()
-        .then((keys) =>
-          Promise.all(
-            keys
-              .filter((key) => key.startsWith("genit-"))
-              .map((key) => caches.delete(key))
-          )
-        ),
-    ]);
+    // Keep the app installable without intercepting documents or Next.js assets.
+    // Clear caches created by older workers before installing the no-fetch worker.
+    void caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith("genit-"))
+            .map((key) => caches.delete(key))
+        )
+      )
+      .then(() => navigator.serviceWorker.register("/sw.js", { scope: "/" }))
+      .catch((error) => {
+        console.error("[Service Worker] Registration failed:", error);
+      });
 
     return () => {
       window.removeEventListener("error", handleError);
