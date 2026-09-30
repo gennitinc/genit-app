@@ -1,6 +1,16 @@
 import type { IntegrationPlatform } from "./integrations-api";
 import { apiResponse } from "@/utils/apiResponse";
 
+export const POST_PLATFORMS: IntegrationPlatform[] = [
+  "facebook",
+  "instagram",
+  "linkedin",
+  "x",
+  "tiktok",
+  "youtube",
+  "pinterest",
+];
+
 export type SocialPostStatus = "draft" | "scheduled" | "published" | "failed";
 export interface SocialPostMetrics {
   impressions: number;

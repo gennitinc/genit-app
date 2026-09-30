@@ -54,6 +54,7 @@ import {
   type YouTubePrivacy,
 } from "@/lib/integrations-api";
 import {
+  POST_PLATFORMS,
   type SocialPostConnectionOptions,
   type SocialPostMedia,
   type SocialPostStatus,
@@ -78,15 +79,7 @@ import {
   useState,
 } from "react";
 
-export const POST_PLATFORMS: IntegrationPlatform[] = [
-  "facebook",
-  "instagram",
-  "linkedin",
-  "x",
-  "tiktok",
-  "youtube",
-  "pinterest",
-];
+export { POST_PLATFORMS } from "@/lib/social-posts-api";
 
 export const POST_PLATFORM_LABELS: Partial<
   Record<IntegrationPlatform, string>

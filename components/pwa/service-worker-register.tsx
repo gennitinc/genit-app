@@ -51,60 +51,30 @@ export function ServiceWorkerRegister() {
     window.addEventListener("error", handleError);
     window.addEventListener("unhandledrejection", handleRejection);
 
-    // Check if we're in production (not localhost)
-    const isProduction =
-      window.location.hostname !== "localhost" &&
-      window.location.hostname !== "127.0.0.1" &&
-      !window.location.hostname.startsWith("192.168.") &&
-      !window.location.hostname.startsWith("10.");
-
-    // Also allow in production build even on localhost for testing
-    const isProductionBuild = process.env.NODE_ENV === "production";
-
-    if (!isProduction && !isProductionBuild) {
-      return () => {
-        window.removeEventListener("error", handleError);
-        window.removeEventListener("unhandledrejection", handleRejection);
-      };
-    }
-
-    // Register service worker
-    let updateInterval: ReturnType<typeof setInterval> | undefined;
-    navigator.serviceWorker
-      .register("/sw.js", {
-        scope: "/",
-      })
-      .then((registration) => {
-        // Check for updates on page load
-        registration.update();
-
-        // Check for updates every hour
-        updateInterval = setInterval(
-          () => {
-            registration.update();
-          },
-          60 * 60 * 1000
-        );
-      })
-      .catch((error) => {
-        console.error("[Service Worker] Registration failed:", error);
-      });
-
-    // Handle service worker updates
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    });
-
-    // Listen for service worker messages
-    navigator.serviceWorker.addEventListener("message", (event) => {});
+    // The worker no longer provides offline behavior. Remove old registrations
+    // and Genit caches so stale Next.js assets cannot control future loads.
+    void Promise.allSettled([
+      navigator.serviceWorker
+        .getRegistrations()
+        .then((registrations) =>
+          Promise.all(
+            registrations.map((registration) => registration.unregister())
+          )
+        ),
+      caches
+        .keys()
+        .then((keys) =>
+          Promise.all(
+            keys
+              .filter((key) => key.startsWith("genit-"))
+              .map((key) => caches.delete(key))
+          )
+        ),
+    ]);
 
     return () => {
       window.removeEventListener("error", handleError);
       window.removeEventListener("unhandledrejection", handleRejection);
-      if (updateInterval) clearInterval(updateInterval);
     };
   }, []);
 

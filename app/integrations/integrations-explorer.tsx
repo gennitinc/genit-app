@@ -1,7 +1,5 @@
 "use client";
 
-import { ConnectDialog } from "./_components/connect-dialog";
-import { ManageDialog } from "./_components/manage-dialog";
 import {
   BrevoBrand,
   FacebookBrand,
@@ -50,6 +48,7 @@ import {
   Search,
   TrendingUp,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
   type CSSProperties,
@@ -57,6 +56,13 @@ import {
   useMemo,
   useState,
 } from "react";
+
+const ConnectDialog = dynamic(() =>
+  import("./_components/connect-dialog").then((module) => module.ConnectDialog)
+);
+const ManageDialog = dynamic(() =>
+  import("./_components/manage-dialog").then((module) => module.ManageDialog)
+);
 
 export type BaseStatus = "available" | "soon";
 // `partial` = the user has authorized Meta (identity row exists) but the
@@ -487,7 +493,6 @@ function IntegrationCard({
           </button>
         ) : status === "connected" || status === "partial" ? (
           <div className='flex items-center gap-1'>
-            
             <button
               type='button'
               onClick={onManage}
@@ -792,27 +797,31 @@ export function IntegrationsExplorer({
         </div>
       )}
 
-      <ConnectDialog
-        open={Boolean(connectFor)}
-        onOpenChange={(o) => !o && setConnectFor(null)}
-        platform={connectFor?.platform ?? null}
-        platformName={connectFor?.name ?? ""}
-        platformDescription={connectFor?.description ?? ""}
-        Icon={connectFor?.icon ?? (() => null)}
-        iconUrl={connectFor?.remoteIcon}
-        glow={connectFor?.glow ?? "rgba(113,113,122,0.4)"}
-        appSlug={connectFor?.appSlug}
-      />
+      {connectFor && (
+        <ConnectDialog
+          open
+          onOpenChange={(o) => !o && setConnectFor(null)}
+          platform={connectFor.platform}
+          platformName={connectFor.name}
+          platformDescription={connectFor.description}
+          Icon={connectFor.icon}
+          iconUrl={connectFor.remoteIcon}
+          glow={connectFor.glow}
+          appSlug={connectFor.appSlug}
+        />
+      )}
 
-      <ManageDialog
-        open={Boolean(manageFor)}
-        onOpenChange={(o) => !o && setManageFor(null)}
-        connections={manageConnections}
-        platform={manageFor?.platform ?? null}
-        platformName={manageFor?.name ?? ""}
-        Icon={manageFor?.icon ?? (() => null)}
-        glow={manageFor?.glow ?? "rgba(113,113,122,0.4)"}
-      />
+      {manageFor && (
+        <ManageDialog
+          open
+          onOpenChange={(o) => !o && setManageFor(null)}
+          connections={manageConnections}
+          platform={manageFor.platform}
+          platformName={manageFor.name}
+          Icon={manageFor.icon}
+          glow={manageFor.glow}
+        />
+      )}
     </>
   );
 }

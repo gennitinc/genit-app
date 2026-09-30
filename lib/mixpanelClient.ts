@@ -1,4 +1,4 @@
-import mixpanel from "mixpanel-browser";
+type Mixpanel = (typeof import("mixpanel-browser"))["default"];
 
 const APP_ENV = process.env.NODE_ENV;
 const IS_PROD = process.env.NODE_ENV === "production";
@@ -19,6 +19,7 @@ export type MixpanelUserProfile = {
 
 let initialized = false;
 let initFailed = false;
+let mixpanelPromise: Promise<Mixpanel | null> | null = null;
 
 const isMixpanelEnabled = () =>
   typeof window !== "undefined" && Boolean(MIXPANEL_TOKEN);
@@ -29,38 +30,57 @@ const toIsoDate = (value?: number | string | Date) => {
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 };
 
-export const initMixpanel = () => {
+const loadMixpanel = async () => {
   if (!isMixpanelEnabled()) {
-    console.warn("Mixpanel token is missing! Check your .env file.");
-    return false;
+    return null;
   }
 
-  if (initialized && !initFailed) return true;
+  if (mixpanelPromise) return mixpanelPromise;
 
-  try {
-    mixpanel.init(MIXPANEL_TOKEN, {
-      autocapture: true,
-      track_pageview: true,
-      persistence: "localStorage",
-      ignore_dnt: true,
-      debug: !IS_PROD,
-      batch_requests: IS_PROD,
-      api_transport: "XHR",
-      api_host: "https://api-eu.mixpanel.com",
-      loaded: (instance) => {
-        if (!IS_PROD) {
-        }
-      },
+  mixpanelPromise = import("mixpanel-browser")
+    .then(({ default: mixpanel }) => {
+      if (!initialized || initFailed) {
+        mixpanel.init(MIXPANEL_TOKEN, {
+          autocapture: true,
+          track_pageview: true,
+          persistence: "localStorage",
+          ignore_dnt: true,
+          debug: !IS_PROD,
+          batch_requests: IS_PROD,
+          api_transport: "XHR",
+          api_host: "https://api-eu.mixpanel.com",
+        });
+        initialized = true;
+        initFailed = false;
+      }
+      return mixpanel;
+    })
+    .catch((error) => {
+      initialized = false;
+      initFailed = true;
+      mixpanelPromise = null;
+      console.error("Mixpanel initialization failed:", error);
+      return null;
     });
-    initialized = true;
-    initFailed = false;
-    return true;
-  } catch (error) {
-    initialized = false;
-    initFailed = true;
-    console.error("Mixpanel initialization failed:", error);
-    return false;
+
+  return mixpanelPromise;
+};
+
+const afterStartup = (task: () => Promise<void>) => {
+  if (typeof window === "undefined") return;
+  const run = () => void task();
+  const requestIdle = window.requestIdleCallback;
+  if (requestIdle) {
+    requestIdle(run, { timeout: 5_000 });
+  } else {
+    setTimeout(run, 1_000);
   }
+};
+
+export const initMixpanel = () => {
+  afterStartup(async () => {
+    await loadMixpanel();
+  });
 };
 
 const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
@@ -70,40 +90,42 @@ const withDefaults = (properties?: MixpanelProps): MixpanelProps => ({
 });
 
 export const trackEvent = (eventName: string, properties?: MixpanelProps) => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
-  if (!ready) return;
-  try {
-    mixpanel.track(eventName, withDefaults(properties), (response) => {
-      if (!IS_PROD) {
-      }
-    });
-  } catch (error) {
-    console.error(`Mixpanel track failed for "${eventName}":`, error);
-  }
+  afterStartup(async () => {
+    const mixpanel = await loadMixpanel();
+    if (!mixpanel) return;
+    try {
+      mixpanel.track(eventName, withDefaults(properties));
+    } catch (error) {
+      console.error(`Mixpanel track failed for "${eventName}":`, error);
+    }
+  });
 };
 
 export const identifyUser = (profile: MixpanelUserProfile) => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
-  if (!ready) return;
-  try {
-    mixpanel.identify(profile.id);
-    if (mixpanel.people?.set) {
-      mixpanel.people.set({
-        $email: profile.email,
-        $name: profile.username,
-        plan: profile.plan,
-        role: profile.role,
-        email_verified: profile.emailVerified,
-        onboarding_completed: profile.onboardingCompleted,
-        signed_up_at: toIsoDate(profile.createdAt),
-        last_seen_at: new Date().toISOString(),
-      });
+  afterStartup(async () => {
+    const mixpanel = await loadMixpanel();
+    if (!mixpanel) return;
+    try {
+      mixpanel.identify(profile.id);
+      if (mixpanel.people?.set) {
+        mixpanel.people.set({
+          $email: profile.email,
+          $name: profile.username,
+          plan: profile.plan,
+          role: profile.role,
+          email_verified: profile.emailVerified,
+          onboarding_completed: profile.onboardingCompleted,
+          signed_up_at: toIsoDate(profile.createdAt),
+          last_seen_at: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      console.error(
+        `Mixpanel identify failed for user "${profile.id}":`,
+        error
+      );
     }
-  } catch (error) {
-    console.error(`Mixpanel identify failed for user "${profile.id}":`, error);
-  }
+  });
 };
 
 export const identifyAndTrackAuth = (
@@ -120,14 +142,15 @@ export const identifyAndTrackAuth = (
 };
 
 export const resetMixpanelUser = () => {
-  if (!isMixpanelEnabled()) return;
-  const ready = initialized || initMixpanel();
-  if (!ready) return;
-  try {
-    mixpanel.reset();
-  } catch (error) {
-    console.error("Mixpanel reset failed:", error);
-  }
+  afterStartup(async () => {
+    const mixpanel = await loadMixpanel();
+    if (!mixpanel) return;
+    try {
+      mixpanel.reset();
+    } catch (error) {
+      console.error("Mixpanel reset failed:", error);
+    }
+  });
 };
 
 export const trackPageView = (path: string, properties?: MixpanelProps) => {

@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Cache-Control",
-            value: "public, max-age=0, must-revalidate",
+            value: "no-store, max-age=0",
           },
           {
             key: "Service-Worker-Allowed",
