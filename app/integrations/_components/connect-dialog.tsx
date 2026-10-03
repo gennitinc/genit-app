@@ -600,12 +600,7 @@ export function ConnectDialog({
         provisioned?.adAccounts?.[0]?.name ||
         provisioned?.whatsapp?.[0]?.displayPhoneNumber ||
         null;
-      setConnectedAccount(name);
-      setPhase("success");
-      qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
-      toast.success(`Connected ${platformName}`, {
-        description: name ? `@${name}` : undefined,
-      });
+      markConnected(name || undefined);
       return;
     }
 
@@ -716,6 +711,7 @@ export function ConnectDialog({
           }`,
           { description: first ? first.pageName : undefined }
         );
+        onConnected?.();
       } else {
         const result = await provisionInstagramSelected(
           Array.from(selectedIgIds)
@@ -739,6 +735,7 @@ export function ConnectDialog({
             description: first ? `@${first.username}` : undefined,
           });
         }
+        onConnected?.();
       }
     } catch (err: any) {
       const msg =
@@ -751,7 +748,7 @@ export function ConnectDialog({
     } finally {
       setProvisionLoading(false);
     }
-  }, [selectedIgIds, qc, orgId, platform]);
+  }, [selectedIgIds, qc, orgId, onConnected, platform]);
 
   const isSupported = platform ? isPlatformSupported(platform) : false;
   const scopes = platform ? (PLATFORM_SCOPES[platform] ?? []) : [];

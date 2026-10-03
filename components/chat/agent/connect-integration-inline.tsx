@@ -8,24 +8,41 @@ import { useComposioToolkits } from "@/hooks/use-integrations";
 import type { AgentIntegrationRequired } from "@/lib/agents-api";
 import { resolveComposioToolkit } from "@/lib/plugin-connection-link";
 import { ArrowRight, CheckCircle2, Plug, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { useState } from "react";
 
-// Use the same Composio verification and connection refresh flow as Plugins.
 export function ConnectIntegrationInline({
   required,
   onConnected,
 }: {
   required: AgentIntegrationRequired;
-  onConnected?: () => void;
+  onConnected?: () => Promise<void> | void;
 }) {
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
+  const [resuming, setResuming] = useState(false);
   const { data: toolkits = [] } = useComposioToolkits();
   const toolkit =
     toolkits.find((item) => item.slug === required.toolkitSlug) ||
     resolveComposioToolkit(required.platformName, toolkits);
-  const toolkitSlug = required.toolkitSlug || toolkit?.slug;
+  // First-class platforms (Google Calendar, Gmail, etc.) must use their native
+  // OAuth route because their agent tools read native Integration records.
+  // Only dynamic plugin requests carry a toolkitSlug and use Composio.
+  const toolkitSlug = required.toolkitSlug;
   const pluginName = toolkit?.name || required.platformName;
+  const resumeChat = async () => {
+    if (!onConnected || resuming) return;
+    setResuming(true);
+    try {
+      await onConnected();
+    } catch {
+      toast.error(`${pluginName} is connected, but the chat could not resume`, {
+        description: "Click Continue chat to retry.",
+      });
+    } finally {
+      setResuming(false);
+    }
+  };
 
   return (
     <>
@@ -49,14 +66,29 @@ export function ConnectIntegrationInline({
         </p>
         <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
           <ShieldCheck className='h-3 w-3' />
-          <span>Connect securely through Composio.</span>
+          <span>
+            Connect securely
+            {toolkitSlug ? " through Composio" : ` to ${pluginName}`}.
+          </span>
         </div>
         <div className='mt-3'>
           {connected ? (
-            <AgentButton type='button' variant='secondary' disabled>
-              <CheckCircle2 className='h-3.5 w-3.5' />
-              <LocalizedText text={"Connected"} />
-            </AgentButton>
+            <div className='flex flex-wrap items-center gap-2'>
+              <AgentButton type='button' variant='secondary' disabled>
+                <CheckCircle2 className='h-3.5 w-3.5' />
+                <LocalizedText text={"Connected"} />
+              </AgentButton>
+              <AgentButton
+                type='button'
+                variant='primary'
+                disabled={resuming}
+                onClick={() => void resumeChat()}
+              >
+                <LocalizedText
+                  text={resuming ? "Continuing…" : "Continue chat"}
+                />
+              </AgentButton>
+            </div>
           ) : (
             <AgentButton
               type='button'
@@ -83,7 +115,7 @@ export function ConnectIntegrationInline({
         onConnected={() => {
           setConnected(true);
           setOpen(false);
-          onConnected?.();
+          void resumeChat();
         }}
       />
     </>

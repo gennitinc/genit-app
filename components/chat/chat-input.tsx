@@ -113,7 +113,6 @@ export function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useUserContext();
   const router = useRouter();
-  const hasEnoughCredits = (user?.creditsRemaining ?? 0) > 0;
   const activeOrg =
     user?.currentOrganization && typeof user.currentOrganization === "object"
       ? user.currentOrganization
@@ -126,13 +125,14 @@ export function ChatInput({
   const hasOrgBrand = orgBrandColors.length > 0;
   const showAppliedSwatches = hasOrgBrand && brandIdentityEnabled;
   const validateInput = useCallback((value: string, files: File[]) => {
-    if (!value.trim() && files.length === 0) {
+    const trimmed = value.trim();
+    if (!trimmed && files.length === 0) {
       return "Please enter a prompt or attach files";
     }
-    if (value.trim().length < 2) {
+    if (trimmed && trimmed.length < 2) {
       return "Please provide a more detailed prompt (at least 2 characters)";
     }
-    if (value.trim().length > 5000) {
+    if (trimmed.length > 5000) {
       return "Prompt is too long (maximum 5000 characters)";
     }
     return null;
@@ -145,10 +145,16 @@ export function ChatInput({
   const [isSending, setIsSending] = useState(false);
   const [isStopping, setIsStopping] = useState(false);
   const sendInFlightRef = useRef(false);
-  const isAiResponding = isGenerating || isAgentRunning || isSending;
   const activeRun = [...runs].reverse().find((run) => run.status === "running");
   const latestRun = runs.at(-1);
-  const stoppedRun = latestRun?.status === "cancelled" ? latestRun : undefined;
+  const wantsToResume = /^(continue|resume|go on|keep going)[.!]?$/i.test(
+    inputValue.trim()
+  );
+  const resumableRun =
+    latestRun && ["cancelled", "failed", "running"].includes(latestRun.status)
+      ? latestRun
+      : undefined;
+  const showStopButton = isAgentRunning && !wantsToResume;
 
   useEffect(() => {
     setSelectedModel(null);
@@ -189,11 +195,11 @@ export function ChatInput({
 
   // FIXED: Handle sending messages with proper project identification
   const handlegenerateMessage = async () => {
-    if (sendInFlightRef.current || isAgentRunning) return;
+    if (sendInFlightRef.current || (isAgentRunning && !wantsToResume)) return;
 
     // Check for low credits
     const creditsRemaining = user?.creditsRemaining ?? 0;
-    if (creditsRemaining === 0) {
+    if (creditsRemaining === 0 && !(resumableRun && wantsToResume)) {
       const isBasic = String(user?.userPlan) === "Basic";
       trackEvent("low_credits_prompt_shown", {
         credits_remaining: creditsRemaining,
@@ -218,6 +224,7 @@ export function ChatInput({
 
     if (validationError) {
       console.error("Validation error:", validationError);
+      toast.error(validationError);
       return;
     }
 
@@ -229,11 +236,8 @@ export function ChatInput({
     sendInFlightRef.current = true;
     setIsSending(true);
     try {
-      if (
-        stoppedRun &&
-        /^(continue|resume|go on|keep going)[.!]?$/i.test(inputValue.trim())
-      ) {
-        await continueAgent(stoppedRun.runId);
+      if (resumableRun && wantsToResume) {
+        await continueAgent(resumableRun.runId);
         clearInput();
         return;
       }
@@ -244,7 +248,9 @@ export function ChatInput({
         project_id: project._id,
       });
 
-      const formattedInput = appendClientTimeContext(inputValue);
+      const formattedInput = appendClientTimeContext(
+        inputValue.trim() || "Please use the attached files."
+      );
 
       let uploadedFiles:
         | { name: string; type: string; url: string; size?: number }[]
@@ -307,12 +313,13 @@ export function ChatInput({
         });
       }
 
-      await startAgent(
+      const startedRun = await startAgent(
         formattedInput,
         uploadedFiles,
         undefined,
         brandIdentityEnabled
       );
+      if (!startedRun) throw new Error("No project is available for this run");
 
       trackEvent("generation_request_submitted", {
         project_id: project._id,
@@ -326,6 +333,11 @@ export function ChatInput({
       }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
+      const message =
+        (error as any)?.response?.data?.message ||
+        (error as any)?.message ||
+        "Could not start Genit. Your message is still here so you can retry.";
+      toast.error(message);
       trackEvent("generation_request_failed", {
         project_id: project?._id,
       });
@@ -642,10 +654,10 @@ export function ChatInput({
                 </button>
 
                 <button
-                  type={isAgentRunning ? "button" : "submit"}
-                  onClick={isAgentRunning ? handleStop : undefined}
+                  type={showStopButton ? "button" : "submit"}
+                  onClick={showStopButton ? handleStop : undefined}
                   disabled={
-                    isAgentRunning
+                    showStopButton
                       ? isStopping
                       : isGenerating ||
                         isSending ||
@@ -654,7 +666,7 @@ export function ChatInput({
                         (inputValue.trim().length < 2 &&
                           attachedFiles.length === 0)
                   }
-                  aria-label={isAgentRunning ? "Stop Genit" : "Send message"}
+                  aria-label={showStopButton ? "Stop Genit" : "Send message"}
                   className='relative cursor-pointer rounded-[10px] bg-[linear-gradient(to_top,#292929,#555555,#292929)] p-[2px] shadow-[inset_0_6px_2px_-4px_rgba(255,255,255,.5)] transition-all duration-150 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   {/* Border effects behind content */}
@@ -675,13 +687,13 @@ export function ChatInput({
 
                   {/* Button content */}
                   <div className='relative z-10 flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-black/10 backdrop-blur-[3px] transition-all duration-300 hover:drop-shadow-[0_0_5px_white]'>
-                    {isAgentRunning ? (
+                    {showStopButton ? (
                       isStopping ? (
                         <LoadingFileLoader size={14} />
                       ) : (
                         <span className='h-3 w-3 rounded-[2px] bg-white' />
                       )
-                    ) : isAiResponding ? (
+                    ) : isSending || isGenerating ? (
                       <LoadingFileLoader size={14} />
                     ) : (
                       <svg

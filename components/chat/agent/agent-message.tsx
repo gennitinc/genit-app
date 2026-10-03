@@ -70,6 +70,19 @@ function humanizeToolName(name: string): string {
 
 function formatErrorMessage(error: string | undefined): string {
   if (!error) return "";
+  if (/^invalid_?value$/i.test(error.trim())) {
+    return "The agent generated a value that did not match the available options. Please retry your request.";
+  }
+  if (/tool_use[\s\S]*tool_result[\s\S]*corresponding/i.test(error)) {
+    return "A previous agent step was interrupted before its result was saved. Please retry your request.";
+  }
+  if (
+    /(?:messages\.\d+|InvalidToolInputError|NoSuchToolError|AI_[A-Z_]+|tool[_ -]?(?:use|result|call))/i.test(
+      error
+    )
+  ) {
+    return "An internal agent step could not be completed. Please retry your request.";
+  }
   try {
     let parsed = JSON.parse(error);
 
@@ -94,9 +107,10 @@ function formatErrorMessage(error: string | undefined): string {
       return typeof msg === "string" ? msg : JSON.stringify(msg);
     }
 
-    if (parsed.message) {
+    if (parsed.message && typeof parsed.message === "string") {
       return parsed.message;
     }
+    return "We couldn't complete this request. Please try again.";
   } catch (e) {
     // If it's not JSON, or parsing fails, check if it contains common quota/rate limit text
     const lowerError = error.toLowerCase();

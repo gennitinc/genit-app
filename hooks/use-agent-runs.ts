@@ -53,31 +53,25 @@ export function useAgentRuns(projectId: string | undefined) {
     projectIdRef.current = projectId;
   }, [projectId]);
 
+  const reconcileFromServer = useCallback(async (id?: string) => {
+    if (!id) return;
+    try {
+      const historyRuns = await listAgentRuns(id);
+      if (projectIdRef.current !== id) return;
+      setRuns(
+        (historyRuns as AgentRunView[]).sort(
+          (a, b) => a.createdAt - b.createdAt
+        )
+      );
+    } catch (err) {
+      console.error("Failed to reconcile agent history:", err);
+    }
+  }, []);
+
   useEffect(() => {
     if (!projectId) return;
-    let mounted = true;
-    listAgentRuns(projectId)
-      .then((historyRuns) => {
-        if (!mounted) return;
-        setRuns((prev) => {
-          // Merge history runs with any incoming socket runs.
-          // History runs replace existing ones if they match runId,
-          // otherwise they are added.
-          const runMap = new Map<string, AgentRunView>();
-          for (const r of historyRuns) runMap.set(r.runId, r as AgentRunView);
-          for (const r of prev) runMap.set(r.runId, r);
-
-          return Array.from(runMap.values()).sort(
-            (a, b) => a.createdAt - b.createdAt
-          );
-        });
-      })
-      .catch((err) => console.error("Failed to load agent history:", err));
-
-    return () => {
-      mounted = false;
-    };
-  }, [projectId]);
+    void reconcileFromServer(projectId);
+  }, [projectId, reconcileFromServer]);
 
   const upsert = useCallback(
     (
@@ -113,6 +107,7 @@ export function useAgentRuns(projectId: string | undefined) {
     if (!serverUrlSocket) return;
     const socket = ioClient(serverUrlSocket);
     socketRef.current = socket;
+    const onConnect = () => void reconcileFromServer(projectIdRef.current);
 
     const matchProject = (payload: AnyEvent) => {
       const pid = projectIdRef.current;
@@ -232,7 +227,7 @@ export function useAgentRuns(projectId: string | undefined) {
         errorCode: undefined,
         errorProvider: undefined,
         plan: r.plan.map((task) =>
-          task.status === "failed" && task.detail === "Stopped by user"
+          task.status === "failed" || task.status === "running"
             ? { ...task, status: "pending", detail: undefined }
             : task
         ),
@@ -261,6 +256,7 @@ export function useAgentRuns(projectId: string | undefined) {
       }));
     };
 
+    socket.on("connect", onConnect);
     socket.on("agent:run:start", onRunStart);
     socket.on("agent:run:resume", onRunResume);
     socket.on("agent:plan", onPlan);
@@ -275,6 +271,7 @@ export function useAgentRuns(projectId: string | undefined) {
     socket.on("agent:run:end", onRunEnd);
 
     return () => {
+      socket.off("connect", onConnect);
       socket.off("agent:run:start", onRunStart);
       socket.off("agent:run:resume", onRunResume);
       socket.off("agent:plan", onPlan);
@@ -290,7 +287,7 @@ export function useAgentRuns(projectId: string | undefined) {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [upsert]);
+  }, [reconcileFromServer, upsert]);
 
   // Insert a placeholder so the UI can render immediately after the POST.
   const registerNewRun = useCallback(

@@ -2,18 +2,22 @@
 
 import { PluginLogo } from "../plugin-logo";
 import { AgentButton, AgentCard, AgentInput } from "./agent-card";
+import { Response } from "@/components/ai-elements/response";
 import { LocalizedText } from "@/components/localized-text";
 import { BorderBeam } from "@/components/ui/border-beam";
-import type { AgentElicitation } from "@/lib/agents-api";
+import type { AgentAttachedFile, AgentElicitation } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
+import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import {
   CheckCircle2,
-  Loader2,
   MessageCircleQuestion,
+  Paperclip,
   Plus,
   Send,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import { toast } from "sonner";
+import { useRef, useState } from "react";
 
 export function ElicitationCard({
   elicitation,
@@ -23,7 +27,7 @@ export function ElicitationCard({
   elicitation: AgentElicitation;
   onSubmit: (
     value: string,
-    metadata?: { isOther: boolean }
+    metadata?: { isOther: boolean; attachedFiles?: AgentAttachedFile[] }
   ) => Promise<void> | void;
   disabled?: boolean;
 }) {
@@ -32,16 +36,46 @@ export function ElicitationCard({
   const [pickedValue, setPickedValue] = useState<string | null>(null);
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [showOther, setShowOther] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const submit = async (v: string, isOther = false) => {
-    if (!v.trim()) return;
+    if (!v.trim() && files.length === 0) return;
     setSubmitting(true);
     setPickedValue(v);
     try {
-      await onSubmit(v, { isOther });
+      let attachedFiles: AgentAttachedFile[] | undefined;
+      if (files.length > 0) {
+        const body = new FormData();
+        files.forEach((file) => body.append("files", file));
+        const { data } = await apiResponseFileUpload.post(
+          "/agents/upload",
+          body
+        );
+        attachedFiles = data.files;
+      }
+      await onSubmit(v.trim() || "See attached files.", {
+        isOther,
+        attachedFiles,
+      });
+    } catch {
+      toast.error("Could not send your answer and attachments");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const addFiles = (selected: File[]) => {
+    const accepted = selected.filter((file) => file.size <= 10 * 1024 * 1024);
+    if (accepted.length !== selected.length) {
+      toast.error("Each attachment must be 10MB or smaller");
+    }
+    setFiles((current) => {
+      if (current.length + accepted.length > 4) {
+        toast.error("You can attach up to 4 files");
+      }
+      return [...current, ...accepted].slice(0, 4);
+    });
   };
 
   const hasOptions = !!elicitation.options && elicitation.options.length > 0;
@@ -78,6 +112,9 @@ export function ElicitationCard({
   };
   const visualSizes =
     elicitation.presentation === "video_size" ? videoSizes : imageSizes;
+  const question = elicitation.question
+    .replace(/\s+(?=1\.\s+\*\*)/, "\n\n")
+    .replace(/\s+(?=[2-9]\d*\.\s+\*\*)/g, "\n");
 
   return (
     <AgentCard
@@ -99,9 +136,12 @@ export function ElicitationCard({
         className='from-transparent via-blue-500 to-transparent'
       />
 
-      <p className='text-foreground text-sm leading-relaxed'>
-        {elicitation.question}
-      </p>
+      <Response
+        mode='static'
+        className='text-foreground text-sm leading-relaxed [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5'
+      >
+        {question}
+      </Response>
 
       {hasOptions && (
         <div
@@ -241,40 +281,92 @@ export function ElicitationCard({
       )}
 
       {(!hasOptions || showOther) && (
-        <form
-          className='mt-3 flex items-center gap-2'
-          onSubmit={(e) => {
-            e.preventDefault();
-            submit(value, showOther);
-          }}
-        >
-          <AgentInput
-            type='text'
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            disabled={disabled || submitting}
-            placeholder={
-              showOther
-                ? "Name another plugin or describe what you need…"
-                : "Type your answer…"
-            }
-            autoFocus
-          />
-          <AgentButton
-            type='submit'
-            variant='primary'
-            disabled={disabled || submitting || !value.trim()}
-            className='h-8'
-            aria-label='Send'
+        <div className='mt-3 space-y-2'>
+          {files.length > 0 && (
+            <div className='flex flex-wrap gap-1.5' aria-label='Attachments'>
+              {files.map((file, index) => (
+                <span
+                  key={`${file.name}-${file.lastModified}-${index}`}
+                  className='border-border/70 bg-background text-foreground inline-flex max-w-48 items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] dark:border-white/10 dark:bg-white/[0.03]'
+                >
+                  <Paperclip className='text-muted-foreground size-3 shrink-0' />
+                  <span className='truncate'>{file.name}</span>
+                  <button
+                    type='button'
+                    aria-label={`Remove ${file.name}`}
+                    disabled={submitting}
+                    onClick={() =>
+                      setFiles((current) =>
+                        current.filter((_, itemIndex) => itemIndex !== index)
+                      )
+                    }
+                    className='text-muted-foreground hover:text-foreground disabled:opacity-50'
+                  >
+                    <X className='size-3' />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          <form
+            className='flex items-center gap-2'
+            onSubmit={(e) => {
+              e.preventDefault();
+              submit(value, showOther);
+            }}
           >
-            {submitting ? (
-              <LoadingFileLoader size={12} />
-            ) : (
-              <Send className='h-3 w-3' />
-            )}
-            <LocalizedText text={"Send"} />
-          </AgentButton>
-        </form>
+            <AgentInput
+              type='text'
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={disabled || submitting}
+              placeholder={
+                showOther
+                  ? "Name another plugin or describe what you need…"
+                  : "Type your answer…"
+              }
+              autoFocus
+            />
+            <input
+              ref={fileInputRef}
+              type='file'
+              multiple
+              accept='image/*,video/*'
+              className='hidden'
+              onChange={(event) => {
+                addFiles(Array.from(event.target.files || []));
+                event.target.value = "";
+              }}
+            />
+            <AgentButton
+              type='button'
+              variant='secondary'
+              disabled={disabled || submitting || files.length >= 4}
+              className='h-8 px-2'
+              aria-label='Attach images or videos'
+              title='Attach images or videos (10MB max each)'
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Paperclip className='size-3.5' />
+            </AgentButton>
+            <AgentButton
+              type='submit'
+              variant='primary'
+              disabled={
+                disabled || submitting || (!value.trim() && files.length === 0)
+              }
+              className='h-8'
+              aria-label='Send'
+            >
+              {submitting ? (
+                <LoadingFileLoader size={12} />
+              ) : (
+                <Send className='h-3 w-3' />
+              )}
+              <LocalizedText text={"Send"} />
+            </AgentButton>
+          </form>
+        </div>
       )}
     </AgentCard>
   );

@@ -360,27 +360,27 @@ export const loginCarouselData: { media: MediaItem[] } = {
   media: [
     {
       type: "image",
-      src: "https://i.pinimg.com/1200x/40/d9/b7/40d9b7c963e383dc23a50bbc7c5b6158.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "AI Design Tools",
       showControls: false,
       testimonial: {
-        title: "Design Ads with AI",
+        title: "Your AI Marketing Team",
         description:
-          "Access powerful AI tools to create stunning graphics anytime.",
+          "Turn a marketing goal into a coordinated plan your team can execute.",
         rating: 5,
         reviewCount: "Daily active creators",
         avatars: defaultAvatars,
       },
     },
     {
-      type: "video",
-      src: "https://res.cloudinary.com/dkym1gbk1/video/upload/v1768770565/new_blxhcs.mp4?_s=public-apps",
+      type: "image",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Video Creation",
       showControls: false,
       testimonial: {
-        title: "Create Videos That Convert",
+        title: "Automate Marketing Workflows",
         description:
-          "Produce professional promo videos without editing skills.",
+          "Connect triggers, AI actions, approvals, and schedules in one place.",
         rating: 5,
         reviewCount: "High engagement",
         avatars: defaultAvatars,
@@ -388,12 +388,13 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/736x/5f/5f/3c/5f5f3c82349c1dd8552ffa7e97423fb2.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Avatar Studio",
       showControls: false,
       testimonial: {
-        title: "Your AI Avatar Studio",
-        description: "Create and manage AI avatars for content and marketing.",
+        title: "Publish Across Every Channel",
+        description:
+          "Plan, adapt, schedule, and publish social content from one workspace.",
         rating: 5,
         reviewCount: "Loved by brands",
         avatars: defaultAvatars,
@@ -401,13 +402,13 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/1200x/c8/62/04/c862048c66b954303866047010109f36.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Voice AI",
       showControls: false,
       testimonial: {
-        title: "Voice Cloning Made Simple",
+        title: "Create On-Brand Content",
         description:
-          "Generate realistic voiceovers using advanced AI voice tech.",
+          "Create copy, images, video, and documents with shared brand context.",
         rating: 5,
         reviewCount: "Natural-sounding voices",
         avatars: defaultAvatars,
@@ -415,13 +416,13 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://genit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1766919857775-genit-image-1766919857769-0.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "HD Image Generator",
       showControls: false,
       testimonial: {
-        title: "Ultra-Sharp AI Images",
+        title: "Run Campaigns End to End",
         description:
-          "Create high-resolution images ready for ads and campaigns.",
+          "Move from audience and strategy to creative, execution, and insights.",
         rating: 5,
         reviewCount: "Crystal-clear quality",
         avatars: defaultAvatars,
@@ -429,12 +430,13 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/videos/thumbnails/originals/aa/6b/de/aa6bde250e02a08fbfebf25688f85d91.0000000.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Creator Earnings",
       showControls: false,
       testimonial: {
-        title: "Turn Creativity into Income",
-        description: "Sell services, content, and AI creations on genit.",
+        title: "Manage Every Conversation",
+        description:
+          "Bring supported social, messaging, and email conversations together.",
         rating: 5,
         reviewCount: "Creators getting paid",
         avatars: defaultAvatars,
@@ -442,12 +444,13 @@ export const loginCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/videos/thumbnails/originals/49/b1/ec/49b1ecdd8b27f40ddd70f2c60f353246.0000000.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Creator Community",
       showControls: false,
       testimonial: {
-        title: "Build with the Community",
-        description: "Connect with creators, share ideas, and grow together.",
+        title: "Connect Your Marketing Stack",
+        description:
+          "Let agents work across the business tools your team already uses.",
         rating: 5,
         reviewCount: "Strong community vibes",
         avatars: defaultAvatars,
@@ -461,7 +464,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
   media: [
     {
       type: "image",
-      src: "https://i.pinimg.com/1200x/cf/1f/eb/cf1febfbad3b22202fb83bccd08b6328.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "AI Graphics",
       showControls: false,
       testimonial: {
@@ -474,8 +477,8 @@ export const signupCarouselData: { media: MediaItem[] } = {
       },
     },
     {
-      type: "video",
-      src: "https://res.cloudinary.com/dkym1gbk1/video/upload/v1768770565/new_blxhcs.mp4?_s=public-apps",
+      type: "image",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Promotional Videos",
       showControls: false,
       testimonial: {
@@ -489,7 +492,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/1200x/b2/db/80/b2db80290f2aba3567213d4eab1117a5.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "AI Avatar",
       showControls: false,
       testimonial: {
@@ -503,7 +506,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/1200x/99/f1/69/99f169a3b1c58c7f6b46314c30458a9e.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Voice Cloning",
       showControls: false,
       testimonial: {
@@ -517,7 +520,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://genit-storage.s3.eu-north-1.amazonaws.com/templeajuzie%40gmail.com/generated/image/1768029882257-genit-image-1768029882254-0.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "HD Images",
       showControls: false,
       testimonial: {
@@ -531,7 +534,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/videos/thumbnails/originals/aa/6b/de/aa6bde250e02a08fbfebf25688f85d91.0000000.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Refer and earn",
       showControls: false,
       testimonial: {
@@ -545,7 +548,7 @@ export const signupCarouselData: { media: MediaItem[] } = {
     },
     {
       type: "image",
-      src: "https://i.pinimg.com/videos/thumbnails/originals/49/b1/ec/49b1ecdd8b27f40ddd70f2c60f353246.0000000.jpg",
+      src: "https://i.pinimg.com/736x/d9/e1/14/d9e1142232b1e289906ef927ce5a25f5.jpg",
       alt: "Community",
       showControls: false,
       testimonial: {

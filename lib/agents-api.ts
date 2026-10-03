@@ -97,12 +97,13 @@ export async function startAgentRun(input: {
 export async function resumeAgentRunUserInput(
   runId: string,
   value: string,
-  metadata?: { isOther: boolean }
+  metadata?: { isOther: boolean; attachedFiles?: AgentAttachedFile[] }
 ): Promise<void> {
   await apiResponse.post(`/agents/${runId}/resume`, {
     kind: "user_input",
     value,
     isOther: metadata?.isOther,
+    attachedFiles: metadata?.attachedFiles,
   });
 }
 

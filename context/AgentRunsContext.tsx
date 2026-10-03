@@ -58,7 +58,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
         return { runId };
       } catch (err) {
         console.error("[agent] startAgent failed", err);
-        return null;
+        throw err;
       }
     },
     [projectId, registerNewRun]

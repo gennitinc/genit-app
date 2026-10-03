@@ -1,5 +1,6 @@
 "use client";
 
+import { Response } from "@/components/ai-elements/response";
 import { Brain, ChevronDown, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -65,9 +66,12 @@ export function AgentThinkingStream({
 
       {open && (
         <div className='border-border/50 border-t px-3 py-2.5 dark:border-white/[0.07]'>
-          <div className='text-muted-foreground max-h-60 overflow-y-auto leading-relaxed whitespace-pre-wrap'>
+          <Response
+            mode='static'
+            className='text-muted-foreground max-h-60 overflow-y-auto leading-relaxed [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5'
+          >
             {text || (active ? "…" : "")}
-          </div>
+          </Response>
         </div>
       )}
     </div>
