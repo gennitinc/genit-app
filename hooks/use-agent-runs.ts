@@ -133,7 +133,12 @@ export function useAgentRuns(projectId: string | undefined) {
         ...r,
         plan: r.plan.map((t) =>
           t.id === p.taskId
-            ? { ...t, status: p.status, detail: p.detail ?? t.detail }
+            ? {
+                ...t,
+                status: p.status,
+                detail:
+                  p.status === "done" ? undefined : (p.detail ?? t.detail),
+              }
             : t
         ),
       }));
