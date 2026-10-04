@@ -93,7 +93,12 @@ export function ModelSelector({
         if (response.success && response.data) {
           const modelsArray = Array.isArray(response.data) ? response.data : [];
           // Filter by type on client side as a safety measure
-          const filteredModels = modelsArray.filter((m) => m.type === type);
+          const filteredModels = modelsArray.filter(
+            (m) =>
+              m.type === type &&
+              (type !== "video" ||
+                Boolean(m.capabilities?.supportedDurationsSeconds?.length))
+          );
           setModels(filteredModels);
 
           // Check if current selected model matches the type

@@ -71,11 +71,14 @@ export default function AdminModelsPage() {
     isPremium: false,
     status: "active" as "active" | "inactive" | "beta",
     allowCustomAudio: false,
+    supportedDurationsInput: "",
     capabilities: {
       supportsAspectRatio: false,
       supportsStyle: false,
       supportsVideoReference: false,
       supportsSubjectReference: false,
+      supportedDurationsSeconds: [] as number[],
+      documentationUrl: "",
       maxResolution: "",
       supportedAspectRatios: [] as string[],
     },
@@ -149,11 +152,14 @@ export default function AdminModelsPage() {
       isPremium: false,
       status: "active",
       allowCustomAudio: false,
+      supportedDurationsInput: "",
       capabilities: {
         supportsAspectRatio: false,
         supportsStyle: false,
         supportsVideoReference: false,
         supportsSubjectReference: false,
+        supportedDurationsSeconds: [] as number[],
+        documentationUrl: "",
         maxResolution: "",
         supportedAspectRatios: [],
       },
@@ -175,6 +181,9 @@ export default function AdminModelsPage() {
       isPremium: model.isPremium,
       status: model.status,
       allowCustomAudio: model.allowCustomAudio || false,
+      supportedDurationsInput: (
+        model.capabilities?.supportedDurationsSeconds || []
+      ).join(", "),
       capabilities: {
         supportsAspectRatio: model.capabilities?.supportsAspectRatio || false,
         supportsStyle: model.capabilities?.supportsStyle || false,
@@ -182,6 +191,9 @@ export default function AdminModelsPage() {
           model.capabilities?.supportsVideoReference || false,
         supportsSubjectReference:
           model.capabilities?.supportsSubjectReference || false,
+        supportedDurationsSeconds:
+          model.capabilities?.supportedDurationsSeconds || [],
+        documentationUrl: model.capabilities?.documentationUrl || "",
         maxResolution: model.capabilities?.maxResolution || "",
         supportedAspectRatios: model.capabilities?.supportedAspectRatios || [],
       },
@@ -206,6 +218,16 @@ export default function AdminModelsPage() {
   const handleSubmit = async (isEdit: boolean) => {
     if (!formData.name || !formData.provider || !formData.modelId) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+    if (
+      formData.type === "video" &&
+      (!formData.capabilities.supportedDurationsSeconds.length ||
+        !formData.capabilities.documentationUrl.startsWith("https://"))
+    ) {
+      toast.error(
+        "Video models require supported durations and an HTTPS documentation URL"
+      );
       return;
     }
 
@@ -640,6 +662,56 @@ export default function AdminModelsPage() {
                   placeholder='e.g., 1024x1024'
                 />
               </div>
+
+              {formData.type === "video" && (
+                <>
+                  <div className='space-y-2'>
+                    <Label htmlFor='supportedDurations'>
+                      <LocalizedText text={"Supported Durations (seconds)"} />
+                    </Label>
+                    <Input
+                      id='supportedDurations'
+                      value={formData.supportedDurationsInput}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          supportedDurationsInput: e.target.value,
+                          capabilities: {
+                            ...formData.capabilities,
+                            supportedDurationsSeconds: e.target.value
+                              .split(",")
+                              .map((value) => Number(value.trim()))
+                              .filter(
+                                (value) => Number.isInteger(value) && value > 0
+                              ),
+                          },
+                        })
+                      }
+                      placeholder='e.g., 4, 6, 8'
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <Label htmlFor='durationDocumentationUrl'>
+                      <LocalizedText text={"Duration Documentation URL"} />
+                    </Label>
+                    <Input
+                      id='durationDocumentationUrl'
+                      type='url'
+                      value={formData.capabilities.documentationUrl}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          capabilities: {
+                            ...formData.capabilities,
+                            documentationUrl: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder='https://provider.example/model-docs'
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className='flex items-center gap-6'>
@@ -999,6 +1071,56 @@ export default function AdminModelsPage() {
                   placeholder='e.g., 1024x1024'
                 />
               </div>
+
+              {formData.type === "video" && (
+                <>
+                  <div className='space-y-2'>
+                    <Label htmlFor='edit-supportedDurations'>
+                      <LocalizedText text={"Supported Durations (seconds)"} />
+                    </Label>
+                    <Input
+                      id='edit-supportedDurations'
+                      value={formData.supportedDurationsInput}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          supportedDurationsInput: e.target.value,
+                          capabilities: {
+                            ...formData.capabilities,
+                            supportedDurationsSeconds: e.target.value
+                              .split(",")
+                              .map((value) => Number(value.trim()))
+                              .filter(
+                                (value) => Number.isInteger(value) && value > 0
+                              ),
+                          },
+                        })
+                      }
+                      placeholder='e.g., 4, 6, 8'
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <Label htmlFor='edit-durationDocumentationUrl'>
+                      <LocalizedText text={"Duration Documentation URL"} />
+                    </Label>
+                    <Input
+                      id='edit-durationDocumentationUrl'
+                      type='url'
+                      value={formData.capabilities.documentationUrl}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          capabilities: {
+                            ...formData.capabilities,
+                            documentationUrl: e.target.value,
+                          },
+                        })
+                      }
+                      placeholder='https://provider.example/model-docs'
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className='flex items-center gap-6'>

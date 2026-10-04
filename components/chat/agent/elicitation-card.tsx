@@ -83,6 +83,8 @@ export function ElicitationCard({
   const isVisualSizePicker = ["image_size", "video_size"].includes(
     elicitation.presentation || ""
   );
+  const isDurationPicker = elicitation.presentation === "video_duration";
+  const isVisualPicker = isVisualSizePicker || isDurationPicker;
   const isPluginPicker = elicitation.presentation === "plugin_choice";
   const isMultiple = elicitation.multiple === true;
 
@@ -145,7 +147,7 @@ export function ElicitationCard({
       {hasOptions && (
         <div
           className={
-            isVisualSizePicker
+            isVisualPicker
               ? "mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3"
               : isPluginPicker
                 ? "mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2"
@@ -171,7 +173,7 @@ export function ElicitationCard({
                 }
                 title={opt.description}
                 className={
-                  isVisualSizePicker
+                  isVisualPicker
                     ? isPicked
                       ? "bg-foreground text-background flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60"
                       : "border-border/70 bg-background text-foreground hover:bg-accent flex min-h-24 flex-col items-center justify-center gap-2 rounded-lg border px-3 py-3 text-xs font-medium transition-colors disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
@@ -207,6 +209,18 @@ export function ElicitationCard({
                     ) : opt.connected ? (
                       <CheckCircle2 className='size-3.5 shrink-0 text-emerald-500' />
                     ) : null}
+                  </>
+                ) : isDurationPicker ? (
+                  <>
+                    <span className='text-2xl font-semibold tabular-nums'>
+                      {opt.value}s
+                    </span>
+                    <span>{opt.label}</span>
+                    {opt.description && (
+                      <span className='text-center text-[10px] font-normal opacity-65'>
+                        {opt.description}
+                      </span>
+                    )}
                   </>
                 ) : isVisualSizePicker && imageSize ? (
                   <>

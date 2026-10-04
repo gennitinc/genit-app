@@ -358,13 +358,7 @@ export interface CloneVoiceRequest {
 // ============================================
 
 export type ModelType =
-  | "general"
-  | "image"
-  | "video"
-  | "audio"
-  | "text"
-  | "social"
-  | "docs";
+  "general" | "image" | "video" | "audio" | "text" | "social" | "docs";
 
 export interface Model {
   _id: string;
@@ -382,6 +376,8 @@ export interface Model {
     supportsStyle?: boolean;
     supportsVideoReference?: boolean;
     supportsSubjectReference?: boolean;
+    supportedDurationsSeconds?: number[];
+    documentationUrl?: string;
     maxResolution?: string;
     supportedAspectRatios?: string[];
   };

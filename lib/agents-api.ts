@@ -60,7 +60,12 @@ export interface AgentElicitation {
     icon?: string;
     connected?: boolean;
   }[];
-  presentation?: "buttons" | "image_size" | "video_size" | "plugin_choice";
+  presentation?:
+    | "buttons"
+    | "image_size"
+    | "video_size"
+    | "video_duration"
+    | "plugin_choice";
   allowOther?: boolean;
   multiple?: boolean;
 }

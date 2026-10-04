@@ -7,6 +7,7 @@ import {
   CommunityContentResponse,
   CommunityContentSubmission,
   CommunityQueryParams,
+  ElevenLabsVoice,
   GenerateVideoRequest,
   GenerateVideoResponse,
   ImageGenTemplatesResponse,
@@ -21,7 +22,6 @@ import {
   TutorialsResponse,
   VideoGenTemplatesResponse,
   Voice,
-  ElevenLabsVoice,
   VoiceResponse,
 } from "@/types/inspire";
 
@@ -647,6 +647,8 @@ export const modelApi = {
       capabilities?: {
         supportsAspectRatio?: boolean;
         supportsStyle?: boolean;
+        supportedDurationsSeconds?: number[];
+        documentationUrl?: string;
         maxResolution?: string;
         supportedAspectRatios?: string[];
       };
@@ -700,6 +702,8 @@ export const modelApi = {
       capabilities?: {
         supportsAspectRatio?: boolean;
         supportsStyle?: boolean;
+        supportedDurationsSeconds?: number[];
+        documentationUrl?: string;
         maxResolution?: string;
         supportedAspectRatios?: string[];
       };
@@ -920,7 +924,9 @@ export const templateApi = {
    */
   publishToInspiration: async (
     data: PublishToInspirationRequest
-  ): Promise<ApiResponse<{ id: string; assetId: string; category: string }>> => {
+  ): Promise<
+    ApiResponse<{ id: string; assetId: string; category: string }>
+  > => {
     try {
       const response = await apiResponse.post(`/templates/publish`, data, {
         withCredentials: true,

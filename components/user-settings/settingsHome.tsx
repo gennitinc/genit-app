@@ -1954,7 +1954,7 @@ const SettingsHome = () => {
                           min={0}
                           max={10000}
                           defaultValue={
-                            currentOrg?.automationMaxCreditsPerRun ?? 50
+                            currentOrg?.automationMaxCreditsPerRun ?? 2000
                           }
                           disabled={savingAuto}
                           onBlur={(event) =>

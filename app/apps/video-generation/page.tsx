@@ -307,6 +307,14 @@ function VideoGenerationPage() {
     }
   }, [generationMode, selectedVideoModel, selectedImageModel]);
 
+  useEffect(() => {
+    const supported =
+      selectedVideoModel?.capabilities?.supportedDurationsSeconds;
+    if (supported?.length && !supported.includes(duration)) {
+      setDuration(Math.max(...supported));
+    }
+  }, [selectedVideoModel, duration]);
+
   // Restore recreate data from localStorage
   useEffect(() => {
     const restoreRecreateData = async () => {
@@ -750,7 +758,11 @@ function VideoGenerationPage() {
         model_id: selectedVideoModel?._id,
       });
       const creditsRemaining = user?.creditsRemaining ?? 0;
-      if (String(error?.message || "").toLowerCase().includes("insufficient credits")) {
+      if (
+        String(error?.message || "")
+          .toLowerCase()
+          .includes("insufficient credits")
+      ) {
         const isBasic = String(user?.userPlan) === "Basic";
         toast.error(`Low Credits`, {
           description: `You have ${creditsRemaining} credits remaining.`,
@@ -1605,16 +1617,31 @@ function VideoGenerationPage() {
                                     }
                                     className='bg-background border-neutral-12 w-full rounded-md border px-3 py-2 text-sm'
                                   >
-                                    <option value={4}>
-                                      <LocalizedText text={"4 seconds"} />
-                                    </option>
-                                    <option value={8}>
-                                      <LocalizedText text={"8 seconds"} />
-                                    </option>
-                                    {/* <option value={12}>12 seconds</option>
-                                  <option value={16}>16 seconds</option>
-                                  <option value={30}>30 seconds</option> */}
+                                    {(
+                                      selectedVideoModel?.capabilities
+                                        ?.supportedDurationsSeconds || [8]
+                                    ).map((seconds) => (
+                                      <option key={seconds} value={seconds}>
+                                        {seconds} seconds
+                                      </option>
+                                    ))}
                                   </select>
+                                  {selectedVideoModel?.capabilities
+                                    ?.documentationUrl && (
+                                    <a
+                                      href={
+                                        selectedVideoModel.capabilities
+                                          .documentationUrl
+                                      }
+                                      target='_blank'
+                                      rel='noreferrer'
+                                      className='text-primary mt-2 inline-block text-xs underline'
+                                    >
+                                      <LocalizedText
+                                        text={"Provider duration documentation"}
+                                      />
+                                    </a>
+                                  )}
                                 </div>
                               )}
                             </div>

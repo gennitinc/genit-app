@@ -5,6 +5,7 @@ import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,6 +76,9 @@ function ChatHistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchInputVal, setSearchInputVal] = useState("");
   const [isRestored, setIsRestored] = useState(false);
+  const [selectedProjectIds, setSelectedProjectIds] = useState<Set<string>>(
+    new Set()
+  );
 
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const latestFetchRef = useRef(0);
@@ -128,6 +132,7 @@ function ChatHistoryPage() {
             setProjects((prev) => [...prev, ...newProjects]);
           } else {
             setProjects(newProjects);
+            setSelectedProjectIds(new Set());
           }
 
           setHasMore(pagination?.hasNextPage || false);
@@ -429,32 +434,60 @@ function ChatHistoryPage() {
     }
   };
 
-  const handleDeleteProject = async (projectId: string) => {
+  const handleDeleteProjects = async (projectIds: string[]) => {
+    if (projectIds.length === 0) return;
     setIsDeletingProject(true);
 
     try {
-      const response = await apiResponse.delete(`/project/${projectId}`);
+      const results = await Promise.allSettled(
+        projectIds.map((projectId) =>
+          apiResponse.delete(`/project/${projectId}`)
+        )
+      );
+      const deletedIds = new Set(
+        projectIds.filter(
+          (_, index) =>
+            results[index].status === "fulfilled" &&
+            results[index].value.status === 200
+        )
+      );
+      const failedCount = projectIds.length - deletedIds.size;
 
-      if (response.status == 200) {
-        // Update the projects array by removing the deleted project
-        setProjects((prevProjects) =>
-          prevProjects.filter((project) => project._id !== projectId)
+      setProjects((current) =>
+        current.filter((project) => !deletedIds.has(project._id))
+      );
+      setSelectedProjectIds((current) =>
+        new Set([...current].filter((id) => !deletedIds.has(id)))
+      );
+      if (deletedIds.size)
+        toast.success(
+          `${deletedIds.size} chat${deletedIds.size === 1 ? "" : "s"} deleted`
         );
-        setIsDeletingProject(false);
-        setActiveProject(null);
-        toast("Operation Completed", {
-          description: "project and resources has been deleted successfully",
-        });
-        setIsDeleteModalOpen(false);
-      } else {
-        setIsDeletingProject(false);
-        toast.error("Failed to delete project");
-      }
+      if (failedCount)
+        toast.error(
+          `${failedCount} chat${failedCount === 1 ? "" : "s"} could not be deleted`
+        );
     } catch (error: any) {
       console.error("Error deleting project:", error);
-      setIsDeletingProject(false);
       toast.error(error.response?.data?.message || "Failed to delete project");
+    } finally {
+      setIsDeletingProject(false);
+      setActiveProject(null);
+      setIsDeleteModalOpen(false);
     }
+  };
+
+  const allLoadedSelected =
+    filteredProjects.length > 0 &&
+    filteredProjects.every((project) => selectedProjectIds.has(project._id));
+
+  const toggleProjectSelection = (projectId: string) => {
+    setSelectedProjectIds((current) => {
+      const next = new Set(current);
+      if (next.has(projectId)) next.delete(projectId);
+      else next.add(projectId);
+      return next;
+    });
   };
 
   return (
@@ -529,6 +562,50 @@ function ChatHistoryPage() {
                   </button>
                 )}
               </div>
+
+              {filteredProjects.length > 0 && (
+                <div className='flex items-center justify-between gap-3'>
+                  <label className='flex cursor-pointer items-center gap-2 text-sm'>
+                    <Checkbox
+                      checked={
+                        allLoadedSelected
+                          ? true
+                          : selectedProjectIds.size > 0
+                            ? "indeterminate"
+                            : false
+                      }
+                      onCheckedChange={() =>
+                        setSelectedProjectIds(
+                          allLoadedSelected
+                            ? new Set()
+                            : new Set(
+                                filteredProjects.map((project) => project._id)
+                              )
+                        )
+                      }
+                      aria-label='Select all loaded chats'
+                    />
+                    <span>
+                      {selectedProjectIds.size
+                        ? `${selectedProjectIds.size} selected`
+                        : "Select all loaded chats"}
+                    </span>
+                  </label>
+                  <Button
+                    variant='destructive'
+                    size='sm'
+                    disabled={selectedProjectIds.size === 0}
+                    onClick={() => {
+                      setActiveProject(null);
+                      setIsDeleteModalOpen(true);
+                    }}
+                    className='gap-2'
+                  >
+                    <Trash2 className='h-3.5 w-3.5' />
+                    Delete selected
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Chat History List */}
@@ -579,11 +656,27 @@ function ChatHistoryPage() {
                   {filteredProjects.map((project) => (
                     <Card
                       key={project._id}
-                      className='hover:border-border/60 group border-border/40 cursor-pointer transition-all duration-200 hover:shadow-sm'
+                      className={cn(
+                        "hover:border-border/60 group border-border/40 cursor-pointer transition-all duration-200 hover:shadow-sm",
+                        selectedProjectIds.has(project._id) &&
+                          "border-indigo-500/60 bg-indigo-500/5"
+                      )}
                       onClick={() => handleProjectClick(project)}
                     >
                       <CardContent className='p-3'>
                         <div className='flex items-start justify-between'>
+                          <div
+                            className='mr-3 pt-0.5'
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            <Checkbox
+                              checked={selectedProjectIds.has(project._id)}
+                              onCheckedChange={() =>
+                                toggleProjectSelection(project._id)
+                              }
+                              aria-label={`Select ${project.title}`}
+                            />
+                          </div>
                           <div className='min-w-0 flex-1'>
                             <h3 className='text-foreground group-hover:text-primary mb-1 truncate text-sm font-medium transition-colors'>
                               {project.title}
@@ -695,12 +788,16 @@ function ChatHistoryPage() {
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={() => {
-          handleDeleteProject(String(activeProject?._id));
+          handleDeleteProjects(
+            activeProject
+              ? [activeProject._id]
+              : Array.from(selectedProjectIds)
+          );
         }}
         loading={isDeletingProject}
-        title='Project account'
-        description='This action will removes this project, assets, and history. This cannot be undone.'
-        confirmLabel='Delete Project'
+        title={activeProject ? "Delete chat?" : "Delete selected chats?"}
+        description={`This will permanently delete ${activeProject ? "this chat" : `${selectedProjectIds.size} selected chats`} and their resources. This cannot be undone.`}
+        confirmLabel={activeProject ? "Delete Chat" : "Delete Selected"}
         variant='destructive'
       />
     </div>

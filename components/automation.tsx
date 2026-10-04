@@ -725,6 +725,25 @@ export default function AutomationWorkflow({
           });
           return;
         }
+        if (action.name === "remove_node") {
+          setNodes((current: any[]) => {
+            const next = current.filter(
+              (node: any) => node.id !== action.args.nodeId
+            );
+            nodesRef.current = next;
+            return next;
+          });
+          setEdges((current: any[]) => {
+            const next = current.filter(
+              (edge: any) =>
+                edge.source !== action.args.nodeId &&
+                edge.target !== action.args.nodeId
+            );
+            edgesRef.current = next;
+            return next;
+          });
+          return;
+        }
         if (action.name === "create_node") {
           const nodeArgs = action.args;
           const newNodeId = nodeArgs.nodeId || `${nodeArgs.type}-${Date.now()}`;
