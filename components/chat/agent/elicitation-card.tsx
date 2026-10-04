@@ -6,6 +6,7 @@ import { Response } from "@/components/ai-elements/response";
 import { LocalizedText } from "@/components/localized-text";
 import { BorderBeam } from "@/components/ui/border-beam";
 import type { AgentAttachedFile, AgentElicitation } from "@/lib/agents-api";
+import { formatElicitationQuestion } from "@/lib/format-elicitation-question.mjs";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import {
@@ -112,9 +113,7 @@ export function ElicitationCard({
   };
   const visualSizes =
     elicitation.presentation === "video_size" ? videoSizes : imageSizes;
-  const question = elicitation.question
-    .replace(/\s+(?=1\.\s+\*\*)/, "\n\n")
-    .replace(/\s+(?=[2-9]\d*\.\s+\*\*)/g, "\n");
+  const question = formatElicitationQuestion(elicitation.question);
 
   return (
     <AgentCard
@@ -138,7 +137,7 @@ export function ElicitationCard({
 
       <Response
         mode='static'
-        className='text-foreground text-sm leading-relaxed [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5'
+        className='text-foreground text-sm leading-relaxed [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_p]:my-2 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5'
       >
         {question}
       </Response>
