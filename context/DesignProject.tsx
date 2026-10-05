@@ -16,6 +16,7 @@ import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
 import React, {
@@ -326,10 +327,13 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    const socket = io(`${serverUrlSocket}`);
+    const socket = io(`${serverUrlSocket}`, {
+      auth: { token: cookie.get("genituToken") || "" },
+      withCredentials: true,
+    });
     socketRef.current = socket;
 
-    const handleConnect = () => {};
+    const handleConnect = () => socket.emit("joinProject", project._id);
 
     const handleNewMessage = (projectData: any) => {
       // Ignore messages from other projects
@@ -549,6 +553,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     // Cleanup function to disconnect socket when component unmounts
     return () => {
       if (socketRef.current) {
+        socketRef.current.emit("leaveProject", project._id);
         socketRef.current.off("connect", handleConnect);
         socketRef.current.off("newMessage", handleNewMessage);
         socketRef.current.off("textStart", handleTextStart);

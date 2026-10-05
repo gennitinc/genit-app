@@ -14,6 +14,7 @@ import {
   listAgentRuns,
 } from "@/lib/agents-api";
 import { serverUrlSocket } from "@/utils/apiResponse";
+import cookie from "js-cookie";
 import { Socket, io as ioClient } from "socket.io-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -73,6 +74,17 @@ export function useAgentRuns(projectId: string | undefined) {
     void reconcileFromServer(projectId);
   }, [projectId, reconcileFromServer]);
 
+  // Socket events are fast, while this reconciliation closes the small gap
+  // around room authorization, reconnects, and brief network outages.
+  useEffect(() => {
+    if (!projectId || !runs.some((run) => run.status === "running")) return;
+    const timer = window.setInterval(
+      () => void reconcileFromServer(projectId),
+      5000
+    );
+    return () => window.clearInterval(timer);
+  }, [projectId, reconcileFromServer, runs]);
+
   const upsert = useCallback(
     (
       runId: string,
@@ -105,9 +117,16 @@ export function useAgentRuns(projectId: string | undefined) {
 
   useEffect(() => {
     if (!serverUrlSocket) return;
-    const socket = ioClient(serverUrlSocket);
+    const socket = ioClient(serverUrlSocket, {
+      auth: { token: cookie.get("genituToken") || "" },
+      withCredentials: true,
+    });
     socketRef.current = socket;
-    const onConnect = () => void reconcileFromServer(projectIdRef.current);
+    const onConnect = () => {
+      const activeProjectId = projectIdRef.current;
+      if (activeProjectId) socket.emit("joinProject", activeProjectId);
+      void reconcileFromServer(activeProjectId);
+    };
 
     const matchProject = (payload: AnyEvent) => {
       const pid = projectIdRef.current;
@@ -276,6 +295,7 @@ export function useAgentRuns(projectId: string | undefined) {
     socket.on("agent:run:end", onRunEnd);
 
     return () => {
+      socket.emit("leaveProject", projectId);
       socket.off("connect", onConnect);
       socket.off("agent:run:start", onRunStart);
       socket.off("agent:run:resume", onRunResume);
@@ -292,7 +312,7 @@ export function useAgentRuns(projectId: string | undefined) {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [reconcileFromServer, upsert]);
+  }, [projectId, reconcileFromServer, upsert]);
 
   // Insert a placeholder so the UI can render immediately after the POST.
   const registerNewRun = useCallback(

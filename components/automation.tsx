@@ -42,6 +42,7 @@ import {
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
+import cookie from "js-cookie";
 import {
   AlertTriangle,
   ArrowLeftRight,
@@ -526,17 +527,19 @@ export default function AutomationWorkflow({
       }
       try {
         onNodeDataChange(nodeId, { isTesting: true });
-        toast.loading("Running zero-credit dry run...", { id: `test-run-${nodeId}` });
+        toast.loading("Running zero-credit dry run...", {
+          id: `test-run-${nodeId}`,
+        });
         const res = await apiResponse.post(
           `/apps/automation/${projectId}/test-run`,
           { nodeId }
         );
         if (res.data?.success) {
           const trace = automationTraceSummary(res.data?.data?.trace);
-          toast.success(
-            res.data.message || `Zero-credit dry run passed.`,
-            { id: `test-run-${nodeId}`, description: trace || undefined }
-          );
+          toast.success(res.data.message || `Zero-credit dry run passed.`, {
+            id: `test-run-${nodeId}`,
+            description: trace || undefined,
+          });
         } else {
           toast.error("Dry run found issues", { id: `test-run-${nodeId}` });
         }
@@ -679,7 +682,10 @@ export default function AutomationWorkflow({
   useEffect(() => {
     if (!projectId) return;
 
-    const socket = io(serverUrlSocket, { withCredentials: true });
+    const socket = io(serverUrlSocket, {
+      auth: { token: cookie.get("genituToken") || "" },
+      withCredentials: true,
+    });
     socket.emit("joinProject", projectId);
 
     socket.on("automation:ai:update", (data: any) => {
@@ -909,7 +915,11 @@ export default function AutomationWorkflow({
   useEffect(() => {
     if (!projectId) return;
 
-    const socket = io(serverUrlSocket, { withCredentials: true });
+    const socket = io(serverUrlSocket, {
+      auth: { token: cookie.get("genituToken") || "" },
+      withCredentials: true,
+    });
+    socket.emit("joinProject", projectId);
 
     socket.on("agent:run:end", async (data: any) => {
       // Only act if this event is for our project and run succeeded
