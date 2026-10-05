@@ -278,6 +278,7 @@ export function useAgentRuns(projectId: string | undefined) {
             }
           : {}),
       }));
+      void reconcileFromServer(projectIdRef.current);
     };
 
     socket.on("connect", onConnect);

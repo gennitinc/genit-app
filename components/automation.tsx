@@ -922,9 +922,9 @@ export default function AutomationWorkflow({
     socket.emit("joinProject", projectId);
 
     socket.on("agent:run:end", async (data: any) => {
-      // Only act if this event is for our project and run succeeded
+      // Reload after every terminal result because final verification may
+      // repair and persist a partial graph even when an integration is missing.
       if (data.projectId !== projectId) return;
-      if (data.status !== "completed") return;
 
       // The server persists AI-created nodes and edges. Reload that graph so
       // socket timing or a stale autosave can never leave the canvas unwired.
