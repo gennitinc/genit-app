@@ -73,6 +73,8 @@ import {
   listRemoteSocialPosts,
   listSocialPostsPage,
   publishSocialPosts,
+  scheduledPostIso,
+  scheduledPostLocalValue,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
@@ -836,7 +838,9 @@ export default function PostsPage() {
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
-          form.status === "scheduled" ? form.scheduledFor : undefined,
+          form.status === "scheduled"
+            ? scheduledPostIso(form.scheduledFor)
+            : undefined,
       };
       if (editing) {
         if (editing.remote && editing.platform === "facebook") {
@@ -993,7 +997,7 @@ export default function PostsPage() {
           ? post.metadata.tiktokPrivacyLevel
           : "SELF_ONLY",
       status: post.status,
-      scheduledFor: post.scheduledFor?.slice(0, 16) || "",
+      scheduledFor: scheduledPostLocalValue(post.scheduledFor),
       youtubePlaylistId:
         typeof post.metadata?.youtubePlaylistId === "string"
           ? post.metadata.youtubePlaylistId
@@ -1264,7 +1268,7 @@ export default function PostsPage() {
                       : "Could not load posts from the connected accounts."
                     : connected.length
                       ? "No published posts were returned by the connected accounts."
-                    : "Connect a social account to bring its live posts into this workspace."}
+                      : "Connect a social account to bring its live posts into this workspace."}
             </p>
             {view !== "live" && (
               <Button

@@ -27,6 +27,8 @@ import {
   generateSocialPostText,
   listSocialPosts,
   publishSocialPosts,
+  scheduledPostIso,
+  scheduledPostLocalValue,
   updateSocialPosts,
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
@@ -124,7 +126,9 @@ export function HomeCommandCenter({
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
-          form.status === "scheduled" ? form.scheduledFor : undefined,
+          form.status === "scheduled"
+            ? scheduledPostIso(form.scheduledFor)
+            : undefined,
       };
       if (editing) {
         const posts = await updateSocialPosts(editing._id, {
@@ -269,7 +273,7 @@ export function HomeCommandCenter({
           ? post.metadata.tiktokPrivacyLevel
           : "SELF_ONLY",
       status: post.status,
-      scheduledFor: post.scheduledFor?.slice(0, 16) || "",
+      scheduledFor: scheduledPostLocalValue(post.scheduledFor),
       youtubePlaylistId:
         typeof post.metadata?.youtubePlaylistId === "string"
           ? post.metadata.youtubePlaylistId
