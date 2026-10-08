@@ -996,7 +996,7 @@ export default function PostsPage() {
         typeof post.metadata?.tiktokPrivacyLevel === "string"
           ? post.metadata.tiktokPrivacyLevel
           : "SELF_ONLY",
-      status: post.status,
+      status: post.status === "failed" ? "draft" : post.status,
       scheduledFor: scheduledPostLocalValue(post.scheduledFor),
       youtubePlaylistId:
         typeof post.metadata?.youtubePlaylistId === "string"

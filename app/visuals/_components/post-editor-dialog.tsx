@@ -298,8 +298,13 @@ export function getPostValidationErrors(form: PostEditorForm): string[] {
     if (rule.titleMax && title.length > rule.titleMax)
       errors.add(`${label} titles cannot exceed ${rule.titleMax} characters.`);
   }
-  if (form.status === "scheduled" && !form.scheduledFor)
-    errors.add("Choose a publish time for a scheduled post.");
+  if (form.status === "scheduled") {
+    const scheduledTime = new Date(form.scheduledFor).getTime();
+    if (!form.scheduledFor || !Number.isFinite(scheduledTime))
+      errors.add("Choose a publish time for a scheduled post.");
+    else if (scheduledTime <= Date.now())
+      errors.add("Choose a publish time in the future.");
+  }
   return [...errors];
 }
 
@@ -1060,9 +1065,6 @@ export function PostEditorDialog({
                 <SelectItem value='published'>
                   <LocalizedText text={"Publish"} />
                 </SelectItem>
-                <SelectItem value='failed'>
-                  <LocalizedText text={"Failed"} />
-                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -1074,6 +1076,11 @@ export function PostEditorDialog({
               <Input
                 id='scheduled-for'
                 type='datetime-local'
+                min={new Date(
+                  Date.now() - new Date().getTimezoneOffset() * 60_000
+                )
+                  .toISOString()
+                  .slice(0, 16)}
                 value={form.scheduledFor}
                 onChange={(event) =>
                   setForm({ ...form, scheduledFor: event.target.value })
@@ -1114,9 +1121,13 @@ export function PostEditorDialog({
           ? "Saving…"
           : form.status === "published"
             ? "Publish"
-            : editing
-              ? "Save post"
-              : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}
+            : form.status === "scheduled"
+              ? editing
+                ? "Reschedule post"
+                : "Schedule post"
+              : editing
+                ? "Save post"
+                : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}
       </Button>
     </>
   );
