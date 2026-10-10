@@ -588,7 +588,7 @@ function ChatHistoryPage() {
                     <span>
                       {selectedProjectIds.size
                         ? `${selectedProjectIds.size} selected`
-                        : "Select all loaded chats"}
+                        : "Select all"}
                     </span>
                   </label>
                   <Button
