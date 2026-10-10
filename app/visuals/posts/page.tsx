@@ -1165,8 +1165,8 @@ export default function PostsPage() {
       </header>
 
       <section className='overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-        <div className='flex flex-col gap-2 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
-          <div className='inline-flex w-fit rounded-xl bg-zinc-100 p-1 dark:bg-white/[0.06]'>
+        <div className='flex flex-col gap-3 border-b border-zinc-200 p-3 md:flex-row md:items-center md:justify-between dark:border-white/10'>
+          <div className='grid w-full grid-cols-3 rounded-xl bg-zinc-100 p-1 md:inline-flex md:w-fit dark:bg-white/[0.06]'>
             {(
               [
                 ["live", "Live", live.length],
@@ -1178,28 +1178,29 @@ export default function PostsPage() {
                 key={value}
                 onClick={() => setView(value)}
                 className={cn(
-                  "rounded-lg px-4 py-2 text-xs font-medium transition",
+                  "min-w-0 rounded-lg px-2.5 py-2 text-xs font-medium transition-[background-color,color,box-shadow,transform] duration-150 active:scale-[0.98] sm:px-4",
                   view === value
                     ? "bg-white text-zinc-950 shadow-sm"
                     : "text-zinc-500 hover:text-zinc-950 dark:text-white/55 dark:hover:text-white"
                 )}
               >
-                {label} <span className='ml-1.5 opacity-60'>{count}</span>
+                {label}{" "}
+                <span className='ml-1 tabular-nums opacity-50'>{count}</span>
               </button>
             ))}
           </div>
-          <div className='flex flex-col gap-2 sm:flex-row'>
-            <div className='relative'>
-              <Search className='absolute top-2.5 left-3 h-4 w-4 text-zinc-400 dark:text-white/45' />
+          <div className='grid w-full grid-cols-[minmax(0,1fr)_auto] gap-2 md:flex md:w-auto'>
+            <div className='relative col-span-2 md:col-span-1'>
+              <Search className='absolute top-3 left-3 h-4 w-4 text-zinc-400 dark:text-white/45' />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder='Search posts'
-                className='rounded-xl border-zinc-200 bg-white pl-9 text-zinc-950 placeholder:text-zinc-400 sm:w-56 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/35'
+                className='h-10 w-full rounded-xl border-zinc-200 bg-white pl-9 text-zinc-950 placeholder:text-zinc-400 md:w-56 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/35'
               />
             </div>
             <Select value={platformFilter} onValueChange={setPlatformFilter}>
-              <SelectTrigger className='rounded-xl border-zinc-200 bg-white text-zinc-950 sm:w-40 dark:border-white/10 dark:bg-white/[0.04] dark:text-white'>
+              <SelectTrigger className='h-10 w-full min-w-0 rounded-xl border-zinc-200 bg-white text-zinc-950 md:w-40 dark:border-white/10 dark:bg-white/[0.04] dark:text-white'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1217,7 +1218,7 @@ export default function PostsPage() {
               <Button
                 variant='outline'
                 size='icon'
-                className='rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
+                className='h-10 w-10 shrink-0 rounded-xl border-zinc-200 bg-white text-zinc-700 transition-[background-color,transform] duration-150 hover:bg-zinc-100 active:scale-[0.96] dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
                 onClick={() => liveQuery.refetch()}
                 aria-label='Refresh live posts'
               >

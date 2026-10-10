@@ -341,7 +341,7 @@ export default function CalendarPage() {
   const eventCount = eventsQuery.data?.events.length || 0;
 
   return (
-    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-5 rounded-lg bg-zinc-50 px-0 md:p-2 text-zinc-950 duration-500 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
+    <div className='animate-in fade-in flex min-h-[calc(100dvh-7rem)] w-full flex-col gap-3 rounded-lg bg-zinc-50 px-0 text-zinc-950 duration-500 md:gap-5 md:p-2 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
       <section className='p-1'>
         <div className='grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] lg:items-stretch'>
           <div className='flex min-w-0 flex-col justify-end py-1'>
@@ -356,8 +356,8 @@ export default function CalendarPage() {
               </p>
             </div>
 
-            <div className='mt-4 flex flex-wrap items-center gap-2'>
-              <div className='relative min-w-56 flex-1 sm:flex-none'>
+            <div className='mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2'>
+              <div className='relative min-w-0 sm:w-64'>
                 <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
                 <input
                   type='search'
@@ -369,7 +369,7 @@ export default function CalendarPage() {
               </div>
               {activeConnection ? (
                 <Button
-                  className='my-2 rounded-xl px-4'
+                  className='h-10 shrink-0 rounded-xl px-4'
                   onClick={openCreateEvent}
                 >
                   <LocalizedText text={"New"} />
@@ -381,7 +381,12 @@ export default function CalendarPage() {
                   onClick={handleConnectCalendar}
                 >
                   <GoogleCalendarBrand />
-                  <LocalizedText text={"Connect calendar"} />
+                  <span className='sm:hidden'>
+                    <LocalizedText text={"Connect"} />
+                  </span>
+                  <span className='hidden sm:inline'>
+                    <LocalizedText text={"Connect calendar"} />
+                  </span>
                 </Button>
               )}
             </div>
@@ -440,15 +445,15 @@ export default function CalendarPage() {
       </section>
 
       <section className='calendar-shell overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-        <div className='grid gap-2 border-b border-zinc-200 p-2.5 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-3 dark:border-white/10'>
-          <div className='flex min-w-0 items-center gap-2'>
+        <div className='flex flex-wrap items-center gap-2 border-b border-zinc-200 p-2 lg:px-3 dark:border-white/10'>
+          <div className='order-1 flex min-w-0 items-center gap-2'>
             <div className='flex rounded-lg bg-zinc-100 p-0.5 dark:bg-white/[0.06]'>
               {VIEW_OPTIONS.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => changeView(option.value)}
                   title={option.title}
-                  className={`h-7 min-w-7 rounded-md px-2 text-xs font-semibold transition ${
+                  className={`h-9 min-w-9 rounded-md px-2 text-xs font-semibold transition-colors duration-150 active:scale-[0.98] ${
                     currentView === option.value
                       ? "bg-white text-zinc-950 shadow-sm dark:bg-white dark:text-black"
                       : "text-zinc-500 hover:text-zinc-950 dark:text-white/55 dark:hover:text-white"
@@ -489,33 +494,33 @@ export default function CalendarPage() {
             )}
           </div>
 
-          <div className='flex items-center justify-center gap-1'>
+          <div className='order-3 flex w-full items-center justify-center gap-1 lg:order-2 lg:w-auto lg:flex-1'>
             <button
               onClick={() => calendarApi()?.prev()}
               aria-label='Previous date range'
-              className='rounded-lg p-1.5 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
+              className='flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors duration-150 hover:bg-zinc-100 hover:text-zinc-950 active:scale-[0.98] dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
             >
               <ChevronLeft className='h-4 w-4' />
             </button>
             <button
               onClick={() => calendarApi()?.setOption("date", new Date())}
-              className='min-w-32 rounded-lg px-2 py-1.5 text-center text-sm font-semibold tracking-tight hover:bg-zinc-100 sm:min-w-40 dark:hover:bg-white/[0.06]'
+              className='min-w-36 rounded-lg px-2 py-2 text-center text-sm font-semibold tracking-tight transition-colors duration-150 hover:bg-zinc-100 active:scale-[0.98] sm:min-w-40 dark:hover:bg-white/[0.06]'
             >
               {calendarTitle}
             </button>
             <button
               onClick={() => calendarApi()?.next()}
               aria-label='Next date range'
-              className='rounded-lg p-1.5 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
+              className='flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors duration-150 hover:bg-zinc-100 hover:text-zinc-950 active:scale-[0.98] dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
             >
               <ChevronRight className='h-4 w-4' />
             </button>
           </div>
 
-          <div className='flex items-center justify-end gap-1.5'>
+          <div className='order-2 ml-auto flex items-center justify-end gap-1 lg:order-3'>
             <button
               onClick={() => calendarApi()?.setOption("date", new Date())}
-              className='h-8 rounded-lg border border-zinc-200 px-2.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/[0.06]'
+              className='h-9 rounded-lg border border-zinc-200 px-3 text-xs font-medium text-zinc-700 transition-colors duration-150 hover:bg-zinc-100 active:scale-[0.98] dark:border-white/10 dark:text-white/70 dark:hover:bg-white/[0.06]'
             >
               <LocalizedText text={"Today"} />
             </button>
@@ -523,7 +528,7 @@ export default function CalendarPage() {
               onClick={() => eventsQuery.refetch()}
               disabled={!activeConnection || eventsQuery.isFetching}
               aria-label='Refresh events'
-              className='flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-950 disabled:opacity-50 dark:text-white/55 dark:hover:bg-white/10 dark:hover:text-white'
+              className='flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors duration-150 hover:bg-zinc-100 hover:text-zinc-950 active:scale-[0.98] disabled:opacity-50 dark:text-white/55 dark:hover:bg-white/10 dark:hover:text-white'
             >
               {eventsQuery.isFetching ? (
                 <LoadingFileLoader size={18} />
@@ -535,11 +540,12 @@ export default function CalendarPage() {
         </div>
 
         {activeConnection && (
-          <div className='border-b border-zinc-200 px-3 py-2 sm:hidden dark:border-white/10'>
+          <div className='border-b border-zinc-200 p-2 sm:hidden dark:border-white/10'>
             <select
               value={selectedCalendarId}
               onChange={(event) => setSelectedCalendarId(event.target.value)}
-              className='w-full rounded-lg bg-zinc-100 px-3 py-2 text-sm text-zinc-900 dark:bg-white/[0.06] dark:text-white'
+              aria-label='Google calendar'
+              className='h-10 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-sm font-medium text-zinc-900 outline-none dark:border-white/10 dark:bg-white/[0.06] dark:text-white'
             >
               <option value='primary'>
                 <LocalizedText text={"Primary calendar"} />
