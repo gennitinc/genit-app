@@ -1,8 +1,6 @@
 "use client";
 
 import Wrapper from "@/components/layout/wrapper";
-import { PWAInstaller } from "@/components/pwa/pwa-installer";
-import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -54,8 +52,6 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
           <ReactQueryDevtools initialIsOpen={false} />
         )}
       </QueryClientProvider>
-      <ServiceWorkerRegister />
-      <PWAInstaller />
     </TooltipProvider>
   );
 }
