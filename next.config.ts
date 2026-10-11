@@ -9,11 +9,6 @@ const nextConfig: NextConfig = {
         destination: "/plugins",
         permanent: true,
       },
-      {
-        source: "/teams",
-        destination: "/company",
-        permanent: true,
-      },
     ];
   },
   images: {
