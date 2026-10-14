@@ -81,8 +81,8 @@ export const getLatestAgentPreview = (
       const type =
         render === "generated_design"
           ? "graphics"
-          : render === "automation_node_created" ||
-              render === "automation_nodes_connected"
+          : // Creating, editing, wiring, or removing nodes all show the canvas.
+            /^automation_nodes?_/.test(render)
             ? "automation"
             : null;
       if (!type || !call.result?.ok) continue;

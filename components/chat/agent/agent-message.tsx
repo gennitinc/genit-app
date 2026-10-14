@@ -34,7 +34,11 @@ import type {
   AgentTask,
   AgentToolCall,
 } from "@/lib/agents-api";
-import { getAutomationWorkflowSummary } from "@/lib/automation-workflow-summary";
+import {
+  AUTOMATION_RENDERS,
+  QUIET_AUTOMATION_TOOLS,
+  getAutomationWorkflowSummary,
+} from "@/lib/automation-workflow-summary";
 import { isCapabilityUnavailable } from "@/lib/capability-feedback";
 import { type ResultLink, extractResultLinks } from "@/lib/result-links";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -198,6 +202,19 @@ function ToolCallView({
     }
     if (call.name === "connect_automation_nodes") {
       return "Connecting nodes";
+    }
+    if (call.name === "update_automation_node") {
+      return `Updating ${call.args?.data?.title || "node"}`;
+    }
+    if (call.name === "delete_automation_node") {
+      const count = call.args?.nodeIds?.length || 1;
+      return count === 1 ? "Removing node" : `Removing ${count} nodes`;
+    }
+    if (call.name === "disconnect_automation_nodes") {
+      return "Disconnecting nodes";
+    }
+    if (call.name === "get_automation_graph") {
+      return "Reading workflow";
     }
     return humanizeToolName(call.name);
   })();
@@ -447,8 +464,8 @@ export function AgentMessage({
   const automationSummary = getAutomationWorkflowSummary(displayedToolCalls);
   const nonAutomationToolCalls = displayedToolCalls.filter(
     (call) =>
-      call.render !== "automation_node_created" &&
-      call.render !== "automation_nodes_connected"
+      !AUTOMATION_RENDERS.has(call.render || "") &&
+      !(call.result && QUIET_AUTOMATION_TOOLS.has(call.name))
   );
 
   return (
@@ -531,7 +548,8 @@ export function AgentMessage({
               ))}
 
             {(automationSummary.nodes.length > 0 ||
-              automationSummary.connectionCount > 0) && (
+              automationSummary.connectionCount > 0 ||
+              automationSummary.removedNodes.length > 0) && (
               <AutomationWorkflowSummaryCard {...automationSummary} />
             )}
 

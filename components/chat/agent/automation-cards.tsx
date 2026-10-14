@@ -373,18 +373,27 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
 export function AutomationWorkflowSummaryCard({
   nodes,
   connectionCount,
+  removedNodes = [],
+  isUpdate = false,
 }: {
   nodes: any[];
   connectionCount: number;
+  removedNodes?: any[];
+  isUpdate?: boolean;
 }) {
   const { setFocusedGenerationId } = useProjectDesign();
   const nodeCount = nodes.length;
+  const removedCount = removedNodes.length;
 
   return (
     <AgentCard
       icon={<LayoutGrid className='h-3.5 w-3.5' />}
-      title='Workflow created'
-      meta={`${nodeCount} ${nodeCount === 1 ? "node" : "nodes"} · ${connectionCount} ${connectionCount === 1 ? "connection" : "connections"}`}
+      title={isUpdate ? "Workflow updated" : "Workflow created"}
+      meta={[
+        `${nodeCount} ${nodeCount === 1 ? "node" : "nodes"}`,
+        `${connectionCount} ${connectionCount === 1 ? "connection" : "connections"}`,
+        ...(removedCount ? [`${removedCount} removed`] : []),
+      ].join(" · ")}
       tone='success'
     >
       <div className='space-y-2'>
@@ -421,6 +430,23 @@ export function AutomationWorkflowSummaryCard({
               })}
             </ul>
           </details>
+        )}
+        {removedCount > 0 && (
+          <ul className='space-y-1'>
+            {removedNodes.map((node) => (
+              <li
+                key={node.nodeId}
+                className='text-muted-foreground flex items-center gap-1.5 text-xs'
+              >
+                <span className='truncate line-through'>
+                  {node.title || "Untitled node"}
+                </span>
+                <span className='shrink-0 text-[10.5px]'>
+                  <LocalizedText text={"Removed"} />
+                </span>
+              </li>
+            ))}
+          </ul>
         )}
         <Button
           variant='outline'

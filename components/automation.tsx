@@ -34,6 +34,15 @@ import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import {
+  type AutomationGraph,
+  automationConnectionCreatesCycle,
+  automationEdgeKey,
+  cleanAutomationGraph,
+  diffAutomationGraph,
+  isEmptyAutomationDiff,
+  rebaseAutomationGraph,
+} from "@/lib/automation-graph-sync";
+import {
   type ComposioToolkit,
   type IntegrationPlatform,
   fetchComposioToolkits,
@@ -88,18 +97,25 @@ import {
   Video,
   View,
   Webhook,
+  X,
   Zap,
 } from "lucide-react";
 import ReactFlow, {
   Background,
+  BaseEdge,
   type Connection,
   type Edge,
+  type EdgeChange,
+  EdgeLabelRenderer,
+  type EdgeProps,
+  type EdgeTypes,
   MarkerType,
   type Node,
+  type NodeChange,
   type NodeTypes,
-  Position,
   applyEdgeChanges,
   applyNodeChanges,
+  getSmoothStepPath,
   useEdgesState,
   useNodesState,
 } from "reactflow";
@@ -213,6 +229,75 @@ function automationTraceSummary(trace: any[] = []) {
     .join("\n");
 }
 
+const newNodeId = (type: string) =>
+  `${type}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+const isEditableTarget = (target: EventTarget | null) =>
+  Boolean(
+    (target as HTMLElement | null)?.closest?.(
+      "input, textarea, select, [contenteditable='true']"
+    )
+  );
+
+const AutomationCanvasContext = React.createContext<{
+  isEditMode: boolean;
+  removeEdge: (edgeId: string) => void;
+}>({ isEditMode: false, removeEdge: () => {} });
+
+/** Connection line with an inline remove control while editing. */
+function RemovableEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerEnd,
+  style,
+  selected,
+}: EdgeProps) {
+  const { isEditMode, removeEdge } = React.useContext(AutomationCanvasContext);
+  const [path, labelX, labelY] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+  });
+  return (
+    <>
+      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} />
+      {isEditMode && (
+        <EdgeLabelRenderer>
+          <button
+            type='button'
+            onClick={(event) => {
+              event.stopPropagation();
+              removeEdge(id);
+            }}
+            title='Remove connection'
+            aria-label='Remove connection'
+            className={cn(
+              "nodrag nopan border-border bg-background text-muted-foreground hover:border-destructive/60 hover:text-destructive absolute flex h-5 w-5 items-center justify-center rounded-full border shadow-sm transition-[opacity,color,border-color] duration-150",
+              selected ? "opacity-100" : "opacity-60 hover:opacity-100"
+            )}
+            style={{
+              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+              pointerEvents: "all",
+            }}
+          >
+            <X className='h-3 w-3' />
+          </button>
+        </EdgeLabelRenderer>
+      )}
+    </>
+  );
+}
+
+const edgeTypes: EdgeTypes = { removable: RemovableEdge };
+
 // ── MAIN AUTOMATION WORKFLOW COMPONENT ──────────────────────────────────────
 
 interface AutomationWorkflowProps {
@@ -229,12 +314,14 @@ export default function AutomationWorkflow({
   onToggleFullscreen,
 }: AutomationWorkflowProps) {
   const { focusedGenerationId, messages } = useProjectDesign();
-  const [projectId, setProjectId] = useState<string | null>(null);
-  const [projectName, setProjectName] = useState("");
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const projectId = slug || null;
+  const [nodes, setNodes] = useNodesState([]);
+  const [edges, setEdges] = useEdgesState([]);
   const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 0.8 });
+  const viewportRef = useRef(viewport);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
   const isEditModeRef = useRef(isEditMode);
   isEditModeRef.current = isEditMode;
@@ -253,270 +340,408 @@ export default function AutomationWorkflow({
   const [pendingConnectedApp, setPendingConnectedApp] =
     useState<AddNodeItem | null>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const reactFlowRef = useRef<any>(null);
+  reactFlowRef.current = reactFlowInstance;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const validationCount = nodes.filter(
     (node) => (node.data?.validationErrors as string[] | undefined)?.length
   ).length;
 
-  // Auto-save
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
-    "idle"
-  );
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
   const [workflowReady, setWorkflowReady] = useState<boolean | null>(null);
-  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const hasUnsavedChanges = useRef(false);
-  const initialLoadDone = useRef(false);
-  const suppressNextAutoSave = useRef(false);
-
-  // Undo / Redo
-  const [isUndoRedoAction, setIsUndoRedoAction] = useState(false);
-  const [history, setHistory] = useState<
-    Array<{ nodes: Node[]; edges: Edge[] }>
-  >([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const historyIndexRef = useRef(-1);
 
   const nodesRef = useRef<Node[]>(nodes);
   const edgesRef = useRef<Edge[]>(edges);
-
   useEffect(() => {
     nodesRef.current = nodes;
   }, [nodes]);
-
   useEffect(() => {
     edgesRef.current = edges;
   }, [edges]);
 
-  // ── History helpers ─────────────────────────────────────────────────────
+  // The last graph the server confirmed. Local edits are diffs against it, so
+  // agent updates and saves can be merged instead of overwriting each other.
+  const syncedRef = useRef<{ revision: number; graph: AutomationGraph } | null>(
+    null
+  );
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savingRef = useRef(false);
+  const saveQueuedRef = useRef(false);
+  const saveFailuresRef = useRef(0);
+  const validationRef = useRef(new Map<string, string[]>());
+  const performSaveRef = useRef<() => Promise<void>>(async () => {});
 
-  const addToHistory = useCallback(
-    (newNodes: Node[], newEdges: Edge[]) => {
-      if (isUndoRedoAction) return;
-
-      const safeNodes = Array.isArray(newNodes)
-        ? JSON.parse(JSON.stringify(newNodes))
-        : [];
-      const safeEdges = Array.isArray(newEdges)
-        ? JSON.parse(JSON.stringify(newEdges))
-        : [];
-
-      const currentState = { nodes: safeNodes, edges: safeEdges };
-
-      setHistory((prev) => {
-        const trimmed = prev.slice(0, historyIndexRef.current + 1);
-        const next = [...trimmed, currentState];
-        return next.slice(-50);
-      });
-
-      setHistoryIndex((prev) => {
-        const nextIdx = Math.min(prev + 1, 49);
-        historyIndexRef.current = nextIdx;
-        return nextIdx;
-      });
-    },
-    [isUndoRedoAction]
+  const localGraph = useCallback(
+    () => cleanAutomationGraph(nodesRef.current, edgesRef.current),
+    []
   );
 
-  const undo = useCallback(() => {
-    if (historyIndex > 0 && history.length > 0) {
-      const previousState = history[historyIndex - 1];
-      if (previousState?.nodes && previousState?.edges) {
-        setIsUndoRedoAction(true);
-        setNodes(injectNodeCallbacks(previousState.nodes));
-        setEdges(previousState.edges);
-        setHistoryIndex(historyIndex - 1);
-        historyIndexRef.current = historyIndex - 1;
-        setIsUndoRedoAction(false);
-        hasUnsavedChanges.current = true;
+  // Every node change goes through these so the refs read by saves, socket
+  // merges, and history are never behind the rendered canvas.
+  const updateNodes = useCallback(
+    (update: (current: Node[]) => Node[]) => {
+      const next = update(nodesRef.current);
+      nodesRef.current = next;
+      setNodes(next);
+      return next;
+    },
+    [setNodes]
+  );
+  const updateEdges = useCallback(
+    (update: (current: Edge[]) => Edge[]) => {
+      const next = update(edgesRef.current);
+      edgesRef.current = next;
+      setEdges(next);
+      return next;
+    },
+    [setEdges]
+  );
+
+  // ── History ─────────────────────────────────────────────────────────────
+
+  const historyRef = useRef<{ stack: AutomationGraph[]; index: number }>({
+    stack: [],
+    index: -1,
+  });
+  const [history, setHistory] = useState({ canUndo: false, canRedo: false });
+  const syncHistory = useCallback(() => {
+    const { stack, index } = historyRef.current;
+    setHistory({ canUndo: index > 0, canRedo: index < stack.length - 1 });
+  }, []);
+  const resetHistory = useCallback(
+    (graph: AutomationGraph) => {
+      historyRef.current = { stack: [graph], index: 0 };
+      syncHistory();
+    },
+    [syncHistory]
+  );
+  const recordHistory = useCallback(
+    (graph: AutomationGraph) => {
+      const { stack, index } = historyRef.current;
+      if (
+        stack[index] &&
+        JSON.stringify(stack[index]) === JSON.stringify(graph)
+      )
+        return;
+      const next = [...stack.slice(0, index + 1), graph].slice(-50);
+      historyRef.current = { stack: next, index: next.length - 1 };
+      syncHistory();
+    },
+    [syncHistory]
+  );
+
+  // ── Node callbacks ──────────────────────────────────────────────────────
+
+  // Nodes receive stable wrappers; the latest implementations live in a ref.
+  const handlersRef = useRef({
+    removeNode: (_nodeId: string) => {},
+    onNodeDataChange: (_nodeId: string, _fields: any) => {},
+    onTestRun: async (_nodeId: string) => {},
+  });
+  const nodeHandlers = useMemo(
+    () => ({
+      onRemoveNode: (nodeId: string) => handlersRef.current.removeNode(nodeId),
+      onNodeDataChange: (nodeId: string, fields: any) =>
+        handlersRef.current.onNodeDataChange(nodeId, fields),
+      onTestRun: (nodeId: string) => handlersRef.current.onTestRun(nodeId),
+    }),
+    []
+  );
+
+  const showGraph = useCallback(
+    (graph: AutomationGraph) => {
+      const previous = new Map(nodesRef.current.map((node) => [node.id, node]));
+      const previousEdges = new Map(
+        edgesRef.current.map((edge) => [automationEdgeKey(edge), edge])
+      );
+      updateNodes(() =>
+        graph.nodes.map((node) => {
+          const legacyEmailTrigger =
+            node.type === "trigger" &&
+            (node.data?.triggerType === "email_received" ||
+              (!node.data?.triggerType &&
+                /(?:incoming|new)?\s*email\s+received/i.test(
+                  node.data?.title || ""
+                )));
+          return {
+            ...node,
+            position: node.position || { x: 0, y: 0 },
+            draggable: true,
+            selected: previous.get(node.id)?.selected,
+            data: {
+              ...node.data,
+              ...(legacyEmailTrigger ? { triggerType: "gmail_received" } : {}),
+              ...nodeHandlers,
+              isEditMode: isEditModeRef.current,
+              isTesting: previous.get(node.id)?.data?.isTesting,
+              validationErrors: validationRef.current.get(node.id) || [],
+            },
+          } as Node;
+        })
+      );
+      updateEdges(
+        () =>
+          graph.edges.map((edge) => ({
+            ...edge,
+            id:
+              edge.id ||
+              `edge-${edge.source}-${edge.sourceHandle || ""}-${edge.target}`,
+            selected: previousEdges.get(automationEdgeKey(edge))?.selected,
+          })) as Edge[]
+      );
+    },
+    [nodeHandlers, updateNodes, updateEdges]
+  );
+
+  const setValidation = useCallback((errors?: any[], ready?: boolean) => {
+    validationRef.current = new Map(
+      (errors || []).map((item: any) => [item.nodeId, item.errors || []])
+    );
+    if (ready !== undefined) setWorkflowReady(Boolean(ready));
+  }, []);
+
+  const fitSoon = useCallback((duration = 600) => {
+    setTimeout(() => {
+      if (nodesRef.current.length)
+        reactFlowRef.current?.fitView({ duration, padding: 0.25 });
+    }, 150);
+  }, []);
+
+  const scheduleAutoSave = useCallback((delay = 1500) => {
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(
+      () => void performSaveRef.current(),
+      delay
+    );
+  }, []);
+
+  /** Adopts a graph from the server, replaying any unsaved local edits. */
+  const applyServerGraph = useCallback(
+    (
+      payload: { revision?: number; nodes?: any[]; edges?: any[] },
+      options: { validationErrors?: any[]; ready?: boolean; fit?: boolean } = {}
+    ) => {
+      const revision = Number(payload.revision ?? 0);
+      const synced = syncedRef.current;
+      if (synced && revision < synced.revision) return;
+      const remote = cleanAutomationGraph(payload.nodes, payload.edges);
+      const next = synced
+        ? rebaseAutomationGraph(synced.graph, localGraph(), remote)
+        : remote;
+      const nodeCountChanged = next.nodes.length !== nodesRef.current.length;
+      syncedRef.current = { revision, graph: remote };
+      if (options.validationErrors)
+        setValidation(options.validationErrors, options.ready);
+      showGraph(next);
+      recordHistory(next);
+      if (!isEmptyAutomationDiff(diffAutomationGraph(remote, next)))
         scheduleAutoSave();
-      }
-    }
-  }, [history, historyIndex]);
+      if (options.fit || nodeCountChanged) fitSoon();
+    },
+    [
+      fitSoon,
+      localGraph,
+      recordHistory,
+      scheduleAutoSave,
+      setValidation,
+      showGraph,
+    ]
+  );
 
-  const redo = useCallback(() => {
-    if (historyIndex < history.length - 1 && history.length > 0) {
-      const nextState = history[historyIndex + 1];
-      if (nextState?.nodes && nextState?.edges) {
-        setIsUndoRedoAction(true);
-        setNodes(injectNodeCallbacks(nextState.nodes));
-        setEdges(nextState.edges);
-        setHistoryIndex(historyIndex + 1);
-        historyIndexRef.current = historyIndex + 1;
-        setIsUndoRedoAction(false);
-        hasUnsavedChanges.current = true;
-        scheduleAutoSave();
+  const refetchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const refetchGraph = useCallback(
+    async ({ fit = false }: { fit?: boolean } = {}) => {
+      if (!projectId || !syncedRef.current) return;
+      try {
+        const res = await apiResponse.get(
+          `/apps/automation/${projectId}?layout=1`,
+          { withCredentials: true }
+        );
+        if (res.data?.success && res.data.data)
+          applyServerGraph(
+            {
+              ...res.data.data,
+              revision: res.data.revision ?? res.data.data.revision,
+            },
+            {
+              validationErrors: res.data.validationErrors || [],
+              ready: res.data.ready,
+              fit,
+            }
+          );
+      } catch (error) {
+        console.error("Failed to refresh the automation:", error);
       }
-    }
-  }, [history, historyIndex]);
-
-  // ── Keyboard shortcuts for undo/redo ────────────────────────────────────
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
-        e.preventDefault();
-        if (e.shiftKey) {
-          redo();
-        } else {
-          undo();
-        }
-      }
-      if ((e.metaKey || e.ctrlKey) && e.key === "y") {
-        e.preventDefault();
-        redo();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [undo, redo]);
+    },
+    [projectId, applyServerGraph]
+  );
+  // Bursts of socket events collapse into a single refresh.
+  const requestRefetch = useCallback(
+    (options: { fit?: boolean } = {}) => {
+      if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current);
+      refetchTimerRef.current = setTimeout(
+        () => void refetchGraph(options),
+        250
+      );
+    },
+    [refetchGraph]
+  );
 
   // ── Auto-save ───────────────────────────────────────────────────────────
 
   const performSave = useCallback(async () => {
-    if (!projectId || !hasUnsavedChanges.current) return;
+    const synced = syncedRef.current;
+    if (!projectId || !synced) return;
+    if (savingRef.current) {
+      saveQueuedRef.current = true;
+      return;
+    }
+    const sent = localGraph();
+    if (isEmptyAutomationDiff(diffAutomationGraph(synced.graph, sent))) {
+      setSaveStatus((status) => (status === "error" ? "idle" : status));
+      return;
+    }
 
+    savingRef.current = true;
+    setSaveStatus("saving");
+    setWorkflowReady(null);
     try {
-      setSaveStatus("saving");
       const res = await apiResponse.put(
         `/apps/automation/${projectId}`,
         {
-          nodes: nodesRef.current.map((n) => {
-            const cleanData = { ...n.data };
-            delete cleanData.onRemoveNode;
-            delete cleanData.onNodeDataChange;
-            delete cleanData.isEditMode;
-            delete cleanData.onTestRun;
-            delete cleanData.isTesting;
-            return {
-              id: n.id,
-              type: n.type,
-              position: n.position,
-              data: cleanData,
-            };
-          }),
-          edges: edgesRef.current,
-          viewport,
+          ...sent,
+          viewport: viewportRef.current,
+          baseRevision: synced.revision,
         },
         { withCredentials: true }
       );
-
-      if (res.data?.success) {
-        setWorkflowReady(Boolean(res.data.ready));
-        const serverNodes = res.data.data?.nodes || [];
-        const serverEdges = res.data.data?.edges || [];
-        if (serverNodes.length) {
-          const validationByNode = new Map<string, string[]>(
-            (res.data.validationErrors || []).map((item: any) => [
-              item.nodeId,
-              item.errors || [],
-            ])
-          );
-          suppressNextAutoSave.current = true;
-          setNodes((current) =>
-            current.map((node) => {
-              const saved = serverNodes.find(
-                (item: any) => item.id === node.id
-              );
-              if (!saved) return node;
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  composioStatus: saved.data?.composioStatus,
-                  composioError: saved.data?.composioError,
-                  composioTriggerId: saved.data?.composioTriggerId,
-                  integrationId:
-                    saved.data?.integrationId || node.data?.integrationId,
-                  composioToolkitName:
-                    saved.data?.composioToolkitName ||
-                    node.data?.composioToolkitName,
-                  composioLogo:
-                    saved.data?.composioLogo || node.data?.composioLogo,
-                  webhookUrl: saved.data?.webhookUrl || node.data?.webhookUrl,
-                  validationErrors: validationByNode.get(node.id) || [],
-                },
-              };
-            })
-          );
-          edgesRef.current = serverEdges;
-          setEdges(serverEdges);
-        }
-        hasUnsavedChanges.current = false;
-        setSaveStatus("saved");
-        setTimeout(() => setSaveStatus("idle"), 2000);
+      const saved = res.data?.data;
+      if (!res.data?.success || !saved)
+        throw new Error(res.data?.message || "The workflow was not saved");
+      const remote = cleanAutomationGraph(saved.nodes, saved.edges);
+      // Keep anything edited while the request was in flight.
+      const next = rebaseAutomationGraph(sent, localGraph(), remote);
+      syncedRef.current = {
+        revision: Number(res.data.revision ?? saved.revision ?? 0),
+        graph: remote,
+      };
+      setValidation(res.data.validationErrors || [], res.data.ready);
+      showGraph(next);
+      if (res.data.dropped?.length)
+        toast.warning("Some invalid connections were removed", {
+          description: res.data.dropped.join("\n"),
+        });
+      saveFailuresRef.current = 0;
+      setSaveStatus("saved");
+      setTimeout(
+        () => setSaveStatus((status) => (status === "saved" ? "idle" : status)),
+        2000
+      );
+    } catch (err: any) {
+      const conflict = err?.response?.status === 409 && err.response.data?.data;
+      if (conflict) {
+        // The agent (or another tab) changed the workflow first: replay these
+        // edits on top of its version and save again.
+        const data = err.response.data;
+        const remote = cleanAutomationGraph(data.data.nodes, data.data.edges);
+        const next = rebaseAutomationGraph(synced.graph, localGraph(), remote);
+        syncedRef.current = {
+          revision: Number(data.revision ?? data.data.revision ?? 0),
+          graph: remote,
+        };
+        showGraph(next);
+        recordHistory(next);
+        saveQueuedRef.current = true;
+      } else {
+        saveFailuresRef.current += 1;
+        setSaveStatus("error");
+        console.error("Auto-save error:", err);
+        if (saveFailuresRef.current === 1)
+          toast.error("Couldn't save the workflow", {
+            description:
+              err?.response?.data?.message ||
+              "Your changes are kept here and will be retried automatically.",
+          });
+        scheduleAutoSave(Math.min(30000, 2000 * 2 ** saveFailuresRef.current));
       }
-    } catch (err) {
-      console.error("Auto-save error:", err);
-      setSaveStatus("idle");
+    } finally {
+      savingRef.current = false;
+      if (saveQueuedRef.current) {
+        saveQueuedRef.current = false;
+        scheduleAutoSave(0);
+      }
     }
-  }, [projectId, viewport]);
+  }, [
+    projectId,
+    localGraph,
+    recordHistory,
+    scheduleAutoSave,
+    setValidation,
+    showGraph,
+  ]);
+  performSaveRef.current = performSave;
 
-  const scheduleAutoSave = useCallback(() => {
-    if (autoSaveTimerRef.current) {
-      clearTimeout(autoSaveTimerRef.current);
-    }
-    autoSaveTimerRef.current = setTimeout(() => {
-      performSave();
-    }, 2000);
-  }, [performSave]);
-
-  // Mark unsaved on node/edge changes
-  useEffect(() => {
-    if (!initialLoadDone.current) return;
-    if (suppressNextAutoSave.current) {
-      suppressNextAutoSave.current = false;
-      return;
-    }
-    hasUnsavedChanges.current = true;
-    setWorkflowReady(null);
-    scheduleAutoSave();
-  }, [nodes, edges, scheduleAutoSave]);
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
-    };
+  /** Flushes pending edits so server-side checks see the current canvas. */
+  const saveNow = useCallback(async () => {
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    for (let waited = 0; savingRef.current && waited < 100; waited += 1)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    await performSaveRef.current();
   }, []);
+
+  // Any canvas change schedules a save; unchanged graphs are skipped there.
+  useEffect(() => {
+    if (isLoading || !syncedRef.current) return;
+    scheduleAutoSave();
+  }, [nodes, edges, isLoading, scheduleAutoSave]);
+
+  // Leaving the preview must not drop edits still waiting for the debounce.
+  useEffect(
+    () => () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+      if (refetchTimerRef.current) clearTimeout(refetchTimerRef.current);
+      void performSaveRef.current();
+    },
+    []
+  );
 
   // ── Node callbacks ──────────────────────────────────────────────────────
 
   const removeNode = useCallback(
     (nodeId: string) => {
-      setNodes((nds) => {
-        const next = nds.filter((node) => node.id !== nodeId);
-        nodesRef.current = next;
-        return next;
-      });
-      setEdges((eds) => {
-        const next = eds.filter(
+      updateNodes((current) => current.filter((node) => node.id !== nodeId));
+      updateEdges((current) =>
+        current.filter(
           (edge) => edge.source !== nodeId && edge.target !== nodeId
-        );
-        edgesRef.current = next;
-        return next;
-      });
-      hasUnsavedChanges.current = true;
+        )
+      );
+      recordHistory(localGraph());
     },
-    [setNodes, setEdges]
+    [localGraph, recordHistory, updateEdges, updateNodes]
+  );
+
+  const removeEdge = useCallback(
+    (edgeId: string) => {
+      updateEdges((current) => current.filter((edge) => edge.id !== edgeId));
+      recordHistory(localGraph());
+    },
+    [localGraph, recordHistory, updateEdges]
   );
 
   const onNodeDataChange = useCallback(
     (nodeId: string, updatedFields: any) => {
-      setNodes((nds) =>
-        nds.map((node) => {
-          if (node.id === nodeId) {
-            return {
-              ...node,
-              data: {
-                ...node.data,
-                ...updatedFields,
-              },
-            };
-          }
-          return node;
-        })
+      updateNodes((current) =>
+        current.map((node) =>
+          node.id === nodeId
+            ? { ...node, data: { ...node.data, ...updatedFields } }
+            : node
+        )
       );
     },
-    [setNodes]
+    [updateNodes]
   );
 
   const onTestRun = useCallback(
@@ -530,6 +755,8 @@ export default function AutomationWorkflow({
         toast.loading("Running zero-credit dry run...", {
           id: `test-run-${nodeId}`,
         });
+        // The dry run reads the stored workflow, so save pending edits first.
+        await saveNow();
         const res = await apiResponse.post(
           `/apps/automation/${projectId}/test-run`,
           { nodeId }
@@ -559,112 +786,104 @@ export default function AutomationWorkflow({
         onNodeDataChange(nodeId, { isTesting: false });
       }
     },
-    [projectId, onNodeDataChange]
+    [projectId, onNodeDataChange, saveNow]
   );
+  handlersRef.current = { removeNode, onNodeDataChange, onTestRun };
 
-  const injectNodeCallbacks = useCallback(
-    (nodesList: Node[]) => {
-      return nodesList.map((node) => {
-        const legacyEmailTrigger =
-          node.type === "trigger" &&
-          (node.data?.triggerType === "email_received" ||
-            (!node.data?.triggerType &&
-              /(?:incoming|new)?\s*email\s+received/i.test(
-                node.data?.title || ""
-              )));
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            ...(legacyEmailTrigger ? { triggerType: "gmail_received" } : {}),
-            isEditMode: isEditModeRef.current,
-            onRemoveNode: removeNode,
-            onNodeDataChange: onNodeDataChange,
-            onTestRun: onTestRun,
-          },
-        };
-      });
-    },
-    [removeNode, onNodeDataChange, onTestRun]
-  );
+  const undo = useCallback(() => {
+    const current = historyRef.current;
+    if (current.index <= 0) return;
+    current.index -= 1;
+    showGraph(current.stack[current.index]);
+    syncHistory();
+  }, [showGraph, syncHistory]);
+
+  const redo = useCallback(() => {
+    const current = historyRef.current;
+    if (current.index >= current.stack.length - 1) return;
+    current.index += 1;
+    showGraph(current.stack[current.index]);
+    syncHistory();
+  }, [showGraph, syncHistory]);
+
+  // ── Keyboard shortcuts for undo/redo ────────────────────────────────────
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Never hijack undo inside text fields, the chat box, or other panels.
+      if (!isEditModeRef.current || isEditableTarget(e.target)) return;
+      const target = e.target as HTMLElement | null;
+      if (target !== document.body && !rootRef.current?.contains(target))
+        return;
+      const key = e.key.toLowerCase();
+      if ((e.metaKey || e.ctrlKey) && key === "z") {
+        e.preventDefault();
+        if (e.shiftKey) redo();
+        else undo();
+      }
+      if ((e.metaKey || e.ctrlKey) && key === "y") {
+        e.preventDefault();
+        redo();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [undo, redo]);
 
   // ── Fetch automation state ──────────────────────────────────────────────
 
   useEffect(() => {
-    if (!slug) return;
-    setProjectId(slug);
-
-    const fetchAutomation = async () => {
-      try {
-        setIsLoading(true);
-        const res = await apiResponse.get(`/apps/automation/${slug}?layout=1`, {
-          withCredentials: true,
-        });
-
-        if (res.data?.success && res.data.data) {
-          const autoData = res.data.data;
-          setProjectName(autoData.name || "Automation");
-          const validationByNode = new Map<string, string[]>(
-            (res.data.validationErrors || []).map((item: any) => [
-              item.nodeId,
-              item.errors || [],
-            ])
-          );
-          setWorkflowReady(Boolean(res.data.ready));
-          const loadedNodes = injectNodeCallbacks(
-            (autoData.nodes || []).map((node: any) => ({
-              ...node,
-              data: {
-                ...node.data,
-                validationErrors: validationByNode.get(node.id) || [],
-              },
-            }))
-          );
-          const loadedEdges = autoData.edges || [];
-          setNodes(loadedNodes);
-          setEdges(loadedEdges);
-          if (autoData.viewport) {
-            setViewport(autoData.viewport);
-          }
-
-          // Capture initial history state
-          setHistory([
-            {
-              nodes: JSON.parse(JSON.stringify(loadedNodes)),
-              edges: JSON.parse(JSON.stringify(loadedEdges)),
-            },
-          ]);
-          setHistoryIndex(0);
-          historyIndexRef.current = 0;
-
-          // Mark initial load complete so auto-save doesn't fire immediately
-          setTimeout(() => {
-            initialLoadDone.current = true;
-          }, 500);
+    if (!projectId) return;
+    let cancelled = false;
+    syncedRef.current = null;
+    setIsLoading(true);
+    setLoadError(null);
+    apiResponse
+      .get(`/apps/automation/${projectId}?layout=1`, { withCredentials: true })
+      .then((res) => {
+        if (cancelled) return;
+        const data = res.data?.data;
+        if (!res.data?.success || !data)
+          throw new Error(res.data?.message || "Automation not found");
+        if (data.viewport) {
+          setViewport(data.viewport);
+          viewportRef.current = data.viewport;
         }
-      } catch (err) {
+        const graph = cleanAutomationGraph(data.nodes, data.edges);
+        syncedRef.current = {
+          revision: Number(res.data.revision ?? data.revision ?? 0),
+          graph,
+        };
+        setValidation(res.data.validationErrors || [], res.data.ready);
+        showGraph(graph);
+        resetHistory(graph);
+      })
+      .catch((err) => {
+        if (cancelled) return;
         console.error("Failed to load automation:", err);
-        toast.error("Failed to load automation canvas");
-      } finally {
-        setIsLoading(false);
-      }
+        setLoadError(
+          err?.response?.data?.message || "Failed to load automation canvas"
+        );
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
     };
-
-    fetchAutomation();
-  }, [slug, injectNodeCallbacks, setNodes, setEdges]);
+    // showGraph and friends are stable for a given project.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId, loadAttempt]);
 
   // Update nodes isEditMode state when edit mode toggles
   useEffect(() => {
-    setNodes((nds) =>
-      nds.map((n) => ({
-        ...n,
-        data: {
-          ...n.data,
-          isEditMode,
-        },
+    updateNodes((current) =>
+      current.map((node) => ({
+        ...node,
+        data: { ...node.data, isEditMode },
       }))
     );
-  }, [isEditMode, setNodes]);
+  }, [isEditMode, updateNodes]);
 
   // Node dimensions and handle direction change between edit and view modes.
   // Refit after that render so the complete workflow stays comfortably visible.
@@ -677,324 +896,141 @@ export default function AutomationWorkflow({
     return () => clearTimeout(timer);
   }, [isLoading, isEditMode, reactFlowInstance, nodes.length]);
 
-  // ── Socket listener for AI updates ──────────────────────────────────────
+  // ── Live updates from the agent ─────────────────────────────────────────
 
+  const applyServerGraphRef = useRef(applyServerGraph);
+  applyServerGraphRef.current = applyServerGraph;
+  const requestRefetchRef = useRef(requestRefetch);
+  requestRefetchRef.current = requestRefetch;
+
+  // One socket per canvas. It rejoins the project room after every reconnect
+  // and refetches, so updates emitted while disconnected are never lost.
   useEffect(() => {
     if (!projectId) return;
-
     const socket = io(serverUrlSocket, {
       auth: { token: cookie.get("genituToken") || "" },
       withCredentials: true,
     });
-    socket.emit("joinProject", projectId);
-
-    socket.on("automation:ai:update", (data: any) => {
-      if (data.projectId !== projectId) return;
-
-      if (!data.actions || data.actions.length === 0) return;
-
-      // These changes are already persisted by the agent tools. Never let the
-      // canvas autosave an intermediate socket snapshot back over the server.
-      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
-      hasUnsavedChanges.current = false;
-      suppressNextAutoSave.current = true;
-
-      // Process the full batch — collect all new nodes/edges in local arrays
-      // so we can apply them together and then call fitView once.
-      const createdNodes: Node[] = [];
-      const createdEdges: Edge[] = [];
-      let layoutPositions: Array<{
-        id: string;
-        position: { x: number; y: number };
-      }> = [];
-
-      data.actions.forEach((action: any) => {
-        if (action.name === "update_node") {
-          setNodes((current) => {
-            const next = current.map((node) =>
-              node.id === action.args.nodeId
-                ? {
-                    ...node,
-                    data: {
-                      ...node.data,
-                      ...action.args.data,
-                      isEditMode,
-                      onRemoveNode: removeNode,
-                      onNodeDataChange,
-                      onTestRun,
-                    },
-                  }
-                : node
-            );
-            nodesRef.current = next;
-            return next;
-          });
-          return;
-        }
-        if (action.name === "remove_node") {
-          setNodes((current: any[]) => {
-            const next = current.filter(
-              (node: any) => node.id !== action.args.nodeId
-            );
-            nodesRef.current = next;
-            return next;
-          });
-          setEdges((current: any[]) => {
-            const next = current.filter(
-              (edge: any) =>
-                edge.source !== action.args.nodeId &&
-                edge.target !== action.args.nodeId
-            );
-            edgesRef.current = next;
-            return next;
-          });
-          return;
-        }
-        if (action.name === "create_node") {
-          const nodeArgs = action.args;
-          const newNodeId = nodeArgs.nodeId || `${nodeArgs.type}-${Date.now()}`;
-
-          // Merge ALL data fields the AI provided — don't cherry-pick.
-          // Then layer on the interactive callbacks and nodeId.
-          const nodeData: any = {
-            // Spread every field from the AI payload first
-            ...nodeArgs.data,
-            // Ensure nodeId is always set
-            nodeId: newNodeId,
-            // Inject interactive callbacks so nodes are fully functional
-            isEditMode,
-            onRemoveNode: removeNode,
-            onNodeDataChange,
-            onTestRun,
-          };
-
-          const newNode: Node = {
-            id: newNodeId,
-            type: nodeArgs.type,
-            position: nodeArgs.position || {
-              // Fallback layout if backend didn't send position: match backend spacing
-              x: 400,
-              y: 80 + (nodesRef.current.length + createdNodes.length) * 320,
-            },
-            draggable: true,
-            data: nodeData,
-          };
-
-          createdNodes.push(newNode);
-        } else if (action.name === "connect_nodes") {
-          const edgeArgs = action.args;
-          const newEdge: Edge = {
-            id: `edge-${edgeArgs.sourceId}-${edgeArgs.targetId}-${Date.now()}`,
-            source: edgeArgs.sourceId,
-            target: edgeArgs.targetId,
-            // Forward sourceHandle so condition true/false branches work
-            ...(edgeArgs.sourceHandle
-              ? { sourceHandle: edgeArgs.sourceHandle }
-              : {}),
-            animated: true,
-          };
-          createdEdges.push(newEdge);
-        } else if (action.name === "layout_nodes") {
-          layoutPositions = action.args?.positions || [];
-        }
+    const join = () =>
+      socket.emit("joinProject", projectId, () => {
+        if (syncedRef.current) requestRefetchRef.current();
       });
-
-      // Apply nodes then edges atomically
-      if (createdNodes.length > 0) {
-        setNodes((nds) => {
-          const byId = new Map(nds.map((node) => [node.id, node]));
-          for (const node of createdNodes) byId.set(node.id, node);
-          const next = [...byId.values()];
-          nodesRef.current = next;
-          return next;
-        });
-      }
-      if (createdEdges.length > 0) {
-        setEdges((eds) => {
-          const next = [...eds];
-          for (const edge of createdEdges) {
-            const exists = next.some(
-              (current) =>
-                current.source === edge.source &&
-                current.target === edge.target &&
-                (current.sourceHandle || null) === (edge.sourceHandle || null)
-            );
-            if (!exists) next.push(edge);
-          }
-          edgesRef.current = next;
-          return next;
-        });
-      }
-      if (layoutPositions.length > 0) {
-        const positions = new Map(
-          layoutPositions.map((item) => [item.id, item.position])
-        );
-        setNodes((nds) => {
-          const next = nds.map((node) => ({
-            ...node,
-            position: positions.get(node.id) || node.position,
-          }));
-          nodesRef.current = next;
-          return next;
-        });
-      }
-
-      // After nodes settle, fit the view so the user sees the full canvas
-      if (
-        (createdNodes.length > 0 || layoutPositions.length > 0) &&
-        reactFlowInstance
-      ) {
-        setTimeout(() => {
-          reactFlowInstance.fitView({ duration: 600, padding: 0.25 });
-        }, 150);
-      }
+    socket.on("connect", join);
+    // Every agent edit carries the complete persisted graph.
+    socket.on("automation:graph:update", (data: any) => {
+      if (String(data?.projectId) !== String(projectId)) return;
+      if (!syncedRef.current) return;
+      applyServerGraphRef.current(data);
     });
-
+    // Older servers send partial actions; the stored graph is authoritative.
+    socket.on("automation:ai:update", (data: any) => {
+      if (String(data?.projectId) === String(projectId))
+        requestRefetchRef.current();
+    });
+    // Final verification can repair the graph after the last tool call.
+    socket.on("agent:run:end", (data: any) => {
+      if (String(data?.projectId) === String(projectId))
+        requestRefetchRef.current({ fit: true });
+    });
     return () => {
+      socket.off("connect", join);
+      socket.off("automation:graph:update");
       socket.off("automation:ai:update");
-      socket.disconnect();
-    };
-  }, [
-    projectId,
-    setNodes,
-    setEdges,
-    isEditMode,
-    removeNode,
-    onNodeDataChange,
-    onTestRun,
-    reactFlowInstance,
-  ]);
-
-  // ── Load snapshot version ───────────────────────────────────────────────
-
-  useEffect(() => {
-    if (focusedGenerationId && messages) {
-      let foundSnapshot = null;
-      for (const msg of messages) {
-        if (msg.generationGroups) {
-          for (const group of msg.generationGroups) {
-            const item = group.items?.find(
-              (it: any) => it.id === focusedGenerationId
-            );
-            if (
-              item &&
-              item.type === "application/json+automation" &&
-              item.data
-            ) {
-              foundSnapshot = item.data;
-              break;
-            }
-          }
-        }
-        if (foundSnapshot) break;
-      }
-
-      if (foundSnapshot) {
-        const loadedNodes = injectNodeCallbacks(foundSnapshot.nodes || []);
-        const loadedEdges = foundSnapshot.edges || [];
-        setNodes(loadedNodes);
-        setEdges(loadedEdges);
-        if (reactFlowInstance) {
-          setTimeout(() => {
-            reactFlowInstance.fitView({ duration: 400, padding: 0.2 });
-          }, 100);
-        }
-      }
-    }
-  }, [
-    focusedGenerationId,
-    messages,
-    injectNodeCallbacks,
-    setNodes,
-    setEdges,
-    reactFlowInstance,
-  ]);
-
-  // ── Final fit-view when AI agent run completes ──────────────────────────
-
-  useEffect(() => {
-    if (!projectId) return;
-
-    const socket = io(serverUrlSocket, {
-      auth: { token: cookie.get("genituToken") || "" },
-      withCredentials: true,
-    });
-    socket.emit("joinProject", projectId);
-
-    socket.on("agent:run:end", async (data: any) => {
-      // Reload after every terminal result because final verification may
-      // repair and persist a partial graph even when an integration is missing.
-      if (data.projectId !== projectId) return;
-
-      // The server persists AI-created nodes and edges. Reload that graph so
-      // socket timing or a stale autosave can never leave the canvas unwired.
-      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
-      hasUnsavedChanges.current = false;
-      try {
-        const res = await apiResponse.get(
-          `/apps/automation/${projectId}?layout=1`,
-          {
-            withCredentials: true,
-          }
-        );
-        if (res.data?.success && res.data.data) {
-          const validationByNode = new Map<string, string[]>(
-            (res.data.validationErrors || []).map((item: any) => [
-              item.nodeId,
-              item.errors || [],
-            ])
-          );
-          setWorkflowReady(Boolean(res.data.ready));
-          const serverNodes = injectNodeCallbacks(
-            (res.data.data.nodes || []).map((node: any) => ({
-              ...node,
-              data: {
-                ...node.data,
-                validationErrors: validationByNode.get(node.id) || [],
-              },
-            }))
-          );
-          const serverEdges = res.data.data.edges || [];
-          nodesRef.current = serverNodes;
-          edgesRef.current = serverEdges;
-          suppressNextAutoSave.current = true;
-          setNodes(serverNodes);
-          setEdges(serverEdges);
-        }
-      } catch (error) {
-        console.error("Failed to refresh the completed automation:", error);
-      }
-
-      // Give React a moment to flush all node/edge state updates, then fit
-      setTimeout(() => {
-        if (reactFlowInstance && nodesRef.current.length > 0) {
-          reactFlowInstance.fitView({ duration: 800, padding: 0.25 });
-        }
-      }, 400);
-    });
-
-    return () => {
       socket.off("agent:run:end");
       socket.disconnect();
     };
-  }, [projectId, reactFlowInstance, injectNodeCallbacks, setNodes, setEdges]);
+  }, [projectId]);
 
-  // ── Handle manual connection between nodes ──────────────────────────────
+  // ── Load snapshot version ───────────────────────────────────────────────
+
+  const appliedSnapshotRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (
+      !focusedGenerationId ||
+      isLoading ||
+      appliedSnapshotRef.current === focusedGenerationId
+    )
+      return;
+    let snapshot: any = null;
+    for (const msg of messages || []) {
+      for (const group of msg.generationGroups || []) {
+        const item = group.items?.find(
+          (entry: any) => entry.id === focusedGenerationId
+        );
+        if (item?.type === "application/json+automation" && item.data) {
+          snapshot = item.data;
+          break;
+        }
+      }
+      if (snapshot) break;
+    }
+    // Restore a version once when it is selected, not on every new message.
+    if (!snapshot) return;
+    appliedSnapshotRef.current = focusedGenerationId;
+    const graph = cleanAutomationGraph(snapshot.nodes, snapshot.edges);
+    showGraph(graph);
+    recordHistory(graph);
+    fitSoon(400);
+  }, [
+    focusedGenerationId,
+    messages,
+    isLoading,
+    showGraph,
+    recordHistory,
+    fitSoon,
+  ]);
+
+  // ── Manual editing ──────────────────────────────────────────────────────
+
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      updateNodes((current) => applyNodeChanges(changes, current));
+      if (changes.some((change) => change.type === "remove"))
+        recordHistory(localGraph());
+    },
+    [localGraph, recordHistory, updateNodes]
+  );
+
+  const handleEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      updateEdges((current) => applyEdgeChanges(changes, current));
+      if (changes.some((change) => change.type === "remove"))
+        recordHistory(localGraph());
+    },
+    [localGraph, recordHistory, updateEdges]
+  );
+
+  // Rejects connections the server would refuse, so a bad drag can never
+  // leave the canvas in a state that fails every later save.
+  const isValidConnection = useCallback((connection: Connection) => {
+    const { source, target } = connection;
+    if (!source || !target) return false;
+    const sourceNode = nodesRef.current.find((node) => node.id === source);
+    if (!sourceNode || !nodesRef.current.some((node) => node.id === target))
+      return false;
+    if (
+      sourceNode.type === "condition" &&
+      !["true", "false"].includes(String(connection.sourceHandle))
+    )
+      return false;
+    if (
+      edgesRef.current.some(
+        (edge) =>
+          edge.source === source &&
+          edge.target === target &&
+          (edge.sourceHandle || null) === (connection.sourceHandle || null)
+      )
+    )
+      return false;
+    return !automationConnectionCreatesCycle(edgesRef.current, source, target);
+  }, []);
 
   const handleConnect = useCallback(
     (connection: Connection) => {
-      if (!connection.source || !connection.target) return;
-
-      setEdges((eds) => {
-        const isDuplicate = eds.some(
-          (e) =>
-            e.source === connection.source &&
-            e.target === connection.target &&
-            (e.sourceHandle || null) === (connection.sourceHandle || null)
-        );
-        if (isDuplicate) return eds;
-
-        const newEdge: Edge = {
+      if (!isValidConnection(connection)) return;
+      updateEdges((current) => [
+        ...current,
+        {
           id: `edge-${connection.source}-${connection.target}-${Date.now()}`,
           source: connection.source!,
           target: connection.target!,
@@ -1002,24 +1038,22 @@ export default function AutomationWorkflow({
             ? { sourceHandle: connection.sourceHandle }
             : {}),
           animated: true,
-        };
-        return [...eds, newEdge];
-      });
+        },
+      ]);
+      recordHistory(localGraph());
     },
-    [setEdges]
+    [isValidConnection, localGraph, recordHistory, updateEdges]
   );
 
   // ── Node drag stop → capture history ────────────────────────────────────
 
-  const onNodeDragStop = useCallback(
-    (_event: any, _node: Node) => {
-      addToHistory(nodesRef.current, edgesRef.current);
-    },
-    [addToHistory]
-  );
+  const onNodeDragStop = useCallback(() => {
+    recordHistory(localGraph());
+  }, [localGraph, recordHistory]);
 
   const onMoveEnd = useCallback(
     (_event: any, vp: { x: number; y: number; zoom: number }) => {
+      viewportRef.current = vp;
       setViewport(vp);
     },
     []
@@ -1032,21 +1066,24 @@ export default function AutomationWorkflow({
     subtype?: string,
     initialData: Record<string, unknown> = {}
   ) => {
-    const nodeId = `${type}-${Date.now()}`;
+    const nodeId = newNodeId(type);
 
     let position = {
-      x: 200 + ((nodes.length * 40) % 200),
-      y: 150 + ((nodes.length * 40) % 200),
+      x: 200 + ((nodesRef.current.length * 40) % 200),
+      y: 150 + ((nodesRef.current.length * 40) % 200),
     };
 
-    // Place in centre of viewport if instance available
-    if (reactFlowInstance) {
-      const vp = reactFlowInstance.getViewport();
-      const centerX = (-vp.x + window.innerWidth / 2) / vp.zoom;
-      const centerY = (-vp.y + window.innerHeight / 2) / vp.zoom;
+    // Place it in the middle of the visible canvas, which in the chat preview
+    // is only part of the window.
+    const bounds = canvasRef.current?.getBoundingClientRect();
+    if (reactFlowInstance && bounds) {
+      const center = reactFlowInstance.project({
+        x: bounds.width / 2,
+        y: bounds.height / 2,
+      });
       position = {
-        x: centerX + (Math.random() * 80 - 40),
-        y: centerY + (Math.random() * 80 - 40),
+        x: center.x - 140 + (Math.random() * 60 - 30),
+        y: center.y - 80 + (Math.random() * 60 - 30),
       };
     }
 
@@ -1129,18 +1166,14 @@ export default function AutomationWorkflow({
       draggable: true,
       data: {
         ...baseData,
+        ...nodeHandlers,
         isEditMode,
-        onRemoveNode: removeNode,
-        onNodeDataChange,
-        onTestRun,
+        validationErrors: [],
       },
     };
 
-    setNodes((nds) => {
-      const next = [...nds, newNode];
-      addToHistory(next, edgesRef.current);
-      return next;
-    });
+    updateNodes((current) => [...current, newNode]);
+    recordHistory(localGraph());
     setShowAddComponent(false);
     setAddSearch("");
   };
@@ -1286,8 +1319,27 @@ export default function AutomationWorkflow({
     );
   }
 
+  if (loadError) {
+    return (
+      <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center gap-3 px-4 text-center'>
+        <AlertTriangle className='h-5 w-5 text-amber-500' />
+        <p className='text-muted-foreground text-sm'>{loadError}</p>
+        <Button
+          variant='outline'
+          size='sm'
+          onClick={() => setLoadAttempt((attempt) => attempt + 1)}
+        >
+          <LocalizedText text={"Try again"} />
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <div className='bg-background relative flex h-full w-full flex-col'>
+    <div
+      ref={rootRef}
+      className='bg-background relative flex h-full w-full flex-col'
+    >
       {/* ── Header with Title & Toolbar (side-by-side) ──────────────── */}
       <div className='border-border/80 bg-background/50 z-10 flex shrink-0 items-center justify-between border-b px-4 py-1 backdrop-blur-sm'>
         <div className='text-foreground flex items-center gap-2'>
@@ -1355,7 +1407,7 @@ export default function AutomationWorkflow({
             variant='ghost'
             size='sm'
             onClick={undo}
-            disabled={historyIndex <= 0}
+            disabled={!isEditMode || !history.canUndo}
             className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Undo (Ctrl+Z)'
           >
@@ -1367,7 +1419,7 @@ export default function AutomationWorkflow({
             variant='ghost'
             size='sm'
             onClick={redo}
-            disabled={historyIndex >= history.length - 1}
+            disabled={!isEditMode || !history.canRedo}
             className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Redo (Ctrl+Y)'
           >
@@ -1571,54 +1623,71 @@ export default function AutomationWorkflow({
                 <SaveAll className='h-3 w-3' />
               </>
             )}
+            {saveStatus === "error" && (
+              <button
+                type='button'
+                onClick={() => void saveNow()}
+                className='flex items-center gap-1 text-red-500 hover:text-red-400'
+                title="Couldn't save; retrying automatically. Click to retry now."
+              >
+                <AlertTriangle className='h-3 w-3' />
+                <span>Not saved</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       {/* ── React Flow Canvas ──────────────────────────────────────── */}
       <div
+        ref={canvasRef}
         className={cn(
           "relative z-0 min-h-0 flex-1 transition-colors",
           !isEditMode && "bg-[#101113]"
         )}
       >
-        <ReactFlow
-          proOptions={{ hideAttribution: true }}
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={isEditMode ? onNodesChange : undefined}
-          onEdgesChange={isEditMode ? onEdgesChange : undefined}
-          onConnect={isEditMode ? handleConnect : undefined}
-          nodeTypes={nodeTypes}
-          nodesDraggable={isEditMode}
-          nodesConnectable={isEditMode}
-          edgesFocusable={isEditMode}
-          nodesFocusable={isEditMode}
-          elementsSelectable={isEditMode}
-          onNodeDragStop={isEditMode ? onNodeDragStop : undefined}
-          onInit={setReactFlowInstance}
-          onMoveEnd={onMoveEnd}
-          defaultViewport={viewport}
-          fitView
-          fitViewOptions={{ padding: 0.3 }}
-          defaultEdgeOptions={{
-            type: "smoothstep",
-            animated: false,
-            markerEnd: { type: MarkerType.ArrowClosed, color: "#a1a1aa" },
-            style: { stroke: "#a1a1aa", strokeWidth: 1.6 },
-          }}
-          minZoom={0.1}
-          maxZoom={2}
-          panOnDrag={true}
-          zoomOnScroll={true}
-          zoomOnPinch={true}
-        >
-          <Background
-            color={isEditMode ? "#d4d4d8" : "#34363b"}
-            gap={24}
-            size={1}
-          />
-        </ReactFlow>
+        <AutomationCanvasContext.Provider value={{ isEditMode, removeEdge }}>
+          <ReactFlow
+            proOptions={{ hideAttribution: true }}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={isEditMode ? handleNodesChange : undefined}
+            onEdgesChange={isEditMode ? handleEdgesChange : undefined}
+            onConnect={isEditMode ? handleConnect : undefined}
+            isValidConnection={isValidConnection}
+            deleteKeyCode={isEditMode ? ["Backspace", "Delete"] : null}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            nodesDraggable={isEditMode}
+            nodesConnectable={isEditMode}
+            edgesFocusable={isEditMode}
+            nodesFocusable={isEditMode}
+            elementsSelectable={isEditMode}
+            onNodeDragStop={isEditMode ? onNodeDragStop : undefined}
+            onInit={setReactFlowInstance}
+            onMoveEnd={onMoveEnd}
+            defaultViewport={viewport}
+            fitView
+            fitViewOptions={{ padding: 0.3 }}
+            defaultEdgeOptions={{
+              type: "removable",
+              animated: false,
+              markerEnd: { type: MarkerType.ArrowClosed, color: "#a1a1aa" },
+              style: { stroke: "#a1a1aa", strokeWidth: 1.6 },
+            }}
+            minZoom={0.1}
+            maxZoom={2}
+            panOnDrag={true}
+            zoomOnScroll={true}
+            zoomOnPinch={true}
+          >
+            <Background
+              color={isEditMode ? "#d4d4d8" : "#34363b"}
+              gap={24}
+              size={1}
+            />
+          </ReactFlow>
+        </AutomationCanvasContext.Provider>
       </div>
 
       <ConnectDialog
