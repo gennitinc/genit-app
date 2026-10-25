@@ -147,6 +147,8 @@ const SettingsHome = () => {
   const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
   const [deviceSessions, setDeviceSessions] = useState<DeviceSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(false);
+  const [sessionsError, setSessionsError] = useState(false);
+  const [sessionsReloadKey, setSessionsReloadKey] = useState(0);
   const [disconnectingSession, setDisconnectingSession] = useState<string>();
   const fetchAutomationRuns = async () => {
     if (!currentOrg?._id) return;
@@ -194,17 +196,19 @@ const SettingsHome = () => {
   useEffect(() => {
     if (activeTab !== "security") return;
     setLoadingSessions(true);
+    setSessionsError(false);
     apiResponse
       .get("/user/sessions")
       .then((response) => setDeviceSessions(response.data.sessions || []))
-      .catch(() =>
+      .catch(() => {
+        setSessionsError(true);
         toast({
           title: "Could not load device sessions",
           variant: "destructive",
-        })
-      )
+        });
+      })
       .finally(() => setLoadingSessions(false));
-  }, [activeTab, toast]);
+  }, [activeTab, sessionsReloadKey, toast]);
 
   useEffect(() => {
     if (activeTab !== "automation" || !currentOrg?._id) return;
@@ -2568,6 +2572,27 @@ const SettingsHome = () => {
                           <div className='flex items-center gap-2 py-3 text-sm text-zinc-500'>
                             <Loader2 className='size-4 animate-spin' />
                             <LocalizedText text={"Loading sessions..."} />
+                          </div>
+                        ) : sessionsError ? (
+                          <div className='flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50/50 p-3 sm:flex-row sm:items-center sm:justify-between dark:border-red-500/20 dark:bg-red-500/[0.06]'>
+                            <p className='text-sm text-red-700 dark:text-red-300'>
+                              <LocalizedText
+                                text={
+                                  "Device sessions could not be loaded. Try again."
+                                }
+                              />
+                            </p>
+                            <Button
+                              size='sm'
+                              variant='outline'
+                              className='shrink-0 rounded-xl'
+                              onClick={() =>
+                                setSessionsReloadKey((value) => value + 1)
+                              }
+                            >
+                              <RefreshCw className='size-4' />
+                              <LocalizedText text={"Try again"} />
+                            </Button>
                           </div>
                         ) : deviceSessions.length === 0 ? (
                           <p className='py-3 text-sm text-zinc-500'>
