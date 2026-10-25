@@ -2,8 +2,6 @@
 
 import { PreviewPanel } from "../chat/preview-panel";
 import { TextChatContent } from "../chat/text-chat-content";
-import { AppSidebar } from "./app-sidebar";
-import TopNavWithAurora from "./top-nav-with-aurora";
 import {
   AgentRunsProvider,
   useAgentRunsContext,
@@ -25,7 +23,6 @@ import { PanelRightClose, PanelRightOpen } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-
 
 export function ChatLayout() {
   return (
@@ -66,7 +63,6 @@ function PreviewToggle({
 
 function ChatLayoutInner() {
   const searchParams = useSearchParams();
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -182,136 +178,110 @@ function ChatLayoutInner() {
   return (
     <div
       className={cn(
-        "relative flex w-full [overflow-anchor:none]",
-        useDocumentScroll ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"
+        "relative flex min-w-0 flex-1 flex-col bg-white [overflow-anchor:none] dark:bg-black",
+        useDocumentScroll ? "min-h-full" : "h-full overflow-hidden"
       )}
     >
-      <div
-        className={cn(
-          "shrink-0",
-          useDocumentScroll &&
-            isDesktop &&
-            "sticky top-0 h-[100dvh] self-start [&>.peer]:h-full"
-        )}
-      >
-        <AppSidebar
-          className={cn(useDocumentScroll && isDesktop && "h-full")}
-        />
-      </div>
-      <div
-        ref={scrollContainerRef}
-        className={cn(
-          "relative flex min-w-0 flex-1 flex-col bg-white dark:bg-black",
-          useDocumentScroll ? "min-h-[100dvh]" : "h-full overflow-hidden"
-        )}
-      >
-        <TopNavWithAurora
-          scrollContainerRef={
-            scrollContainerRef as React.RefObject<HTMLDivElement>
-          }
-        />
-
-        {isDesktop && !isPreviewOpen && (
-          <div className='pointer-events-none sticky top-12 z-50 h-0 w-full shrink-0'>
-            <div className='mx-auto flex w-full max-w-2xl justify-end px-3'>
-              <PreviewToggle
-                isOpen={false}
-                onToggle={() => setIsPreviewOpen(true)}
-              />
-            </div>
+      {isDesktop && !isPreviewOpen && (
+        <div className='pointer-events-none sticky top-12 z-50 h-0 w-full shrink-0'>
+          <div className='mx-auto flex w-full max-w-2xl justify-end px-3'>
+            <PreviewToggle
+              isOpen={false}
+              onToggle={() => setIsPreviewOpen(true)}
+            />
           </div>
-        )}
+        </div>
+      )}
 
-        {isDesktop ? (
-          <div
+      {isDesktop ? (
+        <div
+          className={cn(
+            "relative flex min-h-0 w-full flex-1",
+            isPreviewOpen ? "overflow-hidden" : "overflow-visible"
+          )}
+        >
+          {isPreviewOpen && (
+            <PreviewToggle
+              isOpen
+              onToggle={() => setIsPreviewOpen(false)}
+              className={cn(
+                "absolute top-2 z-50",
+                isFullscreen ? "left-3" : "left-[37.5%] -translate-x-1/2"
+              )}
+            />
+          )}
+          <motion.div
+            layout={isPreviewOpen}
+            transition={{
+              type: "spring",
+              damping: 30,
+              stiffness: 220,
+              mass: 0.8,
+            }}
             className={cn(
-              "relative flex min-h-0 w-full flex-1",
-              isPreviewOpen ? "overflow-hidden" : "overflow-visible"
+              "relative flex min-w-0 flex-col",
+              isPreviewOpen
+                ? "h-full overflow-hidden"
+                : "flex-1 overflow-visible",
+              isFullscreen ? "hidden" : "flex-1"
             )}
           >
-            {isPreviewOpen && (
-              <PreviewToggle
-                isOpen
-                onToggle={() => setIsPreviewOpen(false)}
-                className={cn(
-                  "absolute top-2 z-50",
-                  isFullscreen ? "left-3" : "left-[37.5%] -translate-x-1/2"
-                )}
-              />
-            )}
-            <motion.div
-              layout={isPreviewOpen}
-              transition={{
-                type: "spring",
-                damping: 30,
-                stiffness: 220,
-                mass: 0.8,
-              }}
+            <div
               className={cn(
-                "relative flex min-w-0 flex-col",
-                isPreviewOpen
-                  ? "h-full overflow-hidden"
-                  : "flex-1 overflow-visible",
-                isFullscreen ? "hidden" : "flex-1"
+                "flex w-full flex-col transition-[max-width] duration-300 ease-out",
+                isPreviewOpen ? "h-full" : "flex-1",
+                !isPreviewOpen && "mx-auto max-w-2xl"
               )}
             >
-              <div
+              <TextChatContent useDocumentScroll={!isPreviewOpen} />
+            </div>
+          </motion.div>
+
+          <AnimatePresence initial={false}>
+            {isPreviewOpen && (
+              <motion.div
+                key='preview-pane'
+                initial={{ width: 0, opacity: 0 }}
+                animate={{
+                  width: isFullscreen ? "100%" : "62.5%",
+                  opacity: 1,
+                }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{
+                  type: "spring",
+                  damping: 30,
+                  stiffness: 220,
+                  mass: 0.8,
+                }}
                 className={cn(
-                  "flex w-full flex-col transition-[max-width] duration-300 ease-out",
-                  isPreviewOpen ? "h-full" : "flex-1",
-                  !isPreviewOpen && "mx-auto max-w-2xl"
+                  "relative h-full shrink-0 overflow-hidden",
+                  isFullscreen ? "p-0" : "p-2"
                 )}
               >
-                <TextChatContent useDocumentScroll={!isPreviewOpen} />
-              </div>
-            </motion.div>
-
-            <AnimatePresence initial={false}>
-              {isPreviewOpen && (
                 <motion.div
-                  key='preview-pane'
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{
-                    width: isFullscreen ? "100%" : "62.5%",
-                    opacity: 1,
-                  }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{
-                    type: "spring",
-                    damping: 30,
-                    stiffness: 220,
-                    mass: 0.8,
-                  }}
-                  className={cn(
-                    "relative h-full shrink-0 overflow-hidden",
-                    isFullscreen ? "p-0" : "p-2"
-                  )}
+                  initial={{ x: 40, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 40, opacity: 0 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className='relative h-full w-full'
                 >
-                  <motion.div
-                    initial={{ x: 40, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 40, opacity: 0 }}
-                    transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    className='relative h-full w-full'
-                  >
-                    <PreviewPanel
-                      previewType={previewType}
-                      isFullscreen={isFullscreen}
-                      onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
-                    />
-                  </motion.div>
+                  <PreviewPanel
+                    previewType={previewType}
+                    isFullscreen={isFullscreen}
+                    onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+                  />
                 </motion.div>
-              )}
-            </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ) : (
+        <div className='flex min-h-0 w-full flex-1 flex-col'>
+          <div className='flex flex-1 flex-col'>
+            <TextChatContent useDocumentScroll />
           </div>
-        ) : (
-          <div className='flex min-h-0 w-full flex-1 flex-col'>
-            <div className='flex flex-1 flex-col'>
-              <TextChatContent useDocumentScroll />
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -75,15 +75,16 @@ export function HomeCommandCenter({
 }) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { integrations } = useIntegrations();
+  const { orgId, integrations } = useIntegrations();
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<SocialPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<SocialPost | null>(null);
   const [form, setForm] = useState(EMPTY_POST_FORM);
 
   const postsQuery = useQuery({
-    queryKey: ["social-posts"],
+    queryKey: ["social-posts", orgId || "none"],
     queryFn: listSocialPosts,
+    enabled: Boolean(orgId),
   });
   const posts = postsQuery.data || [];
   const connected = useMemo(
@@ -157,7 +158,7 @@ export function HomeCommandCenter({
     },
     onSuccess: (saved) => {
       queryClient.setQueryData<SocialPost[]>(
-        ["social-posts"],
+        ["social-posts", orgId || "none"],
         (current = []) => [
           ...saved,
           ...current.filter(
@@ -207,23 +208,28 @@ export function HomeCommandCenter({
     mutationFn: deleteSocialPost,
     onMutate: async (deletedId) => {
       await queryClient.cancelQueries({ queryKey: ["social-posts"] });
-      const previous = queryClient.getQueryData<SocialPost[]>(["social-posts"]);
-      queryClient.setQueryData<SocialPost[]>(["social-posts"], (current = []) =>
+      const queryKey = ["social-posts", orgId || "none"];
+      const previous = queryClient.getQueryData<SocialPost[]>(queryKey);
+      queryClient.setQueryData<SocialPost[]>(queryKey, (current = []) =>
         current.filter((post) => post._id !== deletedId)
       );
       setDeleteTarget(null);
       return { previous };
     },
     onSuccess: (_, deletedId) => {
-      queryClient.setQueryData<SocialPost[]>(["social-posts"], (current = []) =>
-        current.filter((post) => post._id !== deletedId)
+      queryClient.setQueryData<SocialPost[]>(
+        ["social-posts", orgId || "none"],
+        (current = []) => current.filter((post) => post._id !== deletedId)
       );
       setDeleteTarget(null);
       toast({ title: "Post deleted" });
     },
     onError: (error, _deletedId, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(["social-posts"], context.previous);
+        queryClient.setQueryData(
+          ["social-posts", orgId || "none"],
+          context.previous
+        );
       }
       toast({
         title: "Could not delete post",

@@ -4,6 +4,7 @@ import { PricingDialog } from "../common/pricing-dialog";
 // import { ProjectPreview } from "../community/project-preview";
 import { SidebarProvider } from "../ui/sidebar";
 import { useUserContext } from "@/context/AuthenticatedContext";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
@@ -15,6 +16,7 @@ function CheckoutPricingDialog() {
 function Wrapper({ children }: { children: React.ReactNode }) {
   const { user, updateUserPreferences } = useUserContext();
   const pathname = usePathname();
+  const isDesktop = useMediaQuery("(min-width: 1025px)");
   const isChatIdPage =
     pathname !== "/chat/history" && /^\/chat\/[^/]+$/.test(pathname);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -97,8 +99,14 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider
-      open={isChatIdPage ? chatSidebarOpen : sidebarOpen}
-      onOpenChange={isChatIdPage ? setChatSidebarOpen : handleSidebarOpenChange}
+      open={isDesktop ? false : isChatIdPage ? chatSidebarOpen : sidebarOpen}
+      onOpenChange={
+        isDesktop
+          ? undefined
+          : isChatIdPage
+            ? setChatSidebarOpen
+            : handleSidebarOpenChange
+      }
     >
       <div className='custom-scrollbar h-full w-full'>
         {children}

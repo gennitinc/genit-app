@@ -54,6 +54,7 @@ export default function VisualsHomePage() {
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const {
+    orgId,
     byPlatform,
     identityBySurface,
     integrations,
@@ -112,8 +113,9 @@ export default function VisualsHomePage() {
     };
   }, [rangeEnd, rangeStart]);
   const statsQuery = useQuery({
-    queryKey: ["social-post-stats", statsRange],
+    queryKey: ["social-post-stats", orgId || "none", statsRange],
     queryFn: () => getSocialPostStats(statsRange),
+    enabled: Boolean(orgId),
   });
   const stats = statsQuery.data;
 

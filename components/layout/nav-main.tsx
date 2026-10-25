@@ -7,19 +7,16 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
-import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import {
-  BookMarked,
   BookOpen,
   Cog,
-  CreditCard,
   GalleryHorizontal,
   Gift,
   GitBranchPlus,
-  Grid2X2Plus,
   HelpCircle,
   History,
   Image as ImageIcon,
@@ -39,14 +36,11 @@ export function NavMain() {
   const { state, setOpenMobile, isMobile } = useSidebar();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isDesktop = useMediaQuery("(min-width: 1025px)");
 
-  const FARMNET_EMAIL = "farmnetent@gmail.com";
-
-  const user = useUserContext().user;
-  const isFarmnetUser = user?.email?.toLowerCase() === FARMNET_EMAIL;
   const navItems = [
     {
-      title: t("Visual Flow"),
+      title: t("Visual"),
       icon: GalleryHorizontal,
       href: "/visuals",
       badge: t("New"),
@@ -62,15 +56,11 @@ export function NavMain() {
       href: "/plugins",
       // badge: "New",
     },
-    ...(isFarmnetUser
-      ? [
-          {
-            title: t("Apps"),
-            icon: Grid2X2Plus,
-            href: "/apps",
-          },
-        ]
-      : []),
+    // {
+    //   title: t("Apps"),
+    //   icon: Grid2X2Plus,
+    //   href: "/apps",
+    // },
     // {
     //   title: t("Community"),
     //   icon: Users,
@@ -82,7 +72,7 @@ export function NavMain() {
       href: "/chat/history",
     },
     {
-      title: t("Creator Program"),
+      title: t("Creator"),
       icon: Gift,
       href: `/user/referral`,
     },
@@ -94,25 +84,25 @@ export function NavMain() {
   ];
 
   const secondaryNavItems = [
-    {
-      title: t("Billing"),
-      icon: CreditCard,
-      href: "/user/settings?tab=billing",
-    },
-    {
-      title: t("Blog"),
-      icon: BookMarked,
-      href: "/blog",
-    },
+    // {
+    //   title: t("Billing"),
+    //   icon: CreditCard,
+    //   href: "/user/settings?tab=billing",
+    // },
+    // {
+    //   title: t("Blog"),
+    //   icon: BookMarked,
+    //   href: "/blog",
+    // },
     {
       title: t("Settings"),
       icon: Cog,
       href: "/user/settings",
     },
     {
-      title: t("Help"),
+      title: t("Support"),
       icon: HelpCircle,
-      href: "/contact",
+      href: "/feedback",
     },
   ];
 
@@ -123,6 +113,7 @@ export function NavMain() {
 
   // For mobile, always show full content, for desktop use the state
   const shouldShowCollapsed = !isMobile && state === "collapsed";
+  const showDesktopCollapsedLabels = isDesktop && state === "collapsed";
 
   // Helper function to check if a route is active (handles query params)
   const isRouteActive = (href: string) => {
@@ -147,19 +138,18 @@ export function NavMain() {
 
       return true;
     }
-    // For routes without query params, use exact pathname matching
-    // This prevents parent routes from being active when on child routes
-    if (href === "/user/settings" && searchParams.get("tab") === "billing") {
-      return false;
-    }
+    // Routes without query params stay active across their tab query values.
     return (
       pathname === href ||
-      (href === "/visuals" && pathname.startsWith("/visuals/"))
+      (href === "/visuals" && pathname.startsWith("/visuals/")) ||
+      (href === "/chat" &&
+        pathname !== "/chat/history" &&
+        /^\/chat\/[^/]+$/.test(pathname))
     );
   };
 
   return (
-    <>
+    <div className='flex min-h-full flex-1 flex-col'>
       <SidebarGroup>
         <SidebarMenu className={cn(shouldShowCollapsed ? "items-center" : "")}>
           {navItems.map((item) => (
@@ -167,12 +157,19 @@ export function NavMain() {
               <SidebarMenuButton
                 asChild
                 isActive={isRouteActive(item.href)}
-                tooltip={shouldShowCollapsed ? item.title : undefined}
+                tooltip={
+                  shouldShowCollapsed && !showDesktopCollapsedLabels
+                    ? item.title
+                    : undefined
+                }
                 className={cn(
                   "transition-colors duration-300",
-                  isRouteActive(item.href)
+                  showDesktopCollapsedLabels &&
+                    "!h-16 !w-14 !bg-transparent !p-1 hover:!bg-transparent",
+                  !showDesktopCollapsedLabels && isRouteActive(item.href)
                     ? "bg-gray-200 text-black dark:bg-zinc-800 dark:text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
+                    : !showDesktopCollapsedLabels &&
+                        "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
                 )}
                 onClick={() => {
                   handleLinkClick();
@@ -184,23 +181,40 @@ export function NavMain() {
                   );
                 }}
               >
-                <Link href={item.href} className='flex w-full items-center'>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "flex w-full items-center",
+                    showDesktopCollapsedLabels &&
+                      "flex-col justify-center gap-1"
+                  )}
+                >
                   <item.icon
                     className={cn(
                       "h-6 w-6 flex-shrink-0 rounded-full",
-                      shouldShowCollapsed ? "mx-auto" : "mr-2",
+                      showDesktopCollapsedLabels
+                        ? "mx-auto !h-9 !w-9 rounded-lg p-2"
+                        : shouldShowCollapsed
+                          ? "mx-auto"
+                          : "mr-2",
                       // Make icons more visible on mobile/tablet
                       isMobile && "h-7 w-7",
                       // Theme responsive icon colors - explicit and strong
                       isRouteActive(item.href)
-                        ? "text-black dark:text-white"
+                        ? cn(
+                            "text-black dark:text-white",
+                            showDesktopCollapsedLabels &&
+                              "bg-gray-200 dark:bg-zinc-800"
+                          )
                         : "text-gray-700 dark:text-zinc-300"
                     )}
                   />
-                  {!shouldShowCollapsed && (
+                  {(!shouldShowCollapsed || showDesktopCollapsedLabels) && (
                     <span
                       className={cn(
                         "font-normal",
+                        showDesktopCollapsedLabels &&
+                          "max-w-14 truncate text-center text-[10px] leading-tight",
                         // Theme responsive text colors - explicit and strong
                         isRouteActive(item.href)
                           ? "text-black dark:text-white"
@@ -221,67 +235,91 @@ export function NavMain() {
           ))}
         </SidebarMenu>
       </SidebarGroup>
-      <div className='px-2'>
-        <hr className='border-muted/40 flex-grow border-t' />
-      </div>
-      <SidebarGroup>
-        <SidebarMenu className={cn(shouldShowCollapsed ? "items-center" : "")}>
-          {secondaryNavItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                isActive={isRouteActive(item.href)}
-                tooltip={shouldShowCollapsed ? item.title : undefined}
-                className={cn(
-                  "transition-colors duration-300",
-                  isRouteActive(item.href)
-                    ? "bg-gray-200 text-black dark:bg-zinc-800 dark:text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
-                )}
-                onClick={() => {
-                  handleLinkClick();
-                  trackFeatureUsed("secondary_nav_clicked", {
-                    nav_item: item.title || "",
-                    href: item.href,
-                  });
-                }}
-              >
-                <Link
-                  href={item.href}
-                  className='flex w-full items-center'
-                  {...(item.href === "/contact" ? { target: "_blank" } : {})}
-                >
-                  <item.icon
-                    className={cn(
-                      "h-10 w-10 flex-shrink-0",
-                      shouldShowCollapsed ? "mx-auto" : "mr-2",
-                      // Make icons more visible on mobile/tablet
-                      isMobile && "h-7 w-7",
-                      // Theme responsive icon colors - explicit and strong
-                      isRouteActive(item.href)
-                        ? "text-black dark:text-white"
-                        : "text-gray-700 dark:text-zinc-300"
-                    )}
-                  />
-                  {!shouldShowCollapsed && (
-                    <span
-                      className={cn(
-                        "font-medium",
-                        // Theme responsive text colors - explicit and strong
-                        isRouteActive(item.href)
-                          ? "text-black dark:text-white"
-                          : "text-gray-800 dark:text-zinc-200"
-                      )}
-                    >
-                      {item.title}
-                    </span>
+      <div className='mt-auto'>
+        <div className='px-2'>
+          <hr className='border-muted/40 flex-grow border-t' />
+        </div>
+        <SidebarGroup>
+          <SidebarMenu
+            className={cn(shouldShowCollapsed ? "items-center" : "")}
+          >
+            {secondaryNavItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isRouteActive(item.href)}
+                  tooltip={
+                    shouldShowCollapsed && !showDesktopCollapsedLabels
+                      ? item.title
+                      : undefined
+                  }
+                  className={cn(
+                    "transition-colors duration-300",
+                    showDesktopCollapsedLabels &&
+                      "!h-16 !w-14 !bg-transparent !p-1 hover:!bg-transparent",
+                    !showDesktopCollapsedLabels && isRouteActive(item.href)
+                      ? "bg-gray-200 text-black dark:bg-zinc-800 dark:text-white"
+                      : !showDesktopCollapsedLabels &&
+                          "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white"
                   )}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroup>
-    </>
+                  onClick={() => {
+                    handleLinkClick();
+                    trackFeatureUsed("secondary_nav_clicked", {
+                      nav_item: item.title || "",
+                      href: item.href,
+                    });
+                  }}
+                >
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex w-full items-center",
+                      showDesktopCollapsedLabels &&
+                        "flex-col justify-center gap-1"
+                    )}
+                  >
+                    <item.icon
+                      className={cn(
+                        "h-10 w-10 flex-shrink-0",
+                        showDesktopCollapsedLabels
+                          ? "mx-auto !h-9 !w-9 rounded-lg p-2"
+                          : shouldShowCollapsed
+                            ? "mx-auto"
+                            : "mr-2",
+                        // Make icons more visible on mobile/tablet
+                        isMobile && "h-7 w-7",
+                        // Theme responsive icon colors - explicit and strong
+                        isRouteActive(item.href)
+                          ? cn(
+                              "text-black dark:text-white",
+                              showDesktopCollapsedLabels &&
+                                "bg-gray-200 dark:bg-zinc-800"
+                            )
+                          : "text-gray-700 dark:text-zinc-300"
+                      )}
+                    />
+                    {(!shouldShowCollapsed || showDesktopCollapsedLabels) && (
+                      <span
+                        className={cn(
+                          "font-medium",
+                          showDesktopCollapsedLabels &&
+                            "max-w-14 truncate text-center text-[10px] leading-tight",
+                          // Theme responsive text colors - explicit and strong
+                          isRouteActive(item.href)
+                            ? "text-black dark:text-white"
+                            : "text-gray-800 dark:text-zinc-200"
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                    )}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </div>
+    </div>
   );
 }

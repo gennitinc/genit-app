@@ -4,7 +4,6 @@ import { ChatLayout } from "@/components/layout/chat-layout";
 import { LocalizedText } from "@/components/localized-text";
 import { Toaster } from "@/components/ui/sonner";
 import { useProjectDesign } from "@/context/DesignProject";
-import withAuth from "@/helper/hoc/withAuth";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -41,11 +40,11 @@ const ChatIdPage = () => {
   }
 
   return (
-    <div className=''>
+    <div className='flex min-h-0 flex-1'>
       <Toaster />
       <ChatLayout />
     </div>
   );
 };
 
-export default withAuth(ChatIdPage);
+export default ChatIdPage;

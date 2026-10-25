@@ -13,7 +13,7 @@ import {
   PostEditorDialog,
   type PostEditorForm,
   getProviderTargetMetadata,
-} from "@/app/visuals/_components/post-editor-dialog";
+} from "@/app/(workspace)/visuals/_components/post-editor-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
@@ -455,7 +455,7 @@ async function fetchLivePosts(
         return (await listFacebookPosts(connection._id, 50)).map((post) => ({
           ...base,
           ...facebookMedia(post),
-          _id: `remote:facebook:${post.id}`,
+          _id: `remote:${connection._id}:facebook:${post.id}`,
           externalId: post.id,
           content: post.message || "Facebook post",
           permalink: post.permalink_url,
@@ -472,7 +472,7 @@ async function fetchLivePosts(
       if (connection.platform === "instagram")
         return (await listInstagramPosts(connection._id, 50)).map((post) => ({
           ...base,
-          _id: `remote:instagram:${post.id}`,
+          _id: `remote:${connection._id}:instagram:${post.id}`,
           externalId: post.id,
           content: post.caption || "Instagram post",
           mediaType: post.media_type,
@@ -489,7 +489,7 @@ async function fetchLivePosts(
       if (connection.platform === "threads")
         return (await listThreadsPosts(connection._id, 50)).map((post) => ({
           ...base,
-          _id: `remote:threads:${post.id}`,
+          _id: `remote:${connection._id}:threads:${post.id}`,
           externalId: post.id,
           content: post.text || "Threads post",
           mediaType: post.media_type,
@@ -507,7 +507,7 @@ async function fetchLivePosts(
           const media = post.media?.[0];
           return {
             ...base,
-            _id: `remote:x:${post.id}`,
+            _id: `remote:${connection._id}:x:${post.id}`,
             externalId: post.id,
             content: post.text,
             mediaType: media?.type,
@@ -531,7 +531,7 @@ async function fetchLivePosts(
           await listTikTokVideos(connection._id, { maxCount: 50 })
         ).videos.map((post) => ({
           ...base,
-          _id: `remote:tiktok:${post.id}`,
+          _id: `remote:${connection._id}:tiktok:${post.id}`,
           externalId: post.id,
           title: post.title,
           content: post.video_description || post.title || "TikTok video",
@@ -554,7 +554,7 @@ async function fetchLivePosts(
           await listYouTubeVideos(connection._id, { maxResults: 50 })
         ).videos.map((post) => ({
           ...base,
-          _id: `remote:youtube:${post.id}`,
+          _id: `remote:${connection._id}:youtube:${post.id}`,
           externalId: post.id,
           title: post.snippet?.title,
           content:
@@ -579,7 +579,7 @@ async function fetchLivePosts(
           await listPinterestPins(connection._id, { pageSize: 50 })
         ).pins.map((post) => ({
           ...base,
-          _id: `remote:pinterest:${post.id}`,
+          _id: `remote:${connection._id}:pinterest:${post.id}`,
           externalId: post.id,
           title: post.title,
           content: post.description || post.title || "Pinterest pin",
@@ -656,7 +656,11 @@ async function fetchPostAnalytics(post: DisplayPost) {
 }
 
 export default function PostsPage() {
-  const { integrations, isLoading: integrationsLoading } = useIntegrations();
+  const {
+    orgId,
+    integrations,
+    isLoading: integrationsLoading,
+  } = useIntegrations();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { resolvedTheme } = useTheme();
@@ -693,12 +697,8 @@ export default function PostsPage() {
     () => new Set(connected.map((item) => item._id)),
     [connected]
   );
-  const activePlatforms = useMemo(
-    () => new Set(connected.map((item) => item.platform)),
-    [connected]
-  );
   const postsQuery = useInfiniteQuery({
-    queryKey: ["social-posts", "pages"],
+    queryKey: ["social-posts", orgId || "none", "pages"],
     queryFn: ({ pageParam }) =>
       listSocialPostsPage({ page: pageParam, limit: POSTS_PAGE_SIZE }),
     initialPageParam: 1,
@@ -706,18 +706,22 @@ export default function PostsPage() {
       lastPage.pagination.hasNextPage
         ? lastPage.pagination.page + 1
         : undefined,
+    enabled: Boolean(orgId),
   });
   const liveQuery = useQuery({
     queryKey: [
       "connected-social-posts",
-      ...liveConnections.map((item) => item._id),
+      orgId || "none",
+      ...liveConnections.map(
+        (item) => `${item._id}:${item.accountId}:${item.updatedAt}`
+      ),
     ],
     queryFn: () => fetchLivePosts(liveConnections),
-    enabled: liveConnections.length > 0,
+    enabled: Boolean(orgId && liveConnections.length > 0),
     staleTime: 60_000,
   });
   const analyticsQuery = useQuery({
-    queryKey: ["post-analytics", analyticsPost?._id],
+    queryKey: ["post-analytics", orgId || "none", analyticsPost?._id],
     queryFn: () => fetchPostAnalytics(analyticsPost!),
     enabled: Boolean(
       analyticsPost &&
@@ -760,9 +764,8 @@ export default function PostsPage() {
       ...workspacePosts.filter(
         (post) =>
           post.status === "published" &&
-          (post.integration
-            ? activeConnectionIds.has(String(post.integration))
-            : activePlatforms.has(post.platform))
+          Boolean(post.integration) &&
+          activeConnectionIds.has(String(post.integration))
       ),
     ];
     return combined.filter(
@@ -770,14 +773,16 @@ export default function PostsPage() {
         combined.findIndex((candidate) =>
           post.externalId && candidate.externalId
             ? post.externalId === candidate.externalId &&
-              post.platform === candidate.platform
+              post.platform === candidate.platform &&
+              String(post.integration || "") ===
+                String(candidate.integration || "")
             : post._id === candidate._id
         ) === index
     );
-  }, [activeConnectionIds, activePlatforms, liveQuery.data, workspacePosts]);
+  }, [activeConnectionIds, liveQuery.data, workspacePosts]);
   const liveAnalyticsQueries = useQueries({
     queries: live.map((post) => ({
-      queryKey: ["post-analytics", post._id],
+      queryKey: ["post-analytics", orgId || "none", post._id],
       queryFn: () => fetchPostAnalytics(post),
       enabled: Boolean(
         post.integration &&

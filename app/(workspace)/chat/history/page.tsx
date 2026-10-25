@@ -1,7 +1,5 @@
 "use client";
 
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import TopNavWithAurora from "@/components/layout/top-nav-with-aurora";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,11 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Toaster } from "@/components/ui/sonner";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { ProjectActionModal } from "@/components/user/project-action-moda";
 import { useUserContext } from "@/context/AuthenticatedContext";
-import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -456,8 +452,8 @@ function ChatHistoryPage() {
       setProjects((current) =>
         current.filter((project) => !deletedIds.has(project._id))
       );
-      setSelectedProjectIds((current) =>
-        new Set([...current].filter((id) => !deletedIds.has(id)))
+      setSelectedProjectIds(
+        (current) => new Set([...current].filter((id) => !deletedIds.has(id)))
       );
       if (deletedIds.size)
         toast.success(
@@ -491,18 +487,11 @@ function ChatHistoryPage() {
   };
 
   return (
-    <div className='relative flex h-[100dvh] w-full overflow-hidden bg-white dark:bg-black'>
-      <Toaster />
-      <AppSidebar />
+    <>
       <div
         ref={scrollContainerRef}
-        className='scroll-container flex flex-1 flex-col overflow-auto will-change-scroll'
+        className='scroll-container flex-1 overflow-auto will-change-scroll'
       >
-        <TopNavWithAurora
-          scrollContainerRef={
-            scrollContainerRef as React.RefObject<HTMLDivElement>
-          }
-        />
         <div className='flex-1 rounded-t-2xl border-2 border-b-0 p-4 lg:p-8'>
           {/* Centered container with custom width for desktop */}
           <div className='mx-auto max-w-4xl'>
@@ -789,9 +778,7 @@ function ChatHistoryPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={() => {
           handleDeleteProjects(
-            activeProject
-              ? [activeProject._id]
-              : Array.from(selectedProjectIds)
+            activeProject ? [activeProject._id] : Array.from(selectedProjectIds)
           );
         }}
         loading={isDeletingProject}
@@ -800,8 +787,8 @@ function ChatHistoryPage() {
         confirmLabel={activeProject ? "Delete Chat" : "Delete Selected"}
         variant='destructive'
       />
-    </div>
+    </>
   );
 }
 
-export default withAuth(ChatHistoryPage);
+export default ChatHistoryPage;

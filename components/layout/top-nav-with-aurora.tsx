@@ -37,9 +37,9 @@ export default function TopNavWithAurora({
     >
       <div className='flex w-full items-center justify-between px-4 py-1.5'>
         <div className='z-20 flex flex-1 items-center'>
-          <SidebarTrigger className='z-20 -ml-2' />
+          <SidebarTrigger className='z-20 -ml-2 min-[1025px]:hidden' />
           <Link href='/' className='flex items-center gap-1 lg:hidden'>
-            <Logo className='h-9 w-9 ml-4' />
+            <Logo className='ml-4 h-9 w-9' />
             <span className='text-lg font-semibold'>
               <LocalizedText text={"Genit"} />
             </span>

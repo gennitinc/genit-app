@@ -151,7 +151,6 @@ const featuredPlugins = [
 
 export function LandingNavbar() {
   const { t } = useLanguage();
-  const FARMNET_EMAIL = "farmnetent@gmail.com";
   const { theme, setTheme } = useTheme();
   const user = useUserContext().user;
   const { total: totalPlugins } = useAvailablePlugins();
@@ -170,7 +169,6 @@ export function LandingNavbar() {
   };
 
   const currentUser = mounted ? user : null;
-  const isFarmnetUser = currentUser?.email?.toLowerCase() === FARMNET_EMAIL;
 
   const navigation = [
     // { name: t("Platform"), href: "/platform" },
@@ -180,7 +178,7 @@ export function LandingNavbar() {
       name: t("Plugins"),
       href: "/plugins",
     },
-    ...(isFarmnetUser ? [{ name: t("Apps"), href: "/apps" }] : []),
+    // { name: t("Apps"), href: "/apps" },
     // { name: "Video & Image Gen", href: "/inspire/create?mode=ai-video-gen" },
     // { name: t("Community"), href: "/community" },
     { name: t("Blog"), href: "/blog" },
@@ -314,14 +312,12 @@ export function LandingNavbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                {isFarmnetUser && (
-                  <Link
-                    className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
-                    href='/apps'
-                  >
-                    {t("Apps")}
-                  </Link>
-                )}
+                {/* <Link
+                  className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
+                  href='/apps'
+                >
+                  {t("Apps")}
+                </Link> */}
                 {/* <Link
                   target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'

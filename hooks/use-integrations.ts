@@ -105,6 +105,10 @@ export function useDisconnectIntegration() {
     mutationFn: (id: string) => disconnectIntegrationById(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      qc.removeQueries({ queryKey: ["connected-social-posts"] });
+      qc.removeQueries({ queryKey: ["post-analytics"] });
+      qc.invalidateQueries({ queryKey: ["social-posts"] });
+      qc.invalidateQueries({ queryKey: ["social-post-stats"] });
     },
   });
 }
@@ -120,6 +124,10 @@ export function useDisconnectMetaIdentity() {
     mutationFn: (id: string) => disconnectMetaIdentityById(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
+      qc.removeQueries({ queryKey: ["connected-social-posts"] });
+      qc.removeQueries({ queryKey: ["post-analytics"] });
+      qc.invalidateQueries({ queryKey: ["social-posts"] });
+      qc.invalidateQueries({ queryKey: ["social-post-stats"] });
     },
   });
 }
