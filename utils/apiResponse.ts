@@ -47,6 +47,33 @@ apiResponse.interceptors.request.use((config) => {
   return config;
 });
 
+const expiredSessionMessages = new Set([
+  "Session expired or disconnected",
+  "You are not logged in",
+  "Invalid token",
+  "Token expired",
+  "Unauthorized access",
+]);
+
+apiResponse.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error?.response?.data?.message;
+    if (
+      typeof window !== "undefined" &&
+      error?.response?.status === 401 &&
+      expiredSessionMessages.has(message) &&
+      cookie.get("genituToken")
+    ) {
+      cookie.remove("genituToken");
+      if (window.location.pathname !== "/signin") {
+        window.location.assign("/signin");
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const clientUrl =
   process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_CLIENT_LIVE_URL

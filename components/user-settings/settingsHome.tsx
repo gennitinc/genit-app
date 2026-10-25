@@ -73,6 +73,17 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+type DeviceSession = {
+  _id: string;
+  device: string;
+  browser: string;
+  os: string;
+  ipAddress?: string;
+  lastActiveAt: string;
+  createdAt: string;
+  isCurrent: boolean;
+};
+
 const SettingsHome = () => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("account");
@@ -134,6 +145,9 @@ const SettingsHome = () => {
   const [username, setUsername] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
+  const [deviceSessions, setDeviceSessions] = useState<DeviceSession[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
+  const [disconnectingSession, setDisconnectingSession] = useState<string>();
   const fetchAutomationRuns = async () => {
     if (!currentOrg?._id) return;
     setLoadingRuns(true);
@@ -178,6 +192,21 @@ const SettingsHome = () => {
   }, [activeTab, currentOrg?._id]);
 
   useEffect(() => {
+    if (activeTab !== "security") return;
+    setLoadingSessions(true);
+    apiResponse
+      .get("/user/sessions")
+      .then((response) => setDeviceSessions(response.data.sessions || []))
+      .catch(() =>
+        toast({
+          title: "Could not load device sessions",
+          variant: "destructive",
+        })
+      )
+      .finally(() => setLoadingSessions(false));
+  }, [activeTab, toast]);
+
+  useEffect(() => {
     if (activeTab !== "automation" || !currentOrg?._id) return;
     const interval = window.setInterval(
       () => void fetchAutomationRuns(),
@@ -211,6 +240,38 @@ const SettingsHome = () => {
     const url = new URL(window.location.href);
     url.searchParams.set("tab", tab);
     window.history.pushState({}, "", url);
+  };
+
+  const disconnectSession = async (session: DeviceSession) => {
+    setDisconnectingSession(session._id);
+    try {
+      await apiResponse.delete(`/user/sessions/${session._id}`);
+      setDeviceSessions((current) =>
+        current.filter((item) => item._id !== session._id)
+      );
+      toast({
+        title: "Device disconnected",
+        description: `${session.browser} on ${session.os} must sign in again.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Could not disconnect device",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    } finally {
+      setDisconnectingSession(undefined);
+    }
+  };
+
+  const sessionActivity = (value: string) => {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? "Recently active"
+      : `Active ${date.toLocaleString(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })}`;
   };
 
   const saveProfile = async () => {
@@ -2484,27 +2545,88 @@ const SettingsHome = () => {
                         <LocalizedText text={"Coming soon"} />
                       </Badge>
                     </div>
-                    <div className='flex items-center justify-between gap-5 px-5 py-4'>
+                    <div className='px-5 py-4'>
                       <div className='flex min-w-0 items-start gap-3'>
                         <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
                           <Monitor className='size-4' />
                         </span>
-                        <div>
+                        <div className='min-w-0 flex-1'>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
                             <LocalizedText text={"Device sessions"} />
                           </p>
                           <p className='mt-0.5 text-sm text-zinc-500 dark:text-zinc-400'>
                             <LocalizedText
                               text={
-                                "Multi-device session controls are not available yet."
+                                "Disconnect any device you no longer use or recognize."
                               }
                             />
                           </p>
                         </div>
                       </div>
-                      <Badge variant='outline'>
-                        <LocalizedText text={"Coming soon"} />
-                      </Badge>
+                      <div className='mt-4 space-y-2 pl-0 sm:pl-12'>
+                        {loadingSessions ? (
+                          <div className='flex items-center gap-2 py-3 text-sm text-zinc-500'>
+                            <Loader2 className='size-4 animate-spin' />
+                            <LocalizedText text={"Loading sessions..."} />
+                          </div>
+                        ) : deviceSessions.length === 0 ? (
+                          <p className='py-3 text-sm text-zinc-500'>
+                            <LocalizedText text={"No active sessions found."} />
+                          </p>
+                        ) : (
+                          deviceSessions.map((session) => (
+                            <div
+                              key={session._id}
+                              className='flex flex-col gap-3 rounded-xl border border-zinc-200 p-3 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'
+                            >
+                              <div className='min-w-0'>
+                                <div className='flex flex-wrap items-center gap-2'>
+                                  <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
+                                    {session.browser} on {session.os}
+                                  </p>
+                                  {session.isCurrent && (
+                                    <Badge variant='outline'>
+                                      <LocalizedText text={"This device"} />
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className='mt-1 text-xs text-zinc-500 dark:text-zinc-400'>
+                                  {session.device} ·{" "}
+                                  {sessionActivity(session.lastActiveAt)}
+                                  {session.ipAddress
+                                    ? ` · ${session.ipAddress}`
+                                    : ""}
+                                </p>
+                              </div>
+                              <Button
+                                size='sm'
+                                variant='outline'
+                                className='shrink-0 rounded-xl active:scale-[0.97]'
+                                disabled={
+                                  disconnectingSession === session._id ||
+                                  (session.isCurrent && isSigningOut)
+                                }
+                                onClick={() =>
+                                  session.isCurrent
+                                    ? setIsSignOutModalOpen(true)
+                                    : void disconnectSession(session)
+                                }
+                              >
+                                {disconnectingSession === session._id ? (
+                                  <Loader2 className='size-4 animate-spin' />
+                                ) : null}
+                                <LocalizedText
+                                  text={
+                                    session.isCurrent
+                                      ? "Sign out"
+                                      : "Disconnect"
+                                  }
+                                />
+                              </Button>
+                            </div>
+                          ))
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
