@@ -477,8 +477,6 @@ export function IdeaSection() {
     removeAttachedFile,
     selectedColorScales,
     primaryFont,
-    imageModel,
-    setImageModel,
     project,
     brandSaveStatus,
     brandIdentityEnabled,
@@ -554,8 +552,7 @@ export function IdeaSection() {
 
   useEffect(() => {
     if (promptFromUrl) setInputValue(promptFromUrl);
-    if (categoryFromUrl === "automation")
-      setSelectedDesignTypeId("automation");
+    if (categoryFromUrl === "automation") setSelectedDesignTypeId("automation");
   }, [categoryFromUrl, promptFromUrl, setInputValue]);
 
   const placeholderText = useTypewriterEffect({
@@ -780,7 +777,8 @@ export function IdeaSection() {
               primaryFont,
               useBrandIdentity: brandIdentityEnabled,
             },
-          }
+          },
+          selectedModel?._id || selectedModel?.id || selectedModel?.modelId
         );
 
         trackEvent("idea_project_created", {
@@ -1359,11 +1357,7 @@ export function IdeaSection() {
                         <ModelSelector
                           type='general'
                           selectedModel={selectedModel}
-                          initialModelId={imageModel}
-                          onSelectModel={(model) => {
-                            setSelectedModel(model);
-                            setImageModel(model.modelId);
-                          }}
+                          onSelectModel={setSelectedModel}
                         />
                       </div>
 

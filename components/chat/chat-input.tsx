@@ -91,9 +91,6 @@ export function ChatInput({
     isGenerating,
     project,
     error,
-    imageModel,
-    setImageModel,
-    updateProjectModel,
     brandSaveStatus,
     isProcessingDraft,
     brandIdentityEnabled,
@@ -317,7 +314,8 @@ export function ChatInput({
         formattedInput,
         uploadedFiles,
         undefined,
-        brandIdentityEnabled
+        brandIdentityEnabled,
+        selectedModel?._id || selectedModel?.id || selectedModel?.modelId
       );
       if (!startedRun) throw new Error("No project is available for this run");
 
@@ -567,14 +565,7 @@ export function ChatInput({
                 <ModelSelector
                   type='general'
                   selectedModel={selectedModel}
-                  initialModelId={imageModel}
-                  onSelectModel={(model) => {
-                    setSelectedModel(model);
-                    setImageModel(model.modelId);
-                    if (project?._id) {
-                      updateProjectModel(project._id, model.modelId);
-                    }
-                  }}
+                  onSelectModel={setSelectedModel}
                 />
               </div>
 

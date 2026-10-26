@@ -95,6 +95,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     files: File[];
     selectedFiles: string[];
     metadata: Record<string, any>;
+    agentModelId?: string;
   } | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const lastFetchedProjectIdRef = useRef<string | null>(null);
@@ -865,6 +866,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
         const parsed = inMemoryDraft ?? JSON.parse(storedDraft as string);
         const prompt = parsed.prompt;
         const metadata = parsed.metadata || {};
+        const agentModelId = parsed.agentModelId;
 
         const filesFromStorage = inMemoryDraft ? [] : parsed.files || [];
         const selectedFiles = parsed.selectedFiles || [];
@@ -955,6 +957,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             prompt,
             requestId: `initial:${project._id}`,
             attachedFiles: agentFiles.length > 0 ? agentFiles : undefined,
+            agentModelId,
           });
         } catch (err) {
           console.error("Failed to start agent run", err);
@@ -990,7 +993,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
     designTypeId?: string,
     orientation?: string | null,
     customSize?: { width: string; height: string } | null,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
+    agentModelId?: string
   ) => {
     let category;
 
@@ -1052,6 +1056,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
           files: filesArray,
           selectedFiles: selectedFiles || [],
           metadata: metadata || {},
+          agentModelId,
         };
 
         // Keep the lightweight parts as a reload fallback. File objects remain in
@@ -1065,6 +1070,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
             designType: designTypeId || null,
             projectId,
             metadata: metadata || {},
+            agentModelId,
           })
         );
 

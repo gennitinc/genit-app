@@ -149,7 +149,8 @@ export interface IProjectDesignContext {
     designTypeId?: string,
     orientation?: string | null,
     customSize?: { width: string; height: string } | null,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
+    agentModelId?: string
   ) => Promise<{ type: boolean; message: string; id?: string }>;
   fetchProject: (projectId: string) => Promise<{
     success: boolean;

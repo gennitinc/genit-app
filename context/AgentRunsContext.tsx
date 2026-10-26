@@ -22,7 +22,8 @@ interface AgentRunsContextValue {
     prompt: string,
     attachedFiles?: AgentAttachedFile[],
     selectedIntegrations?: Record<string, string>,
-    useBrandIdentity?: boolean
+    useBrandIdentity?: boolean,
+    agentModelId?: string
   ) => Promise<{ runId: string } | null>;
   stopAgent: (runId: string) => Promise<void>;
   continueAgent: (runId: string) => Promise<void>;
@@ -42,7 +43,8 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
       prompt: string,
       attachedFiles?: AgentAttachedFile[],
       selectedIntegrations?: Record<string, string>,
-      useBrandIdentity?: boolean
+      useBrandIdentity?: boolean,
+      agentModelId?: string
     ) => {
       if (!projectId) return null;
       try {
@@ -53,6 +55,7 @@ export function AgentRunsProvider({ children }: { children: ReactNode }) {
           attachedFiles,
           selectedIntegrations,
           useBrandIdentity,
+          agentModelId,
         });
         registerNewRun(runId, prompt, attachedFiles);
         return { runId };
