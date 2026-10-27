@@ -5,7 +5,7 @@ import {
 } from "../components/chat/messages/brand-identity-panel";
 import { useUserContext } from "./AuthenticatedContext";
 import { toast } from "@/hooks/use-toast";
-import { startAgentRun } from "@/lib/agents-api";
+import { isSupportedAgentFile, startAgentRun } from "@/lib/agents-api";
 import { stripClientTimeContext } from "@/lib/utils";
 import {
   IDesignProject,
@@ -1466,13 +1466,11 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const processFiles = (files: File[] = []) => {
     if (!files || files.length === 0) return;
-    const allowedPrefixes = ["image/", "video/"];
     const maxFileSizeBytes = 10 * 1024 * 1024;
     const maxFiles = 4;
 
     const filtered = files.filter((file) => {
-      const isAllowedType =
-        !!file.type && allowedPrefixes.some((p) => file.type.startsWith(p));
+      const isAllowedType = isSupportedAgentFile(file);
       const isAllowedSize = file.size <= maxFileSizeBytes;
       return isAllowedType && isAllowedSize;
     });

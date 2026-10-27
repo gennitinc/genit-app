@@ -37,6 +37,7 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { AGENT_FILE_ACCEPT, isSupportedAgentFile } from "@/lib/agents-api";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 import {
   trackAppOpened,
@@ -508,6 +509,7 @@ export function IdeaSection() {
   useEffect(() => {
     setSelectedModel(null);
   }, [project?._id]);
+
   const [imageRotations] = useState(() =>
     images.map(() => Math.random() * 20 - 10)
   );
@@ -648,8 +650,8 @@ export function IdeaSection() {
   // Handle file processing with validation
   const handleFileProcess = useCallback(
     (files: File[]) => {
-      const maxFileSize = 50 * 1024 * 1024; // 50MB
-      const maxFiles = 10;
+      const maxFileSize = 10 * 1024 * 1024;
+      const maxFiles = 4;
 
       if (attachedFiles.length + files.length > maxFiles) {
         setInputError(`Maximum ${maxFiles} files allowed`);
@@ -657,11 +659,12 @@ export function IdeaSection() {
       }
 
       const validFiles = files.filter((file) => {
-        const isImageOrVideo =
-          file.type?.startsWith("image/") || file.type?.startsWith("video/");
-        if (!isImageOrVideo) return false;
+        if (!isSupportedAgentFile(file)) {
+          setInputError(`${file.name} is not a supported file type`);
+          return false;
+        }
         if (file.size > maxFileSize) {
-          setInputError(`${file.name} is too large (max 50MB)`);
+          setInputError(`${file.name} is too large (max 10MB)`);
           return false;
         }
         return true;
@@ -1350,7 +1353,7 @@ export function IdeaSection() {
                         onChange={handleFileInputChange}
                         disabled={isGenerating || isSubmitting}
                         className='hidden'
-                        accept='image/*,video/*'
+                        accept={AGENT_FILE_ACCEPT}
                       />
 
                       <div className='ml-2 flex items-center gap-1.5'>

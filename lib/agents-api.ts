@@ -84,6 +84,30 @@ export interface AgentAttachedFile {
   size?: number;
 }
 
+export const AGENT_FILE_ACCEPT = "image/*,video/*,.pdf,.docx,.xlsx,.pptx";
+
+export function isSupportedAgentFile(file: Pick<File, "name" | "type">) {
+  const type = file.type.toLowerCase();
+  const name = file.name.toLowerCase();
+  const isDocument = [".pdf", ".docx", ".xlsx", ".pptx"].some((extension) =>
+    name.endsWith(extension)
+  );
+  const isDocumentType =
+    !type ||
+    type === "application/octet-stream" ||
+    [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ].includes(type);
+  return (
+    type.startsWith("image/") ||
+    type.startsWith("video/") ||
+    (isDocument && isDocumentType)
+  );
+}
+
 export async function startAgentRun(input: {
   projectId: string;
   prompt: string;

@@ -413,7 +413,9 @@ export function AgentMessage({
       case "provider_quota_limited":
         return `${errorProvider || "Provider"} limit reached`;
       case "provider_authentication_required":
-        return `Reconnect ${errorProvider || "provider"}`;
+        return ["OpenAI", "Anthropic", "Google"].includes(errorProvider || "")
+          ? "Contact support"
+          : `Reconnect ${errorProvider || "provider"}`;
       case "provider_permission_denied":
         return `${errorProvider || "Provider"} permission required`;
       case "provider_action_unavailable":

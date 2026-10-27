@@ -16,6 +16,7 @@ import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { useSpeechToText } from "@/hooks/use-speech-to-text";
+import { AGENT_FILE_ACCEPT } from "@/lib/agents-api";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -556,7 +557,7 @@ export function ChatInput({
                 ref={fileInputRef}
                 type='file'
                 multiple
-                accept='image/*,video/*'
+                accept={AGENT_FILE_ACCEPT}
                 onChange={handleFileSelect}
                 className='hidden'
               />

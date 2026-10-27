@@ -286,7 +286,7 @@ export default function AdminModelsPage() {
           </h1>
           <p className='text-muted-foreground'>
             <LocalizedText
-              text={"Manage AI models for image and video generation"}
+              text={"Manage agent, image, video, audio, and text models"}
             />
           </p>
         </div>
@@ -405,6 +405,9 @@ export default function AdminModelsPage() {
 
               <div className='space-y-2'>
                 <div className='flex flex-wrap gap-2'>
+                  <Badge variant='secondary'>
+                    {model.type === "general" ? "Agent" : model.type}
+                  </Badge>
                   <Badge variant='outline'>{model.provider}</Badge>
                   <Badge
                     variant={
@@ -454,9 +457,7 @@ export default function AdminModelsPage() {
               <LocalizedText text={"Create New Model"} />
             </DialogTitle>
             <DialogDescription>
-              <LocalizedText
-                text={"Add a new AI model for image or video generation"}
-              />
+              <LocalizedText text={"Add an agent or media-generation model"} />
             </DialogDescription>
           </DialogHeader>
 

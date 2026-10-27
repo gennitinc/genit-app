@@ -216,6 +216,11 @@ export function ModelSelector({
                           <span className='truncate text-sm font-medium'>
                             {model.name}
                           </span>
+                          {type === "general" && (
+                            <span className='rounded border border-neutral-700 px-1 py-0.5 text-[9px] font-medium tracking-wide text-neutral-400 uppercase'>
+                              Agent
+                            </span>
+                          )}
                         </div>
                         {model.description && (
                           <p className='w-30 truncate text-xs text-neutral-500 dark:text-neutral-400'>

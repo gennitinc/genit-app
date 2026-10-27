@@ -283,22 +283,18 @@ export function TextChatContent({
   }, [isTyping, isAtBottom, doScrollToBottom]);
 
   useEffect(() => {
-    if (!useDocumentScroll) return;
     const content = conversationContextRef.current?.contentRef.current;
     if (!content) return;
 
     const resizeObserver = new ResizeObserver(() => {
       if (isAtBottomRef.current) {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "auto",
-        });
+        doScrollToBottom({ behavior: "auto" });
       }
     });
 
     resizeObserver.observe(content);
     return () => resizeObserver.disconnect();
-  }, [useDocumentScroll]);
+  }, [doScrollToBottom]);
 
   useEffect(() => {
     const handler = () => {
