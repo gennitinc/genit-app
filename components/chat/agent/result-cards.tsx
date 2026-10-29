@@ -19,6 +19,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { toast } from "@/hooks/use-toast";
+import { getDocumentPreviewUrl } from "@/lib/document-preview";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
@@ -1272,10 +1273,12 @@ export function ResearchReportCard({ data }: { data: any }) {
 
 export function DocumentArtifactCard({ data }: { data: any }) {
   const artifact = data?.artifact || data;
-  const previewUrl = getFullUrl(
-    artifact?.previewUrl || artifact?.fileUrl || ""
-  );
   const fileUrl = getFullUrl(artifact?.fileUrl || "");
+  const previewUrl = getDocumentPreviewUrl({
+    format: artifact?.format,
+    fileUrl,
+    fallbackUrl: getFullUrl(artifact?.previewUrl || ""),
+  });
   const { setArtifactPreview } = useProjectDesign();
   const showPreview = () =>
     setArtifactPreview({

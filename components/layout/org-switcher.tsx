@@ -398,7 +398,8 @@ export function OrgSwitcher({
               align='start'
               side={dropdownSide}
               sideOffset={8}
-              className='border-border bg-popover text-popover-foreground w-72 rounded-lg'
+              collisionPadding={8}
+              className='border-border bg-popover text-popover-foreground max-h-[calc(100dvh-1rem)] w-[calc(100vw-1rem)] max-w-72 overflow-y-auto overscroll-contain rounded-lg'
             >
               {user && (
                 <DropdownMenuLabel className='p-0 font-normal'>

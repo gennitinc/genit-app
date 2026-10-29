@@ -87,7 +87,7 @@ export function AppSidebar({
       </SidebarContent>
 
       {state !== "collapsed" || isMobile ? (
-        <div className='border-border mx-2 mb-4 border-t pt-2'>
+        <div className='border-border mx-2 mb-4 shrink-0 border-t pt-2'>
           <div className='relative cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 p-3 text-white shadow-lg transition-all hover:from-cyan-600/90 hover:to-blue-600/90'>
             {/* Background Pattern */}
             <div className='absolute inset-0 opacity-10'>
@@ -220,7 +220,7 @@ export function AppSidebar({
         )
       )}
 
-      <SidebarFooter className='border-border border-t pt-2'>
+      <SidebarFooter className='border-border shrink-0 border-t pt-2'>
         <OrgSwitcher />
       </SidebarFooter>
     </Sidebar>

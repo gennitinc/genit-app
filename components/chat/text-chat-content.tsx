@@ -283,6 +283,10 @@ export function TextChatContent({
   }, [isTyping, isAtBottom, doScrollToBottom]);
 
   useEffect(() => {
+    // StickToBottom already observes its own scroller. A second observer in
+    // that mode creates a resize-scroll loop that repaints the sticky input.
+    if (!useDocumentScroll) return;
+
     const content = conversationContextRef.current?.contentRef.current;
     if (!content) return;
 
@@ -294,7 +298,7 @@ export function TextChatContent({
 
     resizeObserver.observe(content);
     return () => resizeObserver.disconnect();
-  }, [doScrollToBottom]);
+  }, [doScrollToBottom, useDocumentScroll]);
 
   useEffect(() => {
     const handler = () => {
