@@ -14,6 +14,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -47,6 +54,7 @@ import {
   useUserContext,
 } from "@/context/AuthenticatedContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import {
@@ -79,6 +87,7 @@ export function OrgSwitcher({
   forceExpanded,
 }: { forceExpanded?: boolean } = {}) {
   const { isMobile, state } = useSidebar();
+  const useDrawer = useMediaQuery("(max-width: 1024px)");
   const {
     user,
     switchOrganization,
@@ -104,6 +113,7 @@ export function OrgSwitcher({
   const [teamsByOrg, setTeamsByOrg] = useState<Record<string, Team[]>>({});
   const [loadingTeamsFor, setLoadingTeamsFor] = useState<string | null>(null);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteContext, setInviteContext] = useState<{
@@ -347,328 +357,496 @@ export function OrgSwitcher({
 
   const dropdownSide = isMobile ? "top" : "top";
 
+  const switcherButton = (
+    <SidebarMenuButton
+      size={isCollapsed ? "sm" : "lg"}
+      className={cn(
+        "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+        isCollapsed ? "justify-center !px-2" : "w-full",
+        forceExpanded && "!h-12 !w-full !justify-start !px-2"
+      )}
+    >
+      <Avatar className={cn("rounded-md", isCollapsed ? "h-7 w-7" : "h-8 w-8")}>
+        {current?.businessLogo ? (
+          <AvatarImage
+            src={current.businessLogo}
+            alt={current?.businessName || "Organization"}
+            className='bg-white object-contain'
+          />
+        ) : null}
+        <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
+          {orgInitial(current)}
+        </AvatarFallback>
+      </Avatar>
+      {!isCollapsed && (
+        <>
+          <div className='ml-2 grid flex-1 text-left text-sm leading-tight'>
+            <span className='truncate font-semibold'>
+              {current?.businessName || "Create workspace"}
+            </span>
+            <span className='text-muted-foreground truncate text-xs'>
+              {user?.username || user?.email}
+            </span>
+          </div>
+          <ChevronsUpDown className='ml-auto h-4 w-4 opacity-60' />
+        </>
+      )}
+    </SidebarMenuButton>
+  );
+
   return (
     <>
       <SidebarMenu>
         <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton
-                size={isCollapsed ? "sm" : "lg"}
-                className={cn(
-                  "data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
-                  isCollapsed ? "justify-center !px-2" : "w-full",
-                  forceExpanded && "!h-12 !w-full !justify-start !px-2"
-                )}
-              >
-                <Avatar
-                  className={cn(
-                    "rounded-md",
-                    isCollapsed ? "h-7 w-7" : "h-8 w-8"
-                  )}
-                >
-                  {current?.businessLogo ? (
-                    <AvatarImage
-                      src={current.businessLogo}
-                      alt={current?.businessName || "Organization"}
-                      className='bg-white object-contain'
-                    />
-                  ) : null}
-                  <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
-                    {orgInitial(current)}
-                  </AvatarFallback>
-                </Avatar>
-                {!isCollapsed && (
-                  <>
-                    <div className='ml-2 grid flex-1 text-left text-sm leading-tight'>
-                      <span className='truncate font-semibold'>
-                        {current?.businessName || "Create workspace"}
-                      </span>
-                      <span className='text-muted-foreground truncate text-xs'>
-                        {user?.username || user?.email}
-                      </span>
-                    </div>
-                    <ChevronsUpDown className='ml-auto h-4 w-4 opacity-60' />
-                  </>
-                )}
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align='start'
-              side={dropdownSide}
-              sideOffset={8}
-              collisionPadding={8}
-              className='border-border bg-popover text-popover-foreground max-h-[calc(100dvh-1rem)] w-[calc(100vw-1rem)] max-w-72 overflow-y-auto overscroll-contain rounded-lg'
-            >
-              {user && (
-                <DropdownMenuLabel className='p-0 font-normal'>
-                  <Link
-                    href={`/creator/${user.username}`}
-                    className='hover:bg-accent flex items-center gap-2 rounded-md p-2 transition-colors'
-                  >
-                    <Avatar className='h-9 w-9'>
-                      <AvatarImage
-                        src={user.userdp}
-                        alt={user.username}
-                        className='object-cover'
-                      />
-                      <AvatarFallback>{user.username?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className='flex min-w-0 flex-col'>
-                      <span className='truncate text-sm font-medium'>
-                        {user.username}
-                      </span>
-                      <span className='text-muted-foreground truncate text-xs'>
-                        {user.email}
-                      </span>
-                    </div>
-                  </Link>
-                </DropdownMenuLabel>
-              )}
-
-              <DropdownMenuSeparator className='bg-border' />
-
-              <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                <LocalizedText text={"Organizations"} />
-              </DropdownMenuLabel>
-
-              {organizations.length === 0 && (
-                <div className='text-muted-foreground px-2 py-3 text-xs'>
-                  <LocalizedText text={"No organizations yet."} />
-                </div>
-              )}
-
-              {organizations.map((org) => {
-                const isActive = current?._id === org._id;
-                const userOwnsOrg = isOwnerOf(org);
-                return (
-                  <DropdownMenuSub key={org._id}>
-                    <DropdownMenuSubTrigger
-                      onMouseEnter={() => loadTeams(org._id)}
-                      className='focus:bg-accent focus:text-accent-foreground gap-2'
-                    >
-                      <Avatar className='h-6 w-6 rounded-md'>
-                        {org.businessLogo ? (
-                          <AvatarImage
-                            src={org.businessLogo}
-                            alt={org.businessName}
-                            className='bg-white object-contain'
-                          />
-                        ) : null}
-                        <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[10px] font-semibold text-white'>
-                          {orgInitial(org)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className='flex-1 truncate'>
-                        {org.businessName}
-                      </span>
-                      {switchingId === org._id ? (
-                        <LoadingFileLoader size={20} />
-                      ) : isActive ? (
-                        <Check className='h-3 w-3 opacity-70' />
-                      ) : null}
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className='border-border bg-popover text-popover-foreground w-60 rounded-lg'>
-                      <DropdownMenuItem
-                        onSelect={() => handleSwitch(org._id)}
-                        disabled={isActive}
-                        className='focus:bg-accent focus:text-accent-foreground'
+          {useDrawer ? (
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+              <DrawerTrigger asChild>{switcherButton}</DrawerTrigger>
+              <DrawerContent className='max-h-[85dvh]'>
+                <DrawerTitle className='sr-only'>
+                  <LocalizedText text={"Account and organizations"} />
+                </DrawerTitle>
+                <div className='overflow-y-auto px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]'>
+                  {user && (
+                    <DrawerClose asChild>
+                      <Link
+                        href={`/creator/${user.username}`}
+                        className='hover:bg-accent flex items-center gap-3 rounded-lg p-3 transition-colors'
                       >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            isActive ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {isActive ? "Current organization" : "Switch to this"}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className='bg-border' />
-                      <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                        <LocalizedText text={"Teams"} />
-                      </DropdownMenuLabel>
-                      {loadingTeamsFor === org._id ? (
-                        <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
-                          <LoadingFileLoader size={20} />
+                        <Avatar className='h-10 w-10'>
+                          <AvatarImage
+                            src={user.userdp}
+                            alt={user.username}
+                            className='object-cover'
+                          />
+                          <AvatarFallback>{user.username?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className='flex min-w-0 flex-col text-left'>
+                          <span className='truncate text-sm font-medium'>
+                            {user.username}
+                          </span>
+                          <span className='text-muted-foreground truncate text-xs'>
+                            {user.email}
+                          </span>
                         </div>
-                      ) : (teamsByOrg[org._id] || []).length === 0 ? (
-                        <div className='text-muted-foreground px-2 py-1.5 text-xs'>
-                          <LocalizedText text={"No teams yet"} />
-                        </div>
+                      </Link>
+                    </DrawerClose>
+                  )}
+
+                  <div className='border-border mt-2 border-t pt-3'>
+                    <p className='text-muted-foreground px-3 pb-2 text-xs font-medium'>
+                      <LocalizedText text={"Organizations"} />
+                    </p>
+                    <div className='space-y-1'>
+                      {organizations.length === 0 && (
+                        <p className='text-muted-foreground px-3 py-2 text-sm'>
+                          <LocalizedText text={"No organizations yet."} />
+                        </p>
+                      )}
+                      {organizations.map((org) => {
+                        const isActive = current?._id === org._id;
+                        return (
+                          <button
+                            key={org._id}
+                            type='button'
+                            onClick={() => {
+                              if (!isActive) void handleSwitch(org._id);
+                            }}
+                            disabled={isActive || switchingId === org._id}
+                            className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left disabled:opacity-70'
+                          >
+                            <Avatar className='h-8 w-8 rounded-md'>
+                              {org.businessLogo ? (
+                                <AvatarImage
+                                  src={org.businessLogo}
+                                  alt={org.businessName}
+                                  className='bg-white object-contain'
+                                />
+                              ) : null}
+                              <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
+                                {orgInitial(org)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className='min-w-0 flex-1 truncate text-sm font-medium'>
+                              {org.businessName}
+                            </span>
+                            {switchingId === org._id ? (
+                              <LoadingFileLoader size={20} />
+                            ) : isActive ? (
+                              <Check className='h-4 w-4' />
+                            ) : null}
+                          </button>
+                        );
+                      })}
+                      <button
+                        type='button'
+                        onClick={() => {
+                          setIsDrawerOpen(false);
+                          if (canCreateOrg) {
+                            setOrgOnboardingOpen(true);
+                          } else {
+                            router.push("/pricing");
+                            toast.info("Upgrade to create more organizations");
+                          }
+                        }}
+                        className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
+                      >
+                        {canCreateOrg ? (
+                          <Plus className='h-4 w-4' />
+                        ) : (
+                          <Lock className='h-4 w-4 opacity-70' />
+                        )}
+                        <LocalizedText text={"Create organization"} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className='border-border mt-3 space-y-1 border-t pt-3'>
+                    {user && (
+                      <DrawerClose asChild>
+                        <Link
+                          href={`/creator/${user.username}`}
+                          className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
+                        >
+                          <UserIcon className='h-4 w-4' />
+                          <LocalizedText text={"View profile"} />
+                        </Link>
+                      </DrawerClose>
+                    )}
+                    <DrawerClose asChild>
+                      <Link
+                        href='/user/settings'
+                        className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
+                      >
+                        <BadgeCheck className='h-4 w-4' />
+                        <LocalizedText text={"Account"} />
+                      </Link>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Link
+                        href='/user/settings?tab=billing'
+                        className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
+                      >
+                        <CreditCard className='h-4 w-4' />
+                        <LocalizedText text={"Billing"} />
+                      </Link>
+                    </DrawerClose>
+                    <button
+                      type='button'
+                      onClick={() =>
+                        setTheme(theme === "dark" ? "light" : "dark")
+                      }
+                      className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
+                    >
+                      {theme === "dark" ? (
+                        <Sun className='h-4 w-4' />
                       ) : (
-                        (teamsByOrg[org._id] || []).map((team) => {
-                          const isOnTeam = (team.members || []).some(
-                            (m) => m.user === user?._id
-                          );
-                          if (userOwnsOrg) {
+                        <Moon className='h-4 w-4' />
+                      )}
+                      <LocalizedText
+                        text={
+                          theme === "dark"
+                            ? "Switch to light mode"
+                            : "Switch to dark mode"
+                        }
+                      />
+                    </button>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        setIsDrawerOpen(false);
+                        setIsSignOutModalOpen(true);
+                      }}
+                      className='text-destructive hover:bg-destructive/10 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
+                    >
+                      <LogOut className='h-4 w-4' />
+                      <LocalizedText text={"Log out"} />
+                    </button>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                {switcherButton}
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align='start'
+                side={dropdownSide}
+                sideOffset={8}
+                collisionPadding={8}
+                className='border-border bg-popover text-popover-foreground max-h-[calc(100dvh-1rem)] w-[calc(100vw-1rem)] max-w-72 overflow-y-auto overscroll-contain rounded-lg'
+              >
+                {user && (
+                  <DropdownMenuLabel className='p-0 font-normal'>
+                    <Link
+                      href={`/creator/${user.username}`}
+                      className='hover:bg-accent flex items-center gap-2 rounded-md p-2 transition-colors'
+                    >
+                      <Avatar className='h-9 w-9'>
+                        <AvatarImage
+                          src={user.userdp}
+                          alt={user.username}
+                          className='object-cover'
+                        />
+                        <AvatarFallback>{user.username?.[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className='flex min-w-0 flex-col'>
+                        <span className='truncate text-sm font-medium'>
+                          {user.username}
+                        </span>
+                        <span className='text-muted-foreground truncate text-xs'>
+                          {user.email}
+                        </span>
+                      </div>
+                    </Link>
+                  </DropdownMenuLabel>
+                )}
+
+                <DropdownMenuSeparator className='bg-border' />
+
+                <DropdownMenuLabel className='text-muted-foreground text-xs'>
+                  <LocalizedText text={"Organizations"} />
+                </DropdownMenuLabel>
+
+                {organizations.length === 0 && (
+                  <div className='text-muted-foreground px-2 py-3 text-xs'>
+                    <LocalizedText text={"No organizations yet."} />
+                  </div>
+                )}
+
+                {organizations.map((org) => {
+                  const isActive = current?._id === org._id;
+                  const userOwnsOrg = isOwnerOf(org);
+                  return (
+                    <DropdownMenuSub key={org._id}>
+                      <DropdownMenuSubTrigger
+                        onMouseEnter={() => loadTeams(org._id)}
+                        className='focus:bg-accent focus:text-accent-foreground gap-2'
+                      >
+                        <Avatar className='h-6 w-6 rounded-md'>
+                          {org.businessLogo ? (
+                            <AvatarImage
+                              src={org.businessLogo}
+                              alt={org.businessName}
+                              className='bg-white object-contain'
+                            />
+                          ) : null}
+                          <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[10px] font-semibold text-white'>
+                            {orgInitial(org)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className='flex-1 truncate'>
+                          {org.businessName}
+                        </span>
+                        {switchingId === org._id ? (
+                          <LoadingFileLoader size={20} />
+                        ) : isActive ? (
+                          <Check className='h-3 w-3 opacity-70' />
+                        ) : null}
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent className='border-border bg-popover text-popover-foreground w-60 rounded-lg'>
+                        <DropdownMenuItem
+                          onSelect={() => handleSwitch(org._id)}
+                          disabled={isActive}
+                          className='focus:bg-accent focus:text-accent-foreground'
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              isActive ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {isActive ? "Current organization" : "Switch to this"}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className='bg-border' />
+                        <DropdownMenuLabel className='text-muted-foreground text-xs'>
+                          <LocalizedText text={"Teams"} />
+                        </DropdownMenuLabel>
+                        {loadingTeamsFor === org._id ? (
+                          <div className='text-muted-foreground flex items-center px-2 py-1.5 text-xs'>
+                            <LoadingFileLoader size={20} />
+                          </div>
+                        ) : (teamsByOrg[org._id] || []).length === 0 ? (
+                          <div className='text-muted-foreground px-2 py-1.5 text-xs'>
+                            <LocalizedText text={"No teams yet"} />
+                          </div>
+                        ) : (
+                          (teamsByOrg[org._id] || []).map((team) => {
+                            const isOnTeam = (team.members || []).some(
+                              (m) => m.user === user?._id
+                            );
+                            if (userOwnsOrg) {
+                              return (
+                                <DropdownMenuItem
+                                  key={team._id}
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    openInvite(org._id, team._id, team.name);
+                                  }}
+                                  className='focus:bg-accent focus:text-accent-foreground'
+                                >
+                                  <Users className='mr-2 h-4 w-4 opacity-70' />
+                                  <span className='flex-1 truncate'>
+                                    {team.name}
+                                  </span>
+                                  <Mail className='ml-2 h-3.5 w-3.5 opacity-50' />
+                                </DropdownMenuItem>
+                              );
+                            }
                             return (
                               <DropdownMenuItem
                                 key={team._id}
                                 onSelect={(e) => {
                                   e.preventDefault();
-                                  openInvite(org._id, team._id, team.name);
+                                  if (isOnTeam) {
+                                    setLeaveContext({
+                                      orgId: org._id,
+                                      teamId: team._id,
+                                      teamName: team.name,
+                                    });
+                                  }
                                 }}
+                                disabled={!isOnTeam}
                                 className='focus:bg-accent focus:text-accent-foreground'
                               >
                                 <Users className='mr-2 h-4 w-4 opacity-70' />
                                 <span className='flex-1 truncate'>
                                   {team.name}
                                 </span>
-                                <Mail className='ml-2 h-3.5 w-3.5 opacity-50' />
+                                {isOnTeam && (
+                                  <DoorOpen className='ml-2 h-3.5 w-3.5 opacity-50' />
+                                )}
                               </DropdownMenuItem>
                             );
-                          }
-                          return (
+                          })
+                        )}
+                        {userOwnsOrg && (
+                          <>
+                            <DropdownMenuSeparator className='bg-border' />
                             <DropdownMenuItem
-                              key={team._id}
                               onSelect={(e) => {
                                 e.preventDefault();
-                                if (isOnTeam) {
-                                  setLeaveContext({
-                                    orgId: org._id,
-                                    teamId: team._id,
-                                    teamName: team.name,
-                                  });
-                                }
+                                openCreateTeam(org._id);
                               }}
-                              disabled={!isOnTeam}
                               className='focus:bg-accent focus:text-accent-foreground'
                             >
-                              <Users className='mr-2 h-4 w-4 opacity-70' />
-                              <span className='flex-1 truncate'>
-                                {team.name}
-                              </span>
-                              {isOnTeam && (
-                                <DoorOpen className='ml-2 h-3.5 w-3.5 opacity-50' />
-                              )}
+                              <Plus className='mr-2 h-4 w-4' />
+                              <LocalizedText text={"Create team"} />
                             </DropdownMenuItem>
-                          );
-                        })
-                      )}
-                      {userOwnsOrg && (
-                        <>
-                          <DropdownMenuSeparator className='bg-border' />
-                          <DropdownMenuItem
-                            onSelect={(e) => {
-                              e.preventDefault();
-                              openCreateTeam(org._id);
-                            }}
-                            className='focus:bg-accent focus:text-accent-foreground'
-                          >
-                            <Plus className='mr-2 h-4 w-4' />
-                            <LocalizedText text={"Create team"} />
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onSelect={(e) => {
-                              e.preventDefault();
-                              setDeleteContext(org);
-                            }}
-                            className='text-destructive focus:bg-destructive/10 focus:text-destructive'
-                          >
-                            <Trash2 className='mr-2 h-4 w-4' />
-                            <LocalizedText text={"Delete organization"} />
-                          </DropdownMenuItem>
-                        </>
-                      )}
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
-                );
-              })}
+                            <DropdownMenuItem
+                              onSelect={(e) => {
+                                e.preventDefault();
+                                setDeleteContext(org);
+                              }}
+                              className='text-destructive focus:bg-destructive/10 focus:text-destructive'
+                            >
+                              <Trash2 className='mr-2 h-4 w-4' />
+                              <LocalizedText text={"Delete organization"} />
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                  );
+                })}
 
-              {canCreateOrg ? (
-                <DropdownMenuItem
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    setOrgOnboardingOpen(true);
-                  }}
-                  className='focus:bg-accent focus:text-accent-foreground'
-                >
-                  <Plus className='mr-2 h-4 w-4' />
-                  <LocalizedText text={"Create organization"} />
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    router.push("/pricing");
-                    toast.info("Upgrade to create more organizations");
-                  }}
-                  className='focus:bg-accent focus:text-accent-foreground'
-                >
-                  <Lock className='mr-2 h-4 w-4 opacity-70' />
-                  <span className='flex-1'>
+                {canCreateOrg ? (
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      setOrgOnboardingOpen(true);
+                    }}
+                    className='focus:bg-accent focus:text-accent-foreground'
+                  >
+                    <Plus className='mr-2 h-4 w-4' />
                     <LocalizedText text={"Create organization"} />
-                  </span>
-                  <span className='ml-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 px-1.5 py-0.5 text-[9px] font-semibold text-white'>
-                    <LocalizedText text={"PRO"} />
-                  </span>
-                </DropdownMenuItem>
-              )}
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      router.push("/pricing");
+                      toast.info("Upgrade to create more organizations");
+                    }}
+                    className='focus:bg-accent focus:text-accent-foreground'
+                  >
+                    <Lock className='mr-2 h-4 w-4 opacity-70' />
+                    <span className='flex-1'>
+                      <LocalizedText text={"Create organization"} />
+                    </span>
+                    <span className='ml-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 px-1.5 py-0.5 text-[9px] font-semibold text-white'>
+                      <LocalizedText text={"PRO"} />
+                    </span>
+                  </DropdownMenuItem>
+                )}
 
-              <DropdownMenuSeparator className='bg-border' />
+                <DropdownMenuSeparator className='bg-border' />
 
-              <DropdownMenuGroup>
-                {user && (
+                <DropdownMenuGroup>
+                  {user && (
+                    <DropdownMenuItem
+                      asChild
+                      className='focus:bg-accent focus:text-accent-foreground'
+                    >
+                      <Link href={`/creator/${user.username}`}>
+                        <UserIcon className='mr-2 h-4 w-4' />
+                        <LocalizedText text={"View profile"} />
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     asChild
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
-                    <Link href={`/creator/${user.username}`}>
-                      <UserIcon className='mr-2 h-4 w-4' />
-                      <LocalizedText text={"View profile"} />
+                    <Link href='/user/settings'>
+                      <BadgeCheck className='mr-2 h-4 w-4' />
+                      <LocalizedText text={"Account"} />
                     </Link>
                   </DropdownMenuItem>
-                )}
+                  <DropdownMenuItem
+                    asChild
+                    className='focus:bg-accent focus:text-accent-foreground'
+                  >
+                    <Link href='/user/settings?tab=billing'>
+                      <CreditCard className='mr-2 h-4 w-4' />
+                      <LocalizedText text={"Billing"} />
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator className='bg-border' />
+
                 <DropdownMenuItem
-                  asChild
                   className='focus:bg-accent focus:text-accent-foreground'
+                  onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}
                 >
-                  <Link href='/user/settings'>
-                    <BadgeCheck className='mr-2 h-4 w-4' />
-                    <LocalizedText text={"Account"} />
-                  </Link>
+                  {theme === "dark" ? (
+                    <>
+                      <Sun className='mr-2 h-4 w-4' />
+                      <LocalizedText text={"Switch to light mode"} />
+                    </>
+                  ) : (
+                    <>
+                      <Moon className='mr-2 h-4 w-4' />
+                      <LocalizedText text={"Switch to dark mode"} />
+                    </>
+                  )}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  asChild
                   className='focus:bg-accent focus:text-accent-foreground'
+                  onSelect={(event) => {
+                    event.preventDefault();
+                    setIsSignOutModalOpen(true);
+                  }}
                 >
-                  <Link href='/user/settings?tab=billing'>
-                    <CreditCard className='mr-2 h-4 w-4' />
-                    <LocalizedText text={"Billing"} />
-                  </Link>
+                  <LogOut className='mr-2 h-4 w-4' />
+                  <LocalizedText text={"Log out"} />
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-
-              <DropdownMenuSeparator className='bg-border' />
-
-              <DropdownMenuItem
-                className='focus:bg-accent focus:text-accent-foreground'
-                onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                {theme === "dark" ? (
-                  <>
-                    <Sun className='mr-2 h-4 w-4' />
-                    <LocalizedText text={"Switch to light mode"} />
-                  </>
-                ) : (
-                  <>
-                    <Moon className='mr-2 h-4 w-4' />
-                    <LocalizedText text={"Switch to dark mode"} />
-                  </>
-                )}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='focus:bg-accent focus:text-accent-foreground'
-                onSelect={(event) => {
-                  event.preventDefault();
-                  setIsSignOutModalOpen(true);
-                }}
-              >
-                <LogOut className='mr-2 h-4 w-4' />
-                <LocalizedText text={"Log out"} />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </SidebarMenuItem>
       </SidebarMenu>
 

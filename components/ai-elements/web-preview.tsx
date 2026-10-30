@@ -155,13 +155,15 @@ export const WebPreviewUrl = ({
   );
 };
 
-export type WebPreviewBodyProps = ComponentProps<"iframe"> & {
+export type WebPreviewBodyProps = Omit<ComponentProps<"iframe">, "sandbox"> & {
   loading?: ReactNode;
+  sandbox?: string | false;
 };
 
 export const WebPreviewBody = ({
   className,
   loading,
+  sandbox = "allow-scripts allow-same-origin allow-forms allow-popups allow-presentation",
   src,
   ...props
 }: WebPreviewBodyProps) => {
@@ -171,7 +173,7 @@ export const WebPreviewBody = ({
     <div className='flex-1'>
       <iframe
         className={cn("size-full", className)}
-        sandbox='allow-scripts allow-same-origin allow-forms allow-popups allow-presentation'
+        sandbox={sandbox === false ? undefined : sandbox}
         src={(src ?? url) || undefined}
         title='Preview'
         {...props}

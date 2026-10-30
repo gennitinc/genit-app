@@ -34,6 +34,7 @@ import {
   FileText,
   Folder,
   Forward,
+  Globe2,
   LayoutGrid,
   Loader2,
   Mail,
@@ -1271,6 +1272,57 @@ export function ResearchReportCard({ data }: { data: any }) {
   );
 }
 
+export function BrowserSessionCard({ data }: { data: any }) {
+  const liveViewUrl = getFullUrl(data?.liveViewUrl || "");
+  const { setArtifactPreview } = useProjectDesign();
+  const showPreview = () =>
+    setArtifactPreview({
+      type: "website",
+      title: data?.title || "Live browser",
+      url: liveViewUrl,
+    });
+
+  useEffect(() => {
+    if (liveViewUrl) showPreview();
+  }, [liveViewUrl]);
+
+  return (
+    <AgentCard
+      icon={<Globe2 className='h-3.5 w-3.5' />}
+      title={data?.title || "Live browser"}
+      meta={data?.url ? new URL(data.url).hostname : "Interactive session"}
+      tone='success'
+    >
+      <div className='flex flex-wrap items-center gap-2'>
+        {liveViewUrl && (
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-7 px-2 text-xs'
+            onClick={showPreview}
+          >
+            <ExternalLink className='h-3 w-3' />
+            <LocalizedText text={"Open browser"} />
+          </Button>
+        )}
+        <span className='text-muted-foreground text-xs'>
+          <LocalizedText text={"Watch or take over in the preview."} />
+        </span>
+        {data?.url && (
+          <a
+            href={data.url}
+            target='_blank'
+            rel='noreferrer'
+            className='text-muted-foreground hover:text-foreground truncate text-xs underline-offset-2 hover:underline'
+          >
+            {data.url}
+          </a>
+        )}
+      </div>
+    </AgentCard>
+  );
+}
+
 export function DocumentArtifactCard({ data }: { data: any }) {
   const artifact = data?.artifact || data;
   const fileUrl = getFullUrl(artifact?.fileUrl || "");
@@ -1414,6 +1466,8 @@ export function renderToolResult(
       return <GtmPdfReportCard data={data} />;
     case "research_report":
       return <ResearchReportCard data={data} />;
+    case "browser_session":
+      return <BrowserSessionCard data={data} />;
     case "document_artifact":
       return <DocumentArtifactCard data={data} />;
     case "document_list":

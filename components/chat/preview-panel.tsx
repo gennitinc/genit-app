@@ -112,13 +112,23 @@ const PreviewPanelContent = ({
               <span className='h-2 w-2 rounded-full bg-green-400' />
             </div>
             <span className='truncate text-sm font-semibold'>
-              <LocalizedText text={"Document"} />
+              <LocalizedText
+                text={
+                  artifactPreview.type === "website"
+                    ? "Live browser"
+                    : "Document"
+                }
+              />
             </span>
           </div>
 
           <WebPreviewUrl
             readOnly
-            aria-label='Document URL'
+            aria-label={
+              artifactPreview.type === "website"
+                ? "Live browser URL"
+                : "Document URL"
+            }
             className='bg-muted/900 h-7 w-80 rounded-md border-0 px-3 text-center text-xs shadow-none'
           />
 
@@ -183,7 +193,15 @@ const PreviewPanelContent = ({
             )}
           </div>
         </WebPreviewNavigation>
-        <WebPreviewBody key={artifactReloadKey} />
+        <WebPreviewBody
+          key={artifactReloadKey}
+          sandbox={
+            artifactPreview.type === "document"
+              ? false
+              : "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads allow-modals allow-pointer-lock"
+          }
+          allow='clipboard-read; clipboard-write; fullscreen'
+        />
       </WebPreview>
     );
   }
@@ -245,7 +263,5 @@ const PreviewPanelContent = ({
     );
   }
 
-  return (
-    <AgentThinkingOverlay status={aiStatus} />
-  );
+  return <AgentThinkingOverlay status={aiStatus} />;
 };
