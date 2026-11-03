@@ -56,12 +56,30 @@ export const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
   messenger_message: MessengerBrand,
 };
 
+// Preset frequencies that run at a chosen local time of day.
+const CLOCK_FREQUENCIES = ["Daily", "Every Monday", "Weekly", "Monthly"];
+const WEEKDAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const browserTimeZone = () =>
+  Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
 interface TriggerNodeData {
   title: string;
   triggerType: TriggerSubtype;
   scheduleFrequency?: string;
   cronExpression?: string;
   scheduleTime?: string;
+  scheduleClock?: string;
+  scheduleWeekday?: number;
+  scheduleMonthDay?: number;
+  timezone?: string;
   filterField?: string;
   filterValue?: string;
   senderFilter?: string;
@@ -89,6 +107,13 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
   const isEdit = data.isEditMode;
   const subtype = TRIGGER_SUBTYPES.find((t) => t.id === data.triggerType);
   const Icon = TRIGGER_ICONS[data.triggerType] ?? Zap;
+  // Schedule times are the user's local wall time; the server runs them in
+  // the saved timezone, not its own.
+  const updateSchedule = (patch: Record<string, unknown>) =>
+    data.onNodeDataChange(id, {
+      ...patch,
+      timezone: data.timezone || browserTimeZone(),
+    });
 
   return (
     <div
@@ -200,8 +225,12 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                 <select
                   value={data.scheduleFrequency || "Once"}
                   onChange={(e) =>
-                    data.onNodeDataChange(id, {
+                    updateSchedule({
                       scheduleFrequency: e.target.value,
+                      ...(CLOCK_FREQUENCIES.includes(e.target.value) &&
+                      !data.scheduleClock
+                        ? { scheduleClock: "09:00" }
+                        : {}),
                     })
                   }
                   className={selectCls}
@@ -243,12 +272,64 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                     type='datetime-local'
                     value={data.scheduleTime || ""}
                     onChange={(e) =>
-                      data.onNodeDataChange(id, {
-                        scheduleTime: e.target.value,
-                      })
+                      updateSchedule({ scheduleTime: e.target.value })
                     }
                     className={cn(inputCls, "mt-1.5")}
                   />
+                )}
+                {CLOCK_FREQUENCIES.includes(data.scheduleFrequency || "") && (
+                  <div className='mt-1.5 flex gap-1.5'>
+                    {data.scheduleFrequency === "Weekly" && (
+                      <select
+                        value={data.scheduleWeekday ?? 1}
+                        onChange={(e) =>
+                          updateSchedule({
+                            scheduleWeekday: Number(e.target.value),
+                          })
+                        }
+                        className={selectCls}
+                      >
+                        {WEEKDAYS.map((day, index) => (
+                          <option key={day} value={index}>
+                            {day}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    {data.scheduleFrequency === "Monthly" && (
+                      <select
+                        value={data.scheduleMonthDay ?? 1}
+                        onChange={(e) =>
+                          updateSchedule({
+                            scheduleMonthDay: Number(e.target.value),
+                          })
+                        }
+                        className={selectCls}
+                      >
+                        {Array.from({ length: 28 }, (_, i) => i + 1).map(
+                          (day) => (
+                            <option key={day} value={day}>
+                              Day {day}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    )}
+                    <input
+                      type='time'
+                      value={data.scheduleClock || ""}
+                      onChange={(e) =>
+                        updateSchedule({ scheduleClock: e.target.value })
+                      }
+                      className={inputCls}
+                    />
+                  </div>
+                )}
+                {data.scheduleFrequency !== "Custom" && (
+                  <p className='mt-1 text-[9px] text-zinc-500 dark:text-neutral-400'>
+                    <LocalizedText text={"Time zone"} />:{" "}
+                    {data.timezone || browserTimeZone()}
+                  </p>
                 )}
               </div>
             )}
@@ -439,6 +520,10 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               {(data.scheduleFrequency || data.filterValue) && (
                 <p className='truncate pl-5 text-zinc-500 dark:text-neutral-400'>
                   {data.scheduleFrequency || data.filterValue}
+                  {data.scheduleClock &&
+                  CLOCK_FREQUENCIES.includes(data.scheduleFrequency || "")
+                    ? ` · ${data.scheduleClock}`
+                    : ""}
                 </p>
               )}
               {data.triggerType === "composio_event" && (

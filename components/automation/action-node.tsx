@@ -92,6 +92,7 @@ interface ActionNodeData {
   calendarSummary?: string;
   calendarDate?: string;
   driveFolderPath?: string;
+  mediaUrl?: string;
   channels?: string[];
   instruction?: string;
   postId?: string;
@@ -143,6 +144,17 @@ const labelCls =
 export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
   const isEdit = data.isEditMode;
   const subtypeConfig = ACTION_SUBTYPES.find((a) => a.id === data.actionType);
+  const videoOnlyPost =
+    data.actionType === "post_tiktok" || data.actionType === "post_youtube";
+  const mediaKind: "image" | "video" =
+    videoOnlyPost || (data.videoUrl && data.videoUrl !== data.imageUrl)
+      ? "video"
+      : "image";
+  const mediaValue =
+    (mediaKind === "video" ? data.videoUrl : data.imageUrl) ||
+    data.imageUrl ||
+    data.videoUrl ||
+    "";
   const Icon = ACTION_ICONS[data.actionType];
 
   return (
@@ -164,7 +176,11 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
           {data.actionType === "composio_action" && data.composioLogo ? (
-            <img src={data.composioLogo} alt='' className='h-4 w-4 rounded object-contain' />
+            <img
+              src={data.composioLogo}
+              alt=''
+              className='h-4 w-4 rounded object-contain'
+            />
           ) : (
             <ArrowRightLeft className='h-4 w-4' />
           )}
@@ -445,18 +461,45 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                   <label className={labelCls}>
                     <LocalizedText text={"Media URL (optional)"} />
                   </label>
-                  <input
-                    type='text'
-                    value={data.imageUrl || data.videoUrl || ""}
-                    onChange={(e) =>
-                      data.onNodeDataChange(id, {
-                        imageUrl: e.target.value,
-                        videoUrl: e.target.value,
-                      })
-                    }
-                    className={inputCls}
-                    placeholder='https:// or {{ ai_generate.url }}'
-                  />
+                  {/* Publishers post a video whenever videoUrl is set, so the
+                      URL is stored in exactly one of the two fields. */}
+                  <div className='flex gap-1.5'>
+                    {!videoOnlyPost && (
+                      <select
+                        value={mediaKind}
+                        onChange={(e) =>
+                          data.onNodeDataChange(id, {
+                            imageUrl:
+                              e.target.value === "image"
+                                ? mediaValue
+                                : undefined,
+                            videoUrl:
+                              e.target.value === "video"
+                                ? mediaValue
+                                : undefined,
+                          })
+                        }
+                        className={cn(selectCls, "w-24 shrink-0")}
+                      >
+                        <option value='image'>Image</option>
+                        <option value='video'>Video</option>
+                      </select>
+                    )}
+                    <input
+                      type='text'
+                      value={mediaValue}
+                      onChange={(e) =>
+                        data.onNodeDataChange(id, {
+                          imageUrl:
+                            mediaKind === "image" ? e.target.value : undefined,
+                          videoUrl:
+                            mediaKind === "video" ? e.target.value : undefined,
+                        })
+                      }
+                      className={inputCls}
+                      placeholder='https:// or {{ nodeId.output }}'
+                    />
+                  </div>
                 </div>
                 {data.actionType === "post_tiktok" && (
                   <div>
@@ -1024,7 +1067,21 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
 
             {/* ── Google Drive upload ────────────────────────── */}
             {data.actionType === "google_drive_upload" && (
-              <div>
+              <div className='space-y-2'>
+                <div>
+                  <label className={labelCls}>
+                    <LocalizedText text={"File URL"} />
+                  </label>
+                  <input
+                    type='text'
+                    value={data.mediaUrl || ""}
+                    onChange={(e) =>
+                      data.onNodeDataChange(id, { mediaUrl: e.target.value })
+                    }
+                    className={inputCls}
+                    placeholder='https:// or {{ nodeId.output }}'
+                  />
+                </div>
                 <label className={labelCls}>
                   <LocalizedText text={"Folder Path"} />
                 </label>
@@ -1050,7 +1107,11 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
             <div className='space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-[10px] text-zinc-600 dark:border-neutral-800/50 dark:bg-neutral-950 dark:text-neutral-400'>
               <span className='flex items-center gap-1.5 font-medium text-zinc-800 dark:text-neutral-200'>
                 {data.actionType === "composio_action" && data.composioLogo ? (
-                  <img src={data.composioLogo} alt='' className='h-3.5 w-3.5 rounded object-contain' />
+                  <img
+                    src={data.composioLogo}
+                    alt=''
+                    className='h-3.5 w-3.5 rounded object-contain'
+                  />
                 ) : Icon ? (
                   <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
                 ) : null}

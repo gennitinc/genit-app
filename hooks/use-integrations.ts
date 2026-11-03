@@ -107,6 +107,8 @@ export function useDisconnectIntegration() {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
       qc.removeQueries({ queryKey: ["connected-social-posts"] });
       qc.removeQueries({ queryKey: ["post-analytics"] });
+      qc.removeQueries({ queryKey: ["post-comments"] });
+      qc.invalidateQueries({ queryKey: ["social-connections"] });
       qc.invalidateQueries({ queryKey: ["social-posts"] });
       qc.invalidateQueries({ queryKey: ["social-post-stats"] });
     },
@@ -126,6 +128,8 @@ export function useDisconnectMetaIdentity() {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
       qc.removeQueries({ queryKey: ["connected-social-posts"] });
       qc.removeQueries({ queryKey: ["post-analytics"] });
+      qc.removeQueries({ queryKey: ["post-comments"] });
+      qc.invalidateQueries({ queryKey: ["social-connections"] });
       qc.invalidateQueries({ queryKey: ["social-posts"] });
       qc.invalidateQueries({ queryKey: ["social-post-stats"] });
     },

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Us – Genit AI | Get in Touch",
   description:
-    "Get in touch with Genit AI. Fill out our contact form and our team will reach out to provide personalized assistance and answers to your questions.",
+    "Contact Genit about plans, demos, or partnerships. Email support@trygenit.com or send a message through the form.",
   keywords: [
     "contact us",
     "support",

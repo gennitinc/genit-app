@@ -1,4 +1,5 @@
 import { marketingCapabilities } from "@/lib/marketing-capabilities";
+import { useCases } from "@/lib/use-cases";
 import { apiResponse } from "@/utils/apiResponse";
 import type { MetadataRoute } from "next";
 
@@ -10,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/pricing",
     "/platform",
     "/company",
+    "/use-cases",
     "/contact",
     "/feedback",
     "/blog",
@@ -19,12 +21,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/legal/privacy-policy",
     "/docs",
     ...marketingCapabilities.map(({ slug }) => `/platform/${slug}`),
+    ...useCases.map(({ slug }) => `/use-cases/${slug}`),
   ];
 
   const sitemapEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route.startsWith("/platform") ? 0.9 : 0.7,
+    priority:
+      route === ""
+        ? 1
+        : route.startsWith("/platform") || route.startsWith("/use-cases")
+          ? 0.9
+          : 0.7,
   }));
 
   // Fetch dynamic blog posts

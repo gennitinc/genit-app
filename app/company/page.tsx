@@ -1,22 +1,40 @@
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import { marketingCapabilities } from "@/lib/marketing-capabilities";
+import { useCases } from "@/lib/use-cases";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Genit | The AI Marketing Execution Platform",
+  title: "About Genit",
   description:
-    "Genit is building an autonomous AI marketing platform that helps businesses understand their brand, plan campaigns, create content, automate workflows, and execute across connected channels.",
+    "Genit is an AI marketing workspace for small teams: design, video, posting, inbox, campaigns, and automation in one place, built around your brand.",
   alternates: { canonical: "/company" },
   openGraph: {
-    title: "About Genit | Your Autonomous AI Marketing Team",
+    title: "About Genit",
     description:
-      "Learn why Genit is building one connected platform for AI marketing planning, creation, automation, publishing, communication, and optimization.",
+      "Why we built one workspace for the marketing work small teams do every week.",
     url: "/company",
     type: "website",
   },
 };
+
+const beliefs = [
+  {
+    title: "Finished work beats drafts",
+    description:
+      "A caption in a chat window still has to be designed, sized, scheduled, and posted. We measure Genit by how much of that last mile it handles, not by how much text it writes.",
+  },
+  {
+    title: "Explain your brand once",
+    description:
+      "Every workspace has a brand profile built from your website and your own notes. Every tool in Genit reads from it, so you stop pasting the same guidelines into every prompt.",
+  },
+  {
+    title: "You approve what goes out",
+    description:
+      "Genit can publish, send, and run automations, but nothing public happens without the approval rules you set.",
+  },
+];
 
 export default function CompanyPage() {
   const structuredData = {
@@ -31,130 +49,119 @@ export default function CompanyPage() {
   return (
     <div className='bg-white dark:bg-black'>
       <LandingNavbar />
-      <main className='mx-auto my-20 max-w-3xl px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-10'>
-        <article className='max-w-2xl'>
-          <div className='space-y-5 md:space-y-8'>
-            <div className='space-y-3'>
-              <h1 className='text-2xl font-bold tracking-tight md:text-4xl lg:text-6xl'>
-                We’re building the{" "}
-                <span className='from-primary to-accent bg-gradient-to-r bg-clip-text text-transparent'>
-                  AI marketing team
-                </span>{" "}
-                every business should have.
-              </h1>
-              <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Genit is an end-to-end AI marketing platform. It gives
-                businesses one place to understand their brand, plan growth,
-                create campaign assets, automate workflows, publish across
-                connected channels, manage conversations, and learn from
-                performance.
-              </p>
-            </div>
-
-            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Businesses often split marketing across writing tools, design
-              tools, calendars, social dashboards, email platforms, advertising
-              accounts, spreadsheets, and automation software. The context gets
-              lost between every handoff.
+      <main className='mx-auto my-20 max-w-3xl px-5 pt-6 pb-12 sm:px-8 lg:pt-10'>
+        <article className='space-y-14'>
+          <header className='space-y-6'>
+            <h1 className='text-3xl font-bold tracking-tight text-neutral-950 md:text-5xl dark:text-white'>
+              Marketing tools for teams that don&apos;t have a marketing
+              department.
+            </h1>
+            <p className='text-base leading-8 text-pretty text-neutral-600 dark:text-neutral-400'>
+              Genit is a workspace where a founder, a shop owner, or a two-person
+              agency can make the graphics, write the posts, schedule them,
+              answer the replies, and run the campaign, without stitching
+              together a design app, a scheduler, an email tool, and three
+              inboxes.
             </p>
+          </header>
 
-            <figure>
-              <img
-                className='w-full rounded-xl object-cover'
-                src='https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
-                alt='AI technology representing connected marketing execution'
-              />
-              <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
-                AI agents executing end-to-end marketing activities from a
-                single workspace.
-              </figcaption>
-            </figure>
+          <figure className=' overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[520px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+            alt='Person checking their phone at a kitchen table'
+          />
+        </figure>
 
-            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Genit brings those steps into one agentic workspace. A team can
-              begin with a goal, use shared brand intelligence, create the
-              required work, and act through authorized integrations without
-              rebuilding the campaign in a different product at every stage.
+          <section className='space-y-4'>
+            <h2 className='text-xl font-semibold text-neutral-950 dark:text-white'>
+              Why we built it
+            </h2>
+            <p className='text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              AI made it cheap to generate a draft. It didn&apos;t make it
+              cheaper to ship one. Small teams still copy text from one app,
+              resize it in another, upload it to a third, and then lose track of
+              the comments it gets. The work in between is where most of the
+              time goes.
             </p>
-
-            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Creative generation is an important part of Genit, but it is not
-              the whole product. The larger goal is dependable marketing
-              execution with clear human control. Businesses can start with{" "}
-              <Link
-                className='font-medium text-blue-600 decoration-2 hover:underline focus:underline focus:outline-hidden dark:text-blue-500'
-                href='/pricing'
-              >
-                the free Basic plan
-              </Link>{" "}
-              and grow into more advanced workflows as their needs expand.
+            <p className='text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              So we put those steps in one place and connected them. A graphic
+              you make in chat is already in your media library. A post you
+              schedule shows up on the calendar. A reply to that post lands in
+              the same inbox as your email. An AI agent can do any of those
+              steps for you when you ask.
             </p>
+          </section>
 
-            <blockquote className='p-4 text-center sm:px-7'>
-              <p className='text-xl font-medium text-gray-800 md:text-2xl md:leading-normal xl:text-2xl xl:leading-normal dark:text-neutral-200'>
-                Creative generation is part of Genit. Coordinated marketing
-                execution is the product.
-              </p>
-              <p className='mt-5 text-gray-800 dark:text-neutral-200'>
-                The principle behind Genit
-              </p>
-            </blockquote>
+          <figure className=' overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[520px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+            alt='Two people looking at a phone together outdoors'
+          />
+        </figure>
 
-            <figure>
-              <img
-                className='w-full rounded-xl object-cover'
-                src='https://images.unsplash.com/photo-1670272498380-eb330b61f3cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80'
-                alt='AI technology representing automated brand workflows'
-              />
-              <figcaption className='mt-3 text-center text-sm text-gray-500 dark:text-neutral-500'>
-                AI agents and marketing integrations automating brand workflows.
-              </figcaption>
-            </figure>
-
-            <div className='space-y-3'>
-              <h2 className='text-2xl font-semibold dark:text-white'>
-                Built around the full marketing lifecycle
-              </h2>
-              <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-                Genit turns marketing goals into coordinated action. Its AI
-                marketing agents use shared brand intelligence to research,
-                plan, create, automate, publish, manage conversations, and
-                optimize work across connected business tools.
-              </p>
-            </div>
-
-            <ul className='space-y-5 text-lg text-gray-800 dark:text-neutral-200'>
-              {marketingCapabilities.map((capability) => (
-                <li
-                  key={capability.slug}
-                  className='border-l border-gray-200 ps-4 dark:border-neutral-800 text-sm leading-7 text-pretty text-neutral-400 dark:text-neutral-200'
+          <section className='space-y-6'>
+            <h2 className='text-xl font-semibold text-neutral-950 dark:text-white'>
+              What we believe
+            </h2>
+            <div className='space-y-6'>
+              {beliefs.map((belief) => (
+                <div
+                  key={belief.title}
+                  className='border-l border-neutral-300 ps-4 dark:border-neutral-700'
                 >
-                  {capability.name}. {capability.description}
-                </li>
+                  <h3 className='font-semibold text-neutral-950 dark:text-white'>
+                    {belief.title}
+                  </h3>
+                  <p className='mt-1 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+                    {belief.description}
+                  </p>
+                </div>
               ))}
-            </ul>
+            </div>
+          </section>
 
-            <p className='text-slate-11 my-5 text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
-              Genit is guided by three principles: execution over output, one
-              reusable brand context, and automation with human control. The
-              result is an autonomous AI marketing platform that can move work
-              from an idea through planning, creation, approval, and action
-              without forcing teams to rebuild campaigns across disconnected
-              tools.
-            </p>
-
-            <div>
-              {marketingCapabilities.map((capability) => (
+          <section className='space-y-4'>
+            <h2 className='text-xl font-semibold text-neutral-950 dark:text-white'>
+              What&apos;s in Genit today
+            </h2>
+            <div className='flex flex-wrap gap-2'>
+              {useCases.map((useCase) => (
                 <Link
-                  key={capability.slug}
-                  className='m-1 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-hidden dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700'
-                  href={`/platform/${capability.slug}`}
+                  key={useCase.slug}
+                  className='inline-flex items-center rounded-full bg-neutral-100 px-3 py-1.5 text-sm text-neutral-800 transition-colors hover:bg-neutral-200 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800'
+                  href={`/use-cases/${useCase.slug}`}
                 >
-                  {capability.name}
+                  {useCase.name}
                 </Link>
               ))}
             </div>
-          </div>
+          </section>
+
+          <section className='space-y-4 rounded-2xl border border-neutral-200 p-6 sm:p-8 dark:border-neutral-800'>
+            <h2 className='text-xl font-semibold text-neutral-950 dark:text-white'>
+              Try it, or talk to us
+            </h2>
+            <p className='text-sm leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
+              The Basic plan is free. If you want to suggest a feature or need
+              help, we read everything that comes in.
+            </p>
+            <div className='flex flex-wrap items-center gap-4 pt-2'>
+              <Link
+                href='/pricing'
+                className='rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
+              >
+                See plans
+              </Link>
+              <Link
+                href='/contact'
+                className='text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white'
+              >
+                Contact us →
+              </Link>
+            </div>
+          </section>
         </article>
       </main>
       <LandingFooter />

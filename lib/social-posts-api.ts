@@ -134,13 +134,16 @@ export async function getSocialPostStats(input: {
 export async function listSocialPostsPage({
   page = 1,
   limit = 50,
+  campaignId,
 }: {
   page?: number;
   limit?: number;
+  campaignId?: string;
 } = {}): Promise<SocialPostsPage> {
   const params = new URLSearchParams({
     page: String(page),
     limit: String(limit),
+    ...(campaignId ? { campaignId } : {}),
   });
   const { data } = await apiResponse.get<SocialPostsPage>(
     `/social-posts?${params}`,
@@ -163,6 +166,122 @@ export async function getSocialPostConnectionOptions(
     options: SocialPostConnectionOptions;
   }>(`/social-posts/connections/${integrationId}/options`);
   return data.options;
+}
+
+// --- Connected-account post lifecycle ----------------------------------------
+// The server resolves each connection's platform adapter; the client only
+// reads `capabilities` to decide which actions to offer.
+
+export type SocialCapability =
+  | "listPosts"
+  | "updatePost"
+  | "deletePost"
+  | "listComments"
+  | "createComment"
+  | "replyToComment"
+  | "analytics";
+
+export interface SocialConnection {
+  _id: string;
+  platform: IntegrationPlatform;
+  accountName: string;
+  accountAvatar?: string;
+  accountId: string;
+  provider: "managed" | "native";
+  capabilities: SocialCapability[];
+  updatedAt?: string;
+}
+
+export interface SocialComment {
+  id: string;
+  text: string;
+  authorName?: string;
+  authorAvatar?: string;
+  createdAt?: string;
+  likeCount?: number;
+  replyCount?: number;
+  replies?: SocialComment[];
+}
+
+function connectionPostPath(integrationId: string, postId: string) {
+  return `/social-posts/connections/${integrationId}/posts/${encodeURIComponent(postId)}`;
+}
+
+export async function listSocialConnections(): Promise<SocialConnection[]> {
+  const { data } = await apiResponse.get<{ connections: SocialConnection[] }>(
+    "/social-posts/connections",
+    { timeout: 15_000 }
+  );
+  return data.connections;
+}
+
+export async function updateConnectionPost(
+  integrationId: string,
+  postId: string,
+  update: { content?: string; title?: string }
+) {
+  await apiResponse.patch(connectionPostPath(integrationId, postId), update);
+}
+
+export async function deleteConnectionPost(
+  integrationId: string,
+  postId: string
+) {
+  await apiResponse.delete(connectionPostPath(integrationId, postId));
+}
+
+export async function listPostComments(
+  integrationId: string,
+  postId: string
+): Promise<{
+  comments: SocialComment[];
+  canComment: boolean;
+  canReply: boolean;
+}> {
+  const { data } = await apiResponse.get<{
+    comments: SocialComment[];
+    canComment: boolean;
+    canReply: boolean;
+  }>(`${connectionPostPath(integrationId, postId)}/comments`, {
+    timeout: 30_000,
+  });
+  return data;
+}
+
+export async function createPostComment(
+  integrationId: string,
+  postId: string,
+  text: string
+) {
+  await apiResponse.post(
+    `${connectionPostPath(integrationId, postId)}/comments`,
+    { text },
+    { timeout: 30_000 }
+  );
+}
+
+export async function replyToPostComment(
+  integrationId: string,
+  postId: string,
+  commentId: string,
+  text: string
+) {
+  await apiResponse.post(
+    `${connectionPostPath(integrationId, postId)}/comments/${encodeURIComponent(commentId)}/replies`,
+    { text },
+    { timeout: 30_000 }
+  );
+}
+
+export async function fetchConnectionPostAnalytics(
+  integrationId: string,
+  postId: string
+): Promise<SocialPostMetrics> {
+  const { data } = await apiResponse.get<{ metrics: SocialPostMetrics }>(
+    `${connectionPostPath(integrationId, postId)}/analytics`,
+    { timeout: 30_000 }
+  );
+  return data.metrics;
 }
 
 export async function listRemoteSocialPosts(

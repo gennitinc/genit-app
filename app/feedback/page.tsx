@@ -17,17 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import {
-  ArrowRight,
-  Cpu,
-  FileText,
-  Layers,
-  Paperclip,
-  Sparkles,
-  Upload,
-  X,
-} from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, FileText, Paperclip, X } from "lucide-react";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
@@ -259,93 +249,58 @@ export default function FeedbackPage() {
       <LandingNavbar />
 
       <main className='mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24'>
-        {/* Header Section */}
         <div className='max-w-3xl'>
-          <div className='flex items-center gap-2 font-mono text-xs tracking-widest text-neutral-500 uppercase'>
-            <Link
-              href='/'
-              className='transition-colors hover:text-neutral-900 dark:hover:text-white'
-            >
-              Home
-            </Link>
-            <span className='text-neutral-300 dark:text-neutral-700'>/</span>
-            <span>Support &amp; Feedback</span>
-          </div>
-
-          <h1 className='mt-6 text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
-            Help shape the future of Genit.
+          <h1 className='text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
+            Support and feature requests
           </h1>
           <p className='mt-5 text-base leading-7 text-pretty text-neutral-600 sm:text-lg dark:text-neutral-400'>
-            Have an idea for a new marketing agent capability, want a tool
-            integration added, or need technical assistance with your workspace?
-            Our product and engineering teams review every submission.
+            Something broken, a billing question, or an idea for what Genit
+            should do next? Pick the form that fits. Every submission is read
+            by the people who build the product.
           </p>
         </div>
 
-        {/* Hero Figure 01: Product Collaboration */}
         <figure className='mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
           <img
             className='h-auto max-h-[500px] w-full object-cover'
             src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
-            alt='Product design, wireframing, and user feedback in Genit'
+            alt='Product team reviewing feedback'
           />
-          <figcaption className='flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 px-5 py-3 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
-            <span>
-              Figure 01: Product architecture evolving through user feedback
-              &amp; continuous iteration
-            </span>
-            <span>Genit Engineering &amp; Design</span>
-          </figcaption>
         </figure>
 
-        {/* 3 Architectural Pillars */}
-        <div className='mt-16 grid grid-cols-1 gap-6 border-y border-neutral-200 py-10 sm:grid-cols-3 dark:border-neutral-800'>
+        <div className='mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3'>
           <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-            <div className='flex items-center gap-2 font-mono text-xs text-neutral-400 uppercase dark:text-neutral-500'>
-              <Cpu className='size-3.5' />
-              <span>01 // Agents &amp; Skills</span>
-            </div>
-            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
-              <LocalizedText text={"Agent Capabilities"} />
+            <h3 className='font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"Something's not working"} />
             </h3>
             <p className='mt-1 text-sm leading-6 text-pretty text-neutral-600 dark:text-neutral-400'>
               <LocalizedText
                 text={
-                  "Suggest new workflows, creative formats, or autonomous execution skills for Genit agents."
+                  "Open a support ticket. A screenshot and the steps that led to the problem help us fix it faster."
                 }
               />
             </p>
           </div>
-
           <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-            <div className='flex items-center gap-2 font-mono text-xs text-neutral-400 uppercase dark:text-neutral-500'>
-              <Layers className='size-3.5' />
-              <span>02 // Integrations</span>
-            </div>
-            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
-              <LocalizedText text={"Connected Tools"} />
+            <h3 className='font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"Missing an integration"} />
             </h3>
             <p className='mt-1 text-sm leading-6 text-pretty text-neutral-600 dark:text-neutral-400'>
               <LocalizedText
                 text={
-                  "Request connections for ad networks, CRM software, ecommerce stores, or niche social channels."
+                  "Tell us which app you want connected and what you'd use it for."
                 }
               />
             </p>
           </div>
-
           <div className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-            <div className='flex items-center gap-2 font-mono text-xs text-neutral-400 uppercase dark:text-neutral-500'>
-              <Sparkles className='size-3.5' />
-              <span>03 // Support</span>
-            </div>
-            <h3 className='mt-2 font-semibold text-neutral-950 dark:text-white'>
-              <LocalizedText text={"Direct Assistance"} />
+            <h3 className='font-semibold text-neutral-950 dark:text-white'>
+              <LocalizedText text={"An idea for a feature"} />
             </h3>
             <p className='mt-1 text-sm leading-6 text-pretty text-neutral-600 dark:text-neutral-400'>
               <LocalizedText
                 text={
-                  "Open an engineering ticket for debugging, billing questions, or personalized workspace setup."
+                  "Describe the task you're trying to get done. That's more useful to us than a feature name."
                 }
               />
             </p>
@@ -386,7 +341,7 @@ export default function FeedbackPage() {
                   <p className='text-sm text-neutral-600 dark:text-neutral-400'>
                     <LocalizedText
                       text={
-                        "Encountering an issue? Describe what happened and our engineering team will assist."
+                        "Tell us what happened and what you expected to happen instead."
                       }
                     />
                   </p>
@@ -611,7 +566,7 @@ export default function FeedbackPage() {
                   <p className='text-sm text-neutral-600 dark:text-neutral-400'>
                     <LocalizedText
                       text={
-                        "Tell us what capability or tool integration would make Genit more powerful for your team."
+                        "What would you like Genit to do that it can't today?"
                       }
                     />
                   </p>
@@ -687,7 +642,7 @@ export default function FeedbackPage() {
                       name='description'
                       value={suggestionDescription}
                       onChange={handleSuggestionChange}
-                      placeholder='Describe how this feature would work and the impact it would have on your marketing workflow...'
+                      placeholder='What are you trying to do, and how do you do it today?'
                       required
                       className='min-h-[140px] resize-none rounded-lg border-neutral-200 bg-white focus-visible:ring-1 focus-visible:ring-neutral-950 dark:border-neutral-800 dark:bg-neutral-900 dark:focus-visible:ring-white'
                     />
@@ -713,7 +668,6 @@ export default function FeedbackPage() {
           </Tabs>
         </section>
 
-        {/* Supporting Figure 02: Collaborative Engineering Triage */}
       </main>
 
       <LandingFooter />

@@ -342,12 +342,13 @@ export async function fetchComposioTools(
 
 export async function syncComposioConnection(
   toolkit: string,
-  platform: IntegrationPlatform
+  platform: IntegrationPlatform,
+  connectedAccountId?: string
 ): Promise<IntegrationConnection> {
   const { data } = await apiResponse.post<{
     success: true;
     integration: IntegrationConnection;
-  }>("/integrations/composio/sync", { toolkit, platform });
+  }>("/integrations/composio/sync", { toolkit, platform, connectedAccountId });
   return data.integration;
 }
 

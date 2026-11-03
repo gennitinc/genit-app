@@ -7,7 +7,7 @@ type Tone = "neutral" | "success" | "error" | "warning" | "info";
 
 const toneIconClass: Record<Tone, string> = {
   neutral: "text-muted-foreground",
-  success: "text-emerald-600 dark:text-emerald-400",
+  success: "text-foreground",
   error: "text-rose-600 dark:text-rose-400",
   warning: "text-amber-600 dark:text-amber-400",
   info: "text-foreground",

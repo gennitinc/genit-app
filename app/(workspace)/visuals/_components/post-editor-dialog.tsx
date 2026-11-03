@@ -16,7 +16,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -44,6 +43,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useCampaignOptions } from "@/hooks/use-campaigns";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import type {
   IntegrationConnection,
@@ -65,7 +65,6 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import {
   AlertCircle,
   CalendarClock,
-  Check,
   CircleFadingArrowUp,
   FileText,
   Send,
@@ -73,6 +72,7 @@ import {
 } from "lucide-react";
 import {
   type Dispatch,
+  type ReactNode,
   type SetStateAction,
   useEffect,
   useMemo,
@@ -111,6 +111,8 @@ export type PostEditorForm = {
   youtubeMadeForKids: boolean;
   status: SocialPostStatus;
   scheduledFor: string;
+  /** GTM campaign this post belongs to; drives campaign attribution. */
+  campaignId: string;
 };
 
 export const EMPTY_POST_FORM: PostEditorForm = {
@@ -131,6 +133,7 @@ export const EMPTY_POST_FORM: PostEditorForm = {
   youtubeMadeForKids: false,
   status: "draft",
   scheduledFor: "",
+  campaignId: "",
 };
 
 export function getProviderTargetMetadata(
@@ -321,6 +324,7 @@ export function PostEditorDialog({
   onEnhanceText,
 }: PostEditorDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const campaignOptions = useCampaignOptions(open);
   const connectedPlatforms = useMemo(
     () =>
       POST_PLATFORMS.filter((platform) =>
@@ -510,7 +514,21 @@ export function PostEditorDialog({
 
   const description = editing
     ? "Update this post and its destination."
-    : "Check every platform you want to post to, then compose once.";
+    : "Choose where to post, then write it once.";
+
+  // The strictest limit among the selected platforms is the one that matters.
+  const limitFor = (key: "contentMax" | "titleMax") => {
+    let limit: { max: number; platform: IntegrationPlatform } | undefined;
+    for (const platform of form.platforms) {
+      const max = PLATFORM_RULES[platform]?.[key];
+      if (max && (!limit || max < limit.max)) limit = { max, platform };
+    }
+    return limit;
+  };
+  const contentLimit = limitFor("contentMax");
+  const titleLimit = limitFor("titleMax");
+  const titleIsPublic =
+    form.platforms.includes("youtube") || form.platforms.includes("pinterest");
 
   const renderEnhanceButton = (field: "title" | "content") =>
     onEnhanceText ? (
@@ -521,7 +539,7 @@ export function PostEditorDialog({
             size='icon'
             variant='ghost'
             aria-label='Enhance with AI'
-            className='absolute top-1.5 right-1.5 h-7 w-7 rounded-md text-indigo-200 hover:bg-indigo-500/10 hover:text-white'
+            className='h-7 w-7 shrink-0 rounded-md text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-100'
             disabled={isGeneratingText}
             onClick={() => onEnhanceText(field)}
           >
@@ -538,573 +556,548 @@ export function PostEditorDialog({
       </Tooltip>
     ) : null;
 
-  const formContent = (
-    <div className='grid gap-4 lg:grid-cols-[0.9fr_1.1fr]'>
-      <section className='space-y-4 lg:border-r lg:border-white/[0.05] lg:pr-4'>
-        <div className='grid gap-2'>
-          <div className='flex items-center justify-between gap-3'>
-            <div>
-              <h3 className='text-sm font-semibold text-white'>
-                <LocalizedText text={"Destinations"} />
-              </h3>
-              <p className='mt-1 text-xs text-zinc-500'>
-                <LocalizedText text={"Choose where this post should appear."} />
-              </p>
-            </div>
-            <span className='rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] font-semibold text-zinc-300 ring-1 ring-white/10'>
-              {form.platforms.length}
-            </span>
-          </div>
-          {connectedPlatforms.length ? (
-            <div className='grid grid-cols-2 gap-2'>
-              {connectedPlatforms.map((platform) => {
-                const selected = form.platforms.includes(platform);
-                return (
-                  <button
-                    key={platform}
-                    type='button'
-                    role='checkbox'
-                    aria-checked={selected}
-                    onClick={() => togglePlatform(platform)}
-                    className={cn(
-                      "relative flex items-center gap-2.5 rounded-xl border p-2.5 text-left text-xs font-medium transition-all duration-200",
-                      selected
-                        ? "border-indigo-500/40 bg-indigo-500/[0.06] text-white"
-                        : "border-zinc-800 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900/70"
-                    )}
-                  >
-                    <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-950 ring-1 ring-zinc-800'>
-                      <PlatformIcon platform={platform} />
-                    </span>
-                    <span className='min-w-0'>
-                      <span className='block truncate'>
-                        {POST_PLATFORM_LABELS[platform]}
-                      </span>
-                      <span className='mt-1 block text-[9px] font-medium text-emerald-400'>
-                        <LocalizedText text={"Connected"} />
-                      </span>
-                    </span>
-                    {selected && (
-                      <span className='absolute top-1.5 right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-indigo-600 text-white'>
-                        <Check className='h-2 w-2 stroke-[3]' />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <div className='rounded-xl border border-dashed border-zinc-800 bg-zinc-900/30 p-4 text-xs leading-5 text-zinc-500'>
-              <LocalizedText
-                text={"Connect a social account from Plugins to create a post."}
-              />
-            </div>
-          )}
-        </div>
-        {form.platforms.length > 0 && (
-          <div className='grid gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3'>
-            <p className='text-[10px] font-semibold tracking-[0.16em] text-zinc-400 uppercase'>
-              <LocalizedText text={"Connected accounts"} />
-            </p>
-            <div className='space-y-2'>
-              {form.platforms.map((platform) => {
-                const accounts = connected.filter(
-                  (item) => item.platform === platform
-                );
-                const options = connectionOptions[platform];
-                const targetLabel =
-                  platform === "facebook"
-                    ? "Page"
-                    : platform === "instagram"
-                      ? "Instagram account"
-                      : platform === "linkedin"
-                        ? "Publish as"
-                        : platform === "pinterest"
-                          ? "Board"
-                          : "Destination";
-                return (
-                  <div
-                    key={platform}
-                    className='space-y-1.5 rounded-lg border border-white/[0.05] bg-white/[0.02] p-2.5'
-                  >
-                    <Label className='flex items-center gap-2 text-xs font-medium text-zinc-200'>
-                      <span className='flex h-5 w-5 items-center justify-center rounded bg-white/5 ring-1 ring-white/10'>
-                        <PlatformIcon platform={platform} />
-                      </span>
-                      {POST_PLATFORM_LABELS[platform]}{" "}
-                      <LocalizedText text={"account"} />
-                    </Label>
-                    <Select
-                      value={form.integrationIds[platform] || undefined}
-                      onValueChange={(value) => {
-                        if (platform === "youtube")
-                          setIsCustomYoutubePlaylist(false);
-                        setForm((current) => ({
-                          ...current,
-                          integrationIds: {
-                            ...current.integrationIds,
-                            [platform]: value === "none" ? "" : value,
-                          },
-                          ...(platform === "youtube"
-                            ? {
-                                youtubePlaylistId: "",
-                                youtubePlaylistTitle: "",
-                                youtubePlaylistDescription: "",
-                                youtubePlaylistPrivacyStatus: "public",
-                              }
-                            : {}),
-                        }));
-                      }}
-                    >
-                      <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                        <SelectValue placeholder='Select account' />
-                      </SelectTrigger>
-                      <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                        {accounts.map((account) => (
-                          <SelectItem key={account._id} value={account._id}>
-                            {account.accountName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {platform !== "youtube" && options?.targets.length ? (
-                      <div className='grid gap-1.5 pt-1'>
-                        <Label className='text-[11px] font-medium text-zinc-400'>
-                          <LocalizedText text={targetLabel} />
-                        </Label>
-                        <Select
-                          value={form.providerTargetIds[platform] || undefined}
-                          onValueChange={(value) =>
-                            setForm((current) => ({
-                              ...current,
-                              providerTargetIds: {
-                                ...current.providerTargetIds,
-                                [platform]: value,
-                              },
-                            }))
-                          }
-                        >
-                          <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                            <SelectValue
-                              placeholder={`Select ${targetLabel.toLowerCase()}`}
-                            />
-                          </SelectTrigger>
-                          <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                            {options.targets.map((target) => (
-                              <SelectItem key={target.id} value={target.id}>
-                                {target.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    ) : null}
-                    {platform === "tiktok" && options?.privacyLevels.length ? (
-                      <div className='grid gap-1.5 pt-1'>
-                        <Label className='text-[11px] font-medium text-zinc-400'>
-                          <LocalizedText text={"Who can view"} />
-                        </Label>
-                        <Select
-                          value={form.tiktokPrivacyLevel}
-                          onValueChange={(value) =>
-                            setForm((current) => ({
-                              ...current,
-                              tiktokPrivacyLevel: value,
-                            }))
-                          }
-                        >
-                          <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                            {options.privacyLevels.map((level) => (
-                              <SelectItem key={level.value} value={level.value}>
-                                {level.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    ) : null}
-                    {connectionOptionErrors[platform] ? (
-                      <p className='pt-1 text-[11px] leading-4 text-amber-300'>
-                        {connectionOptionErrors[platform]}
-                      </p>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+  const counter = (
+    length: number,
+    limit?: { max: number; platform: IntegrationPlatform }
+  ) =>
+    limit ? (
+      <span
+        className={cn(
+          "text-[11px] tabular-nums",
+          length > limit.max ? "text-amber-300" : "text-zinc-600"
         )}
-        {showYouTubePlaylist && (
-          <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
-            <div>
-              <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
-                <LocalizedText text={"YouTube playlist"} />
-              </p>
-              <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
-                <LocalizedText
-                  text={
-                    "Optional. Select an existing playlist or type a new one."
-                  }
-                />
-              </p>
-            </div>
-            <Select
-              value={selectedYouTubePlaylistValue}
-              disabled={!youtubeIntegrationId || isLoadingYoutubePlaylists}
-              onValueChange={(value) => {
-                if (value === "none") {
-                  setIsCustomYoutubePlaylist(false);
-                  setForm((current) => ({
-                    ...current,
-                    youtubePlaylistId: "",
-                    youtubePlaylistTitle: "",
-                    youtubePlaylistDescription: "",
-                    youtubePlaylistPrivacyStatus: "public",
-                  }));
-                  return;
-                }
-                if (value === "custom") {
-                  setIsCustomYoutubePlaylist(true);
-                  setForm((current) => ({
-                    ...current,
-                    youtubePlaylistId: "",
-                    youtubePlaylistTitle: current.youtubePlaylistTitle,
-                    youtubePlaylistPrivacyStatus:
-                      current.youtubePlaylistPrivacyStatus || "public",
-                  }));
-                  return;
-                }
-                const playlist = youtubePlaylists.find(
-                  (item) => item.id === value
-                );
-                setIsCustomYoutubePlaylist(false);
-                setForm((current) => ({
-                  ...current,
-                  youtubePlaylistId: value,
-                  youtubePlaylistTitle: playlist?.snippet?.title || "",
-                  youtubePlaylistDescription:
-                    playlist?.snippet?.description || "",
-                  youtubePlaylistPrivacyStatus:
-                    playlist?.status?.privacyStatus || "public",
-                }));
-              }}
-            >
-              <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                <SelectValue
-                  placeholder={
-                    youtubeIntegrationId
-                      ? "Choose playlist"
-                      : "Select a YouTube account first"
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                <SelectItem value='none'>
-                  <LocalizedText text={"No playlist"} />
-                </SelectItem>
-                {youtubePlaylists.map((playlist) => (
-                  <SelectItem key={playlist.id} value={playlist.id}>
-                    {playlist.snippet?.title || playlist.id}
-                  </SelectItem>
-                ))}
-                <SelectItem value='custom'>
-                  <LocalizedText text={"New playlist"} />
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {selectedYouTubePlaylistValue === "custom" && (
-              <Input
-                value={form.youtubePlaylistTitle}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    youtubePlaylistId: "",
-                    youtubePlaylistTitle: event.target.value,
-                  }))
-                }
-                placeholder='Playlist name'
-                className='h-9 border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600'
-              />
-            )}
-            {selectedYouTubePlaylistValue === "custom" && (
-              <>
-                <Textarea
-                  value={form.youtubePlaylistDescription}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      youtubePlaylistDescription: event.target.value,
-                    }))
-                  }
-                  rows={2}
-                  placeholder='Playlist description'
-                  className='resize-none border-white/10 bg-white/[0.02] text-white placeholder:text-zinc-600'
-                />
-                <div className='grid gap-2'>
-                  <Label className='text-xs font-medium text-zinc-300'>
-                    <LocalizedText text={"Playlist visibility"} />
-                  </Label>
-                  <Select
-                    value={form.youtubePlaylistPrivacyStatus}
-                    onValueChange={(value) =>
-                      setForm((current) => ({
-                        ...current,
-                        youtubePlaylistPrivacyStatus: value as YouTubePrivacy,
-                      }))
-                    }
-                  >
-                    <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                      <SelectItem value='public'>
-                        <LocalizedText text={"Public"} />
-                      </SelectItem>
-                      <SelectItem value='unlisted'>
-                        <LocalizedText text={"Unlisted"} />
-                      </SelectItem>
-                      <SelectItem value='private'>
-                        <LocalizedText text={"Private"} />
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-        {showYouTubePlaylist && (
-          <div className='grid gap-3 rounded-xl border border-red-500/15 bg-red-500/[0.04] p-3'>
-            <div>
-              <p className='text-[10px] font-semibold tracking-[0.16em] text-red-200/80 uppercase'>
-                <LocalizedText text={"YouTube video settings"} />
-              </p>
-              <p className='mt-1 text-[11px] leading-4 text-zinc-500'>
-                <LocalizedText
-                  text={"Upload defaults for this YouTube video."}
-                />
-              </p>
-            </div>
-            <div className='grid gap-2'>
-              <Label className='text-xs font-medium text-zinc-300'>
-                <LocalizedText text={"Video visibility"} />
-              </Label>
-              <Select
-                value={form.youtubePrivacyStatus}
-                onValueChange={(value) =>
-                  setForm((current) => ({
-                    ...current,
-                    youtubePrivacyStatus: value as YouTubePrivacy,
-                  }))
-                }
-              >
-                <SelectTrigger className='h-9 w-full rounded-lg border-zinc-800 bg-zinc-950 text-zinc-200'>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className='border-zinc-800 bg-zinc-950 text-zinc-200'>
-                  <SelectItem value='public'>
-                    <LocalizedText text={"Public"} />
-                  </SelectItem>
-                  <SelectItem value='unlisted'>
-                    <LocalizedText text={"Unlisted"} />
-                  </SelectItem>
-                  <SelectItem value='private'>
-                    <LocalizedText text={"Private"} />
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className='flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-zinc-950/60 p-3'>
-              <div>
-                <Label className='text-xs font-medium text-zinc-200'>
-                  <LocalizedText text={"Made for kids"} />
-                </Label>
-                <p className='mt-1 text-[11px] text-zinc-500'>
-                  <LocalizedText text={"Off by default."} />
-                </p>
-              </div>
-              <Switch
-                checked={form.youtubeMadeForKids}
-                onCheckedChange={(checked) =>
-                  setForm((current) => ({
-                    ...current,
-                    youtubeMadeForKids: checked,
-                  }))
-                }
-                aria-label='Made for kids'
-              />
-            </div>
-          </div>
-        )}
-      </section>
+      >
+        {length.toLocaleString()} / {limit.max.toLocaleString()}
+        <span className='text-zinc-600'>
+          {" "}
+          · {POST_PLATFORM_LABELS[limit.platform]}
+        </span>
+      </span>
+    ) : (
+      <span className='text-[11px] text-zinc-600 tabular-nums'>
+        {length.toLocaleString()}
+      </span>
+    );
 
-      <section className='space-y-3'>
-        <div className='grid gap-2'>
-          <Label
-            htmlFor='post-title'
-            className='text-xs font-medium text-zinc-300'
-          >
-            {form.platforms.includes("youtube") ||
-            form.platforms.includes("pinterest")
-              ? "Post title"
-              : "Internal title"}
-          </Label>
-          <div className='relative'>
-            <Input
-              id='post-title'
-              value={form.title}
-              onChange={(event) =>
-                setForm({ ...form, title: event.target.value })
-              }
-              placeholder='Summer launch'
-              className='border-white/10 bg-white/[0.02] pr-10 text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
-            />
-            {renderEnhanceButton("title")}
-          </div>
-        </div>
-        <div className='grid gap-2'>
-          <Label
-            htmlFor='post-content'
-            className='text-xs font-medium text-zinc-300'
-          >
-            <LocalizedText text={"Caption"} />
-          </Label>
-          <div className='relative'>
-            <Textarea
-              id='post-content'
-              value={form.content}
-              onChange={(event) =>
-                setForm({ ...form, content: event.target.value })
-              }
-              rows={5}
-              placeholder='Write your post…'
-              className='resize-none border-white/10 bg-white/[0.02] pr-10 text-white placeholder:text-zinc-600 focus-visible:ring-white/20 focus-visible:ring-offset-0'
-            />
-            {renderEnhanceButton("content")}
-          </div>
-        </div>
-        <div className='grid gap-2'>
-          <div className='flex items-center justify-between gap-3'>
-            <Label className='text-zinc-300'>
-              <LocalizedText text={"Media"} />
-            </Label>
-            <span className='text-[10px] text-zinc-500'>
-              <LocalizedText text={"Images and videos only"} />
-            </span>
-          </div>
-          <MediaPicker
-            accept='media'
-            multiple
-            value={form.mediaUrl}
-            onChange={(mediaUrl) =>
-              setForm((current) => ({ ...current, mediaUrl }))
+  const destinations = (
+    <div className='flex flex-wrap items-center gap-1.5'>
+      {connectedPlatforms.length ? (
+        connectedPlatforms.map((platform) => {
+          const selected = form.platforms.includes(platform);
+          return (
+            <button
+              key={platform}
+              type='button'
+              role='checkbox'
+              aria-checked={selected}
+              onClick={() => togglePlatform(platform)}
+              className={cn(
+                "flex h-8 items-center gap-2 rounded-md border px-2.5 text-[13px] transition-colors",
+                selected
+                  ? "border-white/25 bg-white/[0.08] text-white"
+                  : "border-white/[0.07] text-zinc-500 hover:border-white/15 hover:text-zinc-300"
+              )}
+            >
+              <span
+                className={cn(
+                  "flex h-4 w-4 items-center justify-center [&_svg]:h-4 [&_svg]:w-4",
+                  !selected && "opacity-50 grayscale"
+                )}
+              >
+                <PlatformIcon platform={platform} />
+              </span>
+              {POST_PLATFORM_LABELS[platform]}
+            </button>
+          );
+        })
+      ) : (
+        <p className='text-[13px] text-zinc-500'>
+          <LocalizedText
+            text={"Connect a social account from Plugins to create a post."}
+          />
+        </p>
+      )}
+    </div>
+  );
+
+  const composer = (
+    <div className='space-y-5'>
+      <div className='rounded-lg border border-white/[0.08] bg-white/[0.015] focus-within:border-white/20'>
+        <div className='flex items-center gap-2 border-b border-white/[0.06] pr-2'>
+          <Input
+            id='post-title'
+            aria-label={titleIsPublic ? "Title" : "Internal title"}
+            value={form.title}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, title: event.target.value }))
             }
-            values={form.media}
-            onValuesChange={(media) =>
+            placeholder={
+              titleIsPublic ? "Title" : "Title — only visible in Genit"
+            }
+            className='h-11 rounded-none border-0 bg-transparent px-3.5 text-[15px] font-medium text-white shadow-none placeholder:font-normal placeholder:text-zinc-600 focus-visible:ring-0 focus-visible:ring-offset-0'
+          />
+          {titleLimit && counter(form.title.length, titleLimit)}
+          {renderEnhanceButton("title")}
+        </div>
+        <Textarea
+          id='post-content'
+          aria-label='Caption'
+          value={form.content}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, content: event.target.value }))
+          }
+          placeholder='Write your post…'
+          className='min-h-[220px] resize-none rounded-none border-0 bg-transparent px-3.5 py-3 text-[14px] leading-6 text-zinc-100 shadow-none placeholder:text-zinc-600 focus-visible:ring-0 focus-visible:ring-offset-0'
+        />
+        <div className='flex items-center justify-between gap-2 px-3.5 pb-2'>
+          {counter(form.content.length, contentLimit)}
+          {renderEnhanceButton("content")}
+        </div>
+      </div>
+
+      <div className='space-y-2'>
+        <div className='flex items-baseline justify-between gap-3'>
+          <Label className='text-[13px] font-medium text-zinc-300'>
+            <LocalizedText text={"Media"} />
+          </Label>
+          <span className='text-[11px] text-zinc-600'>
+            <LocalizedText text={"Images and videos"} />
+          </span>
+        </div>
+        <MediaPicker
+          accept='media'
+          multiple
+          value={form.mediaUrl}
+          onChange={(mediaUrl) =>
+            setForm((current) => ({ ...current, mediaUrl }))
+          }
+          values={form.media}
+          onValuesChange={(media) =>
+            setForm((current) => ({
+              ...current,
+              media,
+              mediaUrl: media[0]?.url || "",
+              mediaType: media[0]?.mimeType || "",
+            }))
+          }
+          onMediaTypeChange={(mediaType) =>
+            setForm((current) => ({ ...current, mediaType }))
+          }
+        />
+      </div>
+    </div>
+  );
+
+  const timing = (
+    <section className='space-y-2.5'>
+      <h3 className='text-[13px] font-medium text-zinc-200'>
+        <LocalizedText text={"When"} />
+      </h3>
+      <div
+        role='radiogroup'
+        aria-label='Post status'
+        className='grid grid-cols-3 rounded-md border border-white/[0.08] p-0.5'
+      >
+        {(
+          [
+            ["draft", "Draft"],
+            ["scheduled", "Schedule"],
+            ["published", "Now"],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type='button'
+            role='radio'
+            aria-checked={form.status === value}
+            onClick={() =>
+              setForm((current) => ({ ...current, status: value }))
+            }
+            className={cn(
+              "h-7 rounded-[5px] text-[12px] transition-colors",
+              form.status === value
+                ? "bg-white/[0.1] text-white"
+                : "text-zinc-500 hover:text-zinc-300"
+            )}
+          >
+            <LocalizedText text={label} />
+          </button>
+        ))}
+      </div>
+      {form.status === "scheduled" && (
+        <Input
+          id='scheduled-for'
+          aria-label='Publish time'
+          type='datetime-local'
+          min={new Date(Date.now() - new Date().getTimezoneOffset() * 60_000)
+            .toISOString()
+            .slice(0, 16)}
+          value={form.scheduledFor}
+          onChange={(event) =>
+            setForm((current) => ({
+              ...current,
+              scheduledFor: event.target.value,
+            }))
+          }
+          className={cn(FIELD, "[color-scheme:dark]")}
+        />
+      )}
+    </section>
+  );
+
+  const youtubeSettings = (
+    <>
+      <Field label='Playlist'>
+        <Select
+          value={selectedYouTubePlaylistValue}
+          disabled={!youtubeIntegrationId || isLoadingYoutubePlaylists}
+          onValueChange={(value) => {
+            if (value === "none") {
+              setIsCustomYoutubePlaylist(false);
               setForm((current) => ({
                 ...current,
-                media,
-                mediaUrl: media[0]?.url || "",
-                mediaType: media[0]?.mimeType || "",
+                youtubePlaylistId: "",
+                youtubePlaylistTitle: "",
+                youtubePlaylistDescription: "",
+                youtubePlaylistPrivacyStatus: "public",
+              }));
+              return;
+            }
+            if (value === "custom") {
+              setIsCustomYoutubePlaylist(true);
+              setForm((current) => ({
+                ...current,
+                youtubePlaylistId: "",
+                youtubePlaylistTitle: current.youtubePlaylistTitle,
+                youtubePlaylistPrivacyStatus:
+                  current.youtubePlaylistPrivacyStatus || "public",
+              }));
+              return;
+            }
+            const playlist = youtubePlaylists.find((item) => item.id === value);
+            setIsCustomYoutubePlaylist(false);
+            setForm((current) => ({
+              ...current,
+              youtubePlaylistId: value,
+              youtubePlaylistTitle: playlist?.snippet?.title || "",
+              youtubePlaylistDescription: playlist?.snippet?.description || "",
+              youtubePlaylistPrivacyStatus:
+                playlist?.status?.privacyStatus || "public",
+            }));
+          }}
+        >
+          <SelectTrigger className={FIELD}>
+            <SelectValue
+              placeholder={
+                youtubeIntegrationId
+                  ? "Choose playlist"
+                  : "Select a YouTube account first"
+              }
+            />
+          </SelectTrigger>
+          <SelectContent className={MENU}>
+            <SelectItem value='none'>
+              <LocalizedText text={"No playlist"} />
+            </SelectItem>
+            {youtubePlaylists.map((playlist) => (
+              <SelectItem key={playlist.id} value={playlist.id}>
+                {playlist.snippet?.title || playlist.id}
+              </SelectItem>
+            ))}
+            <SelectItem value='custom'>
+              <LocalizedText text={"New playlist…"} />
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </Field>
+      {selectedYouTubePlaylistValue === "custom" && (
+        <div className='space-y-2 border-l border-white/[0.08] pl-3'>
+          <Input
+            value={form.youtubePlaylistTitle}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                youtubePlaylistId: "",
+                youtubePlaylistTitle: event.target.value,
               }))
             }
-            onMediaTypeChange={(mediaType) =>
-              setForm((current) => ({ ...current, mediaType }))
+            placeholder='Playlist name'
+            className={FIELD}
+          />
+          <Textarea
+            value={form.youtubePlaylistDescription}
+            onChange={(event) =>
+              setForm((current) => ({
+                ...current,
+                youtubePlaylistDescription: event.target.value,
+              }))
+            }
+            rows={2}
+            placeholder='Playlist description'
+            className='min-h-0 resize-none rounded-md border-white/10 bg-white/[0.03] text-[13px] text-zinc-200 placeholder:text-zinc-600'
+          />
+          <PrivacySelect
+            label='Playlist visibility'
+            value={form.youtubePlaylistPrivacyStatus}
+            onChange={(value) =>
+              setForm((current) => ({
+                ...current,
+                youtubePlaylistPrivacyStatus: value,
+              }))
             }
           />
         </div>
-        {form.platforms.length > 0 && (
-          <div className='space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3'>
-            {form.platforms.map((platform) => (
-              <p
-                key={platform}
-                className='flex gap-2 text-[11px] leading-4 text-zinc-400'
-              >
-                <span className='font-semibold text-zinc-200'>
-                  {POST_PLATFORM_LABELS[platform]}:
-                </span>
-                <span>{PLATFORM_RULES[platform]?.summary}</span>
-              </p>
-            ))}
-            {validationErrors.length > 0 && (
-              <div className='border-t border-white/[0.06] pt-2 text-[11px] text-amber-300'>
-                {validationErrors.map((error) => (
-                  <p key={error} className='flex gap-1.5'>
-                    <AlertCircle className='mt-0.5 h-3 w-3 shrink-0' />
-                    {error}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-        <div className='grid gap-4 sm:grid-cols-2'>
-          <div className='grid gap-2'>
-            <Label className='text-zinc-300'>
-              <LocalizedText text={"Status"} />
-            </Label>
-            <Select
-              value={form.status}
-              onValueChange={(value) =>
-                setForm({ ...form, status: value as SocialPostStatus })
-              }
-            >
-              <SelectTrigger className='w-full border-white/10 bg-white/[0.02] text-zinc-200'>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='draft'>
-                  <LocalizedText text={"Draft"} />
-                </SelectItem>
-                <SelectItem value='scheduled'>
-                  <LocalizedText text={"Scheduled"} />
-                </SelectItem>
-                <SelectItem value='published'>
-                  <LocalizedText text={"Publish"} />
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {form.status === "scheduled" && (
-            <div className='grid gap-2'>
-              <Label htmlFor='scheduled-for' className='text-zinc-300'>
-                <LocalizedText text={"Publish time"} />
-              </Label>
-              <Input
-                id='scheduled-for'
-                type='datetime-local'
-                min={new Date(
-                  Date.now() - new Date().getTimezoneOffset() * 60_000
-                )
-                  .toISOString()
-                  .slice(0, 16)}
-                value={form.scheduledFor}
-                onChange={(event) =>
-                  setForm({ ...form, scheduledFor: event.target.value })
-                }
-                className='border-white/10 bg-white/[0.02] text-white'
-              />
-            </div>
+      )}
+      <PrivacySelect
+        label='Video visibility'
+        value={form.youtubePrivacyStatus}
+        onChange={(value) =>
+          setForm((current) => ({ ...current, youtubePrivacyStatus: value }))
+        }
+      />
+      <label className='flex cursor-pointer items-center justify-between gap-3 py-0.5'>
+        <span className='text-[12px] text-zinc-400'>
+          <LocalizedText text={"Made for kids"} />
+        </span>
+        <Switch
+          checked={form.youtubeMadeForKids}
+          onCheckedChange={(checked) =>
+            setForm((current) => ({ ...current, youtubeMadeForKids: checked }))
+          }
+          aria-label='Made for kids'
+        />
+      </label>
+    </>
+  );
+
+  const platformSettings = form.platforms.map((platform) => {
+    const accounts = connected.filter((item) => item.platform === platform);
+    const options = connectionOptions[platform];
+    const targetLabel =
+      platform === "facebook"
+        ? "Page"
+        : platform === "instagram"
+          ? "Instagram account"
+          : platform === "linkedin"
+            ? "Publish as"
+            : platform === "pinterest"
+              ? "Board"
+              : "Destination";
+    return (
+      <section
+        key={platform}
+        className='space-y-2.5 border-t border-white/[0.06] pt-4'
+      >
+        <div>
+          <h3 className='flex items-center gap-2 text-[13px] font-medium text-zinc-200 [&_svg]:h-3.5 [&_svg]:w-3.5'>
+            <PlatformIcon platform={platform} />
+            {POST_PLATFORM_LABELS[platform]}
+          </h3>
+          {PLATFORM_RULES[platform]?.summary && (
+            <p className='mt-1 text-[11px] leading-4 text-zinc-600'>
+              {PLATFORM_RULES[platform].summary}
+            </p>
           )}
         </div>
+        {accounts.length > 1 || !form.integrationIds[platform] ? (
+          <Field label='Account'>
+            <Select
+              value={form.integrationIds[platform] || undefined}
+              onValueChange={(value) => {
+                if (platform === "youtube") setIsCustomYoutubePlaylist(false);
+                setForm((current) => ({
+                  ...current,
+                  integrationIds: {
+                    ...current.integrationIds,
+                    [platform]: value === "none" ? "" : value,
+                  },
+                  ...(platform === "youtube"
+                    ? {
+                        youtubePlaylistId: "",
+                        youtubePlaylistTitle: "",
+                        youtubePlaylistDescription: "",
+                        youtubePlaylistPrivacyStatus: "public" as const,
+                      }
+                    : {}),
+                }));
+              }}
+            >
+              <SelectTrigger className={FIELD}>
+                <SelectValue placeholder='Select account' />
+              </SelectTrigger>
+              <SelectContent className={MENU}>
+                {accounts.map((account) => (
+                  <SelectItem key={account._id} value={account._id}>
+                    {account.accountName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        ) : (
+          <p className='truncate text-[12px] text-zinc-400'>
+            {accounts[0]?.accountName}
+          </p>
+        )}
+        {platform !== "youtube" && options?.targets.length ? (
+          <Field label={targetLabel}>
+            <Select
+              value={form.providerTargetIds[platform] || undefined}
+              onValueChange={(value) =>
+                setForm((current) => ({
+                  ...current,
+                  providerTargetIds: {
+                    ...current.providerTargetIds,
+                    [platform]: value,
+                  },
+                }))
+              }
+            >
+              <SelectTrigger className={FIELD}>
+                <SelectValue
+                  placeholder={`Select ${targetLabel.toLowerCase()}`}
+                />
+              </SelectTrigger>
+              <SelectContent className={MENU}>
+                {options.targets.map((target) => (
+                  <SelectItem key={target.id} value={target.id}>
+                    {target.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        ) : null}
+        {platform === "tiktok" && options?.privacyLevels.length ? (
+          <Field label='Who can view'>
+            <Select
+              value={form.tiktokPrivacyLevel}
+              onValueChange={(value) =>
+                setForm((current) => ({
+                  ...current,
+                  tiktokPrivacyLevel: value,
+                }))
+              }
+            >
+              <SelectTrigger className={FIELD}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className={MENU}>
+                {options.privacyLevels.map((level) => (
+                  <SelectItem key={level.value} value={level.value}>
+                    {level.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        ) : null}
+        {platform === "youtube" && youtubeSettings}
+        {connectionOptionErrors[platform] ? (
+          <p className='text-[11px] leading-4 text-amber-300'>
+            {connectionOptionErrors[platform]}
+          </p>
+        ) : null}
       </section>
+    );
+  });
+
+  const campaigns = campaignOptions.data || [];
+  const campaignField = (
+    <section className='space-y-2.5'>
+      <h3 className='text-[13px] font-medium text-zinc-200'>
+        <LocalizedText text={"Campaign"} />
+      </h3>
+      <Select
+        value={form.campaignId || "none"}
+        onValueChange={(value) =>
+          setForm((current) => ({
+            ...current,
+            campaignId: value === "none" ? "" : value,
+          }))
+        }
+        disabled={campaignOptions.isLoading}
+      >
+        <SelectTrigger className={FIELD} aria-label='Campaign'>
+          <SelectValue
+            placeholder={
+              campaignOptions.isLoading ? "Loading campaigns…" : "No campaign"
+            }
+          />
+        </SelectTrigger>
+        <SelectContent className={MENU}>
+          <SelectItem value='none'>
+            <LocalizedText text={"No campaign"} />
+          </SelectItem>
+          {form.campaignId &&
+            !campaigns.some((item) => item._id === form.campaignId) && (
+              <SelectItem value={form.campaignId}>Linked campaign</SelectItem>
+            )}
+          {campaigns.map((campaign) => (
+            <SelectItem key={campaign._id} value={campaign._id}>
+              {campaign.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <p className='text-[11px] leading-4 text-zinc-500'>
+        <LocalizedText
+          text={"Linked posts count toward the campaign's reach and ROI."}
+        />
+      </p>
+    </section>
+  );
+
+  const formContent = (
+    <div className='grid gap-6 lg:grid-cols-[minmax(0,1fr)_272px]'>
+      <div className='min-w-0'>{composer}</div>
+      <aside className='space-y-4 lg:border-l lg:border-white/[0.06] lg:pl-6'>
+        {timing}
+        {campaignField}
+        {platformSettings}
+      </aside>
     </div>
   );
+
+  const issues =
+    validationErrors.length > 0 ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <p className='flex min-w-0 cursor-default items-center gap-1.5 text-[12px] text-amber-300/90'>
+            <AlertCircle className='h-3.5 w-3.5 shrink-0' />
+            <span className='truncate'>{validationErrors[0]}</span>
+            {validationErrors.length > 1 && (
+              <span className='shrink-0 text-zinc-500'>
+                +{validationErrors.length - 1}
+              </span>
+            )}
+          </p>
+        </TooltipTrigger>
+        {validationErrors.length > 1 && (
+          <TooltipContent side='top' align='start' className='max-w-xs'>
+            <ul className='space-y-1'>
+              {validationErrors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </TooltipContent>
+        )}
+      </Tooltip>
+    ) : (
+      <span />
+    );
 
   const actions = (
     <>
       <Button
-        variant='outline'
-        className='text-foreground rounded-md border-none bg-transparent transition-all duration-200'
+        variant='ghost'
+        className='h-9 rounded-md px-3 text-zinc-400 hover:bg-white/[0.06] hover:text-white'
         onClick={() => onOpenChange(false)}
       >
         <LocalizedText text={"Cancel"} />
       </Button>
       <Button
-        className='rounded-md bg-indigo-600 px-5 font-medium text-white transition-all duration-200 hover:bg-indigo-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:opacity-50'
+        className='h-9 rounded-md bg-white px-4 font-medium text-zinc-950 hover:bg-zinc-200 disabled:bg-white/10 disabled:text-zinc-500 disabled:opacity-100'
         disabled={validationErrors.length > 0 || isSaving}
         onClick={onSave}
       >
@@ -1123,11 +1116,13 @@ export function PostEditorDialog({
             ? "Publish"
             : form.status === "scheduled"
               ? editing
-                ? "Reschedule post"
-                : "Schedule post"
+                ? "Reschedule"
+                : "Schedule"
               : editing
-                ? "Save post"
-                : `Create ${form.platforms.length || ""} post${form.platforms.length === 1 ? "" : "s"}`}
+                ? "Save draft"
+                : form.platforms.length > 1
+                  ? `Save ${form.platforms.length} drafts`
+                  : "Save draft"}
       </Button>
     </>
   );
@@ -1136,38 +1131,35 @@ export function PostEditorDialog({
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
-          className='flex max-h-[80vh] flex-col gap-0 overflow-hidden rounded-lg border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-3xl'
+          className='flex max-h-[86vh] flex-col gap-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl sm:max-w-4xl'
           hideDialogClose
         >
-          <DialogHeader className='relative border-b border-white/[0.05] px-5 pt-4 pb-3 text-left'>
-            <div className='flex items-center gap-2.5'>
-              <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/10 ring-1 ring-indigo-500/20'>
-                <Send className='h-4 w-4' />
-              </span>
-              <div>
-                <DialogTitle className='text-sm font-semibold text-white'>
-                  {editing ? "Edit post" : "Create post"}
-                </DialogTitle>
-                <DialogDescription className='text-[11px] text-zinc-500'>
-                  {description}
-                </DialogDescription>
-              </div>
+          <DialogHeader className='space-y-3 border-b border-white/[0.06] px-6 pt-5 pb-4 text-left'>
+            <div className='flex items-center justify-between gap-4'>
+              <DialogTitle className='text-[15px] font-semibold text-white'>
+                {editing ? "Edit post" : "New post"}
+              </DialogTitle>
+              <DialogDescription className='sr-only'>
+                {description}
+              </DialogDescription>
+              <button
+                type='button'
+                onClick={() => onOpenChange(false)}
+                className='-mr-1.5 rounded-md p-1.5 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white'
+                aria-label='Close post composer'
+              >
+                <X className='h-4 w-4' />
+              </button>
             </div>
-            <button
-              type='button'
-              onClick={() => onOpenChange(false)}
-              className='absolute top-3 right-3 rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-900 hover:text-white'
-              aria-label='Close post composer'
-            >
-              <X className='h-5 w-5' />
-            </button>
+            {destinations}
           </DialogHeader>
-          <div className='min-h-0 flex-1 overflow-y-auto px-5 py-4'>
+          <div className='min-h-0 flex-1 overflow-y-auto px-6 py-5'>
             {formContent}
           </div>
-          <DialogFooter className='border-t border-white/[0.05] bg-[#0c0c0e]/95 px-5 py-3'>
-            {actions}
-          </DialogFooter>
+          <div className='flex items-center justify-between gap-4 border-t border-white/[0.06] px-6 py-3'>
+            <div className='min-w-0 flex-1'>{issues}</div>
+            <div className='flex shrink-0 items-center gap-2'>{actions}</div>
+          </div>
         </DialogContent>
       </Dialog>
     );
@@ -1179,22 +1171,71 @@ export function PostEditorDialog({
       onOpenChange={onOpenChange}
       shouldScaleBackground={false}
     >
-      <DrawerContent className='h-[94dvh] max-h-[94dvh] overflow-hidden rounded-t-[2rem] border-t border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl'>
-        <DrawerHeader className='border-b border-white/[0.05] p-2 text-left'>
-          <DrawerTitle className='text-lg text-white'>
-            {editing ? "Edit post" : "Create post"}
+      <DrawerContent className='h-[94dvh] max-h-[94dvh] overflow-hidden rounded-t-2xl border-t border-white/[0.08] bg-[#0c0c0e] p-0 text-white shadow-2xl'>
+        <DrawerHeader className='space-y-3 border-b border-white/[0.06] px-4 pt-2 pb-4 text-left'>
+          <DrawerTitle className='text-[15px] font-semibold text-white'>
+            {editing ? "Edit post" : "New post"}
           </DrawerTitle>
-          <DrawerDescription className='text-xs text-zinc-500'>
-            {description}
-          </DrawerDescription>
+          <DrawerDescription className='sr-only'>{description}</DrawerDescription>
+          {destinations}
         </DrawerHeader>
-        <div className='min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6'>
+        <div className='min-h-0 flex-1 overflow-y-auto px-4 py-5'>
           {formContent}
         </div>
-        <DrawerFooter className='grid grid-cols-2 border-t border-white/[0.05] bg-[#0c0c0e]/95 px-4 py-4 sm:px-6'>
-          {actions}
+        <DrawerFooter className='gap-2 border-t border-white/[0.06] px-4 py-3'>
+          {validationErrors.length > 0 && issues}
+          <div className='grid grid-cols-2 gap-2'>{actions}</div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+const FIELD =
+  "h-9 w-full rounded-md border-white/10 bg-white/[0.03] text-[13px] text-zinc-200 placeholder:text-zinc-600 focus-visible:ring-0 focus-visible:ring-offset-0";
+const MENU = "border-zinc-800 bg-zinc-950 text-zinc-200";
+
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className='grid gap-1.5'>
+      <Label className='text-[11px] font-normal text-zinc-500'>
+        <LocalizedText text={label} />
+      </Label>
+      {children}
+    </div>
+  );
+}
+
+function PrivacySelect({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: YouTubePrivacy;
+  onChange: (value: YouTubePrivacy) => void;
+}) {
+  return (
+    <Field label={label}>
+      <Select
+        value={value}
+        onValueChange={(next) => onChange(next as YouTubePrivacy)}
+      >
+        <SelectTrigger className={FIELD}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className={MENU}>
+          <SelectItem value='public'>
+            <LocalizedText text={"Public"} />
+          </SelectItem>
+          <SelectItem value='unlisted'>
+            <LocalizedText text={"Unlisted"} />
+          </SelectItem>
+          <SelectItem value='private'>
+            <LocalizedText text={"Private"} />
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    </Field>
   );
 }

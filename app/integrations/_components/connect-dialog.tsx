@@ -83,6 +83,7 @@ type PopupMessage =
   | {
       type: "genit:composio:authorized";
       platform: IntegrationPlatform;
+      connectedAccountId?: string;
     }
   | {
       type: "genit:composio:verify";
@@ -388,7 +389,7 @@ export function ConnectDialog({
   );
 
   const reconcileComposioConnection = useCallback(
-    async (fallbackMessage?: string) => {
+    async (fallbackMessage?: string, connectedAccountId?: string) => {
       if (!appSlug || !platform) {
         setErrorMessage(fallbackMessage || "Connection failed");
         setPhase("error");
@@ -402,7 +403,11 @@ export function ConnectDialog({
           await new Promise((resolve) => window.setTimeout(resolve, 1_500));
         if (attemptId !== connectionAttemptRef.current) return;
         try {
-          const integration = await syncComposioConnection(appSlug, platform);
+          const integration = await syncComposioConnection(
+            appSlug,
+            platform,
+            connectedAccountId
+          );
           if (attemptId !== connectionAttemptRef.current) return;
           markConnected(integration.accountName);
           return;
@@ -468,7 +473,8 @@ export function ConnectDialog({
         connectionResolvedRef.current = true;
         closePopup();
         void reconcileComposioConnection(
-          "The account was authorized, but Genit could not finish saving the connection."
+          "The account was authorized, but Genit could not finish saving the connection.",
+          data.connectedAccountId
         );
         return;
       }

@@ -21,6 +21,10 @@ import {
   fetchConversationWhatsAppTemplates,
   requestConversationCallPermission,
 } from "@/lib/inbox-api";
+import {
+  browserCanCall,
+  whatsappCallController,
+} from "@/lib/whatsapp-call-controller";
 import { Loader2, Phone, Video } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -152,6 +156,23 @@ export function CallDialog({
       toast.success("WhatsApp call permission request sent");
       setMessage("");
       await refresh();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const startVoiceCall = async () => {
+    setBusy(true);
+    try {
+      // The call lives in the floating call bar, so the dialog can close.
+      const pending = whatsappCallController.startOutbound(
+        conversation._id,
+        conversation.customerName
+      );
+      onOpenChange(false);
+      await pending;
     } catch (error) {
       toast.error(errorMessage(error));
     } finally {
@@ -295,21 +316,18 @@ export function CallDialog({
                 ) : (
                   <Button
                     size='sm'
-                    disabled={
-                      busy || !capabilities.whatsappNative.gatewayConfigured
-                    }
-                    onClick={() => void create("whatsapp_native", "audio")}
+                    disabled={busy || !browserCanCall()}
+                    onClick={() => void startVoiceCall()}
                   >
                     Start voice call
                   </Button>
                 )}
-                {capabilities.whatsappNative.available &&
-                  !capabilities.whatsappNative.gatewayConfigured && (
-                    <p className='mt-2 text-xs text-amber-600'>
-                      A SIP/WebRTC call gateway must be configured to carry
-                      audio.
-                    </p>
-                  )}
+                {capabilities.whatsappNative.available && !browserCanCall() && (
+                  <p className='mt-2 text-xs text-amber-600'>
+                    This browser cannot place calls. Use a current Chrome, Edge,
+                    Safari or Firefox over HTTPS.
+                  </p>
+                )}
               </div>
             </div>
 

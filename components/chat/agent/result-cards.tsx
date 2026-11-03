@@ -1280,6 +1280,8 @@ export function BrowserSessionCard({ data }: { data: any }) {
       type: "website",
       title: data?.title || "Live browser",
       url: liveViewUrl,
+      displayUrl: data?.url || undefined,
+      openUrl: data?.url || undefined,
     });
 
   useEffect(() => {

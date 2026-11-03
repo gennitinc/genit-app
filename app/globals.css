@@ -209,25 +209,47 @@
     scrollbar-width: none; /* Firefox */
   }
 
-  .chat-scrollbar {
-    scrollbar-color: rgb(161 161 170 / 0.75) transparent;
-    scrollbar-width: thin;
+  /* Slim scrollbar flush with the pane edge. The element that actually
+     scrolls is the conversation's inner div, so descendants are styled
+     too. Chrome ignores ::-webkit-scrollbar rules whenever
+     scrollbar-width/-color are set, so those apply only where webkit
+     scrollbars aren't supported (Firefox). */
+  @supports not selector(::-webkit-scrollbar) {
+    .chat-scrollbar,
+    .chat-scrollbar * {
+      scrollbar-color: rgb(161 161 170 / 0.5) transparent;
+      scrollbar-width: thin;
+    }
   }
 
   .chat-scrollbar::-webkit-scrollbar,
+  .chat-scrollbar *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
   .chat-scrollbar::-webkit-scrollbar-track,
-  .chat-scrollbar::-webkit-scrollbar-corner {
+  .chat-scrollbar *::-webkit-scrollbar-track,
+  .chat-scrollbar::-webkit-scrollbar-corner,
+  .chat-scrollbar *::-webkit-scrollbar-corner {
     background: transparent;
   }
 
-  .chat-scrollbar::-webkit-scrollbar-thumb {
-    border: 3px solid transparent;
+  .chat-scrollbar::-webkit-scrollbar-thumb,
+  .chat-scrollbar *::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
     border-radius: 9999px;
-    background: rgb(161 161 170 / 0.75);
+    background: rgb(161 161 170 / 0.45);
     background-clip: content-box;
   }
 
-  .chat-scrollbar::-webkit-scrollbar-button {
+  .chat-scrollbar:hover::-webkit-scrollbar-thumb,
+  .chat-scrollbar *:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(161 161 170 / 0.75);
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-button,
+  .chat-scrollbar *::-webkit-scrollbar-button {
     display: none;
   }
 

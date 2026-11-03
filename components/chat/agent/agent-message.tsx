@@ -541,7 +541,8 @@ export function AgentMessage({
                   {tc.result?.ok &&
                     tc.name !== "request_user_input" &&
                     tc.render !== "design_inspiration" &&
-                    tc.render !== "web_search_results" && (
+                    tc.render !== "web_search_results" &&
+                    tc.render !== "browser_session" && (
                       <ToolResultLinks
                         links={extractResultLinks(tc.result.data)}
                       />

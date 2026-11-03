@@ -10,6 +10,7 @@ import AutomationWorkflow from "../automation";
 import GenittWorkflow from "../workflow";
 import { AgentThinkingOverlay } from "./agent-thinking-overlay";
 import { GraphicsCanvas } from "./graphics-canvas";
+import { LiveBrowserPreview, isLiveBrowserUrl } from "./live-browser-preview";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
@@ -29,10 +30,14 @@ import React from "react";
 
 export const PreviewPanel = ({
   previewType,
+  thinking,
+  isThinking,
   isFullscreen,
   onToggleFullscreen,
 }: {
   previewType: CanvasPreviewType | "website" | null;
+  thinking?: string;
+  isThinking?: boolean;
   isFullscreen?: boolean;
   onToggleFullscreen?: () => void;
 }) => {
@@ -42,6 +47,8 @@ export const PreviewPanel = ({
     <>
       <PreviewPanelContent
         previewType={previewType}
+        thinking={thinking}
+        isThinking={isThinking}
         isFullscreen={isFullscreen}
         onToggleFullscreen={onToggleFullscreen}
       />
@@ -67,16 +74,21 @@ export const PreviewPanel = ({
 
 const PreviewPanelContent = ({
   previewType,
+  thinking,
+  isThinking,
   isFullscreen,
   onToggleFullscreen,
 }: {
   previewType: CanvasPreviewType | "website" | null;
+  thinking?: string;
+  isThinking?: boolean;
   isFullscreen?: boolean;
   onToggleFullscreen?: () => void;
 }) => {
   const { artifactPreview, project, isLoadingProject, aiStatus } =
     useProjectDesign();
   const [artifactReloadKey, setArtifactReloadKey] = React.useState(0);
+  const artifactPreviewRef = React.useRef<HTMLDivElement>(null);
 
   if (isLoadingProject) {
     return (
@@ -97,85 +109,86 @@ const PreviewPanelContent = ({
     );
   }
 
+  if (
+    artifactPreview?.type === "website" &&
+    isLiveBrowserUrl(artifactPreview.url)
+  ) {
+    return (
+      <div ref={artifactPreviewRef} className='h-full w-full'>
+        <LiveBrowserPreview
+          key={artifactPreview.url}
+          url={artifactPreview.url}
+          displayUrl={artifactPreview.displayUrl}
+        />
+      </div>
+    );
+  }
+
   if (artifactPreview) {
     return (
-      <WebPreview
-        key={artifactPreview.url}
-        defaultUrl={artifactPreview.url}
-        className='bg-muted/90 min-h-0 overflow-hidden rounded-3xl border border-zinc-200 shadow-2xl dark:border-zinc-800/50'
-      >
-        <WebPreviewNavigation className='bg-background/95 grid h-12 shrink-0 grid-cols-[1fr_minmax(12rem,28rem)_1fr] items-center gap-3 px-4 py-1 backdrop-blur-sm'>
-          <div className='flex min-w-0 items-center gap-2'>
-            <div className='flex items-center space-x-1.5 px-2'>
-              <span className='h-2 w-2 rounded-full bg-red-400' />
-              <span className='h-2 w-2 rounded-full bg-yellow-400' />
-              <span className='h-2 w-2 rounded-full bg-green-400' />
+      <div ref={artifactPreviewRef} className='h-full w-full'>
+        <WebPreview
+          key={artifactPreview.url}
+          defaultUrl={artifactPreview.url}
+          className='bg-muted/90 min-h-0 overflow-hidden rounded-3xl border border-zinc-200 shadow-2xl dark:border-zinc-800/50'
+        >
+          <WebPreviewNavigation className='bg-background/95 grid h-12 shrink-0 grid-cols-[1fr_minmax(12rem,28rem)_1fr] items-center gap-3 px-4 py-1 backdrop-blur-sm'>
+            <div className='flex min-w-0 items-center gap-2'>
+              <div className='flex items-center space-x-1.5 px-2'>
+                <span className='h-2 w-2 rounded-full bg-red-400' />
+                <span className='h-2 w-2 rounded-full bg-yellow-400' />
+                <span className='h-2 w-2 rounded-full bg-green-400' />
+              </div>
+              <span className='truncate text-sm font-semibold'>
+                <LocalizedText
+                  text={
+                    artifactPreview.type === "website"
+                      ? "Live browser"
+                      : "Document"
+                  }
+                />
+              </span>
             </div>
-            <span className='truncate text-sm font-semibold'>
-              <LocalizedText
-                text={
-                  artifactPreview.type === "website"
-                    ? "Live browser"
-                    : "Document"
-                }
-              />
-            </span>
-          </div>
 
-          <WebPreviewUrl
-            readOnly
-            aria-label={
-              artifactPreview.type === "website"
-                ? "Live browser URL"
-                : "Document URL"
-            }
-            className='bg-muted/900 h-7 w-80 rounded-md border-0 px-3 text-center text-xs shadow-none'
-          />
+            <WebPreviewUrl
+              value={artifactPreview.displayUrl || artifactPreview.url}
+              readOnly
+              aria-label={
+                artifactPreview.type === "website"
+                  ? "Live browser URL"
+                  : "Document URL"
+              }
+              className='bg-muted/900 h-7 w-80 rounded-md border-0 px-3 text-center text-xs shadow-none'
+            />
 
-          <div className='bg-background/80 border-border ml-auto flex items-center gap-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='text-muted-foreground hover:text-foreground h-7 gap-1.5 rounded-md px-2 text-xs'
-              onClick={() => setArtifactReloadKey((value) => value + 1)}
-            >
-              <Eye className='h-3.5 w-3.5' />
-              <LocalizedText text={"Preview"} />
-            </Button>
-            {onToggleFullscreen && (
+            <div className='bg-background/80 border-border ml-auto flex items-center gap-1 rounded-md border p-1 shadow-sm backdrop-blur-sm'>
               <Button
                 variant='ghost'
                 size='sm'
-                onClick={onToggleFullscreen}
-                className={cn(
-                  "text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0",
-                  isFullscreen && "bg-muted text-foreground"
-                )}
-                title={isFullscreen ? "Exit fullscreen" : "Enlarge"}
+                className='text-muted-foreground hover:text-foreground h-7 gap-1.5 rounded-md px-2 text-xs'
+                onClick={() => setArtifactReloadKey((value) => value + 1)}
               >
-                {isFullscreen ? (
-                  <Minimize2 className='h-3.5 w-3.5' />
-                ) : (
-                  <Maximize2 className='h-3.5 w-3.5' />
-                )}
+                <Eye className='h-3.5 w-3.5' />
+                <LocalizedText text={"Preview"} />
               </Button>
-            )}
-            <Button
-              asChild
-              variant='ghost'
-              size='sm'
-              className='h-7 w-7 rounded-md p-0'
-            >
-              <a
-                href={artifactPreview.url}
-                target='_blank'
-                rel='noreferrer'
-                title='Open'
-              >
-                <ExternalLink className='h-3.5 w-3.5' />
-              </a>
-            </Button>
-            {artifactPreview.downloadUrl && (
+              {onToggleFullscreen && (
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={onToggleFullscreen}
+                  className={cn(
+                    "text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0",
+                    isFullscreen && "bg-muted text-foreground"
+                  )}
+                  title={isFullscreen ? "Exit fullscreen" : "Enlarge"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className='h-3.5 w-3.5' />
+                  ) : (
+                    <Maximize2 className='h-3.5 w-3.5' />
+                  )}
+                </Button>
+              )}
               <Button
                 asChild
                 variant='ghost'
@@ -183,26 +196,48 @@ const PreviewPanelContent = ({
                 className='h-7 w-7 rounded-md p-0'
               >
                 <a
-                  href={artifactPreview.downloadUrl}
-                  download={artifactPreview.fileName}
-                  title='Download'
+                  href={
+                    artifactPreview.openUrl ||
+                    artifactPreview.displayUrl ||
+                    artifactPreview.url
+                  }
+                  target='_blank'
+                  rel='noreferrer'
+                  title='Open'
                 >
-                  <Download className='h-3.5 w-3.5' />
+                  <ExternalLink className='h-3.5 w-3.5' />
                 </a>
               </Button>
-            )}
-          </div>
-        </WebPreviewNavigation>
-        <WebPreviewBody
-          key={artifactReloadKey}
-          sandbox={
-            artifactPreview.type === "document"
-              ? false
-              : "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads allow-modals allow-pointer-lock"
-          }
-          allow='clipboard-read; clipboard-write; fullscreen'
-        />
-      </WebPreview>
+              {artifactPreview.downloadUrl && (
+                <Button
+                  asChild
+                  variant='ghost'
+                  size='sm'
+                  className='h-7 w-7 rounded-md p-0'
+                >
+                  <a
+                    href={artifactPreview.downloadUrl}
+                    download={artifactPreview.fileName}
+                    title='Download'
+                  >
+                    <Download className='h-3.5 w-3.5' />
+                  </a>
+                </Button>
+              )}
+            </div>
+          </WebPreviewNavigation>
+          <WebPreviewBody
+            key={artifactReloadKey}
+            sandbox={
+              artifactPreview.type === "document"
+                ? false
+                : "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads allow-modals allow-pointer-lock"
+            }
+            allow='clipboard-read; clipboard-write; fullscreen'
+            className='h-full'
+          />
+        </WebPreview>
+      </div>
     );
   }
 
@@ -263,5 +298,11 @@ const PreviewPanelContent = ({
     );
   }
 
-  return <AgentThinkingOverlay status={aiStatus} />;
+  return (
+    <AgentThinkingOverlay
+      status={aiStatus}
+      thinking={thinking}
+      active={isThinking}
+    />
+  );
 };

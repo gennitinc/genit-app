@@ -127,6 +127,8 @@ export interface IProjectDesignContext {
     type: "document" | "website";
     title: string;
     url: string;
+    displayUrl?: string;
+    openUrl?: string;
     downloadUrl?: string;
     fileName?: string;
   } | null;

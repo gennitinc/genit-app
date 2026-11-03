@@ -526,13 +526,15 @@ export function LandingFooter() {
               </div>
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  {t("Use cases")}
+                  <Link href='/use-cases' className='hover:underline'>
+                    {t("Use cases")}
+                  </Link>
                 </h4>
                 <ul className='space-y-3'>
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/chat'
+                      href='/use-cases/graphic-design'
                     >
                       {t("Graphic Design")}
                     </Link>
@@ -540,7 +542,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/apps/video-generation?mode=ai-video-gen'
+                      href='/use-cases/ai-video-creation'
                     >
                       {t("AI Video Creation")}
                     </Link>
@@ -548,7 +550,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/inbox'
+                      href='/use-cases/unified-inbox'
                     >
                       {t("Unified Inbox")}
                     </Link>
@@ -556,7 +558,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/chat'
+                      href='/use-cases/ai-chat-agents'
                     >
                       {t("AI Chat Agents")}
                     </Link>
@@ -564,7 +566,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/platform'
+                      href='/use-cases/team-management'
                     >
                       {t("Team & Organization Management")}
                     </Link>
@@ -572,7 +574,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/plugins'
+                      href='/use-cases/apps-and-plugins'
                     >
                       {t("1,500+ External Apps & Plugins")}
                     </Link>
@@ -580,7 +582,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/automation'
+                      href='/use-cases/marketing-automation'
                     >
                       {t("Marketing Automation")}
                     </Link>
@@ -588,7 +590,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/campaigns'
+                      href='/use-cases/ad-campaigns'
                     >
                       {t("Ad Campaigns")}
                     </Link>
@@ -596,7 +598,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/calendar'
+                      href='/use-cases/content-calendar'
                     >
                       {t("Content Calendar")}
                     </Link>
@@ -604,7 +606,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/posts'
+                      href='/use-cases/social-publishing'
                     >
                       {t("Social Publishing")}
                     </Link>
@@ -612,7 +614,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/visuals/library'
+                      href='/use-cases/digital-asset-library'
                     >
                       {t("Digital Asset Library")}
                     </Link>

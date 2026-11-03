@@ -1,6 +1,8 @@
 "use client";
 
 import { CallDialog } from "./_components/call-dialog";
+import { EmojiPickerButton } from "./_components/emoji-picker-button";
+import { WhatsAppCallBar } from "./_components/whatsapp-call-bar";
 import { ContactDetails } from "./_components/contact-details";
 import { NewConversationDialog } from "./_components/new-conversation-dialog";
 import {
@@ -55,11 +57,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useClearConversation,
@@ -110,7 +107,6 @@ import {
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import DOMPurify from "dompurify";
-import type { EmojiClickData, Theme as EmojiTheme } from "emoji-picker-react";
 import {
   Archive,
   Ban,
@@ -149,7 +145,6 @@ import {
   XCircle,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -163,7 +158,6 @@ import {
   useState,
 } from "react";
 
-const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 function ConversationListSkeleton() {
   return (
@@ -646,7 +640,6 @@ export default function InboxPage() {
       });
     });
   };
-  const [showEmoji, setShowEmoji] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
   const [whatsappTemplates, setWhatsAppTemplates] = useState<
@@ -682,10 +675,6 @@ export default function InboxPage() {
   const initialSyncOrgRef = useRef("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replyInputRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    void import("emoji-picker-react");
-  }, []);
 
   /* Lock parent layout ancestors to viewport height so only the
      messages column scrolls – uses inline styles because dynamically
@@ -1139,7 +1128,6 @@ export default function InboxPage() {
   ]);
 
   useEffect(() => {
-    setShowEmoji(false);
   }, [activeId]);
 
   useEffect(() => {
@@ -1193,18 +1181,26 @@ export default function InboxPage() {
     );
   };
 
-  const insertEmoji = ({ emoji }: EmojiClickData) => {
-    const input = replyInputRef.current;
-    const start = input?.selectionStart ?? reply.length;
-    const end = input?.selectionEnd ?? start;
-    const next = reply.slice(0, start) + emoji + reply.slice(end);
-    if (replyMaxLength && next.length > replyMaxLength) return;
-    setReply(next);
-    requestAnimationFrame(() => {
-      input?.focus();
-      input?.setSelectionRange(start + emoji.length, start + emoji.length);
-    });
-  };
+  // Stable across keystrokes (reads the controlled textarea, not `reply`) so
+  // the memoized emoji picker does not re-render while typing.
+  const insertEmoji = useCallback(
+    (emoji: string) => {
+      const input = replyInputRef.current;
+      const current = input?.value ?? "";
+      const start = input?.selectionStart ?? current.length;
+      const end = input?.selectionEnd ?? start;
+      const next = current.slice(0, start) + emoji + current.slice(end);
+      if (replyMaxLength && next.length > replyMaxLength) return;
+      setReply(next);
+      requestAnimationFrame(() => {
+        input?.focus();
+        input?.setSelectionRange(start + emoji.length, start + emoji.length);
+      });
+    },
+    // setReply writes to the active conversation's draft.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [replyMaxLength, activeId]
+  );
 
   const sendWhatsAppTemplate = () => {
     if (!activeId || !selectedTemplate) return;
@@ -2757,40 +2753,10 @@ export default function InboxPage() {
                             <Paperclip className='h-4 w-4' />
                           )}
                         </Button>
-                        <Popover open={showEmoji} onOpenChange={setShowEmoji}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              type='button'
-                              variant='ghost'
-                              size='icon'
-                              className='text-muted-foreground hover:bg-muted hover:text-foreground h-8 w-8 rounded-full'
-                              aria-label='Add emoji'
-                            >
-                              <Smile className='h-4 w-4' />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            side='top'
-                            align='start'
-                            collisionPadding={12}
-                            onInteractOutside={() => setShowEmoji(false)}
-                            className='w-auto max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border-0 bg-transparent p-0 shadow-xl'
-                          >
-                            <EmojiPicker
-                              onEmojiClick={insertEmoji}
-                              autoFocusSearch
-                              searchPlaceholder='Search emojis'
-                              theme={
-                                (resolvedTheme === "dark"
-                                  ? "dark"
-                                  : "light") as EmojiTheme
-                              }
-                              width='min(350px, calc(100vw - 1.5rem))'
-                              height='min(420px, calc(100dvh - 7rem))'
-                              previewConfig={{ showPreview: false }}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                        <EmojiPickerButton
+                          onPick={insertEmoji}
+                          theme={resolvedTheme === "dark" ? "dark" : "light"}
+                        />
                         <Button
                           type='button'
                           variant='ghost'
@@ -3079,6 +3045,8 @@ export default function InboxPage() {
         Icon={manageFor?.icon ?? (() => null)}
         glow={manageFor?.glow ?? "rgba(113,113,122,0.4)"}
       />
+
+      <WhatsAppCallBar />
     </div>
   );
 }

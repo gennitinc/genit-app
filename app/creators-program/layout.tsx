@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Creators & Affiliate Program | Genit AI",
   description:
-    "Join the Genit Creators Program. Share the autonomous AI marketing platform with your audience, empower businesses, and earn recurring commissions on eligible referrals.",
+    "Earn a recurring commission when people you refer subscribe to a paid Genit plan.",
   keywords: [
     "Genit affiliate program",
     "creator partnership",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Creators & Affiliate Program | Genit AI",
     description:
-      "Partner with Genit. Share the AI marketing platform and earn recurring commissions on eligible subscriptions.",
+      "Earn a recurring commission when people you refer subscribe to Genit.",
     url: "https://www.trygenit.com/creators-program",
     type: "website",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Creators & Affiliate Program | Genit AI",
     description:
-      "Partner with Genit. Share the AI marketing platform and earn recurring commissions on eligible subscriptions.",
+      "Earn a recurring commission when people you refer subscribe to Genit.",
     images: ["/opengraph-image.png"],
   },
 };

@@ -58,3 +58,49 @@ export function campaignError(error: unknown, fallback: string) {
     fallback
   );
 }
+
+export function formatCompact(value = 0) {
+  return new Intl.NumberFormat(undefined, {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+export function campaignChatHref(prompt: string) {
+  return `/chat?prompt=${encodeURIComponent(prompt)}`;
+}
+
+/**
+ * Orders the checklist a business works through to take a campaign live, so
+ * every surface shows the same "what's next" instead of ad-hoc hints.
+ */
+export function campaignReadiness(
+  campaign: Pick<GtmCampaign, "plan" | "email" | "outreach" | "conversions">,
+  linkedPosts: number
+) {
+  const steps = [
+    {
+      id: "plan",
+      label: "Plan approved",
+      done: campaign.plan.funnel.length > 0,
+    },
+    { id: "content", label: "Content linked", done: linkedPosts > 0 },
+    {
+      id: "outreach",
+      label: "Outreach configured",
+      done:
+        campaign.email.steps.length > 0 ||
+        campaign.outreach.variants.length > 0,
+    },
+    {
+      id: "tracking",
+      label: "Conversions tracked",
+      done: campaign.conversions.length > 0,
+    },
+  ];
+  return {
+    steps,
+    completed: steps.filter((step) => step.done).length,
+    next: steps.find((step) => !step.done),
+  };
+}

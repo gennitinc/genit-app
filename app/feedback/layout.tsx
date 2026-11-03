@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Feature Requests & Support | Genit AI",
   description:
-    "Submit feature suggestions, share feedback, or request assistance for Genit's AI marketing agents, automation, campaigns, and integrations.",
+    "Report a problem, get help with your account or billing, or suggest a feature or integration for Genit.",
   keywords: [
     "feature requests",
     "Genit support",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Feature Requests & Support | Genit AI",
     description:
-      "Help shape the future of autonomous marketing. Submit suggestions or reach our engineering and support team.",
+      "Report a problem, ask for help, or suggest a feature for Genit.",
     url: "https://www.trygenit.com/feedback",
     type: "website",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Feature Requests & Support | Genit AI",
     description:
-      "Help shape the future of autonomous marketing. Submit suggestions or reach our engineering and support team.",
+      "Report a problem, ask for help, or suggest a feature for Genit.",
     images: ["/opengraph-image.png"],
   },
 };

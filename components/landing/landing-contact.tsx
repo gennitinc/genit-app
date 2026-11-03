@@ -27,12 +27,11 @@ import { apiResponse } from "@/utils/apiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRight,
-  Clock,
   FileText,
-  Globe2,
+  Lightbulb,
+  LifeBuoy,
   Mail,
   Paperclip,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -144,32 +143,23 @@ export default function LandingContact() {
     
 
         <div className='mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16'>
-          {/* Left Column: Narrative & Channels */}
           <div className='space-y-8 lg:col-span-5'>
             <div>
-              <span className='font-mono text-xs font-semibold tracking-wider text-blue-600 uppercase dark:text-blue-400'>
-                {t("Get In Touch")}
-              </span>
-              <h1 className='mt-3 text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
-                {t("Let’s discuss.")}
+              <h1 className='text-3xl font-bold tracking-tight text-neutral-950 sm:text-5xl dark:text-white'>
+                {t("Contact us")}
               </h1>
-              {/* <p className='mt-5 text-pretty text-base leading-7 text-neutral-600 dark:text-neutral-400'>
+              <p className='mt-5 text-base leading-7 text-pretty text-neutral-600 dark:text-neutral-400'>
                 {t(
-                  "Whether you’re exploring autonomous agents for your team, need custom tool integrations, or have questions about our platform architecture, we’re ready to assist."
+                  "Questions about plans, a demo for your team, or a partnership idea. Send a message and a person will reply by email."
                 )}
-              </p> */}
+              </p>
             </div>
 
-            {/* Direct Communication Channels */}
-            <div className='space-y-4 rounded-2xl border border-neutral-200 bg-neutral-50/70 p-6 dark:border-neutral-800 dark:bg-neutral-950/60'>
+            <div className='space-y-4 rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800'>
               <div className='flex items-start gap-3.5'>
-                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
-                  <Mail className='size-4 text-neutral-700 dark:text-neutral-300' />
-                </div>
+                <Mail className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
-                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
-                    Direct Inquiries
-                  </p>
+                  <p className='text-sm text-neutral-500'>{t("Email")}</p>
                   <a
                     href='mailto:support@trygenit.com'
                     className='text-sm font-semibold text-neutral-900 hover:underline dark:text-white'
@@ -178,80 +168,46 @@ export default function LandingContact() {
                   </a>
                 </div>
               </div>
-
-              <div className='flex items-start gap-3.5 pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80'>
-                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
-                  <Clock className='size-4 text-neutral-700 dark:text-neutral-300' />
-                </div>
+              <div className='flex items-start gap-3.5 border-t border-neutral-200 pt-4 dark:border-neutral-800'>
+                <LifeBuoy className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
-                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
-                    Response Time
+                  <p className='text-sm text-neutral-500'>
+                    {t("Already a customer?")}
                   </p>
-                  <p className='text-sm text-neutral-700 dark:text-neutral-300'>
-                    Within 4 business hours
-                  </p>
+                  <Link
+                    href='/feedback?tab=support'
+                    className='text-sm font-semibold text-neutral-900 hover:underline dark:text-white'
+                  >
+                    {t("Open a support ticket")}
+                  </Link>
                 </div>
               </div>
-
-              <div className='flex items-start gap-3.5 pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80'>
-                <div className='flex size-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900'>
-                  <Globe2 className='size-4 text-neutral-700 dark:text-neutral-300' />
-                </div>
+              <div className='flex items-start gap-3.5 border-t border-neutral-200 pt-4 dark:border-neutral-800'>
+                <Lightbulb className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
-                  <p className='text-xs font-mono text-neutral-400 dark:text-neutral-500 uppercase'>
-                    Global Operations
+                  <p className='text-sm text-neutral-500'>
+                    {t("Have a feature idea?")}
                   </p>
-                  <p className='text-sm text-neutral-700 dark:text-neutral-300'>
-                    Support available across US, EMEA &amp; APAC time zones
-                  </p>
+                  <Link
+                    href='/feedback?tab=suggestion'
+                    className='text-sm font-semibold text-neutral-900 hover:underline dark:text-white'
+                  >
+                    {t("Suggest a feature")}
+                  </Link>
                 </div>
               </div>
             </div>
 
-            
-
-            {/* Editorial solutions photo */}
-            <figure className='overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
-              <img
-                className='h-auto max-h-[300px] w-full object-cover'
-                src='https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
-                alt='Dedicated client solutions and onboarding team'
-              />
-              <figcaption className='border-t border-neutral-200 px-4 py-2.5 font-mono text-xs text-neutral-500 dark:border-neutral-800'>
-                Figure 01: Dedicated client solutions &amp; onboarding team
-              </figcaption>
-            </figure>
-
-            {/* Why Genit - Left Border Editorial Style */}
-            <div className='space-y-4 pt-2'>
-              <span className='font-mono text-xs tracking-widest text-neutral-500 uppercase'>
-                Platform Standards
-              </span>
-
-              <ul className='space-y-4 text-sm leading-7 text-neutral-600 dark:text-neutral-400'>
-                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-                  <strong className='font-semibold text-neutral-950 dark:text-white'>
-                    End-to-End Autonomy:
-                  </strong>{" "}
-                  From goal research to cross-channel publishing in one unified system.
-                </li>
-                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-                  <strong className='font-semibold text-neutral-950 dark:text-white'>
-                    Strict Human Verification:
-                  </strong>{" "}
-                  Define precise approval checkpoints before consequential actions occur.
-                </li>
-                <li className='border-l border-neutral-300 ps-4 dark:border-neutral-700'>
-                  <strong className='font-semibold text-neutral-950 dark:text-white'>
-                    Persistent Brand Memory:
-                  </strong>{" "}
-                  Never re-prompt tone, constraints, or guidelines across campaigns.
-                </li>
-              </ul>
-            </div>
+            <figure className=' overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900'>
+          <img
+            className='h-auto max-h-[300px] w-full object-cover'
+            src='https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+            alt='Genit team at work'
+          />
+        </figure>
           </div>
 
-          {/* Right Column: Architectural Form */}
+          {/* Right Column: Form */}
           <div className='lg:col-span-7'>
             <div className='rounded-2xl border border-neutral-200 bg-neutral-50/50 p-6 sm:p-9 dark:border-neutral-800 dark:bg-neutral-950/60'>
               <div className='mb-8 space-y-1.5'>
@@ -260,7 +216,7 @@ export default function LandingContact() {
                 </h2>
                 <p className='text-sm text-neutral-600 dark:text-neutral-400'>
                   {t(
-                    "Fill in your details below and our team will get back to you promptly."
+                    "We reply to every message by email."
                   )}
                 </p>
               </div>

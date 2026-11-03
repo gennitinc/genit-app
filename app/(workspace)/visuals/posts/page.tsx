@@ -14,6 +14,7 @@ import {
   type PostEditorForm,
   getProviderTargetMetadata,
 } from "@/app/(workspace)/visuals/_components/post-editor-dialog";
+import { PostCommentsPanel } from "@/app/(workspace)/visuals/_components/post-comments-panel";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,37 +42,24 @@ import {
 import { useIntegrations } from "@/hooks/use-integrations";
 import { useToast } from "@/hooks/use-toast";
 import {
-  type FacebookPostSummary,
-  type IntegrationConnection,
   type IntegrationPlatform,
   asEffectiveIntegration,
-  deleteFacebookPost,
-  deleteThreadsPost,
-  fetchFacebookInsights,
-  fetchInstagramInsights,
-  fetchPinterestPinAnalytics,
-  fetchThreadsInsights,
-  fetchTikTokVideoMetrics,
-  fetchTweetMetrics,
-  fetchYouTubeAnalytics,
-  listFacebookPosts,
-  listInstagramPosts,
-  listPinterestPins,
-  listThreadsPosts,
-  listTikTokVideos,
-  listUserTweets,
-  listYouTubeVideos,
-  updateFacebookPost,
 } from "@/lib/integrations-api";
 import {
   type SocialPost,
   type SocialPostMedia,
   type SocialPostMetrics,
+  type SocialConnection,
+  type SocialCapability,
   createSocialPosts,
+  deleteConnectionPost,
   deleteSocialPost,
+  fetchConnectionPostAnalytics,
   generateSocialPostText,
   listRemoteSocialPosts,
+  listSocialConnections,
   listSocialPostsPage,
+  updateConnectionPost,
   publishSocialPosts,
   scheduledPostIso,
   scheduledPostLocalValue,
@@ -83,7 +71,6 @@ import { GradientFrame } from "@/utils/gradient-frame";
 import {
   useInfiniteQuery,
   useMutation,
-  useQueries,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -95,7 +82,6 @@ import {
   Eye,
   FileText,
   Heart,
-  Loader2,
   type LucideIcon,
   MessageCircle,
   MoreHorizontal,
@@ -175,6 +161,7 @@ const EMPTY_FORM: PostEditorForm = {
   youtubeMadeForKids: false,
   status: "draft",
   scheduledFor: "",
+  campaignId: "",
 };
 
 type DisplayPost = SocialPost & {
@@ -183,6 +170,22 @@ type DisplayPost = SocialPost & {
   thumbnailUrl?: string;
 };
 type View = "live" | "scheduled" | "drafts";
+type DetailTab = "analytics" | "comments";
+type LiveFetchFailure = {
+  integrationId: string;
+  platform: IntegrationPlatform;
+  accountName: string;
+  message: string;
+};
+
+function errorMessage(error: any) {
+  return (
+    error?.response?.data?.msg ||
+    error?.response?.data?.message ||
+    error?.message ||
+    "Could not load posts from this account."
+  );
+}
 
 function PlatformIcon({
   platform,
@@ -252,25 +255,6 @@ function isVideoMedia(url?: string) {
   );
 }
 
-function facebookMedia(post: FacebookPostSummary) {
-  const attachment = post.attachments?.data?.[0];
-  const child = attachment?.subattachments?.data?.[0];
-  const item = child || attachment;
-  const mediaType = item?.media_type || attachment?.media_type;
-  const thumbnailUrl =
-    post.full_picture ||
-    item?.media?.image?.src ||
-    attachment?.media?.image?.src;
-  const videoUrl = mediaType?.toLowerCase().includes("video")
-    ? item?.media?.source || attachment?.media?.source
-    : undefined;
-  return {
-    mediaType: videoUrl ? mediaType : "image",
-    mediaUrl: videoUrl || thumbnailUrl,
-    thumbnailUrl,
-  };
-}
-
 function MediaPreview({ post }: { post: DisplayPost }) {
   const [failed, setFailed] = useState(false);
   const primaryMedia = post.media?.[0];
@@ -308,351 +292,60 @@ function MediaPreview({ post }: { post: DisplayPost }) {
   );
 }
 
-function metricValue(source: unknown, names: string[]): number {
-  if (!source || typeof source !== "object") return 0;
-  for (const [key, value] of Object.entries(source)) {
-    if (names.includes(key.toLowerCase())) {
-      const parsed = Number(
-        typeof value === "object" && value && "value" in value
-          ? (value as { value: unknown }).value
-          : value
-      );
-      if (Number.isFinite(parsed)) return parsed;
-    }
-    const nested = metricValue(value, names);
-    if (nested) return nested;
-  }
-  return 0;
-}
-
-function namedMetricValue(source: unknown, names: string[]): number {
-  if (!source || typeof source !== "object") return 0;
-  if (!Array.isArray(source)) {
-    const item = source as Record<string, unknown>;
-    const metricName = String(item.name || item.metric || "").toLowerCase();
-    if (names.includes(metricName)) {
-      const values = Array.isArray(item.values) ? item.values : [item];
-      return values.reduce((total, entry) => {
-        if (!entry || typeof entry !== "object") return total;
-        const value = (entry as Record<string, unknown>).value;
-        if (value && typeof value === "object") {
-          return (
-            total +
-            Object.values(value).reduce<number>(
-              (sum, part) => sum + (Number(part) || 0),
-              0
-            )
-          );
-        }
-        return total + (Number(value) || 0);
-      }, 0);
-    }
-  }
-  for (const value of Object.values(source)) {
-    const found = namedMetricValue(value, names);
-    if (found) return found;
-  }
-  return 0;
-}
-
-function tabularMetricValue(source: unknown, names: string[]): number {
-  if (!source || typeof source !== "object") return 0;
-  const table = source as {
-    columnHeaders?: Array<{ name?: string }>;
-    rows?: unknown[][];
-  };
-  if (table.columnHeaders && table.rows) {
-    const index = table.columnHeaders.findIndex((header) =>
-      names.includes(String(header.name || "").toLowerCase())
-    );
-    if (index >= 0)
-      return table.rows.reduce(
-        (total, row) => total + (Number(row[index]) || 0),
-        0
-      );
-  }
-  return 0;
-}
-
-function analyticsValue(raw: unknown, names: string[]) {
-  return (
-    metricValue(raw, names) ||
-    namedMetricValue(raw, names) ||
-    tabularMetricValue(raw, names)
-  );
-}
-
-function normalizeAnalytics(raw: unknown, fallback: SocialPostMetrics) {
-  return {
-    impressions:
-      analyticsValue(raw, [
-        "impressions",
-        "impression_count",
-        "impressioncount",
-        "post_impressions",
-        "reach",
-      ]) || fallback.impressions,
-    views:
-      analyticsValue(raw, [
-        "views",
-        "view_count",
-        "viewcount",
-        "video_views",
-      ]) || fallback.views,
-    likes:
-      analyticsValue(raw, ["likes", "like_count", "likecount", "reactions"]) ||
-      fallback.likes,
-    comments:
-      analyticsValue(raw, [
-        "comments",
-        "comment_count",
-        "commentcount",
-        "replies",
-      ]) || fallback.comments,
-    shares:
-      analyticsValue(raw, [
-        "shares",
-        "share_count",
-        "sharecount",
-        "retweet_count",
-        "reposts",
-        "quotes",
-      ]) || fallback.shares,
-    clicks:
-      analyticsValue(raw, [
-        "clicks",
-        "click_count",
-        "clickcount",
-        "post_clicks",
-        "pin_click",
-        "pin_clicks",
-      ]) || fallback.clicks,
-  };
-}
-
+// Every connected account is read through the same server endpoint; the
+// server picks the platform adapter. Each post is attributed to the
+// connection that fetched it, never to a provider-supplied id, so one
+// account's posts cannot surface under another.
 async function fetchLivePosts(
-  connections: IntegrationConnection[]
-): Promise<DisplayPost[]> {
+  connections: SocialConnection[]
+): Promise<{ posts: DisplayPost[]; failures: LiveFetchFailure[] }> {
   const results = await Promise.allSettled(
-    connections.map(async (connection): Promise<DisplayPost[]> => {
-      if (connection.metadata?.provider === "composio")
-        return (await listRemoteSocialPosts(connection._id, 50)).map(
-          (post) => ({
-            ...post,
-            remote: true,
-          })
-        );
-      const base = {
-        integration: connection._id,
-        accountName: connection.accountName,
-        platform: connection.platform,
-        source: "integration" as const,
-        status: "published" as const,
-        updatedAt: new Date().toISOString(),
-        remote: true,
-      };
-      if (connection.platform === "facebook")
-        return (await listFacebookPosts(connection._id, 50)).map((post) => ({
-          ...base,
-          ...facebookMedia(post),
-          _id: `remote:${connection._id}:facebook:${post.id}`,
-          externalId: post.id,
-          content: post.message || "Facebook post",
-          permalink: post.permalink_url,
-          createdAt: post.created_time || base.updatedAt,
-          metrics: {
-            ...EMPTY_METRICS,
-            impressions: analyticsValue(post.insights, ["post_impressions"]),
-            likes: post.reactions?.summary?.total_count || 0,
-            comments: post.comments?.summary?.total_count || 0,
-            shares: post.shares?.count || 0,
-            clicks: analyticsValue(post.insights, ["post_clicks"]),
-          },
-        }));
-      if (connection.platform === "instagram")
-        return (await listInstagramPosts(connection._id, 50)).map((post) => ({
-          ...base,
-          _id: `remote:${connection._id}:instagram:${post.id}`,
-          externalId: post.id,
-          content: post.caption || "Instagram post",
-          mediaType: post.media_type,
-          mediaUrl: post.media_url,
-          thumbnailUrl: post.thumbnail_url || post.media_url,
-          permalink: post.permalink,
-          createdAt: post.timestamp || base.updatedAt,
-          metrics: {
-            ...EMPTY_METRICS,
-            likes: post.like_count || 0,
-            comments: post.comments_count || 0,
-          },
-        }));
-      if (connection.platform === "threads")
-        return (await listThreadsPosts(connection._id, 50)).map((post) => ({
-          ...base,
-          _id: `remote:${connection._id}:threads:${post.id}`,
-          externalId: post.id,
-          content: post.text || "Threads post",
-          mediaType: post.media_type,
-          mediaUrl: post.media_url,
-          thumbnailUrl:
-            post.media_type === "IMAGE" ? post.media_url : undefined,
-          permalink: post.permalink,
-          createdAt: post.timestamp || base.updatedAt,
-          metrics: EMPTY_METRICS,
-        }));
-      if (connection.platform === "x")
-        return (
-          await listUserTweets(connection._id, { maxResults: 50 })
-        ).tweets.map((post) => {
-          const media = post.media?.[0];
-          return {
-            ...base,
-            _id: `remote:${connection._id}:x:${post.id}`,
-            externalId: post.id,
-            content: post.text,
-            mediaType: media?.type,
-            mediaUrl: media?.type === "photo" ? media.url : media?.url,
-            thumbnailUrl: media?.preview_image_url || media?.url,
-            permalink: `https://x.com/${connection.accountName}/status/${post.id}`,
-            createdAt: post.created_at || base.updatedAt,
-            metrics: {
-              ...EMPTY_METRICS,
-              impressions: post.public_metrics?.impression_count || 0,
-              likes: post.public_metrics?.like_count || 0,
-              comments: post.public_metrics?.reply_count || 0,
-              shares:
-                (post.public_metrics?.retweet_count || 0) +
-                (post.public_metrics?.quote_count || 0),
-            },
-          };
-        });
-      if (connection.platform === "tiktok")
-        return (
-          await listTikTokVideos(connection._id, { maxCount: 50 })
-        ).videos.map((post) => ({
-          ...base,
-          _id: `remote:${connection._id}:tiktok:${post.id}`,
-          externalId: post.id,
-          title: post.title,
-          content: post.video_description || post.title || "TikTok video",
-          mediaUrl: post.cover_image_url,
-          thumbnailUrl: post.cover_image_url,
-          permalink: post.share_url,
-          createdAt: post.create_time
-            ? new Date(post.create_time * 1000).toISOString()
-            : base.updatedAt,
-          metrics: {
-            ...EMPTY_METRICS,
-            views: post.view_count || 0,
-            likes: post.like_count || 0,
-            comments: post.comment_count || 0,
-            shares: post.share_count || 0,
-          },
-        }));
-      if (connection.platform === "youtube")
-        return (
-          await listYouTubeVideos(connection._id, { maxResults: 50 })
-        ).videos.map((post) => ({
-          ...base,
-          _id: `remote:${connection._id}:youtube:${post.id}`,
-          externalId: post.id,
-          title: post.snippet?.title,
-          content:
-            post.snippet?.description || post.snippet?.title || "YouTube video",
-          mediaUrl:
-            post.snippet?.thumbnails?.medium?.url ||
-            post.snippet?.thumbnails?.default?.url,
-          thumbnailUrl:
-            post.snippet?.thumbnails?.medium?.url ||
-            post.snippet?.thumbnails?.default?.url,
-          permalink: `https://youtube.com/watch?v=${post.id}`,
-          createdAt: post.snippet?.publishedAt || base.updatedAt,
-          metrics: {
-            ...EMPTY_METRICS,
-            views: Number(post.statistics?.viewCount) || 0,
-            likes: Number(post.statistics?.likeCount) || 0,
-            comments: Number(post.statistics?.commentCount) || 0,
-          },
-        }));
-      if (connection.platform === "pinterest")
-        return (
-          await listPinterestPins(connection._id, { pageSize: 50 })
-        ).pins.map((post) => ({
-          ...base,
-          _id: `remote:${connection._id}:pinterest:${post.id}`,
-          externalId: post.id,
-          title: post.title,
-          content: post.description || post.title || "Pinterest pin",
-          mediaUrl: Object.values(post.media?.images || {})[0]?.url,
-          thumbnailUrl: Object.values(post.media?.images || {})[0]?.url,
-          permalink: post.link,
-          createdAt: post.created_at || base.updatedAt,
-          metrics: EMPTY_METRICS,
-        }));
-      return [];
-    })
+    connections.map((connection) =>
+      listRemoteSocialPosts(connection._id, 50)
+    )
   );
+  const failures: LiveFetchFailure[] = [];
   const posts = results.flatMap((result, index) => {
-    if (result.status === "fulfilled") return result.value;
+    const connection = connections[index];
+    if (result.status === "fulfilled")
+      return result.value.map((post) => ({
+        ...post,
+        remote: true,
+        integration: connection._id,
+        platform: connection.platform,
+        accountName: connection.accountName,
+      }));
     // Do not make one unavailable provider hide posts from every other
-    // connected account, but preserve the provider error for diagnostics.
+    // connected account; report which account failed instead.
     console.error(
-      `[Visuals/Posts] Could not fetch ${connections[index]?.platform} posts for ${connections[index]?.accountName}:`,
+      `[Visuals/Posts] Could not fetch ${connection.platform} posts for ${connection.accountName}:`,
       result.reason
     );
+    failures.push({
+      integrationId: connection._id,
+      platform: connection.platform,
+      accountName: connection.accountName,
+      message: errorMessage(result.reason),
+    });
     return [];
   });
-  const failure = results.find(
-    (result): result is PromiseRejectedResult => result.status === "rejected"
-  );
-  if (!posts.length && failure) throw failure.reason;
-  return posts;
+  if (!posts.length && failures.length === connections.length && failures[0])
+    throw new Error(failures[0].message);
+  return { posts, failures };
 }
 
-async function fetchPostAnalytics(post: DisplayPost) {
-  if (!post.integration || !post.externalId)
-    return post.metrics || EMPTY_METRICS;
-  const end = new Date();
-  const start = new Date(end);
-  start.setDate(start.getDate() - 28);
-  const dates = {
-    startDate: start.toISOString().slice(0, 10),
-    endDate: end.toISOString().slice(0, 10),
+function mergeMetrics(
+  live: SocialPostMetrics,
+  fallback: SocialPostMetrics = EMPTY_METRICS
+): SocialPostMetrics {
+  return {
+    impressions: live.impressions || fallback.impressions,
+    views: live.views || fallback.views,
+    likes: live.likes || fallback.likes,
+    comments: live.comments || fallback.comments,
+    shares: live.shares || fallback.shares,
+    clicks: live.clicks || fallback.clicks,
   };
-  let raw: unknown;
-  if (post.platform === "x")
-    raw = await fetchTweetMetrics(post.integration, post.externalId);
-  else if (post.platform === "tiktok")
-    raw = (
-      await fetchTikTokVideoMetrics(post.integration, [post.externalId])
-    )[0];
-  else if (post.platform === "youtube")
-    raw = await fetchYouTubeAnalytics(post.integration, {
-      ...dates,
-      videoId: post.externalId,
-    });
-  else if (post.platform === "pinterest")
-    raw = await fetchPinterestPinAnalytics(
-      post.integration,
-      post.externalId,
-      dates
-    );
-  else if (post.platform === "threads")
-    raw = await fetchThreadsInsights(post.integration, {
-      mediaId: post.externalId,
-      metric: ["views", "likes", "replies", "reposts", "quotes", "shares"],
-    });
-  else if (post.platform === "instagram")
-    raw = await fetchInstagramInsights(post.integration, {
-      mediaId: post.externalId,
-      metric: ["views", "reach", "likes", "comments", "shares", "saved"],
-    });
-  else if (post.platform === "facebook")
-    raw = await fetchFacebookInsights(post.integration, {
-      mediaId: post.externalId,
-      metric: ["post_impressions", "post_engaged_users", "post_clicks"],
-    });
-  return normalizeAnalytics(raw, post.metrics || EMPTY_METRICS);
 }
 
 export default function PostsPage() {
@@ -672,9 +365,11 @@ export default function PostsPage() {
   const [editing, setEditing] = useState<DisplayPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<DisplayPost | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
-  const [analyticsPost, setAnalyticsPost] = useState<DisplayPost | null>(null);
+  const [detailPost, setDetailPost] = useState<DisplayPost | null>(null);
+  const [detailTab, setDetailTab] = useState<DetailTab>("analytics");
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
+  // Accounts the post editor can publish to.
   const connected = useMemo(
     () =>
       integrations
@@ -683,20 +378,47 @@ export default function PostsPage() {
         .filter((item) => PLATFORMS.includes(item.platform)),
     [integrations]
   );
-  const managedConnectionIds = useMemo(
+  // Accounts with live content, and what each one supports, come from the
+  // server's platform adapters.
+  const connectionsQuery = useQuery({
+    queryKey: [
+      "social-connections",
+      orgId || "none",
+      ...integrations.map((item) => `${item._id}:${item.updatedAt}`),
+    ],
+    queryFn: listSocialConnections,
+    enabled: Boolean(orgId),
+    staleTime: 30_000,
+  });
+  const socialConnections = useMemo(
+    () => connectionsQuery.data || [],
+    [connectionsQuery.data]
+  );
+  const connectionById = useMemo(
+    () => new Map(socialConnections.map((item) => [item._id, item])),
+    [socialConnections]
+  );
+  const liveConnections = useMemo(
     () =>
-      new Set(
-        integrations
-          .filter((item) => item.platform === "composio")
-          .map((item) => item._id)
+      socialConnections.filter((item) =>
+        item.capabilities.includes("listPosts")
       ),
-    [integrations]
+    [socialConnections]
   );
-  const liveConnections = connected;
   const activeConnectionIds = useMemo(
-    () => new Set(connected.map((item) => item._id)),
-    [connected]
+    () => new Set(socialConnections.map((item) => item._id)),
+    [socialConnections]
   );
+  // A post's actions depend on its connected account's adapter.
+  function can(post: DisplayPost | null, capability: SocialCapability) {
+    return Boolean(
+      post?.integration &&
+      post.externalId &&
+      connectionById.get(String(post.integration))?.capabilities.includes(
+        capability
+      )
+    );
+  }
   const postsQuery = useInfiniteQuery({
     queryKey: ["social-posts", orgId || "none", "pages"],
     queryFn: ({ pageParam }) =>
@@ -721,13 +443,19 @@ export default function PostsPage() {
     staleTime: 60_000,
   });
   const analyticsQuery = useQuery({
-    queryKey: ["post-analytics", orgId || "none", analyticsPost?._id],
-    queryFn: () => fetchPostAnalytics(analyticsPost!),
-    enabled: Boolean(
-      analyticsPost &&
-      (!analyticsPost.integration ||
-        !managedConnectionIds.has(analyticsPost.integration))
-    ),
+    queryKey: [
+      "post-analytics",
+      orgId || "none",
+      detailPost?.integration,
+      detailPost?.externalId,
+    ],
+    queryFn: () =>
+      fetchConnectionPostAnalytics(
+        String(detailPost!.integration),
+        detailPost!.externalId!
+      ),
+    enabled: can(detailPost, "analytics"),
+    retry: false,
   });
 
   useEffect(() => {
@@ -760,7 +488,9 @@ export default function PostsPage() {
   );
   const live = useMemo(() => {
     const combined: DisplayPost[] = [
-      ...(liveQuery.data || []),
+      ...(liveQuery.data?.posts || []).filter((post) =>
+        activeConnectionIds.has(String(post.integration))
+      ),
       ...workspacePosts.filter(
         (post) =>
           post.status === "published" &&
@@ -780,38 +510,6 @@ export default function PostsPage() {
         ) === index
     );
   }, [activeConnectionIds, liveQuery.data, workspacePosts]);
-  const liveAnalyticsQueries = useQueries({
-    queries: live.map((post) => ({
-      queryKey: ["post-analytics", orgId || "none", post._id],
-      queryFn: () => fetchPostAnalytics(post),
-      enabled: Boolean(
-        post.integration &&
-        post.externalId &&
-        !managedConnectionIds.has(post.integration)
-      ),
-      staleTime: 5 * 60_000,
-      retry: false,
-    })),
-  });
-  const liveMetricsById = useMemo(
-    () =>
-      new Map(
-        live.map((post, index) => [
-          post._id,
-          liveAnalyticsQueries[index]?.data || post.metrics || EMPTY_METRICS,
-        ])
-      ),
-    [live, liveAnalyticsQueries]
-  );
-  const loadingMetricIds = useMemo(
-    () =>
-      new Set(
-        live
-          .filter((_post, index) => liveAnalyticsQueries[index]?.isLoading)
-          .map((post) => post._id)
-      ),
-    [live, liveAnalyticsQueries]
-  );
   const viewPosts: DisplayPost[] =
     view === "live" ? live : view === "scheduled" ? scheduled : drafts;
   const visible: DisplayPost[] = viewPosts.filter((post) => {
@@ -840,6 +538,7 @@ export default function PostsPage() {
           youtubePlaylistPrivacyStatus: form.youtubePlaylistPrivacyStatus,
           youtubePrivacyStatus: form.youtubePrivacyStatus,
           youtubeMadeForKids: form.youtubeMadeForKids,
+          campaignId: form.campaignId || undefined,
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
@@ -848,15 +547,18 @@ export default function PostsPage() {
             : undefined,
       };
       if (editing) {
-        if (editing.remote && editing.platform === "facebook") {
-          if (!editing.integration || !editing.externalId)
+        if (editing.remote) {
+          if (!can(editing, "updatePost"))
             throw new Error(
-              "This Facebook post is missing its account details."
+              `${LABEL[editing.platform] || editing.platform} posts cannot be edited after publishing.`
             );
-          await updateFacebookPost(
-            editing.integration,
-            editing.externalId,
-            form.content
+          await updateConnectionPost(
+            String(editing.integration),
+            editing.externalId!,
+            {
+              content: form.content,
+              ...(editing.title !== undefined ? { title: form.title } : {}),
+            }
           );
           return [editing];
         }
@@ -887,6 +589,7 @@ export default function PostsPage() {
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["social-posts"] });
       queryClient.invalidateQueries({ queryKey: ["connected-social-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["gtm_campaigns"] });
       setEditorOpen(false);
       const count = result.length;
       toast({
@@ -910,23 +613,22 @@ export default function PostsPage() {
   });
   const removeMutation = useMutation({
     mutationFn: async (post: DisplayPost) => {
-      if (post.remote && post.platform === "facebook") {
-        if (!post.integration || !post.externalId)
-          throw new Error("This Facebook post is missing its account details.");
-        await deleteFacebookPost(post.integration, post.externalId);
+      // Published posts are removed from the platform itself (the server
+      // also retires the workspace copy); drafts only exist in Genit.
+      if (can(post, "deletePost")) {
+        await deleteConnectionPost(String(post.integration), post.externalId!);
         return;
       }
-      if (post.remote && post.platform === "threads") {
-        if (!post.integration || !post.externalId)
-          throw new Error("This Threads post is missing its account details.");
-        await deleteThreadsPost(post.integration, post.externalId);
-        return;
-      }
+      if (post.remote)
+        throw new Error(
+          `${LABEL[post.platform] || post.platform} does not allow deleting posts through its API.`
+        );
       await deleteSocialPost(post._id);
     },
-    onSuccess: () => {
+    onSuccess: (_result, post) => {
       queryClient.invalidateQueries({ queryKey: ["social-posts"] });
       queryClient.invalidateQueries({ queryKey: ["connected-social-posts"] });
+      if (detailPost?._id === post._id) setDetailPost(null);
       setDeleteTarget(null);
       toast({ title: "Post deleted" });
     },
@@ -961,15 +663,31 @@ export default function PostsPage() {
       }),
   });
 
-  function openCreate() {
+  function openDetail(post: DisplayPost, tab: DetailTab) {
+    setDetailTab(tab);
+    setDetailPost(post);
+  }
+  function openCreate(campaignId = "") {
     setEditing(null);
     setForm({
       ...EMPTY_FORM,
       platforms: [],
       integrationIds: {},
+      campaignId,
     });
     setEditorOpen(true);
   }
+
+  // Deep link from a campaign: /visuals/posts?compose=1&campaignId=<id>
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("compose") !== "1") return;
+    openCreate(url.searchParams.get("campaignId") || "");
+    url.searchParams.delete("compose");
+    url.searchParams.delete("campaignId");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   function openEdit(post: DisplayPost) {
     setEditing(post);
     setForm({
@@ -1031,13 +749,21 @@ export default function PostsPage() {
         typeof post.metadata?.youtubeMadeForKids === "boolean"
           ? post.metadata.youtubeMadeForKids
           : false,
+      campaignId:
+        typeof post.metadata?.campaignId === "string"
+          ? post.metadata.campaignId
+          : "",
     });
     setEditorOpen(true);
   }
   const loading =
     integrationsLoading ||
     postsQuery.isLoading ||
-    (view === "live" && liveQuery.isLoading);
+    (view === "live" && (connectionsQuery.isLoading || liveQuery.isLoading));
+  // Provider analytics can omit counts the post list already returned.
+  const detailMetrics = analyticsQuery.data
+    ? mergeMetrics(analyticsQuery.data, detailPost?.metrics)
+    : detailPost?.metrics;
   const analyticsMetrics: Array<{
     label: string;
     value: number | undefined;
@@ -1046,32 +772,32 @@ export default function PostsPage() {
     {
       label: "Impressions",
       value:
-        analyticsQuery.data?.impressions ?? analyticsPost?.metrics.impressions,
+        detailMetrics?.impressions,
       icon: Eye,
     },
     {
       label: "Views",
-      value: analyticsQuery.data?.views ?? analyticsPost?.metrics.views,
+      value: detailMetrics?.views,
       icon: BarChart3,
     },
     {
       label: "Likes",
-      value: analyticsQuery.data?.likes ?? analyticsPost?.metrics.likes,
+      value: detailMetrics?.likes,
       icon: Heart,
     },
     {
       label: "Comments",
-      value: analyticsQuery.data?.comments ?? analyticsPost?.metrics.comments,
+      value: detailMetrics?.comments,
       icon: MessageCircle,
     },
     {
       label: "Shares",
-      value: analyticsQuery.data?.shares ?? analyticsPost?.metrics.shares,
+      value: detailMetrics?.shares,
       icon: Share2,
     },
     {
       label: "Clicks",
-      value: analyticsQuery.data?.clicks ?? analyticsPost?.metrics.clicks,
+      value: detailMetrics?.clicks,
       icon: MousePointerClick,
     },
   ];
@@ -1101,7 +827,7 @@ export default function PostsPage() {
               </p>
             </div>
             <Button
-              onClick={openCreate}
+              onClick={() => openCreate()}
               className='mt-4 flex h-9 w-fit items-center gap-2 rounded-md px-4 text-sm disabled:opacity-50'
             >
               <LocalizedText text={"New Post"} />
@@ -1241,6 +967,19 @@ export default function PostsPage() {
           </div>
         </div>
 
+        {view === "live" && Boolean(liveQuery.data?.failures.length) && (
+          <div className='mx-4 mt-4 space-y-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-800 md:mx-5 dark:text-amber-200'>
+            {liveQuery.data?.failures.map((failure) => (
+              <p key={failure.integrationId}>
+                <span className='font-medium'>
+                  {LABEL[failure.platform] || failure.platform} ·{" "}
+                  {failure.accountName}:
+                </span>{" "}
+                {failure.message}
+              </p>
+            ))}
+          </div>
+        )}
         {loading ? (
           <div className='flex min-h-72 items-center justify-center text-zinc-500 dark:text-white/50'>
             <LoadingFileLoader size={24} />
@@ -1280,7 +1019,7 @@ export default function PostsPage() {
               <Button
                 variant='outline'
                 className='mt-5 rounded-md border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
-                onClick={openCreate}
+                onClick={() => openCreate()}
               >
                 <Plus className='mr-2 h-4 w-4' />
                 <LocalizedText text={"New post"} />
@@ -1295,8 +1034,8 @@ export default function PostsPage() {
                 className='group relative mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 align-top transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-[#0c0c0c] dark:hover:bg-white/[0.05]'
               >
                 {(!post.remote ||
-                  post.platform === "facebook" ||
-                  post.platform === "threads") && (
+                  can(post, "updatePost") ||
+                  can(post, "deletePost")) && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
@@ -1307,19 +1046,22 @@ export default function PostsPage() {
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='min-w-36'>
-                      {(!post.remote || post.platform === "facebook") && (
+                      {((!post.remote && post.status !== "published") ||
+                        can(post, "updatePost")) && (
                         <DropdownMenuItem onSelect={() => openEdit(post)}>
                           <Edit3 className='h-3.5 w-3.5' />
                           <LocalizedText text={"Edit"} />
                         </DropdownMenuItem>
                       )}
-                      <DropdownMenuItem
-                        onSelect={() => setDeleteTarget(post)}
-                        className='text-red-600 focus:text-red-600'
-                      >
-                        <Trash2 className='h-3.5 w-3.5' />
-                        <LocalizedText text={"Delete"} />
-                      </DropdownMenuItem>
+                      {(!post.remote || can(post, "deletePost")) && (
+                        <DropdownMenuItem
+                          onSelect={() => setDeleteTarget(post)}
+                          className='text-red-600 focus:text-red-600'
+                        >
+                          <Trash2 className='h-3.5 w-3.5' />
+                          <LocalizedText text={"Delete"} />
+                        </DropdownMenuItem>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
@@ -1376,13 +1118,19 @@ export default function PostsPage() {
                   </p>
                   {view === "live" ? (
                     <div className='mt-4 flex items-center justify-between gap-3 border-t border-zinc-200 pt-3 dark:border-white/10'>
-                      <PostMetrics
-                        metrics={liveMetricsById.get(post._id) || EMPTY_METRICS}
-                        loading={loadingMetricIds.has(post._id)}
-                      />
+                      <PostMetrics metrics={post.metrics || EMPTY_METRICS} />
                       <div className='flex items-center gap-3'>
+                        {can(post, "listComments") && (
+                          <button
+                            onClick={() => openDetail(post, "comments")}
+                            className='flex items-center gap-1 text-[11px] font-semibold text-zinc-600 dark:text-white/70'
+                          >
+                            <LocalizedText text={"Comments"} />
+                            <MessageCircle className='h-3 w-3' />
+                          </button>
+                        )}
                         <button
-                          onClick={() => setAnalyticsPost(post)}
+                          onClick={() => openDetail(post, "analytics")}
                           className='flex items-center gap-1 text-[11px] font-semibold text-sky-300'
                         >
                           <LocalizedText text={"Analytics"} />
@@ -1448,14 +1196,30 @@ export default function PostsPage() {
                   <LocalizedText text={"Delete Post"} />
                 </DialogTitle>
                 <p className='text-muted-foreground mt-2 text-sm dark:text-white/70'>
-                  <LocalizedText
-                    text={"Are you sure you want to delete this post from"}
-                  />{" "}
-                  <span className='text-foreground font-medium dark:text-white'>
-                    {deleteTarget?.accountName ||
-                      LABEL[deleteTarget?.platform || "facebook"]}
-                  </span>
-                  <LocalizedText text={"? This action cannot be undone."} />
+                  {can(deleteTarget, "deletePost") ? (
+                    <>
+                      <LocalizedText
+                        text={"This permanently deletes the post from"}
+                      />{" "}
+                      <span className='text-foreground font-medium dark:text-white'>
+                        {deleteTarget?.accountName ||
+                          LABEL[deleteTarget?.platform || "facebook"]}
+                      </span>
+                      <LocalizedText text={". This action cannot be undone."} />
+                    </>
+                  ) : deleteTarget?.status === "published" ? (
+                    <LocalizedText
+                      text={
+                        "This removes the post from Genit only. It stays live on the platform, which does not allow deleting it through its API."
+                      }
+                    />
+                  ) : (
+                    <LocalizedText
+                      text={
+                        "Are you sure you want to delete this post? This action cannot be undone."
+                      }
+                    />
+                  )}
                 </p>
               </div>
             </div>
@@ -1484,8 +1248,8 @@ export default function PostsPage() {
       </Dialog>
 
       <Dialog
-        open={Boolean(analyticsPost)}
-        onOpenChange={(open) => !open && setAnalyticsPost(null)}
+        open={Boolean(detailPost)}
+        onOpenChange={(open) => !open && setDetailPost(null)}
       >
         <DialogContent
           className='bg-background text-foreground flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-lg border border-black/10 p-0 shadow-2xl sm:max-w-3xl dark:border-white/[0.08] dark:bg-[#0c0c0e] dark:text-white'
@@ -1498,10 +1262,12 @@ export default function PostsPage() {
               </span>
               <div>
                 <DialogTitle className='text-foreground text-sm font-semibold dark:text-white'>
-                  <LocalizedText text={"Post analytics"} />
+                  <LocalizedText text={"Post details"} />
                 </DialogTitle>
                 <DialogDescription className='text-muted-foreground text-[11px]'>
-                  <LocalizedText text={"Performance metrics · last 28 days"} />
+                  <LocalizedText
+                    text={"Performance and conversation for this post"}
+                  />
                 </DialogDescription>
               </div>
             </div>
@@ -1517,14 +1283,14 @@ export default function PostsPage() {
                   </h3>
                   <div className='group overflow-hidden rounded-xl border border-black/10 bg-black/[0.015] dark:border-white/[0.08] dark:bg-white/[0.02]'>
                     <div className='relative flex aspect-video w-full items-center justify-center overflow-hidden border-b border-black/5 bg-zinc-100 dark:border-white/[0.05] dark:bg-zinc-900'>
-                      {analyticsPost && <MediaPreview post={analyticsPost} />}
+                      {detailPost && <MediaPreview post={detailPost} />}
                       <div className='absolute top-2 left-2 flex items-center gap-1.5'>
                         <span className='rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-semibold text-white/90 capitalize backdrop-blur'>
-                          {analyticsPost?.status}
+                          {detailPost?.status}
                         </span>
-                        {analyticsPost?.accountName && (
+                        {detailPost?.accountName && (
                           <span className='max-w-28 truncate rounded-full bg-black/60 px-2 py-0.5 text-[9px] text-white/80 backdrop-blur'>
-                            @{analyticsPost.accountName}
+                            @{detailPost.accountName}
                           </span>
                         )}
                       </div>
@@ -1532,32 +1298,60 @@ export default function PostsPage() {
                     <div className='p-3'>
                       <div className='flex items-center justify-between gap-3'>
                         <span className='text-foreground flex items-center gap-2 text-xs font-medium dark:text-white/90'>
-                          {analyticsPost && (
+                          {detailPost && (
                             <PlatformIcon
-                              platform={analyticsPost.platform}
+                              platform={detailPost.platform}
                               className='h-3.5 w-3.5'
                             />
                           )}
-                          {analyticsPost && LABEL[analyticsPost.platform]}
+                          {detailPost && LABEL[detailPost.platform]}
                         </span>
                         <span className='text-muted-foreground text-[10px]'>
-                          {analyticsPost && postDate(analyticsPost)}
+                          {detailPost && postDate(detailPost)}
                         </span>
                       </div>
                       <h4 className='text-foreground mt-2 line-clamp-1 text-sm font-semibold dark:text-white'>
-                        {analyticsPost?.title || "Untitled Post"}
+                        {detailPost?.title || "Untitled Post"}
                       </h4>
                       <p className='text-muted-foreground mt-1 line-clamp-3 text-xs leading-5'>
-                        {analyticsPost?.content || "No caption"}
+                        {detailPost?.content || "No caption"}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right column: Analytics Chart & Metrics */}
+              {/* Right column: analytics or the comment thread */}
               <div className='space-y-4'>
-                {analyticsQuery.isLoading ? (
+                {can(detailPost, "listComments") && (
+                  <div className='grid w-full grid-cols-2 rounded-lg bg-black/[0.04] p-1 dark:bg-white/[0.05]'>
+                    {(["analytics", "comments"] as const).map((tab) => (
+                      <button
+                        key={tab}
+                        type='button'
+                        onClick={() => setDetailTab(tab)}
+                        className={cn(
+                          "rounded-md px-3 py-1.5 text-xs font-semibold capitalize transition",
+                          detailTab === tab
+                            ? "bg-white text-zinc-950 shadow-sm dark:bg-white/15 dark:text-white"
+                            : "text-zinc-500 hover:text-zinc-800 dark:text-white/50 dark:hover:text-white"
+                        )}
+                      >
+                        <LocalizedText text={tab} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {detailTab === "comments" &&
+                detailPost?.integration &&
+                detailPost.externalId &&
+                can(detailPost, "listComments") ? (
+                  <PostCommentsPanel
+                    orgId={orgId}
+                    integrationId={String(detailPost.integration)}
+                    postId={detailPost.externalId}
+                  />
+                ) : analyticsQuery.isLoading ? (
                   <div className='flex h-48 items-center justify-center'>
                     <LoadingFileLoader />
                   </div>
@@ -1664,18 +1458,22 @@ export default function PostsPage() {
           </div>
 
           <DialogFooter className='bg-background/95 gap-2 border-t border-black/5 px-5 py-3 sm:justify-between dark:border-white/[0.05] dark:bg-[#0c0c0e]/95'>
-            <Button
-              variant='outline'
-              onClick={() => analyticsQuery.refetch()}
-              className='rounded-md border-none bg-transparent dark:hover:text-white'
-            >
-              <RefreshCw className='h-4 w-4' />
-              <LocalizedText text={"Refresh"} />
-            </Button>
-            {analyticsPost?.permalink && (
+            {detailTab === "analytics" && can(detailPost, "analytics") ? (
+              <Button
+                variant='outline'
+                onClick={() => analyticsQuery.refetch()}
+                className='rounded-md border-none bg-transparent dark:hover:text-white'
+              >
+                <RefreshCw className='h-4 w-4' />
+                <LocalizedText text={"Refresh"} />
+              </Button>
+            ) : (
+              <span />
+            )}
+            {detailPost?.permalink && (
               <Button asChild className='rounded-md font-medium'>
                 <a
-                  href={analyticsPost.permalink}
+                  href={detailPost.permalink}
                   target='_blank'
                   rel='noreferrer'
                 >

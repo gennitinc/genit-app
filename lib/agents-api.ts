@@ -165,3 +165,15 @@ export async function listAgentRuns(projectId: string): Promise<any[]> {
 export async function deleteAgentRun(runId: string): Promise<void> {
   await apiResponse.delete(`/agents/${runId}`);
 }
+
+export async function resizeAgentBrowser(
+  projectId: string,
+  width: number,
+  height: number
+): Promise<void> {
+  await apiResponse.post("/agents/browser/viewport", {
+    projectId,
+    width,
+    height,
+  });
+}

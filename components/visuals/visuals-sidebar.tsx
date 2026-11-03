@@ -63,7 +63,9 @@ export function VisualsSidebar() {
       {/* Navigation */}
       <nav className='scrollbar-hide flex flex-row gap-1 overflow-x-auto border-b border-zinc-200 pb-4 md:flex-col md:gap-2 md:overflow-x-visible md:border-b-0 md:pb-0 dark:border-zinc-800'>
         {CATEGORIES.map((cat) => {
-          const isActive = pathname === cat.href;
+          const isActive =
+            pathname === cat.href ||
+            (cat.href !== "/visuals" && pathname.startsWith(`${cat.href}/`));
           return (
             <Link
               href={cat.href}

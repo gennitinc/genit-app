@@ -275,12 +275,19 @@ export function TextChatContent({
     doScrollToBottom,
   ]);
 
-  // Force scroll when AI starts thinking/typing
+  // Follow streamed content while the user remains at the bottom.
   useEffect(() => {
-    if (isTyping && isAtBottom) {
+    const agentIsResponding = agentRuns.some((run) => run.status === "running");
+    if ((isTyping || agentIsResponding) && isAtBottomRef.current) {
       doScrollToBottom({ behavior: "auto" });
     }
-  }, [isTyping, isAtBottom, doScrollToBottom]);
+  }, [
+    agentRuns,
+    streamingAnalysis,
+    streamingContent,
+    isTyping,
+    doScrollToBottom,
+  ]);
 
   useEffect(() => {
     // StickToBottom already observes its own scroller. A second observer in
@@ -397,7 +404,9 @@ export function TextChatContent({
     >
       <div
         className={cn(
-          "min-w-0 flex-1 px-2 md:px-6",
+          // No padding here: the scroll container spans the whole pane so its
+          // scrollbar sits on the edge; the content carries the padding.
+          "min-w-0 flex-1",
           useDocumentScroll ? "overflow-visible" : "overflow-hidden"
         )}
       >
@@ -410,7 +419,12 @@ export function TextChatContent({
             useDocumentScroll ? "overflow-visible" : "h-full"
           )}
         >
-          <ConversationContent className='m-0 min-h-full space-y-4 overflow-x-hidden px-0 pb-10'>
+          <ConversationContent
+            // use-stick-to-bottom reserves an inline scrollbar gutter on both
+            // edges; keep it only on the scrollbar side.
+            scrollClassName='[scrollbar-gutter:stable]!'
+            className='m-0 min-h-full space-y-4 overflow-x-hidden px-2 pb-10 md:pr-3 md:pl-5'
+          >
             {allItems.map((item, index) => {
               if (item.type === "agent") {
                 return (

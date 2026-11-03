@@ -32,19 +32,119 @@ export function ChatLayout() {
   );
 }
 
+// Preview width as a percentage of the split; the chat and preview keep
+// these minimum pixel widths whatever the user drags to.
+const PREVIEW_WIDTH_KEY = "genit:preview-width";
+const DEFAULT_PREVIEW_WIDTH = 70;
+const MIN_CHAT_PX = 340;
+const MIN_PREVIEW_PX = 380;
+
+export function clampPreviewWidth(percent: number, containerWidth: number) {
+  if (!containerWidth) return percent;
+  const min = (MIN_PREVIEW_PX / containerWidth) * 100;
+  const max = 100 - (MIN_CHAT_PX / containerWidth) * 100;
+  return Math.min(Math.max(percent, min), Math.max(min, max));
+}
+
+export function PreviewResizeHandle({
+  width,
+  onChange,
+  onResizingChange,
+  containerRef,
+}: {
+  width: number;
+  onChange: (width: number, persist?: boolean) => void;
+  onResizingChange: (resizing: boolean) => void;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [dragging, setDragging] = useState(false);
+  const widthAt = (clientX: number) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return width;
+    return clampPreviewWidth(
+      ((rect.right - clientX) / rect.width) * 100,
+      rect.width
+    );
+  };
+  const setResizing = (value: boolean) => {
+    setDragging(value);
+    onResizingChange(value);
+  };
+
+  return (
+    <>
+      <div
+        role='separator'
+        aria-orientation='vertical'
+        aria-label='Resize chat and preview'
+        aria-valuenow={Math.round(100 - width)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        tabIndex={0}
+        title='Drag to resize · double-click to reset'
+        className='group absolute top-0 bottom-0 z-40 flex w-3 -translate-x-1/2 cursor-col-resize touch-none justify-center outline-none'
+        style={{ left: `${100 - width}%` }}
+        onPointerDown={(event) => {
+          event.preventDefault();
+          event.currentTarget.setPointerCapture(event.pointerId);
+          setResizing(true);
+        }}
+        onPointerMove={(event) => {
+          if (dragging) onChange(widthAt(event.clientX));
+        }}
+        onPointerUp={(event) => {
+          if (!dragging) return;
+          event.currentTarget.releasePointerCapture(event.pointerId);
+          setResizing(false);
+          onChange(widthAt(event.clientX), true);
+        }}
+        onPointerCancel={() => setResizing(false)}
+        onDoubleClick={() => {
+          const rect = containerRef.current?.getBoundingClientRect();
+          onChange(
+            clampPreviewWidth(DEFAULT_PREVIEW_WIDTH, rect?.width || 0),
+            true
+          );
+        }}
+        onKeyDown={(event) => {
+          if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+          event.preventDefault();
+          const rect = containerRef.current?.getBoundingClientRect();
+          const step = event.key === "ArrowLeft" ? 2 : -2;
+          onChange(clampPreviewWidth(width + step, rect?.width || 0), true);
+        }}
+      >
+        <span
+          className={cn(
+            "my-auto h-10 w-1 rounded-full bg-zinc-300 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 dark:bg-zinc-600",
+            dragging && "bg-blue-500 opacity-100 dark:bg-blue-500"
+          )}
+        />
+      </div>
+      {/* Keeps iframes (live browser, documents) from swallowing the drag. */}
+      {dragging && (
+        <div className='fixed inset-0 z-[60] cursor-col-resize select-none' />
+      )}
+    </>
+  );
+}
+
 function PreviewToggle({
   isOpen,
   onToggle,
   className,
+  style,
 }: {
   isOpen: boolean;
   onToggle: () => void;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <button
       type='button'
       onClick={onToggle}
+      style={style}
       className={cn(
         "border-border/50 bg-background/90 hover:bg-accent pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-md border shadow-sm backdrop-blur transition-transform duration-150 active:scale-[0.97]",
         className
@@ -80,6 +180,10 @@ function ChatLayoutInner() {
   const { runs } = useAgentRunsContext();
   const isGenerationActive =
     Boolean(isGeneratingImage) || (liveNodes?.length ?? 0) > 0;
+  const activeAgentRun = [...runs]
+    .reverse()
+    .find((run) => run.status === "running");
+  const isWorkActive = isGenerationActive || Boolean(activeAgentRun);
 
   const latestMessagePreview = useMemo(
     () => getLatestMessagePreview(messages),
@@ -125,10 +229,41 @@ function ChatLayoutInner() {
     focusedPreviewType || latestPreview?.type || categoryPreviewType;
 
   const hasAnyPreview =
-    isGenerationActive || Boolean(artifactPreview) || Boolean(previewType);
+    isWorkActive || Boolean(artifactPreview) || Boolean(previewType);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [previewWidth, setPreviewWidth] = useState(DEFAULT_PREVIEW_WIDTH);
+  const [isResizingPreview, setIsResizingPreview] = useState(false);
+  const splitRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try {
+      const saved = Number(localStorage.getItem(PREVIEW_WIDTH_KEY));
+      if (saved > 0 && saved < 100) setPreviewWidth(saved);
+    } catch {}
+  }, []);
+
+  // Keep both panes above their minimum widths when the window shrinks.
+  useEffect(() => {
+    const clampToWindow = () =>
+      setPreviewWidth((width) =>
+        clampPreviewWidth(width, splitRef.current?.clientWidth || 0)
+      );
+    window.addEventListener("resize", clampToWindow);
+    return () => window.removeEventListener("resize", clampToWindow);
+  }, []);
+
+  const changePreviewWidth = (width: number, persist = false) => {
+    setPreviewWidth(width);
+    if (!persist) return;
+    try {
+      localStorage.setItem(
+        PREVIEW_WIDTH_KEY,
+        String(Math.round(width * 10) / 10)
+      );
+    } catch {}
+  };
   const useDocumentScroll = !isDesktop || !isPreviewOpen;
   const prevActiveRef = useRef(false);
   const initialOpenForProjectRef = useRef<string | null>(null);
@@ -156,13 +291,13 @@ function ChatLayoutInner() {
     }
   }, [project?._id, hasAnyPreview]);
 
-  // Auto-open on rising edge of active generation (overrides a prior manual close).
+  // Auto-open on the rising edge of any agent work (overrides a prior manual close).
   useEffect(() => {
-    if (isGenerationActive && !prevActiveRef.current) {
+    if (isWorkActive && !prevActiveRef.current) {
       setIsPreviewOpen(true);
     }
-    prevActiveRef.current = isGenerationActive;
-  }, [isGenerationActive]);
+    prevActiveRef.current = isWorkActive;
+  }, [isWorkActive]);
 
   useEffect(() => {
     if (artifactPreview) setIsPreviewOpen(true);
@@ -195,9 +330,11 @@ function ChatLayoutInner() {
 
       {isDesktop ? (
         <div
+          ref={splitRef}
           className={cn(
             "relative flex min-h-0 w-full flex-1",
-            isPreviewOpen ? "overflow-hidden" : "overflow-visible"
+            isPreviewOpen ? "overflow-hidden" : "overflow-visible",
+            isResizingPreview && "select-none"
           )}
         >
           {isPreviewOpen && (
@@ -206,12 +343,23 @@ function ChatLayoutInner() {
               onToggle={() => setIsPreviewOpen(false)}
               className={cn(
                 "absolute top-2 z-50",
-                isFullscreen ? "left-3" : "left-[37.5%] -translate-x-1/2"
+                isFullscreen ? "left-3" : "-translate-x-1/2"
               )}
+              style={
+                isFullscreen ? undefined : { left: `${100 - previewWidth}%` }
+              }
+            />
+          )}
+          {isPreviewOpen && !isFullscreen && (
+            <PreviewResizeHandle
+              width={previewWidth}
+              onChange={changePreviewWidth}
+              onResizingChange={setIsResizingPreview}
+              containerRef={splitRef}
             />
           )}
           <motion.div
-            layout={isPreviewOpen}
+            layout={isPreviewOpen && !isResizingPreview}
             transition={{
               type: "spring",
               damping: 30,
@@ -243,16 +391,16 @@ function ChatLayoutInner() {
                 key='preview-pane'
                 initial={{ width: 0, opacity: 0 }}
                 animate={{
-                  width: isFullscreen ? "100%" : "62.5%",
+                  width: isFullscreen ? "100%" : `${previewWidth}%`,
                   opacity: 1,
                 }}
                 exit={{ width: 0, opacity: 0 }}
-                transition={{
-                  type: "spring",
-                  damping: 30,
-                  stiffness: 220,
-                  mass: 0.8,
-                }}
+                // Follow the pointer exactly while dragging the divider.
+                transition={
+                  isResizingPreview
+                    ? { duration: 0 }
+                    : { type: "spring", damping: 30, stiffness: 220, mass: 0.8 }
+                }
                 className={cn(
                   "relative h-full shrink-0 overflow-hidden",
                   isFullscreen ? "p-0" : "p-2"
@@ -267,6 +415,8 @@ function ChatLayoutInner() {
                 >
                   <PreviewPanel
                     previewType={previewType}
+                    thinking={activeAgentRun?.thinking}
+                    isThinking={Boolean(activeAgentRun)}
                     isFullscreen={isFullscreen}
                     onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
                   />

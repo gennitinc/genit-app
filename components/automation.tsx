@@ -1097,6 +1097,11 @@ export default function AutomationWorkflow({
       case "trigger":
         baseData.triggerType = subtype || "schedule";
         baseData.scheduleFrequency = "Every Monday";
+        if (baseData.triggerType === "schedule") {
+          baseData.scheduleClock = "09:00";
+          baseData.timezone =
+            Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+        }
         baseData.filterField = "";
         baseData.filterValue = "";
         if (subtype === "composio_event") {

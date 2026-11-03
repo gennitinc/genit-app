@@ -105,10 +105,21 @@ export interface CallSession {
     | "failed";
   joinUrl?: string;
   error?: string;
-  metadata?: { meetingProvider?: "google_meet" | "microsoft_teams" } & Record<
-    string,
-    unknown
-  >;
+  metadata?: {
+    meetingProvider?: "google_meet" | "microsoft_teams";
+    transport?: "browser" | "gateway";
+    offerSdp?: string;
+    remoteAnswerSdp?: string;
+    claimedBy?: string;
+  } & Record<string, unknown>;
+  conversation?:
+    | string
+    | {
+        _id: string;
+        customerName?: string;
+        customerAvatar?: string;
+        customerHandle?: string;
+      };
   createdAt: string;
   answeredAt?: string;
   endedAt?: string;
@@ -124,6 +135,7 @@ export interface CallCapabilities {
     available: boolean;
     permissionGranted: boolean;
     gatewayConfigured: boolean;
+    browserCalling?: boolean;
     reason?: string;
   };
 }
@@ -258,6 +270,7 @@ export async function createConversationCall(
     callType: "audio" | "video";
     meetingProvider?: "google_meet" | "microsoft_teams";
     message?: string;
+    sdp?: string;
   }
 ): Promise<CallSession> {
   const res = await apiResponse.post(
@@ -278,6 +291,24 @@ export async function requestConversationCallPermission(
     `/inbox/conversations/${conversationId}/call-permission`,
     input
   );
+  return res.data.call;
+}
+
+export async function fetchLiveCalls(): Promise<CallSession[]> {
+  const res = await apiResponse.get("/inbox/calls/live");
+  return res.data.calls;
+}
+
+export async function acceptCall(
+  callId: string,
+  input: { stage: "pre_accept" | "accept"; sdp?: string }
+): Promise<CallSession> {
+  const res = await apiResponse.post(`/inbox/calls/${callId}/accept`, input);
+  return res.data.call;
+}
+
+export async function rejectCall(callId: string): Promise<CallSession> {
+  const res = await apiResponse.post(`/inbox/calls/${callId}/reject`);
   return res.data.call;
 }
 

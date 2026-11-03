@@ -124,6 +124,7 @@ export function HomeCommandCenter({
           youtubePlaylistPrivacyStatus: form.youtubePlaylistPrivacyStatus,
           youtubePrivacyStatus: form.youtubePrivacyStatus,
           youtubeMadeForKids: form.youtubeMadeForKids,
+          campaignId: form.campaignId || undefined,
         },
         status: form.status === "published" ? "draft" : form.status,
         scheduledFor:
@@ -308,6 +309,10 @@ export function HomeCommandCenter({
         typeof post.metadata?.youtubeMadeForKids === "boolean"
           ? post.metadata.youtubeMadeForKids
           : false,
+      campaignId:
+        typeof post.metadata?.campaignId === "string"
+          ? post.metadata.campaignId
+          : "",
     });
     setEditorOpen(true);
   }

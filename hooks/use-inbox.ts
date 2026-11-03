@@ -33,11 +33,13 @@ import {
 } from "@tanstack/react-query";
 import cookie from "js-cookie";
 import { type Socket, io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function inboxConversationsQueryKey(filters: InboxFilters = {}) {
   return ["inbox_conversations", filters] as const;
 }
+
+export const inboxLiveCallsQueryKey = ["inbox_calls_live"] as const;
 
 export function inboxMessagesQueryKey(conversationId: string) {
   return ["inbox_messages", conversationId] as const;
@@ -101,9 +103,14 @@ export function useInboxRealtime(activeConversationId?: string) {
   const qc = useQueryClient();
   const { user } = useUserContext();
   const [connected, setConnected] = useState(false);
+  const socketRef = useRef<Socket | null>(null);
+  const activeRef = useRef(activeConversationId);
+  activeRef.current = activeConversationId;
   const organizationId =
     user?.currentOrganization?._id || user?.business?._id || "";
 
+  // One socket per organization. Switching conversations only changes rooms;
+  // reconnecting on every click dropped events and re-ran the auth handshake.
   useEffect(() => {
     if (!organizationId) return;
 
@@ -112,6 +119,7 @@ export function useInboxRealtime(activeConversationId?: string) {
       transports: ["websocket", "polling"],
       withCredentials: true,
     });
+    socketRef.current = socket;
 
     const refreshInbox = (event: InboxRealtimeEvent) => {
       if (event.organizationId !== organizationId) return;
@@ -122,18 +130,12 @@ export function useInboxRealtime(activeConversationId?: string) {
       );
       if (event.type === "integration.updated")
         qc.invalidateQueries({ queryKey: ["integrations"] });
-      if (event.conversationId) {
+      if (event.type.startsWith("call."))
+        void qc.invalidateQueries({ queryKey: inboxLiveCallsQueryKey });
+      const conversationId = event.conversationId || activeRef.current;
+      if (conversationId) {
         void qc.invalidateQueries(
-          { queryKey: inboxMessagesQueryKey(event.conversationId) },
-          { cancelRefetch: false }
-        );
-      }
-      if (
-        activeConversationId &&
-        (!event.conversationId || event.conversationId === activeConversationId)
-      ) {
-        void qc.invalidateQueries(
-          { queryKey: inboxMessagesQueryKey(activeConversationId) },
+          { queryKey: inboxMessagesQueryKey(conversationId) },
           { cancelRefetch: false }
         );
       }
@@ -142,9 +144,14 @@ export function useInboxRealtime(activeConversationId?: string) {
     socket.on("connect", () => {
       setConnected(true);
       socket.emit("join-inbox", organizationId);
-      if (activeConversationId) {
-        socket.emit("join-inbox-conversation", activeConversationId);
-      }
+      if (activeRef.current)
+        socket.emit("join-inbox-conversation", activeRef.current);
+      // Anything emitted while disconnected was missed; catch up once.
+      void qc.invalidateQueries({ queryKey: ["inbox_conversations"] });
+      if (activeRef.current)
+        void qc.invalidateQueries({
+          queryKey: inboxMessagesQueryKey(activeRef.current),
+        });
     });
     socket.on("disconnect", () => setConnected(false));
     socket.on("inbox:update", refreshInbox);
@@ -152,13 +159,21 @@ export function useInboxRealtime(activeConversationId?: string) {
     return () => {
       socket.off("inbox:update", refreshInbox);
       socket.emit("leave-inbox", organizationId);
-      if (activeConversationId) {
-        socket.emit("leave-inbox-conversation", activeConversationId);
-      }
       socket.disconnect();
+      socketRef.current = null;
       setConnected(false);
     };
-  }, [activeConversationId, organizationId, qc]);
+  }, [organizationId, qc]);
+
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (!socket || !activeConversationId) return;
+    if (socket.connected)
+      socket.emit("join-inbox-conversation", activeConversationId);
+    return () => {
+      socket.emit("leave-inbox-conversation", activeConversationId);
+    };
+  }, [activeConversationId, organizationId]);
 
   return connected;
 }

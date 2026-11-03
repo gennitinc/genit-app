@@ -140,6 +140,7 @@ export type GtmAttribution = {
   conversionValue: number;
   spend: number;
   roi: number | null;
+  postCount: number;
 };
 
 export type GtmCampaignPage = {
@@ -180,6 +181,13 @@ export async function listGtmCampaigns(
     `/gtm/campaigns?${params}`
   );
   return data;
+}
+
+export async function getGtmCampaign(id: string): Promise<GtmCampaign> {
+  const { data } = await apiResponse.get<{ campaign: GtmCampaign }>(
+    `/gtm/campaigns/${id}`
+  );
+  return data.campaign;
 }
 
 export async function regenerateGtmPlan(id: string): Promise<GtmCampaign> {
@@ -252,7 +260,10 @@ export async function getGtmAttribution(id: string): Promise<GtmAttribution> {
   return data;
 }
 
-export async function runGtmOptimizer(id: string) {
+export async function runGtmOptimizer(id: string): Promise<{
+  campaign: GtmCampaign;
+  recommendations: GtmCampaign["recommendations"];
+}> {
   const { data } = await apiResponse.post(`/gtm/campaigns/${id}/optimize`);
   return data;
 }
@@ -354,6 +365,7 @@ export async function exportGtmReport(id: string): Promise<{
 export type CampaignOutreachSnapshot = {
   campaign: GtmCampaign;
   recipients: CampaignRecipient[];
+  recipientPagination: GtmCampaignPage["pagination"];
   stats: Partial<Record<CampaignRecipient["status"], number>>;
   jobs: Array<{
     _id: string;
@@ -364,9 +376,23 @@ export type CampaignOutreachSnapshot = {
   }>;
 };
 
-export async function getCampaignOutreach(id: string) {
+export async function getCampaignOutreach(
+  id: string,
+  options: {
+    page?: number;
+    limit?: number;
+    status?: CampaignRecipient["status"] | "all";
+  } = {}
+) {
+  const params = new URLSearchParams({
+    page: String(options.page || 1),
+    limit: String(options.limit || 25),
+    ...(options.status && options.status !== "all"
+      ? { status: options.status }
+      : {}),
+  });
   const { data } = await apiResponse.get<CampaignOutreachSnapshot>(
-    `/gtm/campaigns/${id}/outreach`
+    `/gtm/campaigns/${id}/outreach?${params}`
   );
   return data;
 }

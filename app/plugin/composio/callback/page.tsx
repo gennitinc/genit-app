@@ -29,7 +29,11 @@ export default function ComposioCallbackPage() {
           params.get("error_description") || params.get("error");
         if (!toolkit) throw new Error("The connection callback is incomplete.");
         if (providerError) throw new Error(providerError);
-        const integration = await syncComposioConnection(toolkit, platform);
+        const integration = await syncComposioConnection(
+          toolkit,
+          platform,
+          params.get("connected_account_id") || undefined
+        );
         message = {
           type: "genit:integration:connected",
           platform,
