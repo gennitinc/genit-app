@@ -1,5 +1,6 @@
 "use client";
 
+import { AutoReplyInstructions } from "./auto-reply-instructions";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import {
@@ -571,32 +572,45 @@ export function ManageDialog({
                           "messenger",
                           "telegram",
                         ].includes(platform) && (
-                          <div className='mt-3 flex items-center justify-between gap-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
-                            <div className='min-w-0'>
-                              <p className='text-foreground text-xs font-medium'>
-                                <LocalizedText text={"AI auto-replies"} />
-                              </p>
-                              <p className='text-muted-foreground mt-0.5 text-[11px]'>
-                                <LocalizedText
-                                  text={
-                                    "New inbound messages land in Unified Inbox and get a Genit AI reply. Turn off for manual admin response."
-                                  }
-                                />
-                              </p>
+                          <div className='mt-3 rounded-md border border-black/5 bg-white/70 px-3 py-2 dark:border-white/10 dark:bg-white/5'>
+                            <div className='flex items-center justify-between gap-3'>
+                              <div className='min-w-0'>
+                                <p className='text-foreground text-xs font-medium'>
+                                  <LocalizedText text={"AI auto-replies"} />
+                                </p>
+                                <p className='text-muted-foreground mt-0.5 text-[11px]'>
+                                  <LocalizedText
+                                    text={
+                                      "Answers customers from your Brand Brain a few seconds after they stop typing, and hands the chat to your team when it isn't sure."
+                                    }
+                                  />
+                                </p>
+                              </div>
+                              <Switch
+                                checked={Boolean(
+                                  conn.metadata?.inboxAutoReplyEnabled ||
+                                  conn.metadata?.telegramAutoReplyEnabled
+                                )}
+                                disabled={
+                                  updateInboxSettings.isPending ||
+                                  telegramBusinessPending
+                                }
+                                onCheckedChange={(checked) =>
+                                  handleAutoReply(conn._id, checked)
+                                }
+                              />
                             </div>
-                            <Switch
-                              checked={Boolean(
-                                conn.metadata?.inboxAutoReplyEnabled ||
-                                conn.metadata?.telegramAutoReplyEnabled
-                              )}
-                              disabled={
-                                updateInboxSettings.isPending ||
-                                telegramBusinessPending
-                              }
-                              onCheckedChange={(checked) =>
-                                handleAutoReply(conn._id, checked)
-                              }
-                            />
+                            {Boolean(
+                              conn.metadata?.inboxAutoReplyEnabled ||
+                              conn.metadata?.telegramAutoReplyEnabled
+                            ) && (
+                              <AutoReplyInstructions
+                                integrationId={conn._id}
+                                initial={
+                                  conn.metadata?.inboxAutoReplyInstruction
+                                }
+                              />
+                            )}
                           </div>
                         )}
 

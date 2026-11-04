@@ -438,6 +438,7 @@ export async function updateIntegrationInboxSettings(
     autoReplyEnabled?: boolean;
     commentAutoReplyEnabled?: boolean;
     linkedInAuthorUrn?: string;
+    autoReplyInstruction?: string;
   }
 ): Promise<Record<string, any>> {
   const { data } = await apiResponse.patch<{

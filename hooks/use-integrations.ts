@@ -185,16 +185,19 @@ export function useUpdateIntegrationInboxSettings() {
       autoReplyEnabled,
       commentAutoReplyEnabled,
       linkedInAuthorUrn,
+      autoReplyInstruction,
     }: {
       id: string;
       autoReplyEnabled?: boolean;
       commentAutoReplyEnabled?: boolean;
       linkedInAuthorUrn?: string;
+      autoReplyInstruction?: string;
     }) =>
       updateIntegrationInboxSettings(id, {
         autoReplyEnabled,
         commentAutoReplyEnabled,
         linkedInAuthorUrn,
+        autoReplyInstruction,
       }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: integrationsQueryKey(orgId) });
