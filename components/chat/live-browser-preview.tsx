@@ -44,6 +44,7 @@ type LiveState = {
   landscape?: boolean;
   pageStatus?: { kind: string; reason: string; provider?: string };
   verificationCleared?: boolean;
+  verificationRejected?: boolean;
 };
 type LiveDevice = "desktop" | "tablet" | "mobile";
 
@@ -89,6 +90,7 @@ export function LiveBrowserPreview({
   const { resolvedTheme } = useTheme();
   const [state, setState] = React.useState<LiveState | null>(null);
   const [status, setStatus] = React.useState<LiveStatus>("connecting");
+  const [renderStuck, setRenderStuck] = React.useState(false);
   const [devtools, setDevtools] = React.useState({ open: false, errors: 0 });
   const [address, setAddress] = React.useState(displayUrl || "");
   const [editing, setEditing] = React.useState(false);
@@ -138,6 +140,7 @@ export function LiveBrowserPreview({
       if (!data || data.source !== "genit-live") return;
       if (data.type === "state" && data.state) setState(data.state);
       else if (data.type === "status") setStatus(data.status);
+      else if (data.type === "render") setRenderStuck(!!data.stuck);
       else if (data.type === "devtools")
         setDevtools({ open: !!data.open, errors: Number(data.errors) || 0 });
       else if (data.type === "ready" && resolvedTheme)
@@ -434,11 +437,41 @@ export function LiveBrowserPreview({
           <p className='flex-1'>
             {state.pageStatus.reason}.{" "}
             {userInControl ? (
-              <LocalizedText text="Complete it in the browser below, then reply “I'm done” in the chat." />
+              state.verificationRejected ? (
+                <LocalizedText text="This site keeps rejecting Genit's cloud browser. It isn't something you did. Open the site in your own browser and paste what you need into chat." />
+              ) : renderStuck ? (
+                <LocalizedText text="This page isn't displaying here. Reload it, or open the site in your browser and paste what you need into chat." />
+              ) : (
+                <LocalizedText text="Complete the check below, then reply “I'm done” in the chat." />
+              )
             ) : (
-              <LocalizedText text="The agent can't do this for you. Take control to complete it yourself." />
+              <LocalizedText text='If the site clears the check, Genit can continue automatically. You can also take control.' />
             )}
           </p>
+          {renderStuck && (
+            <Button
+              size='sm'
+              variant='outline'
+              className='h-7 text-xs'
+              onClick={() => command({ type: "reload" })}
+            >
+              <LocalizedText text='Reload' />
+            </Button>
+          )}
+          {(renderStuck || state.verificationRejected) &&
+            /^https?:\/\//i.test(currentUrl) && (
+              <Button
+                asChild
+                size='sm'
+                variant='outline'
+                className='h-7 text-xs'
+              >
+                <a href={currentUrl} target='_blank' rel='noopener noreferrer'>
+                  <ExternalLink className='h-3.5 w-3.5' />
+                  <LocalizedText text='Open site' />
+                </a>
+              </Button>
+            )}
           {!userInControl && (
             <Button
               size='sm'

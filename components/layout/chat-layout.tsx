@@ -2,6 +2,8 @@
 
 import { PreviewPanel } from "../chat/preview-panel";
 import { TextChatContent } from "../chat/text-chat-content";
+import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import { LocalizedText } from "@/components/localized-text";
 import {
   AgentRunsProvider,
   useAgentRunsContext,
@@ -19,7 +21,7 @@ import {
 } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { PanelRightClose, PanelRightOpen, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -232,6 +234,8 @@ function ChatLayoutInner() {
     isWorkActive || Boolean(artifactPreview) || Boolean(previewType);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  // Below desktop the preview is a drawer, opened only when the person asks.
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [previewWidth, setPreviewWidth] = useState(DEFAULT_PREVIEW_WIDTH);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
@@ -300,11 +304,15 @@ function ChatLayoutInner() {
   }, [isWorkActive]);
 
   useEffect(() => {
-    if (artifactPreview) setIsPreviewOpen(true);
+    if (artifactPreview) {
+      setIsPreviewOpen(true);
+      setIsDrawerOpen(true);
+    }
   }, [artifactPreview]);
 
   useEffect(() => {
     if (!hasAnyPreview) {
+      setIsDrawerOpen(false);
       setIsPreviewOpen(false);
       setIsFullscreen(false);
     }
@@ -430,6 +438,41 @@ function ChatLayoutInner() {
           <div className='flex flex-1 flex-col'>
             <TextChatContent useDocumentScroll />
           </div>
+          {hasAnyPreview && !isDrawerOpen && (
+            <div className='pointer-events-none fixed top-14 right-3 z-40'>
+              <PreviewToggle
+                isOpen={false}
+                onToggle={() => setIsDrawerOpen(true)}
+              />
+            </div>
+          )}
+          <Drawer
+            open={isDrawerOpen}
+            onOpenChange={setIsDrawerOpen}
+            handleOnly
+            shouldScaleBackground={false}
+          >
+            <DrawerContent className='bg-background flex h-[92dvh] max-h-[92dvh] flex-col outline-none'>
+              <DrawerTitle className='sr-only'>
+                <LocalizedText text={"Preview"} />
+              </DrawerTitle>
+              <button
+                type='button'
+                onClick={() => setIsDrawerOpen(false)}
+                aria-label='Close preview'
+                className='hover:bg-accent absolute top-1.5 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md'
+              >
+                <X className='h-4 w-4' />
+              </button>
+              <div className='mt-3 min-h-0 flex-1 overflow-hidden p-1'>
+                <PreviewPanel
+                  previewType={previewType}
+                  thinking={activeAgentRun?.thinking}
+                  isThinking={Boolean(activeAgentRun)}
+                />
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
       )}
     </div>

@@ -1284,8 +1284,11 @@ export function BrowserSessionCard({ data }: { data: any }) {
       openUrl: data?.url || undefined,
     });
 
+  // On phones and tablets the preview is a drawer over the chat, so it opens
+  // when the person asks rather than whenever a browser card appears.
   useEffect(() => {
-    if (liveViewUrl) showPreview();
+    if (liveViewUrl && window.matchMedia("(min-width: 1024px)").matches)
+      showPreview();
   }, [liveViewUrl]);
 
   return (
