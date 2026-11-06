@@ -34,7 +34,7 @@ interface ScrapedPin {
   boardName?: string;
   score?: number;
   reason?: string;
-  source?: "pinterest" | "rag";
+  source?: "pinterest" | "rag" | "board";
   isRecommended?: boolean;
 }
 
