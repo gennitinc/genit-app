@@ -9,6 +9,7 @@ import {
   Layers,
   Library,
   Megaphone,
+  Target,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ const CATEGORIES = [
     href: "/visuals/posts",
   },
   { id: "inbox", label: "Inbox", icon: Inbox, href: "/visuals/inbox" },
+  { id: "pipeline", label: "Pipeline", icon: Target, href: "/visuals/pipeline" },
   {
     id: "calendar",
     label: "Calendar",

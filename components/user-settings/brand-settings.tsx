@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { AgentSkillsSettings } from "@/components/user-settings/agent-skills-settings";
 import { BrandBrainSettings } from "@/components/user-settings/brand-brain-settings";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
@@ -620,6 +621,8 @@ export default function BrandSettings() {
         </Card>
 
         <BrandBrainSettings organization={currentOrg} readOnly={isReadOnly} />
+
+        <AgentSkillsSettings organization={currentOrg} readOnly={isReadOnly} />
 
         {!isReadOnly && (
           <div className='bg-background/80 sticky bottom-0 -mx-1 flex items-center justify-end gap-2 border-t py-3 backdrop-blur'>

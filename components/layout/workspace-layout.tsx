@@ -1,6 +1,7 @@
 "use client";
 
 import { AppSidebar } from "./app-sidebar";
+import { ChatFab } from "./chat-fab";
 import TopNavWithAurora from "./top-nav-with-aurora";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import withAuth from "@/helper/hoc/withAuth";
@@ -24,6 +25,7 @@ function AuthenticatedWorkspace({ children }: { children: React.ReactNode }) {
         />
         <main className='flex min-h-0 flex-1 flex-col'>{children}</main>
       </div>
+      <ChatFab />
     </div>
   );
 }
