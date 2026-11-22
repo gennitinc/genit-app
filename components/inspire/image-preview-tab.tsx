@@ -11,20 +11,8 @@ import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { communityApi } from "@/utils/inspire-api";
-import {
-  Clock,
-  Copy,
-  Download,
-  ImageIcon,
-  Loader2,
-  Maximize2,
-  Monitor,
-  Palette,
-  RefreshCw,
-  Share2,
-  Upload,
-  Wand2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowExpand01Icon, Image01Icon, RefreshIcon, Copy01Icon, Download01Icon, Share08Icon, Upload01Icon, PaintBoardIcon, ComputerIcon, Clock01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface GeneratedImage {
@@ -351,7 +339,7 @@ export function ImagePreviewTab({
                   className='flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white transition-colors hover:bg-black/70'
                   title='Fullscreen'
                 >
-                  <Maximize2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowExpand01Icon} className='h-4 w-4' />
                 </button>
               </div>
             </div>
@@ -361,7 +349,7 @@ export function ImagePreviewTab({
           {!isGenerating && generatedImages.length === 0 && (
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
               <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-                <ImageIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+                <HugeiconsIcon icon={Image01Icon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
               </div>
               <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
                 <LocalizedText text={"No images yet"} />
@@ -451,7 +439,7 @@ export function ImagePreviewTab({
                   }}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <RefreshCw className='h-4 w-4' />
+                  <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -476,7 +464,7 @@ export function ImagePreviewTab({
                   }}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Copy className='h-4 w-4' />
+                  <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -492,7 +480,7 @@ export function ImagePreviewTab({
                   onClick={handleDownload}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Download className='h-4 w-4' />
+                  <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -508,7 +496,7 @@ export function ImagePreviewTab({
                   onClick={handleShare}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Share2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={Share08Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -535,12 +523,12 @@ export function ImagePreviewTab({
                 </>
               ) : isPublished ? (
                 <>
-                  <Upload className='h-4 w-4' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                   <LocalizedText text={"Published"} />
                 </>
               ) : (
                 <>
-                  <Upload className='h-4 w-4' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                   <LocalizedText text={"Publish"} />
                 </>
               )}
@@ -561,15 +549,15 @@ export function ImagePreviewTab({
             </div>
             <div className='mt-3 flex flex-wrap gap-3 border-t border-neutral-200 pt-3 dark:border-neutral-700'>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
-                <Palette className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={PaintBoardIcon} className='h-3.5 w-3.5' />
                 {generatedImages[selectedImageIndex]?.style}
               </div>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
-                <Monitor className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={ComputerIcon} className='h-3.5 w-3.5' />
                 {generatedImages[selectedImageIndex]?.resolution}
               </div>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
-                <Clock className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Clock01Icon} className='h-3.5 w-3.5' />
                 {generatedImages[selectedImageIndex]?.createdAt
                   ? new Date(
                       generatedImages[selectedImageIndex].createdAt

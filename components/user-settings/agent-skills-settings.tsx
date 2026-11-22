@@ -23,7 +23,8 @@ import {
   fetchAgentSkills,
   updateAgentSkill,
 } from "@/lib/agent-skills-api";
-import { ChevronDown, Plus, Save, Trash2, Upload, Wand2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Delete02Icon, FloppyDiskIcon, MagicWand01Icon, Upload01Icon, PlusSignIcon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 const emptyDraft = { name: "", description: "", instructions: "" };
@@ -225,7 +226,7 @@ export function AgentSkillsSettings({
       <div className='flex flex-wrap justify-end gap-2'>
         {skill && (
           <Button type='button' variant='outline' onClick={() => remove(skill)}>
-            <Trash2 className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Delete"} />
           </Button>
         )}
@@ -238,7 +239,7 @@ export function AgentSkillsSettings({
             !draft.instructions.trim()
           }
         >
-          <Save className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={FloppyDiskIcon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Save skill"} />
         </Button>
       </div>
@@ -251,7 +252,7 @@ export function AgentSkillsSettings({
         <div className='flex flex-col gap-3 md:flex-row md:items-start md:justify-between'>
           <div>
             <CardTitle className='flex items-center gap-2 text-base'>
-              <Wand2 className='h-4 w-4' />
+              <HugeiconsIcon icon={MagicWand01Icon} className='h-4 w-4' />
               <LocalizedText text={"Agent skills"} />
             </CardTitle>
             <CardDescription>
@@ -278,7 +279,7 @@ export function AgentSkillsSettings({
               disabled={!editable || busy || atLimit}
               onClick={() => fileInput.current?.click()}
             >
-              <Upload className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={Upload01Icon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"Import SKILL.md"} />
             </Button>
             <Button
@@ -287,7 +288,7 @@ export function AgentSkillsSettings({
               disabled={!editable || busy || atLimit}
               onClick={() => open(NEW)}
             >
-              <Plus className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"New skill"} />
             </Button>
           </div>
@@ -331,7 +332,7 @@ export function AgentSkillsSettings({
                         {skill.description}
                       </p>
                     </div>
-                    <ChevronDown
+                    <HugeiconsIcon icon={ArrowDown01Icon}
                       className={`text-muted-foreground h-4 w-4 shrink-0 transition-transform ${
                         openId === skill._id ? "rotate-180" : ""
                       }`}

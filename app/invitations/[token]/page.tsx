@@ -1,13 +1,14 @@
 "use client";
 
 import { LocalizedText } from "@/components/localized-text";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { OrgLogo } from "@/components/ui/org-logo";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import cookie from "js-cookie";
-import { Building2, Loader2, MailWarning, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MailRemove01Icon, Building03Icon, UserGroupIcon } from "@hugeicons/core-free-icons";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
@@ -116,7 +117,7 @@ export default function AcceptInvitationPage() {
     return (
       <main className='flex min-h-[80vh] items-center justify-center px-4'>
         <div className='max-w-md text-center'>
-          <MailWarning className='text-muted-foreground mx-auto mb-3 h-10 w-10' />
+          <HugeiconsIcon icon={MailRemove01Icon} className='text-muted-foreground mx-auto mb-3 h-10 w-10' />
           <h1 className='text-foreground text-xl font-semibold'>
             <LocalizedText text={"Invitation unavailable"} />
           </h1>
@@ -143,18 +144,12 @@ export default function AcceptInvitationPage() {
     <main className='flex min-h-[80vh] items-center justify-center px-4 py-12'>
       <div className='border-border w-full max-w-md rounded-lg border bg-white p-8 shadow-sm dark:bg-zinc-900'>
         <div className='flex flex-col items-center text-center'>
-          <Avatar className='h-16 w-16 rounded-xl'>
-            {invitation.organization.businessLogo ? (
-              <AvatarImage
-                src={invitation.organization.businessLogo}
-                alt={invitation.organization.businessName}
-                className='object-cover'
-              />
-            ) : null}
-            <AvatarFallback className='rounded-xl bg-linear-to-br from-cyan-500 to-blue-600 text-lg font-semibold text-white'>
-              {invitation.organization.businessName.slice(0, 1).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <OrgLogo
+            src={invitation.organization.businessLogo}
+            name={invitation.organization.businessName}
+            className='h-16 w-16 rounded-xl'
+            fallbackClassName='text-lg'
+          />
 
           <h1 className='text-foreground mt-4 text-2xl font-semibold'>
             <LocalizedText text={"You're invited to"} />
@@ -181,7 +176,7 @@ export default function AcceptInvitationPage() {
                 <LocalizedText text={"Organization"} />
               </p>
               <p className='text-foreground mt-0.5 flex items-center gap-1.5 text-sm'>
-                <Building2 className='h-3.5 w-3.5 opacity-70' />
+                <HugeiconsIcon icon={Building03Icon} className='h-3.5 w-3.5 opacity-70' />
                 {invitation.organization.businessName}
               </p>
             </div>
@@ -190,7 +185,7 @@ export default function AcceptInvitationPage() {
                 <LocalizedText text={"Team"} />
               </p>
               <p className='text-foreground mt-0.5 flex items-center gap-1.5 text-sm'>
-                <Users className='h-3.5 w-3.5 opacity-70' />
+                <HugeiconsIcon icon={UserGroupIcon} className='h-3.5 w-3.5 opacity-70' />
                 {invitation.team.name}
               </p>
             </div>

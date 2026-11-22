@@ -7,33 +7,8 @@ import { cn } from "@/lib/utils";
 import { createYoutubeTimeline } from "@/lib/youtube-timeline";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ArrowLeft,
-  ArrowUp,
-  Bot,
-  Camera,
-  Check,
-  ChevronDown,
-  Clock3,
-  Download,
-  Film,
-  Image as ImageIcon,
-  MapPin,
-  Mic2,
-  Pause,
-  Play,
-  Plus,
-  RefreshCw,
-  SkipBack,
-  SlidersHorizontal,
-  Sparkles,
-  Trash2,
-  Upload,
-  Users,
-  Volume2,
-  WandSparkles,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft02Icon, YoutubeIcon, Image01Icon, Film01Icon, Delete02Icon, PlusSignIcon, ArrowUp02Icon, SparklesIcon, ArrowDown01Icon, Upload01Icon, MagicWand02Icon, UserGroupIcon, Camera01Icon, Mic02Icon, Tick02Icon, Download01Icon, MapPinIcon, Clock01Icon, PreviousIcon, PauseIcon, PlayIcon, VolumeHighIcon, RefreshIcon, BotIcon, SlidersHorizontalIcon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -639,13 +614,13 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
             onClick={() => router.push("/apps")}
             className='absolute top-6 left-6 flex items-center gap-1.5 text-xs font-medium text-zinc-500 transition-colors duration-150 hover:text-zinc-200'
           >
-            <ArrowLeft className='h-3.5 w-3.5' /> Apps
+            <HugeiconsIcon icon={ArrowLeft02Icon} className='h-3.5 w-3.5' /> Apps
           </button>
 
           <div className='w-full max-w-3xl'>
             <div className='mb-10 text-center'>
               <span className='mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 shadow-[0_0_36px_rgba(220,38,38,0.25)]'>
-                <Youtube className='h-6 w-6' />
+                <HugeiconsIcon icon={YoutubeIcon} className='h-6 w-6' />
               </span>
               <h1 className='text-3xl font-semibold tracking-tight sm:text-4xl'>
                 Create your next YouTube story
@@ -672,9 +647,9 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         )}
                       >
                         {mode === "image" ? (
-                          <ImageIcon className='h-4 w-4' />
+                          <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />
                         ) : (
-                          <Film className='h-4 w-4' />
+                          <HugeiconsIcon icon={Film01Icon} className='h-4 w-4' />
                         )}
                         {mode === "image" ? "Image" : "Video"}
                       </button>
@@ -774,7 +749,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         aria-label={`Remove ${character.name}`}
                         className='rounded-lg p-2 text-zinc-600 transition-colors duration-150 hover:bg-red-500/10 hover:text-red-400'
                       >
-                        <Trash2 className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                       </button>
                     </div>
                   ))}
@@ -806,7 +781,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                 <div className='flex flex-wrap items-center justify-between gap-3 px-1'>
                   <div className='flex items-center gap-2'>
                     <label className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/[0.05] text-zinc-300 transition-[background-color,transform] duration-150 hover:bg-white/[0.09] active:scale-[0.97]'>
-                      <Plus className='h-5 w-5' />
+                      <HugeiconsIcon icon={PlusSignIcon} className='h-5 w-5' />
                       <span className='sr-only'>Upload character images</span>
                       <input
                         type='file'
@@ -840,7 +815,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       {generating ? (
                         <LoadingFileLoader size={17} />
                       ) : (
-                        <ArrowUp className='h-5 w-5' />
+                        <HugeiconsIcon icon={ArrowUp02Icon} className='h-5 w-5' />
                       )}
                     </button>
                   </div>
@@ -867,11 +842,11 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
               onClick={() => router.push("/apps")}
               className='mb-3 flex items-center gap-1.5 text-xs font-medium text-zinc-500 transition-colors duration-150 hover:text-zinc-200'
             >
-              <ArrowLeft className='h-3.5 w-3.5' /> Apps
+              <HugeiconsIcon icon={ArrowLeft02Icon} className='h-3.5 w-3.5' /> Apps
             </button>
             <div className='flex items-center gap-3'>
               <span className='flex h-10 w-10 items-center justify-center rounded-xl bg-red-600 shadow-[0_0_28px_rgba(220,38,38,0.22)]'>
-                <Youtube className='h-5 w-5' />
+                <HugeiconsIcon icon={YoutubeIcon} className='h-5 w-5' />
               </span>
               <div>
                 <h1 className='text-xl font-semibold tracking-tight sm:text-2xl'>
@@ -905,7 +880,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                     A title is enough. A full script works too.
                   </p>
                 </div>
-                <Sparkles className='h-4 w-4 text-red-400' />
+                <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4 text-red-400' />
               </div>
 
               <label className='mb-2 block text-xs font-medium text-zinc-400'>
@@ -936,7 +911,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className='pointer-events-none absolute top-3.5 right-3 h-4 w-4 text-zinc-500' />
+                    <HugeiconsIcon icon={ArrowDown01Icon} className='pointer-events-none absolute top-3.5 right-3 h-4 w-4 text-zinc-500' />
                   </span>
                 </label>
                 <label className='space-y-2 text-xs font-medium text-zinc-400'>
@@ -956,7 +931,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       <option>5-10 minutes</option>
                       <option>10-20 minutes</option>
                     </select>
-                    <ChevronDown className='pointer-events-none absolute top-3.5 right-3 h-4 w-4 text-zinc-500' />
+                    <HugeiconsIcon icon={ArrowDown01Icon} className='pointer-events-none absolute top-3.5 right-3 h-4 w-4 text-zinc-500' />
                   </span>
                 </label>
               </div>
@@ -978,9 +953,9 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       )}
                     >
                       {mode === "image" ? (
-                        <ImageIcon className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Image01Icon} className='h-3.5 w-3.5' />
                       ) : (
-                        <Film className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Film01Icon} className='h-3.5 w-3.5' />
                       )}
                       {mode === "image" ? "Image scenes" : "Video scenes"}
                     </button>
@@ -1035,7 +1010,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                 </div>
 
                 <label className='flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-white/15 bg-white/[0.025] px-3 py-4 text-xs font-medium text-zinc-400 transition-[border-color,background-color,color] duration-150 hover:border-red-500/40 hover:bg-red-500/[0.04] hover:text-zinc-200'>
-                  <Upload className='h-4 w-4' /> Upload character images
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' /> Upload character images
                   <input
                     type='file'
                     accept='image/*'
@@ -1077,7 +1052,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           aria-label={`Remove ${character.name}`}
                           className='rounded-lg p-2 text-zinc-600 transition-colors duration-150 hover:bg-red-500/10 hover:text-red-400'
                         >
-                          <Trash2 className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                         </button>
                       </div>
                     ))}
@@ -1096,7 +1071,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                   </>
                 ) : (
                   <>
-                    <WandSparkles className='mr-2 h-4 w-4' />{" "}
+                    <HugeiconsIcon icon={MagicWand02Icon} className='mr-2 h-4 w-4' />{" "}
                     {storyboard
                       ? "Regenerate storyboard"
                       : "Generate storyboard"}
@@ -1110,9 +1085,9 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
             {!storyboard ? (
               <div className='flex min-h-[680px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.015] px-6 text-center'>
                 <div className='relative mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-white/10 bg-white/[0.04]'>
-                  <Film className='h-8 w-8 text-zinc-500' />
+                  <HugeiconsIcon icon={Film01Icon} className='h-8 w-8 text-zinc-500' />
                   <span className='absolute -right-2 -bottom-2 flex h-8 w-8 items-center justify-center rounded-xl bg-red-600'>
-                    <Sparkles className='h-4 w-4' />
+                    <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4' />
                   </span>
                 </div>
                 <h2 className='text-lg font-semibold'>
@@ -1124,17 +1099,17 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                 </p>
                 <div className='mt-8 grid w-full max-w-xl grid-cols-3 gap-3 text-left'>
                   {[
-                    [Users, "Consistent cast", "Persistent character IDs"],
-                    [Camera, "Scene direction", "Action, emotion & camera"],
-                    [Mic2, "Complete audio", "Dialogue & narration"],
+                    [UserGroupIcon, "Consistent cast", "Persistent character IDs"],
+                    [Camera01Icon, "Scene direction", "Action, emotion & camera"],
+                    [Mic02Icon, "Complete audio", "Dialogue & narration"],
                   ].map(([Icon, title, copy]) => {
-                    const FeatureIcon = Icon as typeof Users;
+                    const FeatureIcon = Icon as typeof UserGroupIcon;
                     return (
                       <div
                         key={title as string}
                         className='rounded-xl border border-white/10 bg-white/[0.025] p-3'
                       >
-                        <FeatureIcon className='mb-3 h-4 w-4 text-red-400' />
+                        <HugeiconsIcon icon={FeatureIcon} className='mb-3 h-4 w-4 text-red-400' />
                         <p className='text-xs font-medium'>{title as string}</p>
                         <p className='mt-1 text-[10px] leading-4 text-zinc-600'>
                           {copy as string}
@@ -1150,7 +1125,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                   <div className='mb-4 flex flex-wrap items-start justify-between gap-4'>
                     <div className='max-w-3xl'>
                       <div className='mb-2 flex items-center gap-2 text-[10px] font-semibold tracking-[0.18em] text-red-400 uppercase'>
-                        <Check className='h-3.5 w-3.5' /> Storyboard ready
+                        <HugeiconsIcon icon={Tick02Icon} className='h-3.5 w-3.5' /> Storyboard ready
                       </div>
                       <h2 className='text-xl font-semibold tracking-tight sm:text-2xl'>
                         {storyboard.title}
@@ -1177,7 +1152,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           </>
                         ) : (
                           <>
-                            <WandSparkles className='mr-1.5 h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={MagicWand02Icon} className='mr-1.5 h-3.5 w-3.5' />
                             Generate production
                           </>
                         )}
@@ -1195,7 +1170,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           </>
                         ) : (
                           <>
-                            <Download className='mr-1.5 h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={Download01Icon} className='mr-1.5 h-3.5 w-3.5' />
                             {exportUrl ? "Download MP4" : "Export MP4"}
                           </>
                         )}
@@ -1221,11 +1196,11 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         )}
                       >
                         {tab === "storyboard" ? (
-                          <Film className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={Film01Icon} className='h-3.5 w-3.5' />
                         ) : tab === "characters" ? (
-                          <Users className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={UserGroupIcon} className='h-3.5 w-3.5' />
                         ) : (
-                          <Camera className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={Camera01Icon} className='h-3.5 w-3.5' />
                         )}
                         {tab}
                       </button>
@@ -1248,7 +1223,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           />
                         ) : (
                           <div className='flex aspect-video items-center justify-center bg-gradient-to-br from-red-500/10 to-transparent'>
-                            <Users className='h-8 w-8 text-zinc-700' />
+                            <HugeiconsIcon icon={UserGroupIcon} className='h-8 w-8 text-zinc-700' />
                           </div>
                         )}
                         <div className='p-4'>
@@ -1298,7 +1273,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                             )
                           ) : (
                             <div className='max-w-md px-6 text-center'>
-                              <Film className='mx-auto mb-4 h-9 w-9 text-zinc-700' />
+                              <HugeiconsIcon icon={Film01Icon} className='mx-auto mb-4 h-9 w-9 text-zinc-700' />
                               <p className='text-sm font-medium text-zinc-300'>
                                 {activeScene?.scene.title || "Timeline preview"}
                               </p>
@@ -1333,15 +1308,15 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         </p>
                         <div className='mt-4 space-y-2 text-[11px] text-zinc-500'>
                           <p className='flex items-center gap-2'>
-                            <Camera className='h-3.5 w-3.5' />{" "}
+                            <HugeiconsIcon icon={Camera01Icon} className='h-3.5 w-3.5' />{" "}
                             {activeScene?.scene.camera}
                           </p>
                           <p className='flex items-center gap-2'>
-                            <MapPin className='h-3.5 w-3.5' />{" "}
+                            <HugeiconsIcon icon={MapPinIcon} className='h-3.5 w-3.5' />{" "}
                             {activeScene?.scene.location}
                           </p>
                           <p className='flex items-center gap-2'>
-                            <Clock3 className='h-3.5 w-3.5' />{" "}
+                            <HugeiconsIcon icon={Clock01Icon} className='h-3.5 w-3.5' />{" "}
                             {activeScene
                               ? `${activeScene.start.toFixed(1)}s – ${activeScene.end.toFixed(1)}s`
                               : "—"}
@@ -1370,7 +1345,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           aria-label='Go to beginning'
                           className='rounded-lg p-2 text-zinc-500 transition-colors duration-150 hover:bg-white/5 hover:text-white'
                         >
-                          <SkipBack className='h-4 w-4' />
+                          <HugeiconsIcon icon={PreviousIcon} className='h-4 w-4' />
                         </button>
                         <button
                           onClick={() => setPlaying((current) => !current)}
@@ -1378,9 +1353,9 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           className='flex h-8 w-8 items-center justify-center rounded-full bg-white text-black transition-transform duration-150 active:scale-[0.94]'
                         >
                           {playing ? (
-                            <Pause className='h-3.5 w-3.5 fill-current' />
+                            <HugeiconsIcon icon={PauseIcon} className='h-3.5 w-3.5 fill-current' />
                           ) : (
-                            <Play className='ml-0.5 h-3.5 w-3.5 fill-current' />
+                            <HugeiconsIcon icon={PlayIcon} className='ml-0.5 h-3.5 w-3.5 fill-current' />
                           )}
                         </button>
                         <input
@@ -1396,7 +1371,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                           aria-label='Timeline playhead'
                           className='h-1 flex-1 accent-red-600'
                         />
-                        <Volume2 className='h-4 w-4 text-zinc-600' />
+                        <HugeiconsIcon icon={VolumeHighIcon} className='h-4 w-4 text-zinc-600' />
                       </div>
 
                       <div className='overflow-x-auto'>
@@ -1416,17 +1391,17 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                             [
                               [
                                 "Visuals",
-                                ImageIcon,
+                                Image01Icon,
                                 "bg-blue-500/20 border-blue-400/25 text-blue-200",
                               ],
                               [
                                 "Voiceover",
-                                Mic2,
+                                Mic02Icon,
                                 "bg-emerald-500/20 border-emerald-400/25 text-emerald-200",
                               ],
                               [
                                 "Audio cues",
-                                Volume2,
+                                VolumeHighIcon,
                                 "bg-violet-500/20 border-violet-400/25 text-violet-200",
                               ],
                             ] as const
@@ -1436,7 +1411,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                               className='mt-2 flex h-12 items-center gap-3'
                             >
                               <div className='flex w-[84px] shrink-0 items-center gap-2 text-[10px] font-medium text-zinc-500'>
-                                <TrackIcon className='h-3.5 w-3.5' /> {label}
+                                <HugeiconsIcon icon={TrackIcon} className='h-3.5 w-3.5' /> {label}
                               </div>
                               <div className='relative h-10 flex-1 overflow-hidden rounded-lg bg-white/[0.025]'>
                                 <div
@@ -1508,17 +1483,17 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                                 </p>
                               </div>
                               <div className='flex items-center gap-1.5 text-[10px] text-zinc-500'>
-                                <Clock3 className='h-3 w-3' />{" "}
+                                <HugeiconsIcon icon={Clock01Icon} className='h-3 w-3' />{" "}
                                 {scene.durationSeconds}s
                               </div>
                             </div>
                             <div className='mt-4 flex flex-wrap gap-2 text-[10px] text-zinc-400'>
                               <span className='flex items-center gap-1.5 rounded-md bg-white/[0.045] px-2 py-1.5'>
-                                <MapPin className='h-3 w-3 text-zinc-600' />
+                                <HugeiconsIcon icon={MapPinIcon} className='h-3 w-3 text-zinc-600' />
                                 {scene.location}
                               </span>
                               <span className='flex items-center gap-1.5 rounded-md bg-white/[0.045] px-2 py-1.5'>
-                                <Camera className='h-3 w-3 text-zinc-600' />
+                                <HugeiconsIcon icon={Camera01Icon} className='h-3 w-3 text-zinc-600' />
                                 {scene.camera}
                               </span>
                               {scene.characterIds.map((id) => (
@@ -1555,7 +1530,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                             </div>
                             <div className='mt-3 rounded-xl border border-red-500/10 bg-red-500/[0.035] p-3'>
                               <p className='mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold tracking-wide text-red-400 uppercase'>
-                                <WandSparkles className='h-3 w-3' /> Generation
+                                <HugeiconsIcon icon={MagicWand02Icon} className='h-3 w-3' /> Generation
                                 prompt
                               </p>
                               <p className='text-xs leading-5 text-zinc-400'>
@@ -1593,9 +1568,9 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                         )}
                       >
                         {mode === "image" ? (
-                          <ImageIcon className='h-4 w-4' />
+                          <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />
                         ) : (
-                          <Film className='h-4 w-4' />
+                          <HugeiconsIcon icon={Film01Icon} className='h-4 w-4' />
                         )}
                         {mode === "image" ? "Image" : "Video"}
                       </button>
@@ -1630,7 +1605,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       disabled={generatingAssets || !activeScene}
                       className='flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-xs font-medium text-zinc-300 transition-[background-color,transform] duration-150 hover:bg-white/[0.08] active:scale-[0.97] disabled:opacity-40'
                     >
-                      <RefreshCw className='h-3.5 w-3.5' /> Scene{" "}
+                      <HugeiconsIcon icon={RefreshIcon} className='h-3.5 w-3.5' /> Scene{" "}
                       {activeScene?.scene.number}
                     </button>
                     <button
@@ -1638,14 +1613,14 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                       disabled={generatingAssets}
                       className='flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-xs font-medium text-zinc-300 transition-[background-color,transform] duration-150 hover:bg-white/[0.08] active:scale-[0.97] disabled:opacity-40'
                     >
-                      <WandSparkles className='h-3.5 w-3.5' /> All scenes
+                      <HugeiconsIcon icon={MagicWand02Icon} className='h-3.5 w-3.5' /> All scenes
                     </button>
                     <button
                       onClick={exportUrl ? downloadExport : exportVideo}
                       disabled={exporting}
                       className='flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-xs font-medium text-zinc-300 transition-[background-color,transform] duration-150 hover:bg-white/[0.08] active:scale-[0.97] disabled:opacity-40'
                     >
-                      <Download className='h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={Download01Icon} className='h-3.5 w-3.5' />
                       {exportUrl ? "Download" : "Export"}
                     </button>
                   </div>
@@ -1664,7 +1639,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                     >
                       {message.role === "assistant" && (
                         <span className='flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-red-600/15 text-red-400'>
-                          <Bot className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={BotIcon} className='h-3.5 w-3.5' />
                         </span>
                       )}
                       <p
@@ -1717,13 +1692,13 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                   )}
                 >
                   {chatSettingsOpen ? (
-                    <SlidersHorizontal className='h-4 w-4' />
+                    <HugeiconsIcon icon={SlidersHorizontalIcon} className='h-4 w-4' />
                   ) : (
-                    <Plus className='h-5 w-5' />
+                    <HugeiconsIcon icon={PlusSignIcon} className='h-5 w-5' />
                   )}
                 </button>
                 <span className='flex h-9 min-w-0 items-center gap-1.5 rounded-full bg-white/[0.055] px-3 text-[11px] text-zinc-400'>
-                  <Bot className='h-3.5 w-3.5 shrink-0' />
+                  <HugeiconsIcon icon={BotIcon} className='h-3.5 w-3.5 shrink-0' />
                   <span className='truncate'>
                     Scene {activeScene?.scene.number || 1} · {productionMode} ·{" "}
                     {aspectRatio}
@@ -1736,7 +1711,7 @@ export default function YouTubeWorkflow({ slug }: { slug?: string }) {
                 aria-label='Send command'
                 className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-950 transition-[background-color,transform] duration-150 hover:bg-white active:scale-[0.94] disabled:bg-white/5 disabled:text-zinc-700'
               >
-                <ArrowUp className='h-4 w-4' />
+                <HugeiconsIcon icon={ArrowUp02Icon} className='h-4 w-4' />
               </button>
             </div>
           </div>

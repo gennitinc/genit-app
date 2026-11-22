@@ -6,13 +6,8 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
-import {
-  CornerDownRight,
-  Edit2,
-  Loader2,
-  MoreVertical,
-  Trash2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MoreVerticalIcon, PencilEdit02Icon, Delete02Icon, ArrowMoveDownRightIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Socket, io } from "socket.io-client";
@@ -220,7 +215,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger asChild>
                     <button className='text-zinc-400 transition-colors hover:text-black dark:hover:text-white'>
-                      <MoreVertical className='h-4 w-4' />
+                      <HugeiconsIcon icon={MoreVerticalIcon} className='h-4 w-4' />
                     </button>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Portal>
@@ -236,7 +231,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                           }}
                           className='flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-zinc-700 outline-none hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800'
                         >
-                          <Edit2 className='h-3.5 w-3.5' />{" "}
+                          <HugeiconsIcon icon={PencilEdit02Icon} className='h-3.5 w-3.5' />{" "}
                           <LocalizedText text={"Edit"} />
                         </DropdownMenu.Item>
                       )}
@@ -244,7 +239,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
                         onClick={() => handleDeleteComment(comment._id)}
                         className='flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-red-600 outline-none hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30'
                       >
-                        <Trash2 className='h-3.5 w-3.5' />{" "}
+                        <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />{" "}
                         <LocalizedText text={"Delete"} />
                       </DropdownMenu.Item>
                     </DropdownMenu.Content>
@@ -298,7 +293,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               }}
               className='flex items-center gap-1 text-xs font-medium text-zinc-500 transition-colors hover:text-cyan-500'
             >
-              <CornerDownRight className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={ArrowMoveDownRightIcon} className='h-3.5 w-3.5' />
               <LocalizedText text={"Reply"} />
             </button>
           </div>

@@ -34,34 +34,20 @@ import {
   uploadBrandBrainDocuments,
 } from "@/lib/brand-brain-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  Brain,
-  CheckCircle2,
-  ChevronDown,
-  FileText,
-  Globe,
-  type LucideIcon,
-  Package,
-  RefreshCw,
-  Save,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { SecurityCheckIcon, SparklesIcon, PackageIcon, BrainIcon, File02Icon, Delete02Icon, FloppyDiskIcon, Upload01Icon, GlobeIcon, CheckmarkCircle02Icon, RefreshIcon, ArrowDown01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useMemo, useState } from "react";
 
 const typeOptions: Array<{
   value: BrandBrainItemType;
   label: string;
-  icon: LucideIcon;
+  icon: IconSvgElement;
 }> = [
-  { value: "instruction", label: "Instruction", icon: ShieldCheck },
-  { value: "brand_voice", label: "Voice", icon: Sparkles },
-  { value: "product", label: "Product", icon: Package },
-  { value: "faq", label: "FAQ", icon: Brain },
-  { value: "policy", label: "Policy", icon: FileText },
+  { value: "instruction", label: "Instruction", icon: SecurityCheckIcon },
+  { value: "brand_voice", label: "Voice", icon: SparklesIcon },
+  { value: "product", label: "Product", icon: PackageIcon },
+  { value: "faq", label: "FAQ", icon: BrainIcon },
+  { value: "policy", label: "Policy", icon: File02Icon },
 ];
 
 const emptyDraft = {
@@ -418,12 +404,12 @@ export function BrandBrainSettings({
             onClick={remove}
             disabled={!editable || busy}
           >
-            <Trash2 className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Delete"} />
           </Button>
         )}
         <Button type='button' onClick={save} disabled={!editable || busy}>
-          <Save className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={FloppyDiskIcon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Save brain"} />
         </Button>
       </div>
@@ -449,7 +435,7 @@ export function BrandBrainSettings({
             onClick={upload}
             disabled={!editable || files.length === 0 || busy}
           >
-            <Upload className='h-4 w-4' />
+            <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
           </Button>
         </div>
       </div>
@@ -470,7 +456,7 @@ export function BrandBrainSettings({
             onClick={crawl}
             disabled={!editable || !websiteUrl.trim() || busy}
           >
-            <Globe className='h-4 w-4' />
+            <HugeiconsIcon icon={GlobeIcon} className='h-4 w-4' />
           </Button>
         </div>
       </div>
@@ -492,7 +478,7 @@ export function BrandBrainSettings({
             </div>
             <div className='flex flex-wrap items-center gap-2'>
               <span className='border-border bg-muted/40 text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs'>
-                <CheckCircle2 className='h-3.5 w-3.5 text-emerald-500' />
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5 text-emerald-500' />
                 <LocalizedText text={"Sync"} />
               </span>
               <Button
@@ -506,7 +492,7 @@ export function BrandBrainSettings({
                 {busy ? (
                   <LoadingFileLoader size={12} />
                 ) : (
-                  <RefreshCw className='h-4 w-4' />
+                  <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
                 )}
               </Button>
             </div>
@@ -546,7 +532,7 @@ export function BrandBrainSettings({
                         />
                       </p>
                     </div>
-                    <ChevronDown className='text-muted-foreground h-4 w-4 shrink-0 rotate-180 transition-transform' />
+                    <HugeiconsIcon icon={ArrowDown01Icon} className='text-muted-foreground h-4 w-4 shrink-0 rotate-180 transition-transform' />
                   </button>
                   <div className='bg-muted/20 px-3 py-3'>
                     {renderSourceEditor(false)}
@@ -585,7 +571,7 @@ export function BrandBrainSettings({
                             {item.summary || item.content}
                           </p>
                         </div>
-                        <ChevronDown
+                        <HugeiconsIcon icon={ArrowDown01Icon}
                           className={`text-muted-foreground h-4 w-4 shrink-0 transition-transform ${
                             isOpen ? "rotate-180" : ""
                           }`}
@@ -634,7 +620,7 @@ export function BrandBrainSettings({
                 placeholder='Check what agents will retrieve'
               />
               <Button type='button' variant='outline' onClick={runSearch}>
-                <Search className='h-4 w-4' />
+                <HugeiconsIcon icon={Search01Icon} className='h-4 w-4' />
               </Button>
             </div>
             {matches.length > 0 && (

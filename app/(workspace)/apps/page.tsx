@@ -4,24 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { APP_SECTIONS, type AppCardProps } from "@/lib/apps-config";
 import { trackAppOpened, trackEvent } from "@/lib/mixpanelClient";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  Activity,
-  ArrowRight,
-  Brush,
-  Camera,
-  Code,
-  GitBranchPlus,
-  Image as ImageIcon,
-  type LucideIcon,
-  MessageSquareCode,
-  Plus,
-  Search,
-  Sparkles,
-  Sun,
-  User,
-  Video,
-  Volume2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, CodeIcon, ArrowRight02Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { Toaster } from "sonner";
 import React, { useMemo, useState } from "react";
@@ -171,7 +155,7 @@ const Apps = () => {
             {/* Search and filter slider bar */}
             <div className='mb-8 flex items-center gap-3'>
               <div className='relative flex-1'>
-                <Search className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
+                <HugeiconsIcon icon={Search01Icon} className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
                 <input
                   type='search'
                   value={query}
@@ -280,7 +264,7 @@ const Apps = () => {
                   {/* icon + title row */}
                   <div className='flex items-center gap-2'>
                     <div className='border-border bg-muted/40 flex h-8 w-8 items-center justify-center rounded-md border'>
-                      <Code className='text-foreground h-4 w-4' />
+                      <HugeiconsIcon icon={CodeIcon} className='text-foreground h-4 w-4' />
                     </div>
 
                     <h3 className='text-foreground text-sm font-semibold'>
@@ -304,7 +288,7 @@ const Apps = () => {
                       className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500 hover:text-indigo-400'
                     >
                       <LocalizedText text={"SDK Coming soon"} />
-                      <ArrowRight className='h-3 w-3' />
+                      <HugeiconsIcon icon={ArrowRight02Icon} className='h-3 w-3' />
                     </a>
 
                     <span className='text-muted-foreground text-[10px]'>
@@ -320,7 +304,7 @@ const Apps = () => {
                 <LocalizedText text={"Need a custom workflow or agent?"} />
               </p>
               <button className='border-border bg-card/60 text-foreground hover:bg-accent inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10'>
-                <Plus className='h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                 <LocalizedText text={"Request agent"} />
               </button>
             </div>

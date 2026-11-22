@@ -4,7 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { type VariantProps, cva } from "class-variance-authority";
-import { X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import * as React from "react";
 
 const Sheet = SheetPrimitive.Root;
@@ -67,7 +68,7 @@ const SheetContent = React.forwardRef<
     >
       {children}
       <SheetPrimitive.Close className='ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>
-        <X className='h-4 w-4' />
+        <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
         <span className='sr-only'>
           <LocalizedText text={"Close"} />
         </span>

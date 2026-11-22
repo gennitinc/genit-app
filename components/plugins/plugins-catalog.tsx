@@ -3,7 +3,8 @@
 import { IntegrationsExplorer } from "@/app/integrations/integrations-explorer";
 import { LocalizedText } from "@/components/localized-text";
 import { useAvailablePlugins } from "@/components/plugins/plugins-flow";
-import { ArrowRight, Code, Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CodeIcon, ArrowRight02Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 export function PluginsCatalog({
@@ -48,7 +49,7 @@ export function PluginsCatalog({
             <div className='group border-border bg-background rounded-lg border p-4 transition-all hover:-translate-y-0.5 hover:shadow-sm'>
               <div className='flex items-center gap-2'>
                 <div className='border-border bg-muted/40 flex h-8 w-8 items-center justify-center rounded-md border'>
-                  <Code className='text-foreground h-4 w-4' />
+                  <HugeiconsIcon icon={CodeIcon} className='text-foreground h-4 w-4' />
                 </div>
                 <h3 className='text-foreground text-sm font-semibold'>
                   <LocalizedText text={"Custom Agent"} />
@@ -64,7 +65,7 @@ export function PluginsCatalog({
               <div className='mt-3 flex items-center justify-between'>
                 <span className='inline-flex items-center gap-1 text-xs font-medium text-indigo-500'>
                   <LocalizedText text={"SDK Coming soon"} />
-                  <ArrowRight className='h-3 w-3' />
+                  <HugeiconsIcon icon={ArrowRight02Icon} className='h-3 w-3' />
                 </span>
                 <span className='text-muted-foreground text-[10px]'>
                   <LocalizedText text={"SDK"} />
@@ -79,7 +80,7 @@ export function PluginsCatalog({
             <LocalizedText text={"Need another plugin?"} />
           </p>
           <button className='border-border bg-card/60 text-foreground hover:bg-accent inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10'>
-            <Plus className='h-4 w-4' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
             <LocalizedText text={"Request plugin"} />
           </button>
           <p className='text-muted-foreground mt-6 text-xs'>

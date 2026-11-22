@@ -11,16 +11,8 @@ import { toast } from "@/hooks/use-toast";
 import { Model, ModelType } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
-import {
-  FileText,
-  Image as ImageIcon,
-  Loader2,
-  Music,
-  Share2,
-  Sparkles,
-  Type as TypeIcon,
-  Video,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SparklesIcon, Video01Icon, MusicNote01Icon, TextFontIcon, Share08Icon, File02Icon, Image01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface ModelSelectorProps {
@@ -67,13 +59,13 @@ function ModelIcon({
   }
 
   // Default icon based on type
-  if (type === "general") return <Sparkles className='h-4 w-4 flex-shrink-0' />;
-  if (type === "video") return <Video className='h-4 w-4 flex-shrink-0' />;
-  if (type === "audio") return <Music className='h-4 w-4 flex-shrink-0' />;
-  if (type === "text") return <TypeIcon className='h-4 w-4 flex-shrink-0' />;
-  if (type === "social") return <Share2 className='h-4 w-4 flex-shrink-0' />;
-  if (type === "docs") return <FileText className='h-4 w-4 flex-shrink-0' />;
-  return <ImageIcon className='h-4 w-4 flex-shrink-0' />;
+  if (type === "general") return <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4 flex-shrink-0' />;
+  if (type === "video") return <HugeiconsIcon icon={Video01Icon} className='h-4 w-4 flex-shrink-0' />;
+  if (type === "audio") return <HugeiconsIcon icon={MusicNote01Icon} className='h-4 w-4 flex-shrink-0' />;
+  if (type === "text") return <HugeiconsIcon icon={TextFontIcon} className='h-4 w-4 flex-shrink-0' />;
+  if (type === "social") return <HugeiconsIcon icon={Share08Icon} className='h-4 w-4 flex-shrink-0' />;
+  if (type === "docs") return <HugeiconsIcon icon={File02Icon} className='h-4 w-4 flex-shrink-0' />;
+  return <HugeiconsIcon icon={Image01Icon} className='h-4 w-4 flex-shrink-0' />;
 }
 
 export function ModelSelector({

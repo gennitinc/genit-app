@@ -11,20 +11,8 @@ import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { communityApi } from "@/utils/inspire-api";
-import {
-  Clock,
-  Copy,
-  Download,
-  Loader2,
-  Maximize2,
-  Monitor,
-  Play,
-  RefreshCw,
-  Share2,
-  Upload,
-  Video as VideoIcon,
-  Wand2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowExpand01Icon, Video01Icon, PlayIcon, RefreshIcon, Copy01Icon, Download01Icon, Share08Icon, Upload01Icon, ComputerIcon, Clock01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 interface GeneratedVideo {
@@ -346,7 +334,7 @@ export function VideoPreviewTab({
                   className='flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white transition-colors hover:bg-black/70'
                   title='Fullscreen'
                 >
-                  <Maximize2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowExpand01Icon} className='h-4 w-4' />
                 </button>
               </div>
             </div>
@@ -356,7 +344,7 @@ export function VideoPreviewTab({
           {!isGenerating && generatedVideos.length === 0 && (
             <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
               <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-                <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+                <HugeiconsIcon icon={Video01Icon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
               </div>
               <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
                 <LocalizedText text={"No videos yet"} />
@@ -422,7 +410,7 @@ export function VideoPreviewTab({
                     className='h-full w-full object-cover'
                   />
                   <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
-                    <Play className='h-4 w-4 text-white' />
+                    <HugeiconsIcon icon={PlayIcon} className='h-4 w-4 text-white' />
                   </div>
                 </button>
               ))}
@@ -449,7 +437,7 @@ export function VideoPreviewTab({
                   }}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <RefreshCw className='h-4 w-4' />
+                  <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -473,7 +461,7 @@ export function VideoPreviewTab({
                   }}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Copy className='h-4 w-4' />
+                  <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -489,7 +477,7 @@ export function VideoPreviewTab({
                   onClick={handleDownload}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Download className='h-4 w-4' />
+                  <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -505,7 +493,7 @@ export function VideoPreviewTab({
                   onClick={handleShare}
                   className='flex h-9 w-9 items-center justify-center rounded-lg bg-neutral-100 text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                 >
-                  <Share2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={Share08Icon} className='h-4 w-4' />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -532,12 +520,12 @@ export function VideoPreviewTab({
                 </>
               ) : isPublished ? (
                 <>
-                  <Upload className='h-4 w-4' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                   <LocalizedText text={"Published"} />
                 </>
               ) : (
                 <>
-                  <Upload className='h-4 w-4' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                   <LocalizedText text={"Publish"} />
                 </>
               )}
@@ -560,7 +548,7 @@ export function VideoPreviewTab({
             </div>
             <div className='mt-3 flex flex-wrap gap-3 border-t border-neutral-200 pt-3 dark:border-neutral-700'>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
-                <Monitor className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={ComputerIcon} className='h-3.5 w-3.5' />
                 {generatedVideos[selectedVideoIndex]?.resolution}
               </div>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
@@ -576,7 +564,7 @@ export function VideoPreviewTab({
                 {generatedVideos[selectedVideoIndex]?.aspectRatio}
               </div>
               <div className='flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400'>
-                <Clock className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Clock01Icon} className='h-3.5 w-3.5' />
                 {generatedVideos[selectedVideoIndex]?.createdAt
                   ? new Date(
                       generatedVideos[selectedVideoIndex].createdAt

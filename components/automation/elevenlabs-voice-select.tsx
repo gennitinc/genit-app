@@ -3,7 +3,7 @@
 import type { ElevenLabsVoice } from "@/types/inspire";
 import Loading from "@/utils/Loading";
 import { voiceApi } from "@/utils/inspire-api";
-import { Loader2 } from "lucide-react";
+
 import { useEffect, useRef, useState } from "react";
 
 type Props = {

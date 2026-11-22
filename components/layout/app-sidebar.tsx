@@ -17,13 +17,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { trackEvent } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  Bolt,
-  CircleFadingArrowUp,
-  Crown,
-  Sparkles,
-  TrendingUp,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CrownIcon, ChartIncreaseIcon, SparklesIcon, FlashIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type * as React from "react";
@@ -114,7 +109,7 @@ export function AppSidebar({
               <div className='mb-3 flex items-center justify-between'>
                 <div className='flex items-center gap-2'>
                   <div className='flex h-6 w-6 items-center justify-center rounded-lg border border-white/10 bg-white/20 backdrop-blur-sm'>
-                    <Crown className='h-3 w-3 text-white' strokeWidth={1.5} />
+                    <HugeiconsIcon icon={CrownIcon} className='h-3 w-3 text-white' strokeWidth={1.5} />
                   </div>
                   <div>
                     <div className='text-xs font-semibold text-white'>
@@ -151,13 +146,13 @@ export function AppSidebar({
 
                 <div className='flex items-center justify-between text-xs'>
                   <div className='flex items-center gap-1 text-white/70'>
-                    <TrendingUp className='h-3 w-3' strokeWidth={1.5} />
+                    <HugeiconsIcon icon={ChartIncreaseIcon} className='h-3 w-3' strokeWidth={1.5} />
                     <span>
                       {currentCredits.toLocaleString()} {t("left")}
                     </span>
                   </div>
                   <div className='flex items-center gap-1 text-white/70'>
-                    <Sparkles className='h-3 w-3' strokeWidth={1.5} />
+                    <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' strokeWidth={1.5} />
                     <span>{user?.userPlan || "Basic"}</span>
                   </div>
                 </div>
@@ -181,7 +176,7 @@ export function AppSidebar({
                   }}
                   className='group mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black bg-black px-5 py-2 text-xs font-medium text-white transition-all duration-200 ease-in-out hover:border-neutral-800 hover:bg-neutral-800 focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-none dark:border-white dark:bg-white dark:text-black dark:hover:border-neutral-200 dark:hover:bg-neutral-200 dark:focus:ring-white'
                 >
-                  <Bolt className='h-4 w-4 transition-transform duration-200 group-hover:scale-110' />
+                  <HugeiconsIcon icon={FlashIcon} className='h-4 w-4 transition-transform duration-200 group-hover:scale-110' />
                   {user?.userPlan === "Basic" &&
                   user?.creditsRemaining &&
                   user?.creditsRemaining <= 20
@@ -214,7 +209,7 @@ export function AppSidebar({
                 }
               }}
             >
-              <Crown className='h-4 w-4 text-white' strokeWidth={1.5} />
+              <HugeiconsIcon icon={CrownIcon} className='h-4 w-4 text-white' strokeWidth={1.5} />
             </div>
           </div>
         )

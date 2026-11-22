@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { campaignReadiness, formatCompact } from "@/lib/campaign-utils";
 import type { GtmCampaign } from "@/lib/gtm-api";
 import { cn } from "@/lib/utils";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 
 type Props = {
   campaign: GtmCampaign;
@@ -52,7 +53,7 @@ export function CampaignOverview({ campaign, linkedPosts, onNavigate }: Props) {
             onClick={() => onNavigate(next.tab)}
             className='-mr-2'
           >
-            Continue <ArrowRight />
+            Continue <HugeiconsIcon icon={ArrowRight02Icon} />
           </Button>
         </div>
       )}
@@ -150,7 +151,7 @@ export function CampaignOverview({ campaign, linkedPosts, onNavigate }: Props) {
                         <span className='group-hover:underline'>
                           {source.title}
                         </span>
-                        <ArrowUpRight className='text-muted-foreground size-3' />
+                        <HugeiconsIcon icon={ArrowUpRight01Icon} className='text-muted-foreground size-3' />
                       </a>
                       {source.insight && (
                         <p className='text-muted-foreground mt-0.5 text-sm'>

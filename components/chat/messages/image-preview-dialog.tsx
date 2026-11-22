@@ -7,7 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Download, X, ZoomIn, ZoomOut } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ZoomOutAreaIcon, ZoomInAreaIcon, Download01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface ImagePreviewDialogProps {
@@ -65,7 +66,7 @@ export function ImagePreviewDialog({
                 disabled={zoom <= 0.5}
                 className='p-2'
               >
-                <ZoomOut className='h-4 w-4' />
+                <HugeiconsIcon icon={ZoomOutAreaIcon} className='h-4 w-4' />
               </Button>
               <span className='min-w-[3rem] text-center text-sm text-gray-600'>
                 {Math.round(zoom * 100)}%
@@ -77,7 +78,7 @@ export function ImagePreviewDialog({
                 disabled={zoom >= 3}
                 className='p-2'
               >
-                <ZoomIn className='h-4 w-4' />
+                <HugeiconsIcon icon={ZoomInAreaIcon} className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -85,7 +86,7 @@ export function ImagePreviewDialog({
                 onClick={handleDownload}
                 className='p-2'
               >
-                <Download className='h-4 w-4' />
+                <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
               </Button>
             </div>
           </div>

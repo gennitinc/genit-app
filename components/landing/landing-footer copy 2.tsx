@@ -21,23 +21,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUp,
-  ChevronRight,
-  Facebook,
-  Github,
-  Globe,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Moon,
-  Phone,
-  Sun,
-  Twitter,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUp02Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import type React from "react";
@@ -122,7 +107,7 @@ export function LandingFooter() {
                 variant='secondary'
                 className='hover:text-primary-foreground rounded-full shadow-lg transition-all duration-300 hover:bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl'
               >
-                <ArrowUp className='h-5 w-5' />
+                <HugeiconsIcon icon={ArrowUp02Icon} className='h-5 w-5' />
                 <span className='sr-only'>Back to top</span>
               </Button>
             </TooltipTrigger>
@@ -161,7 +146,7 @@ export function LandingFooter() {
                 />
               </div>
               <Button type='submit' size='lg' className='btn-gradient'>
-                Subscribe <ChevronRight className='ml-2 h-4 w-4' />
+                Subscribe <HugeiconsIcon icon={ArrowRight01Icon} className='ml-2 h-4 w-4' />
               </Button>
             </form>
           </div>

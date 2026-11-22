@@ -23,7 +23,8 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { Icon } from "@iconify/react";
-import { ImageIcon, Settings, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Settings01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { useRef, useState } from "react";
 
 interface SlideCanvasProps {
@@ -211,7 +212,7 @@ export function SlideCanvas({
               onClick={(e) => e.stopPropagation()}
               title='Slide settings'
             >
-              <Settings className='h-4 w-4' />
+              <HugeiconsIcon icon={Settings01Icon} className='h-4 w-4' />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-40'>
@@ -222,7 +223,7 @@ export function SlideCanvas({
               }}
               className='text-destructive focus:text-destructive'
             >
-              <Trash2 className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"Delete Slide"} />
             </DropdownMenuItem>
           </DropdownMenuContent>

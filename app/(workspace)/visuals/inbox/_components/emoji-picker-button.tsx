@@ -11,7 +11,8 @@ import type {
   EmojiStyle,
   Theme as EmojiTheme,
 } from "emoji-picker-react";
-import { Smile } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SmileIcon } from "@hugeicons/core-free-icons";
 import dynamic from "next/dynamic";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
@@ -93,7 +94,7 @@ export const EmojiPickerButton = memo(function EmojiPickerButton({
           onPointerEnter={() => void loadPicker()}
           onFocus={() => void loadPicker()}
         >
-          <Smile className='h-4 w-4' />
+          <HugeiconsIcon icon={SmileIcon} className='h-4 w-4' />
         </Button>
       </PopoverTrigger>
       {mounted && (

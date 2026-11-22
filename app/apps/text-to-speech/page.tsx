@@ -26,26 +26,9 @@ import { cn } from "@/lib/utils";
 import { Voice } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { audioGenApi, voiceApi } from "@/utils/inspire-api";
-import {
-  AudioWaveform,
-  Check,
-  ChevronDown,
-  ChevronRight,
-  Clock,
-  Download,
-  Loader2,
-  Mic,
-  Minus,
-  Pause,
-  Play,
-  Plus,
-  RotateCcw,
-  Search,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
-import { SlidersHorizontal, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MinusSignIcon, PlusSignIcon, RotateLeft01Icon, PauseIcon, PlayIcon, VolumeMute02Icon, VolumeHighIcon, Download01Icon, AudioWave01Icon, Mic01Icon, ArrowRight01Icon, Clock01Icon, Search01Icon, SlidersHorizontalIcon, StarIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
@@ -134,7 +117,7 @@ function TTSSlider({
           disabled={value <= min}
           className='bg-muted/40 hover:bg-muted text-muted-foreground/60 hover:text-foreground flex size-6 items-center justify-center rounded-md transition-all active:scale-90 disabled:pointer-events-none disabled:opacity-20'
         >
-          <Minus className='size-3' />
+          <HugeiconsIcon icon={MinusSignIcon} className='size-3' />
         </button>
 
         {/* Bar */}
@@ -173,7 +156,7 @@ function TTSSlider({
           disabled={value >= max}
           className='bg-muted/40 hover:bg-muted text-muted-foreground/60 hover:text-foreground flex size-6 items-center justify-center rounded-md transition-all active:scale-90 disabled:pointer-events-none disabled:opacity-20'
         >
-          <Plus className='size-3' />
+          <HugeiconsIcon icon={PlusSignIcon} className='size-3' />
         </button>
       </div>
     </div>
@@ -509,7 +492,7 @@ function TextToSpeechPage() {
                           );
                       }}
                     >
-                      <RotateCcw className='h-4 w-4' />
+                      <HugeiconsIcon icon={RotateLeft01Icon} className='h-4 w-4' />
                     </button>
 
                     <button
@@ -533,9 +516,9 @@ function TextToSpeechPage() {
                       {isGenerating ? (
                         <LoadingFileLoader size={20} />
                       ) : isPlaying ? (
-                        <Pause className='h-4 w-4 fill-current' />
+                        <HugeiconsIcon icon={PauseIcon} className='h-4 w-4 fill-current' />
                       ) : (
-                        <Play className='ml-0.5 h-4 w-4 fill-current' />
+                        <HugeiconsIcon icon={PlayIcon} className='ml-0.5 h-4 w-4 fill-current' />
                       )}
                     </button>
 
@@ -549,7 +532,7 @@ function TextToSpeechPage() {
                           );
                       }}
                     >
-                      <RotateCcw
+                      <HugeiconsIcon icon={RotateLeft01Icon}
                         className='h-4 w-4'
                         style={{ transform: "scaleX(-1)" }}
                       />
@@ -590,9 +573,9 @@ function TextToSpeechPage() {
                       className='text-muted-foreground hover:text-foreground rounded-lg p-2 transition-colors'
                     >
                       {isMuted ? (
-                        <VolumeX className='h-4 w-4' />
+                        <HugeiconsIcon icon={VolumeMute02Icon} className='h-4 w-4' />
                       ) : (
-                        <Volume2 className='h-4 w-4' />
+                        <HugeiconsIcon icon={VolumeHighIcon} className='h-4 w-4' />
                       )}
                     </button>
                     {audioUrl && (
@@ -601,7 +584,7 @@ function TextToSpeechPage() {
                         download
                         className='text-muted-foreground hover:text-foreground rounded-lg p-2 transition-colors'
                       >
-                        <Download className='h-4 w-4' />
+                        <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                       </a>
                     )}
                   </div>
@@ -628,7 +611,7 @@ function TextToSpeechPage() {
                       </>
                     ) : (
                       <>
-                        <AudioWaveform className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={AudioWave01Icon} className='h-3.5 w-3.5' />
                         <span className='hidden sm:inline'>
                           <LocalizedText text={"Generate"} />
                         </span>
@@ -695,7 +678,7 @@ function TextToSpeechPage() {
                             />
                           ) : (
                             <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500 via-pink-500 to-orange-500'>
-                              <Mic className='h-2.5 w-2.5 text-white' />
+                              <HugeiconsIcon icon={Mic01Icon} className='h-2.5 w-2.5 text-white' />
                             </div>
                           )}
                         </div>
@@ -703,7 +686,7 @@ function TextToSpeechPage() {
                           {selectedVoice?.name || "Select voice"}
                         </span>
                       </span>
-                      <ChevronRight className='text-muted-foreground/40 h-4 w-4 flex-shrink-0' />
+                      <HugeiconsIcon icon={ArrowRight01Icon} className='text-muted-foreground/40 h-4 w-4 flex-shrink-0' />
                     </button>
                   </div>
 
@@ -742,7 +725,7 @@ function TextToSpeechPage() {
                               <LocalizedText text={"Multilingual v2"} />
                             </span>
                           </span>
-                          <ChevronRight className='text-muted-foreground/40 h-4 w-4' />
+                          <HugeiconsIcon icon={ArrowRight01Icon} className='text-muted-foreground/40 h-4 w-4' />
                         </button>
                         <div className='relative flex items-center justify-between gap-2 px-3 py-2'>
                           <p className='text-muted-foreground text-sm font-medium'>
@@ -866,7 +849,7 @@ function TextToSpeechPage() {
                       onClick={resetSettings}
                       className='text-muted-foreground hover:text-foreground hover:bg-accent inline-flex items-center gap-1.5 rounded-[10px] px-3 py-1.5 text-sm font-medium transition-colors'
                     >
-                      <RotateCcw className='h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={RotateLeft01Icon} className='h-3.5 w-3.5' />
                       <span>
                         <LocalizedText text={"Reset values"} />
                       </span>
@@ -880,7 +863,7 @@ function TextToSpeechPage() {
                 <div className='animate-in fade-in flex flex-col gap-2 duration-200'>
                   {history.length === 0 ? (
                     <div className='flex flex-col items-center justify-center gap-3 py-16 text-center'>
-                      <Clock className='text-muted-foreground/20 h-8 w-8' />
+                      <HugeiconsIcon icon={Clock01Icon} className='text-muted-foreground/20 h-8 w-8' />
                       <p className='text-muted-foreground/40 text-sm font-medium'>
                         <LocalizedText text={"No generations yet"} />
                       </p>
@@ -902,7 +885,7 @@ function TextToSpeechPage() {
                         className='hover:bg-accent hover:border-border/50 flex items-center gap-3 rounded-xl border border-transparent p-3 text-left transition-colors'
                       >
                         <div className='bg-muted flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg'>
-                          <Play className='text-muted-foreground h-3.5 w-3.5 fill-current' />
+                          <HugeiconsIcon icon={PlayIcon} className='text-muted-foreground h-3.5 w-3.5 fill-current' />
                         </div>
                         <div className='min-w-0 flex-1'>
                           <p className='text-foreground truncate text-sm font-medium'>
@@ -953,7 +936,7 @@ function TextToSpeechPage() {
 
                     <div className='ml-auto flex max-w-md flex-1 items-center gap-2'>
                       <div className='relative flex-1'>
-                        <Search className='text-muted-foreground/40 absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                        <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground/40 absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
                         <input
                           type='text'
                           placeholder='Search Voices Library...'
@@ -963,11 +946,11 @@ function TextToSpeechPage() {
                         />
                       </div>
                       <button className='bg-muted/40 hover:bg-muted/60 text-foreground/70 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors'>
-                        <SlidersHorizontal className='h-4 w-4' />
+                        <HugeiconsIcon icon={SlidersHorizontalIcon} className='h-4 w-4' />
                         <LocalizedText text={"Filter"} />
                       </button>
                       <button className='bg-muted/40 hover:bg-muted/60 text-foreground/70 flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors'>
-                        <RotateCcw className='h-4 w-4' />
+                        <HugeiconsIcon icon={RotateLeft01Icon} className='h-4 w-4' />
                         <LocalizedText text={"Default"} />
                       </button>
                     </div>
@@ -986,7 +969,7 @@ function TextToSpeechPage() {
                   </div>
                 ) : filteredVoices.length === 0 ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-20 opacity-40'>
-                    <AudioWaveform className='text-muted-foreground h-12 w-12' />
+                    <HugeiconsIcon icon={AudioWave01Icon} className='text-muted-foreground h-12 w-12' />
                     <span className='text-sm font-medium'>
                       <LocalizedText text={"No voices found"} />
                     </span>
@@ -1056,7 +1039,7 @@ function TextToSpeechPage() {
                                 />
                               ) : (
                                 <div className='from-primary/10 to-accent/10 flex h-full w-full items-center justify-center bg-gradient-to-br'>
-                                  <Mic className='text-primary/40 h-5 w-5' />
+                                  <HugeiconsIcon icon={Mic01Icon} className='text-primary/40 h-5 w-5' />
                                 </div>
                               )}
                             </div>
@@ -1100,7 +1083,7 @@ function TextToSpeechPage() {
                                         : "text-muted-foreground hover:bg-muted"
                                     )}
                                   >
-                                    <Star
+                                    <HugeiconsIcon icon={StarIcon}
                                       className={cn(
                                         "h-4 w-4",
                                         favorites.includes(voice._id) &&
@@ -1109,7 +1092,7 @@ function TextToSpeechPage() {
                                     />
                                   </button>
                                   <button className='text-muted-foreground hover:bg-muted rounded-lg p-1.5 transition-colors'>
-                                    <X className='h-4 w-4 opacity-40 hover:opacity-100' />
+                                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4 opacity-40 hover:opacity-100' />
                                   </button>
                                 </div>
                               </div>

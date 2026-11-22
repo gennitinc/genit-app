@@ -6,7 +6,8 @@ import { Switch } from "@/components/ui/switch";
 import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { ProjectDesignContext } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
-import { Download, Gauge, Sparkles } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SparklesIcon, Download01Icon, DashboardSpeed01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useContext, useEffect, useMemo, useState } from "react";
 
@@ -173,7 +174,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
     return (
       <>
         <div className='rounded-lg border border-dashed border-neutral-300 p-4 text-center dark:border-white/10'>
-          <Sparkles className='text-primary mx-auto mb-2 h-5 w-5' />
+          <HugeiconsIcon icon={SparklesIcon} className='text-primary mx-auto mb-2 h-5 w-5' />
           <p className='text-foreground text-sm font-medium'>
             <LocalizedText text={"No brand identity yet"} />
           </p>
@@ -189,7 +190,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             onClick={() => setIsImportOpen(true)}
             className='text-primary-foreground mt-3 inline-flex items-center justify-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium transition-opacity hover:bg-indigo-700 hover:opacity-90'
           >
-            <Download className='h-3 w-3' />
+            <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
             <LocalizedText text={"Import Brand"} />
           </button>
         </div>
@@ -233,7 +234,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
 
         <div className='bg-muted/40 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-white/10'>
           <div className='mb-2 flex items-center gap-2'>
-            <Gauge className='text-muted-foreground h-3.5 w-3.5' />
+            <HugeiconsIcon icon={DashboardSpeed01Icon} className='text-muted-foreground h-3.5 w-3.5' />
             <p className='text-foreground text-xs font-semibold'>
               <LocalizedText text={"AI cost mode"} />
             </p>
@@ -400,7 +401,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
             onClick={() => setIsImportOpen(true)}
             className='text-muted-foreground hover:text-foreground inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-neutral-200 px-3 text-xs font-medium transition-colors hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/5'
           >
-            <Download className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Download01Icon} className='h-3.5 w-3.5' />
             <LocalizedText text={"Re-import Brand"} />
           </button>
         )}

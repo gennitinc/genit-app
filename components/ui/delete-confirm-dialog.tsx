@@ -8,7 +8,8 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Alert02Icon, Loading03Icon } from "@hugeicons/core-free-icons";
 import type { ReactNode } from "react";
 
 export function DeleteConfirmDialog({
@@ -37,7 +38,7 @@ export function DeleteConfirmDialog({
       >
         <div className='flex flex-col items-center gap-4 md:flex-row md:items-center md:gap-5'>
           <div className='flex size-16 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 text-amber-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-amber-400'>
-            <AlertTriangle className='size-7' aria-hidden='true' />
+            <HugeiconsIcon icon={Alert02Icon} className='size-7' aria-hidden='true' />
           </div>
           <div className='text-center md:text-left'>
             <AlertDialogTitle className='text-base font-bold text-zinc-950 dark:text-white'>
@@ -58,7 +59,7 @@ export function DeleteConfirmDialog({
             disabled={loading}
             className='h-11 w-full rounded-xl bg-red-100 px-4 font-semibold text-red-700 transition-transform duration-150 hover:bg-red-200 active:scale-[0.97] md:h-9 md:w-auto dark:bg-red-950/60 dark:text-red-300 dark:hover:bg-red-950'
           >
-            {loading && <Loader2 className='animate-spin' />}
+            {loading && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />}
             {confirmLabel}
           </AlertDialogAction>
           <AlertDialogCancel

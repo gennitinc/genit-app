@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { Slide } from "@/types/presentation-schema";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DragDropVerticalIcon } from "@hugeicons/core-free-icons";
 import { ReactNode } from "react";
 
 interface DraggableSlideProps {
@@ -70,7 +71,7 @@ export function DraggableSlide({
         {...listeners}
         className='bg-background/80 border-border absolute top-1/2 -left-12 z-50 flex h-12 w-8 -translate-y-1/2 cursor-grab items-center justify-center rounded-lg border opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 active:cursor-grabbing'
       >
-        <GripVertical className='text-muted-foreground h-4 w-4' />
+        <HugeiconsIcon icon={DragDropVerticalIcon} className='text-muted-foreground h-4 w-4' />
       </div>
 
       {/* Slide Number Badge */}

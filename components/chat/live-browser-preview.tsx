@@ -12,24 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Bot,
-  ChevronDown,
-  CircleCheck,
-  ExternalLink,
-  Hand,
-  Monitor,
-  RectangleHorizontal,
-  RectangleVertical,
-  RotateCw,
-  ShieldAlert,
-  Smartphone,
-  SquareTerminal,
-  Tablet,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ComputerIcon, Tablet01Icon, SmartPhone01Icon, ArrowLeft02Icon, ArrowRight02Icon, ArrowDown01Icon, Rectangular01Icon, RectangularIcon, RotateRight01Icon, LinkSquare02Icon, BotIcon, HandGripIcon, CommandLineIcon, Cancel01Icon, SecurityWarningIcon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import React from "react";
 
@@ -52,25 +36,25 @@ const DEVICES: {
   id: LiveDevice;
   label: string;
   description: string;
-  icon: typeof Monitor;
+  icon: typeof ComputerIcon;
 }[] = [
   {
     id: "desktop",
     label: "Desktop",
     description: "Fits the preview",
-    icon: Monitor,
+    icon: ComputerIcon,
   },
   {
     id: "tablet",
     label: "Tablet",
     description: "iPad Mini · 768 × 1024",
-    icon: Tablet,
+    icon: Tablet01Icon,
   },
   {
     id: "mobile",
     label: "Mobile",
     description: "iPhone 15 Pro · 393 × 659",
-    icon: Smartphone,
+    icon: SmartPhone01Icon,
   },
 ];
 type LiveStatus =
@@ -186,7 +170,7 @@ export function LiveBrowserPreview({
             disabled={disabled}
             onClick={() => command({ type: "back" })}
           >
-            <ArrowLeft className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowLeft02Icon} className='h-4 w-4' />
           </Button>
           <Button
             variant='ghost'
@@ -196,7 +180,7 @@ export function LiveBrowserPreview({
             disabled={disabled}
             onClick={() => command({ type: "forward" })}
           >
-            <ArrowRight className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4' />
           </Button>
         </div>
 
@@ -211,13 +195,13 @@ export function LiveBrowserPreview({
                 aria-label={`Device: ${currentDevice.label}`}
                 className='h-7 shrink-0 gap-0.5 rounded-md px-1.5'
               >
-                <currentDevice.icon
+                <HugeiconsIcon icon={currentDevice.icon}
                   className={cn(
                     "h-3.5 w-3.5",
                     state?.landscape && device !== "desktop" && "rotate-90"
                   )}
                 />
-                <ChevronDown className='text-muted-foreground h-3 w-3' />
+                <HugeiconsIcon icon={ArrowDown01Icon} className='text-muted-foreground h-3 w-3' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='center' className='w-60'>
@@ -240,7 +224,7 @@ export function LiveBrowserPreview({
                     value={id}
                     className='gap-2.5'
                   >
-                    <Icon className='text-muted-foreground h-4 w-4' />
+                    <HugeiconsIcon icon={Icon} className='text-muted-foreground h-4 w-4' />
                     <div className='flex flex-col'>
                       <span className='text-sm'>
                         <LocalizedText text={label} />
@@ -271,7 +255,7 @@ export function LiveBrowserPreview({
                   disabled={device === "desktop"}
                   className='gap-2.5'
                 >
-                  <RectangleVertical className='text-muted-foreground h-4 w-4' />
+                  <HugeiconsIcon icon={Rectangular01Icon} className='text-muted-foreground h-4 w-4' />
                   <LocalizedText text={"Portrait"} />
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
@@ -279,7 +263,7 @@ export function LiveBrowserPreview({
                   disabled={device === "desktop"}
                   className='gap-2.5'
                 >
-                  <RectangleHorizontal className='text-muted-foreground h-4 w-4' />
+                  <HugeiconsIcon icon={RectangularIcon} className='text-muted-foreground h-4 w-4' />
                   <LocalizedText text={"Landscape"} />
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -293,7 +277,7 @@ export function LiveBrowserPreview({
             disabled={disabled}
             onClick={() => command({ type: "reload" })}
           >
-            <RotateCw className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={RotateRight01Icon} className='h-3.5 w-3.5' />
           </Button>
           <form
             className='w-[38cqw] max-w-[26rem] min-w-[5rem] shrink'
@@ -338,10 +322,10 @@ export function LiveBrowserPreview({
                 rel='noreferrer'
                 title='Open in new tab'
               >
-                <ExternalLink className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
               </a>
             ) : (
-              <ExternalLink className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
             )}
           </Button>
         </div>
@@ -366,9 +350,9 @@ export function LiveBrowserPreview({
             }
           >
             {userInControl ? (
-              <Bot className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={BotIcon} className='h-3.5 w-3.5' />
             ) : (
-              <Hand className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={HandGripIcon} className='h-3.5 w-3.5' />
             )}
           </Button>
           <Button
@@ -381,7 +365,7 @@ export function LiveBrowserPreview({
             title='Console & network'
             onClick={() => post({ type: "devtools" })}
           >
-            <SquareTerminal className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={CommandLineIcon} className='h-3.5 w-3.5' />
             {devtools.errors > 0 && !devtools.open && (
               <span className='absolute -top-0.5 -right-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-red-500 px-0.5 text-[9px] leading-none text-white'>
                 {devtools.errors > 9 ? "9+" : devtools.errors}
@@ -422,7 +406,7 @@ export function LiveBrowserPreview({
                   command({ type: "close-tab", id: tab.id });
                 }}
               >
-                <X className='h-3 w-3' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
               </button>
             </div>
           ))}
@@ -433,7 +417,7 @@ export function LiveBrowserPreview({
           person in this live view; the agent only waits and re-checks. */}
       {state?.pageStatus?.kind === "verification_required" ? (
         <div className='border-border bg-muted/40 text-foreground flex shrink-0 items-center gap-3 border-b px-4 py-2 text-xs'>
-          <ShieldAlert className='text-muted-foreground h-4 w-4 shrink-0' />
+          <HugeiconsIcon icon={SecurityWarningIcon} className='text-muted-foreground h-4 w-4 shrink-0' />
           <p className='flex-1'>
             {state.pageStatus.reason}.{" "}
             {userInControl ? (
@@ -467,7 +451,7 @@ export function LiveBrowserPreview({
                 className='h-7 text-xs'
               >
                 <a href={currentUrl} target='_blank' rel='noopener noreferrer'>
-                  <ExternalLink className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
                   <LocalizedText text='Open site' />
                 </a>
               </Button>
@@ -479,14 +463,14 @@ export function LiveBrowserPreview({
               className='h-7 text-xs'
               onClick={() => command({ type: "control", controller: "user" })}
             >
-              <Hand className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={HandGripIcon} className='h-3.5 w-3.5' />
               <LocalizedText text={"Take control"} />
             </Button>
           )}
         </div>
       ) : userInControl && state?.verificationCleared ? (
         <div className='border-border bg-muted/40 text-foreground flex shrink-0 items-center gap-3 border-b px-4 py-2 text-xs'>
-          <CircleCheck className='text-muted-foreground h-4 w-4 shrink-0' />
+          <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-muted-foreground h-4 w-4 shrink-0' />
           <p className='flex-1'>
             <LocalizedText text="Verification passed. Reply “I'm done” in the chat so the agent can continue." />
           </p>
@@ -495,7 +479,7 @@ export function LiveBrowserPreview({
         userInControl &&
         state?.handoffReason && (
           <div className='border-border bg-muted/40 text-foreground flex shrink-0 items-center gap-3 border-b px-4 py-2 text-xs'>
-            <Hand className='text-muted-foreground h-4 w-4 shrink-0' />
+            <HugeiconsIcon icon={HandGripIcon} className='text-muted-foreground h-4 w-4 shrink-0' />
             <p className='flex-1'>
               <LocalizedText text={"The agent needs your help:"} />{" "}
               {state.handoffReason}.{" "}

@@ -7,17 +7,8 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { serverUrlSocket } from "@/utils/apiResponse";
 import { IconBrush } from "@tabler/icons-react";
-import {
-  Brush,
-  Check,
-  Download,
-  Eraser,
-  ExternalLink,
-  ImageIcon,
-  Loader2,
-  Wand2,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Download01Icon, LinkSquare02Icon, Image01Icon, Cancel01Icon, EraserIcon, MagicWand01Icon } from "@hugeicons/core-free-icons";
 import { MaskEditor, toMask } from "react-mask-editor";
 import "react-mask-editor/dist/style.css";
 import { Handle, NodeProps, Position } from "reactflow";
@@ -158,7 +149,7 @@ export const DesignNode = memo(
               onClick={handleDownload}
               className='h-4 w-4 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             >
-              <Download className='h-3 w-3' />
+              <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
             </Button>
 
             <Button
@@ -170,7 +161,7 @@ export const DesignNode = memo(
               }}
               className='h-4 w-4 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             >
-              <ExternalLink className='h-3 w-3' />
+              <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
             </Button>
           </div>
         </div>
@@ -200,7 +191,7 @@ export const DesignNode = memo(
             )
           ) : (
             <div className='flex h-[300px] flex-col items-center justify-center gap-2'>
-              <ImageIcon className='h-8 w-8 text-zinc-400' />
+              <HugeiconsIcon icon={Image01Icon} className='h-8 w-8 text-zinc-400' />
               <span className='text-xs text-zinc-500'>No Content</span>
             </div>
           )}
@@ -282,7 +273,7 @@ export const DesignNode = memo(
                 className='h-9 w-9 rounded-xl'
                 title='Cancel'
               >
-                <X className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3.5 w-3.5' />
               </Button>
 
               <Button
@@ -294,7 +285,7 @@ export const DesignNode = memo(
                 }}
                 className='h-9 w-9 rounded-xl'
               >
-                <Eraser className='h-4 w-4' />
+                <HugeiconsIcon icon={EraserIcon} className='h-4 w-4' />
               </Button>
 
               <Button
@@ -305,7 +296,7 @@ export const DesignNode = memo(
                 {isInpainting ? (
                   <LoadingFileLoader size={20} />
                 ) : (
-                  <Wand2 className='mr-1 h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={MagicWand01Icon} className='mr-1 h-3.5 w-3.5' />
                 )}
                 Generate
               </Button>

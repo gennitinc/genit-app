@@ -15,7 +15,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import type { ComponentProps, ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
 
@@ -212,7 +213,7 @@ export const WebPreviewConsole = ({
           variant='ghost'
         >
           <LocalizedText text={"Console"} />
-          <ChevronDownIcon
+          <HugeiconsIcon icon={ArrowDown01Icon}
             className={cn(
               "h-4 w-4 transition-transform duration-200",
               consoleOpen && "rotate-180"

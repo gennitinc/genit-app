@@ -15,7 +15,8 @@ import { formatCompact } from "@/lib/campaign-utils";
 import { getPipelineReport, listPipeline } from "@/lib/pipeline-api";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, RefreshCw, Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RefreshIcon, PlusSignIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
@@ -87,10 +88,10 @@ function PipelinePageInner() {
             aria-label='Refresh pipeline'
             title='Refresh'
           >
-            <RefreshCw className={cn(refreshing && "animate-spin")} />
+            <HugeiconsIcon icon={RefreshIcon} className={cn(refreshing && "animate-spin")} />
           </Button>
           <Button onClick={() => setAdding(true)}>
-            <Plus /> Add lead
+            <HugeiconsIcon icon={PlusSignIcon} /> Add lead
           </Button>
         </div>
       </header>
@@ -138,7 +139,7 @@ function PipelinePageInner() {
         </nav>
         {tab === "board" && (
           <div className='relative w-full sm:w-64'>
-            <Search className='text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2' />
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}

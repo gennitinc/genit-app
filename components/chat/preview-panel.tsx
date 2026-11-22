@@ -17,15 +17,8 @@ import { useProjectDesign } from "@/context/DesignProject";
 import type { CanvasPreviewType } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
-import {
-  Download,
-  ExternalLink,
-  Eye,
-  Globe,
-  Layout,
-  Maximize2,
-  Minimize2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowShrink01Icon, ArrowExpand01Icon, Layout01Icon, ViewIcon, LinkSquare02Icon, Download01Icon, GlobeIcon } from "@hugeicons/core-free-icons";
 import React from "react";
 
 export const PreviewPanel = ({
@@ -62,9 +55,9 @@ export const PreviewPanel = ({
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           >
             {isFullscreen ? (
-              <Minimize2 className='h-4 w-4' />
+              <HugeiconsIcon icon={ArrowShrink01Icon} className='h-4 w-4' />
             ) : (
-              <Maximize2 className='h-4 w-4' />
+              <HugeiconsIcon icon={ArrowExpand01Icon} className='h-4 w-4' />
             )}
           </button>
         )}
@@ -101,7 +94,7 @@ const PreviewPanelContent = ({
   if (!project) {
     return (
       <div className='bg-muted/90 flex h-full flex-col items-center justify-center gap-4 opacity-50'>
-        <Layout className='text-muted-foreground h-12 w-12' />
+        <HugeiconsIcon icon={Layout01Icon} className='text-muted-foreground h-12 w-12' />
         <p className='text-muted-foreground text-sm font-medium'>
           <LocalizedText text={"Select a project to see preview"} />
         </p>
@@ -168,7 +161,7 @@ const PreviewPanelContent = ({
                 className='text-muted-foreground hover:text-foreground h-7 gap-1.5 rounded-md px-2 text-xs'
                 onClick={() => setArtifactReloadKey((value) => value + 1)}
               >
-                <Eye className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={ViewIcon} className='h-3.5 w-3.5' />
                 <LocalizedText text={"Preview"} />
               </Button>
               {onToggleFullscreen && (
@@ -183,9 +176,9 @@ const PreviewPanelContent = ({
                   title={isFullscreen ? "Exit fullscreen" : "Enlarge"}
                 >
                   {isFullscreen ? (
-                    <Minimize2 className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={ArrowShrink01Icon} className='h-3.5 w-3.5' />
                   ) : (
-                    <Maximize2 className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={ArrowExpand01Icon} className='h-3.5 w-3.5' />
                   )}
                 </Button>
               )}
@@ -205,7 +198,7 @@ const PreviewPanelContent = ({
                   rel='noreferrer'
                   title='Open'
                 >
-                  <ExternalLink className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
                 </a>
               </Button>
               {artifactPreview.downloadUrl && (
@@ -220,7 +213,7 @@ const PreviewPanelContent = ({
                     download={artifactPreview.fileName}
                     title='Download'
                   >
-                    <Download className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={Download01Icon} className='h-3.5 w-3.5' />
                   </a>
                 </Button>
               )}
@@ -272,7 +265,7 @@ const PreviewPanelContent = ({
     return (
       <div className='bg-muted/90 flex h-full flex-col rounded-3xl border border-zinc-200 p-4 py-2 shadow-2xl dark:border-zinc-800/50'>
         <div className='mb-4 flex items-center gap-2 px-2 py-1'>
-          <Globe className='text-primary h-4 w-4' />
+          <HugeiconsIcon icon={GlobeIcon} className='text-primary h-4 w-4' />
           <span className='text-sm font-semibold'>
             <LocalizedText text={"Website Preview"} />
           </span>

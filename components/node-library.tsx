@@ -2,17 +2,8 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
-import {
-  Code,
-  Database,
-  FileOutput,
-  Filter,
-  GitBranch,
-  Mail,
-  Settings,
-  Table,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DatabaseIcon, FileExportIcon, Settings01Icon, GitBranchIcon, CodeIcon, Mail01Icon, FilterIcon, WorkflowSquare10Icon, TableIcon } from "@hugeicons/core-free-icons";
 import type React from "react";
 
 const nodeTypes = [
@@ -20,58 +11,58 @@ const nodeTypes = [
     type: "input",
     label: "Input",
     description: "Data input node",
-    icon: <Database className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={DatabaseIcon} className='mr-2 h-4 w-4' />,
   },
   {
     type: "output",
     label: "Output",
     description: "Data output node",
-    icon: <FileOutput className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={FileExportIcon} className='mr-2 h-4 w-4' />,
   },
   {
     type: "process",
     label: "Process",
     description: "Data processing node",
-    icon: <Settings className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Settings01Icon} className='mr-2 h-4 w-4' />,
   },
   {
     type: "conditional",
     label: "Conditional",
     description: "Conditional branching",
-    icon: <GitBranch className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={GitBranchIcon} className='mr-2 h-4 w-4' />,
   },
   {
     type: "code",
     label: "Code",
     description: "Custom code execution",
-    icon: <Code className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={CodeIcon} className='mr-2 h-4 w-4' />,
   },
   {
     type: "email",
     label: "Email",
     description: "Send email notification",
-    icon: <Mail className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Mail01Icon} className='mr-2 h-4 w-4' />,
     disabled: true,
   },
   {
     type: "filter",
     label: "Filter",
     description: "Filter data",
-    icon: <Filter className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={FilterIcon} className='mr-2 h-4 w-4' />,
     disabled: true,
   },
   {
     type: "workflow",
     label: "Sub-workflow",
     description: "Nested workflow",
-    icon: <Workflow className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={WorkflowSquare10Icon} className='mr-2 h-4 w-4' />,
     disabled: true,
   },
   {
     type: "table",
     label: "Table",
     description: "Database table operation",
-    icon: <Table className='mr-2 h-4 w-4' />,
+    icon: <HugeiconsIcon icon={TableIcon} className='mr-2 h-4 w-4' />,
     disabled: true,
   },
 ];

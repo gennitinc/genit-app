@@ -5,14 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
-import {
-  CircleFadingArrowUp,
-  Mic,
-  Play,
-  RefreshCw,
-  Sparkles,
-  Volume2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SparklesIcon, Mic01Icon, RefreshIcon, VolumeHighIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface ScriptEditorProps {
@@ -99,7 +93,7 @@ export function ScriptEditor({
       {!script && (
         <div className='relative'>
           <div className='border-primary/20 flex items-center gap-2 rounded-lg border bg-indigo-600 px-3 py-2 hover:bg-indigo-700/5'>
-            <Sparkles className='text-primary h-4 w-4' />
+            <HugeiconsIcon icon={SparklesIcon} className='text-primary h-4 w-4' />
             <input
               type='text'
               value={prompt}
@@ -134,7 +128,7 @@ export function ScriptEditor({
                 </>
               ) : (
                 <>
-                  <Sparkles className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={SparklesIcon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Generate Script"} />
                 </>
               )}
@@ -167,7 +161,7 @@ export function ScriptEditor({
             onClick={handleVoiceInput}
             disabled={isListening}
           >
-            <Mic
+            <HugeiconsIcon icon={Mic01Icon}
               className={cn(
                 "h-4 w-4",
                 isListening && "text-primary animate-pulse"
@@ -181,7 +175,7 @@ export function ScriptEditor({
             onClick={() => onScriptChange("")}
             disabled={!script}
           >
-            <RefreshCw className='h-4 w-4' />
+            <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
           </Button>
         </div>
 
@@ -197,7 +191,7 @@ export function ScriptEditor({
             onClick={handleListen}
             disabled={!script}
           >
-            <Volume2 className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={VolumeHighIcon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Listen"} />
           </Button>
         </div>

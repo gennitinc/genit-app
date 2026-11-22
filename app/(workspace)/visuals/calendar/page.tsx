@@ -27,15 +27,8 @@ import {
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  CalendarDays,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  RefreshCw,
-  Search,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, PlusSignIcon, ArrowDown01Icon, ArrowLeft01Icon, ArrowRight01Icon, RefreshIcon } from "@hugeicons/core-free-icons";
 import React, {
   useCallback,
   useDeferredValue,
@@ -358,7 +351,7 @@ export default function CalendarPage() {
 
             <div className='mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2'>
               <div className='relative min-w-0 sm:w-64'>
-                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
+                <HugeiconsIcon icon={Search01Icon} className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
                 <input
                   type='search'
                   value={search}
@@ -373,7 +366,7 @@ export default function CalendarPage() {
                   onClick={openCreateEvent}
                 >
                   <LocalizedText text={"New"} />
-                  <Plus className='h-4 w-4' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                 </Button>
               ) : (
                 <Button
@@ -489,7 +482,7 @@ export default function CalendarPage() {
                       </option>
                     ))}
                 </select>
-                <ChevronDown className='pointer-events-none absolute top-1/2 right-2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400' />
+                <HugeiconsIcon icon={ArrowDown01Icon} className='pointer-events-none absolute top-1/2 right-2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400' />
               </label>
             )}
           </div>
@@ -500,7 +493,7 @@ export default function CalendarPage() {
               aria-label='Previous date range'
               className='flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors duration-150 hover:bg-zinc-100 hover:text-zinc-950 active:scale-[0.98] dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
             >
-              <ChevronLeft className='h-4 w-4' />
+              <HugeiconsIcon icon={ArrowLeft01Icon} className='h-4 w-4' />
             </button>
             <button
               onClick={() => calendarApi()?.setOption("date", new Date())}
@@ -513,7 +506,7 @@ export default function CalendarPage() {
               aria-label='Next date range'
               className='flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition-colors duration-150 hover:bg-zinc-100 hover:text-zinc-950 active:scale-[0.98] dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white'
             >
-              <ChevronRight className='h-4 w-4' />
+              <HugeiconsIcon icon={ArrowRight01Icon} className='h-4 w-4' />
             </button>
           </div>
 
@@ -533,7 +526,7 @@ export default function CalendarPage() {
               {eventsQuery.isFetching ? (
                 <LoadingFileLoader size={18} />
               ) : (
-                <RefreshCw className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={RefreshIcon} className='h-3.5 w-3.5' />
               )}
             </button>
           </div>

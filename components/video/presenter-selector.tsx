@@ -22,7 +22,8 @@ import { cn } from "@/lib/utils";
 import { Presenter } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { presenterApi } from "@/utils/inspire-api";
-import { Check, Loader2, Plus, Trash2, Upload } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, Delete02Icon, PlusSignIcon, Upload01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface PresenterSelectorProps {
@@ -70,7 +71,7 @@ function PresenterCard({
         </div>
         {isSelected && (
           <div className='absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 dark:bg-neutral-100'>
-            <Check className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
+            <HugeiconsIcon icon={Tick02Icon} className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
           </div>
         )}
       </button>
@@ -83,7 +84,7 @@ function PresenterCard({
           className='absolute top-1.5 left-1.5 flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-red-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-red-400'
           title='Delete avatar'
         >
-          <Trash2 className='h-3 w-3' />
+          <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
         </button>
       )}
     </div>
@@ -410,7 +411,7 @@ export function PresenterSelector({
       className='group relative flex aspect-[3/4] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-100 transition-all hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:border-neutral-500'
     >
       <div className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-        <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
+        <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
       </div>
       <p className='text-xs font-medium text-neutral-600 dark:text-neutral-400'>
         <LocalizedText text={"View More"} />
@@ -538,7 +539,7 @@ export function PresenterSelector({
               {/* Upload Section */}
               <div className='mb-4 text-center'>
                 <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                  <Upload className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 </div>
                 <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
                   <LocalizedText text={"Upload Your Avatar"} />
@@ -565,7 +566,7 @@ export function PresenterSelector({
                       disabled={uploading}
                     />
                     <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
-                      <Upload className='h-4 w-4' />
+                      <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                       <LocalizedText text={"Select Image"} />
                     </span>
                   </label>
@@ -665,7 +666,7 @@ export function PresenterSelector({
                         </>
                       ) : (
                         <>
-                          <Upload className='h-4 w-4' />
+                          <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                           <LocalizedText text={"Save Avatar"} />
                         </>
                       )}
@@ -833,7 +834,7 @@ export function PresenterSelector({
               {/* Upload Section */}
               <div className='mb-4 text-center'>
                 <div className='mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                  <Upload className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
                 </div>
                 <h4 className='text-sm font-medium text-neutral-900 dark:text-white'>
                   <LocalizedText text={"Upload Your Avatar"} />
@@ -860,7 +861,7 @@ export function PresenterSelector({
                       disabled={uploading}
                     />
                     <span className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'>
-                      <Upload className='h-4 w-4' />
+                      <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                       <LocalizedText text={"Select Image"} />
                     </span>
                   </label>
@@ -960,7 +961,7 @@ export function PresenterSelector({
                         </>
                       ) : (
                         <>
-                          <Upload className='h-4 w-4' />
+                          <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                           <LocalizedText text={"Save Avatar"} />
                         </>
                       )}

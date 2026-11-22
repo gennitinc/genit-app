@@ -19,16 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 import AccountActionModal from "@/components/user/account-action-modal";
 import { useAccountActions } from "@/hooks/use-account-actions";
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Moon,
-  Sun,
-  User,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UnfoldMoreIcon, UserIcon, CheckmarkBadge01Icon, CreditCardIcon, Sun01Icon, MoonIcon, Logout01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useState } from "react";
@@ -76,7 +68,7 @@ export function NavUser({ user }: any) {
                       {user?.email}
                     </span>
                   </div>
-                  <ChevronsUpDown className='ml-auto h-4 w-4' />
+                  <HugeiconsIcon icon={UnfoldMoreIcon} className='ml-auto h-4 w-4' />
                 </>
               )}
             </SidebarMenuButton>
@@ -115,16 +107,16 @@ export function NavUser({ user }: any) {
                 className='focus:bg-accent focus:text-accent-foreground'
               >
                 <Link href={`/creator/${user?.username}`}>
-                  <User className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={UserIcon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"View Profile"} />
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className='focus:bg-accent focus:text-accent-foreground'>
-                <BadgeCheck className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={CheckmarkBadge01Icon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"Account"} />
               </DropdownMenuItem>
               <DropdownMenuItem className='focus:bg-accent focus:text-accent-foreground'>
-                <CreditCard className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={CreditCardIcon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"Billing"} />
               </DropdownMenuItem>
               {/* <DropdownMenuItem className="focus:bg-accent focus:text-accent-foreground">
@@ -139,14 +131,14 @@ export function NavUser({ user }: any) {
             >
               {theme === "dark" ? (
                 <>
-                  <Sun className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={Sun01Icon} className='mr-2 h-4 w-4' />
                   <span>
                     <LocalizedText text={"Switch to light mode"} />
                   </span>
                 </>
               ) : (
                 <>
-                  <Moon className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={MoonIcon} className='mr-2 h-4 w-4' />
                   <span>
                     <LocalizedText text={"Switch to dark mode"} />
                   </span>
@@ -160,7 +152,7 @@ export function NavUser({ user }: any) {
                 setIsSignOutModalOpen(true);
               }}
             >
-              <LogOut className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={Logout01Icon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"Log out"} />
             </DropdownMenuItem>
           </DropdownMenuContent>

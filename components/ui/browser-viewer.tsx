@@ -2,7 +2,7 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { Loader2 } from "lucide-react";
+
 import { useEffect, useRef, useState } from "react";
 
 interface WebContainerViewerProps {

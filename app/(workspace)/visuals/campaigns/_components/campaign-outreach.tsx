@@ -36,7 +36,8 @@ import {
 } from "@/lib/gtm-api";
 import { effectiveIntegrationPlatform } from "@/lib/integrations-api";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Loader2, Plus, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Loading03Icon, PlusSignIcon, Cancel01Icon, ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
@@ -288,7 +289,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
             onClick={() => void save()}
             disabled={saving}
           >
-            {saving && <Loader2 className='animate-spin' />} Save
+            {saving && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />} Save
           </Button>
           <Button
             size='sm'
@@ -296,7 +297,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
             disabled={launching || Boolean(launchBlocker)}
             title={launchBlocker || undefined}
           >
-            {launching && <Loader2 className='animate-spin' />}
+            {launching && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />}
             {status === "running" ? "Send to new recipients" : "Launch"}
           </Button>
         </div>
@@ -328,7 +329,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
           meta='Each recipient gets one weighted variant for their channel'
           action={
             <Button variant='ghost' size='sm' onClick={addVariant}>
-              <Plus /> Variant
+              <HugeiconsIcon icon={PlusSignIcon} /> Variant
             </Button>
           }
         >
@@ -401,7 +402,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
                         )
                       }
                     >
-                      <X />
+                      <HugeiconsIcon icon={Cancel01Icon} />
                     </Button>
                   </div>
                   {EMAIL_CHANNELS.includes(variant.channel) && (
@@ -459,7 +460,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
             <Empty
               action={
                 <Button size='sm' variant='outline' onClick={addVariant}>
-                  <Plus /> Write a message
+                  <HugeiconsIcon icon={PlusSignIcon} /> Write a message
                 </Button>
               }
             >
@@ -713,7 +714,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
                 disabled={!pagination.hasPreviousPage || outreach.isFetching}
                 aria-label='Previous page'
               >
-                <ChevronLeft />
+                <HugeiconsIcon icon={ArrowLeft01Icon} />
               </Button>
               <Button
                 variant='ghost'
@@ -723,7 +724,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
                 disabled={!pagination.hasNextPage || outreach.isFetching}
                 aria-label='Next page'
               >
-                <ChevronRight />
+                <HugeiconsIcon icon={ArrowRight01Icon} />
               </Button>
             </div>
           </div>

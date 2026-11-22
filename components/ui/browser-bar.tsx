@@ -8,18 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ChevronDown,
-  ExternalLink,
-  Layers,
-  Lock,
-  Monitor,
-  RotateCw,
-  Smartphone,
-  Tablet,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SmartPhone01Icon, Tablet01Icon, ComputerIcon, ArrowLeft02Icon, ArrowRight02Icon, RotateRight01Icon, LockIcon, ArrowDown01Icon, Layers01Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 // Added React import
@@ -64,11 +54,11 @@ export function BrowserBar({
   const getDeviceIcon = (device: DeviceType) => {
     switch (device) {
       case "mobile":
-        return <Smartphone className='h-4 w-4' />;
+        return <HugeiconsIcon icon={SmartPhone01Icon} className='h-4 w-4' />;
       case "tablet":
-        return <Tablet className='h-4 w-4' />;
+        return <HugeiconsIcon icon={Tablet01Icon} className='h-4 w-4' />;
       case "desktop":
-        return <Monitor className='h-4 w-4' />;
+        return <HugeiconsIcon icon={ComputerIcon} className='h-4 w-4' />;
     }
   };
 
@@ -81,7 +71,7 @@ export function BrowserBar({
         onClick={() => onNavigate("back")}
         disabled={!canGoBack}
       >
-        <ArrowLeft className='h-4 w-4' />
+        <HugeiconsIcon icon={ArrowLeft02Icon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -90,7 +80,7 @@ export function BrowserBar({
         onClick={() => onNavigate("forward")}
         disabled={!canGoForward}
       >
-        <ArrowRight className='h-4 w-4' />
+        <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -98,13 +88,13 @@ export function BrowserBar({
         className='h-8 w-8'
         onClick={() => onNavigate("refresh")}
       >
-        <RotateCw className='h-4 w-4' />
+        <HugeiconsIcon icon={RotateRight01Icon} className='h-4 w-4' />
       </Button>
       <form
         onSubmit={handleUrlSubmit}
         className='bg-muted-foreground/10 flex h-8 flex-1 items-center rounded-md px-3'
       >
-        <Lock className='text-muted-foreground/50 mr-2 h-4 w-4' />
+        <HugeiconsIcon icon={LockIcon} className='text-muted-foreground/50 mr-2 h-4 w-4' />
         <Input
           className='h-full border-0 bg-transparent text-sm focus:ring-0'
           value={currentUrl}
@@ -119,26 +109,26 @@ export function BrowserBar({
             className='flex h-8 items-center gap-2 px-2'
           >
             {getDeviceIcon(currentDevice)}
-            <ChevronDown className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowDown01Icon} className='h-4 w-4' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuItem onClick={() => handleDeviceChange("desktop")}>
-            <Monitor className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={ComputerIcon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Desktop"} />
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDeviceChange("tablet")}>
-            <Tablet className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={Tablet01Icon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Tablet"} />
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDeviceChange("mobile")}>
-            <Smartphone className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={SmartPhone01Icon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Mobile"} />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button variant='ghost' size='icon' className='h-8 w-8'>
-        <Layers className='h-4 w-4' />
+        <HugeiconsIcon icon={Layers01Icon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -146,7 +136,7 @@ export function BrowserBar({
         className='h-8 w-8'
         onClick={() => window.open(currentUrl, "_blank")}
       >
-        <ExternalLink className='h-4 w-4' />
+        <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
       </Button>
     </div>
   );

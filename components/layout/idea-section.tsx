@@ -49,42 +49,10 @@ import { appendClientTimeContext, cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  ArrowRightIcon,
-  Camera,
-  CheckCircle2,
-  CircleFadingArrowUp,
-  FileText,
-  Grid2X2Plus,
-  Image,
-  Image as ImageIcon,
-  Layout,
-  Loader2,
-  MessageSquare,
-  Mic,
-  Music,
-  Paintbrush,
-  Palette,
-  PaperclipIcon,
-  Play,
-  Sparkles,
-  Table,
-  TrendingUp,
-  Type,
-  User,
-  Users,
-  Video,
-  Volume2,
-  Wand2,
-  WandSparklesIcon,
-  Workflow,
-  X,
-  XIcon,
-  Youtube,
-  Zap,
-} from "lucide-react";
-import { Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DashboardSquareAddIcon, MagicWand02Icon, WorkflowSquare10Icon, Video01Icon, Image01Icon, UserIcon, PaintBrush01Icon, Camera01Icon, PlayIcon, PaintBoardIcon, Cancel01Icon, MagicWand01Icon, File02Icon, YoutubeIcon, Layout01Icon, TextFontIcon, SparklesIcon, ArrowRight02Icon, ZapIcon, AlertCircleIcon, CircleArrowUp02Icon, PlusSignIcon, CheckmarkCircle02Icon, Mic01Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView } from "@/components/ui/icon-source";
+
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -188,7 +156,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "all-agents",
     label: "All Agents",
     href: "/apps",
-    icon: Grid2X2Plus,
+    icon: DashboardSquareAddIcon,
     bg: "rgba(30, 30, 30, 30)",
     lightBg: "rgba(255, 255, 255, 0.7)",
     darkBg: "rgba(30, 30, 30, 30)",
@@ -199,7 +167,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "design-chat",
     label: "Chat",
     href: "/chat",
-    icon: WandSparklesIcon,
+    icon: MagicWand02Icon,
     bg: "rgba(255, 183, 77, 0.45)",
     lightBg: "rgba(255, 183, 77, 0.35)",
     darkBg: "rgba(255, 183, 77, 0.55)",
@@ -210,7 +178,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "workflow",
     label: "AI Workflow",
     href: "/apps/workflow",
-    icon: Workflow,
+    icon: WorkflowSquare10Icon,
     bg: "rgba(34, 197, 94, 0.45)",
     lightBg: "rgba(34, 197, 94, 0.35)",
     darkBg: "rgba(34, 197, 94, 0.55)",
@@ -221,7 +189,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "video",
     label: "AI Video",
     href: "/apps/video-generation",
-    icon: Video,
+    icon: Video01Icon,
     bg: "rgba(255, 99, 132, 0.45)",
     lightBg: "rgba(255, 99, 132, 0.35)",
     darkBg: "rgba(255, 99, 132, 0.55)",
@@ -232,7 +200,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "image",
     label: "AI Image",
     href: "/apps/image-generation",
-    icon: Image,
+    icon: Image01Icon,
     bg: "rgba(99, 102, 241, 0.5)",
     lightBg: "rgba(99, 102, 241, 0.4)",
     darkBg: "rgba(99, 102, 241, 0.6)",
@@ -243,7 +211,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "character",
     label: "AI Character",
     href: "/apps/character",
-    icon: User,
+    icon: UserIcon,
     bg: "rgba(168, 85, 247, 0.5)",
     lightBg: "rgba(168, 85, 247, 0.4)",
     darkBg: "rgba(168, 85, 247, 0.6)",
@@ -254,7 +222,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "skin-enhancer",
     label: "AI Enhancer",
     href: "/apps/skin-enhancer",
-    icon: Paintbrush,
+    icon: PaintBrush01Icon,
     bg: "rgba(59, 130, 246, 0.5)",
     lightBg: "rgba(59, 130, 246, 0.4)",
     darkBg: "rgba(59, 130, 246, 0.6)",
@@ -265,7 +233,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "angles-reshape",
     label: "Angle Reshape",
     href: "/apps/angles-reshape",
-    icon: Camera,
+    icon: Camera01Icon,
     bg: "rgba(255, 204, 0, 0.5)",
     lightBg: "rgba(255, 204, 0, 0.4)",
     darkBg: "rgba(255, 204, 0, 0.6)",
@@ -276,7 +244,7 @@ const IDEA_ITEMS: IdeaItemData[] = [
     id: "logo-animation",
     label: "AI Animation",
     href: "/apps/logo-animation2",
-    icon: Play,
+    icon: PlayIcon,
     bg: "rgba(0, 122, 255, 0.5)",
     lightBg: "rgba(0, 122, 255, 0.4)",
     darkBg: "rgba(0, 122, 255, 0.6)",
@@ -354,7 +322,8 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
               alt={item.label}
             />
           ) : (
-            <Icon
+            <IconSourceView
+              icon={Icon}
               className={cn(
                 "relative z-10 h-6 w-6 transition-transform duration-300 group-hover:scale-110",
                 item.iconColor
@@ -411,7 +380,7 @@ const BrandIdentityDialog = ({
       <div className='border-border/70 relative z-10 flex shrink-0 items-center justify-between border-b px-4 py-3 md:px-5'>
         <div className='flex min-w-0 items-center gap-2'>
           <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-300'>
-            <Palette className='h-4 w-4' />
+            <HugeiconsIcon icon={PaintBoardIcon} className='h-4 w-4' />
           </div>
           <div className='min-w-0'>
             <h3 className='text-foreground truncate text-sm font-semibold'>
@@ -428,7 +397,7 @@ const BrandIdentityDialog = ({
           className='text-muted-foreground hover:text-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-black/5 dark:hover:bg-white/10'
           aria-label='Close brand identity'
         >
-          <X className='h-4 w-4' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
         </button>
       </div>
 
@@ -905,68 +874,68 @@ export function IdeaSection() {
     {
       id: "auto",
       label: "Auto",
-      icon: Wand2,
+      icon: MagicWand01Icon,
     },
     {
       id: "flier",
       label: "Flier",
-      icon: FileText,
+      icon: File02Icon,
     },
     {
       id: "animation",
       label: "Animation",
-      icon: Video,
+      icon: Video01Icon,
       comingSoon: true,
     },
     {
       id: "video",
       label: "Video",
-      icon: Video,
+      icon: Video01Icon,
     },
     {
       id: "image",
       label: "HD Images",
-      icon: ImageIcon,
+      icon: Image01Icon,
     },
     {
       id: "instagram_post",
       label: "Instagram",
-      icon: Camera,
+      icon: Camera01Icon,
     },
     {
       id: "poster",
       label: "Poster",
-      icon: ImageIcon,
+      icon: Image01Icon,
     },
     {
       id: "youtube_thumbnail",
       label: "YouTube Thumbnail",
-      icon: Youtube,
+      icon: YoutubeIcon,
     },
     {
       id: "facebook_post",
       label: "Facebook Post",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "facebook_cover",
       label: "Facebook Cover",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "banner",
       label: "Banner",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "logo",
       label: "Logo",
-      icon: Type,
+      icon: TextFontIcon,
     },
     {
       id: "generic_design",
       label: "Generic Design",
-      icon: Sparkles,
+      icon: SparklesIcon,
     },
   ];
 
@@ -986,7 +955,7 @@ export function IdeaSection() {
               <span className='text-xs'>
                 <LocalizedText text={"✨ Introducing genit v2"} />
               </span>
-              <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+              <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedShinyText>
 
             <motion.h1
@@ -1174,7 +1143,7 @@ export function IdeaSection() {
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-1'>
                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             <span className='text-muted-foreground text-xs'>
                               {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
@@ -1271,7 +1240,7 @@ export function IdeaSection() {
                   <AnimatePresence>
                     {(inputError || error) && (
                       <p className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'>
-                        <AlertCircle className='mr-2 size-3.5' />
+                        <HugeiconsIcon icon={AlertCircleIcon} className='mr-2 size-3.5' />
                         {inputError || error}
                       </p>
                     )}
@@ -1326,7 +1295,7 @@ export function IdeaSection() {
                               {isEnhancingPrompt ? (
                                 <LoadingFileLoader size={14} />
                               ) : (
-                                <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                                <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-3.5 w-3.5' />
                               )}
                             </button>
                           </TooltipTrigger>
@@ -1344,7 +1313,7 @@ export function IdeaSection() {
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isGenerating || isSubmitting}
                       >
-                        <Plus className='size-5 shrink-0' />
+                        <HugeiconsIcon icon={PlusSignIcon} className='size-5 shrink-0' />
                       </button>
                       <Input
                         ref={fileInputRef}
@@ -1373,7 +1342,7 @@ export function IdeaSection() {
                               </>
                             ) : (
                               <>
-                                <CheckCircle2 className='size-3 text-green-500' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-3 text-green-500' />
                               </>
                             )}
                           </div>
@@ -1394,7 +1363,7 @@ export function IdeaSection() {
                             });
                           }}
                         >
-                          <Palette className='size-4 shrink-0' />
+                          <HugeiconsIcon icon={PaintBoardIcon} className='size-4 shrink-0' />
                         </button>
                         <button
                           className={`focus-visible:ring-ring relative box-border inline-flex h-8 w-8 min-w-fit items-center justify-center gap-2 rounded-full bg-transparent !p-0 px-4 py-2 text-sm font-normal whitespace-nowrap brightness-100 transition-[background-color,opacity,color,filter] duration-150 ease-in-out focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
@@ -1411,7 +1380,7 @@ export function IdeaSection() {
                             !isSupported || isGenerating || isSubmitting
                           }
                         >
-                          <Mic className='size-4 shrink-0' />
+                          <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
                         </button>
                         <button
                           type='submit'

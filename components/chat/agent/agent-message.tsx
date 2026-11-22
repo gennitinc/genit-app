@@ -42,7 +42,8 @@ import {
 import { isCapabilityUnavailable } from "@/lib/capability-feedback";
 import { type ResultLink, extractResultLinks } from "@/lib/result-links";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { CheckCircle2, CircleAlert, ExternalLink } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LinkSquare02Icon, CheckmarkCircle02Icon, AlertCircleIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -142,7 +143,7 @@ function ResultLinkAnchor({ link }: { link: ResultLink }) {
       className='text-foreground hover:text-foreground/80 inline-flex items-center gap-1 text-[12px] font-medium underline-offset-2 hover:underline'
     >
       {link.label}
-      <ExternalLink className='h-3 w-3' />
+      <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
     </a>
   );
 }
@@ -275,7 +276,7 @@ function ToolCallView({
     const results = Array.isArray(data.results) ? data.results : [];
     return (
       <AgentCard
-        icon={<CheckCircle2 className='h-3.5 w-3.5' />}
+        icon={<HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5' />}
         title='Web sources'
         tone='success'
       >
@@ -319,7 +320,7 @@ function ToolCallView({
         data?.provider ? (
           <PluginLogo label={data.provider} slug={data.providerSlug} compact />
         ) : (
-          <CheckCircle2 className='h-3.5 w-3.5' />
+          <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5' />
         )
       }
       title={humanizeToolName(call.name)}
@@ -362,7 +363,7 @@ function StatusBadge({ status }: { status: AgentRunStatus }) {
   if (status === "failed") {
     return (
       <span className='bg-muted text-muted-foreground inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-medium'>
-        <CircleAlert className='h-2.5 w-2.5 text-amber-500' />
+        <HugeiconsIcon icon={AlertCircleIcon} className='h-2.5 w-2.5 text-amber-500' />
         <LocalizedText text={"Needs attention"} />
       </span>
     );
@@ -594,7 +595,7 @@ export function AgentMessage({
             {/* Error */}
             {run.error && (
               <div className='border-border/70 bg-muted/30 my-2 flex items-start gap-2.5 rounded-lg border px-3 py-2.5'>
-                <CircleAlert className='mt-0.5 size-4 shrink-0 text-amber-500' />
+                <HugeiconsIcon icon={AlertCircleIcon} className='mt-0.5 size-4 shrink-0 text-amber-500' />
                 <div className='min-w-0'>
                   <p className='text-foreground text-xs font-medium'>
                     <span className='inline-flex items-center gap-1.5'>

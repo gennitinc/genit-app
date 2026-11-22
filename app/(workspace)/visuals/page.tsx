@@ -22,7 +22,9 @@ import {
 } from "@/lib/integrations-api";
 import { POST_PLATFORMS, getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Folder, Layers3, PenLine, Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
@@ -38,6 +40,8 @@ const ManageDialog = dynamic(() =>
   )
 );
 const VisualsCharts = dynamic(() => import("./_components/visuals-charts"));
+
+const RANGE_PRESETS = [7, 30, 90] as const;
 
 export default function VisualsHomePage() {
   const [chartsReady, setChartsReady] = useState(false);
@@ -119,6 +123,14 @@ export default function VisualsHomePage() {
   });
   const stats = statsQuery.data;
 
+  // A preset is active when the range ends today and spans exactly that many days.
+  const activePreset = RANGE_PRESETS.find(
+    (days) =>
+      to === isoDate(today) &&
+      Math.round((rangeEnd.getTime() - rangeStart.getTime()) / DAY_MS) + 1 ===
+        days
+  );
+
   const connectedChannels = integrations.filter(
     (item) =>
       item.status === "active" &&
@@ -143,11 +155,10 @@ export default function VisualsHomePage() {
         Drafted: day?.drafted || 0,
         Published: day?.published || 0,
         Projects: day?.projects || 0,
-        Channels: connectedChannels,
         Engagement: day?.engagement || 0,
       };
     });
-  }, [connectedChannels, rangeEnd, rangeStart, stats?.activity]);
+  }, [rangeEnd, rangeStart, stats?.activity]);
 
   const connectedIntegrations = useMemo(() => {
     return INTEGRATIONS.filter((integration) => {
@@ -172,91 +183,93 @@ export default function VisualsHomePage() {
     ? connectionsForIntegration(manageFor, byPlatform)
     : [];
 
-  const statCards = [
-    {
-      label: "Posts drafted",
-      value: stats?.drafted ?? "—",
-      detail: "In selected range",
-      Icon: PenLine,
-      dataKey: "Drafted" as const,
-      color: "#60a5fa",
-    },
-    {
-      label: "Active projects",
-      value: stats?.activeProjects ?? "—",
-      detail: "Updated in selected range",
-      Icon: Folder,
-      dataKey: "Projects" as const,
-      color: "#60a5fa",
-    },
-    {
-      label: "Engagement",
-      value: stats?.engagement ?? "—",
-      detail: "Likes, replies, shares, clicks",
-      Icon: BarChart3,
-      dataKey: "Engagement" as const,
-      color: "#60a5fa",
-    },
-    {
-      label: "Channels",
-      value: integrationsLoading ? "—" : connectedChannels,
-      detail: "Ready to publish",
-      Icon: Layers3,
-      dataKey: "Channels" as const,
-      color: "#60a5fa",
-    },
-  ];
 
   return (
     <div className='min-h-[calc(100dvh-7rem)] rounded-lg bg-zinc-50 px-0 text-zinc-950 md:p-2 lg:p-6 lg:px-0 dark:bg-[#070707] dark:text-white'>
-      <div className='mb-8 flex flex-col gap-y-4 md:flex-row md:items-start md:justify-between'>
-        <div>
+      <div className='mb-8 flex flex-col gap-y-4 md:flex-row md:items-start md:justify-between md:gap-x-6'>
+        <div className='w-full md:flex-1'>
           <h1 className='font-instrument-serif text-2xl font-semibold tracking-tight sm:text-3xl'>
             <LocalizedText text={"Hello "} />
             {current?.businessName || user?.username || "User"} 👋
           </h1>
-          <div className='mt-4 flex items-center'>
-            {connectedIntegrations.slice(0, 6).map((integration, index) => (
-              <span
-                key={integration.name}
-                className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-50 bg-white shadow-sm ring-1 ring-zinc-200 first:ml-0 dark:border-[#070707] dark:bg-[#151515] dark:ring-white/10'
-                style={{
-                  zIndex: connectedIntegrations.length - index,
-                }}
-                title={integration.name}
-              >
-                <integration.icon className='h-6 w-6' />
-              </span>
-            ))}
+          {/* Connected plugins on the left, each leaning slightly clockwise; the add button sits at the far right. */}
+          <div className='mt-4 flex w-full items-center justify-between gap-3'>
+            <div className='flex items-center'>
+              {connectedIntegrations.slice(0, 6).map((integration, index) => (
+                <span
+                  key={integration.name}
+                  className='relative -ml-2 flex h-10 w-10 rotate-[8deg] items-center justify-center overflow-hidden rounded-xl border-2 border-zinc-50 bg-white shadow-sm ring-1 ring-zinc-200 first:ml-0 dark:border-[#070707] dark:bg-[#151515] dark:ring-white/10'
+                  style={{
+                    zIndex: connectedIntegrations.length - index,
+                  }}
+                  title={integration.name}
+                >
+                  <IconSourceView icon={integration.icon} className='h-full w-full' />
+                </span>
+              ))}
+              {connectedIntegrations.length === 0 && (
+                <span className='text-xs text-zinc-500 dark:text-white/45'>
+                  <LocalizedText text={"No channels connected yet"} />
+                </span>
+              )}
+            </div>
             <Link
               href='/plugins'
-              className='relative -ml-2 flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
-              style={{ zIndex: 0 }}
+              className='relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-zinc-50 bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition hover:bg-zinc-100 dark:border-[#070707] dark:bg-[#151515] dark:text-white dark:ring-white/10 dark:hover:bg-white/10'
               title='Add plugin'
               aria-label='Add plugin'
             >
-              <Plus className='h-5 w-5' />
+              <HugeiconsIcon icon={PlusSignIcon} className='h-5 w-5' />
             </Link>
-            {connectedIntegrations.length === 0 && (
-              <span className='text-xs text-zinc-500 dark:text-white/45'>
-                <LocalizedText text={"No channels connected yet"} />
-              </span>
-            )}
           </div>
         </div>
 
-        <DateRangePicker
-          from={from}
-          to={to}
-          onChange={(nextFrom, nextTo) => {
-            setFrom(nextFrom);
-            setTo(nextTo);
-          }}
-        />
+        <div className='flex items-center gap-2'>
+          <div
+            role='group'
+            aria-label='Date range'
+            className='flex rounded-lg border border-zinc-200 bg-zinc-100 p-0.5 dark:border-white/10 dark:bg-white/5'
+          >
+            {RANGE_PRESETS.map((days) => {
+              const active = activePreset === days;
+              return (
+                <button
+                  key={days}
+                  type='button'
+                  aria-pressed={active}
+                  onClick={() => {
+                    setFrom(isoDate(new Date(Date.now() - DAY_MS * (days - 1))));
+                    setTo(isoDate(new Date()));
+                  }}
+                  className={[
+                    "h-8 rounded-md px-3 text-[13px] tabular-nums transition-colors",
+                    active
+                      ? "bg-white font-semibold text-zinc-900 shadow-sm ring-1 ring-zinc-200 dark:bg-[#1a1a1a] dark:text-white dark:ring-white/10"
+                      : "font-medium text-zinc-500 hover:text-zinc-900 dark:text-white/50 dark:hover:text-white",
+                  ].join(" ")}
+                >
+                  {days}D
+                </button>
+              );
+            })}
+          </div>
+          <DateRangePicker
+            from={from}
+            to={to}
+            onChange={(nextFrom, nextTo) => {
+              setFrom(nextFrom);
+              setTo(nextTo);
+            }}
+          />
+        </div>
       </div>
 
       {chartsReady ? (
-        <VisualsCharts activityData={activityData} statCards={statCards} />
+        <VisualsCharts
+          activityData={activityData}
+          stats={stats}
+          channels={integrationsLoading ? undefined : connectedChannels}
+        />
       ) : (
         <div className='h-[460px] animate-pulse rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]' />
       )}
@@ -313,7 +326,7 @@ export default function VisualsHomePage() {
               >
                 <div className='flex items-start justify-between gap-3'>
                   <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>
-                    <Icon className='h-5 w-5' />
+                    <IconSourceView icon={Icon} className='h-5 w-5' />
                   </span>
                   <span
                     className={[

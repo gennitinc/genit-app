@@ -13,21 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  CircleFadingArrowUp,
-  Download,
-  Edit3,
-  ExternalLink,
-  Image,
-  ListCheck,
-  Loader2,
-  Lock,
-  MessageSquare,
-  Search,
-  Sparkles,
-  Unlock,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, SparklesIcon, CheckListIcon, PencilEdit01Icon, LinkSquare02Icon, Message01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, Position } from "reactflow";
 import { memo, useEffect, useState } from "react";
 
@@ -122,7 +109,7 @@ export const ImageNode = memo(
             className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
             title='Remove node'
           >
-            <X className='h-3 w-3' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
           </button>
         )}
 
@@ -158,21 +145,21 @@ export const ImageNode = memo(
                     {isAnalyzing ? (
                       <LoadingFileLoader size={20} />
                     ) : (
-                      <Sparkles className='h-3 w-3' />
+                      <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' />
                     )}
                     Analyze
                   </Button>
                 )}
                 {analyzed && (
                   <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
-                    <ListCheck className='h-2.5 w-2.5' />
+                    <HugeiconsIcon icon={CheckListIcon} className='h-2.5 w-2.5' />
                     Analyzed
                   </div>
                 )}
                 <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                   <DialogTrigger asChild>
                     <Button variant='ghost' size='sm' className='h-auto p-1'>
-                      <Edit3 className='text-muted-foreground h-3 w-3' />
+                      <HugeiconsIcon icon={PencilEdit01Icon} className='text-muted-foreground h-3 w-3' />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className='sm:max-w-md'>
@@ -317,7 +304,7 @@ export const ImageNode = memo(
                   onClick={() => window.open(editData.url || url, "_blank")}
                   title='Open image in new tab'
                 >
-                  <ExternalLink className='mr-1 h-3 w-3' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='mr-1 h-3 w-3' />
                   Open
                 </div>
               </div>
@@ -328,7 +315,7 @@ export const ImageNode = memo(
                 {analysis.summary && (
                   <div className='space-y-1'>
                     <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
-                      <MessageSquare className='h-3 w-3' />
+                      <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />
                       AI Summary
                     </div>
                     <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
@@ -340,7 +327,7 @@ export const ImageNode = memo(
                 {analysis.description && (
                   <div className='space-y-1'>
                     <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
-                      <Search className='h-3 w-3' />
+                      <HugeiconsIcon icon={Search01Icon} className='h-3 w-3' />
                       Visual Description
                     </div>
                     <p className='text-muted-foreground line-clamp-4 rounded-md bg-black/5 p-2 text-xs leading-relaxed dark:bg-white/5'>

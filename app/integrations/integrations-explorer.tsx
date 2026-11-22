@@ -34,20 +34,9 @@ import {
   isNativeOnlyComposioToolkit,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  AlertTriangle,
-  ArrowRight,
-  AtSign,
-  Blocks,
-  Calendar,
-  CheckCircle2,
-  Cog,
-  Megaphone,
-  MessageSquare,
-  MoreHorizontal,
-  Search,
-  TrendingUp,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AtIcon, ChartIncreaseIcon, Alert02Icon, MoreHorizontalIcon, DashboardSquare02Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
@@ -72,10 +61,7 @@ export type BaseStatus = "available" | "soon";
 // instead of Connect (which would just hit the same dead-end again).
 export type CardStatus = "connected" | "partial" | "available" | "soon";
 
-export type IntegrationIcon = ComponentType<{
-  className?: string;
-  style?: CSSProperties;
-}>;
+export type IntegrationIcon = IconSource;
 
 export type Integration = {
   platform: IntegrationPlatform;
@@ -115,7 +101,7 @@ export const INTEGRATIONS: Integration[] = [
     name: "Threads",
     description: "Meta Threads is not available through Composio yet.",
     category: "Socials",
-    icon: AtSign,
+    icon: AtIcon,
     baseStatus: "soon",
     glow: "rgba(244, 244, 245, 0.6)",
   },
@@ -195,7 +181,7 @@ export const INTEGRATIONS: Integration[] = [
     description:
       "List Google Ads campaigns across your manager + child accounts and pull per-day performance metrics.",
     category: "Ads Campaigns",
-    icon: TrendingUp,
+    icon: ChartIncreaseIcon,
     baseStatus: "available",
     glow: "rgba(250, 204, 21, 0.8)",
   },
@@ -456,7 +442,7 @@ function IntegrationCard({
               className='h-7 w-7 rounded object-contain'
             />
           ) : (
-            <Icon className='h-6 w-6 text-zinc-800 sm:h-7 sm:w-7 dark:text-zinc-200' />
+            <IconSourceView icon={Icon} className='h-6 w-6 text-zinc-800 sm:h-7 sm:w-7 dark:text-zinc-200' />
           )}
         </div>
 
@@ -471,7 +457,7 @@ function IntegrationCard({
                 className='inline-flex items-center text-amber-500'
                 title='Setup incomplete'
               >
-                <AlertTriangle className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Alert02Icon} className='h-3.5 w-3.5' />
               </span>
             )}
           </div>
@@ -499,7 +485,7 @@ function IntegrationCard({
               className='rounded-md p-2 text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-200'
               title={`Manage ${integration.name}`}
             >
-              <MoreHorizontal className='h-5 w-5' />
+              <HugeiconsIcon icon={MoreHorizontalIcon} className='h-5 w-5' />
             </button>
           </div>
         ) : (
@@ -549,7 +535,7 @@ export function IntegrationsExplorer({
         name: String(connection.metadata?.toolkitName || slug),
         description: `Use ${connection.metadata?.toolkitName || slug} tools from your Genit agent.`,
         category: "More Plugins",
-        icon: Blocks,
+        icon: DashboardSquare02Icon,
         remoteIcon: connection.accountAvatar,
         baseStatus: "available",
         glow: "rgba(99, 102, 241, 0.7)",
@@ -567,7 +553,7 @@ export function IntegrationsExplorer({
           app.description ||
           `Connect ${app.name} and use its tools from Genit.`,
         category: "More Plugins",
-        icon: Blocks,
+        icon: DashboardSquare02Icon,
         remoteIcon: app.logo,
         baseStatus: "available",
         glow: "rgba(99, 102, 241, 0.7)",
@@ -662,7 +648,7 @@ export function IntegrationsExplorer({
                       className='h-6 w-6 rounded object-contain'
                     />
                   ) : (
-                    <Icon className='h-6 w-6 text-zinc-800 dark:text-zinc-200' />
+                    <IconSourceView icon={Icon} className='h-6 w-6 text-zinc-800 dark:text-zinc-200' />
                   )}
                 </button>
               );
@@ -676,7 +662,7 @@ export function IntegrationsExplorer({
         className={`sticky ${publicView ? "top-14" : "top-11"} z-20 -mx-4 mb-5 flex items-center gap-3 border-b border-zinc-100/80 bg-white/90 px-4 py-3 backdrop-blur-xl dark:border-zinc-900/80 dark:bg-black/90`}
       >
         <div className='relative flex-1'>
-          <Search className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
+          <HugeiconsIcon icon={Search01Icon} className='pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-400' />
           <input
             type='search'
             value={query}

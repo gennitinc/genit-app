@@ -15,7 +15,8 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { ImageIcon, Loader2, Trash2, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Image01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface HistoryImage {
@@ -145,7 +146,7 @@ export function ImageHistoryTab({
         <div className='relative min-h-[400px] w-full overflow-hidden rounded-xl'>
           <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
             <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-              <ImageIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+              <HugeiconsIcon icon={Image01Icon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
             <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
               <LocalizedText text={"No history yet"} />
@@ -200,7 +201,7 @@ export function ImageHistoryTab({
                       {deletingId === image._id ? (
                         <LoadingFileLoader size={20} />
                       ) : (
-                        <Trash2 className='h-4 w-4' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                       )}
                     </button>
                   </div>

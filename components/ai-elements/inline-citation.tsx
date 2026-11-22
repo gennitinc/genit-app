@@ -13,7 +13,8 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft02Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import {
   type ComponentProps,
   createContext,
@@ -206,7 +207,7 @@ export const InlineCitationCarouselPrev = ({
       type='button'
       {...props}
     >
-      <ArrowLeftIcon className='text-muted-foreground size-4' />
+      <HugeiconsIcon icon={ArrowLeft02Icon} className='text-muted-foreground size-4' />
     </button>
   );
 };
@@ -233,7 +234,7 @@ export const InlineCitationCarouselNext = ({
       type='button'
       {...props}
     >
-      <ArrowRightIcon className='text-muted-foreground size-4' />
+      <HugeiconsIcon icon={ArrowRight02Icon} className='text-muted-foreground size-4' />
     </button>
   );
 };

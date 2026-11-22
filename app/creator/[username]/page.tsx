@@ -47,29 +47,8 @@ import { CommunityContent } from "@/types/inspire";
 import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { creatorApi } from "@/utils/inspire-api";
-import {
-  ArrowLeft,
-  Camera,
-  Check,
-  Copy,
-  Eye,
-  Facebook,
-  Github,
-  Heart,
-  Image as ImageIcon,
-  Instagram,
-  Linkedin,
-  Loader2,
-  Plus,
-  Settings,
-  Share2,
-  Trash2,
-  Twitter,
-  User,
-  Users,
-  Video,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Camera01Icon, UserIcon, Share08Icon, Copy01Icon, Cancel01Icon, Facebook01Icon, Linkedin01Icon, Settings01Icon, Delete02Icon, PlusSignIcon, UserGroupIcon, Image01Icon, InstagramIcon, TwitterIcon, GithubIcon, Video01Icon } from "@hugeicons/core-free-icons";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -658,7 +637,7 @@ export default function CreatorProfilePage() {
                   {isUploadingCover ? (
                     <LoadingFileLoader size={20} />
                   ) : (
-                    <Camera className='h-5 w-5 text-white' />
+                    <HugeiconsIcon icon={Camera01Icon} className='h-5 w-5 text-white' />
                   )}
                 </button>
               </div>
@@ -681,7 +660,7 @@ export default function CreatorProfilePage() {
                       />
                     ) : (
                       <div className='flex h-full w-full items-center justify-center'>
-                        <User className='h-16 w-16 text-neutral-400' />
+                        <HugeiconsIcon icon={UserIcon} className='h-16 w-16 text-neutral-400' />
                       </div>
                     )}
                   </div>
@@ -704,7 +683,7 @@ export default function CreatorProfilePage() {
                         {isUploadingProfile ? (
                           <LoadingFileLoader size={20} />
                         ) : (
-                          <Camera className='h-5 w-5 text-white' />
+                          <HugeiconsIcon icon={Camera01Icon} className='h-5 w-5 text-white' />
                         )}
                       </button>
                     </div>
@@ -723,24 +702,24 @@ export default function CreatorProfilePage() {
                         size='icon'
                         className='mt-14 h-10 w-10'
                       >
-                        <Share2 className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
+                        <HugeiconsIcon icon={Share08Icon} className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='w-56'>
                       <DropdownMenuItem onClick={handleCopyLink}>
-                        <Copy className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Copy01Icon} className='mr-2 h-4 w-4' />
                         {copiedLink ? "Copied!" : "Copy Link"}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("x")}>
-                        <X className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Share on X"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                        <Facebook className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Facebook01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Share on Facebook"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                        <Linkedin className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Linkedin01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Share on LinkedIn"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
@@ -769,7 +748,7 @@ export default function CreatorProfilePage() {
                           size='icon'
                           className='mt-14 h-10 w-10 rounded-full border-2 border-neutral-200 bg-white shadow-md hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800'
                         >
-                          <Settings className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
+                          <HugeiconsIcon icon={Settings01Icon} className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                         </Button>
                       </DrawerTrigger>
                       <DrawerContent className='max-h-[85dvh]'>
@@ -839,7 +818,7 @@ export default function CreatorProfilePage() {
                                         }
                                         className='mt-6 h-9 w-9 shrink-0'
                                       >
-                                        <Trash2 className='h-4 w-4' />
+                                        <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                                       </Button>
                                     </div>
                                   );
@@ -851,7 +830,7 @@ export default function CreatorProfilePage() {
                                     <div>
                                       <Select onValueChange={handleAddSocial}>
                                         <SelectTrigger className='w-full'>
-                                          <Plus className='mr-2 h-4 w-4' />
+                                          <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                                           <SelectValue placeholder='Add social media' />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -921,7 +900,7 @@ export default function CreatorProfilePage() {
                       />
                     ) : (
                       <div className='flex h-full w-full items-center justify-center'>
-                        <User className='h-20 w-20 text-neutral-400' />
+                        <HugeiconsIcon icon={UserIcon} className='h-20 w-20 text-neutral-400' />
                       </div>
                     )}
                   </div>
@@ -944,7 +923,7 @@ export default function CreatorProfilePage() {
                         {isUploadingProfile ? (
                           <LoadingFileLoader size={20} />
                         ) : (
-                          <Camera className='h-5 w-5 text-white' />
+                          <HugeiconsIcon icon={Camera01Icon} className='h-5 w-5 text-white' />
                         )}
                       </button>
                     </div>
@@ -985,21 +964,21 @@ export default function CreatorProfilePage() {
                     {/* Stats */}
                     <div className='flex flex-wrap items-center gap-6'>
                       <div className='flex items-center gap-2'>
-                        <Users className='h-5 w-5 text-neutral-500' />
+                        <HugeiconsIcon icon={UserGroupIcon} className='h-5 w-5 text-neutral-500' />
                         <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           <span className='font-bold'>{profile.followers}</span>{" "}
                           <LocalizedText text={"followers"} />
                         </span>
                       </div>
                       <div className='flex items-center gap-2'>
-                        <User className='h-5 w-5 text-neutral-500' />
+                        <HugeiconsIcon icon={UserIcon} className='h-5 w-5 text-neutral-500' />
                         <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           <span className='font-bold'>{profile.following}</span>{" "}
                           <LocalizedText text={"following"} />
                         </span>
                       </div>
                       <div className='flex items-center gap-2'>
-                        <ImageIcon className='h-5 w-5 text-neutral-500' />
+                        <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-neutral-500' />
                         <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                           <span className='font-bold'>
                             {profile.stats.totalPosts}
@@ -1032,7 +1011,7 @@ export default function CreatorProfilePage() {
                               className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                               title='Instagram'
                             >
-                              <Instagram className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                              <HugeiconsIcon icon={InstagramIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.twitter && (
@@ -1043,7 +1022,7 @@ export default function CreatorProfilePage() {
                               className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                               title='Twitter/X'
                             >
-                              <Twitter className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                              <HugeiconsIcon icon={TwitterIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.github && (
@@ -1054,7 +1033,7 @@ export default function CreatorProfilePage() {
                               className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                               title='GitHub'
                             >
-                              <Github className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                              <HugeiconsIcon icon={GithubIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.linkedin && (
@@ -1065,7 +1044,7 @@ export default function CreatorProfilePage() {
                               className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                               title='LinkedIn'
                             >
-                              <Linkedin className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                              <HugeiconsIcon icon={Linkedin01Icon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                             </a>
                           )}
                           {profile.socials?.facebook && (
@@ -1166,24 +1145,24 @@ export default function CreatorProfilePage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant='ghost' size='icon' className='h-9 w-9'>
-                      <Share2 className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
+                      <HugeiconsIcon icon={Share08Icon} className='h-5 w-5 text-neutral-700 dark:text-neutral-300' />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-56'>
                     <DropdownMenuItem onClick={handleCopyLink}>
-                      <Copy className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Copy01Icon} className='mr-2 h-4 w-4' />
                       {copiedLink ? "Copied!" : "Copy Link"}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("x")}>
-                      <X className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Cancel01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Share on X"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                      <Facebook className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Facebook01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Share on Facebook"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                      <Linkedin className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Linkedin01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Share on LinkedIn"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
@@ -1210,7 +1189,7 @@ export default function CreatorProfilePage() {
                         variant='outline'
                         className='rounded-lg px-4 py-2'
                       >
-                        <Settings className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Settings01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Settings"} />
                       </Button>
                     </DialogTrigger>
@@ -1280,7 +1259,7 @@ export default function CreatorProfilePage() {
                                     }
                                     className='mt-6 h-9 w-9 shrink-0'
                                   >
-                                    <Trash2 className='h-4 w-4' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                                   </Button>
                                 </div>
                               );
@@ -1292,7 +1271,7 @@ export default function CreatorProfilePage() {
                                 <div>
                                   <Select onValueChange={handleAddSocial}>
                                     <SelectTrigger className='w-full'>
-                                      <Plus className='mr-2 h-4 w-4' />
+                                      <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                                       <SelectValue placeholder='Add social media' />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -1398,21 +1377,21 @@ export default function CreatorProfilePage() {
                 {/* Stats */}
                 <div className='flex flex-wrap items-center justify-center gap-6'>
                   <div className='flex items-center gap-2'>
-                    <Users className='h-5 w-5 text-neutral-500' />
+                    <HugeiconsIcon icon={UserGroupIcon} className='h-5 w-5 text-neutral-500' />
                     <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       <span className='font-bold'>{profile.followers}</span>{" "}
                       <LocalizedText text={"followers"} />
                     </span>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <User className='h-5 w-5 text-neutral-500' />
+                    <HugeiconsIcon icon={UserIcon} className='h-5 w-5 text-neutral-500' />
                     <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       <span className='font-bold'>{profile.following}</span>{" "}
                       <LocalizedText text={"following"} />
                     </span>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <ImageIcon className='h-5 w-5 text-neutral-500' />
+                    <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-neutral-500' />
                     <span className='text-sm font-medium text-neutral-700 dark:text-neutral-300'>
                       <span className='font-bold'>
                         {profile.stats.totalPosts}
@@ -1433,7 +1412,7 @@ export default function CreatorProfilePage() {
                         variant='outline'
                         className='hidden rounded-lg px-6 py-2'
                       >
-                        <Settings className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Settings01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Settings"} />
                       </Button>
                     </DrawerTrigger>
@@ -1503,7 +1482,7 @@ export default function CreatorProfilePage() {
                                     }
                                     className='mt-6 h-9 w-9 shrink-0'
                                   >
-                                    <Trash2 className='h-4 w-4' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                                   </Button>
                                 </div>
                               );
@@ -1515,7 +1494,7 @@ export default function CreatorProfilePage() {
                                 <div>
                                   <Select onValueChange={handleAddSocial}>
                                     <SelectTrigger className='w-full'>
-                                      <Plus className='mr-2 h-4 w-4' />
+                                      <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                                       <SelectValue placeholder='Add social media' />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -1606,7 +1585,7 @@ export default function CreatorProfilePage() {
                           className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                           title='Instagram'
                         >
-                          <Instagram className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                          <HugeiconsIcon icon={InstagramIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.twitter && (
@@ -1617,7 +1596,7 @@ export default function CreatorProfilePage() {
                           className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                           title='Twitter/X'
                         >
-                          <Twitter className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                          <HugeiconsIcon icon={TwitterIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.github && (
@@ -1628,7 +1607,7 @@ export default function CreatorProfilePage() {
                           className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                           title='GitHub'
                         >
-                          <Github className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                          <HugeiconsIcon icon={GithubIcon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.linkedin && (
@@ -1639,7 +1618,7 @@ export default function CreatorProfilePage() {
                           className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700'
                           title='LinkedIn'
                         >
-                          <Linkedin className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
+                          <HugeiconsIcon icon={Linkedin01Icon} className='h-4 w-4 text-neutral-700 dark:text-neutral-300' />
                         </a>
                       )}
                       {profile.socials?.facebook && (
@@ -1757,7 +1736,7 @@ export default function CreatorProfilePage() {
                 contentLoading && "cursor-not-allowed opacity-50"
               )}
             >
-              <ImageIcon
+              <HugeiconsIcon icon={Image01Icon}
                 className={cn(
                   "h-4 w-4 transition-colors",
                   activeTab === "images"
@@ -1796,7 +1775,7 @@ export default function CreatorProfilePage() {
                 contentLoading && "cursor-not-allowed opacity-50"
               )}
             >
-              <Video
+              <HugeiconsIcon icon={Video01Icon}
                 className={cn(
                   "h-4 w-4 transition-colors",
                   activeTab === "videos"

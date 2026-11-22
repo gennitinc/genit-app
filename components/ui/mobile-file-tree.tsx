@@ -5,14 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronRight,
-  Code,
-  File,
-  Folder,
-  Image,
-  Settings,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CodeIcon, Settings01Icon, Image01Icon, File01Icon, ArrowRight01Icon, Folder01Icon } from "@hugeicons/core-free-icons";
 import * as React from "react";
 
 interface FileNode {
@@ -86,18 +80,18 @@ const FileIcon = ({ name }: { name: string }) => {
     case "ts":
     case "jsx":
     case "js":
-      return <Code className='h-4 w-4 text-blue-500' />;
+      return <HugeiconsIcon icon={CodeIcon} className='h-4 w-4 text-blue-500' />;
     case "css":
-      return <Code className='h-4 w-4 text-purple-500' />;
+      return <HugeiconsIcon icon={CodeIcon} className='h-4 w-4 text-purple-500' />;
     case "json":
-      return <Settings className='h-4 w-4 text-yellow-500' />;
+      return <HugeiconsIcon icon={Settings01Icon} className='h-4 w-4 text-yellow-500' />;
     case "ico":
     case "png":
     case "jpg":
     case "svg":
-      return <Image className='h-4 w-4 text-green-500' />;
+      return <HugeiconsIcon icon={Image01Icon} className='h-4 w-4 text-green-500' />;
     default:
-      return <File className='h-4 w-4 text-gray-500' />;
+      return <HugeiconsIcon icon={File01Icon} className='h-4 w-4 text-gray-500' />;
   }
 };
 
@@ -135,7 +129,7 @@ const FileTreeNode: React.FC<FileTreeNodeProps> = ({
         onClick={handleClick}
       >
         {node.type === "folder" && (
-          <ChevronRight
+          <HugeiconsIcon icon={ArrowRight01Icon}
             className={cn(
               "mr-1 h-4 w-4 transition-transform",
               isOpen && "rotate-90 transform"
@@ -143,7 +137,7 @@ const FileTreeNode: React.FC<FileTreeNodeProps> = ({
           />
         )}
         {node.type === "folder" ? (
-          <Folder className='mr-2 h-4 w-4 text-blue-500' />
+          <HugeiconsIcon icon={Folder01Icon} className='mr-2 h-4 w-4 text-blue-500' />
         ) : (
           <FileIcon name={node.name} />
         )}
@@ -189,7 +183,7 @@ export const MobileFileTree: React.FC<MobileFileTreeProps> = ({
         className='w-full justify-start px-4 py-2 text-sm font-semibold'
         onClick={() => setIsOpen(!isOpen)}
       >
-        <ChevronRight
+        <HugeiconsIcon icon={ArrowRight01Icon}
           className={cn(
             "mr-2 h-4 w-4 transition-transform",
             isOpen && "rotate-90 transform"

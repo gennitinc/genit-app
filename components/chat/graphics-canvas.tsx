@@ -7,15 +7,8 @@ import { useAgentRunsContext } from "@/context/AgentRunsContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { DesignNode } from "@/nodes/design-node";
-import {
-  Image as ImageIcon,
-  LayoutGrid,
-  Maximize2,
-  Minimize2,
-  Minus,
-  Plus,
-  View,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, MinusSignIcon, ViewIcon, ArrowShrink01Icon, ArrowExpand01Icon, LayoutGridIcon } from "@hugeicons/core-free-icons";
 import ReactFlow, {
   Background,
   Controls,
@@ -290,7 +283,7 @@ const GraphicsCanvasContent = ({
             className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Zoom In'
           >
-            <Plus className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-3.5 w-3.5' />
           </Button>
 
           {/* Zoom Out */}
@@ -301,7 +294,7 @@ const GraphicsCanvasContent = ({
             className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Zoom Out'
           >
-            <Minus className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={MinusSignIcon} className='h-3.5 w-3.5' />
           </Button>
           {/* Fit View */}
           <Button
@@ -313,7 +306,7 @@ const GraphicsCanvasContent = ({
             className='text-muted-foreground hover:text-foreground h-7 w-7 rounded-md p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             title='Fit View'
           >
-            <View className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={ViewIcon} className='h-3.5 w-3.5' />
           </Button>
           {onToggleFullscreen && (
             <>
@@ -328,9 +321,9 @@ const GraphicsCanvasContent = ({
                 title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               >
                 {isFullscreen ? (
-                  <Minimize2 className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={ArrowShrink01Icon} className='h-3.5 w-3.5' />
                 ) : (
-                  <Maximize2 className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={ArrowExpand01Icon} className='h-3.5 w-3.5' />
                 )}
               </Button>
               <div className='bg-border mx-1 h-5 w-px' />
@@ -364,7 +357,7 @@ const GraphicsCanvasContent = ({
           {nodes.length === 0 && (
             <div className='pointer-events-none absolute inset-0 flex items-center justify-center'>
               <div className='text-foreground space-y-2 text-center opacity-20 select-none'>
-                <LayoutGrid className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
+                <HugeiconsIcon icon={LayoutGridIcon} className='mx-auto h-12 w-12 text-neutral-200 dark:text-neutral-900' />
                 <p className='text-sm font-medium tracking-[0.2em] text-neutral-200 uppercase dark:text-neutral-900'>
                   <LocalizedText text={"genit Workspace"} />
                 </p>

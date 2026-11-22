@@ -4,7 +4,8 @@ import { NotionEditor } from "@/components/admin/NotionEditor";
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { ArrowLeft, Loader2, Save, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft02Icon, FloppyDiskIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -144,7 +145,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
             href='/admin/docs'
             className='cursor-pointer rounded-xl p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white'
           >
-            <ArrowLeft className='h-5 w-5' />
+            <HugeiconsIcon icon={ArrowLeft02Icon} className='h-5 w-5' />
           </Link>
           <div>
             <h1 className='text-xl font-bold text-white'>
@@ -165,7 +166,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
           onClick={handleSubmit}
           className='hover:shadow-primary/20 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-xs font-bold text-white transition duration-200 hover:bg-indigo-700 hover:shadow-lg'
         >
-          {submitLabel} <Save className='h-3.5 w-3.5' />
+          {submitLabel} <HugeiconsIcon icon={FloppyDiskIcon} className='h-3.5 w-3.5' />
         </button>
       </div>
 
@@ -217,7 +218,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                 onClick={() => setIsModalOpen(false)}
                 className='rounded-lg p-1 text-zinc-400 transition hover:bg-zinc-900 hover:text-white'
               >
-                <X className='h-5 w-5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
               </button>
             </div>
 
@@ -356,7 +357,7 @@ export function DocsEditorForm({ mode, initialDoc }: DocsEditorFormProps) {
                   </>
                 ) : (
                   <>
-                    <Save className='h-3.5 w-3.5' />{" "}
+                    <HugeiconsIcon icon={FloppyDiskIcon} className='h-3.5 w-3.5' />{" "}
                     <LocalizedText text={"Save Documentation"} />
                   </>
                 )}

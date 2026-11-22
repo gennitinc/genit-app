@@ -3,21 +3,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowUpRight,
-  Award,
-  Briefcase,
-  ChevronRight,
-  CircleFadingArrowUp,
-  Clock,
-  Globe,
-  Layers,
-  Sparkles,
-  Target,
-  Trophy,
-  Users,
-  Zap,
-} from "lucide-react";
+
 import type { Metadata } from "next";
 import Image from "next/image";
 

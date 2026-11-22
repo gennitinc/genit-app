@@ -6,14 +6,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ArrowUpRight,
-  DollarSign,
-  PieChart,
-  TrendingUp,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Dollar01Icon, ChartIncreaseIcon, UserGroupIcon, PieChartIcon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export default function RevenuePage() {
@@ -70,7 +64,7 @@ export default function RevenuePage() {
       <div className='mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-center'>
         <div className='space-y-1'>
           <div className='text-primary flex items-center gap-2 text-xs font-bold tracking-tight uppercase'>
-            <DollarSign className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Dollar01Icon} className='h-3.5 w-3.5' />
             <LocalizedText text={"Financial Analysis"} />
           </div>
           <h1 className='text-4xl font-extrabold tracking-tight'>
@@ -84,7 +78,7 @@ export default function RevenuePage() {
         </div>
         <div className='flex gap-3'>
           <Button className='shadow-primary/20 h-auto gap-2 rounded-lg bg-indigo-600 px-6 py-6 shadow-lg hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'>
-            <TrendingUp className='h-5 w-5' />{" "}
+            <HugeiconsIcon icon={ChartIncreaseIcon} className='h-5 w-5' />{" "}
             <LocalizedText text={"Detailed Report"} />
           </Button>
         </div>
@@ -96,28 +90,28 @@ export default function RevenuePage() {
             label: "Total Revenue",
             value: `$${financialStats.revenue.total.toLocaleString()}`,
             trend: `${data.overview.revenue.orders} payments`,
-            icon: DollarSign,
+            icon: Dollar01Icon,
             color: "text-emerald-500",
           },
           {
             label: "Tracked AI Cost",
             value: `$${Number(financialStats.credits.estimatedProviderCostUsd || 0).toFixed(2)}`,
             trend: `${financialStats.credits.meteredRuns} metered runs`,
-            icon: TrendingUp,
+            icon: ChartIncreaseIcon,
             color: "text-blue-500",
           },
           {
             label: "Credits Consumed",
             value: Number(financialStats.credits.settled || 0).toLocaleString(),
             trend: "settled only",
-            icon: Users,
+            icon: UserGroupIcon,
             color: "text-primary",
           },
           {
             label: "Credits Refunded",
             value: Number(financialStats.credits.refunded || 0).toLocaleString(),
             trend: "failed or partial runs",
-            icon: PieChart,
+            icon: PieChartIcon,
             color: "text-amber-500",
           },
         ].map((stat, i) => (
@@ -128,7 +122,7 @@ export default function RevenuePage() {
             <div
               className={`bg-muted/50 mb-4 w-fit rounded-lg p-2.5 ${stat.color}`}
             >
-              <stat.icon className='h-5 w-5' />
+              <HugeiconsIcon icon={stat.icon} className='h-5 w-5' />
             </div>
             <p className='text-muted-foreground mb-1 text-sm font-medium'>
               {stat.label}

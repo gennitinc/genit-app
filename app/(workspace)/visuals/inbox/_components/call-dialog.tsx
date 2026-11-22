@@ -25,7 +25,8 @@ import {
   browserCanCall,
   whatsappCallController,
 } from "@/lib/whatsapp-call-controller";
-import { Loader2, Phone, Video } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Loading03Icon, Video01Icon, Call02Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
@@ -209,7 +210,7 @@ export function CallDialog({
 
         {loading ? (
           <div className='flex h-40 items-center justify-center'>
-            <Loader2 className='text-muted-foreground h-5 w-5 animate-spin' />
+            <HugeiconsIcon icon={Loading03Icon} className='text-muted-foreground h-5 w-5 animate-spin' />
           </div>
         ) : (
           <div className='space-y-4'>
@@ -223,7 +224,7 @@ export function CallDialog({
             <div className='grid gap-3 sm:grid-cols-2'>
               <div className='rounded-xl border p-4'>
                 <div className='mb-1 flex items-center gap-2 font-medium'>
-                  <Video className='h-4 w-4' /> Meeting link
+                  <HugeiconsIcon icon={Video01Icon} className='h-4 w-4' /> Meeting link
                 </div>
                 <p className='text-muted-foreground mb-4 text-xs'>
                   Creates a meeting and sends its link through{" "}
@@ -268,7 +269,7 @@ export function CallDialog({
 
               <div className='rounded-xl border p-4'>
                 <div className='mb-1 flex items-center gap-2 font-medium'>
-                  <Phone className='h-4 w-4' /> WhatsApp native
+                  <HugeiconsIcon icon={Call02Icon} className='h-4 w-4' /> WhatsApp native
                 </div>
                 <p className='text-muted-foreground mb-4 text-xs'>
                   Voice calling through WhatsApp Business Calling. Customer

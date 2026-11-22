@@ -27,15 +27,8 @@ import {
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  CalendarDays,
-  Clock3,
-  Loader2,
-  MapPin,
-  Pencil,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar03Icon, Clock01Icon, MapPinIcon, UserGroupIcon, PencilIcon, Delete02Icon } from "@hugeicons/core-free-icons";
 import React, { useEffect, useMemo, useState } from "react";
 
 const ALLOWED_DESCRIPTION_TAGS = new Set([
@@ -196,22 +189,22 @@ export function CalendarEventPanel({
           {!editing && event ? (
             <div className='space-y-5'>
               <div className='flex h-11 w-11 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600 ring-1 ring-violet-500/15 dark:text-violet-300'>
-                <CalendarDays className='h-5 w-5' />
+                <HugeiconsIcon icon={Calendar03Icon} className='h-5 w-5' />
               </div>
               <div className='space-y-3 rounded-lg bg-black/[0.025] p-4 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
                 <div className='flex gap-3 text-sm'>
-                  <Clock3 className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
+                  <HugeiconsIcon icon={Clock01Icon} className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
                   <span>{readableDate(event)}</span>
                 </div>
                 {event.location && (
                   <div className='flex gap-3 text-sm'>
-                    <MapPin className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
+                    <HugeiconsIcon icon={MapPinIcon} className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
                     <span>{event.location}</span>
                   </div>
                 )}
                 {!!event.attendees?.length && (
                   <div className='flex gap-3 text-sm'>
-                    <Users className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
+                    <HugeiconsIcon icon={UserGroupIcon} className='mt-0.5 h-4 w-4 shrink-0 text-violet-500' />
                     <span>
                       {event.attendees
                         .map((item) => item.displayName || item.email)
@@ -234,7 +227,7 @@ export function CalendarEventPanel({
                   className='rounded-xl bg-violet-600 text-white hover:bg-violet-700'
                   onClick={() => setEditing(true)}
                 >
-                  <Pencil className='h-4 w-4' />{" "}
+                  <HugeiconsIcon icon={PencilIcon} className='h-4 w-4' />{" "}
                   <LocalizedText text={"Edit event"} />
                 </Button>
                 <Button
@@ -242,7 +235,7 @@ export function CalendarEventPanel({
                   className='rounded-xl sm:ml-auto'
                   onClick={() => setConfirmDelete(true)}
                 >
-                  <Trash2 className='h-4 w-4' />{" "}
+                  <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />{" "}
                   <LocalizedText text={"Delete"} />
                 </Button>
               </div>

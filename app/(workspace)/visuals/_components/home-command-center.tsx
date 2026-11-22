@@ -34,18 +34,8 @@ import {
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowRight,
-  CalendarClock,
-  CircleFadingArrowUp,
-  Clock3,
-  Edit3,
-  FileText,
-  Loader2,
-  Plus,
-  Sparkles,
-  Trash2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, ArrowRight02Icon, SparklesIcon, PencilEdit01Icon, Delete02Icon, File02Icon, Clock01Icon, Calendar04Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -371,7 +361,7 @@ export function HomeCommandCenter({
                     onClick={openCreate}
                     className='rounded-md border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
-                    <Plus className='mr-1 h-3.5 w-3.5' />{" "}
+                    <HugeiconsIcon icon={PlusSignIcon} className='mr-1 h-3.5 w-3.5' />{" "}
                     <LocalizedText text={"New post"} />
                   </Button>
                   <Button
@@ -382,7 +372,7 @@ export function HomeCommandCenter({
                   >
                     <Link href='/visuals/posts'>
                       <LocalizedText text={"View all"} />
-                      <ArrowRight className='ml-1.5 h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1.5 h-3.5 w-3.5' />
                     </Link>
                   </Button>
                 </div>
@@ -402,7 +392,7 @@ export function HomeCommandCenter({
                             className='h-full w-full object-cover'
                           />
                         ) : (
-                          <Sparkles className='h-4 w-4 text-indigo-300' />
+                          <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4 text-indigo-300' />
                         )}
                       </div>
                       <div className='min-w-0 flex-1'>
@@ -438,21 +428,21 @@ export function HomeCommandCenter({
                         className='flex h-8 w-8 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white'
                         aria-label={`Edit ${post.title || "post"}`}
                       >
-                        <Edit3 className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={PencilEdit01Icon} className='h-3.5 w-3.5' />
                       </button>
                       <button
                         onClick={() => setDeleteTarget(post)}
                         className='flex h-8 w-8 items-center justify-center rounded-full text-white/50 transition hover:bg-rose-500/20 hover:text-rose-400'
                         aria-label={`Delete ${post.title || "post"}`}
                       >
-                        <Trash2 className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                       </button>
                     </article>
                   ))}
                 </div>
               ) : (
                 <div className='flex min-h-64 flex-col items-center justify-center px-6 text-center text-white'>
-                  <FileText className='h-7 w-7 text-white/40' />
+                  <HugeiconsIcon icon={File02Icon} className='h-7 w-7 text-white/40' />
                   <h4 className='mt-3 font-semibold text-white'>
                     <LocalizedText text={"Your pipeline is ready"} />
                   </h4>
@@ -468,7 +458,7 @@ export function HomeCommandCenter({
                     variant='outline'
                     className='mt-4 rounded-md border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white'
                   >
-                    <Plus className='mr-1.5 h-4 w-4' />
+                    <HugeiconsIcon icon={PlusSignIcon} className='mr-1.5 h-4 w-4' />
                     <LocalizedText text={"New post"} />
                   </Button>
                 </div>
@@ -485,7 +475,7 @@ export function HomeCommandCenter({
                     <LocalizedText text={"Your next scheduled releases"} />
                   </p>
                 </div>
-                <Clock3 className='h-4 w-4 text-indigo-300' />
+                <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-indigo-300' />
               </div>
               <div className='mt-5 space-y-3'>
                 {scheduled.slice(0, 4).map((post, index) => (
@@ -510,7 +500,7 @@ export function HomeCommandCenter({
                 ))}
                 {!scheduled.length && (
                   <div className='rounded-lg border border-dashed border-white/15 p-6 text-center'>
-                    <CalendarClock className='mx-auto h-6 w-6 text-white/35' />
+                    <HugeiconsIcon icon={Calendar04Icon} className='mx-auto h-6 w-6 text-white/35' />
                     <p className='mt-3 text-sm font-medium'>
                       <LocalizedText text={"No posts scheduled"} />
                     </p>
@@ -530,7 +520,7 @@ export function HomeCommandCenter({
               >
                 <Link href='/visuals/calendar'>
                   <LocalizedText text={"Open calendar"} />
-                  <ArrowRight className='ml-1.5 h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1.5 h-4 w-4' />
                 </Link>
               </Button>
             </div>

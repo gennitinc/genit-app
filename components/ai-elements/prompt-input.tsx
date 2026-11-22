@@ -18,15 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import type { ChatStatus, FileUIPart } from "ai";
-import {
-  ImageIcon,
-  Loader2Icon,
-  PaperclipIcon,
-  PlusIcon,
-  SendIcon,
-  SquareIcon,
-  XIcon,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Attachment01Icon, Cancel01Icon, Image01Icon, PlusSignIcon, SentIcon, SquareIcon } from "@hugeicons/core-free-icons";
 import { nanoid } from "nanoid";
 import {
   type ChangeEventHandler,
@@ -99,7 +92,7 @@ export function PromptInputAttachment({
         />
       ) : (
         <div className='text-muted-foreground flex size-full items-center justify-center'>
-          <PaperclipIcon className='size-4' />
+          <HugeiconsIcon icon={Attachment01Icon} className='size-4' />
         </div>
       )}
       <Button
@@ -110,7 +103,7 @@ export function PromptInputAttachment({
         type='button'
         variant='outline'
       >
-        <XIcon className='h-3 w-3' />
+        <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
       </Button>
     </div>
   );
@@ -184,7 +177,7 @@ export const PromptInputActionAddAttachments = ({
         attachments.openFileDialog();
       }}
     >
-      <ImageIcon className='mr-2 size-4' /> {label}
+      <HugeiconsIcon icon={Image01Icon} className='mr-2 size-4' /> {label}
     </DropdownMenuItem>
   );
 };
@@ -573,7 +566,7 @@ export const PromptInputActionMenuTrigger = ({
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
     <PromptInputButton className={className} {...props}>
-      {children ?? <PlusIcon className='size-4' />}
+      {children ?? <HugeiconsIcon icon={PlusSignIcon} className='size-4' />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 );
@@ -613,14 +606,14 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  let Icon = <SendIcon className='size-4' />;
+  let Icon = <HugeiconsIcon icon={SentIcon} className='size-4' />;
 
   if (status === "submitted") {
     Icon = <LoadingFileLoader size={20} />;
   } else if (status === "streaming") {
-    Icon = <SquareIcon className='size-4' />;
+    Icon = <HugeiconsIcon icon={SquareIcon} className='size-4' />;
   } else if (status === "error") {
-    Icon = <XIcon className='size-4' />;
+    Icon = <HugeiconsIcon icon={Cancel01Icon} className='size-4' />;
   }
 
   return (

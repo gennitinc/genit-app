@@ -19,7 +19,8 @@ import {
 } from "@/lib/pipeline-api";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Copy } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
@@ -381,7 +382,7 @@ ${vertical.questions
           <div className='flex gap-2'>
             <Input readOnly value={data.formEndpoint} className='font-mono text-xs' onFocus={(e) => e.target.select()} />
             <Button variant='outline' size='icon' onClick={() => void copy(data.formEndpoint, "url")} aria-label='Copy endpoint'>
-              {copied === "url" ? <Check /> : <Copy />}
+              {copied === "url" ? <HugeiconsIcon icon={Tick02Icon} /> : <HugeiconsIcon icon={Copy01Icon} />}
             </Button>
           </div>
         </Field>
@@ -397,7 +398,7 @@ ${vertical.questions
             className='absolute top-2 right-2 h-7 text-xs'
             onClick={() => void copy(snippet, "snippet")}
           >
-            {copied === "snippet" ? <Check /> : <Copy />} Copy HTML
+            {copied === "snippet" ? <HugeiconsIcon icon={Tick02Icon} /> : <HugeiconsIcon icon={Copy01Icon} />} Copy HTML
           </Button>
         </div>
       </Section>

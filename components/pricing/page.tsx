@@ -12,7 +12,8 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import { ArrowRight, Check, Crown, Loader2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon } from "@hugeicons/core-free-icons";
 import React, { useEffect, useState } from "react";
 
 const plansDev = [
@@ -701,7 +702,7 @@ export default function PricingComponent({
                                 "bg-indigo-600 hover:bg-indigo-700"
                               )}
                             >
-                              <Check className='h-2 w-2 stroke-[4px] text-white' />
+                              <HugeiconsIcon icon={Tick02Icon} className='h-2 w-2 stroke-[4px] text-white' />
                             </div>
                             <div className='text-muted-foreground text-sm font-medium'>
                               {feature}

@@ -4,20 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  BookOpen,
-  ChevronRight,
-  Copy,
-  FileText,
-  Library,
-  Loader2,
-  Menu,
-  Search,
-  Send,
-  Sparkles,
-  TerminalSquare,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, Search01Icon, SparklesIcon, ArrowRight01Icon, Menu01Icon, BookOpen01Icon, CommandLineIcon, LibraryIcon, File02Icon, Copy01Icon, SentIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
@@ -168,13 +156,13 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
           className='ml-auto rounded-lg p-2 text-zinc-400 hover:bg-zinc-900 hover:text-white'
           aria-label='Close docs navigation'
         >
-          <X className='h-5 w-5' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
         </button>
       </div>
 
       <div className='flex items-center gap-2 px-4 py-5'>
         <div className='relative flex-1'>
-          <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-500' />
+          <HugeiconsIcon icon={Search01Icon} className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-500' />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -187,7 +175,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
           aria-label='Ask AI'
           className='flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-black text-zinc-400 transition hover:border-zinc-700 hover:text-white'
         >
-          <Sparkles className='h-4 w-4' />
+          <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4' />
         </button>
       </div>
 
@@ -218,7 +206,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                     >
                       <span className='line-clamp-1'>{doc.title}</span>
                       {!active && (
-                        <ChevronRight className='h-3.5 w-3.5 shrink-0 text-zinc-700' />
+                        <HugeiconsIcon icon={ArrowRight01Icon} className='h-3.5 w-3.5 shrink-0 text-zinc-700' />
                       )}
                     </button>
                   );
@@ -241,7 +229,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
             className='rounded-lg p-2 text-zinc-400 hover:bg-zinc-900 hover:text-white lg:hidden'
             aria-label='Open docs navigation'
           >
-            <Menu className='h-5 w-5' />
+            <HugeiconsIcon icon={Menu01Icon} className='h-5 w-5' />
           </button>
 
           <Link href='/' className='flex items-center gap-2'>
@@ -253,21 +241,21 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
 
           <nav className='ml-4 hidden items-center gap-8 text-sm font-medium md:flex'>
             <Link href='/docs' className='flex items-center gap-2 text-white'>
-              <BookOpen className='h-4 w-4' />
+              <HugeiconsIcon icon={BookOpen01Icon} className='h-4 w-4' />
               <LocalizedText text={"Documentation"} />
             </Link>
             <Link
               href='/docs'
               className='flex items-center gap-2 text-zinc-500 transition hover:text-zinc-200'
             >
-              <TerminalSquare className='h-4 w-4' />
+              <HugeiconsIcon icon={CommandLineIcon} className='h-4 w-4' />
               <LocalizedText text={"API Reference"} />
             </Link>
             <Link
               href='/docs'
               className='flex items-center gap-2 text-zinc-500 transition hover:text-zinc-200'
             >
-              <Library className='h-4 w-4' />
+              <HugeiconsIcon icon={LibraryIcon} className='h-4 w-4' />
               <LocalizedText text={"Knowledge Base"} />
             </Link>
           </nav>
@@ -307,7 +295,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
             </div>
           ) : !activeDoc ? (
             <div className='mx-auto max-w-2xl px-6 py-32 text-center'>
-              <FileText className='mx-auto mb-4 h-10 w-10 text-zinc-600' />
+              <HugeiconsIcon icon={File02Icon} className='mx-auto mb-4 h-10 w-10 text-zinc-600' />
               <h1 className='text-2xl font-semibold text-white'>
                 <LocalizedText text={"Documentation is coming soon"} />
               </h1>
@@ -322,7 +310,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
               <article className='min-w-0 lg:mx-auto lg:w-full lg:max-w-3xl'>
                 <div className='mb-5 flex items-center gap-2 text-sm text-zinc-500'>
                   <span>{activeDoc.section}</span>
-                  <ChevronRight className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowRight01Icon} className='h-4 w-4' />
                   <span>{activeDoc.title}</span>
                 </div>
 
@@ -340,7 +328,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                     onClick={copyLink}
                     className='hidden h-11 shrink-0 items-center gap-2 rounded-xl border border-zinc-800 bg-black px-3 text-sm text-zinc-400 transition hover:border-zinc-700 hover:text-white sm:inline-flex'
                   >
-                    <Copy className='h-4 w-4' />
+                    <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
                     {copied ? "Copied" : "Copy"}
                   </button>
                 </div>
@@ -361,7 +349,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
                       aria-label='Send question'
                       className='flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-zinc-300 transition hover:bg-zinc-800 hover:text-white'
                     >
-                      <Send className='h-4 w-4' />
+                      <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />
                     </button>
                   </div>
                 </div>
@@ -370,7 +358,7 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
               <aside className='hidden lg:block'>
                 <div className='sticky top-28 border-l border-zinc-800 pl-6'>
                   <div className='mb-4 flex items-center gap-2 text-sm font-semibold text-zinc-200'>
-                    <Menu className='h-4 w-4' />
+                    <HugeiconsIcon icon={Menu01Icon} className='h-4 w-4' />
                     <LocalizedText text={"On this page"} />
                   </div>
                   <nav className='space-y-3'>

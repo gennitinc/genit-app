@@ -46,29 +46,8 @@ import { useAccountActions } from "@/hooks/use-account-actions";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ArrowDownUp,
-  Bell,
-  Bot,
-  Check,
-  ChevronDown,
-  CreditCard,
-  Download,
-  KeyRound,
-  Loader2,
-  Monitor,
-  Moon,
-  Palette,
-  Plus,
-  RefreshCw,
-  Save,
-  Shield,
-  SlidersHorizontal,
-  Sun,
-  Target,
-  Trash2,
-  User as UserIcon,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserIcon, PaintBoardIcon, ArrowDataTransferVerticalIcon, CreditCardIcon, Shield01Icon, SlidersHorizontalIcon, Tick02Icon, Key01Icon, Target01Icon, PlusSignIcon, Delete02Icon, RefreshIcon, BotIcon, Download01Icon, ArrowDown01Icon, Notification01Icon, ComputerIcon, Loading03Icon, Sun01Icon, MoonIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -703,31 +682,31 @@ const SettingsHome = () => {
       id: "brand",
       label: t("Brand"),
       description: "Identity, voice, and profiles",
-      icon: Palette,
+      icon: PaintBoardIcon,
     },
     {
       id: "automation",
       label: t("Marketing Loop"),
       description: "Goals, experiments, and runs",
-      icon: ArrowDownUp,
+      icon: ArrowDataTransferVerticalIcon,
     },
     {
       id: "billing",
       label: t("Billing"),
       description: "Credits, invoices, and plans",
-      icon: CreditCard,
+      icon: CreditCardIcon,
     },
     {
       id: "security",
       label: t("Security"),
       description: "Sessions and account access",
-      icon: Shield,
+      icon: Shield01Icon,
     },
     {
       id: "preferences",
       label: t("Preferences"),
       description: "Appearance and notifications",
-      icon: SlidersHorizontal,
+      icon: SlidersHorizontalIcon,
     },
   ];
   const activeTabDetails =
@@ -789,7 +768,7 @@ const SettingsHome = () => {
                         : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.05] dark:hover:text-white"
                     }`}
                   >
-                    <Icon
+                    <HugeiconsIcon icon={Icon}
                       className={`size-4 ${
                         selected
                           ? "text-sky-600 dark:text-sky-400"
@@ -860,7 +839,7 @@ const SettingsHome = () => {
                     <div className='flex flex-col gap-3 border-t border-zinc-200 pt-5 sm:flex-row sm:items-center sm:justify-between dark:border-white/10'>
                       <div className='flex items-center gap-2 text-sm'>
                         <span className='flex size-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'>
-                          <Check className='size-4' />
+                          <HugeiconsIcon icon={Tick02Icon} className='size-4' />
                         </span>
                         <span className='font-medium text-zinc-900 dark:text-zinc-100'>
                           {user?.emailVerified
@@ -899,7 +878,7 @@ const SettingsHome = () => {
                   <CardContent className='flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between'>
                     <div className='flex items-start gap-3'>
                       <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
-                        <KeyRound className='size-4' />
+                        <HugeiconsIcon icon={Key01Icon} className='size-4' />
                       </span>
                       <div>
                         <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
@@ -936,7 +915,7 @@ const SettingsHome = () => {
                   <div className='flex items-start justify-between gap-4'>
                     <div className='flex min-w-0 items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl'>
-                        <ArrowDownUp className='h-5 w-5' />
+                        <HugeiconsIcon icon={ArrowDataTransferVerticalIcon} className='h-5 w-5' />
                       </div>
                       <div>
                         <CardTitle className='text-xl'>
@@ -988,7 +967,7 @@ const SettingsHome = () => {
                   <section className='bg-background/60 space-y-5 rounded-xl border p-4 sm:p-5'>
                     <div className='flex items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
-                        <Target className='h-4 w-4' />
+                        <HugeiconsIcon icon={Target01Icon} className='h-4 w-4' />
                       </div>
                       <div>
                         <h4 className='font-semibold'>
@@ -1075,7 +1054,7 @@ const SettingsHome = () => {
                           (currentOrg?.autoModeGoals?.length || 0) >= 10
                         }
                       >
-                        <Plus className='h-4 w-4' />{" "}
+                        <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />{" "}
                         <LocalizedText text={"Add goal"} />
                       </Button>
                     </div>
@@ -1115,7 +1094,7 @@ const SettingsHome = () => {
                                 aria-label={`Remove ${goal.title}`}
                                 onClick={() => removeAutoGoal(goal.id)}
                               >
-                                <Trash2 className='h-4 w-4' />
+                                <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                               </Button>
                             </div>
                           );
@@ -1177,7 +1156,7 @@ const SettingsHome = () => {
                   <section className='bg-background/60 space-y-5 rounded-xl border p-4 sm:p-5'>
                     <div className='flex items-start gap-3'>
                       <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
-                        <RefreshCw className='h-4 w-4' />
+                        <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
                       </div>
                       <div>
                         <h4 className='font-semibold'>
@@ -1321,7 +1300,7 @@ const SettingsHome = () => {
                         onClick={addAutoExperiment}
                         disabled={savingAuto || autoCampaigns.length < 2}
                       >
-                        <Plus className='h-4 w-4' />{" "}
+                        <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />{" "}
                         <LocalizedText text={"Create experiment"} />
                       </Button>
                     </div>
@@ -1380,7 +1359,7 @@ const SettingsHome = () => {
                                 removeAutoExperiment(experiment.id)
                               }
                             >
-                              <Trash2 className='h-4 w-4' />
+                              <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                             </Button>
                           </div>
                         ))}
@@ -1506,7 +1485,7 @@ const SettingsHome = () => {
                     <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
                       <div className='flex items-start gap-3'>
                         <div className='bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg'>
-                          <Bot className='h-4 w-4' />
+                          <HugeiconsIcon icon={BotIcon} className='h-4 w-4' />
                         </div>
                         <div>
                           <h4 className='font-semibold'>
@@ -1539,7 +1518,7 @@ const SettingsHome = () => {
                     {autoMissions.length === 0 ? (
                       <div className='bg-muted/20 flex flex-col items-center rounded-xl border border-dashed px-4 py-7 text-center'>
                         <div className='bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-full'>
-                          <Bot className='h-4 w-4' />
+                          <HugeiconsIcon icon={BotIcon} className='h-4 w-4' />
                         </div>
                         <p className='mt-3 text-sm font-medium'>
                           <LocalizedText text={"No missions yet"} />
@@ -1939,7 +1918,7 @@ const SettingsHome = () => {
                   <div className='space-y-4'>
                     <div>
                       <h4 className='flex items-center gap-2 font-medium'>
-                        <Shield className='h-4 w-4' />{" "}
+                        <HugeiconsIcon icon={Shield01Icon} className='h-4 w-4' />{" "}
                         <LocalizedText text={"Action guardrails"} />
                       </h4>
                       <p className='text-muted-foreground text-sm'>
@@ -2059,7 +2038,7 @@ const SettingsHome = () => {
                         {loadingRuns ? (
                           <LoadingFileLoader size={20} />
                         ) : (
-                          <RefreshCw className='mr-2 h-4 w-4' />
+                          <HugeiconsIcon icon={RefreshIcon} className='mr-2 h-4 w-4' />
                         )}
                         <LocalizedText text={"Refresh"} />
                       </Button>
@@ -2138,7 +2117,7 @@ const SettingsHome = () => {
                   <div className='flex flex-col justify-between gap-3 sm:flex-row sm:items-center'>
                     <div>
                       <h4 className='flex items-center gap-2 font-medium'>
-                        <RefreshCw className='h-4 w-4' />{" "}
+                        <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />{" "}
                         <LocalizedText text={"Loop timer"} />
                       </h4>
                       <p className='text-muted-foreground text-sm'>
@@ -2286,7 +2265,7 @@ const SettingsHome = () => {
                     {billingHistory.length === 0 ? (
                       <div className='flex flex-col items-center px-5 py-12 text-center'>
                         <span className='flex size-10 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400'>
-                          <CreditCard className='size-5' />
+                          <HugeiconsIcon icon={CreditCardIcon} className='size-5' />
                         </span>
                         <p className='mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100'>
                           <LocalizedText text={"No billing activity yet"} />
@@ -2344,7 +2323,7 @@ const SettingsHome = () => {
                                     target='_blank'
                                     rel='noreferrer'
                                   >
-                                    <Download className='mr-2 size-4' />
+                                    <HugeiconsIcon icon={Download01Icon} className='mr-2 size-4' />
                                     <LocalizedText text={"Download"} />
                                   </a>
                                 </Button>
@@ -2393,7 +2372,7 @@ const SettingsHome = () => {
                             }
                             className='size-8 rounded-lg'
                           >
-                            <ChevronDown
+                            <HugeiconsIcon icon={ArrowDown01Icon}
                               className={`size-4 transition-transform ${
                                 isCreditActivityOpen ? "rotate-180" : ""
                               }`}
@@ -2505,7 +2484,7 @@ const SettingsHome = () => {
                     <div className='flex items-center justify-between gap-5 px-5 py-4'>
                       <div className='flex min-w-0 items-start gap-3'>
                         <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
-                          <Bell className='size-4' />
+                          <HugeiconsIcon icon={Notification01Icon} className='size-4' />
                         </span>
                         <div>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
@@ -2530,7 +2509,7 @@ const SettingsHome = () => {
                     <div className='flex items-center justify-between gap-5 px-5 py-4'>
                       <div className='flex min-w-0 items-start gap-3'>
                         <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
-                          <KeyRound className='size-4' />
+                          <HugeiconsIcon icon={Key01Icon} className='size-4' />
                         </span>
                         <div>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
@@ -2552,7 +2531,7 @@ const SettingsHome = () => {
                     <div className='px-5 py-4'>
                       <div className='flex min-w-0 items-start gap-3'>
                         <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
-                          <Monitor className='size-4' />
+                          <HugeiconsIcon icon={ComputerIcon} className='size-4' />
                         </span>
                         <div className='min-w-0 flex-1'>
                           <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>
@@ -2570,7 +2549,7 @@ const SettingsHome = () => {
                       <div className='mt-4 space-y-2 pl-0 sm:pl-12'>
                         {loadingSessions ? (
                           <div className='flex items-center gap-2 py-3 text-sm text-zinc-500'>
-                            <Loader2 className='size-4 animate-spin' />
+                            <HugeiconsIcon icon={Loading03Icon} className='size-4 animate-spin' />
                             <LocalizedText text={"Loading sessions..."} />
                           </div>
                         ) : sessionsError ? (
@@ -2590,7 +2569,7 @@ const SettingsHome = () => {
                                 setSessionsReloadKey((value) => value + 1)
                               }
                             >
-                              <RefreshCw className='size-4' />
+                              <HugeiconsIcon icon={RefreshIcon} className='size-4' />
                               <LocalizedText text={"Try again"} />
                             </Button>
                           </div>
@@ -2638,7 +2617,7 @@ const SettingsHome = () => {
                                 }
                               >
                                 {disconnectingSession === session._id ? (
-                                  <Loader2 className='size-4 animate-spin' />
+                                  <HugeiconsIcon icon={Loading03Icon} className='size-4 animate-spin' />
                                 ) : null}
                                 <LocalizedText
                                   text={
@@ -2752,9 +2731,9 @@ const SettingsHome = () => {
                   <CardContent className='p-5'>
                     <div className='grid grid-cols-3 gap-2 rounded-lg bg-zinc-100 p-1.5 dark:bg-white/[0.05]'>
                       {[
-                        { value: "light", label: t("Light"), icon: Sun },
-                        { value: "dark", label: t("Dark"), icon: Moon },
-                        { value: "system", label: t("System"), icon: Monitor },
+                        { value: "light", label: t("Light"), icon: Sun01Icon },
+                        { value: "dark", label: t("Dark"), icon: MoonIcon },
+                        { value: "system", label: t("System"), icon: ComputerIcon },
                       ].map((option) => {
                         const Icon = option.icon;
                         const selected = theme === option.value;
@@ -2774,7 +2753,7 @@ const SettingsHome = () => {
                                 : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                             }`}
                           >
-                            <Icon className='size-4' />
+                            <HugeiconsIcon icon={Icon} className='size-4' />
                             <span className='hidden sm:inline'>
                               {option.label}
                             </span>

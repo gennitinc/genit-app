@@ -25,33 +25,9 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  Camera,
-  CircleFadingArrowUp,
-  FileText,
-  Image,
-  Image as ImageIcon,
-  Layout,
-  Loader2,
-  MessageSquare,
-  Mic,
-  PaperclipIcon,
-  Presentation,
-  Settings,
-  Settings2,
-  Sparkles,
-  TrendingUp,
-  Type,
-  Users,
-  Video,
-  WandSparklesIcon,
-  X,
-  XIcon,
-  Youtube,
-  Zap,
-} from "lucide-react";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, Video01Icon, Image01Icon, Camera01Icon, YoutubeIcon, Layout01Icon, TextFontIcon, Presentation01Icon, SparklesIcon, CircleArrowUp02Icon, ZapIcon, Attachment01Icon, Settings01Icon, MagicWand02Icon, Cancel01Icon, DragDropVerticalIcon, Delete02Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
+
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type React from "react";
@@ -511,70 +487,70 @@ export function IdeaSection() {
     {
       id: "flier",
       label: "Flier",
-      icon: FileText,
+      icon: File02Icon,
     },
     {
       id: "animation",
       label: "Animation",
-      icon: Video,
+      icon: Video01Icon,
       comingSoon: true,
     },
     {
       id: "video",
       label: "Video",
-      icon: Video,
+      icon: Video01Icon,
     },
     {
       id: "image",
       label: "HD Images",
-      icon: ImageIcon,
+      icon: Image01Icon,
     },
     {
       id: "instagram_post",
       label: "Instagram",
-      icon: Camera,
+      icon: Camera01Icon,
     },
     {
       id: "poster",
       label: "Poster",
-      icon: ImageIcon,
+      icon: Image01Icon,
     },
     {
       id: "youtube_thumbnail",
       label: "YouTube Thumbnail",
-      icon: Youtube,
+      icon: YoutubeIcon,
     },
     {
       id: "facebook_post",
       label: "Facebook Post",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "facebook_cover",
       label: "Facebook Cover",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "banner",
       label: "Banner",
-      icon: Layout,
+      icon: Layout01Icon,
     },
     {
       id: "logo",
       label: "Logo",
-      icon: Type,
+      icon: TextFontIcon,
     },
     {
       id: "presentation",
       label: "Presentation",
-      icon: Presentation,
+      icon: Presentation01Icon,
       comingSoon: true,
     },
     {
       id: "generic_design",
       label: "Generic Design",
-      icon: Sparkles,
-      CircleFadingArrowUp,
+      icon: SparklesIcon,
+      CircleFadingArrowUp: CircleArrowUp02Icon,
     },
   ];
 
@@ -899,7 +875,7 @@ export function IdeaSection() {
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-1'>
                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
@@ -1024,7 +1000,7 @@ export function IdeaSection() {
                             disabled={isGenerating || isSubmitting}
                             aria-label='Attach files'
                           >
-                            <PaperclipIcon className='h-4 w-4' />
+                            <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                           </button>
                           <Input
                             ref={fileInputRef}
@@ -1047,7 +1023,7 @@ export function IdeaSection() {
                                 setShowOrientationSelection(false);
                               }}
                             >
-                              <selectedDesignType.icon className='h-3 w-3' />
+                              <HugeiconsIcon icon={selectedDesignType.icon} className='h-3 w-3' />
                               {selectedDesignType.label}
                               {selectedOrientation &&
                                 selectedOrientation !== "custom" && (
@@ -1082,7 +1058,7 @@ export function IdeaSection() {
                             disabled={isGenerating || isSubmitting}
                             aria-label='Settings'
                           >
-                            <Settings className='h-4 w-4' />
+                            <HugeiconsIcon icon={Settings01Icon} className='h-4 w-4' />
                           </button>
                         </div>
 
@@ -1104,7 +1080,7 @@ export function IdeaSection() {
                               <LoadingFileLoader size={20} />
                             ) : (
                               <div className='flex flex-row items-center gap-2'>
-                                <WandSparklesIcon className='h-3 w-3' />
+                                <HugeiconsIcon icon={MagicWand02Icon} className='h-3 w-3' />
                                 Create
                               </div>
                             )}
@@ -1143,7 +1119,7 @@ export function IdeaSection() {
                           className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
                           aria-label='Close settings'
                         >
-                          <X className='h-4 w-4' />
+                          <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                         </button>
                       </div>
 
@@ -1193,7 +1169,7 @@ export function IdeaSection() {
                                     className='flex-shrink-0'
                                     onCheckedChange={() => {}}
                                   />
-                                  <IconComponent
+                                  <HugeiconsIcon icon={IconComponent}
                                     className={`h-4 w-4 flex-shrink-0 ${
                                       isComingSoon
                                         ? "text-muted-foreground/50"
@@ -1415,7 +1391,7 @@ export function IdeaSection() {
                   >
                     <div className='flex items-start gap-3'>
                       <div className='flex flex-shrink-0 items-center gap-2 pt-1'>
-                        <GripVertical className='text-muted-foreground h-4 w-4 cursor-move' />
+                        <HugeiconsIcon icon={DragDropVerticalIcon} className='text-muted-foreground h-4 w-4 cursor-move' />
                         <span className='text-muted-foreground w-8 text-xs font-medium'>
                           {index + 1}
                         </span>
@@ -1463,7 +1439,7 @@ export function IdeaSection() {
                                 }}
                                 className='text-muted-foreground hover:text-destructive transition-colors'
                               >
-                                <Trash2 className='h-4 w-4' />
+                                <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                               </button>
                             </div>
                           ))}
@@ -1476,7 +1452,7 @@ export function IdeaSection() {
                             }}
                             className='text-muted-foreground hover:text-foreground mt-2 flex items-center gap-2 text-sm transition-colors'
                           >
-                            <Plus className='h-4 w-4' />
+                            <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                             Add bullet point
                           </button>
                         </div>
@@ -1491,7 +1467,7 @@ export function IdeaSection() {
                         }}
                         className='text-muted-foreground hover:text-destructive flex-shrink-0 transition-colors'
                       >
-                        <Trash2 className='h-4 w-4' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                       </button>
                     </div>
                   </div>
@@ -1510,7 +1486,7 @@ export function IdeaSection() {
                   }}
                   className='border-border text-muted-foreground hover:text-foreground hover:border-foreground/50 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors'
                 >
-                  <Plus className='h-4 w-4' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                   Add Slide
                 </button>
 
@@ -1804,7 +1780,7 @@ export function IdeaSection() {
                 </>
               ) : (
                 <>
-                  <WandSparklesIcon className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={MagicWand02Icon} className='mr-2 h-4 w-4' />
                   Generate Presentation
                 </>
               )}

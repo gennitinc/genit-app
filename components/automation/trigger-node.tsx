@@ -14,44 +14,27 @@ import {
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  AtSign,
-  CalendarDays,
-  ClipboardList,
-  Clock,
-  Image,
-  Inbox,
-  Loader2,
-  Mail,
-  MessageCircle,
-  MessageSquare,
-  Pause,
-  Play,
-  Power,
-  Send,
-  Trash2,
-  UserPlus,
-  Webhook,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ZapIcon, Clock01Icon, WebhookIcon, PlayIcon, Mail01Icon, Task01Icon, PowerServiceIcon, Delete02Icon, PauseIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView } from "@/components/ui/icon-source";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
 export const TRIGGER_ICONS: Record<TriggerSubtype, any> = {
-  composio_event: Zap,
-  schedule: Clock,
-  webhook: Webhook,
-  manual: Play,
+  composio_event: ZapIcon,
+  schedule: Clock01Icon,
+  webhook: WebhookIcon,
+  manual: PlayIcon,
   whatsapp_message: WhatsAppBrand,
-  gmail_received: Mail,
-  outlook_email_received: Mail,
+  gmail_received: Mail01Icon,
+  outlook_email_received: Mail01Icon,
   brevo_contact_added: BrevoBrand,
   facebook_comment: FacebookBrand,
   facebook_message: FacebookBrand,
   instagram_comment: InstagramBrand,
   instagram_dm: InstagramBrand,
   calendar_event: GoogleCalendarBrand,
-  form_submission: ClipboardList,
+  form_submission: Task01Icon,
   x_mention: XBrand,
   messenger_message: MessengerBrand,
 };
@@ -106,7 +89,7 @@ const labelCls =
 export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
   const isEdit = data.isEditMode;
   const subtype = TRIGGER_SUBTYPES.find((t) => t.id === data.triggerType);
-  const Icon = TRIGGER_ICONS[data.triggerType] ?? Zap;
+  const Icon = TRIGGER_ICONS[data.triggerType] ?? ZapIcon;
   // Schedule times are the user's local wall time; the server runs them in
   // the saved timezone, not its own.
   const updateSchedule = (patch: Record<string, unknown>) =>
@@ -134,7 +117,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               className='h-4 w-4 rounded object-contain'
             />
           ) : (
-            <Power className='h-4 w-4' />
+            <HugeiconsIcon icon={PowerServiceIcon} className='h-4 w-4' />
           )}
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"Trigger"} />
@@ -147,7 +130,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
               onClick={() => data.onRemoveNode(id)}
               className='nodrag nopan rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
             >
-              <Trash2 className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
             </button>
           )}
           {!isEdit && data.isActive === false && (
@@ -471,9 +454,9 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   }
                 >
                   {data.isActive === false ? (
-                    <Play className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={PlayIcon} className='h-3.5 w-3.5' />
                   ) : (
-                    <Pause className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={PauseIcon} className='h-3.5 w-3.5' />
                   )}
                   {data.isActive === false ? "Paused" : "Active"}
                 </button>
@@ -490,7 +473,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                   {data.isTesting ? (
                     <LoadingFileLoader size={20} />
                   ) : (
-                    <Play className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={PlayIcon} className='h-3.5 w-3.5' />
                   )}
                   {data.isTesting ? "Simulating..." : "Dry Run"}
                 </button>
@@ -511,7 +494,7 @@ export function TriggerNode({ id, data }: NodeProps<TriggerNodeData>) {
                     className='h-3.5 w-3.5 rounded object-contain'
                   />
                 ) : (
-                  <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
+                  <IconSourceView icon={Icon} className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
                 )}
                 <span className='text-zinc-850 font-medium dark:text-neutral-200'>
                   {subtype?.label || data.triggerType}

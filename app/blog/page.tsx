@@ -5,7 +5,8 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
 import Loading, { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { Eye, Heart, Loader2, MessageSquare } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ViewIcon, FavouriteIcon, Message01Icon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -202,15 +203,15 @@ export default function BlogIndex() {
 
                           <div className='flex items-center gap-4 text-xs font-medium text-zinc-400 dark:text-zinc-500'>
                             <div className='flex items-center gap-1.5'>
-                              <Eye className='h-3.5 w-3.5' />
+                              <HugeiconsIcon icon={ViewIcon} className='h-3.5 w-3.5' />
                               <span>{post.viewsCount || 0}</span>
                             </div>
                             <div className='flex items-center gap-1.5'>
-                              <Heart className='h-3.5 w-3.5' />
+                              <HugeiconsIcon icon={FavouriteIcon} className='h-3.5 w-3.5' />
                               <span>{post.likesCount || 0}</span>
                             </div>
                             <div className='flex items-center gap-1.5'>
-                              <MessageSquare className='h-3.5 w-3.5' />
+                              <HugeiconsIcon icon={Message01Icon} className='h-3.5 w-3.5' />
                               <span>{post.commentsCount || 0}</span>
                             </div>
                           </div>

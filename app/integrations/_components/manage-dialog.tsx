@@ -27,14 +27,9 @@ import {
   isMetaSurface,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  ExternalLink,
-  Star,
-  Unplug,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckmarkCircle02Icon, Cancel01Icon, StarIcon, Alert02Icon, PlugSocketIcon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -68,7 +63,7 @@ const AutoReplyUpgradeDialog = ({
       <div className='relative z-10 flex w-full flex-col justify-center bg-white/70 p-5 backdrop-blur-md md:w-1/2 md:bg-transparent md:p-8 md:backdrop-blur-none dark:bg-black/70 md:dark:bg-transparent'>
         <div className='relative z-10 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:shadow-none dark:ring-white/10'>
           <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-            <CheckCircle2 className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
             <span className='font-medium'>
               <LocalizedText text={"AI inbox automation"} />
             </span>
@@ -135,7 +130,7 @@ interface ManageDialogProps {
   connections: IntegrationConnection[];
   platform: IntegrationPlatform | null;
   platformName: string;
-  Icon: ComponentType<{ className?: string; style?: CSSProperties }>;
+  Icon: IconSource;
   glow: string;
 }
 
@@ -363,12 +358,12 @@ export function ManageDialog({
                 className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
                 aria-label='Close'
               >
-                <X className='h-4 w-4' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
               </button>
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
                 <div className='border-border flex h-12 w-12 items-center justify-center rounded-xl border bg-white/80 backdrop-blur dark:border-white/10 dark:bg-white/5'>
-                  <Icon className='h-7 w-7' />
+                  <IconSourceView icon={Icon} className='h-7 w-7' />
                 </div>
                 <div className='min-w-0'>
                   <DialogHeader className='space-y-0 text-left'>
@@ -479,7 +474,7 @@ export function ManageDialog({
                             </p>
                             {conn.isPrimary && (
                               <span className='inline-flex items-center gap-0.5 rounded bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 ring-1 ring-violet-500/30 dark:text-violet-300'>
-                                <Star className='h-2.5 w-2.5' />
+                                <HugeiconsIcon icon={StarIcon} className='h-2.5 w-2.5' />
                                 <LocalizedText text={"Primary"} />
                               </span>
                             )}
@@ -692,7 +687,7 @@ export function ManageDialog({
                       {isConfirming && (
                         <div className='mt-3 rounded-md border border-red-500/30 bg-red-500/5 px-3 py-2'>
                           <div className='flex items-start gap-2'>
-                            <AlertTriangle className='mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500' />
+                            <HugeiconsIcon icon={Alert02Icon} className='mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500' />
                             <p className='text-foreground text-[11px]'>
                               <LocalizedText
                                 text={"Scheduled posts targeting this"}
@@ -716,7 +711,7 @@ export function ManageDialog({
                             disabled={setPrimary.isPending}
                             className='h-7 px-2 text-[11px]'
                           >
-                            <Star className='mr-1 h-3 w-3' />
+                            <HugeiconsIcon icon={StarIcon} className='mr-1 h-3 w-3' />
                             <LocalizedText text={"Make primary"} />
                           </Button>
                         )}
@@ -728,7 +723,7 @@ export function ManageDialog({
                             onClick={() => setConfirmDisconnectId(conn._id)}
                             className='h-7 border-red-500/40 px-2 text-[11px] text-red-600 hover:bg-red-500/10 hover:text-red-700 dark:border-red-400/40 dark:text-red-300'
                           >
-                            <Unplug className='mr-1 h-3 w-3' />
+                            <HugeiconsIcon icon={PlugSocketIcon} className='mr-1 h-3 w-3' />
                             <LocalizedText text={"Disconnect"} />
                           </Button>
                         ) : (
@@ -845,13 +840,13 @@ export function ManageDialog({
                   className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[11px]'
                 >
                   {platformName} <LocalizedText text={"settings"} />
-                  <ExternalLink className='h-3 w-3' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
                 </a>
               ) : (
                 <span />
               )}
               <span className='text-muted-foreground inline-flex items-center gap-1 text-[11px]'>
-                <CheckCircle2 className='h-3 w-3' />
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3 w-3' />
                 <LocalizedText text={"All tokens encrypted at rest"} />
               </span>
             </div>

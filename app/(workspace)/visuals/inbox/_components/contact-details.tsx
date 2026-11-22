@@ -8,7 +8,8 @@ import type {
   InboxConversation,
   UpdateConversationInput,
 } from "@/lib/inbox-api";
-import { Check, Pencil, Tag } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, PencilIcon, Tag01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export function ContactDetails({
@@ -62,9 +63,9 @@ export function ContactDetails({
           aria-label={editing ? "Save contact details" : "Edit contact details"}
         >
           {editing ? (
-            <Check className='h-4 w-4' />
+            <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4' />
           ) : (
-            <Pencil className='h-4 w-4' />
+            <HugeiconsIcon icon={PencilIcon} className='h-4 w-4' />
           )}
         </Button>
         {onCancel && (
@@ -124,7 +125,7 @@ export function ContactDetails({
 
         <section className='border-t pt-5'>
           <div className='mb-2 flex items-center gap-2 font-medium'>
-            <Tag className='h-4 w-4' /> <LocalizedText text={"Labels"} />
+            <HugeiconsIcon icon={Tag01Icon} className='h-4 w-4' /> <LocalizedText text={"Labels"} />
           </div>
           {editing ? (
             <Input

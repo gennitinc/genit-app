@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, Loader2, RefreshCcw } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, Refresh01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export const AdminDashboard = () => {
@@ -62,7 +63,7 @@ export const AdminDashboard = () => {
     return (
       <div className='mx-auto flex h-[600px] max-w-md flex-col items-center justify-center p-6 text-center'>
         <div className='bg-destructive/10 text-destructive mb-6 rounded-full p-4'>
-          <AlertCircle className='h-12 w-12' />
+          <HugeiconsIcon icon={AlertCircleIcon} className='h-12 w-12' />
         </div>
         <h2 className='mb-2 text-xl font-bold'>
           <LocalizedText text={"Access Denied"} />
@@ -73,7 +74,7 @@ export const AdminDashboard = () => {
           variant='outline'
           className='gap-2'
         >
-          <RefreshCcw className='h-4 w-4' />
+          <HugeiconsIcon icon={Refresh01Icon} className='h-4 w-4' />
           <LocalizedText text={"Retry"} />
         </Button>
       </div>
@@ -102,7 +103,7 @@ export const AdminDashboard = () => {
           {loading ? (
             <LoadingFileLoader size={20} />
           ) : (
-            <RefreshCcw className='h-4 w-4' />
+            <HugeiconsIcon icon={Refresh01Icon} className='h-4 w-4' />
           )}
           <LocalizedText text={"Refresh Stats"} />
         </Button>

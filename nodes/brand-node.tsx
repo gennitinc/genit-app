@@ -1,6 +1,7 @@
 "use client";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import { Handle, Position } from "reactflow";
 // import { GlowingEffect } from "../ui/glowing-effect";
@@ -50,7 +51,7 @@ export const BrandNode = ({ data }: { data: any }) => {
           className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
           title='Remove node'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
 

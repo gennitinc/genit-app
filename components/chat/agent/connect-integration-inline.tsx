@@ -7,7 +7,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { useComposioToolkits } from "@/hooks/use-integrations";
 import type { AgentIntegrationRequired } from "@/lib/agents-api";
 import { resolveComposioToolkit } from "@/lib/plugin-connection-link";
-import { ArrowRight, CheckCircle2, Plug, ShieldCheck } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Plug01Icon, SecurityCheckIcon, CheckmarkCircle02Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -47,7 +48,7 @@ export function ConnectIntegrationInline({
   return (
     <>
       <AgentCard
-        icon={<Plug className='h-3.5 w-3.5' />}
+        icon={<HugeiconsIcon icon={Plug01Icon} className='h-3.5 w-3.5' />}
         title='Connection required'
         meta={
           <span className='flex items-center gap-1.5'>
@@ -65,7 +66,7 @@ export function ConnectIntegrationInline({
           {required.reason}
         </p>
         <div className='text-muted-foreground mt-2 flex items-center gap-1.5 text-[11px]'>
-          <ShieldCheck className='h-3 w-3' />
+          <HugeiconsIcon icon={SecurityCheckIcon} className='h-3 w-3' />
           <span>
             Connect securely
             {toolkitSlug ? " through Composio" : ` to ${pluginName}`}.
@@ -75,7 +76,7 @@ export function ConnectIntegrationInline({
           {connected ? (
             <div className='flex flex-wrap items-center gap-2'>
               <AgentButton type='button' variant='secondary' disabled>
-                <CheckCircle2 className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5' />
                 <LocalizedText text={"Connected"} />
               </AgentButton>
               <AgentButton
@@ -97,7 +98,7 @@ export function ConnectIntegrationInline({
             >
               <PluginLogo icon={toolkit?.logo} label={pluginName} compact />
               <LocalizedText text={"Connect"} /> {pluginName}
-              <ArrowRight className='h-3 w-3' />
+              <HugeiconsIcon icon={ArrowRight02Icon} className='h-3 w-3' />
             </AgentButton>
           )}
         </div>
@@ -108,7 +109,7 @@ export function ConnectIntegrationInline({
         platform={required.platform}
         platformName={pluginName}
         platformDescription={required.reason}
-        Icon={Plug}
+        Icon={Plug01Icon}
         iconUrl={toolkit?.logo}
         glow='rgba(99, 102, 241, 0.7)'
         appSlug={toolkitSlug}

@@ -13,22 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  CircleFadingArrowUp,
-  Download,
-  Edit3,
-  ExternalLink,
-  FileText,
-  ListCheck,
-  Loader2,
-  Lock,
-  MessageSquare,
-  Search,
-  Sparkles,
-  Trash2,
-  Unlock,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, LockIcon, SquareUnlock02Icon, SparklesIcon, CheckListIcon, PencilEdit01Icon, LinkSquare02Icon, Download01Icon, Message01Icon, Search01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { memo, useEffect, useState } from "react";
 
@@ -157,7 +143,7 @@ export const DocumentNode = memo(
 
           <div className='flex items-start space-x-3'>
             <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-purple-500/10'>
-              <FileText className='h-5 w-5 text-purple-600' />
+              <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-purple-600' />
             </div>
 
             <div className='min-w-0 flex-1'>
@@ -170,9 +156,9 @@ export const DocumentNode = memo(
                   </h3>
                   <div className='mt-0.5 flex items-center space-x-1'>
                     {editData.status === "private" ? (
-                      <Lock className='h-2.5 w-2.5 text-red-500' />
+                      <HugeiconsIcon icon={LockIcon} className='h-2.5 w-2.5 text-red-500' />
                     ) : (
-                      <Unlock className='h-2.5 w-2.5 text-green-500' />
+                      <HugeiconsIcon icon={SquareUnlock02Icon} className='h-2.5 w-2.5 text-green-500' />
                     )}
                     <span className='text-muted-foreground text-[10px]'>
                       {editData.status}
@@ -200,21 +186,21 @@ export const DocumentNode = memo(
                       {isAnalyzing ? (
                         <LoadingFileLoader size={20} />
                       ) : (
-                        <Sparkles className='h-3 w-3' />
+                        <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' />
                       )}
                       Analyze
                     </Button>
                   )}
                   {analyzed && (
                     <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
-                      <ListCheck className='h-2.5 w-2.5' />
+                      <HugeiconsIcon icon={CheckListIcon} className='h-2.5 w-2.5' />
                       Analyzed
                     </div>
                   )}
                   <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                     <DialogTrigger asChild>
                       <Button variant='ghost' size='sm' className='h-auto p-1'>
-                        <Edit3 className='text-muted-foreground h-3 w-3' />
+                        <HugeiconsIcon icon={PencilEdit01Icon} className='text-muted-foreground h-3 w-3' />
                       </Button>
                     </DialogTrigger>
                     <DialogContent className='sm:max-w-md'>
@@ -365,7 +351,7 @@ export const DocumentNode = memo(
                     className='h-7 flex-1 bg-transparent text-[10px]'
                     onClick={() => window.open(editData.url, "_blank")}
                   >
-                    <ExternalLink className='mr-1 h-3 w-3' />
+                    <HugeiconsIcon icon={LinkSquare02Icon} className='mr-1 h-3 w-3' />
                     View
                   </Button>
                   <Button
@@ -374,7 +360,7 @@ export const DocumentNode = memo(
                     className='h-7 bg-transparent text-[10px]'
                     onClick={handleDownload}
                   >
-                    <Download className='h-3 w-3' />
+                    <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
                   </Button>
                 </div>
               )}
@@ -384,7 +370,7 @@ export const DocumentNode = memo(
                   {analysis.summary && (
                     <div className='space-y-1'>
                       <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
-                        <MessageSquare className='h-3 w-3' />
+                        <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />
                         AI Summary
                       </div>
                       <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>
@@ -396,7 +382,7 @@ export const DocumentNode = memo(
                   {analysis.description && (
                     <div className='space-y-1'>
                       <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
-                        <Search className='h-3 w-3' />
+                        <HugeiconsIcon icon={Search01Icon} className='h-3 w-3' />
                         Key Insights
                       </div>
                       <p className='text-muted-foreground line-clamp-4 rounded-md bg-black/5 p-2 text-xs leading-relaxed dark:bg-white/5'>
@@ -431,7 +417,7 @@ export const DocumentNode = memo(
               className='bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 text-white shadow-lg transition-all duration-200 hover:shadow-xl'
               title='Delete Node'
             >
-              <Trash2 className='h-3 w-3' />
+              <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
             </Button>
           )}
 

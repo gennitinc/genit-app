@@ -9,7 +9,7 @@ import {
   resolveComposioToolkit,
 } from "@/lib/plugin-connection-link";
 import Loading from "@/utils/Loading";
-import { Plug } from "lucide-react";
+import { Plug01Icon } from "@hugeicons/core-free-icons";
 import {
   type AnchorHTMLAttributes,
   Children,
@@ -150,7 +150,7 @@ function PluginConnectionControl({
         platform='composio'
         platformName={toolkit.name}
         platformDescription={`Connect ${toolkit.name} securely through Composio.`}
-        Icon={Plug}
+        Icon={Plug01Icon}
         iconUrl={toolkit.logo}
         glow='rgba(79, 70, 229, 0.7)'
         appSlug={toolkit.slug}

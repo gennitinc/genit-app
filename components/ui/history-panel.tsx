@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { GitBranch, GitCommit, Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GitCommitIcon, GitBranchIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface VersionNode {
@@ -69,11 +70,11 @@ function VersionTreeNode({
             setIsExpanded(!isExpanded);
           }}
         >
-          <GitCommit className='h-4 w-4 text-zinc-400' />
+          <HugeiconsIcon icon={GitCommitIcon} className='h-4 w-4 text-zinc-400' />
         </Button>
         <div className='flex-1'>
           <div className='mb-1 flex flex-row items-center gap-2'>
-            <GitBranch className='h-3 w-3 text-zinc-500' />
+            <HugeiconsIcon icon={GitBranchIcon} className='h-3 w-3 text-zinc-500' />
             <span className='text-sm font-medium text-zinc-200'>
               {node.title}
             </span>
@@ -123,7 +124,7 @@ export function HistoryPanel({ id, versionTree = [] }: HistoryPanelProps) {
           <LocalizedText text={"Version History"} />
         </h2>
         <div className='relative'>
-          <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400' />
+          <HugeiconsIcon icon={Search01Icon} className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400' />
           <Input
             className='border-zinc-700 bg-zinc-800 pl-10 text-zinc-200 placeholder:text-zinc-500'
             placeholder='Search versions...'

@@ -17,33 +17,17 @@ import {
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
-import {
-  Activity,
-  ArrowRightLeft,
-  AtSign,
-  FileText,
-  Image,
-  ImagePlus,
-  Instagram,
-  Linkedin,
-  Mail,
-  MessageCircle,
-  Mic,
-  Music2,
-  Share2,
-  Trash2,
-  Twitter,
-  Upload,
-  Video,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Activity01Icon, Mail01Icon, ImageAdd01Icon, Video01Icon, File02Icon, Mic01Icon, Image01Icon, BubbleChatIcon, AtIcon, ArrowDataTransferHorizontalIcon, Delete02Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React from "react";
 
-export const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
-  composio_action: Activity,
-  send_gmail: Mail,
-  send_brevo_email: Mail,
-  send_outlook_email: Mail,
+export const ACTION_ICONS: Record<ActionSubtype, IconSource> = {
+  composio_action: Activity01Icon,
+  send_gmail: Mail01Icon,
+  send_brevo_email: Mail01Icon,
+  send_outlook_email: Mail01Icon,
   whatsapp_reply: WhatsAppBrand,
   whatsapp_template: WhatsAppBrand,
   post_facebook: FacebookBrand,
@@ -52,11 +36,11 @@ export const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   post_x: XBrand,
   post_tiktok: TikTokBrand,
   post_youtube: YoutubeBrand,
-  generate_image: ImagePlus,
-  generate_video: Video,
-  generate_text: FileText,
-  generate_audio: Mic,
-  generate_story_video: Video,
+  generate_image: ImageAdd01Icon,
+  generate_video: Video01Icon,
+  generate_text: File02Icon,
+  generate_audio: Mic01Icon,
+  generate_story_video: Video01Icon,
   add_calendar_event: GoogleCalendarBrand,
   google_drive_upload: GoogleDriveBrand,
   messenger_reply: MessengerBrand,
@@ -65,13 +49,13 @@ export const ACTION_ICONS: Record<ActionSubtype, React.ComponentType<any>> = {
   reply_facebook_comment: FacebookBrand,
   delete_linkedin_post: LinkedinBrand,
   reply_linkedin_comment: LinkedinBrand,
-  update_pinterest_pin: Image,
-  delete_pinterest_pin: Image,
-  update_youtube_video: Video,
-  delete_youtube_video: Video,
-  reply_youtube_comment: MessageCircle,
+  update_pinterest_pin: Image01Icon,
+  delete_pinterest_pin: Image01Icon,
+  update_youtube_video: Video01Icon,
+  delete_youtube_video: Video01Icon,
+  reply_youtube_comment: BubbleChatIcon,
   delete_tweet: XBrand,
-  delete_threads_post: AtSign,
+  delete_threads_post: AtIcon,
   reply_instagram_comment: InstagramBrand,
 };
 
@@ -182,7 +166,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
               className='h-4 w-4 rounded object-contain'
             />
           ) : (
-            <ArrowRightLeft className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowDataTransferHorizontalIcon} className='h-4 w-4' />
           )}
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"Action"} />
@@ -194,7 +178,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
             onClick={() => data.onRemoveNode(id)}
             className='nodrag nopan rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
           >
-            <Trash2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
           </button>
         )}
       </div>
@@ -1113,7 +1097,7 @@ export function ActionNode({ id, data }: NodeProps<ActionNodeData>) {
                     className='h-3.5 w-3.5 rounded object-contain'
                   />
                 ) : Icon ? (
-                  <Icon className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
+                  <IconSourceView icon={Icon} className='h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-neutral-400' />
                 ) : null}
                 <span>{subtypeConfig?.label || data.actionType}</span>
               </span>

@@ -13,7 +13,8 @@ import {
 } from "@/lib/integrations-api";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
-import { CheckCircle2, Loader2, Plug, Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, CheckmarkCircle02Icon, Plug01Icon } from "@hugeicons/core-free-icons";
 import React, { useEffect, useMemo, useState } from "react";
 
 type Props = {
@@ -198,7 +199,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
         </label>
         {mode === "action" && toolkit && (
           <div className='relative mb-1.5'>
-            <Search className='pointer-events-none absolute top-2 left-2 h-3 w-3 text-zinc-400' />
+            <HugeiconsIcon icon={Search01Icon} className='pointer-events-none absolute top-2 left-2 h-3 w-3 text-zinc-400' />
             <input
               value={itemSearch}
               onChange={(event) => setItemSearch(event.target.value)}
@@ -343,7 +344,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
             disabled
             className='h-7 text-[10px] disabled:opacity-100'
           >
-            <CheckCircle2 /> Connected
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} /> Connected
           </Button>
         ) : (
           <Button
@@ -355,7 +356,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
               setConnectOpen(true);
             }}
           >
-            <Plug /> Connect app
+            <HugeiconsIcon icon={Plug01Icon} /> Connect app
           </Button>
         ))}
 
@@ -365,7 +366,7 @@ export function ComposioCatalogFields({ mode, data, onChange }: Props) {
         platform='composio'
         platformName={selectedToolkit?.name || toolkit}
         platformDescription={`Connect ${selectedToolkit?.name || toolkit} to use it in this automation.`}
-        Icon={Plug}
+        Icon={Plug01Icon}
         iconUrl={selectedToolkit?.logo}
         glow='rgba(79, 70, 229, 0.7)'
         appSlug={toolkit}

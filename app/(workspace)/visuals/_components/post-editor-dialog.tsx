@@ -62,14 +62,8 @@ import {
 } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  AlertCircle,
-  CalendarClock,
-  CircleFadingArrowUp,
-  FileText,
-  Send,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CircleArrowUp02Icon, AlertCircleIcon, Calendar04Icon, SentIcon, File02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import {
   type Dispatch,
   type ReactNode,
@@ -546,7 +540,7 @@ export function PostEditorDialog({
             {isGeneratingText ? (
               <LoadingFileLoader size={12} />
             ) : (
-              <CircleFadingArrowUp className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-3.5 w-3.5' />
             )}
           </Button>
         </TooltipTrigger>
@@ -1064,7 +1058,7 @@ export function PostEditorDialog({
       <Tooltip>
         <TooltipTrigger asChild>
           <p className='flex min-w-0 cursor-default items-center gap-1.5 text-[12px] text-amber-300/90'>
-            <AlertCircle className='h-3.5 w-3.5 shrink-0' />
+            <HugeiconsIcon icon={AlertCircleIcon} className='h-3.5 w-3.5 shrink-0' />
             <span className='truncate'>{validationErrors[0]}</span>
             {validationErrors.length > 1 && (
               <span className='shrink-0 text-zinc-500'>
@@ -1104,11 +1098,11 @@ export function PostEditorDialog({
         {isSaving ? (
           <LoadingFileLoader />
         ) : form.status === "scheduled" ? (
-          <CalendarClock className='h-4 w-4' />
+          <HugeiconsIcon icon={Calendar04Icon} className='h-4 w-4' />
         ) : form.status === "published" ? (
-          <Send className='h-4 w-4' />
+          <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />
         ) : (
-          <FileText className='h-4 w-4' />
+          <HugeiconsIcon icon={File02Icon} className='h-4 w-4' />
         )}
         {isSaving
           ? "Saving…"
@@ -1148,7 +1142,7 @@ export function PostEditorDialog({
                 className='-mr-1.5 rounded-md p-1.5 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white'
                 aria-label='Close post composer'
               >
-                <X className='h-4 w-4' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
               </button>
             </div>
             {destinations}

@@ -9,7 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Filter } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FilterIcon } from "@hugeicons/core-free-icons";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
@@ -843,7 +844,7 @@ const Apps = () => {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <div className='text-text-secondary hover:text-text-primary flex cursor-pointer items-center gap-1.5 text-sm font-medium transition-colors'>
-                            <Filter className='size-4' />
+                            <HugeiconsIcon icon={FilterIcon} className='size-4' />
                             <span className='whitespace-nowrap'>
                               {activeType}
                             </span>

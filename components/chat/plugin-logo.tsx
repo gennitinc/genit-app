@@ -2,7 +2,8 @@
 
 import { useComposioToolkits } from "@/hooks/use-integrations";
 import { resolveComposioToolkit } from "@/lib/plugin-connection-link";
-import { Plug } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Plug01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 export function PluginLogo({
@@ -41,7 +42,7 @@ export function PluginLogo({
           onError={() => setFailed(true)}
         />
       ) : (
-        <Plug
+        <HugeiconsIcon icon={Plug01Icon}
           className={
             compact
               ? "text-muted-foreground size-3"

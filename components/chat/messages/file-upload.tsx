@@ -4,15 +4,8 @@ import { FilePreviewTooltip } from "@/components/chat/messages";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  File,
-  FileText,
-  ImageIcon,
-  Music,
-  Paperclip,
-  Video,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File01Icon, Image01Icon, Video01Icon, MusicNote01Icon, File02Icon, Attachment01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import type React from "react";
 import { useCallback, useRef } from "react";
 
@@ -47,20 +40,20 @@ export function FileUpload({
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/"))
-      return <ImageIcon className='h-4 w-4 text-blue-500' />;
+      return <HugeiconsIcon icon={Image01Icon} className='h-4 w-4 text-blue-500' />;
     if (file.type.startsWith("video/"))
-      return <Video className='h-4 w-4 text-purple-500' />;
+      return <HugeiconsIcon icon={Video01Icon} className='h-4 w-4 text-purple-500' />;
     if (file.type.startsWith("audio/"))
-      return <Music className='h-4 w-4 text-green-500' />;
+      return <HugeiconsIcon icon={MusicNote01Icon} className='h-4 w-4 text-green-500' />;
     if (
       file.type.startsWith("text/") ||
       file.name.endsWith(".md") ||
       file.name.endsWith(".txt")
     )
-      return <FileText className='h-4 w-4 text-gray-500' />;
+      return <HugeiconsIcon icon={File02Icon} className='h-4 w-4 text-gray-500' />;
     if (file.type === "application/pdf")
-      return <FileText className='h-4 w-4 text-red-500' />;
-    return <File className='h-4 w-4 text-gray-400' />;
+      return <HugeiconsIcon icon={File02Icon} className='h-4 w-4 text-red-500' />;
+    return <HugeiconsIcon icon={File01Icon} className='h-4 w-4 text-gray-400' />;
   };
 
   const getFileTypeLabel = (file: File) => {
@@ -150,7 +143,7 @@ export function FileUpload({
           disabled={files.length >= maxFiles}
           className='flex items-center gap-2'
         >
-          <Paperclip className='h-4 w-4' />
+          <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
           <LocalizedText text={"Attach Files"} />
         </Button>
         <span className='text-xs text-gray-500'>
@@ -178,7 +171,7 @@ export function FileUpload({
           className='cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center text-sm text-gray-500 transition-colors hover:border-gray-400'
           onClick={() => fileInputRef.current?.click()}
         >
-          <Paperclip className='mx-auto mb-2 h-8 w-8 text-gray-400' />
+          <HugeiconsIcon icon={Attachment01Icon} className='mx-auto mb-2 h-8 w-8 text-gray-400' />
           <p className='font-medium'>
             <LocalizedText text={"Drop files here or click to browse"} />
           </p>
@@ -227,7 +220,7 @@ export function FileUpload({
                     }}
                     className='h-auto flex-shrink-0 p-1 text-gray-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-500'
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 </div>
               </FilePreviewTooltip>

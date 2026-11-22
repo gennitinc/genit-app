@@ -3,7 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Copy } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Copy01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 
@@ -53,7 +54,7 @@ export function CodeBlock({
           )}
           onClick={copyToClipboard}
         >
-          <Copy className='h-4 w-4' />
+          <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
           <span className='sr-only'>
             <LocalizedText text={"Copy code"} />
           </span>

@@ -18,15 +18,8 @@ import {
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import type { AspectRatio, Resolution } from "@/types/inspire";
-import {
-  Check,
-  ChevronDown,
-  Monitor,
-  Plus,
-  RectangleHorizontal,
-  Smartphone,
-  Square,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ComputerIcon, Tick02Icon, SmartPhone01Icon, SquareIcon, RectangularIcon, ArrowDown01Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface ResolutionSelectorProps {
@@ -124,7 +117,7 @@ function ResolutionCard({
                 : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
             )}
           >
-            <Monitor className='h-5 w-5' />
+            <HugeiconsIcon icon={ComputerIcon} className='h-5 w-5' />
           </div>
           <div>
             <div className='flex items-center gap-2'>
@@ -144,7 +137,7 @@ function ResolutionCard({
         </div>
         {isSelected ? (
           <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-900 dark:bg-neutral-100'>
-            <Check className='h-3 w-3 text-white dark:text-neutral-900' />
+            <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3 text-white dark:text-neutral-900' />
           </div>
         ) : (
           <div className='h-5 w-5 rounded-full border-2 border-neutral-300 dark:border-neutral-600' />
@@ -166,11 +159,11 @@ export function AspectRatioCard({
   const getIcon = () => {
     switch (ratio.icon) {
       case "vertical":
-        return <Smartphone className='h-4 w-4' />;
+        return <HugeiconsIcon icon={SmartPhone01Icon} className='h-4 w-4' />;
       case "square":
-        return <Square className='h-4 w-4' />;
+        return <HugeiconsIcon icon={SquareIcon} className='h-4 w-4' />;
       default:
-        return <RectangleHorizontal className='h-4 w-4' />;
+        return <HugeiconsIcon icon={RectangularIcon} className='h-4 w-4' />;
     }
   };
 
@@ -207,7 +200,7 @@ export function AspectRatioCard({
       </div>
       {isSelected && (
         <div className='absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-900 dark:bg-neutral-100'>
-          <Check className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
+          <HugeiconsIcon icon={Tick02Icon} className='h-2.5 w-2.5 text-white dark:text-neutral-900' />
         </div>
       )}
     </button>
@@ -299,7 +292,7 @@ export function ResolutionSelector({
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-200 dark:bg-neutral-700'>
-                <Monitor className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
+                <HugeiconsIcon icon={ComputerIcon} className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
               </div>
               <div>
                 <p className='text-sm font-medium text-neutral-900 dark:text-white'>
@@ -310,7 +303,7 @@ export function ResolutionSelector({
                 </p>
               </div>
             </div>
-            <ChevronDown className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
+            <HugeiconsIcon icon={ArrowDown01Icon} className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
           </div>
         </button>
 
@@ -326,11 +319,11 @@ export function ResolutionSelector({
             <div className='flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-200 dark:bg-neutral-700'>
                 {currentAspectRatio?.icon === "vertical" ? (
-                  <Smartphone className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
+                  <HugeiconsIcon icon={SmartPhone01Icon} className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 ) : currentAspectRatio?.icon === "square" ? (
-                  <Square className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
+                  <HugeiconsIcon icon={SquareIcon} className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 ) : (
-                  <RectangleHorizontal className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
+                  <HugeiconsIcon icon={RectangularIcon} className='h-5 w-5 text-neutral-600 dark:text-neutral-300' />
                 )}
               </div>
               <div>
@@ -342,7 +335,7 @@ export function ResolutionSelector({
                 </p>
               </div>
             </div>
-            <ChevronDown className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
+            <HugeiconsIcon icon={ArrowDown01Icon} className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
           </div>
         </button>
 
@@ -352,7 +345,7 @@ export function ResolutionSelector({
           className='group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-100 p-3 text-left transition-all hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:border-neutral-500'
         >
           <div className='flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-            <Plus className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4 text-neutral-600 dark:text-neutral-300' />
           </div>
           <span className='text-sm font-medium text-neutral-600 dark:text-neutral-400'>
             <LocalizedText text={"More Options"} />

@@ -24,19 +24,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  CheckCircle2,
-  CircleFadingArrowUp,
-  Download,
-  HistoryIcon,
-  ImageIcon,
-  Play,
-  RefreshCw,
-  Sparkles,
-  Trash2,
-  Upload,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Upload01Icon, PlayIcon, SparklesIcon, CheckmarkCircle02Icon, Clock04Icon, Download01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import React, { useEffect, useState } from "react";
 
 interface LogoAnimationJob {
@@ -215,13 +204,13 @@ const LogoAnimationPage = () => {
                             className='size-full rounded-lg object-contain'
                           />
                           <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
-                            <Upload className='size-6 text-white' />
+                            <HugeiconsIcon icon={Upload01Icon} className='size-6 text-white' />
                           </div>
                         </div>
                       ) : (
                         <div className='flex flex-col items-center justify-center pt-5 pb-6'>
                           <div className='mb-2 rounded-full bg-indigo-600 p-2 transition-transform group-hover:scale-110 hover:bg-indigo-700/10'>
-                            <Upload className='text-primary size-5' />
+                            <HugeiconsIcon icon={Upload01Icon} className='text-primary size-5' />
                           </div>
                           <p className='text-sm font-medium'>
                             <LocalizedText text={"Click to upload"} />
@@ -264,7 +253,7 @@ const LogoAnimationPage = () => {
                       <SelectContent>
                         <SelectItem value='Video'>
                           <div className='flex items-center gap-2'>
-                            <Play className='size-3.5' />
+                            <HugeiconsIcon icon={PlayIcon} className='size-3.5' />
                             <span>
                               <LocalizedText text={"Video (MP4)"} />
                             </span>
@@ -299,7 +288,7 @@ const LogoAnimationPage = () => {
                     </>
                   ) : (
                     <>
-                      <Sparkles className='size-5' />
+                      <HugeiconsIcon icon={SparklesIcon} className='size-5' />
                       <LocalizedText text={"Generate Animation"} />
                     </>
                   )}
@@ -316,7 +305,7 @@ const LogoAnimationPage = () => {
                   </span>
                   {generatedVideoUrl && (
                     <span className='flex items-center gap-1 rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-medium text-green-400'>
-                      <CheckCircle2 className='size-2.5' />{" "}
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-2.5' />{" "}
                       <LocalizedText text={"Ready"} />
                     </span>
                   )}
@@ -325,7 +314,7 @@ const LogoAnimationPage = () => {
                   onClick={() => setIsHistoryOpen(true)}
                   className='inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-xs font-medium text-neutral-300 transition-colors hover:bg-white/[0.08] hover:text-white'
                 >
-                  <HistoryIcon className='size-3.5' />
+                  <HugeiconsIcon icon={Clock04Icon} className='size-3.5' />
                   <LocalizedText text={"History"} />
                 </button>
               </div>
@@ -392,7 +381,7 @@ const LogoAnimationPage = () => {
                         rel='noreferrer'
                         className='rounded-full bg-black/60 p-2 text-white shadow-xl backdrop-blur transition-all hover:bg-blue-600'
                       >
-                        <Download className='size-4' />
+                        <HugeiconsIcon icon={Download01Icon} className='size-4' />
                       </a>
                     </div>
                   </div>
@@ -423,7 +412,7 @@ const LogoAnimationPage = () => {
         <SheetContent className='w-full overflow-y-auto sm:max-w-md'>
           <SheetHeader className='mb-6'>
             <SheetTitle className='flex items-center gap-2'>
-              <HistoryIcon className='size-5' />{" "}
+              <HugeiconsIcon icon={Clock04Icon} className='size-5' />{" "}
               <LocalizedText text={"Animation History"} />
             </SheetTitle>
           </SheetHeader>
@@ -466,7 +455,7 @@ const LogoAnimationPage = () => {
                       }}
                       className='absolute top-3 right-3 rounded-lg bg-red-500/10 p-1.5 text-red-500 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-500/20'
                     >
-                      <Trash2 className='size-3.5' />
+                      <HugeiconsIcon icon={Delete02Icon} className='size-3.5' />
                     </button>
                   </div>
 

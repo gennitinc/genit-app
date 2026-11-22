@@ -10,30 +10,8 @@ import {
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { useLanguage } from "@/context/LanguageContext";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  Activity,
-  ArrowRight,
-  BarChart3,
-  Boxes,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Database,
-  Globe2,
-  Image as ImageIcon,
-  Layers,
-  Mail,
-  Megaphone,
-  MessageSquare,
-  MousePointer2,
-  Plus,
-  Repeat,
-  Send,
-  ShieldCheck,
-  Target,
-  UserPlus,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon, ChartColumnIcon, Target01Icon, Activity01Icon, Globe02Icon, RepeatIcon, CheckmarkCircle02Icon, Clock01Icon, SecurityCheckIcon, Layers01Icon, Package02Icon, DatabaseIcon, Image01Icon, Mail01Icon, Megaphone01Icon, Calendar01Icon, PlusSignIcon, UserAdd01Icon, Cursor01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import React from "react";
 
@@ -65,7 +43,7 @@ const LandinngIntegrations = () => {
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>{t("Connect your stack")}</span>
-          <ArrowRight className='h-4 w-4' />
+          <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4' />
         </Link>
       </div>
 
@@ -81,7 +59,7 @@ const LandinngIntegrations = () => {
           {/* Inset UI preview */}
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground mb-3 flex items-center gap-2 text-sm dark:text-white/80'>
-              <BarChart3 className='text-foreground h-4 w-4 dark:text-white' />
+              <HugeiconsIcon icon={ChartColumnIcon} className='text-foreground h-4 w-4 dark:text-white' />
               <span className='font-medium'>{t("Campaign Monitor")}</span>
             </div>
 
@@ -139,11 +117,11 @@ const LandinngIntegrations = () => {
 
             <div className='mt-4 flex items-center justify-between'>
               <button className='inline-flex items-center gap-2 rounded-full bg-black px-3 py-1.5 text-xs text-white ring-1 ring-black/10 transition hover:bg-black/80 dark:bg-white dark:text-black dark:ring-white/10 dark:hover:bg-white/90'>
-                <Target className='h-4 w-4' />
+                <HugeiconsIcon icon={Target01Icon} className='h-4 w-4' />
                 {t("Optimize Ads")}
               </button>
               <div className='text-muted-foreground flex items-center gap-2 text-[11px] dark:text-white/50'>
-                <Activity className='h-3.5 w-3.5 text-emerald-500 dark:text-emerald-300' />
+                <HugeiconsIcon icon={Activity01Icon} className='h-3.5 w-3.5 text-emerald-500 dark:text-emerald-300' />
                 {t("Live")}
               </div>
             </div>
@@ -170,7 +148,7 @@ const LandinngIntegrations = () => {
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-                <Globe2 className='h-4 w-4 text-indigo-500 dark:text-indigo-300' />
+                <HugeiconsIcon icon={Globe02Icon} className='h-4 w-4 text-indigo-500 dark:text-indigo-300' />
                 <span className='font-medium'>
                   {t("Cross-Platform Publishing")}
                 </span>
@@ -179,7 +157,7 @@ const LandinngIntegrations = () => {
                 <span className='text-muted-foreground text-[11px] dark:text-white/60'>
                   {t("Auto-sync")}
                 </span>
-                <Repeat className='text-muted-foreground h-4 w-4 dark:text-white/40' />
+                <HugeiconsIcon icon={RepeatIcon} className='text-muted-foreground h-4 w-4 dark:text-white/40' />
               </div>
             </div>
 
@@ -214,7 +192,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -230,7 +208,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <Clock className='h-4 w-4 text-sky-600 dark:text-sky-400' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-sky-600 dark:text-sky-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -246,7 +224,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                  <HugeiconsIcon icon={SecurityCheckIcon} className='h-4 w-4 text-amber-600 dark:text-amber-400' />
                 </li>
 
                 {/* New Items */}
@@ -264,7 +242,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -280,7 +258,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <Clock className='h-4 w-4 text-sky-600 dark:text-sky-400' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-sky-600 dark:text-sky-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -296,7 +274,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                  <HugeiconsIcon icon={SecurityCheckIcon} className='h-4 w-4 text-amber-600 dark:text-amber-400' />
                 </li>
 
                 {/* Duplicated for infinite scroll */}
@@ -314,7 +292,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -330,7 +308,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <Clock className='h-4 w-4 text-sky-600 dark:text-sky-400' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-sky-600 dark:text-sky-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -346,7 +324,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                  <HugeiconsIcon icon={SecurityCheckIcon} className='h-4 w-4 text-amber-600 dark:text-amber-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -362,7 +340,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <CheckCircle2 className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -378,7 +356,7 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <Clock className='h-4 w-4 text-sky-600 dark:text-sky-400' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-sky-600 dark:text-sky-400' />
                 </li>
                 <li className='flex items-center justify-between rounded-lg bg-black/[0.02] p-2 dark:bg-white/[0.04]'>
                   <div className='flex items-center gap-3'>
@@ -394,13 +372,13 @@ const LandinngIntegrations = () => {
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className='h-4 w-4 text-amber-600 dark:text-amber-400' />
+                  <HugeiconsIcon icon={SecurityCheckIcon} className='h-4 w-4 text-amber-600 dark:text-amber-400' />
                 </li>
               </ul>
             </div>
 
             <div className='text-muted-foreground relative z-10 mt-4 flex items-center gap-2 pt-1 text-[11px] dark:text-white/60'>
-              <Layers className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={Layers01Icon} className='h-3.5 w-3.5' />
               {t("Format once, publish everywhere")}
             </div>
           </div>
@@ -424,7 +402,7 @@ const LandinngIntegrations = () => {
 
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-              <Boxes className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
+              <HugeiconsIcon icon={Package02Icon} className='h-4 w-4 text-emerald-500 dark:text-emerald-300' />
               <span className='font-medium'>
                 {t("Connects with your stack")}
               </span>
@@ -432,25 +410,25 @@ const LandinngIntegrations = () => {
 
             <div className='mt-3 grid grid-cols-4 gap-3'>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <Database className='text-foreground h-5 w-5 dark:text-white/80' />
+                <HugeiconsIcon icon={DatabaseIcon} className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
                   {t("Products")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <ImageIcon className='text-foreground h-5 w-5 dark:text-white/80' />
+                <HugeiconsIcon icon={Image01Icon} className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
                   {t("Assets")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <Mail className='text-foreground h-5 w-5 dark:text-white/80' />
+                <HugeiconsIcon icon={Mail01Icon} className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
                   {t("Email")}
                 </span>
               </div>
               <div className='flex flex-col items-center gap-2 rounded-xl bg-black/[0.02] p-3 ring-1 ring-black/5 dark:bg-white/[0.04] dark:ring-white/10'>
-                <Megaphone className='text-foreground h-5 w-5 dark:text-white/80' />
+                <HugeiconsIcon icon={Megaphone01Icon} className='text-foreground h-5 w-5 dark:text-white/80' />
                 <span className='text-muted-foreground text-xs dark:text-white/70'>
                   {t("Ads")}
                 </span>
@@ -527,11 +505,11 @@ const LandinngIntegrations = () => {
           <div className='rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5 dark:bg-white/5 dark:shadow-none dark:ring-white/10'>
             <div className='flex items-center justify-between'>
               <div className='text-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-                <Calendar className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
+                <HugeiconsIcon icon={Calendar01Icon} className='h-4 w-4 text-fuchsia-500 dark:text-fuchsia-300' />
                 <span className='font-medium'>{t("Content Calendar")}</span>
               </div>
               <button className='text-foreground inline-flex items-center gap-1 rounded-full bg-black/5 px-2 py-1 text-[11px] ring-1 ring-black/5 transition hover:bg-black/10 dark:bg-white/5 dark:text-white/80 dark:ring-white/10 dark:hover:bg-white/10'>
-                <Calendar className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Calendar01Icon} className='h-3.5 w-3.5' />
                 {t("View All")}
               </button>
             </div>
@@ -629,7 +607,7 @@ const LandinngIntegrations = () => {
                   </div>
                 </div>
                 <div className='flex items-center gap-2 text-[11px] text-sky-600 dark:text-sky-400'>
-                  <Clock className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-3.5 w-3.5' />
                   {t("Scheduled")}
                 </div>
               </div>
@@ -687,11 +665,11 @@ const LandinngIntegrations = () => {
                         />
                       ))}
                       <div className='flex h-7 w-7 items-center justify-center rounded-full bg-black/5 ring-2 ring-white dark:bg-white/10 dark:ring-[#0a0a0a]'>
-                        <Plus className='text-foreground h-3 w-3 dark:text-white' />
+                        <HugeiconsIcon icon={PlusSignIcon} className='text-foreground h-3 w-3 dark:text-white' />
                       </div>
                     </div>
                     <button className='flex items-center gap-1.5 rounded-full bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition hover:bg-indigo-700'>
-                      <UserPlus className='h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={UserAdd01Icon} className='h-3.5 w-3.5' />
                       {t("Invite")}
                     </button>
                   </div>
@@ -710,7 +688,7 @@ const LandinngIntegrations = () => {
 
                   {/* Fake Cursors & Comments */}
                   <div className='absolute top-[25%] left-[15%] animate-[bounce_4s_infinite]'>
-                    <MousePointer2 className='h-5 w-5 rotate-[-15deg] fill-emerald-500 text-emerald-500' />
+                    <HugeiconsIcon icon={Cursor01Icon} className='h-5 w-5 rotate-[-15deg] fill-emerald-500 text-emerald-500' />
                     <div className='mt-1 ml-4 rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-medium text-white shadow-sm'>
                       {t("Sarah J.")}
                     </div>
@@ -722,7 +700,7 @@ const LandinngIntegrations = () => {
                   >
                     <div className='flex items-start gap-2'>
                       <div className='relative'>
-                        <MousePointer2 className='absolute -top-2 -left-2 z-10 h-5 w-5 rotate-[-15deg] fill-fuchsia-500 text-fuchsia-500' />
+                        <HugeiconsIcon icon={Cursor01Icon} className='absolute -top-2 -left-2 z-10 h-5 w-5 rotate-[-15deg] fill-fuchsia-500 text-fuchsia-500' />
                         <div className='relative z-20 flex w-52 flex-col gap-2 rounded-xl rounded-tl-none bg-white p-3 shadow-xl ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10'>
                           <div className='flex items-center justify-between'>
                             <span className='text-foreground text-[11px] font-semibold dark:text-white'>
@@ -737,7 +715,7 @@ const LandinngIntegrations = () => {
                           </p>
                           <div className='mt-1 flex items-center gap-2'>
                             <button className='flex h-6 items-center justify-center rounded bg-emerald-500/10 px-2 text-[10px] font-medium text-emerald-600 transition hover:bg-emerald-500/20 dark:text-emerald-400'>
-                              <CheckCircle2 className='mr-1 h-3 w-3' />{" "}
+                              <HugeiconsIcon icon={CheckmarkCircle02Icon} className='mr-1 h-3 w-3' />{" "}
                               {t("Resolve")}
                             </button>
                             <button className='text-muted-foreground flex h-6 items-center justify-center rounded bg-black/5 px-2 text-[10px] transition hover:bg-black/10 dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/20'>

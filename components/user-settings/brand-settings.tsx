@@ -33,7 +33,8 @@ import { Organization, useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import { ImageIcon, Loader2, Lock, Palette, Plus, Save, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LockIcon, PaintBoardIcon, Image01Icon, PlusSignIcon, FloppyDiskIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type SocialPlatform =
@@ -332,7 +333,7 @@ export default function BrandSettings() {
     <div className='space-y-6'>
       {isReadOnly && (
         <div className='border-border bg-muted/40 flex items-start gap-3 rounded-lg border px-4 py-3 text-sm'>
-          <Lock className='text-muted-foreground mt-0.5 h-4 w-4 shrink-0' />
+          <HugeiconsIcon icon={LockIcon} className='text-muted-foreground mt-0.5 h-4 w-4 shrink-0' />
           <div>
             <p className='text-foreground font-medium'>
               <LocalizedText text={"View-only access"} />
@@ -351,7 +352,7 @@ export default function BrandSettings() {
         <Card className='overflow-hidden rounded-lg border-zinc-200 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
           <CardHeader className='border-b border-zinc-200 p-5 dark:border-white/10'>
             <CardTitle className='flex items-center gap-2 text-base'>
-              <Palette className='h-5 w-5' />
+              <HugeiconsIcon icon={PaintBoardIcon} className='h-5 w-5' />
               <LocalizedText text={"Brand identity"} />
             </CardTitle>
             <CardDescription>
@@ -378,7 +379,7 @@ export default function BrandSettings() {
                   />
                 ) : (
                   <div className='text-muted-foreground flex flex-col items-center gap-1'>
-                    <ImageIcon className='size-6' />
+                    <HugeiconsIcon icon={Image01Icon} className='size-6' />
                     <span className='text-xs'>
                       <LocalizedText text={"Upload logo"} />
                     </span>
@@ -482,7 +483,7 @@ export default function BrandSettings() {
                     onClick={addColor}
                     className='border-border text-muted-foreground flex size-12 items-center justify-center rounded-full border-2 border-dashed transition-colors hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300'
                   >
-                    <Plus className='size-4' />
+                    <HugeiconsIcon icon={PlusSignIcon} className='size-4' />
                   </button>
                 )}
               </div>
@@ -641,7 +642,7 @@ export default function BrandSettings() {
                 </>
               ) : (
                 <>
-                  <Save className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={FloppyDiskIcon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Save changes"} />
                 </>
               )}
@@ -712,7 +713,7 @@ function ColorSwatch({
         onClick={onRemove}
         className='bg-background ring-border absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full opacity-0 ring-1 transition-opacity group-hover:opacity-100'
       >
-        <X className='size-2.5' />
+        <HugeiconsIcon icon={Cancel01Icon} className='size-2.5' />
       </button>
       <span className='text-muted-foreground font-mono text-[10px] uppercase'>
         {value || "—"}
@@ -754,7 +755,7 @@ function ChipEditor({
               onClick={() => onChange(values.filter((_, j) => j !== i))}
               className='hover:text-destructive'
             >
-              <X className='size-3' />
+              <HugeiconsIcon icon={Cancel01Icon} className='size-3' />
             </button>
           </span>
         ))}
@@ -808,7 +809,7 @@ function NumberedList({
             onClick={() => onChange(values.filter((_, j) => j !== i))}
             className='text-muted-foreground hover:text-destructive'
           >
-            <X className='size-4' />
+            <HugeiconsIcon icon={Cancel01Icon} className='size-4' />
           </button>
         </div>
       ))}
@@ -818,7 +819,7 @@ function NumberedList({
           onClick={() => onChange([...values, ""])}
           className='text-primary inline-flex items-center gap-1 text-sm hover:underline'
         >
-          <Plus className='size-3' /> {placeholder}
+          <HugeiconsIcon icon={PlusSignIcon} className='size-3' /> {placeholder}
         </button>
       )}
     </div>

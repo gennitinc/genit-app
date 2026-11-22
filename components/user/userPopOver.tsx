@@ -13,21 +13,8 @@ import AccountActionModal from "@/components/user/account-action-modal";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAccountActions } from "@/hooks/use-account-actions";
-import {
-  Book,
-  CreditCard,
-  Edit3,
-  Lock,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Monitor,
-  Moon,
-  Settings,
-  Sun,
-  User,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Sun01Icon, MoonIcon, ComputerIcon, CreditCardIcon, Settings01Icon, UserIcon, Message01Icon, Logout01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -114,19 +101,19 @@ const UserPopOver = () => {
                   className='hover:bg-accent rounded p-1.5 transition-all duration-200 hover:shadow-sm'
                   onClick={() => setTheme("light")}
                 >
-                  <Sun className='text-muted-foreground h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={Sun01Icon} className='text-muted-foreground h-3.5 w-3.5' />
                 </button>
                 <button
                   className='hover:bg-accent rounded p-1.5 transition-all duration-200 hover:shadow-sm'
                   onClick={() => setTheme("dark")}
                 >
-                  <Moon className='text-muted-foreground h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={MoonIcon} className='text-muted-foreground h-3.5 w-3.5' />
                 </button>
                 <button
                   className='bg-accent rounded p-1.5 shadow-sm'
                   onClick={() => setTheme("system")}
                 >
-                  <Monitor className='text-primary h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={ComputerIcon} className='text-primary h-3.5 w-3.5' />
                 </button>
               </div>
             </div>
@@ -143,7 +130,7 @@ const UserPopOver = () => {
               <span className='text-muted-foreground text-sm font-semibold'>
                 {t("Credits")}
               </span>
-              <CreditCard className='text-primary h-4 w-4' />
+              <HugeiconsIcon icon={CreditCardIcon} className='text-primary h-4 w-4' />
             </div>
             <div className='space-y-1 text-xs'>
               <div className='text-muted-foreground flex justify-between'>
@@ -176,16 +163,16 @@ const UserPopOver = () => {
           {/* Menu Items */}
           <div className='mb-2 space-y-0.5'>
             {[
-              { icon: Settings, label: t("Settings"), href: "/user/settings" },
+              { icon: Settings01Icon, label: t("Settings"), href: "/user/settings" },
               {
-                icon: User,
+                icon: UserIcon,
                 label: t("Profile"),
                 href: `/creator/${user?.username}`,
               },
-              { icon: CreditCard, label: t("Pricing"), href: "/pricing" },
+              { icon: CreditCardIcon, label: t("Pricing"), href: "/pricing" },
               // { icon: Book, label: "Documentation", href: "/documentation" },
               // { icon: Users, label: t("Community"), href: "/community" },
-              { icon: MessageSquare, label: t("Feedback"), href: "/contact" },
+              { icon: Message01Icon, label: t("Feedback"), href: "/contact" },
             ].map(({ icon: Icon, label, href }) => (
               <Link
                 key={label}
@@ -193,7 +180,7 @@ const UserPopOver = () => {
                 className='text-muted-foreground hover:bg-accent hover:text-accent-foreground group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200'
                 onClick={() => setIsUserPopoverOpen(false)}
               >
-                <Icon className='text-muted-foreground group-hover:text-accent-foreground h-4 w-4 transition-colors' />
+                <HugeiconsIcon icon={Icon} className='text-muted-foreground group-hover:text-accent-foreground h-4 w-4 transition-colors' />
                 <span className='text-sm transition-transform duration-200 group-hover:translate-x-0.5'>
                   {label}
                 </span>
@@ -206,7 +193,7 @@ const UserPopOver = () => {
               onClick={() => setIsSignOutModalOpen(true)}
               className='text-destructive hover:bg-destructive/10 hover:text-destructive group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200'
             >
-              <LogOut className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5' />
+              <HugeiconsIcon icon={Logout01Icon} className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5' />
               <span>{t("Sign Out")}</span>
             </button>
           </div>

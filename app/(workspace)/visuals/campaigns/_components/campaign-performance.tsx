@@ -16,7 +16,8 @@ import {
 } from "@/lib/gtm-api";
 import { cn } from "@/lib/utils";
 import { apiOrigin } from "@/utils/apiResponse";
-import { Copy, Loader2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Loading03Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { type FormEvent, type ReactNode, useState } from "react";
 
@@ -215,7 +216,7 @@ export function CampaignPerformance({
                 disabled={scheduling}
                 title='Re-run the review every 7 days'
               >
-                {scheduling && <Loader2 className='animate-spin' />}
+                {scheduling && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />}
                 Review weekly
               </Button>
               <Button
@@ -224,7 +225,7 @@ export function CampaignPerformance({
                 onClick={() => void optimize()}
                 disabled={optimizing}
               >
-                {optimizing && <Loader2 className='animate-spin' />}
+                {optimizing && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />}
                 Review now
               </Button>
             </>
@@ -323,7 +324,7 @@ export function CampaignPerformance({
                 className='w-full'
                 disabled={recording}
               >
-                {recording && <Loader2 className='animate-spin' />} Record
+                {recording && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />} Record
               </Button>
             </form>
             <CopyField
@@ -391,7 +392,7 @@ export function CampaignPerformance({
                 className='w-full'
                 disabled={building}
               >
-                {building && <Loader2 className='animate-spin' />} Build link
+                {building && <HugeiconsIcon icon={Loading03Icon} className='animate-spin' />} Build link
               </Button>
             </form>
             {utmUrl && <CopyField value={utmUrl} name='Tracking link' />}
@@ -425,7 +426,7 @@ function CopyField({
           aria-label={`Copy ${name.toLowerCase()}`}
           onClick={() => void copy(value, name)}
         >
-          <Copy className='size-3.5' />
+          <HugeiconsIcon icon={Copy01Icon} className='size-3.5' />
         </Button>
       </div>
     </div>

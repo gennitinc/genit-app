@@ -5,7 +5,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Lock, Plus, RefreshCw, Search, Unlock, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LockIcon, SquareUnlock02Icon, Cancel01Icon, PlusSignIcon, RefreshIcon, Search01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 type Tab = "brand" | "neutral" | "status" | "fonts";
@@ -182,9 +183,9 @@ function HexInput({
         className='text-muted-foreground hover:text-foreground transition-colors'
       >
         {locked ? (
-          <Lock className='h-3 w-3' />
+          <HugeiconsIcon icon={LockIcon} className='h-3 w-3' />
         ) : (
-          <Unlock className='h-3 w-3 opacity-30 group-hover/hex:opacity-80' />
+          <HugeiconsIcon icon={SquareUnlock02Icon} className='h-3 w-3 opacity-30 group-hover/hex:opacity-80' />
         )}
       </button>
       {showRemove && onRemove && (
@@ -192,7 +193,7 @@ function HexInput({
           onClick={onRemove}
           className='text-muted-foreground transition-colors hover:text-red-400'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
     </div>
@@ -550,7 +551,7 @@ export function ColorManagement({
                     onClick={addBrandSecondary}
                     className='text-muted-foreground hover:text-foreground flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-[10px] transition-all hover:border-white/20'
                   >
-                    <Plus className='h-3 w-3' />{" "}
+                    <HugeiconsIcon icon={PlusSignIcon} className='h-3 w-3' />{" "}
                     <LocalizedText text={"Add secondary scale"} />
                   </button>
                 )}
@@ -559,7 +560,7 @@ export function ColorManagement({
                     onClick={randomiseAll}
                     className='text-muted-foreground hover:text-foreground group flex h-8 w-full items-center justify-center gap-2 rounded-xl border border-white/5 text-[10px] transition-all hover:border-white/10 hover:bg-white/5'
                   >
-                    <RefreshCw className='h-3 w-3 transition-transform duration-500 group-hover:rotate-180' />{" "}
+                    <HugeiconsIcon icon={RefreshIcon} className='h-3 w-3 transition-transform duration-500 group-hover:rotate-180' />{" "}
                     <LocalizedText text={"Randomise colors"} />
                   </button>
                 )}
@@ -606,7 +607,7 @@ export function ColorManagement({
             {activeTab === "fonts" && (
               <div className='space-y-2'>
                 <div className='flex h-9 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 transition-colors focus-within:border-white/25'>
-                  <Search className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
+                  <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
                   <input
                     value={fontSearch}
                     onChange={(e) => setFontSearch(e.target.value)}
@@ -641,7 +642,7 @@ export function ColorManagement({
                         >
                           {isSelected && (
                             <span className='absolute top-2 right-2'>
-                              <Check className='text-primary h-3 w-3' />
+                              <HugeiconsIcon icon={Tick02Icon} className='text-primary h-3 w-3' />
                             </span>
                           )}
                           <p

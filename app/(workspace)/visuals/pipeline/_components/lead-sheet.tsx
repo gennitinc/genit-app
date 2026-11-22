@@ -29,7 +29,8 @@ import {
 } from "@/lib/pipeline-api";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bot, CalendarCheck, ExternalLink, MessageSquareText, User } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Message02Icon, CalendarCheckIn01Icon, LinkSquare02Icon, BotIcon, UserIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { type ReactNode, useEffect, useState } from "react";
@@ -135,7 +136,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string; onClose: () => 
                 {lead.conversation && (
                   <Button asChild variant='outline' size='sm' className='h-8 text-xs'>
                     <Link href={`/visuals/inbox?conversation=${lead.conversation}`}>
-                      <MessageSquareText /> Open in inbox
+                      <HugeiconsIcon icon={Message02Icon} /> Open in inbox
                     </Link>
                   </Button>
                 )}
@@ -148,7 +149,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string; onClose: () => 
             <div className='space-y-6 p-6'>
               {lead.booking?.status === "booked" && (
                 <div className='flex items-start gap-3 rounded-md bg-amber-50 p-3 text-sm dark:bg-amber-500/10'>
-                  <CalendarCheck className='mt-0.5 size-4 text-amber-600' />
+                  <HugeiconsIcon icon={CalendarCheckIn01Icon} className='mt-0.5 size-4 text-amber-600' />
                   <div className='min-w-0 flex-1'>
                     <p className='font-medium'>{formatSlot(lead.booking.start, lead.booking.timezone)}</p>
                     <p className='text-muted-foreground text-xs'>Booked by the AI assistant · invite sent if email known</p>
@@ -161,7 +162,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string; onClose: () => 
                       className='text-muted-foreground hover:text-foreground'
                       aria-label='Open calendar event'
                     >
-                      <ExternalLink className='size-4' />
+                      <HugeiconsIcon icon={LinkSquare02Icon} className='size-4' />
                     </a>
                   )}
                 </div>
@@ -295,7 +296,7 @@ export function LeadSheet({ leadId, onClose }: { leadId: string; onClose: () => 
                         )}
                       >
                         <p className='text-muted-foreground mb-0.5 flex items-center gap-1 text-[10px]'>
-                          {message.senderType === "bot" ? <Bot className='size-3' /> : message.senderType === "agent" ? <User className='size-3' /> : null}
+                          {message.senderType === "bot" ? <HugeiconsIcon icon={BotIcon} className='size-3' /> : message.senderType === "agent" ? <HugeiconsIcon icon={UserIcon} className='size-3' /> : null}
                           {message.senderType === "customer" ? lead.fullName : message.senderType === "bot" ? "AI assistant" : "Teammate"}
                           {message.metadata?.ai?.followUp ? ` · follow-up ${message.metadata.ai.followUp}` : ""}
                           {" · "}

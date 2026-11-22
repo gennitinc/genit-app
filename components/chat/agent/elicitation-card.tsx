@@ -9,14 +9,8 @@ import type { AgentAttachedFile, AgentElicitation } from "@/lib/agents-api";
 import { formatElicitationQuestion } from "@/lib/format-elicitation-question.mjs";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import {
-  CheckCircle2,
-  MessageCircleQuestion,
-  Paperclip,
-  Plus,
-  Send,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MessageQuestionIcon, CheckmarkCircle02Icon, PlusSignIcon, Attachment01Icon, Cancel01Icon, SentIcon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 
@@ -119,7 +113,7 @@ export function ElicitationCard({
 
   return (
     <AgentCard
-      icon={<MessageCircleQuestion className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={MessageQuestionIcon} className='h-3.5 w-3.5' />}
       title='Needs your input'
       tone='neutral'
       className='relative'
@@ -207,7 +201,7 @@ export function ElicitationCard({
                     {isPicked && submitting ? (
                       <LoadingFileLoader size={12} />
                     ) : opt.connected ? (
-                      <CheckCircle2 className='size-3.5 shrink-0 text-emerald-500' />
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-3.5 shrink-0 text-emerald-500' />
                     ) : null}
                   </>
                 ) : isDurationPicker ? (
@@ -264,7 +258,7 @@ export function ElicitationCard({
             >
               {isPluginPicker && (
                 <span className='border-border/70 bg-background flex size-10 shrink-0 items-center justify-center rounded-lg border'>
-                  <Plus className='text-muted-foreground size-5' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='text-muted-foreground size-5' />
                 </span>
               )}
               <span>
@@ -302,7 +296,7 @@ export function ElicitationCard({
                   key={`${file.name}-${file.lastModified}-${index}`}
                   className='border-border/70 bg-background text-foreground inline-flex max-w-48 items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] dark:border-white/10 dark:bg-white/[0.03]'
                 >
-                  <Paperclip className='text-muted-foreground size-3 shrink-0' />
+                  <HugeiconsIcon icon={Attachment01Icon} className='text-muted-foreground size-3 shrink-0' />
                   <span className='truncate'>{file.name}</span>
                   <button
                     type='button'
@@ -315,7 +309,7 @@ export function ElicitationCard({
                     }
                     className='text-muted-foreground hover:text-foreground disabled:opacity-50'
                   >
-                    <X className='size-3' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='size-3' />
                   </button>
                 </span>
               ))}
@@ -360,7 +354,7 @@ export function ElicitationCard({
               title='Attach images or videos (10MB max each)'
               onClick={() => fileInputRef.current?.click()}
             >
-              <Paperclip className='size-3.5' />
+              <HugeiconsIcon icon={Attachment01Icon} className='size-3.5' />
             </AgentButton>
             <AgentButton
               type='submit'
@@ -374,7 +368,7 @@ export function ElicitationCard({
               {submitting ? (
                 <LoadingFileLoader size={12} />
               ) : (
-                <Send className='h-3 w-3' />
+                <HugeiconsIcon icon={SentIcon} className='h-3 w-3' />
               )}
               <LocalizedText text={"Send"} />
             </AgentButton>

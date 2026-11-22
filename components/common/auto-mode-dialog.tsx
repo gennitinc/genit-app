@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { useIsMobile } from "@/components/ui/use-mobile";
-import { CalendarClock, Settings2, ShieldCheck, Sparkles } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar04Icon, Settings02Icon, SecurityCheckIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 
 export function AutoModeDialog({
@@ -49,19 +50,19 @@ export function AutoModeDialog({
         <div className='flex-1 space-y-1 p-4 sm:p-2'>
           {[
             {
-              icon: CalendarClock,
+              icon: Calendar04Icon,
               title: "Runs on your schedule",
               description:
                 "Auto keeps evaluating goals, campaigns, posts, and performance until you turn it off.",
             },
             {
-              icon: Settings2,
+              icon: Settings02Icon,
               title: "Uses workspace credits",
               description:
                 "Planning and generated specialist work can consume credits within your configured limits.",
             },
             {
-              icon: ShieldCheck,
+              icon: SecurityCheckIcon,
               title: "Your guardrails still apply",
               description:
                 "Publishing, sending, spending, and destructive actions follow the approval policy in Settings.",
@@ -74,7 +75,7 @@ export function AutoModeDialog({
                 className='flex items-start gap-3 rounded-2xl px-2 py-2 sm:px-3'
               >
                 <span className='flex size-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300'>
-                  <Icon className='size-4' />
+                  <HugeiconsIcon icon={Icon} className='size-4' />
                 </span>
                 <div>
                   <p className='text-sm font-medium text-zinc-900 dark:text-zinc-100'>

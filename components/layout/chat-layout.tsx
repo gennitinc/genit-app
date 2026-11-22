@@ -21,7 +21,8 @@ import {
 } from "@/lib/chat-preview";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { PanelRightClose, PanelRightOpen, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PanelRightCloseIcon, PanelRightOpenIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -155,9 +156,9 @@ function PreviewToggle({
       title={isOpen ? "Hide preview" : "Show preview"}
     >
       {isOpen ? (
-        <PanelRightClose className='h-4 w-4' />
+        <HugeiconsIcon icon={PanelRightCloseIcon} className='h-4 w-4' />
       ) : (
-        <PanelRightOpen className='h-4 w-4' />
+        <HugeiconsIcon icon={PanelRightOpenIcon} className='h-4 w-4' />
       )}
     </button>
   );
@@ -462,7 +463,7 @@ function ChatLayoutInner() {
                 aria-label='Close preview'
                 className='hover:bg-accent absolute top-1.5 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md'
               >
-                <X className='h-4 w-4' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
               </button>
               <div className='mt-3 min-h-0 flex-1 overflow-hidden p-1'>
                 <PreviewPanel

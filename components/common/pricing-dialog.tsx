@@ -13,7 +13,8 @@ import {
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useUrlState } from "@/hooks/use-url-state";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Check, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon, Tick02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import * as React from "react";
 
@@ -155,13 +156,13 @@ function PricingCard({
               <LocalizedText text={"Choose"} />
               {tier.name}
             </span>
-            <ArrowRight className='ml-1 h-4 w-4' />
+            <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
           </Link>
         </Button>
         <div className='space-y-3'>
           {tier.features.map((feature) => (
             <div key={feature} className='flex items-center text-sm'>
-              <Check className='mr-2 h-4 w-4 text-blue-500' />
+              <HugeiconsIcon icon={Tick02Icon} className='mr-2 h-4 w-4 text-blue-500' />
               <span className='text-muted-foreground'>{feature}</span>
             </div>
           ))}
@@ -332,7 +333,7 @@ export function PricingDialog({
         <DrawerHeader className='text-left'>
           {/* <DrawerTitle className="text-2xl font-bold">Choose your plan</DrawerTitle> */}
           <DrawerClose className='absolute top-4 right-4'>
-            <X className='h-4 w-4' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
             <span className='sr-only'>
               <LocalizedText text={"Close"} />
             </span>

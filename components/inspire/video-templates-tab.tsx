@@ -19,7 +19,8 @@ import { VideoGenTemplate, VideoGenTemplateGroup } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { videoGenTemplatesApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 function useMediaQuery(query: string) {
@@ -261,7 +262,7 @@ export function VideoTemplatesTab({
                     className='flex items-center gap-1 text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
                   >
                     <LocalizedText text={"See all"} />
-                    <ChevronRight className='h-4 w-4' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='h-4 w-4' />
                   </button>
                 )}
               </div>

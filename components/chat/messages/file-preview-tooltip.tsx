@@ -3,7 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { useFilePreview } from "@/hooks/message/use-file-preview";
 import Loading from "@/utils/Loading";
-import { AlertCircle, FileText, Play, Volume2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, PlayIcon, VolumeHighIcon, AlertCircleIcon } from "@hugeicons/core-free-icons";
 import type React from "react";
 import { useState } from "react";
 
@@ -77,7 +78,7 @@ export function FilePreviewTooltip({
         return (
           <div className='max-w-[400px] p-3'>
             <div className='mb-2 flex items-center gap-2'>
-              <FileText className='text-muted-foreground h-4 w-4' />
+              <HugeiconsIcon icon={File02Icon} className='text-muted-foreground h-4 w-4' />
               <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
@@ -97,13 +98,13 @@ export function FilePreviewTooltip({
         return (
           <div className='max-w-[300px] p-3'>
             <div className='mb-2 flex items-center gap-2'>
-              <FileText className='h-4 w-4 text-red-500' />
+              <HugeiconsIcon icon={File02Icon} className='h-4 w-4 text-red-500' />
               <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
             <div className='rounded border border-red-200 bg-red-50 p-4 text-center'>
-              <FileText className='mx-auto mb-2 h-8 w-8 text-red-500' />
+              <HugeiconsIcon icon={File02Icon} className='mx-auto mb-2 h-8 w-8 text-red-500' />
               <p className='text-sm text-red-700'>
                 <LocalizedText text={"PDF Document"} />
               </p>
@@ -130,7 +131,7 @@ export function FilePreviewTooltip({
                 preload='metadata'
               />
               <div className='bg-opacity-30 absolute inset-0 flex items-center justify-center rounded bg-black'>
-                <Play className='h-8 w-8 text-white' />
+                <HugeiconsIcon icon={PlayIcon} className='h-8 w-8 text-white' />
               </div>
             </div>
             <div className='text-muted-foreground mt-2 text-center text-xs'>
@@ -144,13 +145,13 @@ export function FilePreviewTooltip({
         return (
           <div className='max-w-[300px] p-3'>
             <div className='mb-2 flex items-center gap-2'>
-              <Volume2 className='h-4 w-4 text-blue-500' />
+              <HugeiconsIcon icon={VolumeHighIcon} className='h-4 w-4 text-blue-500' />
               <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
             <div className='rounded border border-blue-200 bg-blue-50 p-4 text-center'>
-              <Volume2 className='mx-auto mb-2 h-8 w-8 text-blue-500' />
+              <HugeiconsIcon icon={VolumeHighIcon} className='mx-auto mb-2 h-8 w-8 text-blue-500' />
               <p className='text-sm text-blue-700'>
                 <LocalizedText text={"Audio File"} />
               </p>
@@ -172,13 +173,13 @@ export function FilePreviewTooltip({
         return (
           <div className='max-w-[300px] p-3'>
             <div className='mb-2 flex items-center gap-2'>
-              <AlertCircle className='text-muted-foreground h-4 w-4' />
+              <HugeiconsIcon icon={AlertCircleIcon} className='text-muted-foreground h-4 w-4' />
               <span className='text-muted-foreground text-sm font-medium'>
                 {file.name}
               </span>
             </div>
             <div className='bg-muted-foreground/10 border-border rounded border p-4 text-center'>
-              <AlertCircle className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+              <HugeiconsIcon icon={AlertCircleIcon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
               <p className='text-muted-foreground text-sm'>
                 {previewData.error ||
                   "Preview not available for this file type"}

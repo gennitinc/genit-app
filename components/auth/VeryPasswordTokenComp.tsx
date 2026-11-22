@@ -3,7 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { apiResponse } from "@/utils/apiResponse";
-import { CircleCheckIcon, XCircleIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckmarkCircle02Icon, CancelCircleIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -78,7 +79,7 @@ export function VerifyPasswordTokenComp() {
               </div>
 
               <div className='space-y-4'>
-                <CircleCheckIcon className='mx-auto h-16 w-16 text-green-500' />
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='mx-auto h-16 w-16 text-green-500' />
                 <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
                   <LocalizedText text={"Verified Successfully"} />
                 </h1>
@@ -140,7 +141,7 @@ export function VerifyPasswordTokenComp() {
               </div>
 
               <div className='space-y-4'>
-                <XCircleIcon className='mx-auto h-16 w-16 text-red-500' />
+                <HugeiconsIcon icon={CancelCircleIcon} className='mx-auto h-16 w-16 text-red-500' />
                 <h1 className='text-foreground text-2xl font-semibold tracking-tight'>
                   <LocalizedText text={"Oops, Link has Expired"} />
                 </h1>

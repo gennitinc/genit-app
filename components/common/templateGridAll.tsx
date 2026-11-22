@@ -36,27 +36,8 @@ import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  ArrowRight,
-  CircleFadingArrowUp,
-  Eye,
-  Image as ImageIcon,
-  Loader,
-  MessageSquare,
-  Mic,
-  Palette,
-  PaperclipIcon,
-  Pencil,
-  Plus,
-  TrendingUp,
-  User,
-  Users,
-  WandSparklesIcon,
-  X,
-  XIcon,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserIcon, ViewIcon, PencilIcon, PlusSignIcon, PaintBoardIcon, Mic01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -724,7 +705,7 @@ export default function TemplateGridAll() {
                         />
                       ) : (
                         <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                          <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
+                          <HugeiconsIcon icon={UserIcon} className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                         </div>
                       )}
                       <span className='text-xs font-medium text-white/80'>
@@ -755,7 +736,7 @@ export default function TemplateGridAll() {
                     className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-90 backdrop-blur-sm dark:bg-black/20'
                     aria-label='View template'
                   >
-                    <Eye className='h-4 w-4 text-black dark:text-white' />
+                    <HugeiconsIcon icon={ViewIcon} className='h-4 w-4 text-black dark:text-white' />
                   </Button>
                   <Button
                     size='icon'
@@ -763,7 +744,7 @@ export default function TemplateGridAll() {
                     className='pointer-events-auto h-9 w-9 rounded-full bg-white/90 p-0 opacity-50 backdrop-blur-sm dark:bg-black/20'
                     aria-label='Edit template'
                   >
-                    <Pencil className='h-4 w-4 text-black dark:text-white' />
+                    <HugeiconsIcon icon={PencilIcon} className='h-4 w-4 text-black dark:text-white' />
                   </Button>
                 </div>
               </div>
@@ -1031,7 +1012,7 @@ export default function TemplateGridAll() {
                           disabled={isGenerating || isSubmitting}
                           aria-label='Attach files'
                         >
-                          <Plus className='size-5 shrink-0' />
+                          <HugeiconsIcon icon={PlusSignIcon} className='size-5 shrink-0' />
                         </button>
                         <Input
                           ref={fileInputRef}
@@ -1058,7 +1039,7 @@ export default function TemplateGridAll() {
                             }
                             title='Brand settings'
                           >
-                            <Palette className='size-4 shrink-0' />
+                            <HugeiconsIcon icon={PaintBoardIcon} className='size-4 shrink-0' />
                           </button>
                           <button
                             type='button'
@@ -1076,7 +1057,7 @@ export default function TemplateGridAll() {
                                 : "Start voice input"
                             }
                           >
-                            <Mic className='size-4 shrink-0' />
+                            <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
                           </button>
                           {/* <button
                             type='submit'
@@ -1159,7 +1140,7 @@ export default function TemplateGridAll() {
                   <div className='flex flex-col p-4'>
                     <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
                       <div className='flex items-center gap-2'>
-                        <Palette className='text-primary h-4 w-4' />
+                        <HugeiconsIcon icon={PaintBoardIcon} className='text-primary h-4 w-4' />
                         <h3 className='text-foreground text-sm font-semibold'>
                           <LocalizedText text={"Brand Identity"} />
                         </h3>
@@ -1169,7 +1150,7 @@ export default function TemplateGridAll() {
                         onClick={() => setIsBrandSettingsOpen(false)}
                         className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
                       >
-                        <X className='h-4 w-4' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                       </button>
                     </div>
                     <div className='custom-scrollbar max-h-[300px] overflow-y-auto'>
@@ -1399,7 +1380,7 @@ export default function TemplateGridAll() {
                           disabled={isGenerating || isSubmitting}
                           aria-label='Attach files'
                         >
-                          <Plus className='size-5 shrink-0' />
+                          <HugeiconsIcon icon={PlusSignIcon} className='size-5 shrink-0' />
                         </button>
                         <Input
                           ref={fileInputRef}
@@ -1426,7 +1407,7 @@ export default function TemplateGridAll() {
                             }
                             title='Brand settings'
                           >
-                            <Palette className='size-4 shrink-0' />
+                            <HugeiconsIcon icon={PaintBoardIcon} className='size-4 shrink-0' />
                           </button>
                           <button
                             type='button'
@@ -1444,7 +1425,7 @@ export default function TemplateGridAll() {
                                 : "Start voice input"
                             }
                           >
-                            <Mic className='size-4 shrink-0' />
+                            <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
                           </button>
                           {/* <button
                             type='submit'
@@ -1527,7 +1508,7 @@ export default function TemplateGridAll() {
                   <div className='flex flex-col p-4'>
                     <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
                       <div className='flex items-center gap-2'>
-                        <Palette className='text-primary h-4 w-4' />
+                        <HugeiconsIcon icon={PaintBoardIcon} className='text-primary h-4 w-4' />
                         <h3 className='text-foreground text-sm font-semibold'>
                           <LocalizedText text={"Brand Identity"} />
                         </h3>
@@ -1537,7 +1518,7 @@ export default function TemplateGridAll() {
                         onClick={() => setIsBrandSettingsOpen(false)}
                         className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300'
                       >
-                        <X className='h-4 w-4' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                       </button>
                     </div>
                     <div className='custom-scrollbar max-h-[300px] overflow-y-auto'>

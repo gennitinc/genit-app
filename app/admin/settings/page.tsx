@@ -6,15 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Loading from "@/utils/Loading";
-import {
-  AlertTriangle,
-  Globe,
-  RefreshCw,
-  Save,
-  Settings,
-  Shield,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FloppyDiskIcon, GlobeIcon, Shield01Icon, ZapIcon, Alert02Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 export default function SettingsPage() {
@@ -45,7 +38,7 @@ export default function SettingsPage() {
           disabled={loading}
           className='h-11 gap-2 rounded-xl px-6'
         >
-          {loading ? <Loading size={20} /> : <Save className='h-4 w-4' />}
+          {loading ? <Loading size={20} /> : <HugeiconsIcon icon={FloppyDiskIcon} className='h-4 w-4' />}
           <LocalizedText text={"Save Configuration"} />
         </Button>
       </div>
@@ -55,7 +48,7 @@ export default function SettingsPage() {
         <div className='bg-card border-border/50 rounded-3xl border p-8 shadow-sm'>
           <div className='mb-8 flex items-center gap-3'>
             <div className='text-primary rounded-xl bg-indigo-600 p-2.5 hover:bg-indigo-700/10'>
-              <Globe className='h-5 w-5' />
+              <HugeiconsIcon icon={GlobeIcon} className='h-5 w-5' />
             </div>
             <h2 className='text-xl font-bold'>
               <LocalizedText text={"General Configuration"} />
@@ -113,7 +106,7 @@ export default function SettingsPage() {
           <div className='bg-card border-border/50 h-fit rounded-3xl border p-8 shadow-sm'>
             <div className='mb-8 flex items-center gap-3'>
               <div className='rounded-xl bg-amber-500/10 p-2.5 text-amber-500'>
-                <Shield className='h-5 w-5' />
+                <HugeiconsIcon icon={Shield01Icon} className='h-5 w-5' />
               </div>
               <h2 className='text-xl font-bold'>
                 <LocalizedText text={"Security"} />
@@ -160,7 +153,7 @@ export default function SettingsPage() {
           <div className='bg-card border-border/50 h-fit rounded-3xl border p-8 shadow-sm'>
             <div className='mb-8 flex items-center gap-3'>
               <div className='rounded-xl bg-emerald-500/10 p-2.5 text-emerald-500'>
-                <Zap className='h-5 w-5' />
+                <HugeiconsIcon icon={ZapIcon} className='h-5 w-5' />
               </div>
               <h2 className='text-xl font-bold'>
                 <LocalizedText text={"Performance"} />
@@ -209,7 +202,7 @@ export default function SettingsPage() {
         <div className='rounded-3xl border border-rose-500/20 bg-rose-500/5 p-8 shadow-sm'>
           <div className='mb-6 flex items-center gap-3'>
             <div className='rounded-xl bg-rose-500/10 p-2.5 text-rose-500'>
-              <AlertTriangle className='h-5 w-5' />
+              <HugeiconsIcon icon={Alert02Icon} className='h-5 w-5' />
             </div>
             <h2 className='text-xl font-bold text-rose-500'>
               <LocalizedText text={"Critical Controls"} />

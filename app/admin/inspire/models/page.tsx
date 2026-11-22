@@ -26,22 +26,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Model, ModelType } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
-import {
-  CircleFadingArrowUp,
-  Edit,
-  FileText,
-  Image as ImageIcon,
-  Loader2,
-  Music,
-  Plus,
-  Search,
-  Share2,
-  Sparkles,
-  Trash2,
-  Type as TypeIcon,
-  Video,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, Search01Icon, SparklesIcon, Image01Icon, Video01Icon, MusicNote01Icon, TextFontIcon, Share08Icon, File02Icon, PencilEdit01Icon, Delete02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 
@@ -291,14 +277,14 @@ export default function AdminModelsPage() {
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Create Model"} />
         </Button>
       </div>
 
       <div className='mb-6 flex flex-wrap items-center gap-4'>
         <div className='relative max-w-md flex-1'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder='Search models...'
             value={searchTerm}
@@ -361,25 +347,25 @@ export default function AdminModelsPage() {
               <div className='mb-3 flex items-start justify-between'>
                 <div className='flex items-center gap-2'>
                   {model.type === "general" && (
-                    <Sparkles className='h-5 w-5 text-indigo-500' />
+                    <HugeiconsIcon icon={SparklesIcon} className='h-5 w-5 text-indigo-500' />
                   )}
                   {model.type === "image" && (
-                    <ImageIcon className='h-5 w-5 text-blue-500' />
+                    <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-blue-500' />
                   )}
                   {model.type === "video" && (
-                    <Video className='h-5 w-5 text-purple-500' />
+                    <HugeiconsIcon icon={Video01Icon} className='h-5 w-5 text-purple-500' />
                   )}
                   {model.type === "audio" && (
-                    <Music className='h-5 w-5 text-green-500' />
+                    <HugeiconsIcon icon={MusicNote01Icon} className='h-5 w-5 text-green-500' />
                   )}
                   {model.type === "text" && (
-                    <TypeIcon className='h-5 w-5 text-orange-500' />
+                    <HugeiconsIcon icon={TextFontIcon} className='h-5 w-5 text-orange-500' />
                   )}
                   {model.type === "social" && (
-                    <Share2 className='h-5 w-5 text-pink-500' />
+                    <HugeiconsIcon icon={Share08Icon} className='h-5 w-5 text-pink-500' />
                   )}
                   {model.type === "docs" && (
-                    <FileText className='h-5 w-5 text-gray-500' />
+                    <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-gray-500' />
                   )}
                   <h3 className='font-semibold'>{model.name}</h3>
                 </div>
@@ -390,7 +376,7 @@ export default function AdminModelsPage() {
                     onClick={() => handleEditClick(model)}
                     className='h-8 w-8'
                   >
-                    <Edit className='h-4 w-4' />
+                    <HugeiconsIcon icon={PencilEdit01Icon} className='h-4 w-4' />
                   </Button>
                   <Button
                     variant='ghost'
@@ -398,7 +384,7 @@ export default function AdminModelsPage() {
                     onClick={() => handleDeleteClick(model)}
                     className='text-destructive h-8 w-8'
                   >
-                    <Trash2 className='h-4 w-4' />
+                    <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                   </Button>
                 </div>
               </div>
@@ -610,7 +596,7 @@ export default function AdminModelsPage() {
                       setIconPreview(null);
                     }}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>
@@ -1019,7 +1005,7 @@ export default function AdminModelsPage() {
                       setIconPreview(editingModel?.icon || null);
                     }}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>

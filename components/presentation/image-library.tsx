@@ -10,19 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  CircleFadingArrowUp,
-  Download,
-  ExternalLink,
-  Image as ImageIcon,
-  ImagePlus,
-  Loader2,
-  Search,
-  Sparkles,
-  Trash2,
-  Upload,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Image01Icon, Cancel01Icon, Upload01Icon, SparklesIcon, ImageAdd01Icon, Search01Icon, Delete02Icon, Download01Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface ImageItem {
@@ -491,7 +480,7 @@ export function ImageLibrary({
           <div className='mb-4 flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/10'>
-                <ImageIcon className='h-5 w-5 text-blue-500 dark:text-blue-400' />
+                <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-blue-500 dark:text-blue-400' />
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
@@ -515,7 +504,7 @@ export function ImageLibrary({
                 onClick={onClose}
                 className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className='h-3 w-3' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -527,15 +516,15 @@ export function ImageLibrary({
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
           <TabsList className='grid w-full grid-cols-3'>
             <TabsTrigger value='upload' className='text-xs'>
-              <Upload className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={Upload01Icon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Uploads"} />
             </TabsTrigger>
             <TabsTrigger value='library' className='text-xs'>
-              <ImageIcon className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={Image01Icon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Library"} />
             </TabsTrigger>
             <TabsTrigger value='generate' className='text-xs'>
-              <Sparkles className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={SparklesIcon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Generate"} />
             </TabsTrigger>
           </TabsList>
@@ -564,7 +553,7 @@ export function ImageLibrary({
                   </>
                 ) : (
                   <>
-                    <Upload className='mr-2 h-4 w-4' />
+                    <HugeiconsIcon icon={Upload01Icon} className='mr-2 h-4 w-4' />
                     <LocalizedText text={"Upload Images"} />
                   </>
                 )}
@@ -572,7 +561,7 @@ export function ImageLibrary({
             </div>
             {uploadedImages.length === 0 && (
               <div className='text-muted-foreground py-8 text-center text-sm'>
-                <ImagePlus className='mx-auto mb-2 h-8 w-8 opacity-50' />
+                <HugeiconsIcon icon={ImageAdd01Icon} className='mx-auto mb-2 h-8 w-8 opacity-50' />
                 <p>
                   <LocalizedText text={"No uploaded images"} />
                 </p>
@@ -588,7 +577,7 @@ export function ImageLibrary({
           {/* Library Tab */}
           <TabsContent value='library' className='mt-4'>
             <div className='relative mb-4'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
               <Input
                 type='text'
                 placeholder='Search free images (nature, business, tech...)'
@@ -640,7 +629,7 @@ export function ImageLibrary({
                 </>
               ) : (
                 <>
-                  <Sparkles className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={SparklesIcon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Generate Image"} />
                 </>
               )}
@@ -663,7 +652,7 @@ export function ImageLibrary({
                 </div>
               ) : currentImages.length === 0 ? (
                 <div className='flex h-32 flex-col items-center justify-center'>
-                  <ImageIcon className='text-muted-foreground mb-2 h-8 w-8 opacity-50' />
+                  <HugeiconsIcon icon={Image01Icon} className='text-muted-foreground mb-2 h-8 w-8 opacity-50' />
                   <p className='text-muted-foreground text-sm'>
                     {activeTab === "upload"
                       ? "No images uploaded yet"
@@ -703,7 +692,7 @@ export function ImageLibrary({
                             handleDeleteImage(image.id, image.serverId);
                           }}
                         >
-                          <Trash2 className='h-3 w-3' />
+                          <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
                         </Button>
                       )}
                       {image.author && (
@@ -735,7 +724,7 @@ export function ImageLibrary({
               className='flex-1'
               size='sm'
             >
-              <Download className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"Insert Image"} />
             </Button>
             {selectedImage.authorUrl && (
@@ -744,7 +733,7 @@ export function ImageLibrary({
                 size='sm'
                 onClick={() => window.open(selectedImage.authorUrl, "_blank")}
               >
-                <ExternalLink className='h-4 w-4' />
+                <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
               </Button>
             )}
           </div>

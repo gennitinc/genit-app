@@ -14,7 +14,8 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { Loader2, Play, Trash2, VideoIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Video01Icon, PlayIcon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 interface HistoryVideo {
@@ -146,7 +147,7 @@ export function VideoHistoryTab({
         <div className='relative min-h-[400px] w-full overflow-hidden rounded-xl'>
           <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-center'>
             <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-              <VideoIcon className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+              <HugeiconsIcon icon={Video01Icon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
             </div>
             <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
               <LocalizedText text={"No history yet"} />
@@ -319,7 +320,7 @@ function VideoCard({
             className='flex w-full items-center justify-center bg-neutral-800 dark:bg-neutral-900'
             style={{ aspectRatio }}
           >
-            <VideoIcon className='h-8 w-8 text-neutral-500 dark:text-neutral-600' />
+            <HugeiconsIcon icon={Video01Icon} className='h-8 w-8 text-neutral-500 dark:text-neutral-600' />
           </div>
         )}
         <div className='absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100' />
@@ -334,7 +335,7 @@ function VideoCard({
               className='flex h-10 w-10 items-center justify-center rounded-lg bg-black/70 text-white shadow-lg transition-colors hover:bg-black/80'
               title='Play'
             >
-              <Play className='ml-1 h-6 w-6 text-white' />
+              <HugeiconsIcon icon={PlayIcon} className='ml-1 h-6 w-6 text-white' />
             </button>
             <button
               type='button'
@@ -345,7 +346,7 @@ function VideoCard({
               {deletingId === video._id ? (
                 <LoadingFileLoader size={20} />
               ) : (
-                <Trash2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
               )}
             </button>
           </div>

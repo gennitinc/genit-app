@@ -3,7 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, ExternalLink, Globe } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GlobeIcon, ArrowRight02Icon, CheckmarkCircle02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 
 const logos = [
@@ -250,7 +251,7 @@ export default function PartnerLogos() {
             <div className='flex items-center px-6 py-12 md:px-8 lg:p-16'>
               <div className='w-full max-w-lg'>
                 <Badge className='text-primary mb-6 inline-flex items-center gap-1.5 bg-indigo-600 px-3 py-1.5 text-sm font-medium hover:bg-indigo-700/10'>
-                  <Globe className='h-4 w-4' />
+                  <HugeiconsIcon icon={GlobeIcon} className='h-4 w-4' />
                   <LocalizedText text={"Strategic Partnerships"} />
                 </Badge>
                 <h2 className='mb-6 text-3xl font-bold tracking-tight lg:text-4xl'>
@@ -273,14 +274,14 @@ export default function PartnerLogos() {
                     }}
                   >
                     <LocalizedText text={"Become a partner"} />
-                    <ArrowRight className='size-4 transition-transform duration-300 group-hover:translate-x-1' />
+                    <HugeiconsIcon icon={ArrowRight02Icon} className='size-4 transition-transform duration-300 group-hover:translate-x-1' />
                   </Button>
                   <Button
                     variant='outline'
                     className='group flex cursor-not-allowed items-center gap-2'
                     disabled={true}
                   >
-                    <CheckCircle className='size-4' />
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-4' />
                     <LocalizedText text={"View case studies"} />
                   </Button>
                 </div>
@@ -310,7 +311,7 @@ export default function PartnerLogos() {
                     <span>
                       <LocalizedText text={"Learn more"} />
                     </span>
-                    <ExternalLink className='ml-1 h-3 w-3' />
+                    <HugeiconsIcon icon={LinkSquare02Icon} className='ml-1 h-3 w-3' />
                   </div>
                 </a>
               ))}

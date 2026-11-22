@@ -1,53 +1,44 @@
 "use client";
 
 import { OrgSwitcher } from "@/components/layout/org-switcher";
-import {
-  CalendarFold,
-  FolderSync,
-  Home,
-  Inbox,
-  Layers,
-  Library,
-  Megaphone,
-  Target,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Home03Icon, Layers01Icon, InboxIcon, Target01Icon, Calendar02Icon, LibraryIcon, WorkflowSquare10Icon, Megaphone01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const CATEGORIES = [
-  { id: "home", label: "Home", icon: Home, href: "/visuals" },
+  { id: "home", label: "Home", icon: Home03Icon, href: "/visuals" },
   {
     id: "posts",
     label: "Posts",
-    icon: Layers,
+    icon: Layers01Icon,
     href: "/visuals/posts",
   },
-  { id: "inbox", label: "Inbox", icon: Inbox, href: "/visuals/inbox" },
-  { id: "pipeline", label: "Pipeline", icon: Target, href: "/visuals/pipeline" },
+  { id: "inbox", label: "Inbox", icon: InboxIcon, href: "/visuals/inbox" },
+  { id: "pipeline", label: "Pipeline", icon: Target01Icon, href: "/visuals/pipeline" },
   {
     id: "calendar",
     label: "Calendar",
-    icon: CalendarFold,
+    icon: Calendar02Icon,
     href: "/visuals/calendar",
   },
   {
     id: "library",
     label: "Media Library",
-    icon: Library,
+    icon: LibraryIcon,
     href: "/visuals/library",
   },
   {
     id: "automation",
     label: "Automation",
-    icon: Workflow,
+    icon: WorkflowSquare10Icon,
     href: "/visuals/automation",
   },
   {
     id: "campaigns",
     label: "Campaigns",
-    icon: Megaphone,
+    icon: Megaphone01Icon,
     href: "/visuals/campaigns",
   },
 ];
@@ -78,7 +69,7 @@ export function VisualsSidebar() {
                   : "text-zinc-500 hover:bg-white/50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-200"
               }`}
             >
-              <cat.icon
+              <HugeiconsIcon icon={cat.icon}
                 className={`h-4 w-4 ${isActive ? "text-sky-500 dark:text-sky-300" : ""}`}
               />
               {cat.label}

@@ -21,19 +21,7 @@ import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
 import GridLoading from "@/utils/girdLoading";
 import { communityApi } from "@/utils/inspire-api";
-import {
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Copy,
-  Download,
-  Eye,
-  Heart,
-  Loader2,
-  RefreshCw,
-  User,
-  Users,
-} from "lucide-react";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Socket, io } from "socket.io-client";

@@ -12,7 +12,8 @@ import {
   NavbarButton,
   NavbarLogo,
 } from "@/components/ui/resizable-navbar";
-import { ArrowRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -90,7 +91,7 @@ export function LandingMainNav() {
               <span>
                 <LocalizedText text={"Start for $0"} />
               </span>
-              <ArrowRight className='ml-1 h-4 w-4' />
+              <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
             </Link>
           </div>
         </MobileNavMenu>

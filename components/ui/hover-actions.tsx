@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Check, Copy, Edit, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PencilEdit01Icon, Tick02Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface HoverActionsProps {
@@ -35,7 +36,7 @@ export function HoverActions({
         className='text-muted-foreground hover:text-foreground h-auto px-1.5 py-1'
         onClick={onEdit}
       >
-        <Edit className='h-3.5 w-3.5' />
+        <HugeiconsIcon icon={PencilEdit01Icon} className='h-3.5 w-3.5' />
       </Button>
       <div className='bg-border h-4 w-px'></div>
 
@@ -47,9 +48,9 @@ export function HoverActions({
         disabled={copied}
       >
         {copied ? (
-          <Check className='h-4 w-4 text-green-500' />
+          <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4 text-green-500' />
         ) : (
-          <Copy className='h-4 w-4' />
+          <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
         )}
       </Button>
     </div>

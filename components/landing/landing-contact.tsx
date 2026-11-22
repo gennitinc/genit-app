@@ -25,15 +25,8 @@ import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  ArrowRight,
-  FileText,
-  Lightbulb,
-  LifeBuoy,
-  Mail,
-  Paperclip,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Mail01Icon, LifebuoyIcon, BulbIcon, File02Icon, Attachment01Icon, Cancel01Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -157,7 +150,7 @@ export default function LandingContact() {
 
             <div className='space-y-4 rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800'>
               <div className='flex items-start gap-3.5'>
-                <Mail className='mt-0.5 size-4 shrink-0 text-neutral-500' />
+                <HugeiconsIcon icon={Mail01Icon} className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
                   <p className='text-sm text-neutral-500'>{t("Email")}</p>
                   <a
@@ -169,7 +162,7 @@ export default function LandingContact() {
                 </div>
               </div>
               <div className='flex items-start gap-3.5 border-t border-neutral-200 pt-4 dark:border-neutral-800'>
-                <LifeBuoy className='mt-0.5 size-4 shrink-0 text-neutral-500' />
+                <HugeiconsIcon icon={LifebuoyIcon} className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
                   <p className='text-sm text-neutral-500'>
                     {t("Already a customer?")}
@@ -183,7 +176,7 @@ export default function LandingContact() {
                 </div>
               </div>
               <div className='flex items-start gap-3.5 border-t border-neutral-200 pt-4 dark:border-neutral-800'>
-                <Lightbulb className='mt-0.5 size-4 shrink-0 text-neutral-500' />
+                <HugeiconsIcon icon={BulbIcon} className='mt-0.5 size-4 shrink-0 text-neutral-500' />
                 <div>
                   <p className='text-sm text-neutral-500'>
                     {t("Have a feature idea?")}
@@ -421,7 +414,7 @@ export default function LandingContact() {
                               {selectedFile ? (
                                 <div className='flex flex-col items-center px-4'>
                                   <div className='flex items-center gap-2'>
-                                    <FileText className='size-5 text-neutral-900 dark:text-white' />
+                                    <HugeiconsIcon icon={File02Icon} className='size-5 text-neutral-900 dark:text-white' />
                                     <span className='max-w-[260px] truncate text-sm font-semibold text-neutral-900 dark:text-white'>
                                       {(selectedFile as File).name}
                                     </span>
@@ -436,7 +429,7 @@ export default function LandingContact() {
                                 </div>
                               ) : (
                                 <div className='flex flex-col items-center gap-1.5 text-neutral-500 dark:text-neutral-400'>
-                                  <Paperclip className='size-5' />
+                                  <HugeiconsIcon icon={Attachment01Icon} className='size-5' />
                                   <span className='text-xs font-medium'>
                                     {t("Click to attach brief or guideline")}
                                   </span>
@@ -460,7 +453,7 @@ export default function LandingContact() {
                                   className='absolute top-3 right-3 rounded-full border border-neutral-200 bg-white p-1 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                   title='Remove file'
                                 >
-                                  <X className='size-3.5' />
+                                  <HugeiconsIcon icon={Cancel01Icon} className='size-3.5' />
                                 </button>
                               )}
                             </div>
@@ -486,7 +479,7 @@ export default function LandingContact() {
                       ) : (
                         <div className='flex items-center justify-center gap-2'>
                           <span>{t("Send Inquiry")}</span>
-                          <ArrowRight className='size-4' />
+                          <HugeiconsIcon icon={ArrowRight02Icon} className='size-4' />
                         </div>
                       )}
                     </Button>

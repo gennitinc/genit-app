@@ -44,17 +44,8 @@ import { YouTubeNode } from "@/nodes/youtube-node";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  FolderOpen,
-  History as HistoryIcon,
-  Loader2,
-  Maximize2,
-  Minus,
-  Plus,
-  PlusCircle,
-  Redo2,
-  Undo2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Undo02Icon, Redo02Icon, PlusSignIcon, MinusSignIcon, ArrowExpand01Icon, AddCircleIcon, Clock04Icon, FolderOpenIcon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import ReactFlow, {
   Background,
@@ -1219,7 +1210,7 @@ const GenittWorkflow = ({
                 className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                 title='Undo (Ctrl+Z)'
               >
-                <Undo2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Undo02Icon} className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -1229,7 +1220,7 @@ const GenittWorkflow = ({
                 className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                 title='Redo (Ctrl+Y)'
               >
-                <Redo2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Redo02Icon} className='h-4 w-4' />
               </Button>
               <div className='bg-border mx-1 h-6 w-px'></div>
               <Button
@@ -1239,7 +1230,7 @@ const GenittWorkflow = ({
                 className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Zoom In'
               >
-                <Plus className='h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -1248,7 +1239,7 @@ const GenittWorkflow = ({
                 className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Zoom Out'
               >
-                <Minus className='h-4 w-4' />
+                <HugeiconsIcon icon={MinusSignIcon} className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -1259,7 +1250,7 @@ const GenittWorkflow = ({
                 className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                 title='Fit View'
               >
-                <Maximize2 className='h-4 w-4' />
+                <HugeiconsIcon icon={ArrowExpand01Icon} className='h-4 w-4' />
               </Button>
             </div>
           </div>
@@ -1352,7 +1343,7 @@ const GenittWorkflow = ({
                   className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                   title='Undo (Ctrl+Z)'
                 >
-                  <Undo2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={Undo02Icon} className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
@@ -1362,7 +1353,7 @@ const GenittWorkflow = ({
                   className='hover:bg-accent h-8 w-8 rounded-sm p-0 disabled:cursor-not-allowed disabled:opacity-50'
                   title='Redo (Ctrl+Y)'
                 >
-                  <Redo2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={Redo02Icon} className='h-4 w-4' />
                 </Button>
                 <div className='bg-border mx-1 h-6 w-px'></div>
                 <Button
@@ -1372,7 +1363,7 @@ const GenittWorkflow = ({
                   className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Zoom In'
                 >
-                  <Plus className='h-4 w-4' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
@@ -1381,7 +1372,7 @@ const GenittWorkflow = ({
                   className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Zoom Out'
                 >
-                  <Minus className='h-4 w-4' />
+                  <HugeiconsIcon icon={MinusSignIcon} className='h-4 w-4' />
                 </Button>
                 <Button
                   variant='ghost'
@@ -1392,7 +1383,7 @@ const GenittWorkflow = ({
                   className='hover:bg-accent h-8 w-8 rounded-sm p-0'
                   title='Fit View'
                 >
-                  <Maximize2 className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowExpand01Icon} className='h-4 w-4' />
                 </Button>
               </div>
             </div>
@@ -1487,7 +1478,7 @@ const GenittWorkflow = ({
         >
           <DialogHeader>
             <DialogTitle className='flex items-center gap-2 text-2xl font-bold'>
-              <PlusCircle className='text-primary h-6 w-6' />
+              <HugeiconsIcon icon={AddCircleIcon} className='text-primary h-6 w-6' />
               <LocalizedText text={"Workflow Engine"} />
             </DialogTitle>
             <DialogDescription>
@@ -1535,7 +1526,7 @@ const GenittWorkflow = ({
 
             <div className='space-y-2'>
               <label className='text-muted-foreground flex items-center gap-2 px-1 text-sm font-medium'>
-                <HistoryIcon className='h-4 w-4' />
+                <HugeiconsIcon icon={Clock04Icon} className='h-4 w-4' />
                 <LocalizedText text={"Project History"} />
               </label>
               <div className='custom-scrollbar mb-6 max-h-[200px] space-y-2 overflow-y-auto pr-1'>
@@ -1554,7 +1545,7 @@ const GenittWorkflow = ({
                     >
                       <div className='flex items-center gap-3'>
                         <div className='flex h-8 w-8 items-center justify-center rounded-sm bg-indigo-600 hover:bg-indigo-700/10'>
-                          <HistoryIcon className='text-primary h-4 w-4' />
+                          <HugeiconsIcon icon={Clock04Icon} className='text-primary h-4 w-4' />
                         </div>
                         <div>
                           <p className='text-foreground group-hover:text-primary text-sm font-medium transition-colors'>
@@ -1566,7 +1557,7 @@ const GenittWorkflow = ({
                           </p>
                         </div>
                       </div>
-                      <FolderOpen className='text-muted-foreground group-hover:text-primary h-4 w-4 transition-colors' />
+                      <HugeiconsIcon icon={FolderOpenIcon} className='text-muted-foreground group-hover:text-primary h-4 w-4 transition-colors' />
                     </div>
                   ))
                 ) : (

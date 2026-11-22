@@ -19,20 +19,8 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
 import { communityApi, creatorApi } from "@/utils/inspire-api";
-import {
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Copy,
-  Download,
-  Eye,
-  Heart,
-  Loader2,
-  Pause,
-  Play,
-  RefreshCw,
-  User,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlayIcon, PauseIcon, ViewIcon, FavouriteIcon, UserIcon, RefreshIcon, ArrowUp01Icon, ArrowDown01Icon, Tick02Icon, Copy01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -264,9 +252,9 @@ function VideoCard({
                   className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 opacity-100 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/80'
                 >
                   {isPaused ? (
-                    <Play className='ml-0.5 h-5 w-5 text-white' />
+                    <HugeiconsIcon icon={PlayIcon} className='ml-0.5 h-5 w-5 text-white' />
                   ) : (
-                    <Pause className='h-5 w-5 text-white' />
+                    <HugeiconsIcon icon={PauseIcon} className='h-5 w-5 text-white' />
                   )}
                 </button>
               )}
@@ -279,7 +267,7 @@ function VideoCard({
                 }}
                 className='flex h-10 w-10 items-center justify-center rounded-full bg-black/70 opacity-100 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/80'
               >
-                <Eye className='h-5 w-5 text-white' />
+                <HugeiconsIcon icon={ViewIcon} className='h-5 w-5 text-white' />
               </button>
             </div>
           </div>
@@ -297,7 +285,7 @@ function VideoCard({
             className='flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-50'
             title={isLiked ? "Unlike" : "Like"}
           >
-            <Heart
+            <HugeiconsIcon icon={FavouriteIcon}
               className={`h-4 w-4 transition-all ${
                 isLiked ? "fill-red-500 text-red-500" : "fill-none text-white"
               }`}
@@ -326,7 +314,7 @@ function VideoCard({
                 />
               ) : (
                 <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                  <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
+                  <HugeiconsIcon icon={UserIcon} className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                 </div>
               )}
               <span className='text-xs font-medium text-white/80'>
@@ -355,7 +343,7 @@ function VideoCard({
               }}
               className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
             >
-              <RefreshCw className='h-3 w-3' />
+              <HugeiconsIcon icon={RefreshIcon} className='h-3 w-3' />
               <LocalizedText text={"Recreate"} />
             </button>
           </div>
@@ -709,12 +697,12 @@ function ContentDetailContent({
                   {showFullPrompt ? (
                     <>
                       <LocalizedText text={"View less"} />
-                      <ChevronUp className='h-3 w-3' />
+                      <HugeiconsIcon icon={ArrowUp01Icon} className='h-3 w-3' />
                     </>
                   ) : (
                     <>
                       <LocalizedText text={"View more"} />
-                      <ChevronDown className='h-3 w-3' />
+                      <HugeiconsIcon icon={ArrowDown01Icon} className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -735,7 +723,7 @@ function ContentDetailContent({
               />
             ) : (
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                <User className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
+                <HugeiconsIcon icon={UserIcon} className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
             <div className='flex-1'>
@@ -774,7 +762,7 @@ function ContentDetailContent({
                 className='flex items-center gap-2 text-sm text-neutral-600 transition-colors hover:text-red-500 disabled:opacity-50 dark:text-neutral-400'
               >
                 <span>{content.likes}</span>
-                <Heart
+                <HugeiconsIcon icon={FavouriteIcon}
                   className={`h-4 w-4 transition-all ${
                     isLiked || content.isLiked
                       ? "fill-red-500 text-red-500"
@@ -785,11 +773,11 @@ function ContentDetailContent({
             ) : (
               <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
                 <span>{content.likes}</span>
-                <Heart className='h-4 w-4' />
+                <HugeiconsIcon icon={FavouriteIcon} className='h-4 w-4' />
               </div>
             )}
             <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
-              <Eye className='h-4 w-4' />
+              <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
               <span>{content.views}</span>
             </div>
           </div>
@@ -804,7 +792,7 @@ function ContentDetailContent({
             onClick={onRecreate}
             className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className='h-4 w-4' />
+            <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
             <LocalizedText text={"Recreate"} />
           </button>
           <button
@@ -821,9 +809,9 @@ function ContentDetailContent({
             className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
             {copied ? (
-              <Check className='h-4 w-4 text-green-500' />
+              <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className='h-4 w-4' />
+              <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
             )}
           </button>
           <button
@@ -867,7 +855,7 @@ function ContentDetailContent({
             }}
             className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
-            <Download className='h-4 w-4' />
+            <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
           </button>
         </div>
       </div>

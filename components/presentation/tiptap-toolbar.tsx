@@ -10,19 +10,8 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Editor } from "@tiptap/react";
-import {
-  AlignCenter,
-  AlignJustify,
-  AlignLeft,
-  AlignRight,
-  Bold,
-  Italic,
-  Minus,
-  Palette,
-  Plus,
-  Type,
-  Underline,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { TextBoldIcon, TextItalicIcon, TextUnderlineIcon, TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, TextAlignJustifyLeftIcon, PaintBoardIcon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 interface TiptapToolbarProps {
@@ -256,7 +245,7 @@ export function TiptapToolbar({
         className={cn("h-8 w-8 p-0", editor.isActive("bold") && "bg-muted")}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        <Bold className='h-4 w-4' />
+        <HugeiconsIcon icon={TextBoldIcon} className='h-4 w-4' />
       </Button>
 
       {/* Italic */}
@@ -266,7 +255,7 @@ export function TiptapToolbar({
         className={cn("h-8 w-8 p-0", editor.isActive("italic") && "bg-muted")}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        <Italic className='h-4 w-4' />
+        <HugeiconsIcon icon={TextItalicIcon} className='h-4 w-4' />
       </Button>
 
       {/* Underline */}
@@ -279,7 +268,7 @@ export function TiptapToolbar({
         )}
         onClick={() => editor.chain().focus().toggleUnderline().run()}
       >
-        <Underline className='h-4 w-4' />
+        <HugeiconsIcon icon={TextUnderlineIcon} className='h-4 w-4' />
       </Button>
 
       <div className='bg-border mx-1 h-6 w-px' />
@@ -294,7 +283,7 @@ export function TiptapToolbar({
         )}
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
       >
-        <AlignLeft className='h-4 w-4' />
+        <HugeiconsIcon icon={TextAlignLeftIcon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -305,7 +294,7 @@ export function TiptapToolbar({
         )}
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
       >
-        <AlignCenter className='h-4 w-4' />
+        <HugeiconsIcon icon={TextAlignCenterIcon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -316,7 +305,7 @@ export function TiptapToolbar({
         )}
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
       >
-        <AlignRight className='h-4 w-4' />
+        <HugeiconsIcon icon={TextAlignRightIcon} className='h-4 w-4' />
       </Button>
       <Button
         variant='ghost'
@@ -327,7 +316,7 @@ export function TiptapToolbar({
         )}
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
       >
-        <AlignJustify className='h-4 w-4' />
+        <HugeiconsIcon icon={TextAlignJustifyLeftIcon} className='h-4 w-4' />
       </Button>
 
       <div className='bg-border mx-1 h-6 w-px' />
@@ -350,7 +339,7 @@ export function TiptapToolbar({
             input.click();
           }}
         >
-          <Palette className='h-4 w-4' />
+          <HugeiconsIcon icon={PaintBoardIcon} className='h-4 w-4' />
         </Button>
       </div>
     </div>

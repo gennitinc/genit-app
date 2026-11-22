@@ -31,20 +31,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ChevronLeft,
-  ChevronRight,
-  CircleFadingArrowUp,
-  Download,
-  HistoryIcon,
-  ImageIcon,
-  Minus,
-  Plus,
-  Sparkles,
-  Trash,
-  Trash2,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Delete01Icon, Download01Icon, ArrowLeft01Icon, ArrowRight01Icon, Delete02Icon, Clock04Icon, Image01Icon, MinusSignIcon, PlusSignIcon, SparklesIcon } from "@hugeicons/core-free-icons";
 import { Toaster } from "sonner";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -130,7 +118,7 @@ const GeneratedCarousel = ({
           {deletingId === img.id ? (
             <Loading size={12} />
           ) : (
-            <Trash className='size-3.5' />
+            <HugeiconsIcon icon={Delete01Icon} className='size-3.5' />
           )}
         </button>
 
@@ -143,7 +131,7 @@ const GeneratedCarousel = ({
           className='absolute top-3 right-12 flex size-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition-colors hover:bg-blue-600'
           title='Download'
         >
-          <Download className='size-3.5' />
+          <HugeiconsIcon icon={Download01Icon} className='size-3.5' />
         </a>
       </div>
 
@@ -154,7 +142,7 @@ const GeneratedCarousel = ({
             onClick={prev}
             className='flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20'
           >
-            <ChevronLeft className='size-4' />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className='size-4' />
           </button>
           <span className='font-mono text-[10px] text-white/50'>
             {current + 1} / {images.length}
@@ -163,7 +151,7 @@ const GeneratedCarousel = ({
             onClick={next}
             className='flex size-7 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20'
           >
-            <ChevronRight className='size-4' />
+            <HugeiconsIcon icon={ArrowRight01Icon} className='size-4' />
           </button>
         </div>
       )}
@@ -356,7 +344,7 @@ const HistoryCard = ({
           disabled={deletingJob}
           className='flex size-6 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20 disabled:opacity-50'
         >
-          {deletingJob ? <Loading size={12} /> : <Trash2 className='size-3' />}
+          {deletingJob ? <Loading size={12} /> : <HugeiconsIcon icon={Delete02Icon} className='size-3' />}
         </button>
       </div>
 
@@ -384,7 +372,7 @@ const HistoryCard = ({
                 {deletingAngle === img._id ? (
                   <Loading size={8} />
                 ) : (
-                  <Trash className='size-2.5' />
+                  <HugeiconsIcon icon={Delete01Icon} className='size-2.5' />
                 )}
               </button>
             </div>
@@ -416,7 +404,7 @@ const HistoryContent = ({
   <>
     <div className='border-border bg-background sticky top-0 z-10 flex items-center justify-between border-b px-6 py-4'>
       <h2 className='flex items-center gap-2 text-lg font-normal'>
-        <HistoryIcon className='size-4' />
+        <HugeiconsIcon icon={Clock04Icon} className='size-4' />
         <LocalizedText text={"Angle History"} />
       </h2>
     </div>
@@ -428,7 +416,7 @@ const HistoryContent = ({
         </div>
       ) : history.length === 0 ? (
         <div className='flex flex-col items-center justify-center gap-3 py-12 text-center'>
-          <HistoryIcon className='text-muted-foreground/30 size-10' />
+          <HugeiconsIcon icon={Clock04Icon} className='text-muted-foreground/30 size-10' />
           <p className='text-muted-foreground text-sm'>
             <LocalizedText text={"No history yet."} />
           </p>
@@ -786,7 +774,7 @@ const AnglesReshapePage = () => {
                               />
                             ) : (
                               <div className='flex flex-col items-center justify-center gap-0.5'>
-                                <ImageIcon className='size-3.5 text-blue-500 md:size-4' />
+                                <HugeiconsIcon icon={Image01Icon} className='size-3.5 text-blue-500 md:size-4' />
                                 <span className='text-[6px] leading-none font-bold tracking-wide text-gray-500 uppercase'>
                                   <LocalizedText text={"Upload"} />
                                 </span>
@@ -874,7 +862,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Minus className='size-2.5' />
+                                      <HugeiconsIcon icon={MinusSignIcon} className='size-2.5' />
                                     </button>
                                     <div
                                       className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
@@ -909,7 +897,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Plus className='size-2.5' />
+                                      <HugeiconsIcon icon={PlusSignIcon} className='size-2.5' />
                                     </button>
                                   </div>
                                 );
@@ -929,7 +917,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Minus className='size-2.5' />
+                                      <HugeiconsIcon icon={MinusSignIcon} className='size-2.5' />
                                     </button>
                                     <div
                                       className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
@@ -965,7 +953,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Plus className='size-2.5' />
+                                      <HugeiconsIcon icon={PlusSignIcon} className='size-2.5' />
                                     </button>
                                   </div>
                                 );
@@ -985,7 +973,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Minus className='size-2.5' />
+                                      <HugeiconsIcon icon={MinusSignIcon} className='size-2.5' />
                                     </button>
                                     <div
                                       className='relative h-[18px] flex-1 cursor-pointer overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-800'
@@ -1020,7 +1008,7 @@ const AnglesReshapePage = () => {
                                       disabled={bestAngles}
                                       className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                                     >
-                                      <Plus className='size-2.5' />
+                                      <HugeiconsIcon icon={PlusSignIcon} className='size-2.5' />
                                     </button>
                                   </div>
                                 );
@@ -1060,7 +1048,7 @@ const AnglesReshapePage = () => {
                                 {isGenerating ? "Generating..." : "Generate"}
                               </span>
                               {!isGenerating && (
-                                <Sparkles className='size-4 text-white' />
+                                <HugeiconsIcon icon={SparklesIcon} className='size-4 text-white' />
                               )}
                             </Button>
                           </div>
@@ -1090,7 +1078,7 @@ const AnglesReshapePage = () => {
                       className='inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/5 px-3 py-1.5 text-xs font-medium text-neutral-600 transition-colors hover:bg-black/10 hover:text-black dark:border-white/10 dark:bg-white/[0.05] dark:text-neutral-300 dark:hover:bg-white/[0.08] dark:hover:text-white'
                       title='View history'
                     >
-                      <HistoryIcon className='size-3.5' />
+                      <HugeiconsIcon icon={Clock04Icon} className='size-3.5' />
                       <LocalizedText text={"History"} />
                     </button>
                   </div>

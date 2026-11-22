@@ -6,31 +6,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useProjectDesign } from "@/context/DesignProject";
 import { AUTOMATION_PREVIEW_ID } from "@/lib/chat-preview";
-import {
-  ArrowRight,
-  Bell,
-  Bot,
-  Calendar,
-  Clock,
-  Cloud,
-  Code,
-  Filter,
-  GitBranch,
-  Globe,
-  Image,
-  LayoutGrid,
-  Link2,
-  Mail,
-  MessageSquare,
-  Mic,
-  PlusCircle,
-  Send,
-  Share2,
-  Upload,
-  Video,
-  Webhook,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ZapIcon, SentIcon, Message01Icon, GitBranchIcon, Clock01Icon, BotIcon, CodeIcon, GlobeIcon, Upload01Icon, Calendar01Icon, WebhookIcon, Mail01Icon, AddCircleIcon, CloudIcon, Notification01Icon, Share08Icon, Image01Icon, Video01Icon, Mic01Icon, FilterIcon, LayoutGridIcon, Link02Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import type { ReactNode } from "react";
 
 // ─── Helpers ───
@@ -40,47 +17,47 @@ const NODE_TYPE_CONFIG: Record<
   { icon: ReactNode; label: string; color: string }
 > = {
   trigger: {
-    icon: <Zap className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={ZapIcon} className='h-3.5 w-3.5' />,
     label: "Trigger",
     color: "text-amber-600 dark:text-amber-400",
   },
   action: {
-    icon: <Send className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={SentIcon} className='h-3.5 w-3.5' />,
     label: "Action",
     color: "text-blue-600 dark:text-blue-400",
   },
   prompt: {
-    icon: <MessageSquare className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={Message01Icon} className='h-3.5 w-3.5' />,
     label: "Prompt",
     color: "text-violet-600 dark:text-violet-400",
   },
   condition: {
-    icon: <GitBranch className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={GitBranchIcon} className='h-3.5 w-3.5' />,
     label: "Condition",
     color: "text-orange-600 dark:text-orange-400",
   },
   delay: {
-    icon: <Clock className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={Clock01Icon} className='h-3.5 w-3.5' />,
     label: "Delay",
     color: "text-cyan-600 dark:text-cyan-400",
   },
   ai_generate: {
-    icon: <Bot className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={BotIcon} className='h-3.5 w-3.5' />,
     label: "AI Generate",
     color: "text-purple-600 dark:text-purple-400",
   },
   transform: {
-    icon: <Code className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={CodeIcon} className='h-3.5 w-3.5' />,
     label: "Transform",
     color: "text-teal-600 dark:text-teal-400",
   },
   http_request: {
-    icon: <Globe className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={GlobeIcon} className='h-3.5 w-3.5' />,
     label: "HTTP Request",
     color: "text-indigo-600 dark:text-indigo-400",
   },
   upload: {
-    icon: <Upload className='h-3.5 w-3.5' />,
+    icon: <HugeiconsIcon icon={Upload01Icon} className='h-3.5 w-3.5' />,
     label: "Upload",
     color: "text-pink-600 dark:text-pink-400",
   },
@@ -88,102 +65,102 @@ const NODE_TYPE_CONFIG: Record<
 
 const TRIGGER_TYPE_LABELS: Record<string, { icon: ReactNode; label: string }> =
   {
-    schedule: { icon: <Calendar className='h-3 w-3' />, label: "Schedule" },
-    webhook: { icon: <Webhook className='h-3 w-3' />, label: "Webhook" },
-    manual: { icon: <Zap className='h-3 w-3' />, label: "Manual" },
+    schedule: { icon: <HugeiconsIcon icon={Calendar01Icon} className='h-3 w-3' />, label: "Schedule" },
+    webhook: { icon: <HugeiconsIcon icon={WebhookIcon} className='h-3 w-3' />, label: "Webhook" },
+    manual: { icon: <HugeiconsIcon icon={ZapIcon} className='h-3 w-3' />, label: "Manual" },
     whatsapp_message: {
-      icon: <MessageSquare className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
       label: "WhatsApp Message",
     },
     email_received: {
-      icon: <Mail className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Mail01Icon} className='h-3 w-3' />,
       label: "Email Received",
     },
     brevo_contact_added: {
-      icon: <PlusCircle className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={AddCircleIcon} className='h-3 w-3' />,
       label: "Brevo Contact Added",
     },
     facebook_comment: {
-      icon: <MessageSquare className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
       label: "Facebook Comment",
     },
     facebook_message: {
-      icon: <MessageSquare className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
       label: "Facebook Message",
     },
     instagram_comment: {
-      icon: <MessageSquare className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
       label: "Instagram Comment",
     },
     instagram_dm: {
-      icon: <MessageSquare className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
       label: "Instagram DM",
     },
     calendar_event: {
-      icon: <Calendar className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Calendar01Icon} className='h-3 w-3' />,
       label: "Calendar Event",
     },
     form_submission: {
-      icon: <Cloud className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={CloudIcon} className='h-3 w-3' />,
       label: "Form Submission",
     },
-    x_mention: { icon: <Bell className='h-3 w-3' />, label: "X Mention" },
+    x_mention: { icon: <HugeiconsIcon icon={Notification01Icon} className='h-3 w-3' />, label: "X Mention" },
   };
 
 const ACTION_TYPE_LABELS: Record<string, { icon: ReactNode; label: string }> = {
-  send_email: { icon: <Mail className='h-3 w-3' />, label: "Send Email" },
+  send_email: { icon: <HugeiconsIcon icon={Mail01Icon} className='h-3 w-3' />, label: "Send Email" },
   whatsapp_reply: {
-    icon: <MessageSquare className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
     label: "WhatsApp Reply",
   },
   whatsapp_template: {
-    icon: <MessageSquare className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />,
     label: "WhatsApp Template",
   },
   post_facebook: {
-    icon: <Share2 className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Share08Icon} className='h-3 w-3' />,
     label: "Post to Facebook",
   },
   post_instagram: {
-    icon: <Image className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Image01Icon} className='h-3 w-3' />,
     label: "Post to Instagram",
   },
   post_linkedin: {
-    icon: <Share2 className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Share08Icon} className='h-3 w-3' />,
     label: "Post to LinkedIn",
   },
-  post_x: { icon: <Share2 className='h-3 w-3' />, label: "Post to X" },
+  post_x: { icon: <HugeiconsIcon icon={Share08Icon} className='h-3 w-3' />, label: "Post to X" },
   post_tiktok: {
-    icon: <Video className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Video01Icon} className='h-3 w-3' />,
     label: "Post to TikTok",
   },
   post_youtube: {
-    icon: <Video className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Video01Icon} className='h-3 w-3' />,
     label: "Upload to YouTube",
   },
   generate_image: {
-    icon: <Image className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Image01Icon} className='h-3 w-3' />,
     label: "Generate Image",
   },
   generate_video: {
-    icon: <Video className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Video01Icon} className='h-3 w-3' />,
     label: "Generate Video",
   },
-  generate_text: { icon: <Bot className='h-3 w-3' />, label: "Generate Text" },
+  generate_text: { icon: <HugeiconsIcon icon={BotIcon} className='h-3 w-3' />, label: "Generate Text" },
   generate_audio: {
-    icon: <Mic className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Mic01Icon} className='h-3 w-3' />,
     label: "Generate Audio",
   },
   generate_story_video: {
-    icon: <Video className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Video01Icon} className='h-3 w-3' />,
     label: "Generate Story Video",
   },
   add_calendar_event: {
-    icon: <Calendar className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Calendar01Icon} className='h-3 w-3' />,
     label: "Add Calendar Event",
   },
   google_drive_upload: {
-    icon: <Upload className='h-3 w-3' />,
+    icon: <HugeiconsIcon icon={Upload01Icon} className='h-3 w-3' />,
     label: "Upload to Google Drive",
   },
 };
@@ -235,38 +212,38 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
   let subtypeInfo: { icon: ReactNode; label: string } | null = null;
   if (nodeType === "trigger" && data?.triggerType) {
     subtypeInfo = TRIGGER_TYPE_LABELS[data.triggerType] || {
-      icon: <Zap className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={ZapIcon} className='h-3 w-3' />,
       label: data.triggerType
         .replace(/_/g, " ")
         .replace(/\b\w/g, (c: string) => c.toUpperCase()),
     };
   } else if (nodeType === "action" && data?.actionType) {
     subtypeInfo = ACTION_TYPE_LABELS[data.actionType] || {
-      icon: <Send className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={SentIcon} className='h-3 w-3' />,
       label: data.actionType
         .replace(/_/g, " ")
         .replace(/\b\w/g, (c: string) => c.toUpperCase()),
     };
   } else if (nodeType === "ai_generate" && data?.contentType) {
     subtypeInfo = {
-      icon: <Bot className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={BotIcon} className='h-3 w-3' />,
       label: `Generate ${CONTENT_TYPE_LABELS[data.contentType] || data.contentType}`,
     };
   } else if (nodeType === "delay" && data?.duration) {
     subtypeInfo = {
-      icon: <Clock className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={Clock01Icon} className='h-3 w-3' />,
       label: `Wait ${data.duration} ${data.unit || "seconds"}`,
     };
   } else if (nodeType === "condition" && data?.operator) {
     subtypeInfo = {
-      icon: <Filter className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={FilterIcon} className='h-3 w-3' />,
       label: data.operator
         .replace(/_/g, " ")
         .replace(/\b\w/g, (c: string) => c.toUpperCase()),
     };
   } else if (nodeType === "http_request" && data?.method) {
     subtypeInfo = {
-      icon: <Globe className='h-3 w-3' />,
+      icon: <HugeiconsIcon icon={GlobeIcon} className='h-3 w-3' />,
       label:
         `${data.method} ${data.url ? new URL(data.url).hostname : ""}`.trim(),
     };
@@ -316,7 +293,7 @@ export function AutomationNodeCreatedCard({ data }: { data: any }) {
           className='h-7 gap-1.5 px-2 text-xs'
           onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
         >
-          <LayoutGrid className='h-3 w-3' />
+          <HugeiconsIcon icon={LayoutGridIcon} className='h-3 w-3' />
           <LocalizedText text={"View canvas"} />
         </Button>
       </div>
@@ -338,7 +315,7 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
   return (
     <AgentCard
       icon={
-        <Link2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
+        <HugeiconsIcon icon={Link02Icon} className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
       }
       title='Nodes connected'
       tone='success'
@@ -347,7 +324,7 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
         <span className='bg-foreground/[0.05] text-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium dark:bg-white/[0.06]'>
           {sourceLabel}
         </span>
-        <ArrowRight className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
+        <HugeiconsIcon icon={ArrowRight02Icon} className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
         <span className='bg-foreground/[0.05] text-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium dark:bg-white/[0.06]'>
           {targetLabel}
         </span>
@@ -362,7 +339,7 @@ export function AutomationNodesConnectedCard({ data }: { data: any }) {
           className='ml-auto h-7 gap-1.5 px-2 text-xs'
           onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
         >
-          <LayoutGrid className='h-3 w-3' />
+          <HugeiconsIcon icon={LayoutGridIcon} className='h-3 w-3' />
           <LocalizedText text={"View canvas"} />
         </Button>
       </div>
@@ -387,7 +364,7 @@ export function AutomationWorkflowSummaryCard({
 
   return (
     <AgentCard
-      icon={<LayoutGrid className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={LayoutGridIcon} className='h-3.5 w-3.5' />}
       title={isUpdate ? "Workflow updated" : "Workflow created"}
       meta={[
         `${nodeCount} ${nodeCount === 1 ? "node" : "nodes"}`,
@@ -454,7 +431,7 @@ export function AutomationWorkflowSummaryCard({
           className='h-7 gap-1.5 px-2 text-xs'
           onClick={() => setFocusedGenerationId(AUTOMATION_PREVIEW_ID)}
         >
-          <LayoutGrid className='h-3 w-3' />
+          <HugeiconsIcon icon={LayoutGridIcon} className='h-3 w-3' />
           <LocalizedText text={"View workflow in canvas"} />
         </Button>
       </div>

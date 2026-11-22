@@ -2,40 +2,33 @@
 
 import { ACTION_ICONS } from "./action-node";
 import { TRIGGER_ICONS } from "./trigger-node";
-import {
-  ArrowRightLeft,
-  CircleFadingArrowUp,
-  Clock,
-  GitBranch,
-  Globe,
-  Sparkles,
-  Upload,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { ZapIcon, ArrowDataTransferHorizontalIcon, SparklesIcon, GitBranchIcon, Clock01Icon, CircleArrowUp02Icon, GlobeIcon, Upload01Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { Handle, Position } from "reactflow";
 
 const NODE_META = {
-  trigger: { label: "Trigger", icon: Zap, color: "text-amber-400" },
-  action: { label: "Action", icon: ArrowRightLeft, color: "text-sky-400" },
-  prompt: { label: "AI prompt", icon: Sparkles, color: "text-violet-400" },
-  condition: { label: "Condition", icon: GitBranch, color: "text-emerald-400" },
-  delay: { label: "Delay", icon: Clock, color: "text-orange-400" },
+  trigger: { label: "Trigger", icon: ZapIcon, color: "text-amber-400" },
+  action: { label: "Action", icon: ArrowDataTransferHorizontalIcon, color: "text-sky-400" },
+  prompt: { label: "AI prompt", icon: SparklesIcon, color: "text-violet-400" },
+  condition: { label: "Condition", icon: GitBranchIcon, color: "text-emerald-400" },
+  delay: { label: "Delay", icon: Clock01Icon, color: "text-orange-400" },
   ai_generate: {
     label: "AI generate",
-    icon: CircleFadingArrowUp,
+    icon: CircleArrowUp02Icon,
     color: "text-fuchsia-400",
   },
   transform: {
     label: "Transform",
-    icon: ArrowRightLeft,
+    icon: ArrowDataTransferHorizontalIcon,
     color: "text-cyan-400",
   },
   http_request: {
     label: "HTTP request",
-    icon: Globe,
+    icon: GlobeIcon,
     color: "text-indigo-400",
   },
-  upload: { label: "Upload", icon: Upload, color: "text-teal-400" },
+  upload: { label: "Upload", icon: Upload01Icon, color: "text-teal-400" },
 } as const;
 
 function nodeSubtitle(kind: keyof typeof NODE_META, data: any) {
@@ -72,11 +65,11 @@ export function AutomationNodeView({
   const meta = NODE_META[kind];
   const Icon =
     kind === "trigger"
-      ? (TRIGGER_ICONS as Record<string, React.ComponentType<any>>)[
+      ? (TRIGGER_ICONS as Record<string, IconSource>)[
           data.triggerType
         ] || meta.icon
       : kind === "action"
-        ? (ACTION_ICONS as Record<string, React.ComponentType<any>>)[
+        ? (ACTION_ICONS as Record<string, IconSource>)[
             data.actionType
           ] || meta.icon
         : meta.icon;
@@ -100,7 +93,7 @@ export function AutomationNodeView({
             className='h-7 w-7 rounded-md object-contain'
           />
         ) : (
-          <Icon className={`h-6 w-6 ${meta.color}`} strokeWidth={1.8} />
+          <IconSourceView icon={Icon} className={`h-6 w-6 ${meta.color}`} strokeWidth={1.8} />
         )}
       </div>
 

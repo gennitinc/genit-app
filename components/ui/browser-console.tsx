@@ -2,7 +2,8 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Trash2, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon, Delete02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 type LogLevel = "info" | "warn" | "error";
@@ -130,7 +131,7 @@ export default function BrowserConsole() {
               onClick={() => setIsExpanded(!isExpanded)}
               className='mr-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             >
-              <ChevronRight
+              <HugeiconsIcon icon={ArrowRight01Icon}
                 className={`h-4 w-4 transition-transform ${
                   isExpanded ? "rotate-90" : ""
                 }`}
@@ -146,14 +147,14 @@ export default function BrowserConsole() {
               className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
               title='Clear console'
             >
-              <Trash2 className='h-4 w-4' />
+              <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
             </button>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
               title='Close console'
             >
-              <X className='h-4 w-4' />
+              <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
             </button>
           </div>
         </div>

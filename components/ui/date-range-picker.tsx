@@ -5,7 +5,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Calendar03Icon, ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useMemo, useState } from "react";
 
 export const DAY_MS = 86_400_000;
@@ -140,7 +141,7 @@ export function DateRangePicker({
           type='button'
           className='flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-sm text-zinc-700 shadow-sm transition hover:bg-zinc-100 sm:w-auto dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:shadow-none dark:hover:bg-white/[0.07]'
         >
-          <CalendarDays className='h-4 w-4 text-zinc-500 dark:text-white/55' />
+          <HugeiconsIcon icon={Calendar03Icon} className='h-4 w-4 text-zinc-500 dark:text-white/55' />
           {prettyDateRange(from, to)}
         </button>
       </PopoverTrigger>
@@ -155,7 +156,7 @@ export function DateRangePicker({
             className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
             aria-label='Previous month'
           >
-            <ChevronLeft className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className='h-4 w-4' />
           </button>
           <p className='text-sm font-medium text-zinc-600 dark:text-white/60'>
             {prettyDateRange(from, to)}
@@ -166,7 +167,7 @@ export function DateRangePicker({
             className='flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:bg-white/10'
             aria-label='Next month'
           >
-            <ChevronRight className='h-4 w-4' />
+            <HugeiconsIcon icon={ArrowRight01Icon} className='h-4 w-4' />
           </button>
         </div>
         <div className='grid gap-6 md:grid-cols-2'>

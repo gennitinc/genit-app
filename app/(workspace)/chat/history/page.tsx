@@ -17,20 +17,9 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  Archive,
-  ChevronRight,
-  Clock,
-  Image as ImageIcon,
-  MessageSquare,
-  MoreHorizontal,
-  Presentation,
-  Search,
-  Trash2,
-  Video,
-  X,
-} from "lucide-react";
-import { RefreshCw } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RefreshIcon, Search01Icon, Cancel01Icon, Delete02Icon, Message01Icon, Clock01Icon, MoreHorizontalIcon, ArchiveIcon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -523,7 +512,7 @@ function ChatHistoryPage() {
                   {loading ? (
                     <Loading size={20} />
                   ) : (
-                    <RefreshCw className='h-3 w-3' />
+                    <HugeiconsIcon icon={RefreshIcon} className='h-3 w-3' />
                   )}
                   <LocalizedText text={"Refresh"} />
                 </Button>
@@ -531,7 +520,7 @@ function ChatHistoryPage() {
 
               {/* Search Bar */}
               <div className='relative mb-4 w-full'>
-                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
                 <Input
                   type='text'
                   value={searchInputVal}
@@ -547,7 +536,7 @@ function ChatHistoryPage() {
                     }}
                     className='absolute top-1/2 right-3 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200'
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </button>
                 )}
               </div>
@@ -590,7 +579,7 @@ function ChatHistoryPage() {
                     }}
                     className='gap-2'
                   >
-                    <Trash2 className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                     Delete selected
                   </Button>
                 </div>
@@ -608,7 +597,7 @@ function ChatHistoryPage() {
                 </div>
               ) : error ? (
                 <div className='py-16 text-center'>
-                  <MessageSquare className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
+                  <HugeiconsIcon icon={Message01Icon} className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
                     <LocalizedText text={"Error loading conversations"} />
                   </h3>
@@ -628,7 +617,7 @@ function ChatHistoryPage() {
                 </div>
               ) : filteredProjects.length === 0 ? (
                 <div className='py-16 text-center'>
-                  <MessageSquare className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
+                  <HugeiconsIcon icon={Message01Icon} className='text-muted-foreground mx-auto mb-3 h-8 w-8' />
                   <h3 className='text-foreground mb-1 text-sm font-medium'>
                     {searchQuery
                       ? "No results found"
@@ -677,13 +666,13 @@ function ChatHistoryPage() {
 
                             <div className='text-muted-foreground flex flex-wrap items-center gap-3 text-xs'>
                               <div className='flex items-center gap-1'>
-                                <Clock className='h-3 w-3' />
+                                <HugeiconsIcon icon={Clock01Icon} className='h-3 w-3' />
                                 {formatTimestamp(
                                   project.updatedAt || project.createdAt
                                 )}
                               </div>
                               <div className='flex items-center gap-1'>
-                                <MessageSquare className='h-3 w-3' />
+                                <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />
                                 {(project.messages?.length || 0) +
                                   ((project as any).agentRunCount || 0)}
                               </div>
@@ -699,7 +688,7 @@ function ChatHistoryPage() {
                                   className='h-6 w-6 p-0 opacity-100 transition-opacity group-hover:opacity-100'
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  <MoreHorizontal className='h-3 w-3' />
+                                  <HugeiconsIcon icon={MoreHorizontalIcon} className='h-3 w-3' />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align='end'>
@@ -711,7 +700,7 @@ function ChatHistoryPage() {
                                         handleArchiveProject(project._id);
                                       }}
                                     >
-                                      <Archive className='mr-2 h-3 w-3' />
+                                      <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-3 w-3' />
                                       <LocalizedText text={"Archive"} />
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
@@ -722,7 +711,7 @@ function ChatHistoryPage() {
                                         setActiveProject(project);
                                       }}
                                     >
-                                      <Trash2 className='mr-2 h-3 w-3' />
+                                      <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-3 w-3' />
                                       <LocalizedText text={"Delete"} />
                                     </DropdownMenuItem>
                                   </>
@@ -740,13 +729,13 @@ function ChatHistoryPage() {
                                       );
                                     }}
                                   >
-                                    <Trash2 className='mr-2 h-3 w-3' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-3 w-3' />
                                     <LocalizedText text={"Delete"} />
                                   </DropdownMenuItem>
                                 )}
                               </DropdownMenuContent>
                             </DropdownMenu>
-                            <ChevronRight className='text-muted-foreground h-4 w-4 opacity-100 transition-opacity group-hover:opacity-100' />
+                            <HugeiconsIcon icon={ArrowRight01Icon} className='text-muted-foreground h-4 w-4 opacity-100 transition-opacity group-hover:opacity-100' />
                           </div>
                         </div>
                       </CardContent>

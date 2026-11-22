@@ -6,7 +6,8 @@ import { Model } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { modelApi } from "@/utils/inspire-api";
-import { Loader2, Monitor, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { useCallback, useEffect, useState } from "react";
 
@@ -209,7 +210,7 @@ export function PromptNode({
           className='absolute -top-2 -right-2 z-30 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white opacity-0 shadow-lg transition-colors group-hover:opacity-100 hover:bg-red-600'
           title='Remove node'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
 

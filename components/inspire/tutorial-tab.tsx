@@ -5,7 +5,8 @@ import { toast } from "@/hooks/use-toast";
 import { Tutorial } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { tutorialApi } from "@/utils/inspire-api";
-import { ExternalLink, Loader2, PlayCircle } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlayCircleIcon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface TutorialTabProps {
@@ -88,7 +89,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
       <section className='p-4'>
         <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
           <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-            <PlayCircle className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+            <HugeiconsIcon icon={PlayCircleIcon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
           <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             <LocalizedText text={"No tutorials available"} />
@@ -105,7 +106,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
             className='inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200'
           >
             <LocalizedText text={"Visit YouTube Channel"} />
-            <ExternalLink className='h-4 w-4' />
+            <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
           </a>
         </div>
       </section>
@@ -130,7 +131,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
           className='flex items-center gap-1.5 text-sm font-medium text-cyan-500 transition-colors hover:text-cyan-600'
         >
           <LocalizedText text={"View All"} />
-          <ExternalLink className='h-4 w-4' />
+          <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
         </a>
       </div>
 
@@ -191,7 +192,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
                 <div
                   className={`h-12 w-12 flex-shrink-0 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center`}
                 >
-                  <PlayCircle className='h-6 w-6 text-white' />
+                  <HugeiconsIcon icon={PlayCircleIcon} className='h-6 w-6 text-white' />
                 </div>
                 <div className='min-w-0 flex-1'>
                   <p className='text-sm font-medium text-neutral-900 transition-colors group-hover:text-cyan-500 dark:text-white'>
@@ -201,7 +202,7 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
                     {tutorial.duration}
                   </p>
                 </div>
-                <ExternalLink className='h-4 w-4 text-neutral-400 transition-colors group-hover:text-cyan-500' />
+                <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4 text-neutral-400 transition-colors group-hover:text-cyan-500' />
               </a>
             );
           })}
@@ -215,9 +216,9 @@ export function TutorialTab({ type = "general" }: TutorialTabProps) {
         rel='noopener noreferrer'
         className='mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 font-medium text-white transition-all hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90'
       >
-        <PlayCircle className='h-5 w-5' />
+        <HugeiconsIcon icon={PlayCircleIcon} className='h-5 w-5' />
         <LocalizedText text={"View All Tutorials on YouTube"} />
-        <ExternalLink className='h-4 w-4' />
+        <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
       </a>
     </section>
   );

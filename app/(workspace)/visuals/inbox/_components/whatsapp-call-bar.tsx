@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useWhatsAppCalls } from "@/hooks/use-whatsapp-calls";
 import { whatsappCallController } from "@/lib/whatsapp-call-controller";
-import { Loader2, Mic, MicOff, Phone, PhoneOff } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Call02Icon, PhoneOff01Icon, Loading03Icon, MicOff01Icon, Mic01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
@@ -63,7 +64,7 @@ export function WhatsAppCallBar() {
             state.phase === "incoming" ? "animate-pulse" : ""
           }`}
         >
-          <Phone className='h-5 w-5' />
+          <HugeiconsIcon icon={Call02Icon} className='h-5 w-5' />
         </div>
         <div className='min-w-0 flex-1'>
           <p className='truncate text-sm font-medium'>
@@ -92,13 +93,13 @@ export function WhatsAppCallBar() {
             className='text-red-600'
             onClick={() => run(() => whatsappCallController.decline())}
           >
-            <PhoneOff className='mr-1.5 h-4 w-4' /> Decline
+            <HugeiconsIcon icon={PhoneOff01Icon} className='mr-1.5 h-4 w-4' /> Decline
           </Button>
           <Button
             className='bg-emerald-600 text-white hover:bg-emerald-700'
             onClick={() => run(() => whatsappCallController.answer())}
           >
-            <Phone className='mr-1.5 h-4 w-4' /> Answer
+            <HugeiconsIcon icon={Call02Icon} className='mr-1.5 h-4 w-4' /> Answer
           </Button>
         </div>
       )}
@@ -109,7 +110,7 @@ export function WhatsAppCallBar() {
         <div className='mt-3 flex gap-2'>
           {state.phase === "answering" || state.phase === "connecting" ? (
             <Button variant='outline' disabled className='flex-1'>
-              <Loader2 className='mr-1.5 h-4 w-4 animate-spin' /> Connecting
+              <HugeiconsIcon icon={Loading03Icon} className='mr-1.5 h-4 w-4 animate-spin' /> Connecting
             </Button>
           ) : (
             <Button
@@ -119,9 +120,9 @@ export function WhatsAppCallBar() {
               onClick={() => whatsappCallController.toggleMute()}
             >
               {state.muted ? (
-                <MicOff className='mr-1.5 h-4 w-4' />
+                <HugeiconsIcon icon={MicOff01Icon} className='mr-1.5 h-4 w-4' />
               ) : (
-                <Mic className='mr-1.5 h-4 w-4' />
+                <HugeiconsIcon icon={Mic01Icon} className='mr-1.5 h-4 w-4' />
               )}
               {state.muted ? "Unmute" : "Mute"}
             </Button>
@@ -131,7 +132,7 @@ export function WhatsAppCallBar() {
             className='flex-1'
             onClick={() => run(() => whatsappCallController.hangup())}
           >
-            <PhoneOff className='mr-1.5 h-4 w-4' /> Hang up
+            <HugeiconsIcon icon={PhoneOff01Icon} className='mr-1.5 h-4 w-4' /> Hang up
           </Button>
         </div>
       )}

@@ -52,54 +52,9 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import cookie from "js-cookie";
-import {
-  AlertTriangle,
-  ArrowLeftRight,
-  AtSign,
-  CalendarDays,
-  CalendarPlus,
-  Check,
-  ChevronDown,
-  CircleFadingArrowUp,
-  ClipboardList,
-  Clock,
-  Edit2,
-  FileText,
-  GitBranch,
-  GitBranchIcon,
-  Globe,
-  Image,
-  ImagePlus,
-  Inbox,
-  Instagram,
-  Linkedin,
-  Loader2,
-  Mail,
-  Maximize2,
-  MessageCircle,
-  MessageSquare,
-  Mic,
-  Minus,
-  Music2,
-  Play,
-  Plus,
-  Redo2,
-  SaveAll,
-  Search,
-  Send,
-  Settings,
-  Share2,
-  Sparkles,
-  Twitter,
-  Undo2,
-  Upload,
-  UserPlus,
-  Video,
-  View,
-  Webhook,
-  X,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Clock01Icon, WebhookIcon, PlayIcon, BubbleChatIcon, Mail01Icon, UserAdd01Icon, Message01Icon, SentIcon, Image01Icon, InboxIcon, Calendar03Icon, Task01Icon, AtIcon, File02Icon, Share08Icon, TwitterIcon, MusicNote02Icon, ImageAdd01Icon, Video01Icon, Mic01Icon, CalendarAdd01Icon, Upload01Icon, GitBranchIcon, SparklesIcon, ZapIcon, CircleArrowUp02Icon, ArrowLeftRightIcon, GlobeIcon, Cancel01Icon, Alert02Icon, ArrowExpand01Icon, PencilEdit02Icon, Undo02Icon, Redo02Icon, PlusSignIcon, MinusSignIcon, ViewIcon, ArrowDown01Icon, Search01Icon, Tick02Icon, FloppyDiskIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import ReactFlow, {
   Background,
   BaseEdge,
@@ -130,35 +85,35 @@ import React, {
   useState,
 } from "react";
 
-const MENU_ICONS: Record<string, React.ComponentType<any>> = {
-  Clock,
-  Webhook,
-  Play,
-  MessageCircle,
-  Mail,
-  UserPlus,
-  MessageSquare,
-  Send,
-  Image,
-  Inbox,
-  CalendarDays,
-  ClipboardList,
-  AtSign,
-  FileText,
-  Share2,
-  Twitter,
-  Music2,
-  ImagePlus,
-  Video,
-  Mic,
-  CalendarPlus,
-  Upload,
-  GitBranch,
-  Sparkles,
-  Zap,
-  CircleFadingArrowUp,
-  ArrowLeftRight,
-  Globe,
+const MENU_ICONS: Record<string, IconSource> = {
+  Clock: Clock01Icon,
+  Webhook: WebhookIcon,
+  Play: PlayIcon,
+  MessageCircle: BubbleChatIcon,
+  Mail: Mail01Icon,
+  UserPlus: UserAdd01Icon,
+  MessageSquare: Message01Icon,
+  Send: SentIcon,
+  Image: Image01Icon,
+  Inbox: InboxIcon,
+  CalendarDays: Calendar03Icon,
+  ClipboardList: Task01Icon,
+  AtSign: AtIcon,
+  FileText: File02Icon,
+  Share2: Share08Icon,
+  Twitter: TwitterIcon,
+  Music2: MusicNote02Icon,
+  ImagePlus: ImageAdd01Icon,
+  Video: Video01Icon,
+  Mic: Mic01Icon,
+  CalendarPlus: CalendarAdd01Icon,
+  Upload: Upload01Icon,
+  GitBranch: GitBranchIcon,
+  Sparkles: SparklesIcon,
+  Zap: ZapIcon,
+  CircleFadingArrowUp: CircleArrowUp02Icon,
+  ArrowLeftRight: ArrowLeftRightIcon,
+  Globe: GlobeIcon,
   WhatsApp: WhatsAppBrand,
   Brevo: BrevoBrand,
   Facebook: FacebookBrand,
@@ -288,7 +243,7 @@ function RemovableEdge({
               pointerEvents: "all",
             }}
           >
-            <X className='h-3 w-3' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
           </button>
         </EdgeLabelRenderer>
       )}
@@ -1327,7 +1282,7 @@ export default function AutomationWorkflow({
   if (loadError) {
     return (
       <div className='bg-background flex h-full min-h-[300px] flex-col items-center justify-center gap-3 px-4 text-center'>
-        <AlertTriangle className='h-5 w-5 text-amber-500' />
+        <HugeiconsIcon icon={Alert02Icon} className='h-5 w-5 text-amber-500' />
         <p className='text-muted-foreground text-sm'>{loadError}</p>
         <Button
           variant='outline'
@@ -1374,7 +1329,7 @@ export default function AutomationWorkflow({
                 )}
                 title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
               >
-                <Maximize2 className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={ArrowExpand01Icon} className='h-3.5 w-3.5' />
               </Button>
               <div className='bg-border h-5 w-px' />
             </>
@@ -1399,7 +1354,7 @@ export default function AutomationWorkflow({
               </>
             ) : (
               <>
-                <Edit2 className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={PencilEdit02Icon} className='h-3.5 w-3.5' />
                 <LocalizedText text={"Edit"} />
               </>
             )}
@@ -1416,7 +1371,7 @@ export default function AutomationWorkflow({
             className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Undo (Ctrl+Z)'
           >
-            <Undo2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Undo02Icon} className='h-3.5 w-3.5' />
           </Button>
 
           {/* Redo */}
@@ -1428,7 +1383,7 @@ export default function AutomationWorkflow({
             className='hover:bg-accent h-7 w-7 rounded p-0 disabled:cursor-not-allowed disabled:opacity-40'
             title='Redo (Ctrl+Y)'
           >
-            <Redo2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Redo02Icon} className='h-3.5 w-3.5' />
           </Button>
 
           <div className='bg-border h-5 w-px' />
@@ -1441,7 +1396,7 @@ export default function AutomationWorkflow({
             className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Zoom In'
           >
-            <Plus className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-3.5 w-3.5' />
           </Button>
 
           {/* Zoom Out */}
@@ -1452,7 +1407,7 @@ export default function AutomationWorkflow({
             className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Zoom Out'
           >
-            <Minus className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={MinusSignIcon} className='h-3.5 w-3.5' />
           </Button>
 
           {/* Fit View */}
@@ -1465,7 +1420,7 @@ export default function AutomationWorkflow({
             className='hover:bg-accent h-7 w-7 rounded p-0'
             title='Fit View'
           >
-            <View className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={ViewIcon} className='h-3.5 w-3.5' />
           </Button>
 
           {/* Add Node (edit mode only) */}
@@ -1479,16 +1434,16 @@ export default function AutomationWorkflow({
                   onClick={() => setShowAddComponent(!showAddComponent)}
                   className='text-muted-foreground hover:text-foreground h-7 gap-1 rounded px-2 text-xs font-medium'
                 >
-                  <Plus className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='h-3.5 w-3.5' />
                   <LocalizedText text={"Add"} />
-                  <ChevronDown className='h-3 w-3' />
+                  <HugeiconsIcon icon={ArrowDown01Icon} className='h-3 w-3' />
                 </Button>
 
                 {showAddComponent && (
                   <div className='border-border bg-popover text-popover-foreground absolute right-0 z-50 mt-1.5 flex max-h-[480px] w-72 origin-top-right flex-col overflow-hidden rounded-lg border text-xs shadow-lg'>
                     <div className='border-border/60 bg-popover sticky top-0 z-10 border-b p-2'>
                       <div className='relative'>
-                        <Search className='text-muted-foreground pointer-events-none absolute top-2 left-2 h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground pointer-events-none absolute top-2 left-2 h-3.5 w-3.5' />
                         <input
                           autoFocus
                           value={addSearch}
@@ -1516,7 +1471,7 @@ export default function AutomationWorkflow({
                           </div>
                           {category.items.map((item) => {
                             const IconComponent =
-                              MENU_ICONS[item.iconName] || Sparkles;
+                              MENU_ICONS[item.iconName] || SparklesIcon;
                             return (
                               <button
                                 key={`${item.type}-${item.subtype || item.label}`}
@@ -1546,14 +1501,14 @@ export default function AutomationWorkflow({
                                     className='h-4 w-4 rounded object-contain'
                                   />
                                 ) : (
-                                  <IconComponent className='text-muted-foreground h-3.5 w-3.5' />
+                                  <IconSourceView icon={IconComponent} className='text-muted-foreground h-3.5 w-3.5' />
                                 )}
                                 <span className='min-w-0 flex-1 truncate'>
                                   {item.label}
                                 </span>
                                 {item.connected ? (
                                   <span className='bg-neutral inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:text-emerald-400'>
-                                    <Check className='h-2.5 w-2.5' />
+                                    <HugeiconsIcon icon={Tick02Icon} className='h-2.5 w-2.5' />
                                   </span>
                                 ) : item.initialData?.composioToolkit ? (
                                   <span className='rounded bg-black px-1.5 py-0.5 text-[9px] font-semibold text-white dark:bg-white dark:text-black'>
@@ -1594,9 +1549,9 @@ export default function AutomationWorkflow({
               }
             >
               {workflowReady ? (
-                <Check className='h-3 w-3' />
+                <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
               ) : (
-                <AlertTriangle className='h-3 w-3' />
+                <HugeiconsIcon icon={Alert02Icon} className='h-3 w-3' />
               )}
               {workflowReady ? "Verified" : "Draft"}
             </div>
@@ -1606,7 +1561,7 @@ export default function AutomationWorkflow({
               className='flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-1 text-[10px] font-medium text-amber-600 dark:text-amber-400'
               title={`${validationCount} node${validationCount === 1 ? "" : "s"} need configuration`}
             >
-              <AlertTriangle className='h-3 w-3' />
+              <HugeiconsIcon icon={Alert02Icon} className='h-3 w-3' />
               {validationCount}
             </div>
           )}
@@ -1619,13 +1574,13 @@ export default function AutomationWorkflow({
             )}
             {saveStatus === "saved" && (
               <>
-                <Check className='h-3 w-3 text-emerald-500' />
+                <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3 text-emerald-500' />
                 {/* <span className='text-emerald-600 dark:text-emerald-400'>Saved</span> */}
               </>
             )}
             {saveStatus === "idle" && (
               <>
-                <SaveAll className='h-3 w-3' />
+                <HugeiconsIcon icon={FloppyDiskIcon} className='h-3 w-3' />
               </>
             )}
             {saveStatus === "error" && (
@@ -1635,7 +1590,7 @@ export default function AutomationWorkflow({
                 className='flex items-center gap-1 text-red-500 hover:text-red-400'
                 title="Couldn't save; retrying automatically. Click to retry now."
               >
-                <AlertTriangle className='h-3 w-3' />
+                <HugeiconsIcon icon={Alert02Icon} className='h-3 w-3' />
                 <span>Not saved</span>
               </button>
             )}
@@ -1711,7 +1666,7 @@ export default function AutomationWorkflow({
             "Connected app"
         )}
         platformDescription='Connect this app to use this automation node.'
-        Icon={Zap}
+        Icon={ZapIcon}
         iconUrl={String(pendingConnectedApp?.initialData?.composioLogo || "")}
         glow='rgba(139,92,246,0.35)'
         appSlug={String(

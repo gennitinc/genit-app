@@ -40,17 +40,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
-import { ArrowRight, ChevronDown, PanelRight } from "lucide-react";
-import {
-  BadgeCheck,
-  Bell,
-  CircleFadingArrowUp,
-  CreditCard,
-  LogOut,
-  Moon,
-  Sparkles,
-  Sun,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowDown01Icon, ArrowRight02Icon, Sun01Icon, MoonIcon, PanelRightIcon } from "@hugeicons/core-free-icons";
+
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -261,7 +253,7 @@ export function LandingNavbar() {
                       className='group text-foreground/60 hover:text-foreground/80 data-[state=open]:bg-accent data-[state=open]:text-foreground mr-3 hidden h-9 items-center gap-1 rounded-lg px-3 text-sm font-medium transition-[color,background-color,transform] duration-150 outline-none active:scale-[0.97] min-[1100px]:inline-flex'
                     >
                       {t("Plugins")}
-                      <ChevronDown className='size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180' />
+                      <HugeiconsIcon icon={ArrowDown01Icon} className='size-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180' />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -306,7 +298,7 @@ export function LandingNavbar() {
                       >
                         {t("View all")} {totalPlugins.toLocaleString()}+{" "}
                         {t("plugins")}
-                        <ArrowRight className='size-4' />
+                        <HugeiconsIcon icon={ArrowRight02Icon} className='size-4' />
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -399,9 +391,9 @@ export function LandingNavbar() {
               >
                 {mounted ? (
                   theme === "dark" ? (
-                    <Sun className='h-4 w-4' />
+                    <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
                   ) : (
-                    <Moon className='h-4 w-4' />
+                    <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
                   )
                 ) : (
                   <div className='h-4 w-4' />
@@ -424,7 +416,7 @@ export function LandingNavbar() {
                     href='/signup'
                   >
                     <span>{t("Start for $0")}</span>
-                    <ArrowRight className='ml-1 h-4 w-4' />
+                    <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
                   </Link>
                 </div>
               )}
@@ -458,7 +450,7 @@ export function LandingNavbar() {
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon' className='z-50'>
-                  <PanelRight className='text-muted-foreground size-4 h-4 w-4' />
+                  <HugeiconsIcon icon={PanelRightIcon} className='text-muted-foreground size-4 h-4 w-4' />
                   <span className='sr-only'>{t("Toggle menu")}</span>
                 </Button>
               </SheetTrigger>
@@ -511,7 +503,7 @@ export function LandingNavbar() {
                         href='/signup'
                       >
                         <span>{t("Start for $0")}</span>
-                        <ArrowRight className='ml-1 h-4 w-4' />
+                        <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
                       </Link>
                     </div>
                   )}

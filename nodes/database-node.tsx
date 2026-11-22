@@ -2,7 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Database, Server, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, DatabaseIcon, ServerStack01Icon } from "@hugeicons/core-free-icons";
 import { Handle, Position } from "reactflow";
 
 interface DatabaseNodeData {
@@ -45,13 +46,13 @@ export function DatabaseNode({ data, selected }: DatabaseNodeProps) {
           className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
           title='Remove node'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
 
       <div className='flex items-start space-x-3'>
         <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-purple-500/10'>
-          <Database className='h-5 w-5 text-purple-600' />
+          <HugeiconsIcon icon={DatabaseIcon} className='h-5 w-5 text-purple-600' />
         </div>
 
         <div className='min-w-0 flex-1'>
@@ -81,7 +82,7 @@ export function DatabaseNode({ data, selected }: DatabaseNodeProps) {
             className='h-7 w-full bg-transparent text-xs'
             onClick={() => console.log("[v0] Connect to database")}
           >
-            <Server className='mr-1 h-3 w-3' />
+            <HugeiconsIcon icon={ServerStack01Icon} className='mr-1 h-3 w-3' />
             Connect
           </Button>
         </div>

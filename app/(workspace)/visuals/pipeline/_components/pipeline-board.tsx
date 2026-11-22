@@ -22,7 +22,8 @@ import {
 } from "@/lib/pipeline-api";
 import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarCheck, Clock, Settings2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Settings02Icon, CalendarCheckIn01Icon, Clock01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -77,7 +78,7 @@ export function PipelineBoard({
           Pick your industry and connect a calendar so Genit can qualify enquiries and book them in.
         </p>
         <Button className='mt-5' onClick={onSetup}>
-          <Settings2 /> Set up the sales agent
+          <HugeiconsIcon icon={Settings02Icon} /> Set up the sales agent
         </Button>
       </div>
     );
@@ -178,7 +179,7 @@ function LeadCard({ lead, onOpen }: { lead: PipelineLead; onOpen: () => void }) 
       <div className='text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]'>
         {stage === "booked" && lead.booking?.start ? (
           <span className='inline-flex items-center gap-1 text-amber-700 dark:text-amber-400'>
-            <CalendarCheck className='size-3' />
+            <HugeiconsIcon icon={CalendarCheckIn01Icon} className='size-3' />
             {formatSlot(lead.booking.start)}
           </span>
         ) : (
@@ -191,7 +192,7 @@ function LeadCard({ lead, onOpen }: { lead: PipelineLead; onOpen: () => void }) 
         )}
         {lead.followUp?.nextAt && (
           <span className='inline-flex items-center gap-1' title='Next automatic follow-up'>
-            <Clock className='size-3' />
+            <HugeiconsIcon icon={Clock01Icon} className='size-3' />
             {relativeTime(lead.followUp.nextAt)}
           </span>
         )}

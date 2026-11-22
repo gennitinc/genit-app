@@ -6,7 +6,8 @@ import { SidebarTrigger } from "../ui/sidebar";
 import UserPopOver from "../user/userPopOver";
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
-import { Moon, Sun } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Sun01Icon, MoonIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -53,9 +54,9 @@ export default function TopNavWithAurora({
             className='hover:bg-accent h-8 w-8 rounded-lg p-0'
           >
             {mounted && theme === "dark" ? (
-              <Sun className='h-4 w-4' />
+              <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
             ) : (
-              <Moon className='h-4 w-4' />
+              <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
             )}
           </Button>
 

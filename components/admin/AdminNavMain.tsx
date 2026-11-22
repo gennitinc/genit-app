@@ -8,24 +8,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  Activity,
-  BookOpen,
-  CircleFadingArrowUp,
-  Cpu,
-  CreditCard,
-  ExternalLink,
-  FileText,
-  Layout,
-  LayoutDashboard,
-  Library,
-  Mic,
-  Palette,
-  Settings,
-  Sparkles,
-  UserSquare,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DashboardSquare01Icon, UserGroupIcon, Activity01Icon, CreditCardIcon, Layout01Icon, PaintBoardIcon, File02Icon, BookOpen01Icon, LibraryIcon, CpuIcon, Mic01Icon, UserSquareIcon, Settings01Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -38,62 +22,62 @@ export function AdminNavMain() {
   const navItems = [
     {
       title: "Dashboard",
-      icon: LayoutDashboard,
+      icon: DashboardSquare01Icon,
       href: "/admin",
     },
     {
       title: "User Management",
-      icon: Users,
+      icon: UserGroupIcon,
       href: "/admin/users",
     },
     {
       title: "Activity Logs",
-      icon: Activity,
+      icon: Activity01Icon,
       href: "/admin/activity",
     },
     {
       title: "Revenue",
-      icon: CreditCard,
+      icon: CreditCardIcon,
       href: "/admin/revenue",
     },
     {
       title: "Asset Templates",
-      icon: Layout,
+      icon: Layout01Icon,
       href: "/admin/templates",
     },
     {
       title: "Design Inspirations",
-      icon: Palette,
+      icon: PaintBoardIcon,
       href: "/admin/designinspirations",
     },
     {
       title: "Blog Posts",
-      icon: FileText,
+      icon: File02Icon,
       href: "/admin/blog",
     },
     {
       title: "Docs",
-      icon: BookOpen,
+      icon: BookOpen01Icon,
       href: "/admin/docs",
     },
     {
       title: "Media Library",
-      icon: Library,
+      icon: LibraryIcon,
       href: "/admin/blog/library",
     },
     {
       title: "AI Models",
-      icon: Cpu,
+      icon: CpuIcon,
       href: "/admin/inspire/models",
     },
     {
       title: "AI Voices",
-      icon: Mic,
+      icon: Mic01Icon,
       href: "/admin/inspire/voices",
     },
     {
       title: "AI Presenters",
-      icon: UserSquare,
+      icon: UserSquareIcon,
       href: "/admin/inspire/presenters",
     },
   ];
@@ -101,12 +85,12 @@ export function AdminNavMain() {
   const secondaryNavItems = [
     {
       title: "Platform Settings",
-      icon: Settings,
+      icon: Settings01Icon,
       href: "/admin/settings",
     },
     {
       title: "Back to User View",
-      icon: ExternalLink,
+      icon: LinkSquare02Icon,
       href: "/apps",
     },
   ];
@@ -137,7 +121,7 @@ export function AdminNavMain() {
                 onClick={handleLinkClick}
               >
                 <Link href={item.href} className='flex w-full items-center'>
-                  <item.icon
+                  <HugeiconsIcon icon={item.icon}
                     className={cn(
                       "h-5 w-5 flex-shrink-0",
                       shouldShowCollapsed ? "mx-auto" : "mr-3"
@@ -172,7 +156,7 @@ export function AdminNavMain() {
                 onClick={handleLinkClick}
               >
                 <Link href={item.href} className='flex w-full items-center'>
-                  <item.icon
+                  <HugeiconsIcon icon={item.icon}
                     className={cn(
                       "h-5 w-5 flex-shrink-0",
                       shouldShowCollapsed ? "mx-auto" : "mr-3"

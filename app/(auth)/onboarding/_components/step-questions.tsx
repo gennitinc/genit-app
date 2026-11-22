@@ -3,24 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  Briefcase,
-  Building2,
-  Code2,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Megaphone,
-  MoreHorizontal,
-  Palette,
-  Rocket,
-  TrendingUp,
-  Twitter,
-  UserRound,
-  Users,
-  Youtube,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { RocketIcon, Megaphone01Icon, ZapIcon, Briefcase01Icon, Building03Icon, ChartIncreaseIcon, SourceCodeIcon, PaintBoardIcon, MoreHorizontalIcon, TwitterIcon, Facebook01Icon, Linkedin01Icon, UserCircleIcon, UserGroupIcon, YoutubeIcon, InstagramIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface StepQuestionsProps {
@@ -32,27 +16,27 @@ interface StepQuestionsProps {
 }
 
 const ROLES = [
-  { id: "founder", label: "Founder", icon: Rocket },
-  { id: "marketing", label: "Marketing", icon: Megaphone },
-  { id: "side-hustle", label: "Side Hustle", icon: Zap },
-  { id: "freelancer", label: "Freelancer", icon: Briefcase },
-  { id: "agency", label: "Agency", icon: Building2 },
-  { id: "sales", label: "Sales", icon: TrendingUp },
-  { id: "developer", label: "Developer", icon: Code2 },
-  { id: "designer", label: "Designer", icon: Palette },
-  { id: "other", label: "Other", icon: MoreHorizontal },
+  { id: "founder", label: "Founder", icon: RocketIcon },
+  { id: "marketing", label: "Marketing", icon: Megaphone01Icon },
+  { id: "side-hustle", label: "Side Hustle", icon: ZapIcon },
+  { id: "freelancer", label: "Freelancer", icon: Briefcase01Icon },
+  { id: "agency", label: "Agency", icon: Building03Icon },
+  { id: "sales", label: "Sales", icon: ChartIncreaseIcon },
+  { id: "developer", label: "Developer", icon: SourceCodeIcon },
+  { id: "designer", label: "Designer", icon: PaintBoardIcon },
+  { id: "other", label: "Other", icon: MoreHorizontalIcon },
 ];
 
 const HEAR_OPTIONS = [
-  { id: "twitter", label: "X (Twitter)", icon: Twitter },
-  { id: "facebook", label: "Facebook", icon: Facebook },
-  { id: "linkedin", label: "LinkedIn", icon: Linkedin },
-  { id: "tiktok", label: "TikTok", icon: UserRound },
-  { id: "google", label: "Google", icon: TrendingUp },
-  { id: "friend", label: "Friend", icon: Users },
-  { id: "youtube", label: "YouTube", icon: Youtube },
-  { id: "instagram", label: "Instagram", icon: Instagram },
-  { id: "other", label: "Other", icon: MoreHorizontal },
+  { id: "twitter", label: "X (Twitter)", icon: TwitterIcon },
+  { id: "facebook", label: "Facebook", icon: Facebook01Icon },
+  { id: "linkedin", label: "LinkedIn", icon: Linkedin01Icon },
+  { id: "tiktok", label: "TikTok", icon: UserCircleIcon },
+  { id: "google", label: "Google", icon: ChartIncreaseIcon },
+  { id: "friend", label: "Friend", icon: UserGroupIcon },
+  { id: "youtube", label: "YouTube", icon: YoutubeIcon },
+  { id: "instagram", label: "Instagram", icon: InstagramIcon },
+  { id: "other", label: "Other", icon: MoreHorizontalIcon },
 ];
 
 export function StepQuestions({
@@ -123,7 +107,7 @@ export function StepQuestions({
 interface OptionDef {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: IconSvgElement;
 }
 
 function Section({
@@ -160,7 +144,7 @@ function Section({
                   : "border-neutral-200 hover:border-neutral-400 dark:border-white/10 dark:hover:border-white/20"
               )}
             >
-              <Icon className={cn("size-4 shrink-0 text-neutral-500")} />
+              <HugeiconsIcon icon={Icon} className={cn("size-4 shrink-0 text-neutral-500")} />
 
               <span className={cn("text-sm font-medium")}>{opt.label}</span>
             </button>

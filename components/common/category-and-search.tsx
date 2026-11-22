@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useUrlState } from "@/hooks/use-url-state";
 import Loading from "@/utils/Loading";
-import { Loader, Search, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -42,7 +43,7 @@ export default function CategoryAndSearch({
       <div className='group relative'>
         <form onSubmit={handleSearch} className='w-full'>
           <div className='relative'>
-            <Search className='text-muted-foreground group-focus-within:text-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transition-colors' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground group-focus-within:text-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transition-colors' />
             <Input
               placeholder={placeholder}
               className='bg-background/80 w-full rounded-full border-2 py-6 pr-16 text-base shadow-sm backdrop-blur-sm transition-all duration-200 group-focus-within:shadow-md focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
@@ -61,7 +62,7 @@ export default function CategoryAndSearch({
                 tabIndex={-1}
                 aria-label='Clear search'
               >
-                <X className='h-5 w-5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
               </button>
             )}
             <Button
@@ -72,7 +73,7 @@ export default function CategoryAndSearch({
               {searchLoading ? (
                 <Loading size={20} />
               ) : (
-                <Search className='h-4 w-4' />
+                <HugeiconsIcon icon={Search01Icon} className='h-4 w-4' />
               )}
             </Button>
           </div>

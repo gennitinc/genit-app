@@ -12,24 +12,8 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useProjectDesign } from "@/context/DesignProject";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  CircleFadingArrowUp,
-  Image,
-  Loader2,
-  MessageSquare,
-  Mic,
-  PaperclipIcon,
-  Settings,
-  Settings2,
-  Sparkles,
-  TrendingUp,
-  Users,
-  WandSparklesIcon,
-  X,
-  XIcon,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Mic01Icon, Attachment01Icon, Settings02Icon, MagicWand02Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -613,7 +597,7 @@ export function IdeaSection() {
                       className='hover:bg-background/50 rounded-lg p-1.5 transition-all duration-200 hover:scale-105 active:scale-95'
                       disabled={isGenerating}
                     >
-                      <Mic className='text-muted-foreground h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={Mic01Icon} className='text-muted-foreground h-3.5 w-3.5' />
                     </Button>
                     <button
                       type='button'
@@ -622,7 +606,7 @@ export function IdeaSection() {
                       disabled={isGenerating || isSubmitting}
                       aria-label='Attach files'
                     >
-                      <PaperclipIcon className='h-4 w-4' />
+                      <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                     </button>
                     <Input
                       ref={fileInputRef}
@@ -643,7 +627,7 @@ export function IdeaSection() {
                         aria-label='Flier'
                       >
                         fliers
-                        <Settings2 className='h-4 w-4' />
+                        <HugeiconsIcon icon={Settings02Icon} className='h-4 w-4' />
                       </button>
                     </div>
                   </div>
@@ -680,7 +664,7 @@ export function IdeaSection() {
                         <LoadingFileLoader size={20} />
                       ) : (
                         <div className='flex flex-row items-center gap-2'>
-                          <WandSparklesIcon className='h-3 w-3' />
+                          <HugeiconsIcon icon={MagicWand02Icon} className='h-3 w-3' />
                           Create
                         </div>
                       )}

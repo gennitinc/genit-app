@@ -3,19 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Code,
-  Database,
-  FileOutput,
-  FileText,
-  FolderOpen,
-  GitBranch,
-  MessageCircle,
-  Plus,
-  Search,
-  Settings,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DatabaseIcon, Settings01Icon, FileExportIcon, GitBranchIcon, CodeIcon, BubbleChatIcon, YoutubeIcon, File02Icon, FolderOpenIcon, PlusSignIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface NodePaletteProps {
@@ -27,7 +16,7 @@ const nodeTypes = [
     id: "input",
     name: "Input",
     description: "Data input node",
-    icon: Database,
+    icon: DatabaseIcon,
     color: "text-blue-500",
     bgColor: "bg-blue-50 dark:bg-blue-950",
   },
@@ -35,7 +24,7 @@ const nodeTypes = [
     id: "process",
     name: "Process",
     description: "Data processing node",
-    icon: Settings,
+    icon: Settings01Icon,
     color: "text-purple-500",
     bgColor: "bg-purple-50 dark:bg-purple-950",
   },
@@ -43,7 +32,7 @@ const nodeTypes = [
     id: "output",
     name: "Output",
     description: "Data output node",
-    icon: FileOutput,
+    icon: FileExportIcon,
     color: "text-green-500",
     bgColor: "bg-green-50 dark:bg-green-950",
   },
@@ -51,7 +40,7 @@ const nodeTypes = [
     id: "conditional",
     name: "Conditional",
     description: "Conditional branching",
-    icon: GitBranch,
+    icon: GitBranchIcon,
     color: "text-amber-500",
     bgColor: "bg-amber-50 dark:bg-amber-950",
   },
@@ -59,7 +48,7 @@ const nodeTypes = [
     id: "code",
     name: "Code",
     description: "Custom code execution",
-    icon: Code,
+    icon: CodeIcon,
     color: "text-gray-500",
     bgColor: "bg-gray-50 dark:bg-gray-950",
   },
@@ -67,7 +56,7 @@ const nodeTypes = [
     id: "aiChat",
     name: "AI Chat",
     description: "AI conversation node",
-    icon: MessageCircle,
+    icon: BubbleChatIcon,
     color: "text-cyan-500",
     bgColor: "bg-cyan-50 dark:bg-cyan-950",
   },
@@ -75,7 +64,7 @@ const nodeTypes = [
     id: "youtube",
     name: "YouTube",
     description: "YouTube video content",
-    icon: Youtube,
+    icon: YoutubeIcon,
     color: "text-red-500",
     bgColor: "bg-red-50 dark:bg-red-950",
   },
@@ -83,7 +72,7 @@ const nodeTypes = [
     id: "pdf",
     name: "PDF",
     description: "PDF document content",
-    icon: FileText,
+    icon: File02Icon,
     color: "text-red-500",
     bgColor: "bg-red-50 dark:bg-red-950",
   },
@@ -91,7 +80,7 @@ const nodeTypes = [
     id: "folder",
     name: "Folder",
     description: "Content organization",
-    icon: FolderOpen,
+    icon: FolderOpenIcon,
     color: "text-yellow-500",
     bgColor: "bg-yellow-50 dark:bg-yellow-950",
   },
@@ -118,7 +107,7 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
         <div className='mb-4 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600'>
-              <Plus className='h-4 w-4 text-white' />
+              <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4 text-white' />
             </div>
             <span className='text-foreground font-semibold'>Node Palette</span>
           </div>
@@ -131,7 +120,7 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
       {/* Search */}
       <div className='border-border border-b p-4'>
         <div className='relative'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder='Search nodes...'
             value={searchQuery}
@@ -158,7 +147,7 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
                   <div
                     className={`h-10 w-10 rounded-lg ${node.bgColor} flex items-center justify-center transition-transform group-hover:scale-110`}
                   >
-                    <IconComponent className={`h-5 w-5 ${node.color}`} />
+                    <HugeiconsIcon icon={IconComponent} className={`h-5 w-5 ${node.color}`} />
                   </div>
                   <div className='min-w-0 flex-1'>
                     <h3 className='text-foreground mb-1 text-sm font-medium'>
@@ -173,7 +162,7 @@ export function NodePalette({ onAddNode }: NodePaletteProps) {
                     size='sm'
                     className='h-auto bg-indigo-600 p-1 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-indigo-600 hover:bg-indigo-700/10 hover:bg-indigo-700/20'
                   >
-                    <Plus className='text-primary h-4 w-4' />
+                    <HugeiconsIcon icon={PlusSignIcon} className='text-primary h-4 w-4' />
                   </Button>
                 </div>
               </div>

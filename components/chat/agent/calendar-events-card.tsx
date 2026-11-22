@@ -3,7 +3,8 @@
 import { PluginLogo, PluginName } from "../plugin-logo";
 import { AgentCard } from "./agent-card";
 import { LocalizedText } from "@/components/localized-text";
-import { ExternalLink, MapPin, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MapPinIcon, UserGroupIcon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 
 type GcalEvent = {
   id?: string;
@@ -124,7 +125,7 @@ export function CalendarEventsCard({
                     <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5'>
                       {e.location && (
                         <div className='text-muted-foreground flex items-center gap-1 text-[11px]'>
-                          <MapPin className='h-3 w-3' />
+                          <HugeiconsIcon icon={MapPinIcon} className='h-3 w-3' />
                           <span className='max-w-[180px] truncate'>
                             {e.location}
                           </span>
@@ -132,7 +133,7 @@ export function CalendarEventsCard({
                       )}
                       {e.attendees && e.attendees.length > 0 && (
                         <div className='text-muted-foreground flex items-center gap-1 text-[11px]'>
-                          <Users className='h-3 w-3' />
+                          <HugeiconsIcon icon={UserGroupIcon} className='h-3 w-3' />
                           {e.attendees.length}{" "}
                           {e.attendees.length === 1 ? "attendee" : "attendees"}
                         </div>
@@ -147,7 +148,7 @@ export function CalendarEventsCard({
                       className='text-muted-foreground hover:text-foreground -mr-1 shrink-0 rounded p-1 transition-colors'
                       aria-label='Open in Google Calendar'
                     >
-                      <ExternalLink className='h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
                     </a>
                   )}
                 </div>

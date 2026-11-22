@@ -3,14 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  Check,
-  Image as ImageIcon,
-  Library,
-  Loader2,
-  Upload,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, Image01Icon, Upload01Icon, LibraryIcon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 
@@ -194,7 +188,7 @@ export function MediaPicker({
                       onClick={() => removeSelectedItem(item.url)}
                       className='absolute top-1.5 right-1.5 rounded-full bg-black/70 p-1.5 text-white shadow-lg transition hover:bg-black'
                     >
-                      <X className='h-4 w-4' />
+                      <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                     </button>
                   )}
                 </div>
@@ -202,7 +196,7 @@ export function MediaPicker({
             </div>
           ) : (
             <div className='flex flex-col items-center gap-2 text-zinc-500'>
-              <ImageIcon className='h-7 w-7' />
+              <HugeiconsIcon icon={Image01Icon} className='h-7 w-7' />
               <span className='text-xs'>
                 {acceptsVideo
                   ? "Choose an image or video"
@@ -223,14 +217,14 @@ export function MediaPicker({
             disabled={uploading}
             className='flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-50'
           >
-            <Upload className='h-4 w-4' /> <LocalizedText text={"Upload"} />
+            <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' /> <LocalizedText text={"Upload"} />
           </button>
           <button
             type='button'
             onClick={() => setOpen(true)}
             className='flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-semibold text-white hover:border-zinc-600'
           >
-            <Library className='h-4 w-4' />{" "}
+            <HugeiconsIcon icon={LibraryIcon} className='h-4 w-4' />{" "}
             <LocalizedText text={"Choose from library"} />
           </button>
         </div>
@@ -255,7 +249,7 @@ export function MediaPicker({
                 onClick={() => setOpen(false)}
                 className='rounded-lg p-2 text-zinc-400 hover:bg-zinc-900 hover:text-white'
               >
-                <X className='h-5 w-5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
               </button>
             </div>
             <div className='max-h-[65vh] overflow-y-auto p-5'>
@@ -265,7 +259,7 @@ export function MediaPicker({
                 </div>
               ) : assets.length === 0 ? (
                 <div className='flex h-48 flex-col items-center justify-center gap-2 text-zinc-500'>
-                  <Library className='h-8 w-8' />
+                  <HugeiconsIcon icon={LibraryIcon} className='h-8 w-8' />
                   <p className='text-sm'>
                     <LocalizedText text={"Your library is empty"} />
                   </p>
@@ -306,7 +300,7 @@ export function MediaPicker({
                       </div>
                       {selectedItems.some((item) => item.url === asset.url) && (
                         <span className='absolute top-2 right-2 rounded-full bg-cyan-500 p-1 text-black'>
-                          <Check className='h-3 w-3' />
+                          <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
                         </span>
                       )}
                     </button>

@@ -17,18 +17,8 @@ import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import {
-  ArrowRight,
-  Camera,
-  Globe,
-  Link2,
-  Loader2,
-  Palette,
-  Plus,
-  ShieldCheck,
-  Upload,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { GlobeIcon, Link02Icon, ArrowRight02Icon, PlusSignIcon, Upload01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useMemo, useRef, useState } from "react";
 
@@ -139,7 +129,7 @@ export function StepImport({
 
       {/* Source icons row */}
       <div className='onb-animate-in onb-stagger-3 mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6'>
-        <SourceIcon icon={<Globe className='h-5 w-5' />} label='Website' />
+        <SourceIcon icon={<HugeiconsIcon icon={GlobeIcon} className='h-5 w-5' />} label='Website' />
         <SourceIcon
           icon={<FacebookBrand className='h-7 w-7' />}
           label='Facebook'
@@ -172,7 +162,7 @@ export function StepImport({
       {/* URL input */}
       <div className='onb-animate-in onb-stagger-4 mx-auto mt-6 max-w-xl'>
         <div className='relative'>
-          <Link2 className='absolute top-1/2 left-4 h-fit w-5 -translate-y-1/2 py-1 text-neutral-500 dark:text-neutral-400' />
+          <HugeiconsIcon icon={Link02Icon} className='absolute top-1/2 left-4 h-fit w-5 -translate-y-1/2 py-1 text-neutral-500 dark:text-neutral-400' />
           <Input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -188,7 +178,7 @@ export function StepImport({
             className='absolute top-1/2 right-2 h-10 -translate-y-1/2 rounded-xl bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
             <LocalizedText text={"Import"} />
-            <ArrowRight className='ml-1 h-4 w-4' />
+            <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
           </Button>
         </div>
 
@@ -205,7 +195,7 @@ export function StepImport({
             onClick={() => setMode("manual")}
             className='mx-auto inline-flex h-fit w-fit items-center justify-center gap-2 rounded-lg border border-dashed border-cyan-300/30 px-4 py-2 text-base text-neutral-500 transition-colors hover:bg-cyan-400/10 dark:text-neutral-400'
           >
-            <Plus className='h-5 w-5' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-5 w-5' />
             <LocalizedText text={"Add brand manually"} />
           </button>
           {onSkip && (
@@ -491,7 +481,7 @@ function ManualSetup({
             ) : (
               <>
                 <div className='flex size-12 items-center justify-center rounded-xl bg-cyan-400/10 ring-1 ring-cyan-300/20'>
-                  <Upload className='size-5 text-neutral-500 dark:text-neutral-400' />
+                  <HugeiconsIcon icon={Upload01Icon} className='size-5 text-neutral-500 dark:text-neutral-400' />
                 </div>
                 <p className='font-medium text-neutral-900 dark:text-white'>
                   <LocalizedText text={"Upload your logo"} />
@@ -532,7 +522,7 @@ function ManualSetup({
             onChange={setWebsite}
             placeholder='https://'
             icon={
-              <Globe className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
+              <HugeiconsIcon icon={GlobeIcon} className='h-4 w-4 text-neutral-500 dark:text-neutral-400' />
             }
           />
         </div>
@@ -618,7 +608,7 @@ function ManualSetup({
             className='flex-1 bg-indigo-600 font-medium text-neutral-900 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 disabled:bg-neutral-200 disabled:text-neutral-500 dark:text-neutral-400 dark:text-white dark:disabled:bg-white/10'
           >
             <LocalizedText text={"Continue"} />
-            <ArrowRight className='ml-1 h-4 w-4' />
+            <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
           </Button>
         </div>
       </div>

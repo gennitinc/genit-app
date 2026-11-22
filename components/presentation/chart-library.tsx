@@ -13,15 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import {
-  BarChart3,
-  Download,
-  LineChart,
-  PieChart,
-  Settings,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ChartColumnIcon, PieChartIcon, ChartLineData01Icon, ChartIncreaseIcon, Cancel01Icon, Settings01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import { useMemo, useState } from "react";
 
 interface ChartData {
@@ -109,11 +102,11 @@ export function ChartLibrary({
   };
 
   const chartIcons = {
-    bar: BarChart3,
-    pie: PieChart,
-    line: LineChart,
-    doughnut: PieChart,
-    area: TrendingUp,
+    bar: ChartColumnIcon,
+    pie: PieChartIcon,
+    line: ChartLineData01Icon,
+    doughnut: PieChartIcon,
+    area: ChartIncreaseIcon,
   };
 
   return (
@@ -124,7 +117,7 @@ export function ChartLibrary({
           <div className='mb-4 flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 dark:bg-purple-500/10'>
-                <BarChart3 className='h-5 w-5 text-purple-500 dark:text-purple-400' />
+                <HugeiconsIcon icon={ChartColumnIcon} className='h-5 w-5 text-purple-500 dark:text-purple-400' />
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
@@ -142,7 +135,7 @@ export function ChartLibrary({
                 onClick={onClose}
                 className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className='h-3 w-3' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -174,7 +167,7 @@ export function ChartLibrary({
                           : "border-border hover:border-purple-500/50"
                       )}
                     >
-                      <Icon className='h-5 w-5' />
+                      <HugeiconsIcon icon={Icon} className='h-5 w-5' />
                       <span className='text-xs capitalize'>{type}</span>
                     </button>
                   );
@@ -249,7 +242,7 @@ export function ChartLibrary({
             {parsedLabels.length > 0 && parsedData.length > 0 && (
               <div className='bg-muted/50 border-border rounded-lg border p-3'>
                 <div className='mb-2 flex items-center gap-2'>
-                  <Settings className='text-muted-foreground h-4 w-4' />
+                  <HugeiconsIcon icon={Settings01Icon} className='text-muted-foreground h-4 w-4' />
                   <span className='text-xs font-medium'>
                     <LocalizedText text={"Preview"} />
                   </span>
@@ -288,7 +281,7 @@ export function ChartLibrary({
             parsedLabels.length !== parsedData.length
           }
         >
-          <Download className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Insert Chart"} />
         </Button>
         {parsedLabels.length !== parsedData.length && (

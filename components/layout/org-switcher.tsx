@@ -4,6 +4,7 @@ import { BrandData } from "@/app/(auth)/onboarding/_components/types";
 import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { OrgLogo } from "@/components/ui/org-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -57,24 +58,8 @@ import { useAccountActions } from "@/hooks/use-account-actions";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  BadgeCheck,
-  Check,
-  ChevronsUpDown,
-  CreditCard,
-  DoorOpen,
-  Loader2,
-  Lock,
-  LogOut,
-  Mail,
-  Moon,
-  Plus,
-  Sun,
-  Trash2,
-  User as UserIcon,
-  UserMinus,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UnfoldMoreIcon, Tick02Icon, PlusSignIcon, LockIcon, UserIcon, CheckmarkBadge01Icon, CreditCardIcon, Sun01Icon, MoonIcon, Logout01Icon, UserGroupIcon, Mail01Icon, Door01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -352,9 +337,6 @@ export function OrgSwitcher({
     }
   };
 
-  const orgInitial = (org: Organization | null) =>
-    (org?.businessName || "W").slice(0, 1).toUpperCase();
-
   const dropdownSide = isMobile ? "top" : "top";
 
   const switcherButton = (
@@ -366,18 +348,12 @@ export function OrgSwitcher({
         forceExpanded && "!h-12 !w-full !justify-start !px-2"
       )}
     >
-      <Avatar className={cn("rounded-md", isCollapsed ? "h-7 w-7" : "h-8 w-8")}>
-        {current?.businessLogo ? (
-          <AvatarImage
-            src={current.businessLogo}
-            alt={current?.businessName || "Organization"}
-            className='bg-white object-contain'
-          />
-        ) : null}
-        <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
-          {orgInitial(current)}
-        </AvatarFallback>
-      </Avatar>
+      <OrgLogo
+        src={current?.businessLogo}
+        name={current?.businessName}
+        className={cn("rounded-md", isCollapsed ? "h-7 w-7" : "h-8 w-8")}
+        fallbackClassName='text-xs'
+      />
       {!isCollapsed && (
         <>
           <div className='ml-2 grid flex-1 text-left text-sm leading-tight'>
@@ -388,7 +364,7 @@ export function OrgSwitcher({
               {user?.username || user?.email}
             </span>
           </div>
-          <ChevronsUpDown className='ml-auto h-4 w-4 opacity-60' />
+          <HugeiconsIcon icon={UnfoldMoreIcon} className='ml-auto h-4 w-4 opacity-60' />
         </>
       )}
     </SidebarMenuButton>
@@ -454,25 +430,19 @@ export function OrgSwitcher({
                             disabled={isActive || switchingId === org._id}
                             className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left disabled:opacity-70'
                           >
-                            <Avatar className='h-8 w-8 rounded-md'>
-                              {org.businessLogo ? (
-                                <AvatarImage
-                                  src={org.businessLogo}
-                                  alt={org.businessName}
-                                  className='bg-white object-contain'
-                                />
-                              ) : null}
-                              <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
-                                {orgInitial(org)}
-                              </AvatarFallback>
-                            </Avatar>
+                            <OrgLogo
+                              src={org.businessLogo}
+                              name={org.businessName}
+                              className='h-8 w-8 rounded-md'
+                              fallbackClassName='text-xs'
+                            />
                             <span className='min-w-0 flex-1 truncate text-sm font-medium'>
                               {org.businessName}
                             </span>
                             {switchingId === org._id ? (
                               <LoadingFileLoader size={20} />
                             ) : isActive ? (
-                              <Check className='h-4 w-4' />
+                              <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4' />
                             ) : null}
                           </button>
                         );
@@ -491,9 +461,9 @@ export function OrgSwitcher({
                         className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
                       >
                         {canCreateOrg ? (
-                          <Plus className='h-4 w-4' />
+                          <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                         ) : (
-                          <Lock className='h-4 w-4 opacity-70' />
+                          <HugeiconsIcon icon={LockIcon} className='h-4 w-4 opacity-70' />
                         )}
                         <LocalizedText text={"Create organization"} />
                       </button>
@@ -507,7 +477,7 @@ export function OrgSwitcher({
                           href={`/creator/${user.username}`}
                           className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
                         >
-                          <UserIcon className='h-4 w-4' />
+                          <HugeiconsIcon icon={UserIcon} className='h-4 w-4' />
                           <LocalizedText text={"View profile"} />
                         </Link>
                       </DrawerClose>
@@ -517,7 +487,7 @@ export function OrgSwitcher({
                         href='/user/settings'
                         className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
                       >
-                        <BadgeCheck className='h-4 w-4' />
+                        <HugeiconsIcon icon={CheckmarkBadge01Icon} className='h-4 w-4' />
                         <LocalizedText text={"Account"} />
                       </Link>
                     </DrawerClose>
@@ -526,7 +496,7 @@ export function OrgSwitcher({
                         href='/user/settings?tab=billing'
                         className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
                       >
-                        <CreditCard className='h-4 w-4' />
+                        <HugeiconsIcon icon={CreditCardIcon} className='h-4 w-4' />
                         <LocalizedText text={"Billing"} />
                       </Link>
                     </DrawerClose>
@@ -538,9 +508,9 @@ export function OrgSwitcher({
                       className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
                     >
                       {theme === "dark" ? (
-                        <Sun className='h-4 w-4' />
+                        <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
                       ) : (
-                        <Moon className='h-4 w-4' />
+                        <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
                       )}
                       <LocalizedText
                         text={
@@ -558,7 +528,7 @@ export function OrgSwitcher({
                       }}
                       className='text-destructive hover:bg-destructive/10 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm'
                     >
-                      <LogOut className='h-4 w-4' />
+                      <HugeiconsIcon icon={Logout01Icon} className='h-4 w-4' />
                       <LocalizedText text={"Log out"} />
                     </button>
                   </div>
@@ -625,25 +595,19 @@ export function OrgSwitcher({
                         onMouseEnter={() => loadTeams(org._id)}
                         className='focus:bg-accent focus:text-accent-foreground gap-2'
                       >
-                        <Avatar className='h-6 w-6 rounded-md'>
-                          {org.businessLogo ? (
-                            <AvatarImage
-                              src={org.businessLogo}
-                              alt={org.businessName}
-                              className='bg-white object-contain'
-                            />
-                          ) : null}
-                          <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[10px] font-semibold text-white'>
-                            {orgInitial(org)}
-                          </AvatarFallback>
-                        </Avatar>
+                        <OrgLogo
+                          src={org.businessLogo}
+                          name={org.businessName}
+                          className='h-6 w-6 rounded-md'
+                          fallbackClassName='text-[10px]'
+                        />
                         <span className='flex-1 truncate'>
                           {org.businessName}
                         </span>
                         {switchingId === org._id ? (
                           <LoadingFileLoader size={20} />
                         ) : isActive ? (
-                          <Check className='h-3 w-3 opacity-70' />
+                          <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3 opacity-70' />
                         ) : null}
                       </DropdownMenuSubTrigger>
                       <DropdownMenuSubContent className='border-border bg-popover text-popover-foreground w-60 rounded-lg'>
@@ -652,7 +616,7 @@ export function OrgSwitcher({
                           disabled={isActive}
                           className='focus:bg-accent focus:text-accent-foreground'
                         >
-                          <Check
+                          <HugeiconsIcon icon={Tick02Icon}
                             className={cn(
                               "mr-2 h-4 w-4",
                               isActive ? "opacity-100" : "opacity-0"
@@ -687,11 +651,11 @@ export function OrgSwitcher({
                                   }}
                                   className='focus:bg-accent focus:text-accent-foreground'
                                 >
-                                  <Users className='mr-2 h-4 w-4 opacity-70' />
+                                  <HugeiconsIcon icon={UserGroupIcon} className='mr-2 h-4 w-4 opacity-70' />
                                   <span className='flex-1 truncate'>
                                     {team.name}
                                   </span>
-                                  <Mail className='ml-2 h-3.5 w-3.5 opacity-50' />
+                                  <HugeiconsIcon icon={Mail01Icon} className='ml-2 h-3.5 w-3.5 opacity-50' />
                                 </DropdownMenuItem>
                               );
                             }
@@ -711,12 +675,12 @@ export function OrgSwitcher({
                                 disabled={!isOnTeam}
                                 className='focus:bg-accent focus:text-accent-foreground'
                               >
-                                <Users className='mr-2 h-4 w-4 opacity-70' />
+                                <HugeiconsIcon icon={UserGroupIcon} className='mr-2 h-4 w-4 opacity-70' />
                                 <span className='flex-1 truncate'>
                                   {team.name}
                                 </span>
                                 {isOnTeam && (
-                                  <DoorOpen className='ml-2 h-3.5 w-3.5 opacity-50' />
+                                  <HugeiconsIcon icon={Door01Icon} className='ml-2 h-3.5 w-3.5 opacity-50' />
                                 )}
                               </DropdownMenuItem>
                             );
@@ -732,7 +696,7 @@ export function OrgSwitcher({
                               }}
                               className='focus:bg-accent focus:text-accent-foreground'
                             >
-                              <Plus className='mr-2 h-4 w-4' />
+                              <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                               <LocalizedText text={"Create team"} />
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -742,7 +706,7 @@ export function OrgSwitcher({
                               }}
                               className='text-destructive focus:bg-destructive/10 focus:text-destructive'
                             >
-                              <Trash2 className='mr-2 h-4 w-4' />
+                              <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
                               <LocalizedText text={"Delete organization"} />
                             </DropdownMenuItem>
                           </>
@@ -760,7 +724,7 @@ export function OrgSwitcher({
                     }}
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
-                    <Plus className='mr-2 h-4 w-4' />
+                    <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                     <LocalizedText text={"Create organization"} />
                   </DropdownMenuItem>
                 ) : (
@@ -772,7 +736,7 @@ export function OrgSwitcher({
                     }}
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
-                    <Lock className='mr-2 h-4 w-4 opacity-70' />
+                    <HugeiconsIcon icon={LockIcon} className='mr-2 h-4 w-4 opacity-70' />
                     <span className='flex-1'>
                       <LocalizedText text={"Create organization"} />
                     </span>
@@ -791,7 +755,7 @@ export function OrgSwitcher({
                       className='focus:bg-accent focus:text-accent-foreground'
                     >
                       <Link href={`/creator/${user.username}`}>
-                        <UserIcon className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={UserIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"View profile"} />
                       </Link>
                     </DropdownMenuItem>
@@ -801,7 +765,7 @@ export function OrgSwitcher({
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
                     <Link href='/user/settings'>
-                      <BadgeCheck className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={CheckmarkBadge01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Account"} />
                     </Link>
                   </DropdownMenuItem>
@@ -810,7 +774,7 @@ export function OrgSwitcher({
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
                     <Link href='/user/settings?tab=billing'>
-                      <CreditCard className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={CreditCardIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Billing"} />
                     </Link>
                   </DropdownMenuItem>
@@ -824,12 +788,12 @@ export function OrgSwitcher({
                 >
                   {theme === "dark" ? (
                     <>
-                      <Sun className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Sun01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Switch to light mode"} />
                     </>
                   ) : (
                     <>
-                      <Moon className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={MoonIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Switch to dark mode"} />
                     </>
                   )}
@@ -841,7 +805,7 @@ export function OrgSwitcher({
                     setIsSignOutModalOpen(true);
                   }}
                 >
-                  <LogOut className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={Logout01Icon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Log out"} />
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -999,7 +963,7 @@ export function OrgSwitcher({
               {inviting ? (
                 <LoadingFileLoader size={20} />
               ) : (
-                <Mail className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={Mail01Icon} className='mr-2 h-4 w-4' />
               )}
               <LocalizedText text={"Send invitation"} />
             </Button>

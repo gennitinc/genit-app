@@ -12,7 +12,8 @@ import {
 } from "@/lib/social-posts-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Heart, MessageCircle, RefreshCw, Send } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SentIcon, FavouriteIcon, RefreshIcon, BubbleChatIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 const MAX_LENGTH = 2_000;
@@ -86,7 +87,7 @@ function Composer({
         className='h-9 w-9 shrink-0 rounded-lg'
         aria-label='Send comment'
       >
-        {pending ? <LoadingFileLoader size={14} /> : <Send className='h-4 w-4' />}
+        {pending ? <LoadingFileLoader size={14} /> : <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />}
       </Button>
     </form>
   );
@@ -133,7 +134,7 @@ function CommentItem({
           <span>{when(comment.createdAt)}</span>
           {Boolean(comment.likeCount) && (
             <span className='flex items-center gap-1'>
-              <Heart className='h-3 w-3' />
+              <HugeiconsIcon icon={FavouriteIcon} className='h-3 w-3' />
               {comment.likeCount}
             </span>
           )}
@@ -243,7 +244,7 @@ export function PostCommentsPanel({
           className='text-muted-foreground hover:text-foreground'
           aria-label='Refresh comments'
         >
-          <RefreshCw
+          <HugeiconsIcon icon={RefreshIcon}
             className={`h-3.5 w-3.5 ${comments.isFetching ? "animate-spin" : ""}`}
           />
         </button>
@@ -267,7 +268,7 @@ export function PostCommentsPanel({
         </p>
       ) : items.length === 0 ? (
         <div className='text-muted-foreground flex h-32 flex-col items-center justify-center gap-2 text-xs'>
-          <MessageCircle className='h-5 w-5' />
+          <HugeiconsIcon icon={BubbleChatIcon} className='h-5 w-5' />
           <LocalizedText text={"No comments yet"} />
         </div>
       ) : (

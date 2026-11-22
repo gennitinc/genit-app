@@ -7,21 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowRight,
-  Braces,
-  CheckCircle,
-  ChevronDown,
-  ChevronUp,
-  Code2,
-  Cpu,
-  FileCode,
-  FileText,
-  Folder,
-  Layers,
-  Terminal,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FileScriptIcon, CodeIcon, File02Icon, Folder01Icon, ZapIcon, ComputerTerminal01Icon, Layers01Icon, CheckmarkCircle02Icon, SourceCodeIcon, ArrowRight02Icon, ArrowUp01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface StatusUpdate {
@@ -39,14 +26,14 @@ interface GenerationUIProps {
 
 // File type icons mapping
 const fileIcons: Record<string, React.ReactNode> = {
-  js: <FileCode className='h-4 w-4 text-yellow-500' />,
-  jsx: <FileCode className='h-4 w-4 text-blue-500' />,
-  ts: <FileCode className='h-4 w-4 text-blue-600' />,
-  tsx: <FileCode className='h-4 w-4 text-blue-500' />,
-  css: <FileCode className='h-4 w-4 text-purple-500' />,
-  html: <FileCode className='h-4 w-4 text-orange-500' />,
-  json: <Braces className='h-4 w-4 text-green-500' />,
-  md: <FileText className='h-4 w-4 text-gray-500' />,
+  js: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-yellow-500' />,
+  jsx: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-blue-500' />,
+  ts: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-blue-600' />,
+  tsx: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-blue-500' />,
+  css: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-purple-500' />,
+  html: <HugeiconsIcon icon={FileScriptIcon} className='h-4 w-4 text-orange-500' />,
+  json: <HugeiconsIcon icon={CodeIcon} className='h-4 w-4 text-green-500' />,
+  md: <HugeiconsIcon icon={File02Icon} className='h-4 w-4 text-gray-500' />,
 };
 
 export function GenerationUI({
@@ -84,7 +71,7 @@ export function GenerationUI({
   const getFileIcon = (fileName: string) => {
     const extension = fileName.split(".").pop()?.toLowerCase() || "";
     return (
-      fileIcons[extension] || <FileText className='h-4 w-4 text-gray-500' />
+      fileIcons[extension] || <HugeiconsIcon icon={File02Icon} className='h-4 w-4 text-gray-500' />
     );
   };
 
@@ -102,7 +89,7 @@ export function GenerationUI({
         }`}
       >
         {file.type === "folder" ? (
-          <Folder className='h-4 w-4 text-blue-500' />
+          <HugeiconsIcon icon={Folder01Icon} className='h-4 w-4 text-blue-500' />
         ) : (
           getFileIcon(file.name)
         )}
@@ -215,7 +202,7 @@ export function GenerationUI({
                               ease: "linear",
                             }}
                           >
-                            <Zap className='h-5 w-5 text-blue-600 dark:text-blue-400' />
+                            <HugeiconsIcon icon={ZapIcon} className='h-5 w-5 text-blue-600 dark:text-blue-400' />
                           </motion.div>
                         </div>
                         <div>
@@ -255,19 +242,19 @@ export function GenerationUI({
                       <div className='divide-border grid grid-cols-3 divide-x'>
                         {[
                           {
-                            icon: Terminal,
+                            icon: ComputerTerminal01Icon,
                             title: "Analyzing",
                             desc: "Processing request",
                             step: 1,
                           },
                           {
-                            icon: Layers,
+                            icon: Layers01Icon,
                             title: "Generating",
                             desc: "Creating files",
                             step: 2,
                           },
                           {
-                            icon: CheckCircle,
+                            icon: CheckmarkCircle02Icon,
                             title: "Finalizing",
                             desc: "Optimizing code",
                             step: 3,
@@ -298,7 +285,7 @@ export function GenerationUI({
                                         : "bg-muted-foreground/10"
                                   )}
                                 >
-                                  <step.icon
+                                  <HugeiconsIcon icon={step.icon}
                                     className={cn(
                                       "h-5 w-5 transition-colors",
                                       isComplete
@@ -339,7 +326,7 @@ export function GenerationUI({
                 className='space-y-6 text-center'
               >
                 <div className='bg-muted-foreground/10 mx-auto flex h-24 w-24 items-center justify-center rounded-full'>
-                  <Code2 className='text-muted-foreground h-12 w-12' />
+                  <HugeiconsIcon icon={SourceCodeIcon} className='text-muted-foreground h-12 w-12' />
                 </div>
                 <div className='space-y-2'>
                   <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
@@ -365,7 +352,7 @@ export function GenerationUI({
               <div className='border-border flex items-center justify-between border-b p-4'>
                 <div className='flex items-center gap-2'>
                   <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30'>
-                    <Layers className='h-4 w-4 text-blue-600 dark:text-blue-400' />
+                    <HugeiconsIcon icon={Layers01Icon} className='h-4 w-4 text-blue-600 dark:text-blue-400' />
                   </div>
                   <div>
                     <h3 className='text-muted-foreground font-medium'>
@@ -385,11 +372,11 @@ export function GenerationUI({
                     onClick={onNavigateToCode}
                     className='gap-1 bg-blue-600 text-white hover:bg-blue-700'
                   >
-                    <Code2 className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={SourceCodeIcon} className='h-3.5 w-3.5' />
                     <span>
                       <LocalizedText text={"View Code"} />
                     </span>
-                    <ArrowRight className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={ArrowRight02Icon} className='h-3.5 w-3.5' />
                   </Button>
                 )}
               </div>
@@ -410,14 +397,14 @@ export function GenerationUI({
                       >
                         {showAllFiles ? (
                           <>
-                            <ChevronUp className='h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={ArrowUp01Icon} className='h-3.5 w-3.5' />
                             <span>
                               <LocalizedText text={"Show Less"} />
                             </span>
                           </>
                         ) : (
                           <>
-                            <ChevronDown className='h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={ArrowDown01Icon} className='h-3.5 w-3.5' />
                             <span>
                               <LocalizedText text={"Show All"} />
                               {generatedFiles.length}{" "}

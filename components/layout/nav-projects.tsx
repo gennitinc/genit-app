@@ -18,13 +18,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  Folder,
-  Forward,
-  type LucideIcon,
-  MoreHorizontal,
-  Trash2,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { MoreHorizontalIcon, Folder01Icon, Forward01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 export function NavProjects({
@@ -33,7 +28,7 @@ export function NavProjects({
   projects: {
     name: string;
     url: string;
-    icon: LucideIcon;
+    icon: IconSvgElement;
   }[];
 }) {
   const { isMobile, state, setOpenMobile } = useSidebar();
@@ -62,7 +57,7 @@ export function NavProjects({
                 className='flex items-center'
                 onClick={handleLinkClick}
               >
-                <item.icon
+                <HugeiconsIcon icon={item.icon}
                   className={cn(state === "collapsed" ? "h-5 w-5" : "h-4 w-4")}
                 />
                 <span
@@ -83,7 +78,7 @@ export function NavProjects({
                   showOnHover
                   className={cn(state === "collapsed" && "hidden")}
                 >
-                  <MoreHorizontal />
+                  <HugeiconsIcon icon={MoreHorizontalIcon} />
                   <span className='sr-only'>
                     <LocalizedText text={"More"} />
                   </span>
@@ -95,20 +90,20 @@ export function NavProjects({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <Folder className='text-muted-foreground' />
+                  <HugeiconsIcon icon={Folder01Icon} className='text-muted-foreground' />
                   <span>
                     <LocalizedText text={"View Project"} />
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Forward className='text-muted-foreground' />
+                  <HugeiconsIcon icon={Forward01Icon} className='text-muted-foreground' />
                   <span>
                     <LocalizedText text={"Share Project"} />
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Trash2 className='text-muted-foreground' />
+                  <HugeiconsIcon icon={Delete02Icon} className='text-muted-foreground' />
                   <span>
                     <LocalizedText text={"Delete Project"} />
                   </span>
@@ -122,7 +117,7 @@ export function NavProjects({
             className='text-sidebar-foreground/70'
             tooltip={state === "collapsed" ? "More" : undefined}
           >
-            <MoreHorizontal
+            <HugeiconsIcon icon={MoreHorizontalIcon}
               className={cn(state === "collapsed" ? "h-5 w-5" : "h-4 w-4")}
             />
             <span

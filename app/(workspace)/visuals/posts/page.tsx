@@ -74,24 +74,8 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import {
-  BarChart3,
-  CalendarClock,
-  Edit3,
-  ExternalLink,
-  Eye,
-  FileText,
-  Heart,
-  type LucideIcon,
-  MessageCircle,
-  MoreHorizontal,
-  MousePointerClick,
-  Plus,
-  RefreshCw,
-  Search,
-  Share2,
-  Trash2,
-} from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { ViewIcon, FavouriteIcon, BubbleChatIcon, ChartColumnIcon, Share08Icon, Cursor02Icon, PlusSignIcon, Search01Icon, RefreshIcon, File02Icon, Calendar04Icon, MoreHorizontalIcon, PencilEdit01Icon, Delete02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import {
   Bar,
@@ -222,15 +206,15 @@ function PostMetrics({
   return (
     <div className='text-muted-foreground flex items-center gap-3 text-[10px]'>
       <span className='flex items-center gap-1' title='Views or impressions'>
-        <Eye className='h-3 w-3' />
+        <HugeiconsIcon icon={ViewIcon} className='h-3 w-3' />
         {compact(metrics.views || metrics.impressions)}
       </span>
       <span className='flex items-center gap-1' title='Likes'>
-        <Heart className='h-3 w-3' />
+        <HugeiconsIcon icon={FavouriteIcon} className='h-3 w-3' />
         {compact(metrics.likes)}
       </span>
       <span className='flex items-center gap-1' title='Comments'>
-        <MessageCircle className='h-3 w-3' />
+        <HugeiconsIcon icon={BubbleChatIcon} className='h-3 w-3' />
         {compact(metrics.comments)}
       </span>
       {loading && <LoadingFileLoader size={12} />}
@@ -767,38 +751,38 @@ export default function PostsPage() {
   const analyticsMetrics: Array<{
     label: string;
     value: number | undefined;
-    icon: LucideIcon;
+    icon: IconSvgElement;
   }> = [
     {
       label: "Impressions",
       value:
         detailMetrics?.impressions,
-      icon: Eye,
+      icon: ViewIcon,
     },
     {
       label: "Views",
       value: detailMetrics?.views,
-      icon: BarChart3,
+      icon: ChartColumnIcon,
     },
     {
       label: "Likes",
       value: detailMetrics?.likes,
-      icon: Heart,
+      icon: FavouriteIcon,
     },
     {
       label: "Comments",
       value: detailMetrics?.comments,
-      icon: MessageCircle,
+      icon: BubbleChatIcon,
     },
     {
       label: "Shares",
       value: detailMetrics?.shares,
-      icon: Share2,
+      icon: Share08Icon,
     },
     {
       label: "Clicks",
       value: detailMetrics?.clicks,
-      icon: MousePointerClick,
+      icon: Cursor02Icon,
     },
   ];
   const analyticsChartData = analyticsMetrics.map(({ label, value }) => ({
@@ -831,7 +815,7 @@ export default function PostsPage() {
               className='mt-4 flex h-9 w-fit items-center gap-2 rounded-md px-4 text-sm disabled:opacity-50'
             >
               <LocalizedText text={"New Post"} />
-              <Plus className='h-4 w-4' />
+              <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
             </Button>
           </div>
 
@@ -839,7 +823,7 @@ export default function PostsPage() {
             <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
               <div className='flex min-w-0 items-center gap-3'>
                 <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
-                  <BarChart3 className='h-4 w-4 text-zinc-500 dark:text-white/70' />
+                  <HugeiconsIcon icon={ChartColumnIcon} className='h-4 w-4 text-zinc-500 dark:text-white/70' />
                 </div>
                 <div className='min-w-0'>
                   <p className='truncate text-sm font-medium'>
@@ -922,7 +906,7 @@ export default function PostsPage() {
           </div>
           <div className='grid w-full grid-cols-[minmax(0,1fr)_auto] gap-2 md:flex md:w-auto'>
             <div className='relative col-span-2 md:col-span-1'>
-              <Search className='absolute top-3 left-3 h-4 w-4 text-zinc-400 dark:text-white/45' />
+              <HugeiconsIcon icon={Search01Icon} className='absolute top-3 left-3 h-4 w-4 text-zinc-400 dark:text-white/45' />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -959,7 +943,7 @@ export default function PostsPage() {
                   </div>
                 ) : (
                   <>
-                    <RefreshCw className='size-4' />{" "}
+                    <HugeiconsIcon icon={RefreshIcon} className='size-4' />{" "}
                   </>
                 )}
               </Button>
@@ -988,11 +972,11 @@ export default function PostsPage() {
           <div className='flex min-h-72 flex-col items-center justify-center px-6 text-center'>
             <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-white/[0.06]'>
               {view === "drafts" ? (
-                <FileText className='h-5 w-5 text-zinc-500 dark:text-white/50' />
+                <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               ) : view === "scheduled" ? (
-                <CalendarClock className='h-5 w-5 text-zinc-500 dark:text-white/50' />
+                <HugeiconsIcon icon={Calendar04Icon} className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               ) : (
-                <BarChart3 className='h-5 w-5 text-zinc-500 dark:text-white/50' />
+                <HugeiconsIcon icon={ChartColumnIcon} className='h-5 w-5 text-zinc-500 dark:text-white/50' />
               )}
             </div>
             <p className='mt-4 font-medium'>
@@ -1021,7 +1005,7 @@ export default function PostsPage() {
                 className='mt-5 rounded-md border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:hover:bg-white/10'
                 onClick={() => openCreate()}
               >
-                <Plus className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"New post"} />
               </Button>
             )}
@@ -1042,14 +1026,14 @@ export default function PostsPage() {
                         className='absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/55 text-zinc-800 shadow-[0_6px_20px_rgba(0,0,0,0.12)] backdrop-blur-xl transition hover:border-white/80 hover:bg-white/75 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] dark:border-white/15 dark:bg-black/40 dark:text-white dark:hover:border-white/25 dark:hover:bg-black/55'
                         aria-label='Post actions'
                       >
-                        <MoreHorizontal className='h-4 w-4' />
+                        <HugeiconsIcon icon={MoreHorizontalIcon} className='h-4 w-4' />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='min-w-36'>
                       {((!post.remote && post.status !== "published") ||
                         can(post, "updatePost")) && (
                         <DropdownMenuItem onSelect={() => openEdit(post)}>
-                          <Edit3 className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={PencilEdit01Icon} className='h-3.5 w-3.5' />
                           <LocalizedText text={"Edit"} />
                         </DropdownMenuItem>
                       )}
@@ -1058,7 +1042,7 @@ export default function PostsPage() {
                           onSelect={() => setDeleteTarget(post)}
                           className='text-red-600 focus:text-red-600'
                         >
-                          <Trash2 className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                           <LocalizedText text={"Delete"} />
                         </DropdownMenuItem>
                       )}
@@ -1126,7 +1110,7 @@ export default function PostsPage() {
                             className='flex items-center gap-1 text-[11px] font-semibold text-zinc-600 dark:text-white/70'
                           >
                             <LocalizedText text={"Comments"} />
-                            <MessageCircle className='h-3 w-3' />
+                            <HugeiconsIcon icon={BubbleChatIcon} className='h-3 w-3' />
                           </button>
                         )}
                         <button
@@ -1134,7 +1118,7 @@ export default function PostsPage() {
                           className='flex items-center gap-1 text-[11px] font-semibold text-sky-300'
                         >
                           <LocalizedText text={"Analytics"} />
-                          <BarChart3 className='h-3 w-3' />
+                          <HugeiconsIcon icon={ChartColumnIcon} className='h-3 w-3' />
                         </button>
                       </div>
                     </div>
@@ -1189,7 +1173,7 @@ export default function PostsPage() {
           <div className='relative z-10 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='flex items-start gap-4'>
               <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
-                <Trash2 className='h-5 w-5' />
+                <HugeiconsIcon icon={Delete02Icon} className='h-5 w-5' />
               </div>
               <div>
                 <DialogTitle className='text-foreground text-lg font-semibold tracking-tight dark:text-white'>
@@ -1258,7 +1242,7 @@ export default function PostsPage() {
           <DialogHeader className='relative border-b border-black/5 px-5 pt-4 pb-3 text-left dark:border-white/[0.05]'>
             <div className='flex items-center gap-2.5'>
               <span className='flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-300 ring-1 ring-sky-500/20'>
-                <BarChart3 className='h-4 w-4' />
+                <HugeiconsIcon icon={ChartColumnIcon} className='h-4 w-4' />
               </span>
               <div>
                 <DialogTitle className='text-foreground text-sm font-semibold dark:text-white'>
@@ -1441,7 +1425,7 @@ export default function PostsPage() {
                             >
                               <div className='text-muted-foreground flex items-center justify-between text-[11px]'>
                                 <span>{label}</span>
-                                <Icon className='h-3.5 w-3.5' />
+                                <HugeiconsIcon icon={Icon} className='h-3.5 w-3.5' />
                               </div>
                               <p className='text-foreground mt-1.5 text-lg font-semibold tracking-tight dark:text-white'>
                                 {compact(value || 0)}
@@ -1464,7 +1448,7 @@ export default function PostsPage() {
                 onClick={() => analyticsQuery.refetch()}
                 className='rounded-md border-none bg-transparent dark:hover:text-white'
               >
-                <RefreshCw className='h-4 w-4' />
+                <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
                 <LocalizedText text={"Refresh"} />
               </Button>
             ) : (
@@ -1478,7 +1462,7 @@ export default function PostsPage() {
                   rel='noreferrer'
                 >
                   <LocalizedText text={"View live post"} />
-                  <ExternalLink className='h-4 w-4' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='h-4 w-4' />
                 </a>
               </Button>
             )}

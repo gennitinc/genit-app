@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PauseIcon, PlayIcon, VolumeMute02Icon, VolumeHighIcon } from "@hugeicons/core-free-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 interface TestimonialContent {
@@ -219,9 +213,9 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
             aria-label={isVideoPlaying ? "Pause video" : "Play video"}
           >
             {isVideoPlaying ? (
-              <Pause className='h-5 w-5' />
+              <HugeiconsIcon icon={PauseIcon} className='h-5 w-5' />
             ) : (
-              <Play className='h-5 w-5' />
+              <HugeiconsIcon icon={PlayIcon} className='h-5 w-5' />
             )}
           </button>
           <button
@@ -230,9 +224,9 @@ export const AuthMediaCarousel: React.FC<AuthMediaCarouselProps> = ({
             aria-label={isMuted ? "Unmute" : "Mute"}
           >
             {isMuted ? (
-              <VolumeX className='h-5 w-5' />
+              <HugeiconsIcon icon={VolumeMute02Icon} className='h-5 w-5' />
             ) : (
-              <Volume2 className='h-5 w-5' />
+              <HugeiconsIcon icon={VolumeHighIcon} className='h-5 w-5' />
             )}
           </button>
         </div>

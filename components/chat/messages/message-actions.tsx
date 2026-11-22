@@ -7,7 +7,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Check, Copy, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, Copy01Icon, Delete02Icon, ThumbsUpIcon, ThumbsDownIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface MessageActionsProps {
@@ -65,9 +66,9 @@ export function MessageActions({
             disabled={copied}
           >
             {copied ? (
-              <Check className='h-4 w-4 text-green-500' />
+              <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className='h-4 w-4' />
+              <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
             )}
           </Button>
         </TooltipTrigger>
@@ -86,7 +87,7 @@ export function MessageActions({
               onClick={onDelete}
               disabled={disabled}
             >
-              <Trash2 className='h-4 w-4' />
+              <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -110,7 +111,7 @@ export function MessageActions({
             }`}
             onClick={handleLike}
           >
-            <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+            <HugeiconsIcon icon={ThumbsUpIcon} className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
@@ -130,7 +131,7 @@ export function MessageActions({
             }`}
             onClick={handleDislike}
           >
-            <ThumbsDown
+            <HugeiconsIcon icon={ThumbsDownIcon}
               className={`h-4 w-4 ${isDisliked ? "fill-current" : ""}`}
             />
           </Button>

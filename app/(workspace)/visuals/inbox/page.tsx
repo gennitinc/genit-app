@@ -17,6 +17,13 @@ import {
   XBrand,
 } from "@/app/(auth)/onboarding/_components/social-icons";
 import { ConnectDialog } from "@/app/integrations/_components/connect-dialog";
+import {
+  isNoInboxNote,
+  senderLogo,
+  syncedRecently,
+  syncIssue,
+  type SyncIssueKind,
+} from "@/lib/inbox-sync-messages";
 import { ManageDialog } from "@/app/integrations/_components/manage-dialog";
 import {
   INTEGRATIONS,
@@ -85,6 +92,7 @@ import {
   type InboxAttachment,
   type InboxConversation,
   type InboxFilters,
+  type InboxSyncResult,
   type UpdateConversationInput,
   type WhatsAppTemplate,
   downloadInboxAttachment,
@@ -107,43 +115,9 @@ import {
 } from "@/lib/integrations-api";
 import { LoadingFileLoader } from "@/utils/Loading";
 import DOMPurify from "dompurify";
-import {
-  Archive,
-  Ban,
-  BellOff,
-  Cable,
-  Check,
-  CheckCheck,
-  CheckCircle,
-  ChevronDown,
-  ChevronLeft,
-  Circle,
-  CircleFadingArrowUp,
-  Clock3,
-  Download,
-  Eraser,
-  Inbox,
-  ListFilter,
-  Loader2,
-  MessageSquare,
-  MoreHorizontal,
-  PanelRight,
-  Paperclip,
-  Pencil,
-  Phone,
-  Pin,
-  PinOff,
-  Plus,
-  RefreshCw,
-  Search,
-  Send,
-  Settings,
-  Shapes,
-  Smile,
-  Sparkles,
-  Trash2,
-  XCircle,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Message01Icon, ArrowLeft01Icon, ShapesIcon, CheckmarkCircle02Icon, InboxIcon, PlusSignIcon, FilterHorizontalIcon, Settings01Icon, TickDouble02Icon, RefreshIcon, ArchiveIcon, UsbConnected01Icon, ArrowDown01Icon, Search01Icon, MoreHorizontalIcon, Clock01Icon, CancelCircleIcon, Delete02Icon, CircleIcon, PinIcon, NotificationOff01Icon, UnavailableIcon, PinOffIcon, PanelRightIcon, Download01Icon, EraserIcon, Call02Icon, Tick02Icon, Attachment01Icon, PencilIcon, CircleArrowUp02Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -157,7 +131,6 @@ import {
   useRef,
   useState,
 } from "react";
-
 
 function ConversationListSkeleton() {
   return (
@@ -505,7 +478,7 @@ function PlatformIcon({
     case "slack":
       return <SlackBrand className={className} />;
     default:
-      return <MessageSquare className={className} />;
+      return <HugeiconsIcon icon={Message01Icon} className={className} />;
   }
 }
 
@@ -573,11 +546,12 @@ function CustomerAvatar({
 }) {
   return (
     <Avatar className={className}>
-      {conversation.customerAvatar && (
+      {/* Their photo, else their company's logo for business email, else the initial. */}
+      {(conversation.customerAvatar || senderLogo(conversation)) && (
         <AvatarImage
-          src={conversation.customerAvatar}
+          src={conversation.customerAvatar || senderLogo(conversation)}
           alt={conversation.customerName}
-          className='object-cover'
+          className='bg-white object-cover'
         />
       )}
       <AvatarFallback className='bg-zinc-100 text-sm font-semibold dark:bg-zinc-800'>
@@ -968,7 +942,14 @@ export default function InboxPage() {
     )
       return;
     initialSyncOrgRef.current = orgId;
-    syncMutation.mutate({ continueHistory: false });
+    // Opening the inbox again soon after a sync doesn't sync again (and run
+    // into provider rate limits).
+    if (syncedRecently(syncableAccounts, 5 * 60_000)) return;
+    syncMutation.mutate(
+      { continueHistory: false },
+      // Automatic syncs only raise what you can fix: a channel to reconnect.
+      { onSuccess: (results) => reportSyncIssues(results, true) }
+    );
   }, [integrationsLoading, orgId, syncableAccounts.length]);
 
   const providerHistoryKey = (
@@ -1015,6 +996,50 @@ export default function InboxPage() {
     urlStateReady,
   ]);
 
+  // One short toast per channel that didn't sync; a channel that needs
+  // reconnecting gets a Reconnect button. Automatic syncs skip passing hiccups.
+  const reportSyncIssues = (results: InboxSyncResult[], quiet: boolean) => {
+    const channel = (result: InboxSyncResult) => {
+      const account = integrations.find(
+        (item) => item._id === result.integrationId
+      );
+      const reported = result.platform.toLowerCase();
+      const platform = account
+        ? inboxPlatform(account)
+        : reported === "composio"
+          ? result.accountName.toLowerCase()
+          : reported;
+      const label = PLATFORM_LABELS[platform] || platform;
+      const name = result.accountName?.trim();
+      return name && name.toLowerCase() !== platform
+        ? `${label} (${name})`
+        : label;
+    };
+    const shown = new Set<string>();
+    for (const result of results) {
+      const raw =
+        result.error ||
+        (result.warning && !isNoInboxNote(result.warning)
+          ? result.warning
+          : "");
+      if (!raw) continue;
+      const issue = syncIssue(raw, channel(result));
+      const kind = (result.errorKind as SyncIssueKind | undefined) || issue.kind;
+      const message = result.errorKind ? raw : issue.message;
+      if ((quiet && kind !== "reconnect") || shown.has(message)) continue;
+      shown.add(message);
+      if (kind === "reconnect")
+        toast.error(message, {
+          duration: 10_000,
+          action: {
+            label: "Reconnect",
+            onClick: () => router.push("/integrations"),
+          },
+        });
+      else toast.warning(message);
+    }
+  };
+
   const syncChannels = (continueHistory = false) => {
     const selectedIsSyncable = Boolean(
       selectedAccount &&
@@ -1050,26 +1075,14 @@ export default function InboxPage() {
             0
           );
           const hasMore = results.some((result) => result.nextPageToken);
-          const failures = results.filter((result) => result.error);
-          const warnings = results.filter((result) => result.warning);
-          const failureMessage = failures
-            .map((result) => `${result.accountName}: ${result.error}`)
-            .join(" · ");
-          if (failures.length === results.length) toast.error(failureMessage);
-          else {
+          const failed = results.filter((result) => result.error).length;
+          if (failed < results.length)
             toast.success(
               continueHistory
                 ? `${threads} older conversations imported${hasMore ? ". Import again to continue." : ". History is up to date."}`
                 : `Inbox synchronized: ${threads} conversations checked`
             );
-            if (failures.length) toast.error(failureMessage);
-            if (warnings.length)
-              toast.warning(
-                warnings
-                  .map((result) => `${result.accountName}: ${result.warning}`)
-                  .join(" · ")
-              );
-          }
+          reportSyncIssues(results, false);
         },
         onError: (error: any) =>
           toast.error(
@@ -1429,7 +1442,7 @@ export default function InboxPage() {
             aria-label='Go back'
             title='Go back'
           >
-            <ChevronLeft className='h-5 w-5' />
+            <HugeiconsIcon icon={ArrowLeft01Icon} className='h-5 w-5' />
           </Button>
           <h1 className='text-foreground text-2xl font-bold tracking-tight'>
             <LocalizedText text={"Inbox"} />
@@ -1451,10 +1464,10 @@ export default function InboxPage() {
                     className='h-4 w-4'
                   />
                 ) : (
-                  <Shapes className='h-4 w-4' />
+                  <HugeiconsIcon icon={ShapesIcon} className='h-4 w-4' />
                 )}
                 {selectedAccountId !== "all" && (
-                  <CheckCircle className='absolute top-1 right-1 size-[12px] rounded-full bg-indigo-500' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='absolute top-1 right-1 size-[12px] rounded-full bg-indigo-500' />
                 )}
               </Button>
             </DropdownMenuTrigger>
@@ -1468,7 +1481,7 @@ export default function InboxPage() {
                 onValueChange={setSelectedAccountId}
               >
                 <DropdownMenuRadioItem value='all'>
-                  <Inbox className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={InboxIcon} className='mr-2 h-4 w-4' />
                   <span className='flex min-w-0 flex-col'>
                     <span>
                       <LocalizedText text={"All accounts"} />
@@ -1500,7 +1513,7 @@ export default function InboxPage() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href='/plugins'>
-                      <Plus className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Connect a channel"} />
                     </Link>
                   </DropdownMenuItem>
@@ -1518,7 +1531,7 @@ export default function InboxPage() {
                 aria-label='Conversation view options'
                 title='View options'
               >
-                <ListFilter className='h-4 w-4' />
+                <HugeiconsIcon icon={FilterHorizontalIcon} className='h-4 w-4' />
                 {(status !== "all" ||
                   sort !== "newest" ||
                   folder !== "inbox") && (
@@ -1616,7 +1629,7 @@ export default function InboxPage() {
                 aria-label='Inbox settings'
                 title='Inbox settings'
               >
-                <Settings className='h-4 w-4' />
+                <HugeiconsIcon icon={Settings01Icon} className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-52'>
@@ -1637,7 +1650,7 @@ export default function InboxPage() {
                 {markAllMutation.isPending ? (
                   <LoadingFileLoader size={20} />
                 ) : (
-                  <CheckCheck className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={TickDouble02Icon} className='mr-2 h-4 w-4' />
                 )}
                 <LocalizedText text={"Mark all read"} />
               </DropdownMenuItem>
@@ -1648,7 +1661,7 @@ export default function InboxPage() {
                 {syncMutation.isPending ? (
                   <LoadingFileLoader size={20} />
                 ) : (
-                  <RefreshCw className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={RefreshIcon} className='mr-2 h-4 w-4' />
                 )}
                 <LocalizedText text={"Sync connected channels"} />
               </DropdownMenuItem>
@@ -1656,12 +1669,12 @@ export default function InboxPage() {
                 disabled={!historyAccounts.length || syncMutation.isPending}
                 onSelect={() => syncChannels(true)}
               >
-                <Archive className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"Import older channel history"} />
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href='/plugins'>
-                  <Settings className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={Settings01Icon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Manage plugins"} />
                 </Link>
               </DropdownMenuItem>
@@ -1670,11 +1683,11 @@ export default function InboxPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className='rounded-md bg-indigo-600 px-3 text-white hover:bg-indigo-700 max-sm:size-9 max-sm:p-0'>
-                <Cable className='h-4 w-4 sm:hidden' />
+                <HugeiconsIcon icon={UsbConnected01Icon} className='h-4 w-4 sm:hidden' />
                 <span className='max-sm:sr-only'>
                   <LocalizedText text={"Channel"} />
                 </span>
-                <ChevronDown className='h-4 w-4 max-sm:hidden' />
+                <HugeiconsIcon icon={ArrowDown01Icon} className='h-4 w-4 max-sm:hidden' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-64'>
@@ -1709,15 +1722,15 @@ export default function InboxPage() {
                     }
                   >
                     <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black/5 ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10'>
-                      <Icon className='h-4 w-4' />
+                      <IconSourceView icon={Icon} className='h-4 w-4' />
                     </span>
                     <span className='min-w-0 flex-1 truncate font-medium'>
                       {integration.name}
                     </span>
                     {isConnected ? (
-                      <Settings className='text-muted-foreground h-4 w-4 shrink-0' />
+                      <HugeiconsIcon icon={Settings01Icon} className='text-muted-foreground h-4 w-4 shrink-0' />
                     ) : (
-                      <Plus className='text-muted-foreground h-4 w-4 shrink-0' />
+                      <HugeiconsIcon icon={PlusSignIcon} className='text-muted-foreground h-4 w-4 shrink-0' />
                     )}
                   </DropdownMenuItem>
                 );
@@ -1734,7 +1747,7 @@ export default function InboxPage() {
           <div className='border-b border-black/5 px-4 py-2 dark:border-white/10'>
             <div className='flex items-center gap-2'>
               <div className='relative min-w-0 flex-1'>
-                <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+                <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
                 <Input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
@@ -1752,7 +1765,7 @@ export default function InboxPage() {
                 aria-label='Start a conversation'
                 title='Start a conversation'
               >
-                <Plus className='h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
               </Button>
 
               {/* {isFetching && (
@@ -1794,41 +1807,41 @@ export default function InboxPage() {
                       className='ml-auto shrink-0 rounded-xl'
                       disabled={bulkBusy}
                     >
-                      <MoreHorizontal className='mr-1.5 h-4 w-4' />
+                      <HugeiconsIcon icon={MoreHorizontalIcon} className='mr-1.5 h-4 w-4' />
                       <LocalizedText text={"More"} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-56'>
                     <DropdownMenuItem onSelect={() => runBulkAction("read")}>
-                      <CheckCheck className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={TickDouble02Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Mark as read"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => runBulkAction("open")}>
-                      <Inbox className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={InboxIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Mark open"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onSelect={() => runBulkAction("resolved")}
                     >
-                      <CheckCircle className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={CheckmarkCircle02Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Resolve"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => runBulkAction("snoozed")}>
-                      <Clock3 className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Clock01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Snooze"} />
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onSelect={() => setSelectedConversationIds(new Set())}
                     >
-                      <XCircle className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={CancelCircleIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Cancel selection"} />
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className='text-red-600 focus:text-red-600'
                       onSelect={() => setBulkDeleteOpen(true)}
                     >
-                      <Trash2 className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Delete selected"} />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -1843,7 +1856,7 @@ export default function InboxPage() {
             ) : conversations.length === 0 ? (
               <div className='flex h-full min-h-72 flex-col items-center justify-center px-8 text-center'>
                 <span className='mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900'>
-                  <Inbox className='text-muted-foreground h-6 w-6' />
+                  <HugeiconsIcon icon={InboxIcon} className='text-muted-foreground h-6 w-6' />
                 </span>
                 <h3 className='text-sm font-semibold'>
                   <LocalizedText text={"No conversations here"} />
@@ -1930,24 +1943,24 @@ export default function InboxPage() {
                             )}
                           </span>
                           <span className='text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px] capitalize'>
-                            <Circle
+                            <HugeiconsIcon icon={CircleIcon}
                               className={`h-1.5 w-1.5 fill-current ${conversation.status === "open" ? "text-indigo-500" : conversation.status === "snoozed" ? "text-amber-500" : "text-zinc-400"}`}
                             />
                             {conversation.status}
                             {conversation.isPinned && (
-                              <Pin
+                              <HugeiconsIcon icon={PinIcon}
                                 className='ml-1 h-3 w-3'
                                 aria-label='Pinned'
                               />
                             )}
                             {conversation.isMuted && (
-                              <BellOff
+                              <HugeiconsIcon icon={NotificationOff01Icon}
                                 className='ml-1 h-3 w-3'
                                 aria-label='Muted'
                               />
                             )}
                             {conversation.isBlocked && (
-                              <Ban
+                              <HugeiconsIcon icon={UnavailableIcon}
                                 className='ml-1 h-3 w-3 text-red-500'
                                 aria-label='Blocked'
                               />
@@ -1962,7 +1975,7 @@ export default function InboxPage() {
                           toggleConversationSelection(conversation._id)
                         }
                       >
-                        <CheckCircle className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} className='mr-2 h-4 w-4' />
                         {selectedConversationIds.has(conversation._id)
                           ? "Deselect"
                           : "Select"}
@@ -1973,7 +1986,7 @@ export default function InboxPage() {
                           markReadMutation.mutate(conversation._id)
                         }
                       >
-                        <CheckCheck className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={TickDouble02Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Mark as read"} />
                       </ContextMenuItem>
                       <ContextMenuSeparator />
@@ -1996,7 +2009,7 @@ export default function InboxPage() {
                           )
                         }
                       >
-                        <Archive className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-4 w-4' />
                         {conversation.status === "resolved"
                           ? "Unarchive"
                           : "Archive"}
@@ -2011,9 +2024,9 @@ export default function InboxPage() {
                         }
                       >
                         {conversation.isPinned ? (
-                          <PinOff className='mr-2 h-4 w-4' />
+                          <HugeiconsIcon icon={PinOffIcon} className='mr-2 h-4 w-4' />
                         ) : (
-                          <Pin className='mr-2 h-4 w-4' />
+                          <HugeiconsIcon icon={PinIcon} className='mr-2 h-4 w-4' />
                         )}
                         {conversation.isPinned ? "Unpin" : "Pin"}
                       </ContextMenuItem>
@@ -2026,7 +2039,7 @@ export default function InboxPage() {
                           )
                         }
                       >
-                        <Ban className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={UnavailableIcon} className='mr-2 h-4 w-4' />
                         <span className='truncate'>
                           {conversation.isBlocked ? "Unblock" : "Block"}{" "}
                           {conversation.customerName}
@@ -2041,7 +2054,7 @@ export default function InboxPage() {
                           )
                         }
                       >
-                        <BellOff className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={NotificationOff01Icon} className='mr-2 h-4 w-4' />
                         {conversation.isMuted ? "Unmute" : "Mute"}
                       </ContextMenuItem>
                       <ContextMenuSeparator />
@@ -2051,26 +2064,26 @@ export default function InboxPage() {
                           setShowDetails(true);
                         }}
                       >
-                        <PanelRight className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={PanelRightIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Contact details"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         onSelect={() => void exportChat(conversation)}
                       >
-                        <Download className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Export chat"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         onSelect={() => setClearTarget(conversation)}
                       >
-                        <Eraser className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={EraserIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Clear chat"} />
                       </ContextMenuItem>
                       <ContextMenuItem
                         className='text-red-600 focus:text-red-600'
                         onSelect={() => setDeleteTarget(conversation)}
                       >
-                        <Trash2 className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Delete conversation"} />
                       </ContextMenuItem>
                     </ContextMenuContent>
@@ -2139,7 +2152,7 @@ export default function InboxPage() {
                     className='shrink-0 rounded-full xl:hidden'
                     onClick={() => setActiveId(null)}
                   >
-                    <ChevronLeft className='h-5 w-5' />
+                    <HugeiconsIcon icon={ArrowLeft01Icon} className='h-5 w-5' />
                   </Button>
                   <button
                     type='button'
@@ -2190,7 +2203,7 @@ export default function InboxPage() {
                       onClick={() => setShowCallDialog(true)}
                       aria-label={`Call ${activeConversation.customerName}`}
                     >
-                      <Phone className='h-5 w-5' />
+                      <HugeiconsIcon icon={Call02Icon} className='h-5 w-5' />
                     </Button>
                   )}
                   <Button
@@ -2200,7 +2213,7 @@ export default function InboxPage() {
                     onClick={() => setShowDetails(true)}
                     aria-label='View contact details'
                   >
-                    <PanelRight className='h-5 w-5' />
+                    <HugeiconsIcon icon={PanelRightIcon} className='h-5 w-5' />
                   </Button>
                   {activeConversation.status === "resolved" ? (
                     <Button
@@ -2210,7 +2223,7 @@ export default function InboxPage() {
                       disabled={statusMutation.isPending}
                       onClick={() => changeStatus("open")}
                     >
-                      <Archive className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Reopen"} />
                     </Button>
                   ) : (
@@ -2221,7 +2234,7 @@ export default function InboxPage() {
                       disabled={statusMutation.isPending}
                       onClick={() => changeStatus("resolved")}
                     >
-                      <Check className='mr-2 h-4 w-4' />
+                      <HugeiconsIcon icon={Tick02Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Resolve"} />
                     </Button>
                   )}
@@ -2232,24 +2245,24 @@ export default function InboxPage() {
                         size='icon'
                         className='rounded-full'
                       >
-                        <MoreHorizontal className='h-5 w-5' />
+                        <HugeiconsIcon icon={MoreHorizontalIcon} className='h-5 w-5' />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='w-56'>
                       <DropdownMenuItem onSelect={() => changeStatus("open")}>
-                        <Inbox className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={InboxIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Mark open"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => changeStatus("snoozed")}
                       >
-                        <Clock3 className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Clock01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Snooze"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => changeStatus("resolved")}
                       >
-                        <Check className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Tick02Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Resolve"} />
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -2263,9 +2276,9 @@ export default function InboxPage() {
                         }
                       >
                         {activeConversation.isPinned ? (
-                          <PinOff className='mr-2 h-4 w-4' />
+                          <HugeiconsIcon icon={PinOffIcon} className='mr-2 h-4 w-4' />
                         ) : (
-                          <Pin className='mr-2 h-4 w-4' />
+                          <HugeiconsIcon icon={PinIcon} className='mr-2 h-4 w-4' />
                         )}
                         {activeConversation.isPinned ? "Unpin" : "Pin"}
                       </DropdownMenuItem>
@@ -2278,7 +2291,7 @@ export default function InboxPage() {
                           )
                         }
                       >
-                        <Ban className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={UnavailableIcon} className='mr-2 h-4 w-4' />
                         {activeConversation.isBlocked ? "Unblock" : "Block"}
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -2290,31 +2303,31 @@ export default function InboxPage() {
                           )
                         }
                       >
-                        <BellOff className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={NotificationOff01Icon} className='mr-2 h-4 w-4' />
                         {activeConversation.isMuted ? "Unmute" : "Mute"}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onSelect={() => setShowDetails(true)}>
-                        <PanelRight className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={PanelRightIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Contact details"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => void exportChat(activeConversation)}
                       >
-                        <Download className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Export chat"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => setClearTarget(activeConversation)}
                       >
-                        <Eraser className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={EraserIcon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Clear chat"} />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className='text-red-600 focus:text-red-600'
                         onSelect={() => setDeleteTarget(activeConversation)}
                       >
-                        <Trash2 className='mr-2 h-4 w-4' />
+                        <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
                         <LocalizedText text={"Delete conversation"} />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -2376,7 +2389,7 @@ export default function InboxPage() {
                                       }
                                       className='flex w-full items-center gap-2 px-4 py-3 text-left font-medium underline underline-offset-2'
                                     >
-                                      <Paperclip className='h-4 w-4' />
+                                      <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                                       {attachment.name}
                                     </button>
                                   ) : attachment.mimeType ===
@@ -2422,7 +2435,7 @@ export default function InboxPage() {
                                       rel='noreferrer'
                                       className='flex items-center gap-2 px-4 py-3 font-medium underline underline-offset-2'
                                     >
-                                      <Paperclip className='h-4 w-4' />
+                                      <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                                       {attachment.name}
                                     </a>
                                   )}
@@ -2453,7 +2466,7 @@ export default function InboxPage() {
                                       className='h-7 w-7 shrink-0 rounded-full opacity-100 sm:opacity-0 sm:group-hover/message:opacity-100'
                                       aria-label='Message actions'
                                     >
-                                      <MoreHorizontal className='h-4 w-4' />
+                                      <HugeiconsIcon icon={MoreHorizontalIcon} className='h-4 w-4' />
                                     </Button>
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent
@@ -2484,7 +2497,7 @@ export default function InboxPage() {
                                           );
                                       }}
                                     >
-                                      <Pencil className='mr-2 h-4 w-4' />{" "}
+                                      <HugeiconsIcon icon={PencilIcon} className='mr-2 h-4 w-4' />{" "}
                                       <LocalizedText text={"Edit"} />
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
@@ -2497,7 +2510,7 @@ export default function InboxPage() {
                                         })
                                       }
                                     >
-                                      <Trash2 className='mr-2 h-4 w-4' />{" "}
+                                      <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />{" "}
                                       <LocalizedText text={"Delete"} />
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
@@ -2519,12 +2532,12 @@ export default function InboxPage() {
                                     })
                                   }
                                 >
-                                  <RefreshCw className='h-3 w-3' />
+                                  <HugeiconsIcon icon={RefreshIcon} className='h-3 w-3' />
                                   <LocalizedText text={"Retry"} />
                                 </button>
                               ) : (
                                 <>
-                                  <CheckCheck className='h-3 w-3' />
+                                  <HugeiconsIcon icon={TickDouble02Icon} className='h-3 w-3' />
                                   {message.status}
                                 </>
                               ))}
@@ -2548,7 +2561,7 @@ export default function InboxPage() {
               <div className='bg-background/85 border-border/60 relative z-20 shrink-0 border-t p-2 backdrop-blur-xl'>
                 {activeConversation.isBlocked ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
-                    <Ban className='h-4 w-4 text-red-500' />
+                    <HugeiconsIcon icon={UnavailableIcon} className='h-4 w-4 text-red-500' />
                     <LocalizedText text={"This contact is blocked."} />{" "}
                     <button
                       className='font-semibold text-indigo-700 hover:underline dark:text-indigo-400'
@@ -2565,7 +2578,7 @@ export default function InboxPage() {
                   </div>
                 ) : activeConversation.status === "resolved" ? (
                   <div className='text-muted-foreground flex items-center justify-center gap-2 rounded-lg bg-zinc-100 p-4 text-sm dark:bg-zinc-900'>
-                    <Check className='h-4 w-4' />
+                    <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4' />
                     <LocalizedText
                       text={"This conversation is resolved."}
                     />{" "}
@@ -2681,7 +2694,7 @@ export default function InboxPage() {
                             ) : (
                               <>
                                 <span className='bg-muted/70 text-muted-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-lg'>
-                                  <Paperclip className='h-4 w-4' />
+                                  <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                                 </span>
                                 <span className='text-muted-foreground max-w-28 truncate pr-5 text-[11px]'>
                                   {attachment.name}
@@ -2699,7 +2712,7 @@ export default function InboxPage() {
                               className='absolute top-1 right-1 rounded-full bg-black/60 text-white shadow-sm backdrop-blur-md transition-transform duration-150 ease-out active:scale-95'
                               aria-label={`Remove ${attachment.name}`}
                             >
-                              <XCircle className='h-4 w-4' strokeWidth={2} />
+                              <HugeiconsIcon icon={CancelCircleIcon} className='h-4 w-4' strokeWidth={2} />
                             </button>
                           </div>
                         ))}
@@ -2750,7 +2763,7 @@ export default function InboxPage() {
                           {isUploading ? (
                             <LoadingFileLoader size={20} />
                           ) : (
-                            <Paperclip className='h-4 w-4' />
+                            <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                           )}
                         </Button>
                         <EmojiPickerButton
@@ -2768,7 +2781,7 @@ export default function InboxPage() {
                           {isWriting ? (
                             <LoadingFileLoader size={20} />
                           ) : (
-                            <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-3.5 w-3.5' />
                           )}
                           <LocalizedText text={"AI"} />
                         </Button>

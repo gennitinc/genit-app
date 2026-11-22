@@ -21,27 +21,9 @@ import { Switch } from "@/components/ui/switch";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Bot,
-  CircleDashed,
-  CircleFadingArrowUp,
-  Clock,
-  Code2,
-  GitBranch,
-  Globe,
-  Mail,
-  Play,
-  Plus,
-  Search,
-  Sliders,
-  Sparkles,
-  Trash2,
-  Upload,
-  Webhook,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Clock01Icon, WebhookIcon, PlayIcon, Mail01Icon, GlobeIcon, SlidersVerticalIcon, BotIcon, SparklesIcon, CircleArrowUp02Icon, GitBranchIcon, SourceCodeIcon, Upload01Icon, WorkflowSquare10Icon, DashedLineCircleIcon, Search01Icon, PlusSignIcon, Delete02Icon, ArrowUpRight01Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -77,11 +59,11 @@ function getNodeIconAndName(node: any) {
     const triggerType = data.triggerType || "";
     switch (triggerType) {
       case "schedule":
-        return { IconComponent: Clock, label: "Schedule" };
+        return { IconComponent: Clock01Icon, label: "Schedule" };
       case "webhook":
-        return { IconComponent: Webhook, label: "Webhook" };
+        return { IconComponent: WebhookIcon, label: "Webhook" };
       case "manual":
-        return { IconComponent: Play, label: "Manual" };
+        return { IconComponent: PlayIcon, label: "Manual" };
       case "instagram":
         return { IconComponent: InstagramBrand, label: "Instagram" };
       case "facebook":
@@ -106,7 +88,7 @@ function getNodeIconAndName(node: any) {
       case "brevo":
         return { IconComponent: BrevoBrand, label: "Brevo" };
       default:
-        return { IconComponent: Webhook, label: "Trigger" };
+        return { IconComponent: WebhookIcon, label: "Trigger" };
     }
   }
 
@@ -114,9 +96,9 @@ function getNodeIconAndName(node: any) {
     const actionType = data.actionType || "";
     switch (actionType) {
       case "send_email":
-        return { IconComponent: Mail, label: "Email" };
+        return { IconComponent: Mail01Icon, label: "Email" };
       case "post_social":
-        return { IconComponent: Globe, label: "Post" };
+        return { IconComponent: GlobeIcon, label: "Post" };
       default:
         if (data.platform) {
           return getNodeIconAndName({
@@ -124,33 +106,33 @@ function getNodeIconAndName(node: any) {
             data: { triggerType: data.platform },
           });
         }
-        return { IconComponent: Sliders, label: "Action" };
+        return { IconComponent: SlidersVerticalIcon, label: "Action" };
     }
   }
 
   if (type === "prompt") {
-    return { IconComponent: Bot, label: "AI Prompt" };
+    return { IconComponent: BotIcon, label: "AI Prompt" };
   }
   if (type === "ai_generate") {
-    return { IconComponent: Sparkles, CircleFadingArrowUp, label: "AI Gen" };
+    return { IconComponent: SparklesIcon, CircleFadingArrowUp: CircleArrowUp02Icon, label: "AI Gen" };
   }
   if (type === "condition") {
-    return { IconComponent: GitBranch, label: "Condition" };
+    return { IconComponent: GitBranchIcon, label: "Condition" };
   }
   if (type === "delay") {
-    return { IconComponent: Clock, label: "Delay" };
+    return { IconComponent: Clock01Icon, label: "Delay" };
   }
   if (type === "transform") {
-    return { IconComponent: Code2, label: "Transform" };
+    return { IconComponent: SourceCodeIcon, label: "Transform" };
   }
   if (type === "http_request") {
-    return { IconComponent: Globe, label: "API Call" };
+    return { IconComponent: GlobeIcon, label: "API Call" };
   }
   if (type === "upload") {
-    return { IconComponent: Upload, label: "Upload" };
+    return { IconComponent: Upload01Icon, label: "Upload" };
   }
 
-  return { IconComponent: Workflow, label: type || "Step" };
+  return { IconComponent: WorkflowSquare10Icon, label: type || "Step" };
 }
 
 const getPipelineNodes = (document?: AutomationDocument) => {
@@ -214,7 +196,7 @@ const TEMPLATES = [
       "Generate and schedule posts to Instagram, X, and LinkedIn automatically when new content is ready.",
     prompt:
       "Create a brand automation workflow that triggers on a content approval event, uses AI to generate customized image posts and captions for Instagram, X, and LinkedIn, and auto-schedules them.",
-    icon: Globe,
+    icon: GlobeIcon,
     badge: "Social Media",
   },
   {
@@ -223,7 +205,7 @@ const TEMPLATES = [
       "Capture new leads from your webhook, delay for a custom grace period, then send a tailored email with Brevo.",
     prompt:
       "Create a lead nurturing workflow that triggers when a webhook receives new sign-up data, delays for 15 minutes, generates a personalized onboarding email template, and sends it using Brevo.",
-    icon: Mail,
+    icon: Mail01Icon,
     badge: "Email Marketing",
   },
   {
@@ -232,8 +214,8 @@ const TEMPLATES = [
       "Auto-extract transcripts from YouTube videos to write scripts, summaries, and social promo threads.",
     prompt:
       "Create a content repurposing workflow that triggers on YouTube video uploads, calls the video transcript analyzer, generates a short thread post for X, and saves it in a brand folder.",
-    icon: CircleDashed,
-    CircleFadingArrowUp,
+    icon: DashedLineCircleIcon,
+    CircleFadingArrowUp: CircleArrowUp02Icon,
     badge: "AI Workflow",
   },
 ];
@@ -489,7 +471,7 @@ export default function AutomationPage() {
             </p>
             <div className='mt-4 flex w-full max-w-xl items-center gap-2'>
               <div className='relative min-w-0 flex-1 sm:max-w-64'>
-                <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
+                <HugeiconsIcon icon={Search01Icon} className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-400 dark:text-white/45' />
                 <Input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -501,7 +483,7 @@ export default function AutomationPage() {
                 onClick={() => handleCreate()}
                 className='h-9 shrink-0 gap-2 rounded-xl px-4'
               >
-                <Plus className='h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                 <span className=''>
                   <LocalizedText text={"New"} />
                 </span>
@@ -514,7 +496,7 @@ export default function AutomationPage() {
               <div className='flex items-center justify-between gap-3 border-b border-zinc-200 pb-3 dark:border-white/10'>
                 <div className='flex min-w-0 items-center gap-3'>
                   <div className='flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10'>
-                    <Workflow className='h-4 w-4 text-zinc-500 dark:text-white/70' />
+                    <HugeiconsIcon icon={WorkflowSquare10Icon} className='h-4 w-4 text-zinc-500 dark:text-white/70' />
                   </div>
                   <div className='min-w-0'>
                     <p className='truncate text-sm font-medium'>
@@ -561,7 +543,7 @@ export default function AutomationPage() {
       ) : visibleAutomations.length === 0 ? (
         <div className='flex min-h-72 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-white px-6 py-10 text-center dark:border-white/10 dark:bg-white/[0.035]'>
           <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-white/[0.06] dark:text-white/50'>
-            <Workflow className='h-5 w-5' />
+            <HugeiconsIcon icon={WorkflowSquare10Icon} className='h-5 w-5' />
           </div>
           <h2 className='text-sm font-semibold'>
             {query ? "No automations found" : "Build your first automation"}
@@ -576,7 +558,7 @@ export default function AutomationPage() {
               onClick={() => handleCreate()}
               className='mt-5 gap-2 rounded-xl px-5 text-xs'
             >
-              <Plus className='h-3.5 w-3.5' />
+              <HugeiconsIcon icon={PlusSignIcon} className='h-3.5 w-3.5' />
               <LocalizedText text={"Create automation"} />
             </Button>
           )}
@@ -645,7 +627,7 @@ export default function AutomationPage() {
                                 title={label}
                                 className='flex h-7 w-7 items-center justify-center rounded-lg bg-white text-zinc-600 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-white/70 dark:ring-0'
                               >
-                                <IconComponent className='h-3.5 w-3.5' />
+                                <IconSourceView icon={IconComponent} className='h-3.5 w-3.5' />
                               </div>
                               <span className='max-w-[48px] truncate text-center text-[8px] text-zinc-500 dark:text-white/40'>
                                 {label}
@@ -691,7 +673,7 @@ export default function AutomationPage() {
                       {isBusy ? (
                         <LoadingFileLoader size={20} />
                       ) : (
-                        <Trash2 className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                       )}
                     </button>
                   </div>
@@ -707,7 +689,7 @@ export default function AutomationPage() {
                     <span>
                       <LocalizedText text={"Configure"} />
                     </span>
-                    <ArrowUpRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
+                    <HugeiconsIcon icon={ArrowUpRight01Icon} className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
                   </Button>
                 </div>
               </article>
@@ -747,7 +729,7 @@ export default function AutomationPage() {
               >
                 <div className='mb-3 flex items-center gap-2'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-white text-zinc-600 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-white/70 dark:ring-0'>
-                    <IconComponent className='h-4 w-4' />
+                    <HugeiconsIcon icon={IconComponent} className='h-4 w-4' />
                   </div>
                   <span className='rounded-md bg-zinc-200/70 px-2 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-white/10 dark:text-white/50'>
                     {tmpl.badge}
@@ -765,7 +747,7 @@ export default function AutomationPage() {
                     className='group rounded-lg px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60'
                   >
                     <span>Use Template</span>
-                    <ArrowRight className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-1' />
+                    <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4 transition-transform duration-200 group-hover:translate-x-1' />
                   </Button>
                 </div>
               </div>

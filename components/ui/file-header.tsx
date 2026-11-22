@@ -7,7 +7,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Copy, Download } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Copy01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 
 interface FileHeaderProps {
@@ -56,7 +57,7 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
                 onClick={handleCopy}
                 className='h-6 w-6 p-0'
               >
-                <Copy className='h-3 w-3' />
+                <HugeiconsIcon icon={Copy01Icon} className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -71,7 +72,7 @@ export function FileHeader({ fileName, content }: FileHeaderProps) {
                 onClick={handleDownload}
                 className='h-6 w-6 p-0'
               >
-                <Download className='h-3 w-3' />
+                <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
               </Button>
             </TooltipTrigger>
             <TooltipContent>

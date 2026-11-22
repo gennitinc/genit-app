@@ -17,7 +17,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import { ArrowRight, FileText, Paperclip, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, Attachment01Icon, Cancel01Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
@@ -492,7 +493,7 @@ export default function FeedbackPage() {
                         {supportFile ? (
                           <div className='flex flex-col items-center px-4'>
                             <div className='flex items-center gap-2'>
-                              <FileText className='size-5 text-neutral-900 dark:text-white' />
+                              <HugeiconsIcon icon={File02Icon} className='size-5 text-neutral-900 dark:text-white' />
                               <span className='max-w-[260px] truncate text-sm font-semibold text-neutral-900 dark:text-white'>
                                 {supportFile.name}
                               </span>
@@ -503,7 +504,7 @@ export default function FeedbackPage() {
                           </div>
                         ) : (
                           <div className='flex flex-col items-center gap-1.5 text-neutral-500 dark:text-neutral-400'>
-                            <Paperclip className='size-5' />
+                            <HugeiconsIcon icon={Attachment01Icon} className='size-5' />
                             <span className='text-xs font-medium'>
                               <LocalizedText
                                 text={
@@ -531,7 +532,7 @@ export default function FeedbackPage() {
                             className='absolute top-3 right-3 rounded-full border border-neutral-200 bg-white p-1 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                             title='Remove file'
                           >
-                            <X className='size-3.5' />
+                            <HugeiconsIcon icon={Cancel01Icon} className='size-3.5' />
                           </button>
                         )}
                       </div>
@@ -548,7 +549,7 @@ export default function FeedbackPage() {
                     ) : (
                       <div className='flex items-center justify-center gap-2'>
                         <LocalizedText text={"Submit Support Ticket"} />
-                        <ArrowRight className='size-4' />
+                        <HugeiconsIcon icon={ArrowRight02Icon} className='size-4' />
                       </div>
                     )}
                   </Button>
@@ -658,7 +659,7 @@ export default function FeedbackPage() {
                     ) : (
                       <div className='flex items-center justify-center gap-2'>
                         <LocalizedText text={"Submit Feature Suggestion"} />
-                        <ArrowRight className='size-4' />
+                        <HugeiconsIcon icon={ArrowRight02Icon} className='size-4' />
                       </div>
                     )}
                   </Button>

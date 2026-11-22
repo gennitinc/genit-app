@@ -7,7 +7,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { Icon } from "@iconify/react";
-import { Download, Loader2, Palette, Search, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PaintBoardIcon, Cancel01Icon, Search01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // Popular icons to show initially (format: "icon-set:icon-name")
@@ -382,7 +383,7 @@ export function IconLibrary({
           <div className='mb-4 flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/10 dark:bg-orange-500/10'>
-                <Palette className='h-5 w-5 text-orange-500 dark:text-orange-400' />
+                <HugeiconsIcon icon={PaintBoardIcon} className='h-5 w-5 text-orange-500 dark:text-orange-400' />
               </div>
               <div>
                 <h3 className='text-foreground text-sm font-semibold'>
@@ -402,7 +403,7 @@ export function IconLibrary({
                 onClick={onClose}
                 className='hover:bg-muted text-muted-foreground hover:text-foreground h-6 w-6 p-0'
               >
-                <X className='h-3 w-3' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
               </Button>
             )}
           </div>
@@ -413,7 +414,7 @@ export function IconLibrary({
       <div className='flex-shrink-0 p-4 pb-0'>
         {/* Search */}
         <div className='relative mb-4'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
           <Input
             type='text'
             placeholder='Search 200,000+ icons...'
@@ -475,7 +476,7 @@ export function IconLibrary({
               size='sm'
               className='h-8 w-full text-xs'
             >
-              <Download className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={Download01Icon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Insert Icon"} />
             </Button>
           </div>

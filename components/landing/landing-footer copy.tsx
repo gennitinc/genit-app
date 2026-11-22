@@ -21,23 +21,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUp,
-  ChevronRight,
-  Facebook,
-  Github,
-  Globe,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Moon,
-  Phone,
-  Sun,
-  Twitter,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUp02Icon, ArrowRight01Icon, MoonIcon, Sun01Icon, GlobeIcon, MapPinIcon, Mail01Icon, Facebook01Icon, TwitterIcon, Linkedin01Icon, YoutubeIcon, GithubIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import type React from "react";
@@ -122,7 +107,7 @@ export function LandingFooter() {
                 variant='secondary'
                 className='hover:text-primary-foreground rounded-full shadow-lg transition-all duration-300 hover:bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl'
               >
-                <ArrowUp className='h-5 w-5' />
+                <HugeiconsIcon icon={ArrowUp02Icon} className='h-5 w-5' />
                 <span className='sr-only'>Back to top</span>
               </Button>
             </TooltipTrigger>
@@ -161,7 +146,7 @@ export function LandingFooter() {
                 />
               </div>
               <Button type='submit' size='lg' className='btn-gradient'>
-                Subscribe <ChevronRight className='ml-2 h-4 w-4' />
+                Subscribe <HugeiconsIcon icon={ArrowRight01Icon} className='ml-2 h-4 w-4' />
               </Button>
             </form>
           </div>
@@ -198,9 +183,9 @@ export function LandingFooter() {
                 />
                 <Label htmlFor='theme-mode' className='cursor-pointer'>
                   {theme === "dark" ? (
-                    <Moon className='h-4 w-4' />
+                    <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
                   ) : (
-                    <Sun className='h-4 w-4' />
+                    <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
                   )}
                 </Label>
               </div>
@@ -209,7 +194,7 @@ export function LandingFooter() {
 
               <Select defaultValue='en'>
                 <SelectTrigger className='h-8 w-[110px] text-xs'>
-                  <Globe className='mr-2 h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={GlobeIcon} className='mr-2 h-3.5 w-3.5' />
                   <SelectValue placeholder='Language' />
                 </SelectTrigger>
                 <SelectContent>
@@ -224,7 +209,7 @@ export function LandingFooter() {
 
             <div className='space-y-4'>
               <div className='flex items-start space-x-3'>
-                <MapPin className='text-primary mt-0.5 h-5 w-5' />
+                <HugeiconsIcon icon={MapPinIcon} className='text-primary mt-0.5 h-5 w-5' />
                 <span className='text-muted-foreground text-sm'>
                   123 Innovation Drive, Tech City, TC 10101
                 </span>
@@ -236,7 +221,7 @@ export function LandingFooter() {
                 </span>
               </div> */}
               <div className='flex items-center space-x-3'>
-                <Mail className='text-primary h-5 w-5' />
+                <HugeiconsIcon icon={Mail01Icon} className='text-primary h-5 w-5' />
                 <span className='text-muted-foreground text-sm'>
                   contact@genit.com
                 </span>
@@ -245,12 +230,12 @@ export function LandingFooter() {
 
             <div className='flex w-full flex-wrap gap-3'>
               {[
-                { icon: Facebook, label: "Facebook" },
+                { icon: Facebook01Icon, label: "Facebook" },
                 // { icon: Instagram, label: "Instagram" },
-                { icon: Twitter, label: "Twitter" },
-                { icon: Linkedin, label: "LinkedIn" },
-                { icon: Youtube, label: "YouTube" },
-                { icon: Github, label: "GitHub" },
+                { icon: TwitterIcon, label: "Twitter" },
+                { icon: Linkedin01Icon, label: "LinkedIn" },
+                { icon: YoutubeIcon, label: "YouTube" },
+                { icon: GithubIcon, label: "GitHub" },
               ].map((social) => (
                 <TooltipProvider key={social.label}>
                   <Tooltip>
@@ -260,7 +245,7 @@ export function LandingFooter() {
                         className='text-muted-foreground hover:text-primary hover:border-primary/20 rounded-full border border-transparent p-2.5 transition-colors duration-200 hover:bg-indigo-600 hover:bg-indigo-700/10'
                       >
                         <span className='sr-only'>{social.label}</span>
-                        <social.icon className='h-5 w-5' />
+                        <HugeiconsIcon icon={social.icon} className='h-5 w-5' />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -308,7 +293,7 @@ export function LandingFooter() {
                     href='/pricing'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Pricing Plans
                   </Link>
                 </li>
@@ -317,7 +302,7 @@ export function LandingFooter() {
                     href='/documentation'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Documentation
                   </Link>
                 </li>
@@ -326,7 +311,7 @@ export function LandingFooter() {
                     href='/help'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Implementation Guides
                   </Link>
                 </li>
@@ -342,7 +327,7 @@ export function LandingFooter() {
                     href='/company'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Company
                   </Link>
                 </li>
@@ -351,7 +336,7 @@ export function LandingFooter() {
                     href='/contact'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Contact
                   </Link>
                 </li>
@@ -360,7 +345,7 @@ export function LandingFooter() {
                     href='/company'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Company
                   </Link>
                 </li>
@@ -369,7 +354,7 @@ export function LandingFooter() {
                     href='/features'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Features
                   </Link>
                 </li>
@@ -378,7 +363,7 @@ export function LandingFooter() {
                     href='/community'
                     className='group text-muted-foreground hover:text-primary flex items-center text-base transition-colors duration-200'
                   >
-                    <ChevronRight className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
+                    <HugeiconsIcon icon={ArrowRight01Icon} className='mr-2 -ml-5 h-3 w-3 opacity-0 transition-all duration-200 group-hover:ml-0 group-hover:opacity-100' />
                     Market Place
                   </Link>
                 </li>

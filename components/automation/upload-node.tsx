@@ -3,15 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  FileAudio,
-  FileText,
-  FileVideo,
-  Image as ImageIcon,
-  Link as LinkIcon,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Image01Icon, FileVideoIcon, FileAudioIcon, File02Icon, Upload01Icon, Delete02Icon, Link01Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useRef } from "react";
 import { toast } from "sonner";
@@ -36,13 +29,13 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
   const getIcon = () => {
     switch (data.fileType) {
       case "image":
-        return ImageIcon;
+        return Image01Icon;
       case "video":
-        return FileVideo;
+        return FileVideoIcon;
       case "audio":
-        return FileAudio;
+        return FileAudioIcon;
       default:
-        return FileText;
+        return File02Icon;
     }
   };
 
@@ -108,7 +101,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
       {/* Card Header */}
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
-          <Upload className='h-4 w-4' />
+          <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"Upload Asset"} />
           </span>
@@ -119,7 +112,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
             onClick={() => data.onRemoveNode(id)}
             className='nodrag nopan rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
           >
-            <Trash2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
           </button>
         )}
       </div>
@@ -157,7 +150,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                 className='flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-emerald-500/30 bg-emerald-500/5 p-4 text-center transition hover:bg-emerald-500/10'
               >
                 <div className='flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400'>
-                  <Upload className='h-4 w-4' />
+                  <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4' />
                 </div>
                 <div>
                   <p className='text-xs font-medium text-zinc-800 dark:text-neutral-200'>
@@ -174,7 +167,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
               <div className='space-y-3 rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-neutral-800 dark:bg-neutral-950'>
                 <div className='flex items-start gap-2.5'>
                   <div className='mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-200 text-zinc-500 dark:bg-neutral-800/40 dark:text-neutral-400'>
-                    <IconComponent className='h-4 w-4' />
+                    <HugeiconsIcon icon={IconComponent} className='h-4 w-4' />
                   </div>
                   <div className='min-w-0 flex-1'>
                     <p className='truncate text-xs font-medium text-zinc-900 dark:text-neutral-100'>
@@ -212,7 +205,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
             {data.fileName ? (
               <div className='space-y-2 rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-neutral-800 dark:bg-neutral-950/60'>
                 <div className='flex items-center gap-2'>
-                  <IconComponent className='h-4 w-4 shrink-0 text-zinc-500 dark:text-neutral-400' />
+                  <HugeiconsIcon icon={IconComponent} className='h-4 w-4 shrink-0 text-zinc-500 dark:text-neutral-400' />
                   <p className='flex-1 truncate text-xs text-zinc-800 dark:text-neutral-200'>
                     {data.fileName}
                   </p>
@@ -226,7 +219,7 @@ export function UploadNode({ id, data }: NodeProps<UploadNodeData>) {
                       rel='noopener noreferrer'
                       className='flex items-center gap-1 text-zinc-500 transition-colors hover:text-zinc-700 dark:text-neutral-400 dark:hover:text-neutral-200'
                     >
-                      <LinkIcon className='h-3 w-3' />
+                      <HugeiconsIcon icon={Link01Icon} className='h-3 w-3' />
                       <LocalizedText text={"View File"} />
                     </a>
                   )}

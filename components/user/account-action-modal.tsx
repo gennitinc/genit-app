@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Alert02Icon } from "@hugeicons/core-free-icons";
 import { ReactNode } from "react";
 
 type AccountActionModalProps = {
@@ -51,7 +52,7 @@ export const AccountActionModal = ({
                   "bg-destructive/15 text-destructive"
               )}
             >
-              {icon || <AlertTriangle className='h-5 w-5' />}
+              {icon || <HugeiconsIcon icon={Alert02Icon} className='h-5 w-5' />}
             </span>
             <DialogTitle>{title}</DialogTitle>
           </div>

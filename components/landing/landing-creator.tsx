@@ -1,6 +1,7 @@
 "use client";
 import { useLanguage } from "@/context/LanguageContext";
-import { ArrowRight, ArrowRightIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -23,7 +24,7 @@ const LandingCreator = () => {
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>{t("Get Started")}</span>
-          <ArrowRight className='h-4 w-4' />
+          <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4' />
         </Link>
       </div>
       <div className='relative flex w-full items-center justify-center px-2 md:px-12 lg:px-20 xl:px-24'>

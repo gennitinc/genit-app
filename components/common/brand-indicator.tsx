@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
-import { Info, Palette, Type } from "lucide-react";
+
 import { useState } from "react";
 
 export function BrandIndicator({

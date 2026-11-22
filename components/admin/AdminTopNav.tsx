@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
-import { Bell, Moon, Search, Sun } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, Notification01Icon, Sun01Icon, MoonIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -71,7 +72,7 @@ export function AdminTopNav() {
         <div className='flex items-center gap-2 md:gap-4'>
           {/* Quick Search */}
           <div className='group relative hidden lg:block'>
-            <Search className='text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors' />
             <input
               type='text'
               placeholder='Quick search...'
@@ -85,7 +86,7 @@ export function AdminTopNav() {
               size='icon'
               className='h-9 w-9 rounded-full'
             >
-              <Bell className='h-4 w-4' />
+              <HugeiconsIcon icon={Notification01Icon} className='h-4 w-4' />
             </Button>
 
             <Button
@@ -95,9 +96,9 @@ export function AdminTopNav() {
               className='h-9 w-9 rounded-full'
             >
               {theme === "dark" ? (
-                <Sun className='h-4 w-4' />
+                <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
               ) : (
-                <Moon className='h-4 w-4' />
+                <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
               )}
             </Button>
 

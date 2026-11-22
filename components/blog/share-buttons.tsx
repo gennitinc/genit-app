@@ -1,7 +1,8 @@
 "use client";
 
 import { clientUrl } from "@/utils/apiResponse";
-import { Copy } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Copy01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import React from "react";
 
@@ -74,7 +75,7 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
         className='cursor-pointer rounded-xl border border-zinc-200 bg-white p-3 text-zinc-700 transition-all hover:border-zinc-300 hover:text-cyan-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:text-cyan-400'
         aria-label='Copy Link'
       >
-        <Copy className='h-5 w-5' />
+        <HugeiconsIcon icon={Copy01Icon} className='h-5 w-5' />
       </button>
     </div>
   );

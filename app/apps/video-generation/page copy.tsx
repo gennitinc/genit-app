@@ -28,26 +28,9 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
-import {
-  BookOpen,
-  CircleFadingArrowUp,
-  History,
-  Image as ImageIcon,
-  Loader2,
-  Sparkles,
-  Users,
-  Video,
-  ViewIcon,
-  Wand2,
-} from "lucide-react";
-import {
-  ChevronDown,
-  ChevronUp,
-  Monitor,
-  Settings,
-  User,
-  Volume2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUp01Icon, ArrowDown01Icon, Video01Icon, Image01Icon, UserIcon, VolumeHighIcon, ComputerIcon, Settings01Icon, MagicWand01Icon, SparklesIcon, ViewIcon, Clock04Icon, UserGroupIcon, BookOpen01Icon } from "@hugeicons/core-free-icons";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
@@ -220,7 +203,7 @@ function PresetSlider({
         className='absolute top-1/2 left-2 z-20 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60'
         aria-label='Previous slide'
       >
-        <ChevronUp className='h-4 w-4 -rotate-90' />
+        <HugeiconsIcon icon={ArrowUp01Icon} className='h-4 w-4 -rotate-90' />
       </button>
       <button
         type='button'
@@ -228,7 +211,7 @@ function PresetSlider({
         className='absolute top-1/2 right-2 z-20 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/60'
         aria-label='Next slide'
       >
-        <ChevronDown className='h-4 w-4 -rotate-90' />
+        <HugeiconsIcon icon={ArrowDown01Icon} className='h-4 w-4 -rotate-90' />
       </button>
     </div>
   );
@@ -953,7 +936,7 @@ function VideoCreatePage() {
                     tabIndex={generationMode === "video" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <Video className='h-4 w-4' />
+                    <HugeiconsIcon icon={Video01Icon} className='h-4 w-4' />
                     Video
                   </button>
                   <button
@@ -990,7 +973,7 @@ function VideoCreatePage() {
                     tabIndex={generationMode === "image" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <ImageIcon className='h-4 w-4' />
+                    <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />
                     Image
                   </button>
                 </div>
@@ -1143,7 +1126,7 @@ function VideoCreatePage() {
                                     }
                                   }}
                                 />
-                                <ImageIcon className='h-5 w-5 text-neutral-400' />
+                                <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-neutral-400' />
                               </label>
                             )}
                           </div>
@@ -1662,7 +1645,7 @@ function VideoCreatePage() {
                                       }
                                     }}
                                   />
-                                  <ImageIcon className='h-5 w-5 text-neutral-400' />
+                                  <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-neutral-400' />
                                 </label>
                               )}
                             </div>
@@ -1684,7 +1667,7 @@ function VideoCreatePage() {
                             className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
                             <div className='flex items-center gap-2'>
-                              <User className='text-text-secondary h-4 w-4' />
+                              <HugeiconsIcon icon={UserIcon} className='text-text-secondary h-4 w-4' />
                               <span className='text-font-primary text-sm font-medium'>
                                 Avatar/Presenter
                               </span>
@@ -1715,9 +1698,9 @@ function VideoCreatePage() {
                                 />
                               </button>
                               {sectionsEnabled.avatar ? (
-                                <ChevronUp className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
@@ -1743,7 +1726,7 @@ function VideoCreatePage() {
                               className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                             >
                               <div className='flex items-center gap-2'>
-                                <Volume2 className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={VolumeHighIcon} className='text-text-secondary h-4 w-4' />
                                 <span className='text-font-primary text-sm font-medium'>
                                   Audio & Voice
                                 </span>
@@ -1774,9 +1757,9 @@ function VideoCreatePage() {
                                   />
                                 </button>
                                 {sectionsEnabled.audio ? (
-                                  <ChevronUp className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                                 ) : (
-                                  <ChevronDown className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                                 )}
                               </div>
                             </button>
@@ -1806,7 +1789,7 @@ function VideoCreatePage() {
                             className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
                             <div className='flex items-center gap-2'>
-                              <Monitor className='text-text-secondary h-4 w-4' />
+                              <HugeiconsIcon icon={ComputerIcon} className='text-text-secondary h-4 w-4' />
                               <span className='text-font-primary text-sm font-medium'>
                                 Resolution & Format
                               </span>
@@ -1837,9 +1820,9 @@ function VideoCreatePage() {
                                 />
                               </button>
                               {sectionsEnabled.resolution ? (
-                                <ChevronUp className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
@@ -1884,16 +1867,16 @@ function VideoCreatePage() {
                             className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                           >
                             <div className='flex items-center gap-2'>
-                              <Settings className='text-text-secondary h-4 w-4' />
+                              <HugeiconsIcon icon={Settings01Icon} className='text-text-secondary h-4 w-4' />
                               <span className='text-font-primary text-sm font-medium'>
                                 Advanced Settings
                               </span>
                             </div>
                             <div className='flex items-center gap-2'>
                               {sectionsEnabled.advanced ? (
-                                <ChevronUp className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                               ) : (
-                                <ChevronDown className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                               )}
                             </div>
                           </button>
@@ -1972,7 +1955,7 @@ function VideoCreatePage() {
                                           : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                       )}
                                     >
-                                      <Volume2 className='h-5 w-5' />
+                                      <HugeiconsIcon icon={VolumeHighIcon} className='h-5 w-5' />
                                     </div>
                                     <div>
                                       <p className='text-sm font-medium text-neutral-900 dark:text-white'>
@@ -2261,12 +2244,12 @@ function VideoCreatePage() {
                         <>
                           {generationMode === "image" ? (
                             <>
-                              <Wand2 className='h-4 w-4' />
+                              <HugeiconsIcon icon={MagicWand01Icon} className='h-4 w-4' />
                               Generate Image
                             </>
                           ) : (
                             <>
-                              <Sparkles className='h-4 w-4' />
+                              <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4' />
                               Generate Video
                             </>
                           )}
@@ -2309,7 +2292,7 @@ function VideoCreatePage() {
                     tabIndex={activeContentTab === "preview" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <ViewIcon className='size-4' />
+                    <HugeiconsIcon icon={ViewIcon} className='size-4' />
                     Preview
                   </button>
                   <button
@@ -2329,7 +2312,7 @@ function VideoCreatePage() {
                     tabIndex={activeContentTab === "history" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <History className='size-4' />
+                    <HugeiconsIcon icon={Clock04Icon} className='size-4' />
                     History
                   </button>
                   <button
@@ -2349,7 +2332,7 @@ function VideoCreatePage() {
                     tabIndex={activeContentTab === "community" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <Users className='size-4' />
+                    <HugeiconsIcon icon={UserGroupIcon} className='size-4' />
                     Community
                   </button>
                   <button
@@ -2389,7 +2372,7 @@ function VideoCreatePage() {
                     tabIndex={activeContentTab === "tutorial" ? -1 : 0}
                     data-orientation='horizontal'
                   >
-                    <BookOpen className='size-4' />
+                    <HugeiconsIcon icon={BookOpen01Icon} className='size-4' />
                     Learn how
                   </button>
                 </div>
@@ -2704,7 +2687,7 @@ function VideoCreatePage() {
                         tabIndex={activeContentTab === "preview" ? -1 : 0}
                         data-orientation='horizontal'
                       >
-                        <ViewIcon className='size-4' />
+                        <HugeiconsIcon icon={ViewIcon} className='size-4' />
                         Preview
                       </button>
                       <button
@@ -2724,7 +2707,7 @@ function VideoCreatePage() {
                         tabIndex={activeContentTab === "history" ? -1 : 0}
                         data-orientation='horizontal'
                       >
-                        <History className='size-4' />
+                        <HugeiconsIcon icon={Clock04Icon} className='size-4' />
                         History
                       </button>
                       <button
@@ -2746,7 +2729,7 @@ function VideoCreatePage() {
                         tabIndex={activeContentTab === "community" ? -1 : 0}
                         data-orientation='horizontal'
                       >
-                        <Users className='size-4' />
+                        <HugeiconsIcon icon={UserGroupIcon} className='size-4' />
                         Community
                       </button>
                       <button
@@ -2790,7 +2773,7 @@ function VideoCreatePage() {
                         tabIndex={activeContentTab === "tutorial" ? -1 : 0}
                         data-orientation='horizontal'
                       >
-                        <BookOpen className='size-4' />
+                        <HugeiconsIcon icon={BookOpen01Icon} className='size-4' />
                         Learn how
                       </button>
                     </div>

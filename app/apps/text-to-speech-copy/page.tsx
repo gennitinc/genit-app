@@ -18,23 +18,8 @@ import { Slider } from "@/components/ui/slider";
 import { Toaster } from "@/components/ui/sonner";
 import withAuth from "@/helper/hoc/withAuth";
 import { cn } from "@/lib/utils";
-import {
-  ChevronDown,
-  Download,
-  History,
-  Languages,
-  Music,
-  Pause,
-  Play,
-  Plus,
-  Search,
-  Settings2,
-  Share2,
-  Square,
-  Trash2,
-  Volume2,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, PlusSignIcon, ZapIcon, TranslateIcon, Delete02Icon, PlayIcon, PauseIcon, SquareIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 // --- Types ---
@@ -182,7 +167,7 @@ function TextToSpeechPage() {
         {/* --- Left Sidebar: Project List --- */}
         <aside className='scrollbar-hide flex w-[300px] flex-col gap-4 overflow-y-auto border-r border-[#E5E7EB] bg-white p-4 dark:border-[#1F2937] dark:bg-[#111318]'>
           <div className='relative'>
-            <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9CA3AF]' />
+            <HugeiconsIcon icon={Search01Icon} className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9CA3AF]' />
             <Input
               placeholder='Search all projects'
               className='h-10 border-none bg-[#F3F4F6] pl-10 text-sm placeholder:text-[#9CA3AF] dark:bg-[#1F2937]'
@@ -194,7 +179,7 @@ function TextToSpeechPage() {
             className='h-10 w-full justify-between border-[#E5E7EB] bg-white text-sm font-medium hover:bg-[#F9FAFB] dark:border-[#1F2937] dark:bg-[#111318] dark:hover:bg-[#1F2937]'
           >
             Create New Project
-            <Plus className='h-4 w-4' />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
           </Button>
 
           <div className='mt-4 flex flex-col gap-2'>
@@ -230,7 +215,7 @@ function TextToSpeechPage() {
                   Running on Fumes! ⚡
                 </h4>
                 <div className='flex items-center gap-1 rounded border border-[#9D4EDD]/20 bg-[#9D4EDD]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#9D4EDD]'>
-                  <Zap className='h-3 w-3 fill-current' />
+                  <HugeiconsIcon icon={ZapIcon} className='h-3 w-3 fill-current' />
                   Starter Plan
                 </div>
               </div>
@@ -284,7 +269,7 @@ function TextToSpeechPage() {
                       </span>
                     </div>
                     <div className='flex items-center gap-2 rounded-full bg-[#F3F4F6] px-3 py-1.5 dark:bg-[#1C1F26]'>
-                      <Languages className='h-3.5 w-3.5 text-[#6B7280]' />
+                      <HugeiconsIcon icon={TranslateIcon} className='h-3.5 w-3.5 text-[#6B7280]' />
                       <span className='text-[11px] font-semibold'>
                         {section.language}
                       </span>
@@ -329,7 +314,7 @@ function TextToSpeechPage() {
                         variant='ghost'
                         className='h-8 w-8 rounded-full border border-[#E5E7EB] bg-white shadow-sm dark:border-[#1F2937] dark:bg-[#111318]'
                       >
-                        <Trash2 className='h-4 w-4 text-red-500' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4 text-red-500' />
                       </Button>
                     </div>
                   )}
@@ -343,7 +328,7 @@ function TextToSpeechPage() {
                 variant='outline'
                 className='flex h-11 gap-2 rounded-full border-[#E5E7EB] bg-white px-6 font-semibold shadow-sm transition-all hover:scale-105 hover:bg-[#F9FAFB] active:scale-95 dark:border-[#1F2937] dark:bg-[#111318] dark:hover:bg-[#1F2937]'
               >
-                <Plus className='h-4 w-4' />
+                <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' />
                 Add New Section
               </Button>
             </div>
@@ -373,20 +358,20 @@ function TextToSpeechPage() {
                 variant='outline'
                 className='flex h-10 flex-1 gap-2 rounded-lg border-[#E5E7EB] bg-white text-xs font-semibold dark:border-[#1F2937] dark:bg-[#111318]'
               >
-                <Play className='h-4 w-4 fill-current text-[#1F2937] dark:text-white' />{" "}
+                <HugeiconsIcon icon={PlayIcon} className='h-4 w-4 fill-current text-[#1F2937] dark:text-white' />{" "}
                 Play
               </Button>
               <Button
                 variant='outline'
                 className='flex h-10 flex-1 gap-2 rounded-lg border-[#E5E7EB] bg-white text-xs font-semibold text-[#6B7280] dark:border-[#1F2937] dark:bg-[#111318]'
               >
-                <Pause className='h-4 w-4' /> Pause
+                <HugeiconsIcon icon={PauseIcon} className='h-4 w-4' /> Pause
               </Button>
               <Button
                 variant='outline'
                 className='flex h-10 flex-1 gap-2 rounded-lg border-[#E5E7EB] bg-white text-xs font-semibold text-[#6B7280] dark:border-[#1F2937] dark:bg-[#111318]'
               >
-                <Square className='h-4 w-4 fill-current' /> Stop
+                <HugeiconsIcon icon={SquareIcon} className='h-4 w-4 fill-current' /> Stop
               </Button>
             </div>
           </div>
@@ -568,7 +553,7 @@ function TextToSpeechPage() {
                   variant='link'
                   className='flex gap-1.5 text-[12px] text-[#9CA3AF] no-underline transition-colors hover:text-[#1F2937] dark:hover:text-white'
                 >
-                  <Play className='h-3 w-3 fill-current' /> Preview Audio
+                  <HugeiconsIcon icon={PlayIcon} className='h-3 w-3 fill-current' /> Preview Audio
                 </Button>
               </div>
             </div>

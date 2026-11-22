@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { PresentationBlock } from "@/types/presentation-schema";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { ArrowDown, ArrowUp, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUp02Icon, ArrowDown02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 interface DraggableBlockProps {
@@ -203,7 +204,7 @@ export function DraggableBlock({
                 }}
                 title='Bring to front'
               >
-                <ArrowUp className='h-3 w-3' />
+                <HugeiconsIcon icon={ArrowUp02Icon} className='h-3 w-3' />
               </Button>
               <Button
                 variant='ghost'
@@ -215,7 +216,7 @@ export function DraggableBlock({
                 }}
                 title='Send to back'
               >
-                <ArrowDown className='h-3 w-3' />
+                <HugeiconsIcon icon={ArrowDown02Icon} className='h-3 w-3' />
               </Button>
             </>
           )}
@@ -231,7 +232,7 @@ export function DraggableBlock({
               }}
               title='Delete'
             >
-              <X className='h-3 w-3' />
+              <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
             </Button>
           )}
         </div>

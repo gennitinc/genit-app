@@ -4,14 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  BarChart3,
-  CircleFadingArrowUp,
-  MessageCircle,
-  Send,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, BubbleChatIcon, SparklesIcon, ChartColumnIcon, SentIcon } from "@hugeicons/core-free-icons";
 import { Handle, Position } from "reactflow";
 import { useState } from "react";
 
@@ -77,14 +71,14 @@ export function ChatNode({ data }: ChatNodeProps) {
           className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
           title='Remove node'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
 
       {/* Header */}
       <div className='rounded-t-lg border-b border-gray-200 bg-purple-50 p-3'>
         <div className='mb-2 flex items-center gap-2'>
-          <MessageCircle className='h-4 w-4 text-purple-600' />
+          <HugeiconsIcon icon={BubbleChatIcon} className='h-4 w-4 text-purple-600' />
           <span className='text-sm font-medium text-gray-900'>
             Previous Chats
           </span>
@@ -111,7 +105,7 @@ export function ChatNode({ data }: ChatNodeProps) {
           <span className='text-sm font-medium text-gray-700'>Summarize:</span>
         </div>
         <div className='mb-2 flex items-center gap-2'>
-          <Sparkles className='h-4 w-4 text-purple-500' />
+          <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4 text-purple-500' />
           <span className='text-sm font-medium text-purple-700'>Poppy</span>
         </div>
       </div>
@@ -135,7 +129,7 @@ export function ChatNode({ data }: ChatNodeProps) {
             variant='outline'
             className='bg-transparent text-xs'
           >
-            <Sparkles className='mr-1 h-3 w-3' />
+            <HugeiconsIcon icon={SparklesIcon} className='mr-1 h-3 w-3' />
             Summarize
           </Button>
           <Button
@@ -143,7 +137,7 @@ export function ChatNode({ data }: ChatNodeProps) {
             variant='outline'
             className='bg-transparent text-xs'
           >
-            <BarChart3 className='mr-1 h-3 w-3' />
+            <HugeiconsIcon icon={ChartColumnIcon} className='mr-1 h-3 w-3' />
             Get Key Insights
           </Button>
         </div>
@@ -156,7 +150,7 @@ export function ChatNode({ data }: ChatNodeProps) {
             className='text-sm'
           />
           <Button size='sm' onClick={handleSendMessage}>
-            <Send className='h-3 w-3' />
+            <HugeiconsIcon icon={SentIcon} className='h-3 w-3' />
           </Button>
         </div>
       </div>

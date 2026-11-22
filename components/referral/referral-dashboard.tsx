@@ -11,15 +11,8 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  Code,
-  Copy,
-  Crown,
-  Download,
-  Link as LinkIcon,
-  Medal,
-  RefreshCw,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RefreshIcon, CrownIcon, Medal01Icon, Download01Icon, CodeIcon, Link01Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -272,7 +265,7 @@ export default function ReferralDashboard() {
           {refreshing ? (
             <LoadingFileLoader size={20} />
           ) : (
-            <RefreshCw className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={RefreshIcon} className='mr-2 h-4 w-4' />
           )}
           <LocalizedText text={"Refresh"} />
         </Button>
@@ -430,9 +423,9 @@ export default function ReferralDashboard() {
                           @{supporter.username}
                         </p>
                         {index === 0 ? (
-                          <Crown className='h-4 w-4 text-yellow-500' />
+                          <HugeiconsIcon icon={CrownIcon} className='h-4 w-4 text-yellow-500' />
                         ) : (
-                          <Medal className='h-4 w-4 text-gray-400' />
+                          <HugeiconsIcon icon={Medal01Icon} className='h-4 w-4 text-gray-400' />
                         )}
                       </div>
                       <p className='text-muted-foreground text-xs'>
@@ -476,7 +469,7 @@ export default function ReferralDashboard() {
                   onClick={() => handleDownloadQR("png")}
                   className='w-full'
                 >
-                  <Download className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Download PNG"} />
                 </Button>
                 <Button
@@ -485,7 +478,7 @@ export default function ReferralDashboard() {
                   onClick={handleCopyCode}
                   className='w-full'
                 >
-                  <Code className='mr-2 h-4 w-4' />
+                  <HugeiconsIcon icon={CodeIcon} className='mr-2 h-4 w-4' />
                   <LocalizedText text={"Copy Embed"} />
                 </Button>
               </div>
@@ -496,11 +489,11 @@ export default function ReferralDashboard() {
                 <LocalizedText text={"Referral Link"} />
               </div>
               <div className='flex items-center gap-2'>
-                <LinkIcon className='text-muted-foreground h-4 w-4 shrink-0' />
+                <HugeiconsIcon icon={Link01Icon} className='text-muted-foreground h-4 w-4 shrink-0' />
                 <Input value={stats.referralLink} readOnly className='flex-1' />
               </div>
               <Button onClick={handleCopyLink} className='w-full'>
-                <Copy className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={Copy01Icon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"Copy Link"} />
               </Button>
               <p className='text-muted-foreground text-xs'>
@@ -549,7 +542,7 @@ export default function ReferralDashboard() {
               </ul>
             </div>
             <Button className='w-full'>
-              <Download className='mr-2 h-4 w-4' />
+              <HugeiconsIcon icon={Download01Icon} className='mr-2 h-4 w-4' />
               <LocalizedText text={"Download from Google Drive"} />
             </Button>
           </CardContent>

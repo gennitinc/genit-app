@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Compass, ListFilter } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import TemplateGridAll from "../common/templateGridAll";

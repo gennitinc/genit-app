@@ -5,7 +5,7 @@ import { LandingNavbar } from "@/components/landing/landing-navbar";
 import PricingComponent from "@/components/pricing/page";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
-import { Check } from "lucide-react";
+
 import React, { useState } from "react";
 
 export default function Pricing() {

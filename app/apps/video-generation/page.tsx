@@ -49,29 +49,9 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { imageGenApi, videoGenApi } from "@/utils/inspire-api";
 import { IconTemplate } from "@tabler/icons-react";
-import {
-  BookOpen,
-  ChevronDown,
-  ChevronUp,
-  CircleFadingArrowUp,
-  History,
-  Image as ImageIcon,
-  LayoutDashboard,
-  Loader2,
-  Minus,
-  Monitor,
-  Plus,
-  Search,
-  Settings,
-  Sparkles,
-  Trash,
-  User,
-  Users,
-  Video,
-  ViewIcon,
-  Volume2,
-  Wand2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Video01Icon, Image01Icon, DashboardSquare01Icon, ViewIcon, Clock04Icon, UserGroupIcon, BookOpen01Icon, Delete01Icon, MinusSignIcon, PlusSignIcon, ArrowUp01Icon, ArrowDown01Icon, VolumeHighIcon, MagicWand01Icon, SparklesIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import { toast } from "sonner";
@@ -837,7 +817,7 @@ function VideoGenerationPage() {
                           : "text-muted-foreground hover:text-foreground"
                       )}
                     >
-                      <Video className='h-4 w-4' />
+                      <HugeiconsIcon icon={Video01Icon} className='h-4 w-4' />
                       <LocalizedText text={"Video"} />
                     </button>
                     <button
@@ -863,7 +843,7 @@ function VideoGenerationPage() {
                           : "text-muted-foreground hover:text-foreground"
                       )}
                     >
-                      <ImageIcon className='h-4 w-4' />
+                      <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />
                       <LocalizedText text={"Image"} />
                     </button>
                   </div>
@@ -874,7 +854,7 @@ function VideoGenerationPage() {
                   >
                     <DrawerTrigger asChild>
                       <button className='flex h-fit w-fit items-center justify-center gap-2 rounded-sm border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm font-semibold md:hidden dark:border-neutral-700 dark:bg-neutral-800'>
-                        <LayoutDashboard size={16} />
+                        <HugeiconsIcon icon={DashboardSquare01Icon} size={16} />
                         <span>
                           <LocalizedText text={"view"} />
                         </span>
@@ -890,10 +870,10 @@ function VideoGenerationPage() {
                         <div className='hide-scrollbar mb-4 flex shrink-0 gap-2 overflow-x-auto'>
                           {[
                             { id: "preview", icon: ViewIcon, label: "Preview" },
-                            { id: "history", icon: History, label: "History" },
+                            { id: "history", icon: Clock04Icon, label: "History" },
                             {
                               id: "community",
-                              icon: Users,
+                              icon: UserGroupIcon,
                               label: "Community",
                             },
                             {
@@ -903,7 +883,7 @@ function VideoGenerationPage() {
                             },
                             {
                               id: "tutorial",
-                              icon: BookOpen,
+                              icon: BookOpen01Icon,
                               label: "Tutorial",
                             },
                           ].map((t) => (
@@ -917,7 +897,7 @@ function VideoGenerationPage() {
                                   : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900"
                               )}
                             >
-                              <t.icon size={14} />
+                              <IconSourceView icon={t.icon} size={14} />
                               {t.label}
                             </button>
                           ))}
@@ -1035,7 +1015,7 @@ function VideoGenerationPage() {
                                 }}
                                 className='absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white'
                               >
-                                <Trash size={12} />
+                                <HugeiconsIcon icon={Delete01Icon} size={12} />
                               </button>
                             </>
                           ) : (
@@ -1072,7 +1052,7 @@ function VideoGenerationPage() {
                                 }}
                                 className='absolute top-1 right-1 rounded-full bg-black/50 p-1 text-white'
                               >
-                                <Trash size={12} />
+                                <HugeiconsIcon icon={Delete01Icon} size={12} />
                               </button>
                             </>
                           ) : (
@@ -1168,7 +1148,7 @@ function VideoGenerationPage() {
                               }}
                               className='absolute top-0.5 right-0.5 rounded-full bg-black/50 p-0.5 text-white'
                             >
-                              <Trash size={10} />
+                              <HugeiconsIcon icon={Delete01Icon} size={10} />
                             </button>
                           </div>
                         ))}
@@ -1189,7 +1169,7 @@ function VideoGenerationPage() {
                                 }
                               }}
                             />
-                            <ImageIcon className='h-4 w-4 text-neutral-400' />
+                            <HugeiconsIcon icon={Image01Icon} className='h-4 w-4 text-neutral-400' />
                           </label>
                         )}
                       </div>
@@ -1320,7 +1300,7 @@ function VideoGenerationPage() {
                             }
                             className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                           >
-                            <Minus className='size-2.5' />
+                            <HugeiconsIcon icon={MinusSignIcon} className='size-2.5' />
                           </button>
 
                           <div
@@ -1354,7 +1334,7 @@ function VideoGenerationPage() {
                             }
                             className='flex size-5 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-neutral-500 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
                           >
-                            <Plus className='size-2.5' />
+                            <HugeiconsIcon icon={PlusSignIcon} className='size-2.5' />
                           </button>
                         </div>
 
@@ -1392,7 +1372,7 @@ function VideoGenerationPage() {
                               className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                             >
                               <div className='flex items-center gap-2'>
-                                <Video className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={Video01Icon} className='text-text-secondary h-4 w-4' />
                                 <span className='text-font-primary text-sm font-medium'>
                                   <LocalizedText text={"Reference Video"} />
                                 </span>
@@ -1423,9 +1403,9 @@ function VideoGenerationPage() {
                                   />
                                 </button>
                                 {sectionsEnabled.videoRef ? (
-                                  <ChevronUp className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                                 ) : (
-                                  <ChevronDown className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                                 )}
                               </div>
                             </button>
@@ -1451,7 +1431,7 @@ function VideoGenerationPage() {
                                       }}
                                       className='absolute top-2 right-2 rounded-full bg-black/50 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100'
                                     >
-                                      <Trash size={14} />
+                                      <HugeiconsIcon icon={Delete01Icon} size={14} />
                                     </button>
                                   </div>
                                 ) : (
@@ -1470,7 +1450,7 @@ function VideoGenerationPage() {
                                         }
                                       }}
                                     />
-                                    <Video className='mb-2 h-8 w-8 text-neutral-400' />
+                                    <HugeiconsIcon icon={Video01Icon} className='mb-2 h-8 w-8 text-neutral-400' />
                                     <span className='text-sm font-medium text-neutral-500'>
                                       <LocalizedText
                                         text={"Upload reference video"}
@@ -1494,7 +1474,7 @@ function VideoGenerationPage() {
                               className='bg-neutral-surface-subtle hover:bg-neutral-surface-subtle/80 flex w-full items-center justify-between rounded-lg p-3 transition-colors'
                             >
                               <div className='flex items-center gap-2'>
-                                <Volume2 className='text-text-secondary h-4 w-4' />
+                                <HugeiconsIcon icon={VolumeHighIcon} className='text-text-secondary h-4 w-4' />
                                 <span className='text-font-primary text-sm font-medium'>
                                   <LocalizedText text={"Audio & Voice"} />
                                 </span>
@@ -1525,9 +1505,9 @@ function VideoGenerationPage() {
                                   />
                                 </button>
                                 {sectionsEnabled.audio ? (
-                                  <ChevronUp className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowUp01Icon} className='text-text-secondary h-4 w-4' />
                                 ) : (
-                                  <ChevronDown className='text-text-secondary h-4 w-4' />
+                                  <HugeiconsIcon icon={ArrowDown01Icon} className='text-text-secondary h-4 w-4' />
                                 )}
                               </div>
                             </button>
@@ -1558,7 +1538,7 @@ function VideoGenerationPage() {
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
                             <LocalizedText text={"Avatar & Presenter"} />
-                            <ChevronDown
+                            <HugeiconsIcon icon={ArrowDown01Icon}
                               size={16}
                               className={cn(
                                 "transition-transform",
@@ -1588,7 +1568,7 @@ function VideoGenerationPage() {
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
                             <LocalizedText text={"Resolution & Format"} />
-                            <ChevronDown
+                            <HugeiconsIcon icon={ArrowDown01Icon}
                               size={16}
                               className={cn(
                                 "transition-transform",
@@ -1654,7 +1634,7 @@ function VideoGenerationPage() {
                             className='flex w-full justify-between rounded-lg bg-neutral-100 p-3 text-sm font-medium dark:bg-neutral-900'
                           >
                             <LocalizedText text={"Advanced Settings"} />
-                            <ChevronDown
+                            <HugeiconsIcon icon={ArrowDown01Icon}
                               size={16}
                               className={cn(
                                 "transition-transform",
@@ -1739,7 +1719,7 @@ function VideoGenerationPage() {
                                           : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                                       )}
                                     >
-                                      <Volume2 className='h-5 w-5' />
+                                      <HugeiconsIcon icon={VolumeHighIcon} className='h-5 w-5' />
                                     </div>
                                     <div>
                                       <p className='text-sm font-medium text-neutral-900 dark:text-white'>
@@ -1800,9 +1780,9 @@ function VideoGenerationPage() {
                       ) : (
                         <>
                           {generationMode === "image" ? (
-                            <Wand2 size={16} />
+                            <HugeiconsIcon icon={MagicWand01Icon} size={16} />
                           ) : (
-                            <Sparkles size={16} />
+                            <HugeiconsIcon icon={SparklesIcon} size={16} />
                           )}
                           <span>
                             <LocalizedText text={"Generate"} />{" "}
@@ -1819,10 +1799,10 @@ function VideoGenerationPage() {
                 <div className='flex shrink-0 justify-end gap-2 self-end rounded-xl bg-neutral-100 p-1 dark:bg-neutral-900'>
                   {[
                     { id: "preview", icon: ViewIcon, label: "Preview" },
-                    { id: "history", icon: History, label: "History" },
-                    { id: "community", icon: Users, label: "Community" },
+                    { id: "history", icon: Clock04Icon, label: "History" },
+                    { id: "community", icon: UserGroupIcon, label: "Community" },
                     { id: "templates", icon: IconTemplate, label: "Templates" },
-                    { id: "tutorial", icon: BookOpen, label: "Tutorial" },
+                    { id: "tutorial", icon: BookOpen01Icon, label: "Tutorial" },
                   ].map((t) => (
                     <button
                       key={t.id}
@@ -1834,7 +1814,7 @@ function VideoGenerationPage() {
                           : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
                       )}
                     >
-                      <t.icon size={14} />
+                      <IconSourceView icon={t.icon} size={14} />
                       {t.label}
                     </button>
                   ))}

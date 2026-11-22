@@ -13,7 +13,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatCompact } from "@/lib/campaign-utils";
 import type { SocialPost } from "@/lib/social-posts-api";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 type Props = {
@@ -57,7 +58,7 @@ export function CampaignContent({ campaignId, posts, total, loading }: Props) {
       action={
         <Button asChild size='sm' variant='outline'>
           <Link href={composeHref}>
-            <Plus /> New post
+            <HugeiconsIcon icon={PlusSignIcon} /> New post
           </Link>
         </Button>
       }
@@ -143,7 +144,7 @@ export function CampaignContent({ campaignId, posts, total, loading }: Props) {
                           aria-label='Open published post'
                           className='text-muted-foreground hover:text-foreground inline-flex'
                         >
-                          <ArrowUpRight className='size-4' />
+                          <HugeiconsIcon icon={ArrowUpRight01Icon} className='size-4' />
                         </a>
                       )}
                     </td>
@@ -163,7 +164,7 @@ export function CampaignContent({ campaignId, posts, total, loading }: Props) {
           action={
             <Button asChild size='sm'>
               <Link href={composeHref}>
-                <Plus /> New post
+                <HugeiconsIcon icon={PlusSignIcon} /> New post
               </Link>
             </Button>
           }

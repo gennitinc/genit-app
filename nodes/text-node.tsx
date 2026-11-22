@@ -13,22 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingFileLoader } from "@/utils/Loading";
-import {
-  CheckCheck,
-  CircleFadingArrowUp,
-  Copy,
-  Edit3,
-  FileText,
-  ListCheck,
-  Loader2,
-  Lock,
-  MessageSquare,
-  Save,
-  Search,
-  Sparkles,
-  Unlock,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, SparklesIcon, CheckListIcon, PencilEdit01Icon, TickDouble02Icon, Copy01Icon, Message01Icon } from "@hugeicons/core-free-icons";
 import ReactMarkdown from "react-markdown";
 import { Handle, type NodeProps, Position } from "reactflow";
 import { memo, useEffect, useState } from "react";
@@ -115,7 +101,7 @@ export const TextNode = memo(
             className='absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
             title='Remove node'
           >
-            <X className='h-3 w-3' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
           </button>
         )}
 
@@ -152,21 +138,21 @@ export const TextNode = memo(
                   {isAnalyzing ? (
                     <LoadingFileLoader size={20} />
                   ) : (
-                    <Sparkles className='h-3 w-3' />
+                    <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' />
                   )}
                   Analyze
                 </Button>
               )}
               {analyzed && (
                 <div className='flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-0.5 text-[9px] font-medium text-green-600'>
-                  <ListCheck className='h-2.5 w-2.5' />
+                  <HugeiconsIcon icon={CheckListIcon} className='h-2.5 w-2.5' />
                   Analyzed
                 </div>
               )}
               <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                 <DialogTrigger asChild>
                   <Button variant='ghost' size='sm' className='h-auto p-1'>
-                    <Edit3 className='text-muted-foreground h-3 w-3' />
+                    <HugeiconsIcon icon={PencilEdit01Icon} className='text-muted-foreground h-3 w-3' />
                   </Button>
                 </DialogTrigger>
                 <DialogContent className='flex max-h-[85vh] flex-col overflow-hidden p-0 sm:max-w-2xl'>
@@ -353,9 +339,9 @@ export const TextNode = memo(
                     title='Copy to clipboard'
                   >
                     {isCopied ? (
-                      <CheckCheck className='h-3.5 w-3.5 text-green-500' />
+                      <HugeiconsIcon icon={TickDouble02Icon} className='h-3.5 w-3.5 text-green-500' />
                     ) : (
-                      <Copy className='h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={Copy01Icon} className='h-3.5 w-3.5' />
                     )}
                   </Button>
                 </>
@@ -369,7 +355,7 @@ export const TextNode = memo(
                 {analysis.summary && (
                   <div className='space-y-1'>
                     <div className='text-primary flex items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase'>
-                      <MessageSquare className='h-3 w-3' />
+                      <HugeiconsIcon icon={Message01Icon} className='h-3 w-3' />
                       AI Summary
                     </div>
                     <p className='text-muted-foreground bg-muted/30 border-border/30 rounded-lg border p-2 text-xs leading-relaxed italic'>

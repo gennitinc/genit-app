@@ -13,31 +13,8 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import appLogo from "@/resources/images/gennit.svg";
 import { LoadingFileLoader } from "@/utils/Loading";
 import cookie from "js-cookie";
-import {
-  Book,
-  Check,
-  CreditCard,
-  Download,
-  Edit3,
-  FileDown,
-  Loader2,
-  Lock,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Monitor,
-  Moon,
-  Play,
-  Redo2,
-  Settings,
-  Share2,
-  Sun,
-  Undo2,
-  User,
-  Users,
-  WandSparklesIcon,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, Menu01Icon, LockIcon, Tick02Icon, Undo02Icon, Redo02Icon, Download01Icon, FileDownloadIcon, PlayIcon, Sun01Icon, MoonIcon, Share08Icon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -124,9 +101,9 @@ export function PresentationNavbar({
             className='p-1 sm:hidden'
           >
             {isMobileMenuOpen ? (
-              <X className='h-5 w-5' />
+              <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
             ) : (
-              <Menu className='h-5 w-5' />
+              <HugeiconsIcon icon={Menu01Icon} className='h-5 w-5' />
             )}
           </Button>
         )}
@@ -162,7 +139,7 @@ export function PresentationNavbar({
                 <div className='via-muted-foreground/50 absolute inset-x-0 -bottom-0.5 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'></div>
               </span>
               {/* Visibility Toggle - Simplified on mobile */}
-              <Lock className='text-muted-foreground/50 group-hover:text-muted-foreground h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5' />
+              <HugeiconsIcon icon={LockIcon} className='text-muted-foreground/50 group-hover:text-muted-foreground h-3 w-3 flex-shrink-0 sm:h-3.5 sm:w-3.5' />
             </div>
           </div>
         </div>
@@ -190,7 +167,7 @@ export function PresentationNavbar({
                 // Saved State: Check icon + green text
 
                 <div className='flex items-center gap-1'>
-                  <Check className='h-3.5 w-3.5 text-green-600 dark:text-green-500' />
+                  <HugeiconsIcon icon={Tick02Icon} className='h-3.5 w-3.5 text-green-600 dark:text-green-500' />
 
                   <span className='hidden font-medium sm:inline'>
                     <LocalizedText text={"Saved"} />
@@ -211,7 +188,7 @@ export function PresentationNavbar({
                 className='h-8 w-8 p-0'
                 title='Undo (Ctrl+Z)'
               >
-                <Undo2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Undo02Icon} className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -221,7 +198,7 @@ export function PresentationNavbar({
                 className='h-8 w-8 p-0'
                 title='Redo (Ctrl+Y)'
               >
-                <Redo2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Redo02Icon} className='h-4 w-4' />
               </Button>
             </div>
           )}
@@ -238,7 +215,7 @@ export function PresentationNavbar({
                   disabled={isExporting}
                   className='flex items-center gap-1.5 text-sm'
                 >
-                  <Download className='h-4 w-4' />
+                  <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                   {isExporting ? "Exporting..." : "Export"}
                 </Button>
                 <div className='bg-background border-border invisible absolute top-full right-0 z-[9999] mt-1 w-40 rounded-lg border opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100'>
@@ -248,7 +225,7 @@ export function PresentationNavbar({
                       disabled={isExporting}
                       className='hover:bg-muted flex w-full items-center gap-2 rounded-t-lg px-3 py-2 text-left text-sm'
                     >
-                      <FileDown className='h-4 w-4' />
+                      <HugeiconsIcon icon={FileDownloadIcon} className='h-4 w-4' />
                       <LocalizedText text={"PowerPoint"} />
                     </button>
                   )}
@@ -258,7 +235,7 @@ export function PresentationNavbar({
                       disabled={isExporting}
                       className='hover:bg-muted flex w-full items-center gap-2 rounded-b-lg px-3 py-2 text-left text-sm'
                     >
-                      <FileDown className='h-4 w-4' />
+                      <HugeiconsIcon icon={FileDownloadIcon} className='h-4 w-4' />
                       <LocalizedText text={"PDF"} />
                     </button>
                   )}
@@ -279,7 +256,7 @@ export function PresentationNavbar({
               <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
               <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                 <div className='flex flex-row items-center gap-2'>
-                  <Play className='h-3 w-3' />
+                  <HugeiconsIcon icon={PlayIcon} className='h-3 w-3' />
                   <LocalizedText text={"Present"} />
                 </div>
               </span>
@@ -299,9 +276,9 @@ export function PresentationNavbar({
               title='Toggle Theme'
             >
               {theme === "dark" ? (
-                <Sun className='h-4 w-4' />
+                <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
               ) : (
-                <Moon className='h-4 w-4' />
+                <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
               )}
             </Button>
 
@@ -326,7 +303,7 @@ export function PresentationNavbar({
                 ) : (
                   // Use CheckCircle2 for better visual confirmation than a dot
 
-                  <Check className='h-4 w-4 text-green-500' />
+                  <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4 text-green-500' />
                 )}
               </div>
             )}
@@ -341,9 +318,9 @@ export function PresentationNavbar({
               title='Toggle Theme'
             >
               {theme === "dark" ? (
-                <Sun className='h-4 w-4' />
+                <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
               ) : (
-                <Moon className='h-4 w-4' />
+                <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
               )}
             </Button>
           </div>
@@ -354,7 +331,7 @@ export function PresentationNavbar({
             {/* Share Button - Mobile */}
 
             <div className='relative flex items-center justify-start text-sm'>
-              <Share2 className='mr-1.5 h-4 w-4' />
+              <HugeiconsIcon icon={Share08Icon} className='mr-1.5 h-4 w-4' />
               <LocalizedText text={"Share"} />
             </div>
 
@@ -364,7 +341,7 @@ export function PresentationNavbar({
               <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
               <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
                 <div className='flex flex-row items-center gap-2'>
-                  <Play className='h-3 w-3' />
+                  <HugeiconsIcon icon={PlayIcon} className='h-3 w-3' />
                   <LocalizedText text={"Present"} />
                 </div>
               </span>
@@ -392,7 +369,7 @@ export function PresentationNavbar({
                 onClick={() => setIsEditingTitle(true)}
                 className='h-6 w-6 p-1'
               >
-                <Edit3 className='h-3 w-3' />
+                <HugeiconsIcon icon={PencilEdit01Icon} className='h-3 w-3' />
               </Button>
             </div>
             {/* Add any other mobile menu items here if needed */}

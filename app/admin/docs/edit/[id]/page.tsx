@@ -7,7 +7,7 @@ import {
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { Loader2 } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { use, useEffect, useState } from "react";

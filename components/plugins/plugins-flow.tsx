@@ -7,7 +7,9 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import { useComposioToolkits } from "@/hooks/use-integrations";
 import { isNativeOnlyComposioToolkit } from "@/lib/integrations-api";
-import { Blocks } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DashboardSquare02Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import Link from "next/link";
 import { useMemo } from "react";
 
@@ -92,9 +94,9 @@ export function PluginsFlow({ className = "" }: { className?: string }) {
                         className='size-6 rounded-sm object-contain'
                       />
                     ) : Icon ? (
-                      <Icon className='h-6 w-auto' />
+                      <IconSourceView icon={Icon} className='h-6 w-auto' />
                     ) : (
-                      <Blocks className='size-6' />
+                      <HugeiconsIcon icon={DashboardSquare02Icon} className='size-6' />
                     )}
                   </span>
                   <span className='text-sm font-medium whitespace-nowrap md:text-base'>

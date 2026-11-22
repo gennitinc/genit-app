@@ -33,16 +33,9 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiOrigin } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowRight,
-  CheckCircle2,
-  CircleFadingArrowUp,
-  Loader2,
-  Lock,
-  ShieldCheck,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, CheckmarkCircle02Icon, SparklesIcon, SecurityCheckIcon, ArrowRight02Icon, LockIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { toast } from "sonner";
 import {
   type CSSProperties,
@@ -96,7 +89,7 @@ interface ConnectDialogProps {
   platform: IntegrationPlatform | null;
   platformName: string;
   platformDescription: string;
-  Icon: ComponentType<{ className?: string; style?: CSSProperties }>;
+  Icon: IconSource;
   iconUrl?: string;
   glow: string;
   appSlug?: string;
@@ -776,7 +769,7 @@ export function ConnectDialog({
                 className='text-muted-foreground hover:text-foreground absolute top-4 right-4 z-20 rounded-full p-1 transition'
                 aria-label='Close'
               >
-                <X className='h-4 w-4' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
               </button>
 
               <div className='relative z-10 flex min-w-0 items-center gap-3 pr-6'>
@@ -788,7 +781,7 @@ export function ConnectDialog({
                       className='h-7 w-7 rounded object-contain'
                     />
                   ) : (
-                    <Icon className='h-7 w-7 rounded-none' />
+                    <IconSourceView icon={Icon} className='h-7 w-7 rounded-none' />
                   )}
                 </div>
                 <div className='min-w-0'>
@@ -828,7 +821,7 @@ export function ConnectDialog({
                               key={scope}
                               className='text-foreground flex items-start gap-2 text-sm'
                             >
-                              <CheckCircle2 className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
+                              <HugeiconsIcon icon={CheckmarkCircle02Icon} className='mt-0.5 h-4 w-4 shrink-0 text-emerald-500' />
                               <span className='min-w-0 [overflow-wrap:anywhere]'>
                                 {scope}
                               </span>
@@ -858,7 +851,7 @@ export function ConnectDialog({
                         platform &&
                         isMetaSurface(platform) && (
                           <div className='mt-4 flex items-start gap-2 rounded-md border border-violet-500/30 bg-violet-500/4 px-3 py-2.5 dark:border-violet-300/30'>
-                            <Sparkles className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
+                            <HugeiconsIcon icon={SparklesIcon} className='mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-500 dark:text-violet-300' />
                             <p className='text-foreground text-xs'>
                               <LocalizedText
                                 text={
@@ -967,7 +960,7 @@ export function ConnectDialog({
               {phase === "success" && (
                 <div className='relative z-10 mt-6 flex flex-col items-center justify-center py-6'>
                   <div className='flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/40'>
-                    <CheckCircle2 className='h-7 w-7 text-emerald-500' />
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-7 w-7 text-emerald-500' />
                   </div>
                   <p className='text-foreground mt-4 text-sm font-medium'>
                     {platformName} <LocalizedText text={"connected"} />
@@ -997,7 +990,7 @@ export function ConnectDialog({
 
             <div className='flex flex-col items-stretch justify-between gap-3 border-t border-black/5 bg-black/[0.02] px-4 py-3 sm:flex-row sm:items-center sm:px-6 dark:border-white/10 dark:bg-white/[0.02]'>
               <div className='text-muted-foreground flex min-w-0 items-center gap-1.5 text-[11px]'>
-                <ShieldCheck className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={SecurityCheckIcon} className='h-3.5 w-3.5' />
                 <span className='min-w-0'>
                   <LocalizedText text={"Tokens are encrypted at rest."} />
                 </span>
@@ -1014,11 +1007,11 @@ export function ConnectDialog({
                   {isSupported ? (
                     <>
                       Continue
-                      <ArrowRight className='ml-1 h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-3.5 w-3.5' />
                     </>
                   ) : (
                     <>
-                      <Lock className='mr-1 h-3.5 w-3.5' />
+                      <HugeiconsIcon icon={LockIcon} className='mr-1 h-3.5 w-3.5' />
                       <LocalizedText text={"Coming soon"} />
                     </>
                   )}

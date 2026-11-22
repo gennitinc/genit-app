@@ -4,7 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/context/LanguageContext";
-import { Play, Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -88,7 +89,7 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
       {/* Search */}
       <div className='border-border border-b p-4'>
         <div className='relative'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder={t("Search knowledge...")}
             value={searchQuery}
@@ -121,7 +122,7 @@ export function Sidebar({ selectedItems, onItemSelect }: SidebarProps) {
                   {item.type === "video" && (
                     <div className='absolute inset-0 flex items-center justify-center'>
                       <div className='flex h-6 w-6 items-center justify-center rounded-full bg-black/70'>
-                        <Play className='h-3 w-3 fill-current text-white' />
+                        <HugeiconsIcon icon={PlayIcon} className='h-3 w-3 fill-current text-white' />
                       </div>
                     </div>
                   )}

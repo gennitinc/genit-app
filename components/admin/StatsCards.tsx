@@ -2,13 +2,8 @@
 
 import { LocalizedText } from "@/components/localized-text";
 import { motion } from "framer-motion";
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  CreditCard,
-  Layers,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserGroupIcon, CreditCardIcon, Layers01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 
 interface StatsCardsProps {
   stats: {
@@ -24,7 +19,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
       title: "Total Users",
       value: stats.users.total.toLocaleString(),
       change: `+${stats.users.newToday} today`,
-      icon: Users,
+      icon: UserGroupIcon,
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
     },
@@ -32,7 +27,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
       title: "Total Revenue",
       value: `$${stats.revenue.total.toLocaleString()}`,
       change: `${stats.revenue.orders} orders`,
-      icon: CreditCard,
+      icon: CreditCardIcon,
       color: "text-emerald-500",
       bgColor: "bg-emerald-500/10",
     },
@@ -40,7 +35,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
       title: "Content Created",
       value: stats.content.total.toLocaleString(),
       change: "All generations",
-      icon: Layers,
+      icon: Layers01Icon,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
     },
@@ -58,10 +53,10 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
         >
           <div className='mb-4 flex items-start justify-between'>
             <div className={`rounded-xl p-3 ${card.bgColor} ${card.color}`}>
-              <card.icon className='h-6 w-6' />
+              <HugeiconsIcon icon={card.icon} className='h-6 w-6' />
             </div>
             <div className='flex items-center rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-500'>
-              <ArrowUpRight className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={ArrowUpRight01Icon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Active"} />
             </div>
           </div>

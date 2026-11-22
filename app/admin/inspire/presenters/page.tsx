@@ -25,16 +25,8 @@ import { Presenter } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { presenterApi } from "@/utils/inspire-api";
-import {
-  Edit,
-  Loader2,
-  Plus,
-  Search,
-  Trash2,
-  User,
-  Users,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, Search01Icon, PencilEdit01Icon, Delete02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 
@@ -249,14 +241,14 @@ export default function AdminPresentersPage() {
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Create Avatar"} />
         </Button>
       </div>
 
       <div className='mb-6 flex flex-wrap items-center gap-4'>
         <div className='relative max-w-md flex-1'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder='Search avatars...'
             value={searchTerm}
@@ -327,7 +319,7 @@ export default function AdminPresentersPage() {
                       onClick={() => handleEditClick(presenter)}
                       className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Edit className='h-4 w-4' />
+                      <HugeiconsIcon icon={PencilEdit01Icon} className='h-4 w-4' />
                     </Button>
                     <Button
                       variant='destructive'
@@ -335,7 +327,7 @@ export default function AdminPresentersPage() {
                       onClick={() => handleDeleteClick(presenter)}
                       className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>
@@ -498,7 +490,7 @@ export default function AdminPresentersPage() {
                       setImagePreview(null);
                     }}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>
@@ -636,7 +628,7 @@ export default function AdminPresentersPage() {
                       setImagePreview(editingPresenter.imageUrl || null);
                     }}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>

@@ -15,7 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { Image as ImageIcon, Loader2, Search, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -273,7 +274,7 @@ export default function AdminTemplatesPage() {
 
       <div className='mb-6 flex flex-wrap items-center gap-4'>
         <div className='relative max-w-md flex-1'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder='Search templates...'
             value={searchTerm}
@@ -293,7 +294,7 @@ export default function AdminTemplatesPage() {
             variant='destructive'
             onClick={() => setBulkDeleteDialogOpen(true)}
           >
-            <Trash2 className='mr-2 h-4 w-4' />
+            <HugeiconsIcon icon={Delete02Icon} className='mr-2 h-4 w-4' />
             <LocalizedText text={"Delete"} />
             {selectedTemplates.size} <LocalizedText text={"selected"} />
           </Button>
@@ -365,7 +366,7 @@ export default function AdminTemplatesPage() {
                       onClick={() => handleDeleteClick(template)}
                       className='opacity-0 transition-opacity group-hover:opacity-100'
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                     </Button>
                   </div>
                 </div>

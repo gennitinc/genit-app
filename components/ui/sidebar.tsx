@@ -16,7 +16,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { PanelLeft } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PanelLeftIcon } from "@hugeicons/core-free-icons";
 import * as React from "react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
@@ -305,7 +306,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <HugeiconsIcon icon={PanelLeftIcon} />
       <span className='sr-only'>
         <LocalizedText text={"Toggle Sidebar"} />
       </span>

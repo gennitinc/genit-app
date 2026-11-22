@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { apiResponse } from "@/utils/apiResponse";
-import { Maximize2, Minimize2, Send, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, ArrowShrink01Icon, ArrowExpand01Icon, SentIcon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, Position } from "reactflow";
 import { useCallback, useState } from "react";
 
@@ -119,7 +120,7 @@ export function AIChatNode({
           className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
           title='Remove node'
         >
-          <X className='h-3 w-3' />
+          <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
         </button>
       )}
 
@@ -138,9 +139,9 @@ export function AIChatNode({
             title={isMaximized ? "Minimize" : "Maximize"}
           >
             {isMaximized ? (
-              <Minimize2 className='h-3 w-3' />
+              <HugeiconsIcon icon={ArrowShrink01Icon} className='h-3 w-3' />
             ) : (
-              <Maximize2 className='h-3 w-3' />
+              <HugeiconsIcon icon={ArrowExpand01Icon} className='h-3 w-3' />
             )}
           </Button>
         </div>
@@ -153,7 +154,7 @@ export function AIChatNode({
             {messages.length === 0 && !isTyping ? (
               <div className='text-muted-foreground py-8 text-center text-sm'>
                 <div className='bg-muted mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full'>
-                  <Send className='h-4 w-4' />
+                  <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />
                 </div>
                 <p>Start a conversation with AI</p>
                 <p className='text-xs'>Type your message below</p>
@@ -220,7 +221,7 @@ export function AIChatNode({
             className='px-3'
             disabled={!message.trim()}
           >
-            <Send className='h-4 w-4' />
+            <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />
           </Button>
         </div>
       </div>

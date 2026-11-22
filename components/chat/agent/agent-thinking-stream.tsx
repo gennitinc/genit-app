@@ -1,7 +1,8 @@
 "use client";
 
 import { Response } from "@/components/ai-elements/response";
-import { Brain, ChevronDown, ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { BrainIcon, ArrowDown01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export function AgentThinkingStream({
@@ -34,7 +35,7 @@ export function AgentThinkingStream({
         aria-expanded={open}
         className='hover:bg-muted-foreground/[0.04] flex w-full items-center gap-2 px-3 py-2 text-left transition-colors dark:hover:bg-white/[0.03]'
       >
-        <Brain
+        <HugeiconsIcon icon={BrainIcon}
           className={
             active
               ? "text-foreground h-3.5 w-3.5 animate-pulse"
@@ -57,9 +58,9 @@ export function AgentThinkingStream({
         )}
         <span className='ml-auto'>
           {open ? (
-            <ChevronDown className='text-muted-foreground h-3.5 w-3.5' />
+            <HugeiconsIcon icon={ArrowDown01Icon} className='text-muted-foreground h-3.5 w-3.5' />
           ) : (
-            <ChevronRight className='text-muted-foreground h-3.5 w-3.5' />
+            <HugeiconsIcon icon={ArrowRight01Icon} className='text-muted-foreground h-3.5 w-3.5' />
           )}
         </span>
       </button>

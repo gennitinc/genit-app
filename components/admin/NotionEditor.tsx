@@ -4,26 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { apiResponse } from "@/utils/apiResponse";
 import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
-import {
-  Bold,
-  CheckSquare,
-  Code,
-  Heading1,
-  Heading2,
-  Heading3,
-  Image as ImageIcon,
-  Italic,
-  Link2,
-  List,
-  ListOrdered,
-  MessageSquarePlus,
-  Palette,
-  Quote,
-  Text,
-  TextQuote,
-  Underline as UnderlineIcon,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MessageAdd01Icon, TextIcon, CheckmarkSquare02Icon, Heading01Icon, Heading02Icon, Heading03Icon, ListViewIcon, LeftToRightListNumberIcon, LeftToRightBlockQuoteIcon, CodeIcon, Image01Icon, TextBoldIcon, TextItalicIcon, TextUnderlineIcon, Link02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import {
   Command,
   EditorBubble,
@@ -112,7 +94,7 @@ const suggestionItems = createSuggestionItems([
     title: "Send Feedback",
     description: "Let us know how we can improve.",
     searchTerms: ["feedback", "bug", "support", "help"],
-    icon: <MessageSquarePlus className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={MessageAdd01Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       window.open("/feedback", "_blank");
@@ -122,7 +104,7 @@ const suggestionItems = createSuggestionItems([
     title: "Text",
     description: "Start typing with plain text.",
     searchTerms: ["p", "paragraph", "text"],
-    icon: <Text className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={TextIcon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -136,7 +118,7 @@ const suggestionItems = createSuggestionItems([
     title: "To-do List",
     description: "Track tasks with a to-do list.",
     searchTerms: ["todo", "task", "list", "check", "checkbox"],
-    icon: <CheckSquare className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={CheckmarkSquare02Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       (editor.chain().focus() as any).deleteRange(range).toggleTaskList().run();
     },
@@ -145,7 +127,7 @@ const suggestionItems = createSuggestionItems([
     title: "Heading 1",
     description: "Big section heading.",
     searchTerms: ["title", "big", "large", "h1"],
-    icon: <Heading1 className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Heading01Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -159,7 +141,7 @@ const suggestionItems = createSuggestionItems([
     title: "Heading 2",
     description: "Medium section heading.",
     searchTerms: ["subtitle", "medium", "h2"],
-    icon: <Heading2 className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Heading02Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -173,7 +155,7 @@ const suggestionItems = createSuggestionItems([
     title: "Heading 3",
     description: "Small section heading.",
     searchTerms: ["subtitle", "small", "h3"],
-    icon: <Heading3 className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Heading03Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor
         .chain()
@@ -187,7 +169,7 @@ const suggestionItems = createSuggestionItems([
     title: "Bullet List",
     description: "Create a simple bullet list.",
     searchTerms: ["unordered", "point", "bullet", "list"],
-    icon: <List className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={ListViewIcon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
@@ -196,7 +178,7 @@ const suggestionItems = createSuggestionItems([
     title: "Numbered List",
     description: "Create a list with numbering.",
     searchTerms: ["ordered", "list", "number"],
-    icon: <ListOrdered className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={LeftToRightListNumberIcon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
     },
@@ -205,7 +187,7 @@ const suggestionItems = createSuggestionItems([
     title: "Quote",
     description: "Capture a quote block.",
     searchTerms: ["blockquote", "quote"],
-    icon: <TextQuote className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={LeftToRightBlockQuoteIcon} className='h-4 w-4' />,
     command: ({ editor, range }) =>
       editor
         .chain()
@@ -219,7 +201,7 @@ const suggestionItems = createSuggestionItems([
     title: "Code",
     description: "Capture a code snippet.",
     searchTerms: ["code", "codeblock", "pre"],
-    icon: <Code className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={CodeIcon} className='h-4 w-4' />,
     command: ({ editor, range }) =>
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
   },
@@ -227,7 +209,7 @@ const suggestionItems = createSuggestionItems([
     title: "Image",
     description: "Upload an image from your computer.",
     searchTerms: ["photo", "picture", "media", "image", "upload"],
-    icon: <ImageIcon className='h-4 w-4' />,
+    icon: <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       const input = document.createElement("input");
@@ -300,7 +282,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
               editor.isActive("bold") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <Bold className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={TextBoldIcon} className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         <EditorBubbleItem
@@ -312,7 +294,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
               editor.isActive("italic") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <Italic className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={TextItalicIcon} className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         <EditorBubbleItem
@@ -324,7 +306,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
               editor.isActive("underline") ? "text-cyan-400" : "text-zinc-400"
             }`}
           >
-            <UnderlineIcon className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={TextUnderlineIcon} className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         <EditorBubbleItem onSelect={setLink}>
@@ -335,7 +317,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
             }`}
             title='Add Link'
           >
-            <Link2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Link02Icon} className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
         {/* Color Options */}
@@ -374,7 +356,7 @@ function EditorInner({ value, onChange }: NotionEditorProps) {
             className='hover:bg-zinc-855 cursor-pointer rounded-lg p-1.5 text-zinc-400 transition hover:text-white'
             title='Clear Color'
           >
-            <X className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-3.5 w-3.5' />
           </button>
         </EditorBubbleItem>
       </EditorBubble>

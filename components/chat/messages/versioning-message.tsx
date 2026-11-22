@@ -15,31 +15,8 @@ import Loading from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { templateApi } from "@/utils/inspire-api";
-import {
-  AlertTriangle,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Circle,
-  CircleFadingArrowUp,
-  Download,
-  Edit,
-  Eye,
-  File,
-  GitBranch,
-  Image as ImageIcon,
-  LayoutGrid,
-  Play,
-  RefreshCw,
-  RotateCcw,
-  Send,
-  Sparkles,
-  Square,
-  Trash2,
-  Video,
-  Wand2,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, PencilEdit01Icon, SquareIcon, Alert02Icon, CircleIcon, RefreshIcon, Video01Icon, MagicWand01Icon, SentIcon, Image01Icon, LayoutGridIcon, SparklesIcon, PlayIcon, GitBranchIcon, ZapIcon, File01Icon, ArrowLeft01Icon, ArrowRight01Icon, Delete02Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { MaskEditor, toMask } from "react-mask-editor";
 import "react-mask-editor/dist/style.css";
@@ -350,15 +327,15 @@ export function VersioningMessage({
 
   const getStatusIcon = (status: GenerationItem["status"]) => {
     const iconMap = {
-      generated: <Check className='h-2.5 w-2.5 text-green-500' />,
-      edited: <Edit className='h-2.5 w-2.5 text-blue-500' />,
-      stopped: <Square className='h-2.5 w-2.5 text-orange-500' />,
-      error: <AlertTriangle className='h-2.5 w-2.5 text-red-500' />,
+      generated: <HugeiconsIcon icon={Tick02Icon} className='h-2.5 w-2.5 text-green-500' />,
+      edited: <HugeiconsIcon icon={PencilEdit01Icon} className='h-2.5 w-2.5 text-blue-500' />,
+      stopped: <HugeiconsIcon icon={SquareIcon} className='h-2.5 w-2.5 text-orange-500' />,
+      error: <HugeiconsIcon icon={Alert02Icon} className='h-2.5 w-2.5 text-red-500' />,
       generating: <Loading size={12} />,
     };
     return (
       iconMap[status] || (
-        <Circle className='text-muted-foreground h-2.5 w-2.5' />
+        <HugeiconsIcon icon={CircleIcon} className='text-muted-foreground h-2.5 w-2.5' />
       )
     );
   };
@@ -737,7 +714,7 @@ export function VersioningMessage({
         <div className='relative z-10 flex items-center gap-2 rounded-md px-1.5 py-2 sm:gap-3'>
           <div className='flex-shrink-0'>
             <div className='relative z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-red-500/50 bg-red-500/20 shadow-sm sm:h-5 sm:w-5'>
-              <AlertTriangle className='h-2 w-2 text-red-500 sm:h-2.5 sm:w-2.5' />
+              <HugeiconsIcon icon={Alert02Icon} className='h-2 w-2 text-red-500 sm:h-2.5 sm:w-2.5' />
             </div>
           </div>
           <div className='min-w-0 flex-1'>
@@ -757,7 +734,7 @@ export function VersioningMessage({
               onClick={handleRetry}
               className='h-6 px-2 text-xs text-red-500 hover:text-red-700'
             >
-              <RefreshCw className='mr-1 h-3 w-3' />
+              <HugeiconsIcon icon={RefreshIcon} className='mr-1 h-3 w-3' />
               <LocalizedText text={"Retry"} />
             </Button>
           </div>
@@ -827,7 +804,7 @@ export function VersioningMessage({
                 {item.name}
               </p>
               <div className='mt-0.5 flex items-center gap-1'>
-                <Video className='text-muted-foreground h-3 w-3' />
+                <HugeiconsIcon icon={Video01Icon} className='text-muted-foreground h-3 w-3' />
                 <p className='text-muted-foreground text-xs'>
                   <LocalizedText text={"Preview • Remotion"} />
                 </p>
@@ -897,7 +874,7 @@ export function VersioningMessage({
                   {inpaintMode && inpaintItem?.id !== item.id && (
                     <div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-violet-500/10'>
                       <div className='flex items-center gap-1 rounded-full bg-violet-600/80 px-2 py-1 text-xs text-white backdrop-blur-sm'>
-                        <Wand2 className='h-3 w-3' />
+                        <HugeiconsIcon icon={MagicWand01Icon} className='h-3 w-3' />
                         <span className='hidden lg:block'>
                           <LocalizedText text={"Click to edit"} />
                         </span>
@@ -912,7 +889,7 @@ export function VersioningMessage({
                   {inpaintMode && inpaintItem?.id === item.id && (
                     <div className='absolute top-2 right-2 z-20'>
                       <div className='flex items-center gap-1 rounded-full bg-violet-600 px-2 py-0.5 text-xs text-white'>
-                        <Wand2 className='h-3 w-3' />
+                        <HugeiconsIcon icon={MagicWand01Icon} className='h-3 w-3' />
                         <LocalizedText text={"Painting"} />
                       </div>
                     </div>
@@ -946,7 +923,7 @@ export function VersioningMessage({
                     <div className='flex w-full flex-col gap-3'>
                       {/* Prompt box */}
                       <div className='bg-muted/60 flex w-full items-start gap-2 rounded-xl border border-violet-500/40 px-3 py-2 transition-all focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500/30'>
-                        <Wand2 className='mt-1 h-4 w-4 flex-shrink-0 text-violet-400' />
+                        <HugeiconsIcon icon={MagicWand01Icon} className='mt-1 h-4 w-4 flex-shrink-0 text-violet-400' />
 
                         <textarea
                           value={inpaintPrompt}
@@ -1006,7 +983,7 @@ export function VersioningMessage({
                           {isInpainting ? (
                             <Loading size={12} />
                           ) : (
-                            <Send className='h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={SentIcon} className='h-3.5 w-3.5' />
                           )}
                           {isInpainting ? "Applying…" : "Apply"}
                         </Button>
@@ -1031,7 +1008,7 @@ export function VersioningMessage({
                   </p>
                   <div className='mt-2 flex flex-col gap-2'>
                     <div className='flex items-center gap-1'>
-                      <ImageIcon className='text-muted-foreground h-3 w-3' />
+                      <HugeiconsIcon icon={Image01Icon} className='text-muted-foreground h-3 w-3' />
                       <p className='text-muted-foreground text-xs'>
                         <LocalizedText text={"Image •"} />
                         {fileExt}
@@ -1050,7 +1027,7 @@ export function VersioningMessage({
                         }}
                         className='border-primary/30 text-primary hidden h-7.5 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5 lg:flex'
                       >
-                        <LayoutGrid className='h-3 w-3' />
+                        <HugeiconsIcon icon={LayoutGridIcon} className='h-3 w-3' />
                         <LocalizedText text={"View"} />
                       </Button>
                       {!isPublished && !item.publishStatus && (
@@ -1064,7 +1041,7 @@ export function VersioningMessage({
                           {publishing === item.id ? (
                             <Loading size={12} />
                           ) : (
-                            <Sparkles className='h-3 w-3' />
+                            <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' />
                           )}
                           {publishing === item.id ? "Publishing..." : "Publish"}
                         </Button>
@@ -1102,7 +1079,7 @@ export function VersioningMessage({
                         }}
                         className='h-7.5 w-fit gap-1.5 px-2 text-xs'
                       >
-                        <Play className='h-3 w-3' />
+                        <HugeiconsIcon icon={PlayIcon} className='h-3 w-3' />
                         <LocalizedText text={"Convert to video"} />
                       </Button>
                     </div>
@@ -1119,7 +1096,7 @@ export function VersioningMessage({
                     preload='metadata'
                   />
                   <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
-                    <Video className='h-4 w-4 text-white' />
+                    <HugeiconsIcon icon={Video01Icon} className='h-4 w-4 text-white' />
                   </div>
                 </div>
                 <div className='min-w-0 flex-1'>
@@ -1128,7 +1105,7 @@ export function VersioningMessage({
                   </p>
                   <div className='mt-2 flex flex-col gap-2'>
                     <div className='flex items-center gap-1'>
-                      <Video className='text-muted-foreground h-3 w-3' />
+                      <HugeiconsIcon icon={Video01Icon} className='text-muted-foreground h-3 w-3' />
                       <p className='text-muted-foreground text-xs'>
                         <LocalizedText text={"Video •"} />
                         {fileExt}
@@ -1167,7 +1144,7 @@ export function VersioningMessage({
                         {publishing === item.id ? (
                           <Loading size={12} />
                         ) : (
-                          <Sparkles className='h-3 w-3' />
+                          <HugeiconsIcon icon={SparklesIcon} className='h-3 w-3' />
                         )}
                         {publishing === item.id ? "Publishing..." : "Publish"}
                       </Button>
@@ -1179,7 +1156,7 @@ export function VersioningMessage({
               <div className='flex w-full flex-col items-start gap-3 rounded-lg border border-violet-500/20 bg-violet-500/5 p-3.5 transition-all duration-200 hover:border-violet-500/30 hover:bg-violet-500/10'>
                 <div className='flex w-full items-start gap-3'>
                   <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-violet-500/20 bg-violet-500/10 text-violet-500 sm:h-12 sm:w-12'>
-                    <GitBranch className='h-5 w-5 sm:h-6 sm:w-6' />
+                    <HugeiconsIcon icon={GitBranchIcon} className='h-5 w-5 sm:h-6 sm:w-6' />
                   </div>
                   <div className='min-w-0 flex-1'>
                     <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
@@ -1224,7 +1201,7 @@ export function VersioningMessage({
                         "border-violet-500 bg-violet-500 text-white hover:bg-violet-600 hover:text-white"
                     )}
                   >
-                    <LayoutGrid className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={LayoutGridIcon} className='h-3.5 w-3.5' />
                     {focusedGenerationId === item.id
                       ? "Viewing Canvas"
                       : "View Canvas"}
@@ -1235,7 +1212,7 @@ export function VersioningMessage({
               <div className='flex w-full flex-col items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3.5 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/10'>
                 <div className='flex w-full items-start gap-3'>
                   <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-500 sm:h-12 sm:w-12'>
-                    <Zap className='h-5 w-5 fill-amber-500/10 sm:h-6 sm:w-6' />
+                    <HugeiconsIcon icon={ZapIcon} className='h-5 w-5 fill-amber-500/10 sm:h-6 sm:w-6' />
                   </div>
                   <div className='min-w-0 flex-1'>
                     <p className='text-foreground truncate text-xs font-semibold sm:text-sm'>
@@ -1280,7 +1257,7 @@ export function VersioningMessage({
                         "border-amber-500 bg-amber-500 text-white hover:bg-amber-600 hover:text-white"
                     )}
                   >
-                    <LayoutGrid className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={LayoutGridIcon} className='h-3.5 w-3.5' />
                     {focusedGenerationId === item.id
                       ? "Viewing Canvas"
                       : "View Canvas"}
@@ -1290,14 +1267,14 @@ export function VersioningMessage({
             ) : (
               <div className='flex items-center gap-2'>
                 <div className='border-border bg-muted flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border sm:h-12 sm:w-12'>
-                  <File className='text-muted-foreground h-5 w-5 sm:h-6 sm:w-6' />
+                  <HugeiconsIcon icon={File01Icon} className='text-muted-foreground h-5 w-5 sm:h-6 sm:w-6' />
                 </div>
                 <div className='min-w-0 flex-1'>
                   <p className='text-foreground truncate text-xs font-medium sm:text-sm'>
                     {item.name}
                   </p>
                   <div className='mt-0.5 flex items-center gap-1'>
-                    <File className='text-muted-foreground h-3 w-3' />
+                    <HugeiconsIcon icon={File01Icon} className='text-muted-foreground h-3 w-3' />
                     <p className='text-muted-foreground text-xs'>
                       {item.type || "File"} •
                     </p>
@@ -1338,7 +1315,7 @@ export function VersioningMessage({
                     );
                   }}
                 >
-                  <ChevronLeft className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowLeft01Icon} className='h-4 w-4' />
                 </Button>
                 <span className='text-muted-foreground text-[10px] font-medium tracking-wider uppercase'>
                   {currentSlideIndex + 1} / {items.length}
@@ -1354,7 +1331,7 @@ export function VersioningMessage({
                     );
                   }}
                 >
-                  <ChevronRight className='h-4 w-4' />
+                  <HugeiconsIcon icon={ArrowRight01Icon} className='h-4 w-4' />
                 </Button>
 
                 <Button
@@ -1371,7 +1348,7 @@ export function VersioningMessage({
                   disabled={isDeletingItem}
                   title='Delete this version'
                 >
-                  <Trash2 className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                 </Button>
 
                 <div className='bg-border/50 mx-1 h-4 w-[1px]' />
@@ -1393,7 +1370,7 @@ export function VersioningMessage({
                 )}
                 {item.isActive && (
                   <div className='flex items-center gap-1.5 rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-1'>
-                    <Check className='h-3 w-3 text-violet-500' />
+                    <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3 text-violet-500' />
                     <span className='text-[10px] font-semibold text-violet-600 uppercase'>
                       <LocalizedText text={"main"} />
                     </span>
@@ -1437,7 +1414,7 @@ export function VersioningMessage({
                 !isCollapsed && "rotate-90"
               )}
             >
-              <ChevronRight className='text-muted-foreground h-3 w-3 sm:h-4 sm:w-4' />
+              <HugeiconsIcon icon={ArrowRight01Icon} className='text-muted-foreground h-3 w-3 sm:h-4 sm:w-4' />
             </div>
             <div className='min-w-0 flex-1'>
               <div className='flex flex-wrap items-center justify-between gap-2'>
@@ -1474,7 +1451,7 @@ export function VersioningMessage({
                           : "Inpaint — edit a region"
                       }
                     >
-                      <Wand2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={MagicWand01Icon} className='h-4 w-4' />
                     </Button>
                   )}
 
@@ -1495,7 +1472,7 @@ export function VersioningMessage({
                     }}
                     title='Download file'
                   >
-                    <Download className='h-4 w-4' />
+                    <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                   </Button>
                   {onDelete && generation.items.length > 1 && (
                     <Button
@@ -1508,7 +1485,7 @@ export function VersioningMessage({
                       }}
                       title='Delete'
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                     </Button>
                   )}
                   {generation.isLatest && (

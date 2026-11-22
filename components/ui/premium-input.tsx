@@ -9,13 +9,8 @@ import { enhancePromptText } from "@/lib/prompt-enhancement-api";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  CircleFadingArrowUp,
-  Loader2,
-  Mic,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, ZapIcon, CircleArrowUp02Icon, Mic01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -155,7 +150,7 @@ export function PremiumInput({
             exit={{ opacity: 0, y: 10 }}
             className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
           >
-            <AlertCircle className='mr-2 size-3.5' />
+            <HugeiconsIcon icon={AlertCircleIcon} className='mr-2 size-3.5' />
             {error}
           </motion.p>
         )}
@@ -181,7 +176,7 @@ export function PremiumInput({
           {!isGenerating && (
             <div className='flex w-full items-center justify-between gap-1'>
               <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
                   <span className='text-muted-foreground text-xs'>
                     {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
@@ -263,7 +258,7 @@ export function PremiumInput({
                 {isEnhancingPrompt ? (
                   <LoadingFileLoader size={20} />
                 ) : (
-                  <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-3.5 w-3.5' />
                 )}
               </button>
             </TooltipTrigger>
@@ -294,7 +289,7 @@ export function PremiumInput({
               disabled={!isSupported || isGenerating || disabled}
               title={isListening ? "Stop listening" : "Start voice input"}
             >
-              <Mic className='size-4 shrink-0' />
+              <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
             </button>
           </div>
         </div>

@@ -2,17 +2,8 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Fingerprint,
-  Globe,
-  Image as ImageIcon,
-  LayoutTemplate,
-  Palette,
-  Search,
-  Wand2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon, GlobeIcon, Search01Icon, PaintBoardIcon, Image01Icon, CheckmarkCircle02Icon, FingerPrintIcon, Layout02Icon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -39,7 +30,7 @@ export const LandingBrandDNA = () => {
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>{t("Scan your brand now")}</span>
-          <ArrowRight className='h-4 w-4' />
+          <HugeiconsIcon icon={ArrowRight02Icon} className='h-4 w-4' />
         </Link>
       </div>
 
@@ -58,14 +49,14 @@ export const LandingBrandDNA = () => {
           <div className='group relative mx-auto flex w-full max-w-md items-center gap-2 overflow-hidden rounded-xl bg-black/5 px-3 py-2 ring-1 ring-black/5 sm:px-4 dark:bg-white/5 dark:ring-white/10'>
             <div className='pointer-events-none absolute inset-0 h-full w-full -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-orange-500/10 to-transparent dark:via-orange-500/20' />
 
-            <Globe className='text-muted-foreground h-4 w-4 shrink-0 dark:text-white/40' />
+            <HugeiconsIcon icon={GlobeIcon} className='text-muted-foreground h-4 w-4 shrink-0 dark:text-white/40' />
 
             <span className='text-foreground min-w-0 flex-1 truncate font-mono text-xs tracking-tight sm:text-sm dark:text-white/80'>
               {t("https://your-brand.com")}
             </span>
 
             <div className='flex shrink-0 items-center rounded-full bg-gray-800 px-2 py-1 text-[10px] text-gray-200 ring-1 ring-gray-400'>
-              <Search className='h-3 w-3 animate-pulse' />
+              <HugeiconsIcon icon={Search01Icon} className='h-3 w-3 animate-pulse' />
               <span className='ml-1.5 hidden sm:inline'>{t("Scanning")}</span>
             </div>
           </div>
@@ -77,10 +68,10 @@ export const LandingBrandDNA = () => {
           <div className='col-span-1 space-y-4 md:col-span-5'>
             <div className='relative overflow-hidden rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='absolute top-0 right-0 p-4 opacity-[0.03] dark:opacity-10'>
-                <Palette className='h-24 w-24 text-black dark:text-white' />
+                <HugeiconsIcon icon={PaintBoardIcon} className='h-24 w-24 text-black dark:text-white' />
               </div>
               <h3 className='text-foreground mb-4 flex items-center gap-2 text-lg font-medium dark:text-white/90'>
-                <Palette className='h-4 w-4 text-orange-600 dark:text-orange-400' />
+                <HugeiconsIcon icon={PaintBoardIcon} className='h-4 w-4 text-orange-600 dark:text-orange-400' />
                 {t("Visual Identity")}
               </h3>
 
@@ -138,7 +129,7 @@ export const LandingBrandDNA = () => {
 
             <div className='flex items-center justify-between rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='flex items-center gap-3'>
-                <ImageIcon className='text-muted-foreground h-8 w-8 dark:text-white/40' />
+                <HugeiconsIcon icon={Image01Icon} className='text-muted-foreground h-8 w-8 dark:text-white/40' />
                 <div>
                   <p className='text-foreground text-sm font-medium dark:text-white/90'>
                     {t("Asset Auto-Sync")}
@@ -148,7 +139,7 @@ export const LandingBrandDNA = () => {
                   </p>
                 </div>
               </div>
-              <CheckCircle2 className='h-5 w-5 text-emerald-600 dark:text-emerald-400' />
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-5 w-5 text-emerald-600 dark:text-emerald-400' />
             </div>
           </div>
 
@@ -187,11 +178,11 @@ export const LandingBrandDNA = () => {
             {/* Tone of Voice Profile */}
             <div className='relative flex h-full w-full flex-col overflow-hidden rounded-lg bg-black/[0.02] p-5 ring-1 ring-black/5 lg:w-[65%] dark:bg-white/[0.02] dark:ring-white/10'>
               <div className='absolute right-0 bottom-0 p-4 opacity-[0.03] dark:opacity-5'>
-                <Fingerprint className='h-48 w-48 text-black dark:text-white' />
+                <HugeiconsIcon icon={FingerPrintIcon} className='h-48 w-48 text-black dark:text-white' />
               </div>
 
               <h3 className='text-foreground mb-4 flex items-center gap-2 text-lg font-medium dark:text-white/90'>
-                <LayoutTemplate className='h-4 w-4 text-amber-700 dark:text-amber-700' />
+                <HugeiconsIcon icon={Layout02Icon} className='h-4 w-4 text-amber-700 dark:text-amber-700' />
                 {t("Tone of Voice Profile")}
               </h3>
 
@@ -233,7 +224,7 @@ export const LandingBrandDNA = () => {
 
                 <div className='relative flex flex-col justify-center rounded-xl bg-black/5 p-4 ring-1 ring-black/5 dark:bg-black/20 dark:ring-white/5'>
                   <div className='pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-t from-amber-500/5 to-transparent' />
-                  <LayoutTemplate className='mb-3 h-6 w-6 text-amber-700 dark:text-amber-700' />
+                  <HugeiconsIcon icon={Layout02Icon} className='mb-3 h-6 w-6 text-amber-700 dark:text-amber-700' />
                   <p className='text-foreground text-sm font-medium dark:text-white'>
                     {t("Ready for Generation")}
                   </p>

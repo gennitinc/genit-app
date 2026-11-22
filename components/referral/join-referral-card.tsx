@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { ArrowRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -117,7 +118,7 @@ export function JoinReferralCard({
               ) : (
                 <div className='flex items-center gap-2'>
                   <span>Join the program</span>
-                  <ArrowRight className='size-4' />
+                  <HugeiconsIcon icon={ArrowRight02Icon} className='size-4' />
                 </div>
               )}
             </Button>

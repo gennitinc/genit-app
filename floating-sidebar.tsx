@@ -17,29 +17,8 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
-import {
-  CheckCircle,
-  Crown,
-  Database,
-  FileText,
-  FolderPlus,
-  Globe,
-  ImageIcon,
-  Info,
-  Loader2,
-  MessageCircle,
-  Mic,
-  Mic2,
-  Music,
-  Network,
-  Play,
-  Plus,
-  Search,
-  Trash2,
-  Type,
-  Upload,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Mic01Icon, Search01Icon, Cancel01Icon, MusicNote01Icon, CheckmarkCircle02Icon, Mic02Icon, Upload01Icon, Image01Icon, PlayIcon, TextFontIcon, File02Icon, GlobeIcon, Delete02Icon, InformationCircleIcon, BubbleChatIcon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
@@ -1338,7 +1317,7 @@ export function FloatingSidebar({
   const modalConfigs = {
     mic: {
       title: "Audio & Voice",
-      icon: Mic,
+      icon: Mic01Icon,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
       tabs: ["all", "record", "add"],
@@ -1347,7 +1326,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search audio files...'
                 value={searchQuery}
@@ -1362,7 +1341,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -1373,7 +1352,7 @@ export function FloatingSidebar({
                 historyItems.audio.length === 0 &&
                 !historyPagination.audio.isLoading ? (
                   <div className='py-8 text-center'>
-                    <Music className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={MusicNote01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No audio files yet
                     </p>
@@ -1405,7 +1384,7 @@ export function FloatingSidebar({
                         >
                           <div className='flex items-center gap-3'>
                             <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-md'>
-                              <Music className='text-muted-foreground h-5 w-5' />
+                              <HugeiconsIcon icon={MusicNote01Icon} className='text-muted-foreground h-5 w-5' />
                             </div>
                             <div className='min-w-0 flex-1'>
                               <p className='text-foreground truncate text-sm font-medium'>
@@ -1419,7 +1398,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === file.id && (
                               <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -1445,7 +1424,7 @@ export function FloatingSidebar({
                         >
                           <div className='flex items-center gap-3'>
                             <div className='flex h-10 w-10 items-center justify-center rounded-md bg-green-500/10'>
-                              <Music className='h-5 w-5 text-green-500' />
+                              <HugeiconsIcon icon={MusicNote01Icon} className='h-5 w-5 text-green-500' />
                             </div>
                             <div className='min-w-0 flex-1'>
                               <p className='text-foreground truncate text-sm font-medium'>
@@ -1468,7 +1447,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -1497,7 +1476,7 @@ export function FloatingSidebar({
           <div className='space-y-4'>
             <div className='py-4 text-center'>
               <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10'>
-                <Mic2 className='h-8 w-8 text-red-500' />
+                <HugeiconsIcon icon={Mic02Icon} className='h-8 w-8 text-red-500' />
               </div>
               <h3 className='text-foreground mb-2 text-sm font-semibold'>
                 Record Audio
@@ -1589,7 +1568,7 @@ export function FloatingSidebar({
                   className='w-full bg-red-500 text-white hover:bg-red-600'
                   onClick={startRecording}
                 >
-                  <Mic2 className='mr-2 h-8 w-8' />
+                  <HugeiconsIcon icon={Mic02Icon} className='mr-2 h-8 w-8' />
                   Start Recording
                 </Button>
               ) : (
@@ -1726,7 +1705,7 @@ export function FloatingSidebar({
                         }
                         title='Clear URL'
                       >
-                        <X className='h-3 w-3' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
@@ -1842,7 +1821,7 @@ export function FloatingSidebar({
                       </div>
                     ) : (
                       <>
-                        <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                        <HugeiconsIcon icon={Upload01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                         <p className='text-muted-foreground mb-2 text-sm'>
                           Drop audio files here or click to browse
                         </p>
@@ -1861,7 +1840,7 @@ export function FloatingSidebar({
     },
     image: {
       title: "Images & Graphics",
-      icon: ImageIcon,
+      icon: Image01Icon,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
       tabs: ["all", "url", "upload"],
@@ -1870,7 +1849,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search image files...'
                 value={searchQuery}
@@ -1885,7 +1864,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -1896,7 +1875,7 @@ export function FloatingSidebar({
                 historyItems.image.length === 0 &&
                 !historyPagination.image.isLoading ? (
                   <div className='py-8 text-center'>
-                    <ImageIcon className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={Image01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No images yet
                     </p>
@@ -1935,7 +1914,7 @@ export function FloatingSidebar({
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "image" && (
                                 <div className='absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                  <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
                             <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
@@ -1975,7 +1954,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                             <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
@@ -2104,7 +2083,7 @@ export function FloatingSidebar({
                     }
                     title='Clear URL'
                   >
-                    <X className='h-3 w-3' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -2216,7 +2195,7 @@ export function FloatingSidebar({
                   </div>
                 ) : (
                   <>
-                    <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={Upload01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground mb-2 text-sm'>
                       Drop image files here or click to browse
                     </p>
@@ -2233,7 +2212,7 @@ export function FloatingSidebar({
     },
     video: {
       title: "Video Content",
-      icon: Play,
+      icon: PlayIcon,
       color: "text-blue-500",
       bgColor: "bg-blue-500/10",
       tabs: ["all", "url", "upload"],
@@ -2242,7 +2221,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search videos...'
                 value={searchQuery}
@@ -2257,7 +2236,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -2268,7 +2247,7 @@ export function FloatingSidebar({
                 historyItems.video.length === 0 &&
                 !historyPagination.video.isLoading ? (
                   <div className='py-8 text-center'>
-                    <Play className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={PlayIcon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No videos yet
                     </p>
@@ -2320,12 +2299,12 @@ export function FloatingSidebar({
                               }}
                             />
                             <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
-                              <Play className='h-4 w-4 fill-white text-white' />
+                              <HugeiconsIcon icon={PlayIcon} className='h-4 w-4 fill-white text-white' />
                             </div>
                             {selectedItem?.id === file.id &&
                               selectedItem?.type === "video" && (
                                 <div className='absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                  <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                                 </div>
                               )}
                             <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
@@ -2374,7 +2353,7 @@ export function FloatingSidebar({
                               }}
                             />
                             <div className='absolute inset-0 flex items-center justify-center bg-black/20'>
-                              <Play className='h-4 w-4 fill-white text-white' />
+                              <HugeiconsIcon icon={PlayIcon} className='h-4 w-4 fill-white text-white' />
                             </div>
                             <div className='absolute top-1 left-1'>
                               <Badge className='h-3 border-none bg-indigo-600 px-1 py-0 text-[8px] leading-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/80'>
@@ -2383,7 +2362,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                             <div className='absolute right-0 bottom-0 left-0 bg-black/40 p-1 backdrop-blur-[2px]'>
@@ -2512,7 +2491,7 @@ export function FloatingSidebar({
                     }
                     title='Clear URL'
                   >
-                    <X className='h-3 w-3' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -2624,7 +2603,7 @@ export function FloatingSidebar({
                   </div>
                 ) : (
                   <>
-                    <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={Upload01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground mb-2 text-sm'>
                       Drop video files here or click to browse
                     </p>
@@ -2641,7 +2620,7 @@ export function FloatingSidebar({
     },
     text: {
       title: "Text & Documents",
-      icon: Type,
+      icon: TextFontIcon,
       color: "text-orange-500",
       bgColor: "bg-orange-500/10",
       tabs: ["all", "create"],
@@ -2650,7 +2629,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search text/docs...'
                 value={searchQuery}
@@ -2665,7 +2644,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -2675,7 +2654,7 @@ export function FloatingSidebar({
                 {historyItems.text.length === 0 &&
                 !historyPagination.text.isLoading ? (
                   <div className='py-8 text-center'>
-                    <FileText className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={File02Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No text history yet
                     </p>
@@ -2730,7 +2709,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -2849,7 +2828,7 @@ export function FloatingSidebar({
     },
     globe: {
       title: "Social Media",
-      icon: Globe,
+      icon: GlobeIcon,
       color: "text-pink-500",
       bgColor: "bg-pink-500/10",
       tabs: ["all", "socials", "added"],
@@ -2858,7 +2837,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search socials...'
                 value={searchQuery}
@@ -2873,7 +2852,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -2883,7 +2862,7 @@ export function FloatingSidebar({
                 {historyItems.social.length === 0 &&
                 !historyPagination.social.isLoading ? (
                   <div className='py-8 text-center'>
-                    <Globe className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={GlobeIcon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No social history yet
                     </p>
@@ -2908,7 +2887,7 @@ export function FloatingSidebar({
                         >
                           <div className='flex items-start gap-3'>
                             <div className='mt-1 flex h-10 w-10 items-center justify-center rounded-md bg-pink-500/10'>
-                              <Globe className='h-5 w-5 text-pink-500' />
+                              <HugeiconsIcon icon={GlobeIcon} className='h-5 w-5 text-pink-500' />
                             </div>
                             <div className='min-w-0 flex-1'>
                               <p className='text-foreground line-clamp-1 text-sm font-medium'>
@@ -2934,7 +2913,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -2963,7 +2942,7 @@ export function FloatingSidebar({
               <>
                 <div className='flex-shrink-0 space-y-3'>
                   <div className='relative'>
-                    <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+                    <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
                     <Input
                       placeholder='Search images, videos, audio, social content...'
                       value={searchQuery}
@@ -2978,7 +2957,7 @@ export function FloatingSidebar({
                         onClick={() => setSearchQuery("")}
                         title='Clear Search'
                       >
-                        <X className='h-3 w-3' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
@@ -3061,7 +3040,7 @@ export function FloatingSidebar({
                                       }}
                                     />
                                   ) : null}
-                                  <ImageIcon className='text-muted-foreground absolute inset-0 m-auto h-5 w-5' />
+                                  <HugeiconsIcon icon={Image01Icon} className='text-muted-foreground absolute inset-0 m-auto h-5 w-5' />
                                 </div>
                                 <div className='min-w-0 flex-1'>
                                   <p className='text-foreground truncate text-sm font-medium'>
@@ -3084,7 +3063,7 @@ export function FloatingSidebar({
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "image" && (
                                       <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                        <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
@@ -3097,7 +3076,7 @@ export function FloatingSidebar({
                                     }}
                                     title='Delete file'
                                   >
-                                    <Trash2 className='h-3 w-3' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3151,7 +3130,7 @@ export function FloatingSidebar({
                                   ) : null}
                                   <div className='absolute inset-0 flex items-center justify-center'>
                                     <div className='flex h-6 w-6 items-center justify-center rounded-full bg-black/50'>
-                                      <Play className='h-3 w-3 text-white' />
+                                      <HugeiconsIcon icon={PlayIcon} className='h-3 w-3 text-white' />
                                     </div>
                                   </div>
                                 </div>
@@ -3178,7 +3157,7 @@ export function FloatingSidebar({
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "video" && (
                                       <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                        <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
@@ -3191,7 +3170,7 @@ export function FloatingSidebar({
                                     }}
                                     title='Delete file'
                                   >
-                                    <Trash2 className='h-3 w-3' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3224,7 +3203,7 @@ export function FloatingSidebar({
                             >
                               <div className='flex items-center gap-3'>
                                 <div className='flex h-10 w-10 items-center justify-center rounded-md bg-green-500/10'>
-                                  <Music className='h-5 w-5 text-green-500' />
+                                  <HugeiconsIcon icon={MusicNote01Icon} className='h-5 w-5 text-green-500' />
                                 </div>
                                 <div className='min-w-0 flex-1'>
                                   <p className='text-foreground truncate text-sm font-medium'>
@@ -3249,7 +3228,7 @@ export function FloatingSidebar({
                                   {selectedItem?.id === file.id &&
                                     selectedItem?.type === "audio" && (
                                       <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                        <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                        <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                                       </div>
                                     )}
                                   <Button
@@ -3262,7 +3241,7 @@ export function FloatingSidebar({
                                     }}
                                     title='Delete file'
                                   >
-                                    <Trash2 className='h-3 w-3' />
+                                    <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
                                   </Button>
                                 </div>
                               </div>
@@ -3286,7 +3265,7 @@ export function FloatingSidebar({
                               .includes(searchQuery.toLowerCase())
                           ) && (
                             <div className='py-8 text-center'>
-                              <Search className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                               <p className='text-muted-foreground text-sm'>
                                 No content found
                               </p>
@@ -3311,7 +3290,7 @@ export function FloatingSidebar({
                     onClick={() => setSelectedSocialPlatform(null)}
                     className='hover:bg-muted h-8 w-8 p-0'
                   >
-                    <X className='h-8 w-8' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-8 w-8' />
                   </Button>
                   <div
                     className={`h-8 w-8 ${getPlatformConfig(selectedSocialPlatform)?.bg} flex items-center justify-center rounded`}
@@ -3441,14 +3420,14 @@ export function FloatingSidebar({
                         }
                         title='Clear URL'
                       >
-                        <X className='h-3 w-3' />
+                        <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                       </Button>
                     )}
                   </div>
                 </div>
                 <div className='text-muted-foreground text-xs'>
                   <div className='flex items-center gap-2'>
-                    <Info className='h-3 w-3' />
+                    <HugeiconsIcon icon={InformationCircleIcon} className='h-3 w-3' />
                     <span>
                       Content will be fetched and added to your workflow
                     </span>
@@ -3461,7 +3440,7 @@ export function FloatingSidebar({
         added: () => (
           <div className='space-y-3'>
             <div className='py-8 text-center'>
-              <MessageCircle className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+              <HugeiconsIcon icon={BubbleChatIcon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
               <p className='text-muted-foreground text-sm'>
                 No social content added yet
               </p>
@@ -3475,7 +3454,7 @@ export function FloatingSidebar({
     },
     file: {
       title: "Documents & Files",
-      icon: FileText,
+      icon: File02Icon,
       color: "text-indigo-500",
       bgColor: "bg-indigo-500/10",
       tabs: ["all", "upload", "url"],
@@ -3484,7 +3463,7 @@ export function FloatingSidebar({
           <div className='space-y-3'>
             {/* Search Bar */}
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input
                 placeholder='Search document files...'
                 value={searchQuery}
@@ -3499,7 +3478,7 @@ export function FloatingSidebar({
                   onClick={() => setSearchQuery("")}
                   title='Clear Search'
                 >
-                  <X className='h-3 w-3' />
+                  <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                 </Button>
               )}
             </div>
@@ -3510,7 +3489,7 @@ export function FloatingSidebar({
                 historyItems.docs.length === 0 &&
                 !historyPagination.docs.isLoading ? (
                   <div className='py-8 text-center'>
-                    <FileText className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                    <HugeiconsIcon icon={File02Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                     <p className='text-muted-foreground text-sm'>
                       No documents yet
                     </p>
@@ -3542,7 +3521,7 @@ export function FloatingSidebar({
                         >
                           <div className='flex items-center gap-3'>
                             <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-md'>
-                              <FileText className='text-muted-foreground h-5 w-5' />
+                              <HugeiconsIcon icon={File02Icon} className='text-muted-foreground h-5 w-5' />
                             </div>
                             <div className='min-w-0 flex-1'>
                               <p className='text-foreground truncate text-sm font-medium'>
@@ -3556,7 +3535,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === file.id && (
                               <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -3582,7 +3561,7 @@ export function FloatingSidebar({
                         >
                           <div className='flex items-center gap-3'>
                             <div className='flex h-10 w-10 items-center justify-center rounded-md bg-indigo-500/10'>
-                              <FileText className='h-5 w-5 text-indigo-500' />
+                              <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-indigo-500' />
                             </div>
                             <div className='min-w-0 flex-1'>
                               <p className='text-foreground truncate text-sm font-medium'>
@@ -3605,7 +3584,7 @@ export function FloatingSidebar({
                             </div>
                             {selectedItem?.id === item.id && (
                               <div className='flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700'>
-                                <CheckCircle className='text-primary-foreground h-3 w-3' />
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='text-primary-foreground h-3 w-3' />
                               </div>
                             )}
                           </div>
@@ -3721,7 +3700,7 @@ export function FloatingSidebar({
                 id='document-upload'
               />
               <label htmlFor='document-upload' className='cursor-pointer'>
-                <Upload className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
+                <HugeiconsIcon icon={Upload01Icon} className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                 <p className='text-muted-foreground mb-2 text-sm'>
                   Drop files here or click to browse
                 </p>
@@ -3831,7 +3810,7 @@ export function FloatingSidebar({
                     }
                     title='Clear URL'
                   >
-                    <X className='h-3 w-3' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
                   </Button>
                 )}
               </div>
@@ -3860,7 +3839,7 @@ export function FloatingSidebar({
             title='Audio & Voice'
             onClick={() => handleIconClick("mic")}
           >
-            <Mic className='h-8 w-8' />
+            <HugeiconsIcon icon={Mic01Icon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Audio</span>
         </div>
@@ -3877,7 +3856,7 @@ export function FloatingSidebar({
             title='Images'
             onClick={() => handleIconClick("image")}
           >
-            <ImageIcon className='h-8 w-8' />
+            <HugeiconsIcon icon={Image01Icon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Images</span>
         </div>
@@ -3894,7 +3873,7 @@ export function FloatingSidebar({
             title='Video'
             onClick={() => handleIconClick("video")}
           >
-            <Play className='h-8 w-8' />
+            <HugeiconsIcon icon={PlayIcon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Video</span>
         </div>
@@ -3911,7 +3890,7 @@ export function FloatingSidebar({
             title='Text'
             onClick={() => handleIconClick("text")}
           >
-            <Type className='h-8 w-8' />
+            <HugeiconsIcon icon={TextFontIcon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Text</span>
         </div>
@@ -3952,7 +3931,7 @@ export function FloatingSidebar({
             title='Social Media'
             onClick={() => handleIconClick("globe")}
           >
-            <Globe className='h-8 w-8' />
+            <HugeiconsIcon icon={GlobeIcon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Social</span>
         </div>
@@ -3965,7 +3944,7 @@ export function FloatingSidebar({
             title='Add Prompt'
             onClick={() => onAddIntegration("prompt", {})}
           >
-            <MessageCircle className='h-8 w-8' />
+            <HugeiconsIcon icon={BubbleChatIcon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Prompt</span>
         </div>
@@ -3982,7 +3961,7 @@ export function FloatingSidebar({
             title='Documents'
             onClick={() => handleIconClick("file")}
           >
-            <FileText className='h-8 w-8' />
+            <HugeiconsIcon icon={File02Icon} className='h-8 w-8' />
           </Button>
           <span className='text-muted-foreground text-[10px]'>Docs</span>
         </div>
@@ -4014,22 +3993,22 @@ export function FloatingSidebar({
                       }`}
                     >
                       {selectedIntegrationType === "mic" && (
-                        <Mic className='h-5 w-5 text-green-500' />
+                        <HugeiconsIcon icon={Mic01Icon} className='h-5 w-5 text-green-500' />
                       )}
                       {selectedIntegrationType === "image" && (
-                        <ImageIcon className='h-5 w-5 text-purple-500' />
+                        <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-purple-500' />
                       )}
                       {selectedIntegrationType === "video" && (
-                        <Play className='h-5 w-5 text-blue-500' />
+                        <HugeiconsIcon icon={PlayIcon} className='h-5 w-5 text-blue-500' />
                       )}
                       {selectedIntegrationType === "text" && (
-                        <Type className='h-5 w-5 text-orange-500' />
+                        <HugeiconsIcon icon={TextFontIcon} className='h-5 w-5 text-orange-500' />
                       )}
                       {selectedIntegrationType === "globe" && (
-                        <Globe className='h-5 w-5 text-pink-500' />
+                        <HugeiconsIcon icon={GlobeIcon} className='h-5 w-5 text-pink-500' />
                       )}
                       {selectedIntegrationType === "file" && (
-                        <FileText className='h-5 w-5 text-indigo-500' />
+                        <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-indigo-500' />
                       )}
                     </div>
                     <div>
@@ -4074,7 +4053,7 @@ export function FloatingSidebar({
                 onClick={resetModal}
                 className='hover:bg-muted h-6 w-6 p-0'
               >
-                <X className='h-3 w-3' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
               </Button>
             </div>
           </div>
@@ -4143,7 +4122,7 @@ export function FloatingSidebar({
                     </>
                   ) : (
                     <>
-                      <Plus className='mr-1 h-3 w-3' />
+                      <HugeiconsIcon icon={PlusSignIcon} className='mr-1 h-3 w-3' />
                       Add to Canvas
                     </>
                   )}

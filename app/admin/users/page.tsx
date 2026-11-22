@@ -23,14 +23,8 @@ import {
 import { apiResponse } from "@/utils/apiResponse";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import {
-  Filter,
-  Mail,
-  MoreHorizontal,
-  Search,
-  UserCheck,
-  UserMinus,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FilterIcon, Search01Icon, MoreHorizontalIcon, UserCheck01Icon, Mail01Icon, UserMinus01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export default function UsersPage() {
@@ -76,7 +70,7 @@ export default function UsersPage() {
         </div>
         <div className='flex gap-2'>
           <Button variant='outline' size='sm' className='gap-2'>
-            <Filter className='h-4 w-4' /> <LocalizedText text={"Filter"} />
+            <HugeiconsIcon icon={FilterIcon} className='h-4 w-4' /> <LocalizedText text={"Filter"} />
           </Button>
           <Button size='sm' className='gap-2'>
             <LocalizedText text={"New User"} />
@@ -87,7 +81,7 @@ export default function UsersPage() {
       <div className='bg-card border-border/50 overflow-hidden rounded-3xl border'>
         <div className='border-border/50 bg-muted/20 flex items-center gap-4 border-b p-6'>
           <div className='relative max-w-md flex-1'>
-            <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
             <Input
               placeholder='Search by username or email...'
               className='bg-background border-border/50 h-10 rounded-xl pl-10'
@@ -190,7 +184,7 @@ export default function UsersPage() {
                             size='icon'
                             className='group-hover:bg-background h-8 w-8 rounded-lg'
                           >
-                            <MoreHorizontal className='h-4 w-4' />
+                            <HugeiconsIcon icon={MoreHorizontalIcon} className='h-4 w-4' />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -201,16 +195,16 @@ export default function UsersPage() {
                             <LocalizedText text={"Actions"} />
                           </DropdownMenuLabel>
                           <DropdownMenuItem className='gap-2'>
-                            <UserCheck className='h-4 w-4' />{" "}
+                            <HugeiconsIcon icon={UserCheck01Icon} className='h-4 w-4' />{" "}
                             <LocalizedText text={"Edit Profile"} />
                           </DropdownMenuItem>
                           <DropdownMenuItem className='text-primary gap-2'>
-                            <Mail className='h-4 w-4' />{" "}
+                            <HugeiconsIcon icon={Mail01Icon} className='h-4 w-4' />{" "}
                             <LocalizedText text={"Send Email"} />
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className='text-destructive focus:text-destructive gap-2'>
-                            <UserMinus className='h-4 w-4' />{" "}
+                            <HugeiconsIcon icon={UserMinus01Icon} className='h-4 w-4' />{" "}
                             <LocalizedText text={"Suspend Account"} />
                           </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -20,21 +20,8 @@ import {
   videoGenApi,
 } from "@/utils/inspire-api";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  Check,
-  ChevronDown,
-  CircleFadingArrowUp,
-  History,
-  Image as ImageIcon,
-  Loader2,
-  Mic,
-  Monitor,
-  Music,
-  Type,
-  Video as VideoIcon,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon, ZapIcon, CircleArrowUp02Icon, ArrowDown01Icon, Tick02Icon, ComputerIcon, Clock04Icon, Image01Icon, Video01Icon, MusicNote01Icon, TextFontIcon, Mic01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -394,7 +381,7 @@ export function WorkflowPremiumInput({
             exit={{ opacity: 0, y: 10 }}
             className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
           >
-            <AlertCircle className='mr-2 size-3.5' />
+            <HugeiconsIcon icon={AlertCircleIcon} className='mr-2 size-3.5' />
             {error}
           </motion.p>
         )}
@@ -421,7 +408,7 @@ export function WorkflowPremiumInput({
           {!isGenerating && (
             <div className='flex w-full items-center justify-between gap-1'>
               <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                 {user ? (
                   <span className='text-muted-foreground text-xs'>
                     {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
@@ -503,7 +490,7 @@ export function WorkflowPremiumInput({
                 {isEnhancingPrompt ? (
                   <LoadingFileLoader size={20} />
                 ) : (
-                  <CircleFadingArrowUp className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-3.5 w-3.5' />
                 )}
               </button>
             </TooltipTrigger>
@@ -529,7 +516,7 @@ export function WorkflowPremiumInput({
                 {isLoadingModels
                   ? "Loading"
                   : activeModel?.name || "Select Model"}
-                <ChevronDown className='h-3 w-3 opacity-50' />
+                <HugeiconsIcon icon={ArrowDown01Icon} className='h-3 w-3 opacity-50' />
               </button>
             </PopoverTrigger>
             <PopoverContent className='w-[200px] p-1' align='start'>
@@ -555,7 +542,7 @@ export function WorkflowPremiumInput({
                         {model.name}
                       </div>
                       {selectedModel === model.id && (
-                        <Check className='h-3 w-3' />
+                        <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
                       )}
                     </button>
                   ))
@@ -568,9 +555,9 @@ export function WorkflowPremiumInput({
             <Popover>
               <PopoverTrigger asChild>
                 <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
-                  <Monitor className='h-3.5 w-3.5 opacity-70' />
+                  <HugeiconsIcon icon={ComputerIcon} className='h-3.5 w-3.5 opacity-70' />
                   {aspectRatio === "auto" ? "Auto" : aspectRatio || "16:9"}
-                  <ChevronDown className='h-3 w-3 opacity-50' />
+                  <HugeiconsIcon icon={ArrowDown01Icon} className='h-3 w-3 opacity-50' />
                 </button>
               </PopoverTrigger>
               <PopoverContent className='w-[180px] p-1' align='start'>
@@ -594,7 +581,7 @@ export function WorkflowPremiumInput({
                     >
                       {ratio.label}
                       {aspectRatio === ratio.value && (
-                        <Check className='h-3 w-3' />
+                        <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
                       )}
                     </button>
                   ))}
@@ -608,14 +595,14 @@ export function WorkflowPremiumInput({
           <Popover open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
             <PopoverTrigger asChild>
               <button className='hover:bg-muted text-muted-foreground hover:text-foreground flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium transition-colors'>
-                <History className='h-3.5 w-3.5 opacity-70' />
+                <HugeiconsIcon icon={Clock04Icon} className='h-3.5 w-3.5 opacity-70' />
                 <LocalizedText text={"History"} />
               </button>
             </PopoverTrigger>
             <PopoverContent className='w-[320px] p-0' align='start'>
               <div className='bg-muted/30 border-b p-3'>
                 <h4 className='flex items-center gap-2 text-xs font-semibold'>
-                  <History className='h-3 w-3' />
+                  <HugeiconsIcon icon={Clock04Icon} className='h-3 w-3' />
                   {contentType === "all"
                     ? "Combined History"
                     : `${contentType.charAt(0).toUpperCase() + contentType.slice(1)} History`}
@@ -632,7 +619,7 @@ export function WorkflowPremiumInput({
                     </div>
                   ) : history.length === 0 ? (
                     <div className='flex flex-col items-center justify-center px-4 py-8 text-center'>
-                      <History className='text-muted-foreground/20 mb-2 h-8 w-8' />
+                      <HugeiconsIcon icon={Clock04Icon} className='text-muted-foreground/20 mb-2 h-8 w-8' />
                       <p className='text-muted-foreground text-[10px]'>
                         <LocalizedText
                           text={
@@ -678,18 +665,18 @@ export function WorkflowPremiumInput({
                               )}
                               <div className='absolute top-1 right-1'>
                                 {item.type === "image" ? (
-                                  <ImageIcon className='h-3 w-3 text-white drop-shadow-md' />
+                                  <HugeiconsIcon icon={Image01Icon} className='h-3 w-3 text-white drop-shadow-md' />
                                 ) : (
-                                  <VideoIcon className='h-3 w-3 text-white drop-shadow-md' />
+                                  <HugeiconsIcon icon={Video01Icon} className='h-3 w-3 text-white drop-shadow-md' />
                                 )}
                               </div>
                             </>
                           ) : (
                             <div className='bg-muted/50 flex h-full w-full items-center justify-center p-2'>
                               {item.type === "audio" ? (
-                                <Music className='text-muted-foreground h-4 w-4' />
+                                <HugeiconsIcon icon={MusicNote01Icon} className='text-muted-foreground h-4 w-4' />
                               ) : (
-                                <Type className='text-muted-foreground h-4 w-4' />
+                                <HugeiconsIcon icon={TextFontIcon} className='text-muted-foreground h-4 w-4' />
                               )}
                             </div>
                           )}
@@ -722,7 +709,7 @@ export function WorkflowPremiumInput({
               disabled={!isSupported || isGenerating || disabled}
               title={isListening ? "Stop listening" : "Start voice input"}
             >
-              <Mic className='size-4 shrink-0' />
+              <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
             </button>
 
             <button

@@ -4,7 +4,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { cn } from "@/lib/utils";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { modelApi } from "@/utils/inspire-api";
-import { CircleFadingArrowUp, Loader2, Trash2 } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CircleArrowUp02Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, Position } from "reactflow";
 import React, { useEffect, useState } from "react";
 
@@ -78,7 +79,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
       {/* Header */}
       <div className='flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50 px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-950/40'>
         <div className='flex items-center gap-1.5 text-zinc-500 dark:text-neutral-400'>
-          <CircleFadingArrowUp className='h-4 w-4' />
+          <HugeiconsIcon icon={CircleArrowUp02Icon} className='h-4 w-4' />
           <span className='font-sans text-[10px] font-semibold tracking-wider uppercase'>
             <LocalizedText text={"AI Generate"} />
           </span>
@@ -89,7 +90,7 @@ export function AIGenerateNode({ id, data }: NodeProps<AIGenerateNodeData>) {
             onClick={() => data.onRemoveNode(id)}
             className='nodrag nopan rounded p-1 text-zinc-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400'
           >
-            <Trash2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
           </button>
         )}
       </div>

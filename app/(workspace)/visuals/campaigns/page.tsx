@@ -26,15 +26,8 @@ import {
   listGtmCampaigns,
 } from "@/lib/gtm-api";
 import { cn } from "@/lib/utils";
-import {
-  ChevronLeft,
-  ChevronRight,
-  MessageSquareText,
-  Plus,
-  RefreshCw,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RefreshIcon, PlusSignIcon, Search01Icon, Message02Icon, Delete02Icon, ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -175,11 +168,11 @@ export default function CampaignsPage() {
             aria-label='Refresh campaigns'
             title='Refresh'
           >
-            <RefreshCw className={cn(loading && "animate-spin")} />
+            <HugeiconsIcon icon={RefreshIcon} className={cn(loading && "animate-spin")} />
           </Button>
           <Button asChild>
             <Link href={campaignChatHref(NEW_CAMPAIGN_PROMPT)}>
-              <Plus /> New campaign
+              <HugeiconsIcon icon={PlusSignIcon} /> New campaign
             </Link>
           </Button>
         </div>
@@ -230,7 +223,7 @@ export default function CampaignsPage() {
             ))}
           </nav>
           <div className='relative w-full sm:w-64'>
-            <Search className='text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2' />
             <Input
               value={query}
               onChange={(event) => {
@@ -325,7 +318,7 @@ export default function CampaignsPage() {
                                 aria-label={`Open chat for ${campaign.name}`}
                                 title='Open chat'
                               >
-                                <MessageSquareText />
+                                <HugeiconsIcon icon={Message02Icon} />
                               </Link>
                             </Button>
                           )}
@@ -340,7 +333,7 @@ export default function CampaignsPage() {
                             aria-label={`Delete ${campaign.name}`}
                             title='Delete'
                           >
-                            <Trash2 />
+                            <HugeiconsIcon icon={Delete02Icon} />
                           </Button>
                         </div>
                       </td>
@@ -361,7 +354,7 @@ export default function CampaignsPage() {
             </p>
             <Button asChild className='mt-5'>
               <Link href={campaignChatHref(NEW_CAMPAIGN_PROMPT)}>
-                <Plus /> New campaign
+                <HugeiconsIcon icon={PlusSignIcon} /> New campaign
               </Link>
             </Button>
           </div>
@@ -383,7 +376,7 @@ export default function CampaignsPage() {
                 disabled={!pagination.hasPreviousPage || loading}
                 aria-label='Previous page'
               >
-                <ChevronLeft />
+                <HugeiconsIcon icon={ArrowLeft01Icon} />
               </Button>
               <Button
                 variant='ghost'
@@ -393,7 +386,7 @@ export default function CampaignsPage() {
                 disabled={!pagination.hasNextPage || loading}
                 aria-label='Next page'
               >
-                <ChevronRight />
+                <HugeiconsIcon icon={ArrowRight01Icon} />
               </Button>
             </div>
           </div>

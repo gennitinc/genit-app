@@ -3,17 +3,18 @@
 import { AgentCard } from "./agent-card";
 import type { AgentTask } from "@/lib/agents-api";
 import { LoadingFileLoader } from "@/utils/Loading";
-import { AlertCircle, CheckCircle2, Circle, ListTodo } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckmarkCircle02Icon, AlertCircleIcon, CircleIcon, TaskDone01Icon } from "@hugeicons/core-free-icons";
 
 function Icon({ status }: { status: AgentTask["status"] }) {
   if (status === "running") return <LoadingFileLoader size={12} />;
   if (status === "done")
     return (
-      <CheckCircle2 className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
+      <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400' />
     );
   if (status === "failed")
-    return <AlertCircle className='h-3.5 w-3.5 text-amber-500' />;
-  return <Circle className='text-muted-foreground/40 h-3.5 w-3.5' />;
+    return <HugeiconsIcon icon={AlertCircleIcon} className='h-3.5 w-3.5 text-amber-500' />;
+  return <HugeiconsIcon icon={CircleIcon} className='text-muted-foreground/40 h-3.5 w-3.5' />;
 }
 
 export function AgentPlan({ tasks }: { tasks: AgentTask[] }) {
@@ -21,7 +22,7 @@ export function AgentPlan({ tasks }: { tasks: AgentTask[] }) {
   const done = tasks.filter((t) => t.status === "done").length;
   return (
     <AgentCard
-      icon={<ListTodo className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={TaskDone01Icon} className='h-3.5 w-3.5' />}
       title='Plan'
       meta={`${done}/${tasks.length}`}
     >

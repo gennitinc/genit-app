@@ -5,7 +5,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { useMessageEditor } from "@/hooks/message/use-message-editor";
 import Loading from "@/utils/Loading";
-import { AlertCircle } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AlertCircleIcon } from "@hugeicons/core-free-icons";
 import type React from "react";
 
 interface MessageEditorProps {
@@ -99,7 +100,7 @@ export function MessageEditor({
       {/* Error Message */}
       {error && (
         <div className='bg-background flex items-center gap-2 rounded-lg border border-red-200 p-3 text-red-700'>
-          <AlertCircle className='h-4 w-4 flex-shrink-0' />
+          <HugeiconsIcon icon={AlertCircleIcon} className='h-4 w-4 flex-shrink-0' />
           <span className='text-sm'>{error}</span>
         </div>
       )}

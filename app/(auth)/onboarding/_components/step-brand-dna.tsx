@@ -14,7 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
-import { ArrowRight, ImageIcon, Plus, Sparkles, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SparklesIcon, ArrowRight02Icon, Image01Icon, PlusSignIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 
@@ -43,10 +45,7 @@ const SOCIAL_META: Record<
   {
     label: string;
     color: string;
-    icon: React.ComponentType<{
-      className?: string;
-      style?: React.CSSProperties;
-    }>;
+    icon: IconSource;
     placeholder: string;
   }
 > = {
@@ -83,7 +82,7 @@ const SOCIAL_META: Record<
   tiktok: {
     label: "TikTok",
     color: "#ffffff",
-    icon: Sparkles,
+    icon: SparklesIcon,
     placeholder: "tiktok.com/@you",
   },
 };
@@ -186,7 +185,7 @@ export function StepBrandDna({
             className='bg-indigo-600 font-medium text-white hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 md:px-10'
           >
             <LocalizedText text={"Save &amp; Continue"} />
-            <ArrowRight className='ml-1 size-4' />
+            <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 size-4' />
           </Button>
         </div>
       </div>
@@ -208,7 +207,7 @@ export function StepBrandDna({
               />
             ) : (
               <div className='flex flex-col items-center gap-1 text-neutral-500'>
-                <ImageIcon className='size-6' />
+                <HugeiconsIcon icon={Image01Icon} className='size-6' />
                 <span className='text-xs'>
                   <LocalizedText text={"Upload logo"} />
                 </span>
@@ -332,7 +331,7 @@ export function StepBrandDna({
                   onClick={addColor}
                   className='flex size-12 items-center justify-center rounded-full border-2 border-dashed border-neutral-200 text-neutral-500 transition-colors hover:border-cyan-300/50 hover:text-cyan-700 dark:border-white/15 dark:text-cyan-300'
                 >
-                  <Plus className='size-4' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='size-4' />
                 </button>
               )}
             </div>
@@ -374,7 +373,8 @@ export function StepBrandDna({
                 const Icon = meta.icon;
                 return (
                   <div key={key} className='relative'>
-                    <Icon
+                    <IconSourceView
+                      icon={Icon}
                       className='absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2'
                       style={{ color: meta.color }}
                     />
@@ -480,7 +480,7 @@ function ColorSwatch({
           onClick={onRemove}
           className='absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-neutral-200 opacity-0 ring-1 ring-white/10 transition-opacity group-hover:opacity-100 dark:bg-neutral-800'
         >
-          <X className='size-2.5 text-neutral-600 dark:text-neutral-300' />
+          <HugeiconsIcon icon={Cancel01Icon} className='size-2.5 text-neutral-600 dark:text-neutral-300' />
         </button>
       )}
       <span className='font-mono text-[10px] text-neutral-500 uppercase'>
@@ -524,7 +524,7 @@ function ChipEditor({
               onClick={() => onChange(values.filter((_, j) => j !== i))}
               className='hover:text-red-400'
             >
-              <X className='size-3' />
+              <HugeiconsIcon icon={Cancel01Icon} className='size-3' />
             </button>
           </span>
         ))}
@@ -585,7 +585,7 @@ function NumberedList({
             onClick={() => onChange(values.filter((_, j) => j !== i))}
             className='text-neutral-500 hover:text-red-400'
           >
-            <X className='size-4' />
+            <HugeiconsIcon icon={Cancel01Icon} className='size-4' />
           </button>
         </div>
       ))}
@@ -595,7 +595,7 @@ function NumberedList({
           onClick={() => onChange([...values, ""])}
           className='inline-flex items-center gap-1 text-sm text-cyan-700 hover:underline dark:text-cyan-300'
         >
-          <Plus className='size-3' /> {placeholder}
+          <HugeiconsIcon icon={PlusSignIcon} className='size-3' /> {placeholder}
         </button>
       )}
     </div>

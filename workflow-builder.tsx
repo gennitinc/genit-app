@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import type { WorkflowNode } from "@/lib/types";
 import { createNode, generateNodeId } from "@/lib/workflow-utils";
-import { Play, Save, Upload } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FloppyDiskIcon, Upload01Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import ReactFlow, {
   Background,
   type Connection,
@@ -227,15 +228,15 @@ export default function WorkflowBuilder() {
               <Panel position='top-right'>
                 <div className='flex gap-2'>
                   <Button onClick={saveWorkflow} size='sm' variant='outline'>
-                    <Save className='mr-2 h-4 w-4' />
+                    <HugeiconsIcon icon={FloppyDiskIcon} className='mr-2 h-4 w-4' />
                     Save
                   </Button>
                   <Button onClick={loadWorkflow} size='sm' variant='outline'>
-                    <Upload className='mr-2 h-4 w-4' />
+                    <HugeiconsIcon icon={Upload01Icon} className='mr-2 h-4 w-4' />
                     Load
                   </Button>
                   <Button onClick={executeWorkflow} size='sm' variant='default'>
-                    <Play className='mr-2 h-4 w-4' />
+                    <HugeiconsIcon icon={PlayIcon} className='mr-2 h-4 w-4' />
                     Execute
                   </Button>
                 </div>

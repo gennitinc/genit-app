@@ -21,26 +21,8 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { cn } from "@/lib/utils";
 import appLogo from "@/resources/images/genit.svg";
 import cookie from "js-cookie";
-import {
-  Book,
-  Copy,
-  CreditCard,
-  Edit3,
-  Facebook,
-  Linkedin,
-  Lock,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Monitor,
-  Moon,
-  Settings,
-  Share2,
-  Sun,
-  Twitter,
-  User,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LockIcon, Share08Icon, Copy01Icon, TwitterIcon, Facebook01Icon, Linkedin01Icon, Sun01Icon, MoonIcon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -194,7 +176,7 @@ export function Navbar({ title }: NavbarProps) {
                 <div className='via-muted-foreground/50 absolute inset-x-0 -bottom-0.5 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'></div>
               </span>
               {/* Visibility Toggle - Simplified on mobile */}
-              <Lock className='text-muted-foreground/50 group-hover:text-muted-foreground h-3 w-3 sm:h-3.5 sm:w-3.5' />
+              <HugeiconsIcon icon={LockIcon} className='text-muted-foreground/50 group-hover:text-muted-foreground h-3 w-3 sm:h-3.5 sm:w-3.5' />
             </div>
           </div>
         </div>
@@ -314,25 +296,25 @@ export function Navbar({ title }: NavbarProps) {
                 size='sm'
                 className='text-primary-foreground shadow-primary/20 flex h-9 items-center gap-2 rounded-md bg-indigo-600 px-4 text-xs font-semibold shadow-lg transition-all hover:scale-105 hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 active:scale-95'
               >
-                <Share2 className='h-4 w-4' />
+                <HugeiconsIcon icon={Share08Icon} className='h-4 w-4' />
                 <LocalizedText text={"Share"} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-56'>
               <DropdownMenuItem onClick={handleCopyLink}>
-                <Copy className='mr-2 h-4 w-4' />
+                <HugeiconsIcon icon={Copy01Icon} className='mr-2 h-4 w-4' />
                 {copiedLink ? "Copied!" : "Copy Link"}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleShare("x")}>
-                <Twitter className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
+                <HugeiconsIcon icon={TwitterIcon} className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
                 <LocalizedText text={"Share on X"} />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                <Facebook className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
+                <HugeiconsIcon icon={Facebook01Icon} className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
                 <LocalizedText text={"Share on Facebook"} />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                <Linkedin className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
+                <HugeiconsIcon icon={Linkedin01Icon} className='mr-2 h-4 w-4 text-neutral-700 dark:text-neutral-400' />
                 <LocalizedText text={"Share on LinkedIn"} />
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
@@ -356,9 +338,9 @@ export function Navbar({ title }: NavbarProps) {
             className='hover:bg-accent h-8 w-8 rounded-lg p-0'
           >
             {theme === "dark" ? (
-              <Sun className='h-4 w-4' />
+              <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
             ) : (
-              <Moon className='h-4 w-4' />
+              <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
             )}
           </Button>
 
@@ -376,9 +358,9 @@ export function Navbar({ title }: NavbarProps) {
             className='hover:bg-accent h-8 w-8 rounded-lg p-0'
           >
             {theme === "dark" ? (
-              <Sun className='h-4 w-4' />
+              <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
             ) : (
-              <Moon className='h-4 w-4' />
+              <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
             )}
           </Button>
 
@@ -401,7 +383,7 @@ export function Navbar({ title }: NavbarProps) {
                 onClick={() => setIsEditingTitle(true)}
                 className='h-6 w-6 p-1'
               >
-                <Edit3 className='h-3 w-3' />
+                <HugeiconsIcon icon={PencilEdit01Icon} className='h-3 w-3' />
               </Button>
             </div>
             {/* Add any other mobile menu items here if needed */}

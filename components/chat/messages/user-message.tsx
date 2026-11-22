@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { HoverActions } from "@/components/ui/hover-actions";
 import { stripClientTimeContext } from "@/lib/utils";
-import { Download, Eye, File, FileText, ImageIcon } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File01Icon, Image01Icon, File02Icon, ViewIcon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 interface UserMessageProps {
@@ -105,7 +106,7 @@ export function UserMessage({
     switch (type) {
       case "image":
         return {
-          icon: ImageIcon,
+          icon: Image01Icon,
           bgColor: "bg-muted-foreground/30",
           hoverColor: "group-hover:bg-muted-foreground/10",
           iconColor: "text-muted-foreground",
@@ -113,21 +114,21 @@ export function UserMessage({
       case "document":
       case "text":
         return {
-          icon: FileText,
+          icon: File02Icon,
           bgColor: "bg-muted-foreground/30",
           hoverColor: "group-hover:bg-muted-foreground/10",
           iconColor: "text-muted-foreground",
         };
       case "pdf":
         return {
-          icon: FileText,
+          icon: File02Icon,
           bgColor: "bg-muted-foreground/30",
           hoverColor: "group-hover:bg-muted-foreground/10",
           iconColor: "text-muted-foreground",
         };
       default:
         return {
-          icon: File,
+          icon: File01Icon,
           bgColor: "bg-muted-foreground/30",
           hoverColor: "group-hover:bg-muted-foreground/10",
           iconColor: "text-muted-foreground",
@@ -222,7 +223,7 @@ export function UserMessage({
                       {(() => {
                         const { icon: Icon } = getFileIcon(fileType);
                         return (
-                          <Icon className='text-muted-foreground h-6 w-6' />
+                          <HugeiconsIcon icon={Icon} className='text-muted-foreground h-6 w-6' />
                         );
                       })()}
                     </div>
@@ -254,7 +255,7 @@ export function UserMessage({
                       <div
                         className={`h-6 w-6 rounded-full ${bgColor} flex items-center justify-center ${hoverColor} transition-colors`}
                       >
-                        <Icon className={`h-3 w-3 ${iconColor}`} />
+                        <HugeiconsIcon icon={Icon} className={`h-3 w-3 ${iconColor}`} />
                       </div>
                     );
                   })()}
@@ -343,9 +344,9 @@ function AttachedFilePreview({ file }: { file: any }) {
           ) : (
             <div className='bg-muted-foreground/5 flex h-12 w-12 items-center justify-center rounded-md border'>
               {isVideo ? (
-                <FileText className='text-muted-foreground h-6 w-6' />
+                <HugeiconsIcon icon={File02Icon} className='text-muted-foreground h-6 w-6' />
               ) : (
-                <File className='text-muted-foreground h-6 w-6' />
+                <HugeiconsIcon icon={File01Icon} className='text-muted-foreground h-6 w-6' />
               )}
             </div>
           )}
@@ -372,7 +373,7 @@ function AttachedFilePreview({ file }: { file: any }) {
                   className='h-8 w-8 p-0'
                   title='View file'
                 >
-                  <Eye className='h-4 w-4' />
+                  <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                 </Button>
               </DialogTrigger>
               <DialogContent className='h-auto w-fit max-w-[50vw] p-0'>

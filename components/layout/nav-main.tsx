@@ -11,23 +11,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { trackAppOpened, trackFeatureUsed } from "@/lib/mixpanelClient";
 import { cn } from "@/lib/utils";
-import {
-  BookOpen,
-  Cog,
-  GalleryHorizontal,
-  Gift,
-  GitBranchPlus,
-  HelpCircle,
-  History,
-  Image as ImageIcon,
-  Palette,
-  Settings,
-  SquarePen,
-  UserPlus,
-  Video,
-  WandSparklesIcon,
-  Workflow,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CarouselHorizontalIcon, PencilEdit02Icon, GitBranchIcon, Clock04Icon, GiftIcon, Settings02Icon, HelpCircleIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -41,18 +26,18 @@ export function NavMain() {
   const navItems = [
     {
       title: t("Visual"),
-      icon: GalleryHorizontal,
+      icon: CarouselHorizontalIcon,
       href: "/visuals",
       badge: t("New"),
     },
     {
       title: t("Chat"),
-      icon: SquarePen,
+      icon: PencilEdit02Icon,
       href: "/chat",
     },
     {
       title: t("Plugins"),
-      icon: GitBranchPlus,
+      icon: GitBranchIcon,
       href: "/plugins",
       // badge: "New",
     },
@@ -68,12 +53,12 @@ export function NavMain() {
     // },
     {
       title: t("History"),
-      icon: History,
+      icon: Clock04Icon,
       href: "/chat/history",
     },
     {
       title: t("Creator"),
-      icon: Gift,
+      icon: GiftIcon,
       href: `/user/referral`,
     },
     // {
@@ -96,12 +81,12 @@ export function NavMain() {
     // },
     {
       title: t("Settings"),
-      icon: Cog,
+      icon: Settings02Icon,
       href: "/user/settings",
     },
     {
       title: t("Support"),
-      icon: HelpCircle,
+      icon: HelpCircleIcon,
       href: "/feedback",
     },
   ];
@@ -189,7 +174,7 @@ export function NavMain() {
                       "flex-col justify-center gap-1"
                   )}
                 >
-                  <item.icon
+                  <HugeiconsIcon icon={item.icon}
                     className={cn(
                       "h-6 w-6 flex-shrink-0 rounded-full",
                       showDesktopCollapsedLabels
@@ -278,7 +263,7 @@ export function NavMain() {
                         "flex-col justify-center gap-1"
                     )}
                   >
-                    <item.icon
+                    <HugeiconsIcon icon={item.icon}
                       className={cn(
                         "h-10 w-10 flex-shrink-0",
                         showDesktopCollapsedLabels

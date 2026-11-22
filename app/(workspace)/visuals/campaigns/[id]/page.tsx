@@ -23,12 +23,8 @@ import { useIntegrations } from "@/hooks/use-integrations";
 import { campaignChatHref, campaignError } from "@/lib/campaign-utils";
 import { exportGtmReport } from "@/lib/gtm-api";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  ChevronRight,
-  FileDown,
-  Loader2,
-  MessageSquareText,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Loading03Icon, FileDownloadIcon, Message02Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import {
   useParams,
@@ -152,7 +148,7 @@ export default function CampaignDetailPage() {
               onClick={() => void exportReport()}
               disabled={exporting}
             >
-              {exporting ? <Loader2 className='animate-spin' /> : <FileDown />}
+              {exporting ? <HugeiconsIcon icon={Loading03Icon} className='animate-spin' /> : <HugeiconsIcon icon={FileDownloadIcon} />}
               Export PDF
             </Button>
             <Button asChild variant='outline' size='sm'>
@@ -165,7 +161,7 @@ export default function CampaignDetailPage() {
                       )
                 }
               >
-                <MessageSquareText />
+                <HugeiconsIcon icon={Message02Icon} />
                 {campaign.chatId ? "Open chat" : "Ask Genit"}
               </Link>
             </Button>
@@ -245,7 +241,7 @@ function Breadcrumb({ name }: { name?: string }) {
       </Link>
       {name && (
         <>
-          <ChevronRight className='size-3' />
+          <HugeiconsIcon icon={ArrowRight01Icon} className='size-3' />
           <span className='text-foreground max-w-xs truncate'>{name}</span>
         </>
       )}

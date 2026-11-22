@@ -3,17 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  CheckCircle2,
-  Edit2,
-  Eye,
-  FileText,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Trash2,
-  XCircle,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, RefreshIcon, PlusSignIcon, CheckmarkCircle02Icon, CancelCircleIcon, ViewIcon, PencilEdit02Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -129,7 +120,7 @@ export default function AdminBlogPage() {
       <div className='flex items-center justify-between pb-4'>
         <div>
           <h1 className='flex items-center gap-2 text-2xl font-bold tracking-tight text-white'>
-            <FileText className='h-6 w-6 text-cyan-500' />{" "}
+            <HugeiconsIcon icon={File02Icon} className='h-6 w-6 text-cyan-500' />{" "}
             <LocalizedText text={"Blog Management"} />
           </h1>
           <p className='text-sm text-zinc-400'>
@@ -145,14 +136,14 @@ export default function AdminBlogPage() {
             onClick={triggerSeed}
             className='inline-flex cursor-pointer items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-2 text-xs font-semibold text-zinc-300 transition duration-200 hover:border-zinc-700'
           >
-            <RefreshCw className='h-3.5 w-3.5' />{" "}
+            <HugeiconsIcon icon={RefreshIcon} className='h-3.5 w-3.5' />{" "}
             <LocalizedText text={"Seed Defaults"} />
           </button>
           <Link
             href='/admin/blog/new'
             className='hover:shadow-primary/20 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white transition duration-200 hover:bg-indigo-700 hover:shadow-lg'
           >
-            <Plus className='h-4 w-4' /> <LocalizedText text={"Add Article"} />
+            <HugeiconsIcon icon={PlusSignIcon} className='h-4 w-4' /> <LocalizedText text={"Add Article"} />
           </Link>
         </div>
       </div>
@@ -164,7 +155,7 @@ export default function AdminBlogPage() {
         </div>
       ) : posts.length === 0 ? (
         <div className='rounded-3xl border border-dashed border-zinc-800 py-20 text-center'>
-          <FileText className='mx-auto mb-3 h-10 w-10 text-zinc-600' />
+          <HugeiconsIcon icon={File02Icon} className='mx-auto mb-3 h-10 w-10 text-zinc-600' />
           <h3 className='font-medium text-white'>
             <LocalizedText text={"No posts found"} />
           </h3>
@@ -243,12 +234,12 @@ export default function AdminBlogPage() {
                       >
                         {post.isActive ? (
                           <>
-                            <CheckCircle2 className='h-3.5 w-3.5' />{" "}
+                            <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5' />{" "}
                             <LocalizedText text={"Published"} />
                           </>
                         ) : (
                           <>
-                            <XCircle className='h-3.5 w-3.5' />{" "}
+                            <HugeiconsIcon icon={CancelCircleIcon} className='h-3.5 w-3.5' />{" "}
                             <LocalizedText text={"Draft"} />
                           </>
                         )}
@@ -265,21 +256,21 @@ export default function AdminBlogPage() {
                           className='rounded-xl p-2 text-zinc-400 transition duration-150 hover:bg-zinc-800 hover:text-white'
                           title='Preview'
                         >
-                          <Eye className='h-4 w-4' />
+                          <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                         </Link>
                         <Link
                           href={`/admin/blog/edit/${post._id}`}
                           className='cursor-pointer rounded-xl p-2 text-zinc-400 transition duration-150 hover:bg-zinc-800 hover:text-cyan-400'
                           title='Edit'
                         >
-                          <Edit2 className='h-4 w-4' />
+                          <HugeiconsIcon icon={PencilEdit02Icon} className='h-4 w-4' />
                         </Link>
                         <button
                           onClick={() => handleDeletePost(post._id)}
                           className='cursor-pointer rounded-xl p-2 text-zinc-400 transition duration-150 hover:bg-zinc-800 hover:text-rose-400'
                           title='Delete'
                         >
-                          <Trash2 className='h-4 w-4' />
+                          <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                         </button>
                       </div>
                     </td>

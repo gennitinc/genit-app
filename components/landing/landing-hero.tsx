@@ -20,25 +20,8 @@ import { useUserContext } from "@/context/AuthenticatedContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import Loading from "@/utils/Loading";
-import {
-  ArrowRightIcon,
-  BellRing,
-  CalendarClock,
-  CheckCircle2,
-  ChevronRight,
-  CircleFadingArrowUp,
-  Clock3,
-  ImageIcon,
-  Palette,
-  Play,
-  SendIcon,
-  Share2,
-  Sparkles,
-  Target,
-  TrendingUp,
-  Users,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Target01Icon, CheckmarkCircle02Icon, UserGroupIcon, Image01Icon, CircleArrowUp02Icon, PaintBoardIcon, Share08Icon, Calendar04Icon, Clock01Icon, Notification03Icon, ChartIncreaseIcon, ArrowRight02Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -183,7 +166,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
         <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
           <div className='flex items-center gap-2'>
             <span className='flex size-7 items-center justify-center rounded-lg bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'>
-              <Target className='size-3.5' />
+              <HugeiconsIcon icon={Target01Icon} className='size-3.5' />
             </span>
             <div>
               <p className='text-[11px] font-semibold'>
@@ -194,24 +177,24 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
               </p>
             </div>
           </div>
-          <CheckCircle2 className='size-4 text-emerald-500' />
+          <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-4 text-emerald-500' />
         </div>
         <div className='space-y-1.5 p-3'>
           {[
             [
               "Goal",
               "New collection launch",
-              <Target key='goal' className='size-3.5' />,
+              <HugeiconsIcon icon={Target01Icon} key='goal' className='size-3.5' />,
             ],
             [
               "Audience",
               "Style-conscious professionals",
-              <Users key='audience' className='size-3.5' />,
+              <HugeiconsIcon icon={UserGroupIcon} key='audience' className='size-3.5' />,
             ],
             [
               "Assets",
               "12 brand-approved files",
-              <ImageIcon key='assets' className='size-3.5' />,
+              <HugeiconsIcon icon={Image01Icon} key='assets' className='size-3.5' />,
             ],
           ].map(([label, value, icon]) => (
             <div
@@ -240,7 +223,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
         <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
           <div className='flex items-center gap-2'>
             <span className='flex size-7 items-center justify-center rounded-lg bg-neutral-900 text-white shadow-sm dark:bg-neutral-100 dark:text-neutral-900'>
-              <CircleFadingArrowUp  className='size-3.5' />
+              <HugeiconsIcon icon={CircleArrowUp02Icon}  className='size-3.5' />
             </span>
             <div>
               <p className='text-[11px] font-semibold'>{t("Agent plan")}</p>
@@ -258,16 +241,16 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
         </div>
         <div className='grid grid-cols-3 gap-2 p-3'>
           {[
-            ["Creative", "done", <Palette key='creative' className='size-4' />],
+            ["Creative", "done", <HugeiconsIcon icon={PaintBoardIcon} key='creative' className='size-4' />],
             [
               "Channels",
               "active",
-              <Share2 key='channels' className='size-4' />,
+              <HugeiconsIcon icon={Share08Icon} key='channels' className='size-4' />,
             ],
             [
               "Schedule",
               "queued",
-              <CalendarClock key='schedule' className='size-4' />,
+              <HugeiconsIcon icon={Calendar04Icon} key='schedule' className='size-4' />,
             ],
           ].map(([label, status, icon]) => (
             <div
@@ -280,11 +263,11 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
               <span className='text-[9px] font-medium'>{t(String(label))}</span>
               <span className='mt-1'>
                 {status === "done" ? (
-                  <CheckCircle2 className='size-3 text-emerald-500' />
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-3 text-emerald-500' />
                 ) : status === "active" ? (
                   <span className='block size-3 animate-spin rounded-full border-2 border-neutral-500 border-t-transparent' />
                 ) : (
-                  <Clock3 className='size-3 text-neutral-400' />
+                  <HugeiconsIcon icon={Clock01Icon} className='size-3 text-neutral-400' />
                 )}
               </span>
             </div>
@@ -319,7 +302,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
         </div>
         <div className='mx-3 mb-3 flex items-center justify-between rounded-lg bg-white/80 px-3 py-2 dark:bg-neutral-950/80'>
           <span className='flex items-center gap-1.5 text-[10px] text-neutral-500'>
-            <CalendarClock className='size-3.5' />
+            <HugeiconsIcon icon={Calendar04Icon} className='size-3.5' />
             {t("Tues. · 10:00 AM")}
           </span>
           <span className='bg-foreground text-background rounded-md px-2.5 py-1 text-[9px] font-semibold'>
@@ -335,7 +318,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
       <div className='mt-3 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/70'>
         <div className='flex items-center justify-between border-b border-neutral-200 px-3 py-2.5 dark:border-neutral-700'>
           <div className='flex items-center gap-2 text-[11px] font-semibold'>
-            <BellRing className='size-3.5' />
+            <HugeiconsIcon icon={Notification03Icon} className='size-3.5' />
             {t("Workflow")}
           </div>
           <span className='flex items-center gap-1 text-[9px] text-neutral-500'>
@@ -355,7 +338,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
             >
               <span className='text-[10px] font-medium'>{t(label)}</span>
               <span className='flex items-center gap-1 text-[9px] text-neutral-500'>
-                <CheckCircle2 className='size-3 text-emerald-500' />
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-3 text-emerald-500' />
                 {t(status)}
               </span>
             </div>
@@ -373,7 +356,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
           {t("Campaign live")}
         </div>
         <div className='flex items-center gap-1 text-[9px] font-medium text-neutral-500'>
-          <TrendingUp className='size-3.5' />
+          <HugeiconsIcon icon={ChartIncreaseIcon} className='size-3.5' />
           {t("Optimizing")}
         </div>
       </div>
@@ -391,7 +374,7 @@ function LandingAgentWidget({ kind }: { kind: LandingWidgetKind }) {
             <p className='mt-0.5 flex items-center gap-1 text-xs font-semibold text-neutral-800 dark:text-neutral-100'>
               {value}
               {label === "CTR" && (
-                <TrendingUp className='size-3 text-emerald-500' />
+                <HugeiconsIcon icon={ChartIncreaseIcon} className='size-3 text-emerald-500' />
               )}
             </p>
           </div>
@@ -772,7 +755,7 @@ const LandingHero = () => {
                 <span className='text-xs'>
                   <LocalizedText text={"✨ Built for Modern Business"} />
                 </span>
-                <ArrowRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+                <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
               </AnimatedShinyText>
               <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
                 <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
@@ -810,7 +793,7 @@ const LandingHero = () => {
                   onClick={() => setIsDemoOpen(true)}
                   className='border-border bg-background text-foreground hover:bg-muted flex cursor-pointer items-center gap-2 rounded-md border px-5 py-2.5 text-sm transition-[background-color,transform] duration-150 active:scale-[0.97]'
                 >
-                  <Play className='size-4 fill-current opacity-70' />
+                  <HugeiconsIcon icon={PlayIcon} className='size-4 fill-current opacity-70' />
                   Why AI ?
                 </button>
 

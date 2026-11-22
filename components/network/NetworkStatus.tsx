@@ -3,7 +3,8 @@
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Wifi, WifiOff } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, Wifi01Icon, WifiOff01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export function NetworkStatus({
@@ -82,7 +83,7 @@ export function NetworkStatus({
               transition={{ duration: 0.5, times: [0, 0.5, 1] }}
               className='mb-8 inline-block rounded-full bg-green-500 p-2'
             >
-              <Check className='size-16 text-white' />
+              <HugeiconsIcon icon={Tick02Icon} className='size-16 text-white' />
             </motion.div>
             <h1 className='mb-4 text-xl font-bold text-green-600 dark:text-green-400'>
               <LocalizedText text={"You&apos;re Back Online!"} />
@@ -120,9 +121,9 @@ export function NetworkStatus({
               className='mb-8 inline-block'
             >
               {isRetrying ? (
-                <Wifi className='size-16 text-red-500 dark:text-red-400' />
+                <HugeiconsIcon icon={Wifi01Icon} className='size-16 text-red-500 dark:text-red-400' />
               ) : (
-                <WifiOff className='size-16 text-red-500 dark:text-red-400' />
+                <HugeiconsIcon icon={WifiOff01Icon} className='size-16 text-red-500 dark:text-red-400' />
               )}
             </motion.div>
             <h1 className='mb-4 text-xl font-bold text-gray-900 dark:text-white'>

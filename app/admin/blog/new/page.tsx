@@ -6,16 +6,8 @@ import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import {
-  ArrowLeft,
-  CircleFadingArrowUp,
-  Image as ImageIcon,
-  ImageOff,
-  Loader2,
-  Save,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft02Icon, SparklesIcon, FloppyDiskIcon, Image01Icon, ImageNotFound01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -251,7 +243,7 @@ export default function NewBlogPostPage() {
             href='/admin/blog'
             className='cursor-pointer rounded-xl p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white'
           >
-            <ArrowLeft className='h-5 w-5' />
+            <HugeiconsIcon icon={ArrowLeft02Icon} className='h-5 w-5' />
           </Link>
           <div>
             <h1 className='text-xl font-bold text-white'>
@@ -273,7 +265,7 @@ export default function NewBlogPostPage() {
             onClick={() => setIsAiModalOpen(true)}
             className='inline-flex cursor-pointer items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-600/10 transition duration-200 hover:from-purple-500 hover:to-indigo-500 hover:shadow-purple-600/20'
           >
-            <Sparkles className='h-4 w-4' />{" "}
+            <HugeiconsIcon icon={SparklesIcon} className='h-4 w-4' />{" "}
             <LocalizedText text={"Write with AI"} />
           </button>
           <button
@@ -282,7 +274,7 @@ export default function NewBlogPostPage() {
             className='hover:shadow-primary/20 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-xs font-bold text-white transition duration-200 hover:bg-indigo-700 hover:shadow-lg'
           >
             <LocalizedText text={"Publish Article"} />
-            <Save className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={FloppyDiskIcon} className='h-3.5 w-3.5' />
           </button>
         </div>
       </div>
@@ -321,9 +313,9 @@ export default function NewBlogPostPage() {
                 />
                 <span className='flex items-center gap-1.5'>
                   {withAiImage ? (
-                    <ImageIcon className='h-3.5 w-3.5 text-purple-400' />
+                    <HugeiconsIcon icon={Image01Icon} className='h-3.5 w-3.5 text-purple-400' />
                   ) : (
-                    <ImageOff className='h-3.5 w-3.5 text-zinc-500' />
+                    <HugeiconsIcon icon={ImageNotFound01Icon} className='h-3.5 w-3.5 text-zinc-500' />
                   )}
                   <span
                     className={withAiImage ? "text-zinc-300" : "text-zinc-500"}
@@ -357,7 +349,7 @@ export default function NewBlogPostPage() {
                   </>
                 ) : (
                   <>
-                    <Sparkles className='h-3.5 w-3.5' />
+                    <HugeiconsIcon icon={SparklesIcon} className='h-3.5 w-3.5' />
                     <LocalizedText text={"Generate Body"} />
                     <span className='ml-0.5 text-[10px] font-semibold opacity-75'>
                       ({withAiImage ? "15" : "5"}{" "}
@@ -400,7 +392,7 @@ export default function NewBlogPostPage() {
                 onClick={() => setIsModalOpen(false)}
                 className='rounded-lg p-1 text-zinc-400 transition hover:bg-zinc-900 hover:text-white'
               >
-                <X className='h-5 w-5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
               </button>
             </div>
 
@@ -569,7 +561,7 @@ export default function NewBlogPostPage() {
                   </>
                 ) : (
                   <>
-                    <Save className='h-3.5 w-3.5' />{" "}
+                    <HugeiconsIcon icon={FloppyDiskIcon} className='h-3.5 w-3.5' />{" "}
                     <LocalizedText text={"Publish Blog Post"} />
                   </>
                 )}
@@ -586,7 +578,7 @@ export default function NewBlogPostPage() {
             {/* Modal Header */}
             <div className='flex items-center justify-between pb-3'>
               <div className='flex items-center gap-2'>
-                <Sparkles className='h-5 w-5 text-purple-400' />
+                <HugeiconsIcon icon={SparklesIcon} className='h-5 w-5 text-purple-400' />
                 <div>
                   <h3 className='text-lg font-bold text-white'>
                     <LocalizedText text={"AI Blog Article Writer"} />
@@ -605,7 +597,7 @@ export default function NewBlogPostPage() {
                 onClick={() => setIsAiModalOpen(false)}
                 className='rounded-lg p-1 text-zinc-400 transition hover:bg-zinc-900 hover:text-white'
               >
-                <X className='h-5 w-5' />
+                <HugeiconsIcon icon={Cancel01Icon} className='h-5 w-5' />
               </button>
             </div>
 
@@ -710,7 +702,7 @@ export default function NewBlogPostPage() {
                   </>
                 ) : (
                   <>
-                    <Sparkles className='h-3.5 w-3.5' />{" "}
+                    <HugeiconsIcon icon={SparklesIcon} className='h-3.5 w-3.5' />{" "}
                     <LocalizedText text={"Generate Post"} />
                   </>
                 )}

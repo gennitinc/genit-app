@@ -23,22 +23,8 @@ import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponseFileUpload } from "@/utils/apiResponseFileUpload";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  CheckCircle2,
-  ChevronDown,
-  Loader2,
-  Mic,
-  MicOff,
-  Palette,
-  Paperclip,
-  Plus,
-  SendHorizontal,
-  Settings,
-  Sparkles,
-  X,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowDown01Icon, Attachment01Icon, PlusSignIcon, ZapIcon, AlertCircleIcon, CheckmarkCircle02Icon, PaintBoardIcon, Mic01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, {
@@ -418,7 +404,7 @@ export function ChatInput({
                 : "none",
             }}
           >
-            <ChevronDown className='text-muted-foreground h-5 w-5' />
+            <HugeiconsIcon icon={ArrowDown01Icon} className='text-muted-foreground h-5 w-5' />
           </button>
         </div>
 
@@ -438,7 +424,7 @@ export function ChatInput({
                       className='h-full w-full object-cover'
                     />
                   ) : (
-                    <Paperclip className='text-muted-foreground h-3 w-3' />
+                    <HugeiconsIcon icon={Attachment01Icon} className='text-muted-foreground h-3 w-3' />
                   )}
                 </div>
                 <span className='max-w-[80px] truncate text-[10px]'>
@@ -449,7 +435,7 @@ export function ChatInput({
                   onClick={() => removeAttachedFile(index)}
                   className='text-muted-foreground hover:text-red-500'
                 >
-                  <Plus className='h-3 w-3 rotate-45' />
+                  <HugeiconsIcon icon={PlusSignIcon} className='h-3 w-3 rotate-45' />
                 </button>
               </div>
             ))}
@@ -462,7 +448,7 @@ export function ChatInput({
             {!isGenerating && (
               <div className='flex w-full items-center justify-between gap-1'>
                 <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                  <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                  <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                   {user ? (
                     <span className='text-muted-foreground text-xs'>
                       {(user?.creditsRemaining ?? 0).toLocaleString()}{" "}
@@ -509,7 +495,7 @@ export function ChatInput({
                 exit={{ opacity: 0, y: 10 }}
                 className='mx-4 mb-2 flex items-center text-xs font-medium text-red-500'
               >
-                <AlertCircle className='mr-2 size-3.5' />
+                <HugeiconsIcon icon={AlertCircleIcon} className='mr-2 size-3.5' />
                 {error}
               </motion.p>
             )}
@@ -551,7 +537,7 @@ export function ChatInput({
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isGenerating || isProcessingDraft}
               >
-                <Plus className='size-5 shrink-0' />
+                <HugeiconsIcon icon={PlusSignIcon} className='size-5 shrink-0' />
               </button>
               <input
                 ref={fileInputRef}
@@ -579,7 +565,7 @@ export function ChatInput({
                       </>
                     ) : (
                       <>
-                        <CheckCircle2 className='size-3 text-green-500' />
+                        <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-3 text-green-500' />
                       </>
                     )}
                   </div>
@@ -622,7 +608,7 @@ export function ChatInput({
                       ))}
                     </div>
                   ) : (
-                    <Palette className='size-4 shrink-0' />
+                    <HugeiconsIcon icon={PaintBoardIcon} className='size-4 shrink-0' />
                   )}
                 </button>
                 <button
@@ -642,7 +628,7 @@ export function ChatInput({
                     isProcessingDraft
                   }
                 >
-                  <Mic className='size-4 shrink-0' />
+                  <HugeiconsIcon icon={Mic01Icon} className='size-4 shrink-0' />
                 </button>
 
                 <button
@@ -717,7 +703,7 @@ export function ChatInput({
                   {/* Header */}
                   <div className='border-border mb-4 flex items-center justify-between border-b pb-3'>
                     <div className='flex items-center gap-2'>
-                      <Palette className='text-primary h-4 w-4' />
+                      <HugeiconsIcon icon={PaintBoardIcon} className='text-primary h-4 w-4' />
                       <h3 className='text-foreground text-sm font-semibold'>
                         <LocalizedText text={"Brand Identity"} />
                       </h3>
@@ -728,7 +714,7 @@ export function ChatInput({
                       className='flex h-6 w-6 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-zinc-800 dark:hover:text-gray-300'
                       aria-label='Close settings'
                     >
-                      <X className='h-4 w-4' />
+                      <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                     </button>
                   </div>
 

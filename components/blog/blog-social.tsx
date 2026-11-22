@@ -11,7 +11,8 @@ import {
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { apiResponse } from "@/utils/apiResponse";
-import { Eye, Heart, MessageSquare } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { FavouriteIcon, Message01Icon, ViewIcon } from "@hugeicons/core-free-icons";
 import { usePathname, useRouter } from "next/navigation";
 import { Socket, io } from "socket.io-client";
 import React, { useEffect, useState } from "react";
@@ -145,7 +146,7 @@ export function BlogSocial({
         disabled={isLiking}
         className='group flex items-center gap-2 text-zinc-600 transition-colors hover:text-cyan-500 dark:text-zinc-400 dark:hover:text-cyan-400'
       >
-        <Heart
+        <HugeiconsIcon icon={FavouriteIcon}
           className={`h-5 w-5 transition-transform group-hover:scale-110 ${
             hasLiked ? "fill-cyan-500 text-cyan-500" : ""
           }`}
@@ -157,12 +158,12 @@ export function BlogSocial({
         onClick={scrollToComments}
         className='group flex items-center gap-2 text-zinc-600 transition-colors hover:text-cyan-500 dark:text-zinc-400 dark:hover:text-cyan-400'
       >
-        <MessageSquare className='h-5 w-5 transition-transform group-hover:scale-110' />
+        <HugeiconsIcon icon={Message01Icon} className='h-5 w-5 transition-transform group-hover:scale-110' />
         <span className='text-sm font-medium'>{commentsCount}</span>
       </button>
 
       <div className='flex items-center gap-2 text-zinc-600 dark:text-zinc-400'>
-        <Eye className='h-5 w-5' />
+        <HugeiconsIcon icon={ViewIcon} className='h-5 w-5' />
         <span className='text-sm font-medium'>{views}</span>
       </div>
 

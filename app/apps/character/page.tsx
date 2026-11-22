@@ -25,21 +25,8 @@ import { Model } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { imageGenApi, presenterApi } from "@/utils/inspire-api";
-import {
-  Check,
-  CircleFadingArrowUp,
-  Download,
-  HistoryIcon,
-  Loader2,
-  Plus,
-  SaveIcon,
-  Sparkles,
-  Trash2,
-  Upload,
-  User,
-  Wand2,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Upload01Icon, SparklesIcon, FloppyDiskIcon, Download01Icon, Delete02Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -286,13 +273,13 @@ const PresenterPage = () => {
                         value='upload'
                         className='flex items-center gap-2'
                       >
-                        <Upload size={14} /> <LocalizedText text={"Upload"} />
+                        <HugeiconsIcon icon={Upload01Icon} size={14} /> <LocalizedText text={"Upload"} />
                       </TabsTrigger>
                       <TabsTrigger
                         value='ai'
                         className='flex items-center gap-2'
                       >
-                        <Sparkles size={14} />{" "}
+                        <HugeiconsIcon icon={SparklesIcon} size={14} />{" "}
                         <LocalizedText text={"AI Generate"} />
                       </TabsTrigger>
                     </TabsList>
@@ -307,7 +294,7 @@ const PresenterPage = () => {
                           />
                         ) : (
                           <div className='text-muted-foreground flex flex-col items-center gap-2'>
-                            <Upload size={24} />
+                            <HugeiconsIcon icon={Upload01Icon} size={24} />
                             <span className='text-xs font-medium'>
                               <LocalizedText text={"Click to upload image"} />
                             </span>
@@ -346,7 +333,7 @@ const PresenterPage = () => {
                         {isGenerating ? (
                           <LoadingFileLoader size={20} />
                         ) : (
-                          <Sparkles className='mr-2' size={16} />
+                          <HugeiconsIcon icon={SparklesIcon} className='mr-2' size={16} />
                         )}
                         {isGenerating ? "Generating..." : "Generate Candidate"}
                       </Button>
@@ -362,7 +349,7 @@ const PresenterPage = () => {
                       {isCreating ? (
                         <LoadingFileLoader size={20} />
                       ) : (
-                        <SaveIcon className='mr-2' />
+                        <HugeiconsIcon icon={FloppyDiskIcon} className='mr-2' />
                       )}
                       <LocalizedText text={"Save as Presenter"} />
                     </Button>
@@ -440,21 +427,21 @@ const PresenterPage = () => {
                                 className='flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-green-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-green-400'
                                 title='Download avatar'
                               >
-                                <Download className='h-3 w-3' />
+                                <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
                               </button>
                               <button
                                 onClick={() => handleDeletePresenter(p._id)}
                                 className='flex h-6 w-6 items-center justify-center rounded bg-white/90 text-neutral-600 opacity-0 backdrop-blur-sm transition-colors group-hover:opacity-100 hover:text-red-600 dark:bg-neutral-800/90 dark:text-neutral-400 dark:hover:text-red-400'
                                 title='Delete avatar'
                               >
-                                <Trash2 className='h-3 w-3' />
+                                <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
                               </button>
                             </div>
                           </div>
                         ))
                       ) : (
                         <div className='text-muted-foreground col-span-full flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-20'>
-                          <User size={48} className='mb-4 opacity-20' />
+                          <HugeiconsIcon icon={UserIcon} size={48} className='mb-4 opacity-20' />
                           <p className='text-sm font-medium'>
                             <LocalizedText text={"No presenters yet"} />
                           </p>

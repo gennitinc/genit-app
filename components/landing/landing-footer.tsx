@@ -16,25 +16,8 @@ import {
 } from "@/components/ui/tooltip";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUp,
-  ChevronDown,
-  ChevronRight,
-  Facebook,
-  Github,
-  Globe,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Monitor,
-  Moon,
-  Phone,
-  Sun,
-  Twitter,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Sun01Icon, MoonIcon, ComputerIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import type React from "react";
@@ -698,7 +681,7 @@ export function LandingFooter() {
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "light" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title={t("Light mode")}
                 >
-                  <Sun className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={Sun01Icon} className='h-3.5 w-3.5' />
                 </button>
 
                 <button
@@ -706,7 +689,7 @@ export function LandingFooter() {
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "dark" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title={t("Dark mode")}
                 >
-                  <Moon className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={MoonIcon} className='h-3.5 w-3.5' />
                 </button>
 
                 <button
@@ -714,7 +697,7 @@ export function LandingFooter() {
                   className={`flex size-7 items-center justify-center rounded-full transition-all ${isLoaded && theme === "system" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"} `}
                   title={t("System theme")}
                 >
-                  <Monitor className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={ComputerIcon} className='h-3.5 w-3.5' />
                 </button>
               </div>
             </div>

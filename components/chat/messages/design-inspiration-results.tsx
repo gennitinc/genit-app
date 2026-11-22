@@ -14,14 +14,8 @@ import { useProjectDesign } from "@/context/DesignProject";
 import { cn } from "@/lib/utils";
 import { apiResponse } from "@/utils/apiResponse";
 import { motion } from "framer-motion";
-import {
-  CheckSquare2,
-  Globe2,
-  Pause,
-  Play,
-  Square,
-  ZoomIn,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Globe02Icon, PlayIcon, PauseIcon, ZoomInAreaIcon, CheckmarkSquare02Icon, SquareIcon } from "@hugeicons/core-free-icons";
 import React, { useEffect, useRef, useState } from "react";
 
 // import { ColorManagement } from "./color-management";
@@ -211,7 +205,7 @@ export function DesignInspirationResults({
     <div className='my-4 w-full space-y-3'>
       {/* ─── Header ─── */}
       <div className='flex items-center gap-2'>
-        <Globe2 className='text-primary h-3 w-3 shrink-0' />
+        <HugeiconsIcon icon={Globe02Icon} className='text-primary h-3 w-3 shrink-0' />
         <p className='line-clamp-1 truncate text-[11px] text-blue-500'>
           Internet search results ({safeResults.length}) —{" "}
           <span className='text-foreground/70 font-mono normal-case italic'>
@@ -240,9 +234,9 @@ export function DesignInspirationResults({
             }
           >
             {isCountdownPaused ? (
-              <Play className='h-3 w-3' />
+              <HugeiconsIcon icon={PlayIcon} className='h-3 w-3' />
             ) : (
-              <Pause className='h-3 w-3' />
+              <HugeiconsIcon icon={PauseIcon} className='h-3 w-3' />
             )}
             {isCountdownPaused ? "Play" : "Pause"}
           </Button>
@@ -292,7 +286,7 @@ export function DesignInspirationResults({
                       />
                       {/* Hover overlay */}
                       <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover/card:opacity-100'>
-                        <ZoomIn className='h-5 w-5 text-white/70' />
+                        <HugeiconsIcon icon={ZoomInAreaIcon} className='h-5 w-5 text-white/70' />
                       </div>
                       <button
                         type='button'
@@ -312,9 +306,9 @@ export function DesignInspirationResults({
                         }
                       >
                         {selected ? (
-                          <CheckSquare2 className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={CheckmarkSquare02Icon} className='h-3.5 w-3.5' />
                         ) : (
-                          <Square className='h-3.5 w-3.5' />
+                          <HugeiconsIcon icon={SquareIcon} className='h-3.5 w-3.5' />
                         )}
                       </button>
                       <span className='absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-0.5 text-[8px] font-medium tracking-wide text-white/75 uppercase'>
@@ -330,7 +324,7 @@ export function DesignInspirationResults({
                         }}
                         aria-label='Preview inspiration'
                       >
-                        <ZoomIn className='h-3.5 w-3.5' />
+                        <HugeiconsIcon icon={ZoomInAreaIcon} className='h-3.5 w-3.5' />
                       </button>
                     </motion.div>
                   </div>

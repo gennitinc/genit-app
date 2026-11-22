@@ -8,18 +8,8 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { GradientFrame } from "@/utils/gradient-frame";
-import {
-  CheckSquare2,
-  Download,
-  Eye,
-  File,
-  Grid2X2,
-  Image as ImageIcon,
-  Library,
-  List,
-  Trash2,
-  UploadIcon,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File01Icon, Image01Icon, Download01Icon, Delete02Icon, CheckmarkSquare02Icon, GridViewIcon, ListViewIcon, Upload01Icon, LibraryIcon, ViewIcon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 
@@ -237,7 +227,7 @@ export default function BlogLibraryPage() {
             />
           ) : (
             <div className='flex flex-col items-center gap-3 text-zinc-500'>
-              <File className='h-14 w-14' />
+              <HugeiconsIcon icon={File01Icon} className='h-14 w-14' />
               <span className='max-w-48 truncate text-xs font-medium uppercase'>
                 {selectedAsset.mimeType.split("/")[1] || "File"}
               </span>
@@ -249,7 +239,7 @@ export default function BlogLibraryPage() {
           <div>
             <div className='flex items-center justify-between gap-4 border-b border-black/5 pb-4 dark:border-white/10'>
               <span className='text-muted-foreground flex items-center gap-2 text-sm dark:text-white/80'>
-                <ImageIcon className='h-4 w-4' />
+                <HugeiconsIcon icon={Image01Icon} className='h-4 w-4' />
                 <span className='font-medium capitalize'>
                   {selectedAsset.source} {selectedAsset.mimeType.split("/")[0]}
                 </span>
@@ -260,7 +250,7 @@ export default function BlogLibraryPage() {
                   onClick={() => download(selectedAsset)}
                   className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-indigo-500/10 px-3 text-xs font-medium text-indigo-600 transition hover:bg-indigo-500/20 dark:text-indigo-300'
                 >
-                  <Download className='h-3.5 w-3.5' />{" "}
+                  <HugeiconsIcon icon={Download01Icon} className='h-3.5 w-3.5' />{" "}
                   <LocalizedText text={"Download"} />
                 </button>
                 <button
@@ -268,7 +258,7 @@ export default function BlogLibraryPage() {
                   onClick={() => setDeleteAssets([selectedAsset])}
                   className='flex h-8 items-center justify-center gap-1.5 rounded-full bg-red-500/10 px-3 text-xs font-medium text-red-600 transition hover:bg-red-500/20 dark:text-red-400'
                 >
-                  <Trash2 className='h-3.5 w-3.5' />{" "}
+                  <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />{" "}
                   <LocalizedText text={"Delete"} />
                 </button>
               </div>
@@ -388,7 +378,7 @@ export default function BlogLibraryPage() {
                 onClick={() => setDeleteAssets(selectedAssets)}
                 className='flex items-center gap-1.5 rounded-md bg-red-600 px-3 py-2 text-xs font-normal text-white transition hover:bg-red-500 disabled:opacity-40'
               >
-                <Trash2 className='h-3.5 w-3.5' />
+                <HugeiconsIcon icon={Delete02Icon} className='h-3.5 w-3.5' />
                 Delete{selectedIds.size ? ` (${selectedIds.size})` : ""}
               </button>
             </>
@@ -405,7 +395,7 @@ export default function BlogLibraryPage() {
                 : "border border-black/10 hover:bg-zinc-100 dark:border-white/10 dark:hover:bg-zinc-900"
             }`}
           >
-            <CheckSquare2 className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={CheckmarkSquare02Icon} className='h-3.5 w-3.5' />
             {selectionMode ? "Cancel" : "Select"}
           </button>
           <div className='flex rounded-md bg-zinc-100 p-1 dark:bg-zinc-900'>
@@ -416,7 +406,7 @@ export default function BlogLibraryPage() {
               aria-pressed={view === "grid"}
               className={`rounded p-1.5 ${view === "grid" ? "bg-white shadow-sm dark:bg-zinc-800" : "text-zinc-500"}`}
             >
-              <Grid2X2 className='h-4 w-4' />
+              <HugeiconsIcon icon={GridViewIcon} className='h-4 w-4' />
             </button>
             <button
               type='button'
@@ -425,7 +415,7 @@ export default function BlogLibraryPage() {
               aria-pressed={view === "list"}
               className={`rounded p-1.5 ${view === "list" ? "bg-white shadow-sm dark:bg-zinc-800" : "text-zinc-500"}`}
             >
-              <List className='h-4 w-4' />
+              <HugeiconsIcon icon={ListViewIcon} className='h-4 w-4' />
             </button>
           </div>
           <input
@@ -444,7 +434,7 @@ export default function BlogLibraryPage() {
             {uploading ? (
               <LoadingFileLoader size={20} />
             ) : (
-              <UploadIcon className='h-4 w-4 font-bold' />
+              <HugeiconsIcon icon={Upload01Icon} className='h-4 w-4 font-bold' />
             )}{" "}
             <span className='hidden lg:flex'>
               <LocalizedText text={"Upload"} />
@@ -487,7 +477,7 @@ export default function BlogLibraryPage() {
         </div>
       ) : assets.length === 0 ? (
         <div className='flex h-64 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-800 text-zinc-500'>
-          <Library className='mb-3 h-9 w-9' />
+          <HugeiconsIcon icon={LibraryIcon} className='mb-3 h-9 w-9' />
           <p className='text-sm'>
             <LocalizedText text={"No media yet"} />
           </p>
@@ -541,7 +531,7 @@ export default function BlogLibraryPage() {
                       </div>
                     ) : (
                       <div className='flex aspect-square flex-col items-center justify-center gap-2 p-4 text-center'>
-                        <File className='h-9 w-9 text-zinc-400' />
+                        <HugeiconsIcon icon={File01Icon} className='h-9 w-9 text-zinc-400' />
                         <span className='line-clamp-2 text-xs font-medium text-zinc-600 dark:text-zinc-300'>
                           {asset.name}
                         </span>
@@ -557,7 +547,7 @@ export default function BlogLibraryPage() {
                         }}
                         className='rounded-full bg-white/95 p-2.5 text-zinc-900 shadow-lg transition hover:scale-105 hover:bg-white focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none'
                       >
-                        <Eye className='h-4 w-4' />
+                        <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                       </button>
                       <button
                         type='button'
@@ -565,7 +555,7 @@ export default function BlogLibraryPage() {
                         onClick={() => setDeleteAssets([asset])}
                         className='rounded-full bg-white/95 p-2.5 text-red-600 shadow-lg transition hover:scale-105 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none'
                       >
-                        <Trash2 className='h-4 w-4' />
+                        <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                       </button>
                     </div>
                   </div>
@@ -606,7 +596,7 @@ export default function BlogLibraryPage() {
                           className='h-full w-full object-cover'
                         />
                       ) : (
-                        <File className='h-5 w-5 text-zinc-400' />
+                        <HugeiconsIcon icon={File01Icon} className='h-5 w-5 text-zinc-400' />
                       )}
                     </div>
                     <div className='min-w-0 flex-1'>
@@ -629,7 +619,7 @@ export default function BlogLibraryPage() {
                       }}
                       className='rounded-full p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     >
-                      <Eye className='h-4 w-4' />
+                      <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                     </button>
                     <button
                       type='button'
@@ -637,7 +627,7 @@ export default function BlogLibraryPage() {
                       onClick={() => download(asset)}
                       className='rounded-full p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                     >
-                      <Download className='h-4 w-4' />
+                      <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
                     </button>
                     <button
                       type='button'
@@ -645,7 +635,7 @@ export default function BlogLibraryPage() {
                       onClick={() => setDeleteAssets([asset])}
                       className='rounded-full p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30'
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                     </button>
                   </div>
                 ))}
@@ -690,7 +680,7 @@ export default function BlogLibraryPage() {
           <div className='relative z-10 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10'>
             <div className='flex items-start gap-4'>
               <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-neutral-100 dark:bg-neutral-800'>
-                <Trash2 className='h-5 w-5' />
+                <HugeiconsIcon icon={Delete02Icon} className='h-5 w-5' />
               </div>
               <div>
                 <DialogTitle className='text-foreground text-lg font-semibold tracking-tight dark:text-white'>

@@ -20,21 +20,8 @@ import { cn } from "@/lib/utils";
 import { CommunityContent } from "@/types/inspire";
 import GridLoading from "@/utils/girdLoading";
 import { communityApi } from "@/utils/inspire-api";
-import {
-  Check,
-  ChevronDown,
-  ChevronUp,
-  Copy,
-  Download,
-  Eye,
-  Heart,
-  Loader2,
-  Pause,
-  Play,
-  RefreshCw,
-  User,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserGroupIcon, FavouriteIcon, UserIcon, RefreshIcon, ArrowUp01Icon, ArrowDown01Icon, ViewIcon, Tick02Icon, Copy01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Socket, io } from "socket.io-client";
@@ -383,7 +370,7 @@ export function VideoCommunityTab({
       <section className=''>
         <div className='flex min-h-[60vh] flex-col items-center justify-center text-center'>
           <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800'>
-            <Users className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
+            <HugeiconsIcon icon={UserGroupIcon} className='h-8 w-8 text-neutral-400 dark:text-neutral-500' />
           </div>
           <h3 className='mb-2 text-lg font-semibold text-neutral-900 dark:text-white'>
             <LocalizedText text={"No community videos yet"} />
@@ -689,7 +676,7 @@ function VideoCard({
             className='flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-50'
             title={isLiked ? "Unlike" : "Like"}
           >
-            <Heart
+            <HugeiconsIcon icon={FavouriteIcon}
               className={`h-4 w-4 transition-all ${
                 isLiked ? "fill-red-500 text-red-500" : "fill-none text-white"
               }`}
@@ -726,7 +713,7 @@ function VideoCard({
               />
             ) : (
               <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
+                <HugeiconsIcon icon={UserIcon} className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
             <span className='text-xs font-medium text-white/80'>
@@ -755,7 +742,7 @@ function VideoCard({
             }}
             className='flex w-fit items-center gap-1 rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className='h-3 w-3' />
+            <HugeiconsIcon icon={RefreshIcon} className='h-3 w-3' />
             <span className='hidden md:block'>
               <LocalizedText text={"Recreate"} />
             </span>
@@ -856,12 +843,12 @@ function VideoDetailContent({
                   {showFullPrompt ? (
                     <>
                       <LocalizedText text={"View less"} />
-                      <ChevronUp className='h-3 w-3' />
+                      <HugeiconsIcon icon={ArrowUp01Icon} className='h-3 w-3' />
                     </>
                   ) : (
                     <>
                       <LocalizedText text={"View more"} />
-                      <ChevronDown className='h-3 w-3' />
+                      <HugeiconsIcon icon={ArrowDown01Icon} className='h-3 w-3' />
                     </>
                   )}
                 </button>
@@ -882,7 +869,7 @@ function VideoDetailContent({
               />
             ) : (
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                <User className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
+                <HugeiconsIcon icon={UserIcon} className='h-5 w-5 text-neutral-600 dark:text-neutral-400' />
               </div>
             )}
             <div className='flex-1'>
@@ -914,13 +901,13 @@ function VideoDetailContent({
           {/* Stats */}
           <div className='m-2 flex items-center gap-4'>
             <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
-              <Heart className='h-4 w-4' />
+              <HugeiconsIcon icon={FavouriteIcon} className='h-4 w-4' />
               <span>
                 {video.likes} <LocalizedText text={"likes"} />
               </span>
             </div>
             <div className='flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400'>
-              <Eye className='h-4 w-4' />
+              <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
               <span>
                 {video.views} <LocalizedText text={"views"} />
               </span>
@@ -937,7 +924,7 @@ function VideoDetailContent({
             onClick={onRecreate}
             className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600'
           >
-            <RefreshCw className='h-4 w-4' />
+            <HugeiconsIcon icon={RefreshIcon} className='h-4 w-4' />
             <LocalizedText text={"Recreate"} />
           </button>
           <button
@@ -954,9 +941,9 @@ function VideoDetailContent({
             className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
             {copied ? (
-              <Check className='h-4 w-4 text-green-500' />
+              <HugeiconsIcon icon={Tick02Icon} className='h-4 w-4 text-green-500' />
             ) : (
-              <Copy className='h-4 w-4' />
+              <HugeiconsIcon icon={Copy01Icon} className='h-4 w-4' />
             )}
           </button>
           <button
@@ -998,7 +985,7 @@ function VideoDetailContent({
             }}
             className='rounded-lg bg-neutral-100 px-4 py-2.5 text-neutral-900 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700'
           >
-            <Download className='h-4 w-4' />
+            <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />
           </button>
         </div>
       </div>

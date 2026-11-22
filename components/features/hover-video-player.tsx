@@ -26,14 +26,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Maximize,
-  Minimize,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PauseIcon, PlayIcon, VolumeMute02Icon, VolumeHighIcon, Minimize01Icon, Maximize01Icon } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import React, {
   ReactNode,
@@ -874,7 +868,7 @@ const HoverVideoPlayerPlayPauseButton: React.FC = () => {
       className='hover:text-primary-foreground text-white'
       aria-label={isPlaying ? "Pause video" : "Play video"}
     >
-      {isPlaying ? <Pause className='h-6 w-6' /> : <Play className='h-6 w-6' />}
+      {isPlaying ? <HugeiconsIcon icon={PauseIcon} className='h-6 w-6' /> : <HugeiconsIcon icon={PlayIcon} className='h-6 w-6' />}
     </Button>
   );
 };
@@ -895,9 +889,9 @@ const HoverVideoPlayerVolumeControl: React.FC = () => {
         aria-label={muted ? "Unmute" : "Mute"}
       >
         {muted ? (
-          <VolumeX className='h-6 w-6' />
+          <HugeiconsIcon icon={VolumeMute02Icon} className='h-6 w-6' />
         ) : (
-          <Volume2 className='h-6 w-6' />
+          <HugeiconsIcon icon={VolumeHighIcon} className='h-6 w-6' />
         )}
       </Button>
       <Slider
@@ -955,9 +949,9 @@ const HoverVideoPlayerPiPButton: React.FC = () => {
       }
     >
       {isPiP ? (
-        <Minimize className='h-6 w-6' />
+        <HugeiconsIcon icon={Minimize01Icon} className='h-6 w-6' />
       ) : (
-        <Maximize className='h-6 w-6' />
+        <HugeiconsIcon icon={Maximize01Icon} className='h-6 w-6' />
       )}
     </Button>
   );

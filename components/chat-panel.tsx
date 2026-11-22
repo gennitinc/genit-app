@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bot, MessageSquare, Plus, Send, User } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, Message01Icon, BotIcon, UserIcon, SentIcon } from "@hugeicons/core-free-icons";
 import { useEffect, useRef, useState } from "react";
 
 interface ChatPanelProps {
@@ -117,7 +118,7 @@ export function ChatPanel({
             <LocalizedText text={"AI Assistant"} />
           </h3>
           <Button size='sm' variant='outline'>
-            <Plus className='mr-1 h-4 w-4' />
+            <HugeiconsIcon icon={PlusSignIcon} className='mr-1 h-4 w-4' />
             <LocalizedText text={"New Chat"} />
           </Button>
         </div>
@@ -134,7 +135,7 @@ export function ChatPanel({
               onClick={() => onChatChange(chat.id)}
             >
               <div className='flex items-center gap-2'>
-                <MessageSquare className='h-4 w-4 text-gray-400' />
+                <HugeiconsIcon icon={Message01Icon} className='h-4 w-4 text-gray-400' />
                 <span className='text-sm font-medium text-gray-900'>
                   {chat.title}
                 </span>
@@ -187,7 +188,7 @@ export function ChatPanel({
               >
                 {message.type === "assistant" && (
                   <div className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-purple-500'>
-                    <Bot className='h-4 w-4 text-white' />
+                    <HugeiconsIcon icon={BotIcon} className='h-4 w-4 text-white' />
                   </div>
                 )}
                 <div
@@ -201,7 +202,7 @@ export function ChatPanel({
                 </div>
                 {message.type === "user" && (
                   <div className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gray-400'>
-                    <User className='h-4 w-4 text-white' />
+                    <HugeiconsIcon icon={UserIcon} className='h-4 w-4 text-white' />
                   </div>
                 )}
               </div>
@@ -210,7 +211,7 @@ export function ChatPanel({
             {isTyping && (
               <div className='flex gap-3'>
                 <div className='flex h-8 w-8 items-center justify-center rounded-full bg-purple-500'>
-                  <Bot className='h-4 w-4 text-white' />
+                  <HugeiconsIcon icon={BotIcon} className='h-4 w-4 text-white' />
                 </div>
                 <div className='rounded-lg bg-gray-100 p-3'>
                   <div className='flex gap-1'>
@@ -242,7 +243,7 @@ export function ChatPanel({
               className='flex-1'
             />
             <Button onClick={handleSendMessage} size='sm'>
-              <Send className='h-4 w-4' />
+              <HugeiconsIcon icon={SentIcon} className='h-4 w-4' />
             </Button>
           </div>
         </div>

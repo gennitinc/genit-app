@@ -16,8 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Loading from "@/utils/Loading";
-import { SendIcon } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";

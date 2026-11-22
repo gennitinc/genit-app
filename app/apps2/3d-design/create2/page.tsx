@@ -16,28 +16,9 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowLeft,
-  ChevronDown,
-  Copy,
-  EyeOff,
-  Grid3X3,
-  Layers,
-  Magnet,
-  MousePointer2,
-  PenTool,
-  Play,
-  Plus,
-  PlusSquare,
-  RotateCcw,
-  RotateCw,
-  Save,
-  Scissors,
-  Share,
-  Trash2,
-  Video,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft02Icon, ArrowDown01Icon, Cursor01Icon, PenTool01Icon, PlusSignIcon, AddSquareIcon, Share01Icon, FloppyDiskIcon, Cancel01Icon, RotateLeft01Icon, RotateRight01Icon, MagnetIcon, Copy01Icon, Layers01Icon, GridIcon, ViewOffIcon, Delete02Icon, PlayIcon, Video01Icon } from "@hugeicons/core-free-icons";
+import { IconSourceView } from "@/components/ui/icon-source";
 import Link from "next/link";
 import React, { Suspense, useState } from "react";
 
@@ -157,7 +138,7 @@ const NavButton = ({
     )}
   >
     {Icon && (
-      <Icon className={cn("size-5", active ? "text-white" : "text-white/60")} />
+      <IconSourceView icon={Icon} className={cn("size-5", active ? "text-white" : "text-white/60")} />
     )}
     {label && (
       <span className='text-[10px] font-medium tracking-wider uppercase'>
@@ -222,13 +203,13 @@ const DesignerV2 = () => {
         <div className='pointer-events-auto flex flex-col gap-2'>
           <div className='flex items-center gap-4'>
             <button className='group flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:bg-white/10'>
-              <ArrowLeft className='size-5 text-white/60 group-hover:text-white' />
+              <HugeiconsIcon icon={ArrowLeft02Icon} className='size-5 text-white/60 group-hover:text-white' />
             </button>
             <div className='flex items-center gap-2'>
               <span className='text-xl font-medium tracking-tight'>
                 <LocalizedText text={"Lucky Turtle"} />
               </span>
-              <ChevronDown className='size-4 text-white/40' />
+              <HugeiconsIcon icon={ArrowDown01Icon} className='size-4 text-white/40' />
             </div>
           </div>
           <div className='flex w-10 flex-col items-center'>
@@ -242,19 +223,19 @@ const DesignerV2 = () => {
         <div className='pointer-events-auto'>
           <FloatingSegment>
             <NavButton
-              icon={MousePointer2}
+              icon={Cursor01Icon}
               label='Select'
               active={activeTool === "select"}
               onClick={() => setActiveTool("select")}
             />
             <NavButton
-              icon={PenTool}
+              icon={PenTool01Icon}
               label='Draw'
               active={activeTool === "draw"}
               onClick={() => setActiveTool("draw")}
             />
             <NavButton
-              icon={Plus}
+              icon={PlusSignIcon}
               label='Add'
               active={activeTool === "add"}
               onClick={() => setActiveTool("add")}
@@ -265,9 +246,9 @@ const DesignerV2 = () => {
         {/* Right Actions */}
         <div className='pointer-events-auto'>
           <FloatingSegment>
-            <NavButton icon={PlusSquare} label='New' />
-            <NavButton icon={Share} label='Share' />
-            <NavButton icon={Save} label='Save' />
+            <NavButton icon={AddSquareIcon} label='New' />
+            <NavButton icon={Share01Icon} label='Share' />
+            <NavButton icon={FloppyDiskIcon} label='Save' />
           </FloatingSegment>
         </div>
       </div>
@@ -296,7 +277,7 @@ const DesignerV2 = () => {
                 onClick={() => setShowColorPanel(false)}
                 className='flex size-6 items-center justify-center rounded-full transition-all hover:bg-white/10'
               >
-                <X className='size-3.5 text-white/40' />
+                <HugeiconsIcon icon={Cancel01Icon} className='size-3.5 text-white/40' />
               </button>
             </div>
 
@@ -369,7 +350,7 @@ const DesignerV2 = () => {
                         />
                       ))}
                       <div className='flex size-7 items-center justify-center rounded-full border border-dashed border-white/10 text-white/20'>
-                        <Plus className='size-4' />
+                        <HugeiconsIcon icon={PlusSignIcon} className='size-4' />
                       </div>
                     </div>
                   </div>
@@ -386,10 +367,10 @@ const DesignerV2 = () => {
         <div className='pointer-events-auto flex flex-col items-center gap-2'>
           <FloatingSegment className='p-1 px-2'>
             <button className='p-2 text-white/40 transition-all hover:text-white'>
-              <RotateCcw className='size-5' />
+              <HugeiconsIcon icon={RotateLeft01Icon} className='size-5' />
             </button>
             <button className='p-2 text-white/40 transition-all hover:text-white'>
-              <RotateCw className='size-5' />
+              <HugeiconsIcon icon={RotateRight01Icon} className='size-5' />
             </button>
           </FloatingSegment>
           <div className='flex gap-6 text-[10px] font-bold tracking-widest text-white/40 uppercase'>
@@ -405,7 +386,7 @@ const DesignerV2 = () => {
         {/* Snap Control */}
         <div className='pointer-events-auto flex flex-col items-center gap-2'>
           <button className='group hover:border-primary/50 flex size-14 items-center justify-center rounded-full border border-white/10 bg-[#1a1a1a] shadow-xl transition-all'>
-            <Magnet className='group-hover:text-primary size-6 text-white/40' />
+            <HugeiconsIcon icon={MagnetIcon} className='group-hover:text-primary size-6 text-white/40' />
           </button>
           <span className='text-primary text-[10px] font-bold tracking-widest uppercase'>
             <LocalizedText text={"Snap"} />
@@ -415,13 +396,13 @@ const DesignerV2 = () => {
         {/* Main Actions Bar */}
         <div className='pointer-events-auto flex flex-col items-center gap-2'>
           <FloatingSegment className='px-2'>
-            <NavButton icon={Copy} label='Duplicate' />
-            <NavButton icon={Layers} label='Boolean' />
-            <NavButton icon={Grid3X3} label='Loose' />
-            <NavButton icon={PlusSquare} label='Group' />
-            <NavButton icon={PlusSquare} label='Studs' />
-            <NavButton icon={EyeOff} label='Hide' />
-            <NavButton icon={Trash2} label='Delete' />
+            <NavButton icon={Copy01Icon} label='Duplicate' />
+            <NavButton icon={Layers01Icon} label='Boolean' />
+            <NavButton icon={GridIcon} label='Loose' />
+            <NavButton icon={AddSquareIcon} label='Group' />
+            <NavButton icon={AddSquareIcon} label='Studs' />
+            <NavButton icon={ViewOffIcon} label='Hide' />
+            <NavButton icon={Delete02Icon} label='Delete' />
           </FloatingSegment>
           <div className='flex gap-8 text-[10px] font-bold tracking-widest text-white/40 uppercase' />
         </div>
@@ -459,10 +440,10 @@ const DesignerV2 = () => {
         <div className='pointer-events-auto flex flex-col items-center gap-2'>
           <div className='flex gap-2'>
             <button className='group flex size-12 items-center justify-center rounded-lg border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
-              <Play className='size-5 fill-white/10 text-white/40 group-hover:text-white' />
+              <HugeiconsIcon icon={PlayIcon} className='size-5 fill-white/10 text-white/40 group-hover:text-white' />
             </button>
             <button className='group flex size-12 items-center justify-center rounded-lg border border-white/10 bg-[#1a1a1a] transition-all hover:border-white/30'>
-              <Video className='size-5 text-white/40 group-hover:text-white' />
+              <HugeiconsIcon icon={Video01Icon} className='size-5 text-white/40 group-hover:text-white' />
             </button>
           </div>
           <div className='flex gap-6 text-[10px] font-bold tracking-widest text-white/40 uppercase'>

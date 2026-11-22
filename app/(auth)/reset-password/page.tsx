@@ -21,7 +21,8 @@ import { Label } from "@/components/ui/label";
 import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
-import { Eye, EyeOff } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ViewOffIcon, ViewIcon } from "@hugeicons/core-free-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
@@ -244,9 +245,9 @@ const ResetPassword = () => {
                         className='text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 focus:outline-none'
                       >
                         {showPassword ? (
-                          <EyeOff className='h-4 w-4' />
+                          <HugeiconsIcon icon={ViewOffIcon} className='h-4 w-4' />
                         ) : (
-                          <Eye className='h-4 w-4' />
+                          <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                         )}
                       </button>
                     </div>
@@ -273,9 +274,9 @@ const ResetPassword = () => {
                         className='text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 focus:outline-none'
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className='h-4 w-4' />
+                          <HugeiconsIcon icon={ViewOffIcon} className='h-4 w-4' />
                         ) : (
-                          <Eye className='h-4 w-4' />
+                          <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                         )}
                       </button>
                     </div>

@@ -24,17 +24,8 @@ import { Switch } from "@/components/ui/switch";
 import { Voice } from "@/types/inspire";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { voiceApi } from "@/utils/inspire-api";
-import {
-  Edit,
-  Loader2,
-  Pause,
-  Play,
-  Plus,
-  Search,
-  Trash2,
-  Volume2,
-  X,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PlusSignIcon, Search01Icon, VolumeHighIcon, PauseIcon, PlayIcon, PencilEdit01Icon, Delete02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 
@@ -321,14 +312,14 @@ export default function AdminVoicesPage() {
           </p>
         </div>
         <Button onClick={handleCreateClick}>
-          <Plus className='mr-2 h-4 w-4' />
+          <HugeiconsIcon icon={PlusSignIcon} className='mr-2 h-4 w-4' />
           <LocalizedText text={"Create Voice"} />
         </Button>
       </div>
 
       <div className='mb-6 flex flex-wrap items-center gap-4'>
         <div className='relative max-w-md flex-1'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+          <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
           <Input
             placeholder='Search voices...'
             value={searchTerm}
@@ -386,7 +377,7 @@ export default function AdminVoicesPage() {
         </div>
       ) : filteredVoices.length === 0 ? (
         <div className='py-12 text-center'>
-          <Volume2 className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
+          <HugeiconsIcon icon={VolumeHighIcon} className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
           <p className='text-muted-foreground'>
             <LocalizedText text={"No voices found"} />
           </p>
@@ -414,22 +405,22 @@ export default function AdminVoicesPage() {
                       className='hover:bg-muted rounded-lg p-2 transition-colors'
                     >
                       {isPlaying ? (
-                        <Pause className='h-4 w-4' />
+                        <HugeiconsIcon icon={PauseIcon} className='h-4 w-4' />
                       ) : (
-                        <Play className='h-4 w-4' />
+                        <HugeiconsIcon icon={PlayIcon} className='h-4 w-4' />
                       )}
                     </button>
                     <button
                       onClick={() => handleEditClick(voice)}
                       className='hover:bg-muted rounded-lg p-2 transition-colors'
                     >
-                      <Edit className='h-4 w-4' />
+                      <HugeiconsIcon icon={PencilEdit01Icon} className='h-4 w-4' />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(voice)}
                       className='hover:bg-destructive/10 text-destructive rounded-lg p-2 transition-colors'
                     >
-                      <Trash2 className='h-4 w-4' />
+                      <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' />
                     </button>
                   </div>
                 </div>
@@ -668,7 +659,7 @@ export default function AdminVoicesPage() {
                     size='sm'
                     onClick={() => setAudioFile(null)}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>
@@ -816,7 +807,7 @@ export default function AdminVoicesPage() {
                     size='sm'
                     onClick={() => setAudioFile(null)}
                   >
-                    <X className='h-4 w-4' />
+                    <HugeiconsIcon icon={Cancel01Icon} className='h-4 w-4' />
                   </Button>
                 )}
               </div>

@@ -29,13 +29,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useProjectDesign } from "@/context/DesignProject";
 import { containsMarkdownConnectionLink } from "@/lib/plugin-connection-link";
 import { cn } from "@/lib/utils";
-import {
-  ChevronDown,
-  ChevronRight,
-  Clock,
-  GitBranch,
-  Loader2,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Clock01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -457,7 +452,7 @@ export function AIMessage({
             <div className='flex items-center gap-4'>
               {totalTime && totalTime > 0 && (
                 <div className='flex items-center gap-1'>
-                  <Clock className='h-3 w-3' />
+                  <HugeiconsIcon icon={Clock01Icon} className='h-3 w-3' />
                   <span>
                     <LocalizedText text={"Processed in"} />
                     {formatTime(totalTime)}

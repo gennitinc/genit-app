@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import type { NodeData } from "@/lib/types";
-import { Folder, Trash2, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon, Folder01Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { Handle, type NodeProps, NodeResizer, Position } from "reactflow";
 import { memo } from "react";
 
@@ -31,7 +32,7 @@ export const FolderNode = memo(
             className='absolute -top-2 -right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs text-white shadow-lg transition-colors duration-200 hover:bg-red-600'
             title='Remove node'
           >
-            <X className='h-3 w-3' />
+            <HugeiconsIcon icon={Cancel01Icon} className='h-3 w-3' />
           </button>
         )}
         <div
@@ -43,7 +44,7 @@ export const FolderNode = memo(
         >
           <div className='flex items-center'>
             <div className='text-primary flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700/10'>
-              <Folder className='h-4 w-4' />
+              <HugeiconsIcon icon={Folder01Icon} className='h-4 w-4' />
             </div>
             <div className='ml-2'>
               <div className='text-foreground text-sm font-bold'>
@@ -70,7 +71,7 @@ export const FolderNode = memo(
               className='bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 text-white shadow-lg transition-all duration-200 hover:shadow-xl'
               title='Delete Node'
             >
-              <Trash2 className='h-3 w-3' />
+              <HugeiconsIcon icon={Delete02Icon} className='h-3 w-3' />
             </Button>
           )}
 

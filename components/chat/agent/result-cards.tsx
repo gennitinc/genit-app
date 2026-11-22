@@ -23,28 +23,8 @@ import { getDocumentPreviewUrl } from "@/lib/document-preview";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse, serverUrlSocket } from "@/utils/apiResponse";
 import { templateApi } from "@/utils/inspire-api";
-import {
-  BarChart3,
-  Check,
-  CheckCircle2,
-  Copy,
-  Download,
-  ExternalLink,
-  File as FileIcon,
-  FileText,
-  Folder,
-  Forward,
-  Globe2,
-  LayoutGrid,
-  Loader2,
-  Mail,
-  MessageSquare,
-  Send,
-  Sparkles,
-  Target,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LinkSquare02Icon, Tick02Icon, Copy01Icon, CheckmarkCircle02Icon, File02Icon, Message01Icon, ChartIncreaseIcon, SentIcon, Mail01Icon, Folder01Icon, File01Icon, ChartColumnIcon, UserGroupIcon, Download01Icon, LayoutGridIcon, Forward01Icon, Target01Icon, SparklesIcon, Globe02Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -75,7 +55,7 @@ function ExternalLinkInline({
       className='text-foreground hover:text-foreground/80 inline-flex items-center gap-1 text-[12px] font-medium underline-offset-2 hover:underline'
     >
       {children}
-      <ExternalLink className='h-3 w-3' />
+      <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
     </a>
   );
 }
@@ -127,9 +107,9 @@ function VideoTranscriptCard({ data }: { data: any }) {
             className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-[12px] font-medium'
           >
             {copied ? (
-              <Check className='h-3 w-3' />
+              <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
             ) : (
-              <Copy className='h-3 w-3' />
+              <HugeiconsIcon icon={Copy01Icon} className='h-3 w-3' />
             )}
             {copied ? "Copied" : "Copy transcript"}
           </button>
@@ -162,7 +142,7 @@ export function SocialPostPublishedCard({ data }: { data: any }) {
     data?.permalink;
   return (
     <AgentCard
-      icon={<CheckCircle2 className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3.5 w-3.5' />}
       title={item?.name || "Post published"}
       meta={<ProviderMeta data={data} />}
       tone='success'
@@ -204,7 +184,7 @@ export function PostListCard({ data }: { data: any }) {
   const label = data?.playlists ? "playlist" : data?.items ? "item" : "post";
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={File02Icon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? label : `${label}s`}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -248,7 +228,7 @@ export function CommentsListCard({ data }: { data: any }) {
   const items: any[] = data?.comments || data?.replies || [];
   return (
     <AgentCard
-      icon={<MessageSquare className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Message01Icon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "comment" : "comments"}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -313,7 +293,7 @@ export function InsightsCard({ data }: { data: any }) {
       : [];
   return (
     <AgentCard
-      icon={<TrendingUp className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={ChartIncreaseIcon} className='h-3.5 w-3.5' />}
       title='Insights'
       meta={<ProviderMeta data={data} />}
     >
@@ -345,7 +325,7 @@ export function EmailSentCard({ data }: { data: any }) {
   const d = item?.data || {};
   return (
     <AgentCard
-      icon={<Send className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={SentIcon} className='h-3.5 w-3.5' />}
       title='Email sent'
       meta={<ProviderMeta data={data} detail={d.to || data?.to} />}
       tone='success'
@@ -369,7 +349,7 @@ export function EmailListCard({ data }: { data: any }) {
   const items: any[] = data?.messages || data?.emails || [];
   return (
     <AgentCard
-      icon={<Mail className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Mail01Icon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "email" : "emails"}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -403,7 +383,7 @@ export function MessageSentCard({ data }: { data: any }) {
   const d = item?.data || {};
   return (
     <AgentCard
-      icon={<Send className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={SentIcon} className='h-3.5 w-3.5' />}
       title='Message sent'
       meta={<ProviderMeta data={data} detail={d.recipient || d.chat || d.to} />}
       tone='success'
@@ -422,7 +402,7 @@ export function DriveFilesCard({ data }: { data: any }) {
   const items: any[] = data?.files || [];
   return (
     <AgentCard
-      icon={<Folder className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Folder01Icon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "file" : "files"}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -437,7 +417,7 @@ export function DriveFilesCard({ data }: { data: any }) {
               key={f.id || i}
               className='flex items-center gap-2.5 px-3.5 py-2'
             >
-              <FileIcon className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
+              <HugeiconsIcon icon={File01Icon} className='text-muted-foreground h-3.5 w-3.5 shrink-0' />
               <span className='text-foreground line-clamp-1 flex-1 text-[12.5px]'>
                 {f.name}
               </span>
@@ -449,7 +429,7 @@ export function DriveFilesCard({ data }: { data: any }) {
                   className='text-muted-foreground hover:text-foreground shrink-0'
                   aria-label='Open'
                 >
-                  <ExternalLink className='h-3.5 w-3.5' />
+                  <HugeiconsIcon icon={LinkSquare02Icon} className='h-3.5 w-3.5' />
                 </a>
               )}
             </li>
@@ -502,7 +482,7 @@ export function CampaignListCard({ data }: { data: any }) {
   const items: any[] = data?.campaigns || [];
   return (
     <AgentCard
-      icon={<BarChart3 className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={ChartColumnIcon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "campaign" : "campaigns"}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -544,7 +524,7 @@ export function ContactListCard({ data }: { data: any }) {
   const items: any[] = data?.contacts || [];
   return (
     <AgentCard
-      icon={<Users className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={UserGroupIcon} className='h-3.5 w-3.5' />}
       title={`${items.length} ${items.length === 1 ? "contact" : "contacts"}`}
       meta={<ProviderMeta data={data} />}
     >
@@ -748,9 +728,9 @@ export function GeneratedDesignCard({ data }: { data: any }) {
     <AgentCard
       icon={
         isVideo ? (
-          <TrendingUp className='h-3.5 w-3.5' />
+          <HugeiconsIcon icon={ChartIncreaseIcon} className='h-3.5 w-3.5' />
         ) : (
-          <FileIcon className='h-3.5 w-3.5' />
+          <HugeiconsIcon icon={File01Icon} className='h-3.5 w-3.5' />
         )
       }
       title={
@@ -772,7 +752,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
             title='Download'
             onClick={(e) => e.stopPropagation()}
           >
-            <Download className='h-3.5 w-3.5' />
+            <HugeiconsIcon icon={Download01Icon} className='h-3.5 w-3.5' />
           </a>
         ) : null
       }
@@ -810,7 +790,7 @@ export function GeneratedDesignCard({ data }: { data: any }) {
               }}
               className='border-primary/30 text-primary flex h-7 w-fit gap-1.5 px-2 text-xs hover:bg-indigo-600 hover:bg-indigo-700/5'
             >
-              <LayoutGrid className='h-3 w-3' />
+              <HugeiconsIcon icon={LayoutGridIcon} className='h-3 w-3' />
               <LocalizedText text={"View"} />
             </Button>
           )}
@@ -824,9 +804,9 @@ export function GeneratedDesignCard({ data }: { data: any }) {
             {publishing ? (
               <LoadingFileLoader size={12} />
             ) : published ? (
-              <CheckCircle2 className='h-3 w-3' />
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} className='h-3 w-3' />
             ) : (
-              <Forward className='h-3 w-3' />
+              <HugeiconsIcon icon={Forward01Icon} className='h-3 w-3' />
             )}
             {publishing
               ? published
@@ -856,7 +836,7 @@ export function DesignInspirationCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<TrendingUp className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={ChartIncreaseIcon} className='h-3.5 w-3.5' />}
       title={`${items.length} internet search ${items.length === 1 ? "inspiration" : "inspirations"}`}
     >
       {items.length === 0 ? (
@@ -948,7 +928,7 @@ export function GtmCampaignCard({ data }: { data: any }) {
   const campaigns = data?.campaigns || (campaign?._id ? [campaign] : []);
   return (
     <AgentCard
-      icon={<Target className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Target01Icon} className='h-3.5 w-3.5' />}
       title={campaigns.length > 1 ? "GTM campaigns" : "GTM campaign"}
       tone='success'
       meta={
@@ -1040,7 +1020,7 @@ export function GtmLeadsCard({ data }: { data: any }) {
   const leads: any[] = data?.leads || [];
   return (
     <AgentCard
-      icon={<Users className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={UserGroupIcon} className='h-3.5 w-3.5' />}
       title={`${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
       meta={data?.provider}
       tone='success'
@@ -1077,7 +1057,7 @@ export function GtmOutboundCard({ data }: { data: any }) {
   const imported = stats.imported ?? recipients.length;
   return (
     <AgentCard
-      icon={<Mail className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Mail01Icon} className='h-3.5 w-3.5' />}
       title={scheduled > 0 ? "Campaign outreach" : "Campaign recipients"}
       meta={`${scheduled || imported} ${scheduled > 0 ? "scheduled" : "ready"}`}
       tone='success'
@@ -1109,7 +1089,7 @@ export function GtmAttributionCard({ data }: { data: any }) {
   const roi = data?.roi ?? data?.attribution?.roi;
   return (
     <AgentCard
-      icon={<BarChart3 className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={ChartColumnIcon} className='h-3.5 w-3.5' />}
       title='GTM attribution'
       meta={data?.campaign?.name}
       tone='success'
@@ -1140,7 +1120,7 @@ export function GtmOptimizerCard({ data }: { data: any }) {
     data?.recommendations || data?.campaign?.recommendations || [];
   return (
     <AgentCard
-      icon={<Sparkles className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={SparklesIcon} className='h-3.5 w-3.5' />}
       title='Optimizer recommendations'
       meta={`${recommendations.length} new`}
       tone='success'
@@ -1182,7 +1162,7 @@ export function GtmPdfReportCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={File02Icon} className='h-3.5 w-3.5' />}
       title='PDF report ready'
       meta={report?.campaignName}
       tone='success'
@@ -1196,7 +1176,7 @@ export function GtmPdfReportCard({ data }: { data: any }) {
               className='h-7 px-2 text-xs'
               onClick={showPreview}
             >
-              <ExternalLink className='h-3 w-3' />
+              <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
               <LocalizedText text={"View"} />
             </Button>
             <Button
@@ -1206,7 +1186,7 @@ export function GtmPdfReportCard({ data }: { data: any }) {
               className='h-7 px-2 text-xs'
             >
               <a href={url} download>
-                <Download className='h-3 w-3' />
+                <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
                 <LocalizedText text={"Download"} />
               </a>
             </Button>
@@ -1237,7 +1217,7 @@ export function ResearchReportCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={File02Icon} className='h-3.5 w-3.5' />}
       title={report?.title || "Research report"}
       meta='Document and PDF'
       tone='success'
@@ -1250,7 +1230,7 @@ export function ResearchReportCard({ data }: { data: any }) {
             className='h-7 px-2 text-xs'
             onClick={showPreview}
           >
-            <ExternalLink className='h-3 w-3' />
+            <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
             <LocalizedText text={"View report"} />
           </Button>
         )}
@@ -1262,7 +1242,7 @@ export function ResearchReportCard({ data }: { data: any }) {
             className='h-7 px-2 text-xs'
           >
             <a href={pdfUrl} download={report?.fileName}>
-              <Download className='h-3 w-3' />
+              <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
               <LocalizedText text={"Download PDF"} />
             </a>
           </Button>
@@ -1293,7 +1273,7 @@ export function BrowserSessionCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<Globe2 className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={Globe02Icon} className='h-3.5 w-3.5' />}
       title={data?.title || "Live browser"}
       meta={data?.url ? new URL(data.url).hostname : "Interactive session"}
       tone='success'
@@ -1306,7 +1286,7 @@ export function BrowserSessionCard({ data }: { data: any }) {
             className='h-7 px-2 text-xs'
             onClick={showPreview}
           >
-            <ExternalLink className='h-3 w-3' />
+            <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
             <LocalizedText text={"Open browser"} />
           </Button>
         )}
@@ -1352,7 +1332,7 @@ export function DocumentArtifactCard({ data }: { data: any }) {
 
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={File02Icon} className='h-3.5 w-3.5' />}
       title={artifact?.title || "Document"}
       meta={`${String(artifact?.format || "file").toUpperCase()} · v${artifact?.version || 1}`}
       tone='success'
@@ -1365,7 +1345,7 @@ export function DocumentArtifactCard({ data }: { data: any }) {
             className='h-7 px-2 text-xs'
             onClick={showPreview}
           >
-            <ExternalLink className='h-3 w-3' />
+            <HugeiconsIcon icon={LinkSquare02Icon} className='h-3 w-3' />
             <LocalizedText text={"View"} />
           </Button>
         )}
@@ -1377,7 +1357,7 @@ export function DocumentArtifactCard({ data }: { data: any }) {
             className='h-7 px-2 text-xs'
           >
             <a href={fileUrl} download={artifact?.fileName}>
-              <Download className='h-3 w-3' />
+              <HugeiconsIcon icon={Download01Icon} className='h-3 w-3' />
               <LocalizedText text={"Download"} />
             </a>
           </Button>
@@ -1391,7 +1371,7 @@ export function DocumentListCard({ data }: { data: any }) {
   const artifacts: any[] = data?.artifacts || [];
   return (
     <AgentCard
-      icon={<FileText className='h-3.5 w-3.5' />}
+      icon={<HugeiconsIcon icon={File02Icon} className='h-3.5 w-3.5' />}
       title='Documents'
       meta={`${artifacts.length} recent`}
     >

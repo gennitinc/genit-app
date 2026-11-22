@@ -5,15 +5,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  Camera,
-  FileText,
-  Image as ImageIcon,
-  Layout,
-  Type,
-  Video,
-  Youtube,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { File02Icon, Camera01Icon, Image01Icon, YoutubeIcon, Layout01Icon, TextFontIcon } from "@hugeicons/core-free-icons";
 import React from "react";
 
 type DesignTypeItem = {
@@ -27,49 +20,49 @@ const ITEMS: DesignTypeItem[] = [
   {
     id: "flier",
     label: "Design Flier",
-    icon: <FileText className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={File02Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#ef4444] to-[#f97316]",
   },
   {
     id: "instagram_post",
     label: "Instagram post",
-    icon: <Camera className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={Camera01Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#ec4899] to-[#f43f5e]",
   },
   {
     id: "poster",
     label: "Design Poster",
-    icon: <ImageIcon className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={Image01Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#10b981] to-[#06b6d4]",
   },
   {
     id: "youtube_thumbnail",
     label: "YT thumbnail",
-    icon: <Youtube className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={YoutubeIcon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#a855f7] to-[#6366f1]",
   },
   {
     id: "facebook_post",
     label: "Facebook post",
-    icon: <Layout className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={Layout01Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#60a5fa] to-[#3b82f6]",
   },
   {
     id: "facebook_cover",
     label: "Facebook cover",
-    icon: <Layout className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={Layout01Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#0ea5e9] to-[#22d3ee]",
   },
   {
     id: "banner",
     label: "Design Banner",
-    icon: <Layout className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={Layout01Icon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#f59e0b] to-[#f97316]",
   },
   {
     id: "logo",
     label: "Design Logo",
-    icon: <Type className='h-5 w-5 text-white' />,
+    icon: <HugeiconsIcon icon={TextFontIcon} className='h-5 w-5 text-white' />,
     bg: "bg-gradient-to-br from-[#14b8a6] to-[#22c55e]",
   },
 ];

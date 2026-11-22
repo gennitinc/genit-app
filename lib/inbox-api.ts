@@ -67,6 +67,8 @@ export interface InboxSyncResult {
   resultSizeEstimate?: number;
   liveOnly?: boolean;
   error?: string;
+  /** Set by newer servers, whose error is already a plain sentence. */
+  errorKind?: string;
   warning?: string;
 }
 

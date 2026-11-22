@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/table";
 import { apiResponse } from "@/utils/apiResponse";
 import { format } from "date-fns";
-import { Activity, Clock, Download, Search, Trash2, Zap } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Activity01Icon, Download01Icon, Delete02Icon, ZapIcon, Clock01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
 export default function ActivityPage() {
@@ -42,7 +43,7 @@ export default function ActivityPage() {
       <div className='mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div className='flex items-center gap-4'>
           <div className='text-primary rounded-lg bg-indigo-600 p-3 hover:bg-indigo-700/10'>
-            <Activity className='h-6 w-6' />
+            <HugeiconsIcon icon={Activity01Icon} className='h-6 w-6' />
           </div>
           <div>
             <h1 className='text-3xl font-bold tracking-tight'>
@@ -59,14 +60,14 @@ export default function ActivityPage() {
         </div>
         <div className='flex gap-2'>
           <Button variant='outline' className='gap-2'>
-            <Download className='h-4 w-4' />{" "}
+            <HugeiconsIcon icon={Download01Icon} className='h-4 w-4' />{" "}
             <LocalizedText text={"Export CSV"} />
           </Button>
           <Button
             variant='destructive'
             className='cursor-not-allowed gap-2 opacity-50'
           >
-            <Trash2 className='h-4 w-4' /> <LocalizedText text={"Clear Logs"} />
+            <HugeiconsIcon icon={Delete02Icon} className='h-4 w-4' /> <LocalizedText text={"Clear Logs"} />
           </Button>
         </div>
       </div>
@@ -77,19 +78,19 @@ export default function ActivityPage() {
             label: "Generations Today",
             value: "1,284",
             trend: "+12%",
-            icon: Zap,
+            icon: ZapIcon,
           },
           {
             label: "Avg Execution Time",
             value: "3.2s",
             trend: "-0.4s",
-            icon: Clock,
+            icon: Clock01Icon,
           },
           {
             label: "System Load",
             value: "Optimal",
             trend: "99.9%",
-            icon: Activity,
+            icon: Activity01Icon,
           },
         ].map((stat, i) => (
           <div
@@ -106,7 +107,7 @@ export default function ActivityPage() {
               </div>
             </div>
             <div className='bg-muted/50 rounded-xl p-2'>
-              <stat.icon className='text-muted-foreground h-5 w-5' />
+              <HugeiconsIcon icon={stat.icon} className='text-muted-foreground h-5 w-5' />
             </div>
           </div>
         ))}
@@ -115,7 +116,7 @@ export default function ActivityPage() {
       <div className='bg-card border-border/50 overflow-hidden rounded-3xl border shadow-sm'>
         <div className='border-border/50 bg-muted/10 flex items-center gap-4 border-b p-6'>
           <div className='relative max-w-md flex-1'>
-            <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+            <HugeiconsIcon icon={Search01Icon} className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
             <Input
               placeholder='Filter by event type or user...'
               className='bg-background h-10 rounded-xl pl-10'
@@ -167,7 +168,7 @@ export default function ActivityPage() {
                       <TableCell>
                         <div className='flex items-center gap-3'>
                           <div className='bg-background border-border/50 rounded-lg border p-1.5'>
-                            <Zap className='text-primary h-3.5 w-3.5' />
+                            <HugeiconsIcon icon={ZapIcon} className='text-primary h-3.5 w-3.5' />
                           </div>
                           <span className='text-sm font-semibold capitalize'>
                             {act.name}

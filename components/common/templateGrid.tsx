@@ -30,24 +30,8 @@ import { cn } from "@/lib/utils";
 import Loading from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  CircleFadingArrowUp,
-  Eye,
-  Image as ImageIcon,
-  Loader,
-  MessageSquare,
-  Mic,
-  PaperclipIcon,
-  Pencil,
-  Sparkles,
-  TrendingUp,
-  User,
-  Users,
-  X,
-  XIcon,
-  Zap,
-} from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserIcon, ViewIcon, PencilIcon, ZapIcon, Attachment01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -582,7 +566,7 @@ export default function TemplateGrid() {
                       />
                     ) : (
                       <div className='flex h-5 w-5 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700'>
-                        <User className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
+                        <HugeiconsIcon icon={UserIcon} className='h-3 w-3 text-neutral-600 dark:text-neutral-400' />
                       </div>
                     )}
                     <span className='text-xs font-medium text-white/80'>
@@ -613,7 +597,7 @@ export default function TemplateGrid() {
                   className='pointer-events-auto h-9 w-9 rounded-full p-0'
                   aria-label='View template'
                 >
-                  <Eye className='h-4 w-4' />
+                  <HugeiconsIcon icon={ViewIcon} className='h-4 w-4' />
                 </Button>
                 <Button
                   size='icon'
@@ -621,7 +605,7 @@ export default function TemplateGrid() {
                   className='pointer-events-auto h-9 w-9 rounded-full p-0'
                   aria-label='Edit template'
                 >
-                  <Pencil className='h-4 w-4' />
+                  <HugeiconsIcon icon={PencilIcon} className='h-4 w-4' />
                 </Button>
               </div>
             </div>
@@ -778,7 +762,7 @@ export default function TemplateGrid() {
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-3'>
                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
@@ -870,7 +854,7 @@ export default function TemplateGrid() {
                               disabled={isGenerating || isSubmitting}
                               aria-label='Attach files'
                             >
-                              <PaperclipIcon className='h-4 w-4' />
+                              <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                             </button>
                             <Input
                               ref={fileInputRef}
@@ -1049,7 +1033,7 @@ export default function TemplateGrid() {
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-3'>
                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
@@ -1141,7 +1125,7 @@ export default function TemplateGrid() {
                               disabled={isGenerating || isSubmitting}
                               aria-label='Attach files'
                             >
-                              <PaperclipIcon className='h-4 w-4' />
+                              <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                             </button>
                             <Input
                               ref={fileInputRef}
@@ -1318,7 +1302,7 @@ export default function TemplateGrid() {
                     {!isGenerating && (
                       <div className='flex w-full items-center justify-between gap-3'>
                         <div className='text-muted-foreground flex items-center dark:text-zinc-400'>
-                          <Zap className='mr-2 inline-block h-3 w-3 text-emerald-500' />
+                          <HugeiconsIcon icon={ZapIcon} className='mr-2 inline-block h-3 w-3 text-emerald-500' />
                           {user ? (
                             `${(user?.creditsRemaining ?? 0).toLocaleString()} Credits left`
                           ) : (
@@ -1410,7 +1394,7 @@ export default function TemplateGrid() {
                               disabled={isGenerating || isSubmitting}
                               aria-label='Attach files'
                             >
-                              <PaperclipIcon className='h-4 w-4' />
+                              <HugeiconsIcon icon={Attachment01Icon} className='h-4 w-4' />
                             </button>
                             <Input
                               ref={fileInputRef}
