@@ -20,10 +20,11 @@ import {
   effectiveIntegrationPlatform,
   isMetaSurface,
 } from "@/lib/integrations-api";
+import { isFreePlan, isProPlugin } from "@/lib/plan";
 import { POST_PLATFORMS, getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { PlusSignIcon } from "@hugeicons/core-free-icons";
+import { CheckmarkCircle02Icon, CrownIcon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -274,13 +275,13 @@ export default function VisualsHomePage() {
         <div className='h-[460px] animate-pulse rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]' />
       )}
 
-      <section className='mt-5 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none'>
-        <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+      <section className='mt-5 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-4 sm:shadow-sm sm:dark:border-white/10 sm:dark:bg-white/[0.035] sm:dark:shadow-none'>
+        <div className='flex items-center justify-between gap-3 sm:items-start'>
           <div>
             <h2 className='text-base font-semibold'>
               <LocalizedText text={"Plugins"} />
             </h2>
-            <p className='mt-1 text-sm text-zinc-500 dark:text-white/55'>
+            <p className='mt-1 hidden text-sm text-zinc-500 sm:block dark:text-white/55'>
               <LocalizedText
                 text={"Add channels and tools for this organization."}
               />
@@ -288,7 +289,7 @@ export default function VisualsHomePage() {
           </div>
           <Link
             href='/plugins'
-            className='inline-flex h-9 items-center justify-center rounded-xl border border-zinc-200 px-3 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-950 dark:border-white/10 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'
+            className='inline-flex h-9 shrink-0 items-center justify-center rounded-xl px-3 text-sm text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-950 sm:border sm:border-zinc-200 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white sm:dark:border-white/10'
           >
             <LocalizedText text={"View all"} />
           </Link>
@@ -319,44 +320,68 @@ export default function VisualsHomePage() {
                   : status === "soon"
                     ? "Soon"
                     : "Available";
+            const pro = isFreePlan(user?.userPlan) && isProPlugin(integration) && !isManageable && !isSoon;
             return (
-              <article
-                key={integration.name}
-                className='rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-white/10 dark:bg-[#0c0c0c]'
-              >
-                <div className='flex items-start justify-between gap-3'>
-                  <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>
-                    <IconSourceView icon={Icon} className='h-5 w-5' />
-                  </span>
-                  <span
-                    className={[
-                      "rounded-full px-2.5 py-1 text-xs",
-                      isManageable
-                        ? "bg-sky-500/10 text-sky-700 dark:text-sky-200"
-                        : "bg-zinc-200/70 text-zinc-600 dark:bg-white/10 dark:text-white/55",
-                    ].join(" ")}
-                  >
-                    {statusLabel}
-                  </span>
-                </div>
-                <h3 className='mt-4 font-semibold'>{integration.name}</h3>
-                <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500 dark:text-white/50'>
-                  {integration.description}
-                </p>
-                <Button
+              <React.Fragment key={integration.name}>
+                <button
                   type='button'
                   disabled={isSoon}
-                  onClick={() =>
-                    isManageable
-                      ? setManageFor(integration)
-                      : setConnectFor(integration)
-                  }
-                  variant={isManageable ? "outline" : "default"}
-                  className='mt-4 w-full rounded-xl disabled:cursor-not-allowed'
+                  onClick={() => isManageable ? setManageFor(integration) : setConnectFor(integration)}
+                  className='flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed sm:hidden dark:bg-[#151515] dark:hover:bg-white/10'
                 >
-                  {isManageable ? "Manage" : isSoon ? "Coming soon" : "Add"}
-                </Button>
-              </article>
+                  <IconSourceView icon={Icon} className='size-[26px] shrink-0' />
+                  <span className='min-w-0 flex-1'>
+                    <span className='flex items-center gap-1.5 text-base font-semibold'>
+                      <span className='truncate'>{integration.name}</span>
+                      {pro && <HugeiconsIcon icon={CrownIcon} className='size-3.5 shrink-0 text-amber-500' />}
+                    </span>
+                    <span className='mt-0.5 block truncate text-[13px] text-zinc-500 dark:text-white/50'>{integration.description}</span>
+                  </span>
+                  {status === "connected" ? (
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-6 shrink-0 text-emerald-600 dark:text-emerald-400' aria-label='Connected' />
+                  ) : (
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs ${isSoon || pro || isManageable ? "bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-white/60" : "bg-primary/10 text-primary"}`}>
+                      <LocalizedText text={isManageable ? "Needs setup" : isSoon ? "Soon" : pro ? "Pro" : "Add"} />
+                    </span>
+                  )}
+                </button>
+                <article
+                  className='hidden rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:block dark:border-white/10 dark:bg-[#0c0c0c]'
+                >
+                  <div className='flex items-start justify-between gap-3'>
+                    <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>
+                      <IconSourceView icon={Icon} className='h-5 w-5' />
+                    </span>
+                    <span
+                      className={[
+                        "rounded-full px-2.5 py-1 text-xs",
+                        isManageable
+                          ? "bg-sky-500/10 text-sky-700 dark:text-sky-200"
+                          : "bg-zinc-200/70 text-zinc-600 dark:bg-white/10 dark:text-white/55",
+                      ].join(" ")}
+                    >
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <h3 className='mt-4 font-semibold'>{integration.name}</h3>
+                  <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500 dark:text-white/50'>
+                    {integration.description}
+                  </p>
+                  <Button
+                    type='button'
+                    disabled={isSoon}
+                    onClick={() =>
+                      isManageable
+                        ? setManageFor(integration)
+                        : setConnectFor(integration)
+                    }
+                    variant={isManageable ? "outline" : "default"}
+                    className='mt-4 w-full rounded-xl disabled:cursor-not-allowed'
+                  >
+                    {isManageable ? "Manage" : isSoon ? "Coming soon" : "Add"}
+                  </Button>
+                </article>
+              </React.Fragment>
             );
           })}
         </div>

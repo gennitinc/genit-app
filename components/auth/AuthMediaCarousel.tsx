@@ -358,7 +358,7 @@ export const loginCarouselData: { media: MediaItem[] } = {
       alt: "AI Design Tools",
       showControls: false,
       testimonial: {
-        title: "Your AI Marketing Team",
+        title: "Your AI Marketing & Sales Team",
         description:
           "Turn a marketing goal into a coordinated plan your team can execute.",
         rating: 5,
