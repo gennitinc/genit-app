@@ -758,8 +758,8 @@ const LandingHero = () => {
                 <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
               </AnimatedShinyText>
               <h1 className='text-foreground mx-auto mt-3 max-w-[700px] text-center text-5xl font-medium max-sm:px-4 sm:text-6xl lg:text-7xl/19'>
-                <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-4xl font-semibold sm:text-5xl lg:text-[64px]'>
-                  AI marketing team.
+                <span className='bg-muted/40 inline-block border border-dashed border-gray-600 px-2 py-1 text-3xl font-semibold sm:text-4xl lg:text-[44px]'>
+                  AI marketing & sales team.
                 </span>
               </h1>
               <p className='text-muted-foreground mx-auto mt-3 max-w-[490px] text-center text-sm/5.5 font-light max-sm:px-4'>
