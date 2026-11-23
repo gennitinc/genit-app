@@ -49,10 +49,13 @@ export function CallDialog({
   conversation,
   open,
   onOpenChange,
+  callType = "video",
 }: {
   conversation: InboxConversation;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Which header button opened it: a meeting link is sent as an audio or a video call. */
+  callType?: "audio" | "video";
 }) {
   const [capabilities, setCapabilities] = useState(EMPTY_CAPABILITIES);
   const [calls, setCalls] = useState<CallSession[]>([]);
@@ -238,7 +241,7 @@ export function CallDialog({
                       size='sm'
                       disabled={busy}
                       onClick={() =>
-                        void create("meeting_link", "video", "google_meet")
+                        void create("meeting_link", callType, "google_meet")
                       }
                     >
                       Google Meet
@@ -252,7 +255,7 @@ export function CallDialog({
                       variant='outline'
                       disabled={busy}
                       onClick={() =>
-                        void create("meeting_link", "video", "microsoft_teams")
+                        void create("meeting_link", callType, "microsoft_teams")
                       }
                     >
                       Teams
@@ -359,7 +362,13 @@ export function CallDialog({
                           }
                           title={call.error}
                         >
-                          {call.status.replaceAll("_", " ")}
+                          {call.status.replaceAll("_", " ")} ·{" "}
+                          {new Date(call.createdAt).toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
                           {call.error ? ` · ${call.error}` : ""}
                         </p>
                       </div>

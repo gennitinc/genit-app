@@ -1,5 +1,14 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import {
+  platformChatUrl,
+  platformInboxUrl,
+  type SocialEmbed,
+  socialEmbed,
+} from "@/lib/social-embed";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { isFreePlan } from "@/lib/plan";
 import { hostHref } from "@/lib/domains";
 import { CallDialog } from "./_components/call-dialog";
 import { EmojiPickerButton } from "./_components/emoji-picker-button";
@@ -91,6 +100,8 @@ import {
 } from "@/lib/email-quoted-content";
 import {
   type InboxAttachment,
+  fetchLinkPreview,
+  firstLink,
   type InboxConversation,
   type InboxFilters,
   type InboxSyncResult,
@@ -117,7 +128,7 @@ import {
 import { LoadingFileLoader } from "@/utils/Loading";
 import DOMPurify from "dompurify";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Message01Icon, ArrowLeft01Icon, ShapesIcon, CheckmarkCircle02Icon, InboxIcon, PlusSignIcon, FilterHorizontalIcon, Settings01Icon, TickDouble02Icon, RefreshIcon, ArchiveIcon, UsbConnected01Icon, ArrowDown01Icon, Search01Icon, MoreHorizontalIcon, Clock01Icon, CancelCircleIcon, Delete02Icon, CircleIcon, PinIcon, NotificationOff01Icon, UnavailableIcon, PinOffIcon, PanelRightIcon, Download01Icon, EraserIcon, Call02Icon, Tick02Icon, Attachment01Icon, PencilIcon, CircleArrowUp02Icon } from "@hugeicons/core-free-icons";
+import { Message01Icon, ArrowLeft01Icon, ShapesIcon, CheckmarkCircle02Icon, InboxIcon, PlusSignIcon, FilterHorizontalIcon, Settings01Icon, TickDouble02Icon, RefreshIcon, ArchiveIcon, UsbConnected01Icon, ArrowDown01Icon, Search01Icon, MoreHorizontalIcon, Clock01Icon, CancelCircleIcon, Delete02Icon, CircleIcon, PinIcon, NotificationOff01Icon, UnavailableIcon, PinOffIcon, PanelRightIcon, Download01Icon, EraserIcon, Call02Icon, Tick02Icon, Video01Icon, CrownIcon, Attachment01Icon, PencilIcon, CircleArrowUp02Icon } from "@hugeicons/core-free-icons";
 import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -133,13 +144,13 @@ import {
   useState,
 } from "react";
 
-function ConversationListSkeleton() {
+function ConversationListSkeleton({ rows = 7 }: { rows?: number }) {
   return (
     <div role='status' aria-label='Loading conversations' className='space-y-1'>
       <span className='sr-only'>
         <LocalizedText text={"Loading conversations"} />
       </span>
-      {Array.from({ length: 7 }).map((_, index) => (
+      {Array.from({ length: rows }).map((_, index) => (
         <div
           key={index}
           aria-hidden='true'
@@ -483,6 +494,201 @@ function PlatformIcon({
   }
 }
 
+/**
+ * A shared reel or post, played through the platform's own embed, with a link
+ * to open it on the platform. Clicks inside the embed open the platform too.
+ */
+function SocialPostEmbed({ embed }: { embed: SocialEmbed }) {
+  const width = 260;
+  const height = Math.min(Math.round(width / embed.aspect), 460);
+  return (
+    <div className='flex flex-col gap-1.5 p-1.5'>
+      <iframe
+        src={embed.embedUrl}
+        title={`${embed.label} post`}
+        width={width}
+        height={height}
+        loading='lazy'
+        allow='autoplay; encrypted-media; picture-in-picture; clipboard-write'
+        allowFullScreen
+        className='rounded-lg border-0 bg-black'
+      />
+      <a
+        href={embed.postUrl}
+        target='_blank'
+        rel='noreferrer'
+        className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 px-1 text-xs font-semibold'
+      >
+        <PlatformIcon platform={embed.platform} className='h-3.5 w-3.5' />
+        Open in {embed.label}
+      </a>
+    </div>
+  );
+}
+
+/**
+ * Content the platform kept from apps (often a shared post or reel): a card in
+ * the post's place. The sender's photo, blurred under frosted glass, hints at
+ * the post underneath; the button opens this person's chat in the platform's app.
+ */
+function UnsharedContent({
+  platform,
+  contact,
+}: {
+  platform: string;
+  contact: {
+    customerName: string;
+    customerHandle?: string;
+    customerAvatar?: string;
+    customerId?: string;
+  };
+}) {
+  const target = platformChatUrl(platform, contact);
+  const handle = contact.customerHandle?.replace(/^@/, "");
+  return (
+    <div className='w-[280px] overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-zinc-950'>
+      <a
+        href={target?.url}
+        target='_blank'
+        rel='noreferrer'
+        className='relative flex h-[240px] items-center justify-center overflow-hidden'
+        aria-label={target ? `Open in ${target.label}` : "Shared post"}
+      >
+        {contact.customerAvatar ? (
+          <img
+            src={contact.customerAvatar}
+            alt=''
+            className='absolute inset-0 h-full w-full scale-125 object-cover blur-2xl'
+          />
+        ) : (
+          <span className='absolute inset-0 bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#FCAF45]' />
+        )}
+        <span className='absolute inset-0 bg-white/25 backdrop-blur-xl dark:bg-black/35' />
+        <span className='relative inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/25 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-md transition-transform hover:scale-[1.03]'>
+          <PlatformIcon platform={platform} className='h-4 w-4' />
+          {target ? `Open in ${target.label}` : "Shared post"}
+        </span>
+      </a>
+      <div className='flex items-center gap-3 px-4 pt-3'>
+        {contact.customerAvatar && (
+          <img
+            src={contact.customerAvatar}
+            alt=''
+            className='h-9 w-9 rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10'
+          />
+        )}
+        <div className='min-w-0 flex-1'>
+          <p className='truncate text-sm font-bold'>{contact.customerName}</p>
+          <p className='text-muted-foreground truncate text-xs'>
+            {handle ? `@${handle} · ` : ""}shared a post
+          </p>
+        </div>
+        <PlatformIcon platform={platform} className='h-5 w-5' />
+      </div>
+      <p className='text-muted-foreground px-4 pt-2 pb-3 text-xs'>
+        {target
+          ? `${target.label} only shows this one in its own app. Click to open the chat there.`
+          : "Only its own app can show this one."}
+      </p>
+    </div>
+  );
+}
+
+/** Under a shared reel or post: its caption, and a link to the original (or the app when its page isn't known). */
+function SharedFrom({
+  share,
+}: {
+  share: NonNullable<InboxAttachment["share"]>;
+}) {
+  const inbox = platformInboxUrl(share.platform);
+  const target = share.permalink
+    ? { url: share.permalink, label: inbox?.label || "the app" }
+    : inbox;
+  return (
+    <div className='flex flex-col gap-1 px-4 py-2 text-xs'>
+      {share.caption && (
+        <p className='line-clamp-3 whitespace-pre-wrap'>{share.caption}</p>
+      )}
+      {target && (
+        <a
+          href={target.url}
+          target='_blank'
+          rel='noreferrer'
+          className='text-muted-foreground hover:text-foreground inline-flex w-fit items-center gap-1.5 font-semibold'
+        >
+          <PlatformIcon platform={share.platform} className='h-3.5 w-3.5' />
+          {share.permalink
+            ? `Open ${share.contentType} in ${target.label}`
+            : `Open ${target.label}`}
+        </a>
+      )}
+    </div>
+  );
+}
+
+/** The first link in a message: an embedded social post, or the preview card chat apps show. */
+function LinkInMessage({
+  text,
+  attachments,
+}: {
+  text: string;
+  attachments?: InboxAttachment[];
+}) {
+  const link = firstLink(text);
+  const embed = link ? socialEmbed(link) : null;
+  const preview = useQuery({
+    queryKey: ["inbox_link_preview", link],
+    queryFn: () => fetchLinkPreview(link),
+    enabled: Boolean(link) && !embed,
+    staleTime: 6 * 60 * 60_000,
+    retry: false,
+  });
+  if (
+    !link ||
+    attachments?.some(
+      (item) => item.url === link || item.share?.permalink === link
+    )
+  )
+    return null;
+  if (embed) return <SocialPostEmbed embed={embed} />;
+  const data = preview.data;
+  if (!data) return null;
+  return (
+    <a
+      href={link}
+      target='_blank'
+      rel='noreferrer'
+      className='mx-3 mb-3 block max-w-[280px] overflow-hidden rounded-lg bg-black/[0.04] dark:bg-white/[0.06]'
+    >
+      {data.image && (
+        <img
+          src={data.image}
+          alt=''
+          className='h-[140px] w-full object-cover'
+          loading='lazy'
+        />
+      )}
+      <span className='flex flex-col gap-0.5 p-2.5'>
+        {data.siteName && (
+          <span className='text-muted-foreground text-[10px] font-semibold tracking-wide uppercase'>
+            {data.siteName}
+          </span>
+        )}
+        {data.title && (
+          <span className='line-clamp-2 text-sm font-semibold'>
+            {data.title}
+          </span>
+        )}
+        {data.description && (
+          <span className='text-muted-foreground line-clamp-2 text-xs'>
+            {data.description}
+          </span>
+        )}
+      </span>
+    </a>
+  );
+}
+
 function relativeTime(value: string) {
   const date = new Date(value);
   const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
@@ -565,6 +771,8 @@ function CustomerAvatar({
 export default function InboxPage() {
   const { resolvedTheme } = useTheme();
   const router = useRouter();
+  const { user: currentUser } = useUserContext();
+  const freePlan = isFreePlan(currentUser?.userPlan);
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
   const [manageFor, setManageFor] = useState<Integration | null>(null);
   const [selectedAccountId, setSelectedAccountIdState] = useState("all");
@@ -641,6 +849,7 @@ export default function InboxPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [showNewConversation, setShowNewConversation] = useState(false);
   const [showCallDialog, setShowCallDialog] = useState(false);
+  const [callType, setCallType] = useState<"audio" | "video">("video");
   const [createdConversation, setCreatedConversation] =
     useState<InboxConversation | null>(null);
   const deferredSearch = useDeferredValue(search.trim());
@@ -1126,7 +1335,11 @@ export default function InboxPage() {
       if (!entry.isIntersecting || isFetchingNextPage || syncMutation.isPending)
         return;
       if (hasNextPage) fetchNextPage();
-      else if (requestedHistoryKeyRef.current !== providerHistoryKey) {
+      // Older history is a Pro import, so free plans stop at what's already synced.
+      else if (
+        !freePlan &&
+        requestedHistoryKeyRef.current !== providerHistoryKey
+      ) {
         requestedHistoryKeyRef.current = providerHistoryKey;
         syncChannels(true);
       }
@@ -1134,6 +1347,7 @@ export default function InboxPage() {
     observer.observe(node);
     return () => observer.disconnect();
   }, [
+    freePlan,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -1668,10 +1882,19 @@ export default function InboxPage() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 disabled={!historyAccounts.length || syncMutation.isPending}
-                onSelect={() => syncChannels(true)}
+                onSelect={() =>
+                  freePlan ? router.push("/pricing") : syncChannels(true)
+                }
               >
                 <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-4 w-4' />
                 <LocalizedText text={"Import older channel history"} />
+                {freePlan && (
+                  <HugeiconsIcon
+                    icon={CrownIcon}
+                    className='ml-auto h-3.5 w-3.5 text-amber-500'
+                    aria-label='Pro'
+                  />
+                )}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href='/plugins'>
@@ -2094,7 +2317,7 @@ export default function InboxPage() {
                   ref={loadMoreRef}
                   className='flex h-10 items-center justify-center'
                 >
-                  {isFetchingNextPage && <LoadingFileLoader size={20} />}
+                  {isFetchingNextPage && <ConversationListSkeleton rows={2} />}
                 </div>
               </>
             )}
@@ -2196,17 +2419,36 @@ export default function InboxPage() {
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
-                  {supportsInboxCalling(activeConversation.platform) && (
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='rounded-full'
-                      onClick={() => setShowCallDialog(true)}
-                      aria-label={`Call ${activeConversation.customerName}`}
-                    >
-                      <HugeiconsIcon icon={Call02Icon} className='h-5 w-5' />
-                    </Button>
-                  )}
+                  {/* Audio and video calls; email channels have none, so the buttons stay visible but disabled. */}
+                  {(["audio", "video"] as const).map((type) => {
+                    const canCall = supportsInboxCalling(
+                      activeConversation.platform
+                    );
+                    return (
+                      <Button
+                        key={type}
+                        variant='ghost'
+                        size='icon'
+                        className='rounded-full'
+                        disabled={!canCall}
+                        title={
+                          canCall
+                            ? `${type === "audio" ? "Voice" : "Video"} call ${activeConversation.customerName}`
+                            : `Calls aren't available on ${PLATFORM_LABELS[activeConversation.platform] || activeConversation.platform}`
+                        }
+                        onClick={() => {
+                          setCallType(type);
+                          setShowCallDialog(true);
+                        }}
+                        aria-label={`${type === "audio" ? "Voice" : "Video"} call ${activeConversation.customerName}`}
+                      >
+                        <HugeiconsIcon
+                          icon={type === "audio" ? Call02Icon : Video01Icon}
+                          className='h-5 w-5'
+                        />
+                      </Button>
+                    );
+                  })}
                   <Button
                     variant='ghost'
                     size='icon'
@@ -2216,29 +2458,6 @@ export default function InboxPage() {
                   >
                     <HugeiconsIcon icon={PanelRightIcon} className='h-5 w-5' />
                   </Button>
-                  {activeConversation.status === "resolved" ? (
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      className='hidden rounded-full sm:flex'
-                      disabled={statusMutation.isPending}
-                      onClick={() => changeStatus("open")}
-                    >
-                      <HugeiconsIcon icon={ArchiveIcon} className='mr-2 h-4 w-4' />
-                      <LocalizedText text={"Reopen"} />
-                    </Button>
-                  ) : (
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      className='hidden rounded-full sm:flex'
-                      disabled={statusMutation.isPending}
-                      onClick={() => changeStatus("resolved")}
-                    >
-                      <HugeiconsIcon icon={Tick02Icon} className='mr-2 h-4 w-4' />
-                      <LocalizedText text={"Resolve"} />
-                    </Button>
-                  )}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -2394,6 +2613,12 @@ export default function InboxPage() {
                                       {attachment.name}
                                     </button>
                                   ) : attachment.mimeType ===
+                                      "text/uri-list" &&
+                                    socialEmbed(attachment.url) ? (
+                                    <SocialPostEmbed
+                                      embed={socialEmbed(attachment.url)!}
+                                    />
+                                  ) : attachment.mimeType ===
                                     "text/uri-list" ? (
                                     <a
                                       href={attachment.url}
@@ -2412,17 +2637,27 @@ export default function InboxPage() {
                                       </span>
                                     </a>
                                   ) : attachment.kind === "image" ? (
-                                    <img
-                                      src={attachment.url}
-                                      alt={attachment.name}
-                                      className='max-h-[28rem] w-full bg-black/[0.03] object-contain dark:bg-white/[0.03]'
-                                    />
+                                    <>
+                                      <img
+                                        src={attachment.url}
+                                        alt={attachment.name}
+                                        className='max-h-[28rem] w-full bg-black/[0.03] object-contain dark:bg-white/[0.03]'
+                                      />
+                                      {attachment.share && (
+                                        <SharedFrom share={attachment.share} />
+                                      )}
+                                    </>
                                   ) : attachment.kind === "video" ? (
-                                    <video
-                                      src={attachment.url}
-                                      controls
-                                      className='max-h-[28rem] w-full bg-black'
-                                    />
+                                    <>
+                                      <video
+                                        src={attachment.url}
+                                        controls
+                                        className='max-h-[28rem] w-full bg-black'
+                                      />
+                                      {attachment.share && (
+                                        <SharedFrom share={attachment.share} />
+                                      )}
+                                    </>
                                   ) : attachment.kind === "audio" ? (
                                     <audio
                                       src={attachment.url}
@@ -2455,6 +2690,21 @@ export default function InboxPage() {
                                     {message.content}
                                   </div>
                                 ))}
+                              {/* A link in the text: the platform's own player for social posts, otherwise a preview card. */}
+                              {!emailHtml && message.content && (
+                                <LinkInMessage
+                                  text={message.content}
+                                  attachments={message.attachments}
+                                />
+                              )}
+                              {/* A provider that withheld the content: say so instead of an empty bubble. */}
+                              {!message.content?.trim() &&
+                                !message.attachments?.length && (
+                                  <UnsharedContent
+                                    platform={activeConversation.platform}
+                                    contact={activeConversation}
+                                  />
+                                )}
                             </div>
                             {!inbound &&
                               (!message.platformMessageId ||
@@ -2886,6 +3136,7 @@ export default function InboxPage() {
                 conversation={activeConversation}
                 open={showCallDialog}
                 onOpenChange={setShowCallDialog}
+                callType={callType}
               />
             )}
           {activeConversation && (

@@ -80,6 +80,14 @@ export interface InboxAttachment {
   kind: "image" | "video" | "audio" | "file";
   providerMessageId?: string;
   providerAttachmentId?: string;
+  /** A post or reel someone shared: where it's from, its caption and the post's page. */
+  share?: {
+    platform: string;
+    contentType: "reel" | "post" | "story" | "video";
+    mediaId?: string;
+    caption?: string;
+    permalink?: string;
+  };
 }
 
 export interface WhatsAppTemplate {
@@ -433,4 +441,24 @@ export async function exportConversation(
     { responseType: "blob" }
   );
   return res.data;
+}
+
+export interface LinkPreview {
+  url: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  siteName?: string;
+}
+
+/** Title, image and site name for a link in a message, read by the server from the page. */
+export async function fetchLinkPreview(url: string): Promise<LinkPreview | null> {
+  const res = await apiResponse.get("/inbox/link-preview", { params: { url } });
+  return res.data.preview ?? null;
+}
+
+/** The first web link in a message's text, without trailing punctuation. */
+export function firstLink(text: string) {
+  const match = /https?:\/\/[^\s<>"']+/i.exec(text);
+  return match ? match[0].replace(/[),.!?;:'"\]]+$/, "") : "";
 }

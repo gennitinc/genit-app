@@ -36,7 +36,9 @@ import {
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { AtIcon, ChartIncreaseIcon, Alert02Icon, MoreHorizontalIcon, DashboardSquare02Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { AtIcon, ChartIncreaseIcon, Alert02Icon, MoreHorizontalIcon, DashboardSquare02Icon, Search01Icon, CrownIcon } from "@hugeicons/core-free-icons";
+import { useUserContext } from "@/context/AuthenticatedContext";
+import { isFreePlan, isProPlugin } from "@/lib/plan";
 import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -424,11 +426,14 @@ function IntegrationCard({
   status,
   onConnect,
   onManage,
+  pro = false,
 }: {
   integration: Integration;
   status: CardStatus;
   onConnect: () => void;
   onManage: () => void;
+  /** On the free plan, a plugin other than Gmail and Outlook: gold crown, and Connect becomes Upgrade. */
+  pro?: boolean;
 }) {
   const Icon = integration.icon;
   return (
@@ -453,6 +458,11 @@ function IntegrationCard({
             <h3 className='truncate text-sm font-semibold tracking-tight text-zinc-900 sm:text-base dark:text-zinc-100'>
               {integration.name}
             </h3>
+            {pro && (
+              <span className='inline-flex items-center text-amber-500' title='Pro plugin'>
+                <HugeiconsIcon icon={CrownIcon} className='h-3.5 w-3.5' />
+              </span>
+            )}
             {status === "partial" && (
               <span
                 className='inline-flex items-center text-amber-500'
@@ -493,9 +503,14 @@ function IntegrationCard({
           <button
             type='button'
             onClick={onConnect}
-            className='rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-[background-color,transform] hover:bg-indigo-700 active:scale-95'
+            className={
+              pro
+                ? "inline-flex items-center gap-1 rounded-md bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-[background-color,transform] hover:bg-amber-600 active:scale-95"
+                : "rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-[background-color,transform] hover:bg-indigo-700 active:scale-95"
+            }
           >
-            <LocalizedText text={"Connect"} />
+            {pro && <HugeiconsIcon icon={CrownIcon} className='h-3.5 w-3.5' />}
+            <LocalizedText text={pro ? "Upgrade" : "Connect"} />
           </button>
         )}
       </div>
@@ -509,6 +524,8 @@ export function IntegrationsExplorer({
   publicView?: boolean;
 }) {
   const router = useRouter();
+  const { user } = useUserContext();
+  const freePlan = isFreePlan(user?.userPlan);
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [connectFor, setConnectFor] = useState<Integration | null>(null);
@@ -769,10 +786,19 @@ export function IntegrationsExplorer({
                       key={`${integration.platform}-${integration.appSlug || integration.name}`}
                       integration={integration}
                       status={status}
+                      pro={
+                        !publicView &&
+                        freePlan &&
+                        isProPlugin(integration) &&
+                        status !== "connected" &&
+                        status !== "partial"
+                      }
                       onConnect={() =>
                         publicView
                           ? router.push(hostHref("/signin?redirect=/plugins"))
-                          : setConnectFor(integration)
+                          : freePlan && isProPlugin(integration)
+                            ? router.push(hostHref("/pricing"))
+                            : setConnectFor(integration)
                       }
                       onManage={() => setManageFor(integration)}
                     />
