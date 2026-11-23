@@ -546,7 +546,7 @@ function UnsharedContent({
   const target = platformChatUrl(platform, contact);
   const handle = contact.customerHandle?.replace(/^@/, "");
   return (
-    <div className='w-[280px] overflow-hidden rounded-2xl border border-black/10 bg-white dark:border-white/10 dark:bg-zinc-950'>
+    <div className='w-[280px] overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/10 dark:bg-zinc-950 dark:ring-white/10'>
       <a
         href={target?.url}
         target='_blank'
@@ -2315,7 +2315,7 @@ export default function InboxPage() {
                 ))}
                 <div
                   ref={loadMoreRef}
-                  className='flex h-10 items-center justify-center'
+                  className='flex min-h-10 flex-col justify-center'
                 >
                   {isFetchingNextPage && <ConversationListSkeleton rows={2} />}
                 </div>
@@ -2419,36 +2419,28 @@ export default function InboxPage() {
                   </div>
                 </div>
                 <div className='flex items-center gap-1'>
-                  {/* Audio and video calls; email channels have none, so the buttons stay visible but disabled. */}
-                  {(["audio", "video"] as const).map((type) => {
-                    const canCall = supportsInboxCalling(
-                      activeConversation.platform
-                    );
-                    return (
-                      <Button
-                        key={type}
-                        variant='ghost'
-                        size='icon'
-                        className='rounded-full'
-                        disabled={!canCall}
-                        title={
-                          canCall
-                            ? `${type === "audio" ? "Voice" : "Video"} call ${activeConversation.customerName}`
-                            : `Calls aren't available on ${PLATFORM_LABELS[activeConversation.platform] || activeConversation.platform}`
-                        }
-                        onClick={() => {
-                          setCallType(type);
-                          setShowCallDialog(true);
-                        }}
-                        aria-label={`${type === "audio" ? "Voice" : "Video"} call ${activeConversation.customerName}`}
-                      >
-                        <HugeiconsIcon
-                          icon={type === "audio" ? Call02Icon : Video01Icon}
-                          className='h-5 w-5'
-                        />
-                      </Button>
-                    );
-                  })}
+                  {/* Voice and video calls are coming soon: the buttons say so instead of calling. */}
+                  {(["audio", "video"] as const).map((type) => (
+                    <Button
+                      key={type}
+                      variant='ghost'
+                      size='icon'
+                      className='rounded-full opacity-70'
+                      title={`${type === "audio" ? "Voice" : "Video"} calls are coming soon`}
+                      aria-label={`${type === "audio" ? "Voice" : "Video"} call, coming soon`}
+                      onClick={() =>
+                        toast.info("Voice and video calls are coming soon", {
+                          description:
+                            "You'll be able to call contacts right from the Genit inbox.",
+                        })
+                      }
+                    >
+                      <HugeiconsIcon
+                        icon={type === "audio" ? Call02Icon : Video01Icon}
+                        className='h-5 w-5'
+                      />
+                    </Button>
+                  ))}
                   <Button
                     variant='ghost'
                     size='icon'
@@ -2572,6 +2564,10 @@ export default function InboxPage() {
                             ? message.content
                             : ""
                         : "";
+                      // Nothing the provider let through: the card stands on its own, without a bubble around it.
+                      const unshared =
+                        !message.content?.trim() &&
+                        !message.attachments?.length;
                       return (
                         <div
                           key={message._id}
@@ -2587,7 +2583,7 @@ export default function InboxPage() {
                               />
                             )}
                             <div
-                              className={`min-w-0 overflow-hidden rounded-lg text-sm leading-6 shadow-sm ${emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-50 text-zinc-900 ring-1 ring-red-200 dark:bg-red-950/40 dark:text-zinc-100 dark:ring-red-900" : "rounded-tr-md bg-indigo-600 text-white"}`}
+                              className={`min-w-0 overflow-hidden text-sm leading-6 ${unshared ? "rounded-2xl" : emailHtml ? "w-full max-w-3xl bg-white ring-1 ring-black/5 dark:ring-white/10" : inbound ? "rounded-tl-md bg-white ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10" : message.status === "failed" ? "rounded-tr-md bg-red-50 text-zinc-900 ring-1 ring-red-200 dark:bg-red-950/40 dark:text-zinc-100 dark:ring-red-900" : "rounded-tr-md bg-indigo-600 text-white"} ${unshared ? "" : "rounded-lg shadow-sm"}`}
                             >
                               {message.attachments?.map((attachment) => (
                                 <div
