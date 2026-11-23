@@ -192,8 +192,8 @@ export default function VisualsHomePage() {
             <LocalizedText text={"Hello "} />
             {current?.businessName || user?.username || "User"} 👋
           </h1>
-          {/* Connected plugins on the left, each leaning slightly clockwise; the add button sits at the far right. */}
-          <div className='mt-4 flex w-full items-center justify-between gap-3'>
+          {/* Connected plugins on the left, each leaning slightly clockwise; the add button sits at the far right on small screens and right after the icons on desktop. */}
+          <div className='mt-4 flex w-full items-center justify-between gap-3 lg:justify-start'>
             <div className='flex items-center'>
               {connectedIntegrations.slice(0, 6).map((integration, index) => (
                 <span

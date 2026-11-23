@@ -4,7 +4,6 @@ import { BrandData } from "@/app/(auth)/onboarding/_components/types";
 import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { OrgLogo } from "@/components/ui/org-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -337,6 +336,9 @@ export function OrgSwitcher({
     }
   };
 
+  const orgInitial = (org: Organization | null) =>
+    (org?.businessName || "W").slice(0, 1).toUpperCase();
+
   const dropdownSide = isMobile ? "top" : "top";
 
   const switcherButton = (
@@ -348,12 +350,18 @@ export function OrgSwitcher({
         forceExpanded && "!h-12 !w-full !justify-start !px-2"
       )}
     >
-      <OrgLogo
-        src={current?.businessLogo}
-        name={current?.businessName}
-        className={cn("rounded-md", isCollapsed ? "h-7 w-7" : "h-8 w-8")}
-        fallbackClassName='text-xs'
-      />
+      <Avatar className={cn("rounded-md", isCollapsed ? "h-7 w-7" : "h-8 w-8")}>
+        {current?.businessLogo ? (
+          <AvatarImage
+            src={current.businessLogo}
+            alt={current?.businessName || "Organization"}
+            className='bg-white object-contain'
+          />
+        ) : null}
+        <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
+          {orgInitial(current)}
+        </AvatarFallback>
+      </Avatar>
       {!isCollapsed && (
         <>
           <div className='ml-2 grid flex-1 text-left text-sm leading-tight'>
@@ -430,12 +438,18 @@ export function OrgSwitcher({
                             disabled={isActive || switchingId === org._id}
                             className='hover:bg-accent flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left disabled:opacity-70'
                           >
-                            <OrgLogo
-                              src={org.businessLogo}
-                              name={org.businessName}
-                              className='h-8 w-8 rounded-md'
-                              fallbackClassName='text-xs'
-                            />
+                            <Avatar className='h-8 w-8 rounded-md'>
+                              {org.businessLogo ? (
+                                <AvatarImage
+                                  src={org.businessLogo}
+                                  alt={org.businessName}
+                                  className='bg-white object-contain'
+                                />
+                              ) : null}
+                              <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-xs font-semibold text-white'>
+                                {orgInitial(org)}
+                              </AvatarFallback>
+                            </Avatar>
                             <span className='min-w-0 flex-1 truncate text-sm font-medium'>
                               {org.businessName}
                             </span>
@@ -595,12 +609,18 @@ export function OrgSwitcher({
                         onMouseEnter={() => loadTeams(org._id)}
                         className='focus:bg-accent focus:text-accent-foreground gap-2'
                       >
-                        <OrgLogo
-                          src={org.businessLogo}
-                          name={org.businessName}
-                          className='h-6 w-6 rounded-md'
-                          fallbackClassName='text-[10px]'
-                        />
+                        <Avatar className='h-6 w-6 rounded-md'>
+                          {org.businessLogo ? (
+                            <AvatarImage
+                              src={org.businessLogo}
+                              alt={org.businessName}
+                              className='bg-white object-contain'
+                            />
+                          ) : null}
+                          <AvatarFallback className='rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[10px] font-semibold text-white'>
+                            {orgInitial(org)}
+                          </AvatarFallback>
+                        </Avatar>
                         <span className='flex-1 truncate'>
                           {org.businessName}
                         </span>

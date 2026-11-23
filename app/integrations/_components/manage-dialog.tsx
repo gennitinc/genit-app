@@ -25,6 +25,7 @@ import {
   IntegrationConnection,
   IntegrationPlatform,
   isMetaSurface,
+  SINGLE_ACCOUNT_PLATFORMS,
 } from "@/lib/integrations-api";
 import { GradientFrame } from "@/utils/gradient-frame";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -380,6 +381,16 @@ export function ManageDialog({
                   </DialogHeader>
                 </div>
               </div>
+
+              {/* Older organizations may still hold several accounts of one social
+                  plugin; new ones are limited to one, so say how to get there. */}
+              {hasMultiple && platform && SINGLE_ACCOUNT_PLATFORMS.has(platform) && (
+                <div className='relative z-10 mt-5 rounded-md border border-amber-500/25 bg-amber-500/5 p-3 dark:border-amber-300/20 dark:bg-amber-300/5'>
+                  <p className='text-foreground text-xs'>
+                    {`Only one ${platformName} account can be connected to an organization. These stay connected, but no more can be added; disconnect the extras to keep one.`}
+                  </p>
+                </div>
+              )}
 
               {showIdentitySection && (
                 <div className='relative z-10 mt-5 rounded-md border border-violet-500/20 bg-violet-500/4 p-3 dark:border-violet-300/20 dark:bg-violet-300/4'>
@@ -759,6 +770,16 @@ export function ManageDialog({
                   );
                 })}
               </div>
+
+              {/* Older organizations may still hold several accounts of one social
+                  plugin; new ones are limited to one, so say how to get there. */}
+              {hasMultiple && platform && SINGLE_ACCOUNT_PLATFORMS.has(platform) && (
+                <div className='relative z-10 mt-5 rounded-md border border-amber-500/25 bg-amber-500/5 p-3 dark:border-amber-300/20 dark:bg-amber-300/5'>
+                  <p className='text-foreground text-xs'>
+                    {`Only one ${platformName} account can be connected to an organization. These stay connected, but no more can be added; disconnect the extras to keep one.`}
+                  </p>
+                </div>
+              )}
 
               {showIdentitySection && (
                 <div className='relative z-10 mt-5 rounded-md border border-amber-500/30 bg-amber-500/4 p-3'>
