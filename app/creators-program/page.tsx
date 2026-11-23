@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { JoinReferralCard } from "@/components/referral/join-referral-card";
@@ -13,7 +14,7 @@ export default function ReferralLandingPage() {
 
   const handleJoinSuccess = () => {
     // Redirect to the referral dashboard after successful join
-    router.push("/user/referral");
+    router.push(hostHref("/user/referral"));
   };
 
   return (

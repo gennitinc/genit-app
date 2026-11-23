@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { ModelSelector } from "../inspire/model-selector";
 import { BorderBeam } from "../ui/border-beam";
 import ShinyText from "../ui/shiny-text";
@@ -466,7 +467,7 @@ export function ChatInput({
                     {String(user?.userPlan) === "Basic" ? (
                       <span
                         className='cursor-pointer text-blue-500 hover:underline'
-                        onClick={() => router.push("/pricing")}
+                        onClick={() => router.push(hostHref("/pricing"))}
                       >
                         <LocalizedText text={"Upgrade"} />
                       </span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { StepBrandDna } from "./_components/step-brand-dna";
 import { StepImport } from "./_components/step-import";
 import { StepQuestions } from "./_components/step-questions";
@@ -48,7 +49,7 @@ export default function OnboardingPage() {
       typeof o === "object" &&
       (o.onboardingCompleted || o.onboardingSkipped)
     ) {
-      router.replace(redirect);
+      router.replace(hostHref(redirect));
       return;
     }
     if (o && typeof o === "object") {
@@ -168,7 +169,7 @@ export default function OnboardingPage() {
         origin: { y: 0.6 },
       });
       toast.success("You can complete this later from settings.");
-      router.replace(redirect);
+      router.replace(hostHref(redirect));
     } catch (err) {
       console.error("skip onboarding failed", err);
       toast.error("Could not skip onboarding. Try again.");
@@ -194,7 +195,7 @@ export default function OnboardingPage() {
           origin: { y: 0.6 },
         });
         toast.success("You're all set!");
-        router.replace(redirect);
+        router.replace(hostHref(redirect));
       } catch (err) {
         console.error("finish failed", err);
         toast.error("Could not finish onboarding. Try again.");
@@ -230,7 +231,7 @@ export default function OnboardingPage() {
       />
       <header className='bg-background/70 sticky top-0 z-10 backdrop-blur'>
         <div className='border-border mx-auto flex h-14 max-w-5xl items-center justify-between border-b px-4'>
-          <Link href='/' className='z-40 flex items-center'>
+          <Link href={hostHref("/")} className='z-40 flex items-center'>
             <Logo className='h-12 w-12 flex-shrink-0' />
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}

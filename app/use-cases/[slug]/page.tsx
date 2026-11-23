@@ -1,3 +1,4 @@
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { getUseCase, useCases } from "@/lib/use-cases";
@@ -53,19 +54,19 @@ export default async function UseCasePage({
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://www.trygenit.com",
+            item: "https://trygenit.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Use cases",
-            item: "https://www.trygenit.com/use-cases",
+            item: "https://trygenit.com/use-cases",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: useCase.name,
-            item: `https://www.trygenit.com/use-cases/${slug}`,
+            item: `https://trygenit.com/use-cases/${slug}`,
           },
         ],
       },
@@ -106,7 +107,7 @@ export default async function UseCasePage({
           </p>
           <div className='mt-8 flex flex-wrap items-center gap-4'>
             <Link
-              href={useCase.appHref}
+              href={hostHref(useCase.appHref)}
               className='rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
             >
               {useCase.appLabel}

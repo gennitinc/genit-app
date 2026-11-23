@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { BrandData } from "@/app/(auth)/onboarding/_components/types";
 import { BrandOnboardingDialog } from "@/components/chat/messages/brand-onboarding-dialog";
 import { LocalizedText } from "@/components/localized-text";
@@ -324,7 +325,7 @@ export function OrgSwitcher({
         toast.error(err.message, {
           action: {
             label: "Upgrade",
-            onClick: () => router.push("/pricing"),
+            onClick: () => router.push(hostHref("/pricing")),
           },
         });
         setCreateMode(null);
@@ -468,7 +469,7 @@ export function OrgSwitcher({
                           if (canCreateOrg) {
                             setOrgOnboardingOpen(true);
                           } else {
-                            router.push("/pricing");
+                            router.push(hostHref("/pricing"));
                             toast.info("Upgrade to create more organizations");
                           }
                         }}
@@ -498,7 +499,7 @@ export function OrgSwitcher({
                     )}
                     <DrawerClose asChild>
                       <Link
-                        href='/user/settings'
+                        href={hostHref("/user/settings")}
                         className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
                       >
                         <HugeiconsIcon icon={CheckmarkBadge01Icon} className='h-4 w-4' />
@@ -507,7 +508,7 @@ export function OrgSwitcher({
                     </DrawerClose>
                     <DrawerClose asChild>
                       <Link
-                        href='/user/settings?tab=billing'
+                        href={hostHref("/user/settings?tab=billing")}
                         className='hover:bg-accent flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm'
                       >
                         <HugeiconsIcon icon={CreditCardIcon} className='h-4 w-4' />
@@ -751,7 +752,7 @@ export function OrgSwitcher({
                   <DropdownMenuItem
                     onSelect={(e) => {
                       e.preventDefault();
-                      router.push("/pricing");
+                      router.push(hostHref("/pricing"));
                       toast.info("Upgrade to create more organizations");
                     }}
                     className='focus:bg-accent focus:text-accent-foreground'
@@ -784,7 +785,7 @@ export function OrgSwitcher({
                     asChild
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
-                    <Link href='/user/settings'>
+                    <Link href={hostHref("/user/settings")}>
                       <HugeiconsIcon icon={CheckmarkBadge01Icon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Account"} />
                     </Link>
@@ -793,7 +794,7 @@ export function OrgSwitcher({
                     asChild
                     className='focus:bg-accent focus:text-accent-foreground'
                   >
-                    <Link href='/user/settings?tab=billing'>
+                    <Link href={hostHref("/user/settings?tab=billing")}>
                       <HugeiconsIcon icon={CreditCardIcon} className='mr-2 h-4 w-4' />
                       <LocalizedText text={"Billing"} />
                     </Link>

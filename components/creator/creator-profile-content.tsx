@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
@@ -429,7 +430,7 @@ export function CreatorProfileContent({
   const handleRecreate = async (item: CommunityContent) => {
     // Check if user is authenticated
     if (!user) {
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 
@@ -454,7 +455,7 @@ export function CreatorProfileContent({
 
       // Navigate to create page
       router.push(
-        `/inspire/create?prompt=${encodeURIComponent(item.prompt)}&mode=${contentType === "images" ? "image" : "video"}`
+        hostHref(`/inspire/create?prompt=${encodeURIComponent(item.prompt)}&mode=${contentType === "images" ? "image" : "video"}`)
       );
       toast({
         title: "Settings saved",
@@ -464,7 +465,7 @@ export function CreatorProfileContent({
       console.error("Error preparing recreate:", error);
       // Still allow navigating even if there's an error
       router.push(
-        `/inspire/create?prompt=${encodeURIComponent(item.prompt)}&mode=${contentType === "images" ? "image" : "video"}`
+        hostHref(`/inspire/create?prompt=${encodeURIComponent(item.prompt)}&mode=${contentType === "images" ? "image" : "video"}`)
       );
     }
   };

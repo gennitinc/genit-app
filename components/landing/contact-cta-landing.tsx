@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 import React from "react";
@@ -101,7 +102,7 @@ const ContactCtaLanding = () => {
           <div className='flex flex-col items-start sm:flex-row sm:items-center sm:gap-4'>
             <div className='mt-6 flex justify-center'>
               <Link
-                href='/signup'
+                href={hostHref("/signup")}
                 className='group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm font-semibold text-white no-underline transition duration-200 sm:w-44 dark:bg-white dark:text-black'
               >
                 {t("Start growing")}

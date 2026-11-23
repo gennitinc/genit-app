@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Logo } from "./logo";
 import UserPopOver from "./user/userPopOver";
 import { LocalizedText } from "@/components/localized-text";
@@ -141,7 +142,7 @@ export function Navbar({ title }: NavbarProps) {
         <div className='relative flex min-w-0 items-center gap-1 sm:gap-3'>
           {/* Logo */}
           <Link
-            href='/'
+            href={hostHref("/")}
             className={cn(
               "flex items-center"
               // state === "collapsed" && !isMobile && "justify-start",
@@ -204,14 +205,14 @@ export function Navbar({ title }: NavbarProps) {
             {/* <Link
               target='__blank'
               className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-              href='/community'
+              href={hostHref("/community")}
             >
               <LocalizedText text={"Community"} />
             </Link> */}
             <Link
               target='__blank'
               className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-              href='/pricing'
+              href={hostHref("/pricing")}
             >
               <LocalizedText text={"Pricing"} />
             </Link>

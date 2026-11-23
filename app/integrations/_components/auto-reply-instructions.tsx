@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Button } from "@/components/ui/button";
 import { useUpdateIntegrationInboxSettings } from "@/hooks/use-integrations";
 import Link from "next/link";
@@ -58,7 +59,7 @@ export function AutoReplyInstructions({
       <div className='mt-1.5 flex items-start justify-between gap-3'>
         <p className='text-muted-foreground text-xs leading-snug'>
           Answers come from your{" "}
-          <Link href='/chat/brain' className='text-foreground underline'>
+          <Link href={hostHref("/chat/brain")} className='text-foreground underline'>
             Brand Brain
           </Link>
           . If the answer isn&apos;t there, the AI hands the chat to your team

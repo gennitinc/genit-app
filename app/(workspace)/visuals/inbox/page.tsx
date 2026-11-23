@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { CallDialog } from "./_components/call-dialog";
 import { EmojiPickerButton } from "./_components/emoji-picker-button";
 import { WhatsAppCallBar } from "./_components/whatsapp-call-bar";
@@ -1033,7 +1034,7 @@ export default function InboxPage() {
           duration: 10_000,
           action: {
             label: "Reconnect",
-            onClick: () => router.push("/integrations"),
+            onClick: () => router.push("/plugins"),
           },
         });
       else toast.warning(message);

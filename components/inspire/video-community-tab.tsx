@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Skeleton } from "../ui/skeleton";
 import { LocalizedText } from "@/components/localized-text";
 import {
@@ -172,7 +173,7 @@ export function VideoCommunityTab({
   const handleRecreate = async (video: CommunityContent) => {
     // Check if user is authenticated
     if (!user) {
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 
@@ -301,7 +302,7 @@ export function VideoCommunityTab({
 
     // Check if user is authenticated
     if (!user) {
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 

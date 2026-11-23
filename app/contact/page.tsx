@@ -18,10 +18,10 @@ export const metadata: Metadata = {
     title: "Contact Us – Genit AI",
     description:
       "Reach out to Genit AI for support, sales, or partnership inquiries",
-    url: "https://www.trygenit.com/contact",
+    url: "https://trygenit.com/contact",
     images: [
       {
-        url: "https://www.trygenit.com/opengraph-image.png",
+        url: "https://trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI Contact",

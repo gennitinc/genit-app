@@ -18,7 +18,7 @@ const description =
   "Genit is an end-to-end AI marketing platform for agents, automation, content, campaigns, publishing, inbox management, analytics, and 1,000+ app integrations.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.trygenit.com"),
+  metadataBase: new URL("https://trygenit.com"),
   title,
   description,
   applicationName: "Genit AI",
@@ -89,10 +89,10 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.trygenit.com/#organization",
+      "@id": "https://trygenit.com/#organization",
       name: "Genit AI",
-      url: "https://www.trygenit.com",
-      logo: "https://www.trygenit.com/logo.jpeg",
+      url: "https://trygenit.com",
+      logo: "https://trygenit.com/logo.jpeg",
       description,
       sameAs: [
         "https://www.linkedin.com/company/genit-ai/",
@@ -109,9 +109,9 @@ const structuredData = {
     },
     {
       "@type": "WebApplication",
-      "@id": "https://www.trygenit.com/#application",
+      "@id": "https://trygenit.com/#application",
       name: "Genit AI",
-      url: "https://www.trygenit.com",
+      url: "https://trygenit.com",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description,
@@ -130,15 +130,15 @@ const structuredData = {
       ],
       browserRequirements: "Requires a modern web browser",
       isAccessibleForFree: true,
-      publisher: { "@id": "https://www.trygenit.com/#organization" },
+      publisher: { "@id": "https://trygenit.com/#organization" },
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.trygenit.com/#website",
-      url: "https://www.trygenit.com",
+      "@id": "https://trygenit.com/#website",
+      url: "https://trygenit.com",
       name: "Genit AI",
       description,
-      publisher: { "@id": "https://www.trygenit.com/#organization" },
+      publisher: { "@id": "https://trygenit.com/#organization" },
     },
   ],
 };

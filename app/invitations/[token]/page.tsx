@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { OrgLogo } from "@/components/ui/org-logo";
 import { Button } from "@/components/ui/button";
@@ -95,7 +96,7 @@ export default function AcceptInvitationPage() {
       );
       toast.success(data?.message || "You're in!");
       await fetchCurrentUser();
-      router.push("/");
+      router.push(hostHref("/"));
     } catch (err: any) {
       toast.error(
         err?.response?.data?.message || "Couldn't accept the invitation"
@@ -124,7 +125,7 @@ export default function AcceptInvitationPage() {
           <p className='text-muted-foreground mt-2 text-sm'>
             {error || "This invitation may have expired or been revoked."}
           </p>
-          <Button className='mt-6' onClick={() => router.push("/")}>
+          <Button className='mt-6' onClick={() => router.push(hostHref("/"))}>
             <LocalizedText text={"Go to genit"} />
           </Button>
         </div>

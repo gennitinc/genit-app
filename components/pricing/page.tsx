@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
@@ -342,7 +343,7 @@ export default function PricingComponent({
     }
 
     if (!user) {
-      window.location.href = `/signup?redirect=${encodeURIComponent("/pricing")}`;
+      window.location.href = hostHref(`/signup?redirect=${encodeURIComponent("/pricing")}`);
       return;
     }
 

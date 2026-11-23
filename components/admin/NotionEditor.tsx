@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { apiResponse } from "@/utils/apiResponse";
 import { Color } from "@tiptap/extension-color";
@@ -97,7 +98,7 @@ const suggestionItems = createSuggestionItems([
     icon: <HugeiconsIcon icon={MessageAdd01Icon} className='h-4 w-4' />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
-      window.open("/feedback", "_blank");
+      window.open(hostHref("/feedback"), "_blank");
     },
   },
   {

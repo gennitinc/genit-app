@@ -1,3 +1,4 @@
+import { hostHref } from "@/lib/domains";
 import axios from "axios";
 import cookie from "js-cookie";
 
@@ -67,7 +68,7 @@ apiResponse.interceptors.response.use(
     ) {
       cookie.remove("genituToken");
       if (window.location.pathname !== "/signin") {
-        window.location.assign("/signin");
+        window.location.assign(hostHref("/signin"));
       }
     }
     return Promise.reject(error);

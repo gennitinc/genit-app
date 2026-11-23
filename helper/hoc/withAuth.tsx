@@ -1,4 +1,5 @@
 "use client";
+import { hostHref } from "@/lib/domains";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { getAuthRedirect, withAuthRedirect } from "@/lib/auth-redirect";
 import Loading from "@/utils/Loading";
@@ -40,7 +41,7 @@ function withAuth(
               return;
             } else {
               // Verified and onboarded - redirect to inspire create
-              router.push(redirect);
+              router.push(hostHref(redirect));
               return;
             }
           }
@@ -50,7 +51,7 @@ function withAuth(
           // For protected pages: check authentication and onboarding
           if (!user) {
             // No user - redirect to signin
-            router.push("/signin");
+            router.push(hostHref("/signin"));
             return;
           }
 
@@ -58,7 +59,7 @@ function withAuth(
           if (!user.emailVerified) {
             // Not verified - redirect to verification
             router.push(
-              `/account/verify?email=${encodeURIComponent(user.email)}`
+              hostHref(`/account/verify?email=${encodeURIComponent(user.email)}`)
             );
             return;
           }
@@ -71,7 +72,7 @@ function withAuth(
             // Verified but not onboarded - redirect to onboarding
             // Exception: if already on onboarding page, allow access
             if (pathname !== "/onboarding") {
-              router.push("/onboarding");
+              router.push(hostHref("/onboarding"));
               return;
             }
           }

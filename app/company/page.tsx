@@ -41,9 +41,9 @@ export default function CompanyPage() {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     name: "About Genit",
-    url: "https://www.trygenit.com/company",
+    url: "https://trygenit.com/company",
     description: metadata.description,
-    mainEntity: { "@id": "https://www.trygenit.com/#organization" },
+    mainEntity: { "@id": "https://trygenit.com/#organization" },
   };
 
   return (

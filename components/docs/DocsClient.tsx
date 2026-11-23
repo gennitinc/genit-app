@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { Logo } from "@/components/logo";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -262,13 +263,13 @@ export function DocsClient({ initialSlug }: { initialSlug?: string }) {
 
           <div className='ml-auto flex items-center gap-2'>
             <Link
-              href='/signin'
+              href={hostHref("/signin")}
               className='hidden rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:bg-zinc-800 sm:inline-flex'
             >
               <LocalizedText text={"Sign In"} />
             </Link>
             <Link
-              href='/signup'
+              href={hostHref("/signup")}
               className='rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200'
             >
               <LocalizedText text={"Get Started"} />

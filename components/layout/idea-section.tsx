@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { AIThinkingContent } from "../chat/messages";
 import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
 import { AutoModeDialog } from "../common/auto-mode-dialog";
@@ -282,7 +283,7 @@ const IdeaItem = ({ item }: { item: IdeaItemData }) => {
       )}
 
       <Link
-        href={item.href || "#"}
+        href={item.href ? hostHref(item.href) : "#"}
         onClick={() => {
           trackAppOpened(item.id, item.label, "idea_section_quick_apps", {
             href: item.href,
@@ -683,7 +684,7 @@ export function IdeaSection() {
         trackFeatureUsed("idea_submit_requires_auth", {
           source: "idea_section",
         });
-        router.push("/signin");
+        router.push(hostHref("/signin"));
         return;
       }
 
@@ -764,7 +765,7 @@ export function IdeaSection() {
 
         if (res.type && res.id) {
           // Redirect to chat page with project ID
-          router.push(`/chat/${res.id}`);
+          router.push(hostHref(`/chat/${res.id}`));
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
@@ -1207,7 +1208,7 @@ export function IdeaSection() {
                               {String(user?.userPlan) === "Basic" ? (
                                 <span
                                   className='cursor-pointer text-blue-500 hover:underline'
-                                  onClick={() => router.push("/pricing")}
+                                  onClick={() => router.push(hostHref("/pricing"))}
                                 >
                                   <LocalizedText text={"Upgrade"} />
                                 </span>
@@ -1215,7 +1216,7 @@ export function IdeaSection() {
                                 <span
                                   className='cursor-pointer text-blue-500 hover:underline'
                                   onClick={() =>
-                                    router.push("/user/settings?tab=billing")
+                                    router.push(hostHref("/user/settings?tab=billing"))
                                   }
                                 >
                                   <LocalizedText text={"Buy Credits"} />
@@ -1253,7 +1254,7 @@ export function IdeaSection() {
                         ? handleSubmit
                         : (e) => {
                             e.preventDefault();
-                            router.push("/signin");
+                            router.push(hostHref("/signin"));
                           }
                     }
                     className='group relative flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-md ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
@@ -1424,7 +1425,7 @@ export function IdeaSection() {
                     {!user && (
                       <div
                         className='absolute top-0 right-0 bottom-0 left-0 z-50 h-full w-full bg-transparent'
-                        onClick={() => router.push("/signin")}
+                        onClick={() => router.push(hostHref("/signin"))}
                       ></div>
                     )}
                     <GradientFrame />

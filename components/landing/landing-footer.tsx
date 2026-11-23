@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LanguageSelect } from "@/components/language-select";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
@@ -251,7 +252,7 @@ export function LandingFooter() {
               </p>
               <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
                 <Link
-                  href='/signup'
+                  href={hostHref("/signup")}
                   className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-600 hover:bg-indigo-700 hover:bg-indigo-700/90 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
                 >
                   {t("Start for $0")}
@@ -272,7 +273,7 @@ export function LandingFooter() {
                   </svg>
                 </Link>
                 <Link
-                  href='/contact'
+                  href={hostHref("/contact")}
                   className='ring-offset-background focus-visible:ring-ring inline-flex h-12 items-center justify-center gap-2 rounded-full px-8 text-base font-medium whitespace-nowrap text-gray-400 transition-colors hover:text-gray-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'
                 >
                   {t("Get in touch")}
@@ -293,7 +294,7 @@ export function LandingFooter() {
           <div className='flex flex-col justify-between gap-12 lg:flex-row lg:gap-24'>
             <div className='lg:max-w-sm'>
               <div className='flex flex-col'>
-                <Link href='/' className='z-40 mb-1 flex items-center'>
+                <Link href={hostHref("/")} className='z-40 mb-1 flex items-center'>
                   <Logo className='h-12 w-12 flex-shrink-0' />
                   <span className='text-foreground text-xl font-semibold transition-colors duration-300'>
                     {t("Genit")}
@@ -402,49 +403,49 @@ export function LandingFooter() {
                 </h4>
                 <ul className='flex flex-col space-y-3'>
                   <Link
-                    href='/company'
+                    href={hostHref("/company")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("About")}
                   </Link>
                   <Link
-                    href='/platform'
+                    href={hostHref("/platform")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Platform")}
                   </Link>
                   <Link
-                    href='/creators-program'
+                    href={hostHref("/creators-program")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Creators Program")}
                   </Link>
                   <Link
-                    href='/feedback'
+                    href={hostHref("/feedback")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Feature Requests")}
                   </Link>
                   <Link
-                    href='/contact'
+                    href={hostHref("/contact")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Contact")}
                   </Link>
                   <Link
-                    href='/legal/privacy-policy'
+                    href={hostHref("/legal/privacy-policy")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Privacy Policy")}
                   </Link>
                   <Link
-                    href='/legal/terms-of-service'
+                    href={hostHref("/legal/terms-of-service")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Terms of Service")}
                   </Link>
                   <Link
-                    href='/contact'
+                    href={hostHref("/contact")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Support")}
@@ -458,25 +459,25 @@ export function LandingFooter() {
                 </h4>
                 <ul className='flex flex-col space-y-3'>
                   <Link
-                    href='/'
+                    href={hostHref("/")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Home")}
                   </Link>
                   <Link
-                    href='/visuals'
+                    href={hostHref("/visuals")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Visual Flow")}
                   </Link>
                   <Link
-                    href='/chat'
+                    href={hostHref("/chat")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("AI Chat")}
                   </Link>
                   <Link
-                    href='/pricing'
+                    href={hostHref("/pricing")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Pricing")}
@@ -488,19 +489,19 @@ export function LandingFooter() {
                     {t("Plugins")}
                   </Link>
                   <Link
-                    href='/templates'
+                    href={hostHref("/templates")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Templates")}
                   </Link>
                   <Link
-                    href='/inspirations'
+                    href={hostHref("/inspirations")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Inspirations")}
                   </Link>
                   <Link
-                    href='/chat/history'
+                    href={hostHref("/chat/history")}
                     className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                   >
                     {t("Chat History")}
@@ -509,7 +510,7 @@ export function LandingFooter() {
               </div>
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  <Link href='/use-cases' className='hover:underline'>
+                  <Link href={hostHref("/use-cases")} className='hover:underline'>
                     {t("Use cases")}
                   </Link>
                 </h4>
@@ -517,7 +518,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/graphic-design'
+                      href={hostHref("/use-cases/graphic-design")}
                     >
                       {t("Graphic Design")}
                     </Link>
@@ -525,7 +526,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/ai-video-creation'
+                      href={hostHref("/use-cases/ai-video-creation")}
                     >
                       {t("AI Video Creation")}
                     </Link>
@@ -533,7 +534,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/unified-inbox'
+                      href={hostHref("/use-cases/unified-inbox")}
                     >
                       {t("Unified Inbox")}
                     </Link>
@@ -541,7 +542,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/ai-chat-agents'
+                      href={hostHref("/use-cases/ai-chat-agents")}
                     >
                       {t("AI Chat Agents")}
                     </Link>
@@ -549,7 +550,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/team-management'
+                      href={hostHref("/use-cases/team-management")}
                     >
                       {t("Team & Organization Management")}
                     </Link>
@@ -557,7 +558,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/apps-and-plugins'
+                      href={hostHref("/use-cases/apps-and-plugins")}
                     >
                       {t("1,500+ External Apps & Plugins")}
                     </Link>
@@ -565,7 +566,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/marketing-automation'
+                      href={hostHref("/use-cases/marketing-automation")}
                     >
                       {t("Marketing Automation")}
                     </Link>
@@ -573,7 +574,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/ad-campaigns'
+                      href={hostHref("/use-cases/ad-campaigns")}
                     >
                       {t("Ad Campaigns")}
                     </Link>
@@ -581,7 +582,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/content-calendar'
+                      href={hostHref("/use-cases/content-calendar")}
                     >
                       {t("Content Calendar")}
                     </Link>
@@ -589,7 +590,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/social-publishing'
+                      href={hostHref("/use-cases/social-publishing")}
                     >
                       {t("Social Publishing")}
                     </Link>
@@ -597,7 +598,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/use-cases/digital-asset-library'
+                      href={hostHref("/use-cases/digital-asset-library")}
                     >
                       {t("Digital Asset Library")}
                     </Link>
@@ -612,7 +613,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/docs'
+                      href={hostHref("/docs")}
                     >
                       {t("Documentation")}
                     </Link>
@@ -620,7 +621,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/blog'
+                      href={hostHref("/blog")}
                     >
                       {t("Blog")}
                     </Link>
@@ -628,7 +629,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/templates'
+                      href={hostHref("/templates")}
                     >
                       {t("Templates")}
                     </Link>
@@ -636,7 +637,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/inspirations'
+                      href={hostHref("/inspirations")}
                     >
                       {t("Inspiration Gallery")}
                     </Link>
@@ -644,7 +645,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/creators-program'
+                      href={hostHref("/creators-program")}
                     >
                       {t("Creator Resources")}
                     </Link>
@@ -652,7 +653,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/feedback'
+                      href={hostHref("/feedback")}
                     >
                       {t("Suggest a Feature")}
                     </Link>
@@ -660,7 +661,7 @@ export function LandingFooter() {
                   <li>
                     <Link
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-                      href='/plugin/removal-instructions'
+                      href={hostHref("/plugin/removal-instructions")}
                     >
                       {t("Plugin Help & Data Removal")}
                     </Link>

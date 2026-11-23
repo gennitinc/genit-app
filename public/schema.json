@@ -3,10 +3,10 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.trygenit.com/#organization",
+      "@id": "https://trygenit.com/#organization",
       "name": "Genit AI",
-      "url": "https://www.trygenit.com",
-      "logo": "https://www.trygenit.com/logo.jpeg",
+      "url": "https://trygenit.com",
+      "logo": "https://trygenit.com/logo.jpeg",
       "description": "End-to-end AI marketing platform where autonomous agents plan, create, automate, publish, communicate, and optimize across connected business tools.",
       "sameAs": [
         "https://www.linkedin.com/company/genit-ai/",
@@ -23,9 +23,9 @@
     },
     {
       "@type": "WebApplication",
-      "@id": "https://www.trygenit.com/#application",
+      "@id": "https://trygenit.com/#application",
       "name": "Genit AI",
-      "url": "https://www.trygenit.com",
+      "url": "https://trygenit.com",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
       "description": "Plan, create, automate, publish, communicate, and optimize from one AI marketing platform.",
@@ -43,7 +43,7 @@
         "1,000+ business app integrations"
       ],
       "isAccessibleForFree": true,
-      "publisher": { "@id": "https://www.trygenit.com/#organization" }
+      "publisher": { "@id": "https://trygenit.com/#organization" }
     }
   ]
 }

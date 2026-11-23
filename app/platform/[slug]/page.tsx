@@ -1,3 +1,4 @@
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import {
@@ -52,12 +53,12 @@ export default async function CapabilityPage({
       {
         "@type": "SoftwareApplication",
         name: `Genit ${capability.name}`,
-        url: `https://www.trygenit.com/platform/${slug}`,
+        url: `https://trygenit.com/platform/${slug}`,
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description: capability.description,
         featureList: capability.features.map(({ title }) => title),
-        isPartOf: { "@id": "https://www.trygenit.com/#application" },
+        isPartOf: { "@id": "https://trygenit.com/#application" },
       },
       {
         "@type": "BreadcrumbList",
@@ -66,19 +67,19 @@ export default async function CapabilityPage({
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://www.trygenit.com",
+            item: "https://trygenit.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Platform",
-            item: "https://www.trygenit.com/platform",
+            item: "https://trygenit.com/platform",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: capability.name,
-            item: `https://www.trygenit.com/platform/${slug}`,
+            item: `https://trygenit.com/platform/${slug}`,
           },
         ],
       },
@@ -268,7 +269,7 @@ export default async function CapabilityPage({
           </div>
           <div className='mt-8 flex flex-wrap items-center gap-4'>
             <Link
-              href='/signup'
+              href={hostHref("/signup")}
               className='rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
             >
               Get started free

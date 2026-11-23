@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Logo } from "../logo";
 import Aurora from "../ui/aurora";
 import UserPopOver from "../user/userPopOver";
@@ -204,7 +205,7 @@ export function LandingNavbar() {
       <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
         <nav className='z-50 mx-auto flex h-fit items-center justify-between px-2 py-1 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
-          <Link href='/' className='z-40 flex items-center'>
+          <Link href={hostHref("/")} className='z-40 flex items-center'>
             <Logo className='h-12 w-12 flex-shrink-0' />
             <span
               className={`text-foreground text-xl font-semibold transition-colors duration-300`}
@@ -218,19 +219,19 @@ export function LandingNavbar() {
               <div className='flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end'>
                 {/* <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                  href='/platform'
+                  href={hostHref("/platform")}
                 >
                   {t("Platform")}
                 </Link> */}
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
-                  href='/visuals'
+                  href={hostHref("/visuals")}
                 >
                   {t("Visual Flow")}
                 </Link>
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 text-sm font-medium transition-colors'
-                  href='/chat'
+                  href={hostHref("/chat")}
                 >
                   {t("Chat")}
                 </Link>
@@ -306,20 +307,20 @@ export function LandingNavbar() {
 
                 {/* <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1220px]:inline-flex'
-                  href='/apps'
+                  href={hostHref("/apps")}
                 >
                   {t("Apps")}
                 </Link> */}
                 {/* <Link
                   target='__blank'
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
-                  href='/community'
+                  href={hostHref("/community")}
                 >
                   {t("Community")}
                 </Link> */}
                 <Link
                   className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1360px]:inline-flex'
-                  href='/blog'
+                  href={hostHref("/blog")}
                 >
                   {t("Blog")}
                 </Link>
@@ -332,7 +333,7 @@ export function LandingNavbar() {
                 {currentUser && (
                   <Link
                     className='hover:text-foreground/80 text-foreground/60 mr-3 hidden text-sm font-medium transition-colors min-[1450px]:inline-flex'
-                    href='/chat/history'
+                    href={hostHref("/chat/history")}
                   >
                     {t("History")}
                   </Link>
@@ -407,13 +408,13 @@ export function LandingNavbar() {
                   <Link
                     className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative hidden h-10 items-center justify-center gap-0 rounded-lg border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70 lg:flex'
                     data-state='closed'
-                    href='/signin'
+                    href={hostHref("/signin")}
                   >
                     {t("Sign in")}
                   </Link>
                   <Link
                     className='hover:shadow-button shadow-primary/10 relative inline-flex h-10 items-center justify-center gap-0 rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none hover:bg-indigo-700 focus-visible:ring-4 focus-visible:ring-cyan-500/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-30'
-                    href='/signup'
+                    href={hostHref("/signup")}
                   >
                     <span>{t("Start for $0")}</span>
                     <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />
@@ -459,7 +460,7 @@ export function LandingNavbar() {
                   {navigation.map((item) => (
                     <Link
                       key={item.name}
-                      href={item.href}
+                      href={hostHref(item.href)}
                       className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                     >
                       {item.name}
@@ -494,13 +495,13 @@ export function LandingNavbar() {
                       <Link
                         className='text-gray-9 [&_svg]:text-gray-9 hover:text-gray-10 focus-visible:ring-gray-a2 relative h-10 items-center justify-center gap-0 rounded-lg border border-transparent bg-transparent px-4 text-sm font-semibold transition duration-200 ease-in-out select-none focus-visible:ring-4 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-70'
                         data-state='closed'
-                        href='/signin'
+                        href={hostHref("/signin")}
                       >
                         {t("Sign in")}
                       </Link>
                       <Link
                         className='text-foreground not-disabled:hover:shadow-button relative inline-flex h-10 items-center justify-center gap-0 rounded-lg border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border px-4 text-sm font-semibold shadow-sm outline-hidden backdrop-blur-[25px] transition-all duration-200 ease-in-out select-none after:pointer-events-none after:absolute after:top-[-2px] after:left-[-2px] after:h-[calc(100%+4px)] after:w-[calc(100%+4px)] after:rounded-[1rem] after:bg-[url("/static/texture-btn.png")] after:bg-repeat not-disabled:hover:bg-white/90 not-disabled:hover:text-black focus-visible:bg-white/90 focus-visible:text-black focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:text-white/50 disabled:opacity-30'
-                        href='/signup'
+                        href={hostHref("/signup")}
                       >
                         <span>{t("Start for $0")}</span>
                         <HugeiconsIcon icon={ArrowRight02Icon} className='ml-1 h-4 w-4' />

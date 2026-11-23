@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { syncComposioConnection } from "@/lib/integrations-api";
 import Link from "next/link";
@@ -18,8 +19,8 @@ export default function ComposioCallbackPage() {
       "http://localhost:3000",
       "https://genit.vercel.app",
       "https://genitai.vercel.app",
-      "https://www.trygenit.com",
       "https://trygenit.com",
+      "https://app.trygenit.com",
     ]);
 
     void (async () => {
@@ -71,7 +72,7 @@ export default function ComposioCallbackPage() {
       // "page couldn't load" screen. Return a successful connection to the
       // integrations page; keep provider errors visible and actionable.
       if (message.type === "genit:integration:connected") {
-        window.location.replace("/integrations?connection=success");
+        window.location.replace("/plugins?connection=success");
         return;
       }
       setFailed(true);
@@ -87,7 +88,7 @@ export default function ComposioCallbackPage() {
         <LocalizedText text={status} />
         {failed ? (
           <Link
-            href='/integrations'
+            href={"/plugins"}
             className='mt-4 block font-medium text-violet-600 hover:underline dark:text-violet-400'
           >
             Back to integrations

@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import {
   Empty,
   MetricStrip,
@@ -545,7 +546,7 @@ export function CampaignOutreach({ campaign, onChanged }: Props) {
               <Empty
                 action={
                   <Button asChild size='sm' variant='outline'>
-                    <Link href='/integrations'>Connect</Link>
+                    <Link href={"/plugins"}>Connect</Link>
                   </Button>
                 }
               >

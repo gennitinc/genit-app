@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { NavMain } from "./nav-main";
 import { OrgSwitcher } from "./org-switcher";
 import { LocalizedText } from "@/components/localized-text";
@@ -58,7 +59,7 @@ export function AppSidebar({
     >
       <SidebarHeader className='flex-row justify-start'>
         <Link
-          href='/'
+          href={hostHref("/")}
           className={cn(
             "flex items-center pb-2",
             state === "collapsed" && !isMobile && "justify-start"
@@ -165,13 +166,13 @@ export function AppSidebar({
                         source: "sidebar_card",
                         destination: "/pricing",
                       });
-                      router.push("/pricing");
+                      router.push(hostHref("/pricing"));
                     } else {
                       trackEvent("buy_credits_cta_clicked", {
                         source: "sidebar_card",
                         destination: "/user/settings?tab=billing",
                       });
-                      router.push("/user/settings?tab=billing");
+                      router.push(hostHref("/user/settings?tab=billing"));
                     }
                   }}
                   className='group mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black bg-black px-5 py-2 text-xs font-medium text-white transition-all duration-200 ease-in-out hover:border-neutral-800 hover:bg-neutral-800 focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-none dark:border-white dark:bg-white dark:text-black dark:hover:border-neutral-200 dark:hover:bg-neutral-200 dark:focus:ring-white'
@@ -199,13 +200,13 @@ export function AppSidebar({
                     source: "sidebar_collapsed",
                     destination: "/pricing",
                   });
-                  router.push("/pricing");
+                  router.push(hostHref("/pricing"));
                 } else {
                   trackEvent("buy_credits_cta_clicked", {
                     source: "sidebar_collapsed",
                     destination: "/user/settings?tab=billing",
                   });
-                  router.push("/user/settings?tab=billing");
+                  router.push(hostHref("/user/settings?tab=billing"));
                 }
               }}
             >

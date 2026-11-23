@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { AutoReplyInstructions } from "./auto-reply-instructions";
 import { LocalizedText } from "@/components/localized-text";
 import { Button } from "@/components/ui/button";
@@ -97,7 +98,7 @@ const AutoReplyUpgradeDialog = ({
           </Button>
           <Button
             className='rounded-sm bg-indigo-600 text-sm text-white hover:bg-indigo-700'
-            onClick={() => router.push("/pricing")}
+            onClick={() => router.push(hostHref("/pricing"))}
           >
             <LocalizedText text={"Upgrade Now"} />
           </Button>

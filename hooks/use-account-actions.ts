@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { useToast } from "@/hooks/use-toast";
 import cookie from "js-cookie";
@@ -39,7 +40,7 @@ export const useAccountActions = () => {
     } finally {
       cleanupSession();
       setIsSigningOut(false);
-      router.push("/signin");
+      router.push(hostHref("/signin"));
     }
     return wasSuccessful;
   }, [cleanupSession, router, toast]);
@@ -54,7 +55,7 @@ export const useAccountActions = () => {
         description: "Your account has been removed.",
       });
       cleanupSession();
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       wasSuccessful = true;
     } catch (error) {
       console.error("Failed to delete account:", error);

@@ -1,4 +1,5 @@
 "use client";
+import { hostHref } from "@/lib/domains";
 
 import { AuthMediaCarousel, loginCarouselData } from "./AuthMediaCarousel";
 import { LocalizedText } from "@/components/localized-text";
@@ -130,7 +131,7 @@ export const LoginComp = () => {
           router.push(withAuthRedirect("/onboarding", redirect));
         } else {
           // Verified and onboarded - go to inspire create
-          router.push(redirect);
+          router.push(hostHref(redirect));
         }
       }
     } catch (error: any) {
@@ -209,7 +210,7 @@ export const LoginComp = () => {
           router.push(withAuthRedirect("/onboarding", redirect));
         } else {
           // Verified and onboarded - go to inspire create
-          router.push(redirect);
+          router.push(hostHref(redirect));
         }
       }
     } catch (error: any) {

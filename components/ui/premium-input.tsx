@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import ShinyText from "./shiny-text";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 import { LocalizedText } from "@/components/localized-text";
@@ -194,7 +195,7 @@ export function PremiumInput({
                   {String(user?.userPlan) === "Basic" ? (
                     <span
                       className='cursor-pointer text-blue-500 hover:underline'
-                      onClick={() => router.push("/pricing")}
+                      onClick={() => router.push(hostHref("/pricing"))}
                     >
                       <LocalizedText text={"Upgrade"} />
                     </span>

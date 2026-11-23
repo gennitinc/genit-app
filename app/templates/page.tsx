@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { ImageTemplatesTab, VideoTemplatesTab } from "@/components/inspire";
 import LandingPageBanner from "@/components/landing/landing-banner";
 import { LandingFooter } from "@/components/landing/landing-footer";
@@ -19,11 +20,11 @@ export default function TemplatesPage() {
     // Redirect to create page with the prompt
     if (activeTab === "video") {
       router.push(
-        `/inspire/create?mode=ai-video-gen&prompt=${encodeURIComponent(prompt)}`
+        hostHref(`/inspire/create?mode=ai-video-gen&prompt=${encodeURIComponent(prompt)}`)
       );
     } else {
       router.push(
-        `/inspire/create?mode=ai-image-gen&prompt=${encodeURIComponent(prompt)}`
+        hostHref(`/inspire/create?mode=ai-image-gen&prompt=${encodeURIComponent(prompt)}`)
       );
     }
   };

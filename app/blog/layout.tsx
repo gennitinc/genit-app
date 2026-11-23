@@ -10,11 +10,11 @@ export const metadata: Metadata = {
     title: "Genit AI Marketing Automation Blog",
     description:
       "Practical guides to AI agents, marketing automation, campaigns, publishing, integrations, and growth.",
-    url: "https://www.trygenit.com/blog",
+    url: "https://trygenit.com/blog",
     siteName: "Genit AI",
     images: [
       {
-        url: "https://www.trygenit.com/opengraph-image.png",
+        url: "https://trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Blog",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Genit AI Marketing Automation Blog",
     description:
       "Practical guides to AI agents, marketing automation, campaigns, publishing, integrations, and growth.",
-    images: ["https://www.trygenit.com/opengraph-image.png"],
+    images: ["https://trygenit.com/opengraph-image.png"],
   },
 };
 

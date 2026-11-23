@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea } from "./scroll-area";
 import ShinyText from "./shiny-text";
@@ -426,7 +427,7 @@ export function WorkflowPremiumInput({
                   {String(user?.userPlan) === "Basic" ? (
                     <span
                       className='cursor-pointer text-blue-500 hover:underline'
-                      onClick={() => router.push("/pricing")}
+                      onClick={() => router.push(hostHref("/pricing"))}
                     >
                       <LocalizedText text={"Upgrade"} />
                     </span>

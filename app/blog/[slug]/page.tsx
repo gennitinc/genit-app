@@ -188,10 +188,10 @@ export async function generateMetadata(props: {
     };
   }
 
-  const ogUrl = `${clientUrl || "https://www.trygenit.com"}/blog/${slug}`;
+  const ogUrl = `${clientUrl || "https://trygenit.com"}/blog/${slug}`;
   const coverUrl = post.coverImage.startsWith("http")
     ? post.coverImage
-    : `${clientUrl || "https://www.trygenit.com"}${post.coverImage}`;
+    : `${clientUrl || "https://trygenit.com"}${post.coverImage}`;
 
   return {
     title: `${post.title} – Genit AI Blog`,

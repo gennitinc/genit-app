@@ -1,4 +1,5 @@
 "use client";
+import { hostHref } from "@/lib/domains";
 import CreditTopUpModal from "@/components/credits/CreditTopUpModal";
 import { LanguageSelect } from "@/components/language-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -146,7 +147,7 @@ const UserPopOver = () => {
                 </span>
               </div>
             </div>
-            <Link href='/pricing' target='_blank'>
+            <Link href={hostHref("/pricing")} target='_blank'>
               <button className='text-primary hover:text-primary/80 mt-2 cursor-pointer text-xs font-medium transition-colors hover:underline'>
                 {t("Pricing")} →
               </button>
@@ -176,7 +177,7 @@ const UserPopOver = () => {
             ].map(({ icon: Icon, label, href }) => (
               <Link
                 key={label}
-                href={href}
+                href={hostHref(href)}
                 className='text-muted-foreground hover:bg-accent hover:text-accent-foreground group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200'
                 onClick={() => setIsUserPopoverOpen(false)}
               >

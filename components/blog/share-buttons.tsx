@@ -12,7 +12,7 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ title, slug }: ShareButtonsProps) {
-  const url = `${clientUrl || "https://www.trygenit.com"}/blog/${slug}`;
+  const url = `${clientUrl || "https://trygenit.com"}/blog/${slug}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(url);

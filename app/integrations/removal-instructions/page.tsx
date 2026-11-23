@@ -1,3 +1,4 @@
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { LocalizedText } from "@/components/localized-text";
@@ -517,7 +518,7 @@ export default function RemovalInstructionsPage() {
               <LocalizedText text={"30 days"} />
             </strong>
             <LocalizedText text={", in line with our"} />{" "}
-            <Link className={LINK_CLASS} href='/legal/privacy-policy'>
+            <Link className={LINK_CLASS} href={hostHref("/legal/privacy-policy")}>
               <LocalizedText text={"Privacy Policy"} />
             </Link>
             <LocalizedText

@@ -1,4 +1,5 @@
 "use client";
+import { hostHref } from "@/lib/domains";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -167,7 +168,7 @@ export function NavMain() {
                 }}
               >
                 <Link
-                  href={item.href}
+                  href={hostHref(item.href)}
                   className={cn(
                     "flex w-full items-center",
                     showDesktopCollapsedLabels &&
@@ -256,7 +257,7 @@ export function NavMain() {
                   }}
                 >
                   <Link
-                    href={item.href}
+                    href={hostHref(item.href)}
                     className={cn(
                       "flex w-full items-center",
                       showDesktopCollapsedLabels &&

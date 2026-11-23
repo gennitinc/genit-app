@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import Loading from "@/utils/Loading";
@@ -30,7 +31,7 @@ export function JoinReferralCard({
       toast.info("Please sign in to join the referral program", {
         description: "Redirecting to sign in...",
       });
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 
@@ -58,7 +59,7 @@ export function JoinReferralCard({
         toast.error("Please sign in to join the referral program", {
           description: "Redirecting to sign in...",
         });
-        router.push("/signin");
+        router.push(hostHref("/signin"));
         return;
       }
 
@@ -124,7 +125,7 @@ export function JoinReferralCard({
             </Button>
 
             <Link
-              href='/legal/terms-of-service'
+              href={hostHref("/legal/terms-of-service")}
               className='inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white'
             >
               <span>Read the terms</span>

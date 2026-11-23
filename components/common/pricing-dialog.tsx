@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -151,7 +152,7 @@ function PricingCard({
               : "bg-zinc-800 text-white hover:bg-zinc-700"
           )}
         >
-          <Link href='/pricing'>
+          <Link href={hostHref("/pricing")}>
             <span>
               <LocalizedText text={"Choose"} />
               {tier.name}
@@ -232,7 +233,7 @@ function PricingContent({
 
         <div className='mt-8 flex w-full flex-row items-center justify-center gap-2'>
           <Link
-            href='/pricing'
+            href={hostHref("/pricing")}
             className='flex flex-row items-center gap-2 text-base font-semibold text-gray-400 dark:text-gray-300'
           >
             <span>

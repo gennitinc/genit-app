@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { BlogComments } from "./blog-comments";
 import { LocalizedText } from "@/components/localized-text";
 import {
@@ -100,7 +101,7 @@ export function BlogSocial({
 
   const toggleLike = async () => {
     if (!user) {
-      router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
+      router.push(hostHref(`/signin?redirect=${encodeURIComponent(pathname)}`));
       return;
     }
 

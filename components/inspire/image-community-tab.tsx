@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import {
   Dialog,
@@ -216,7 +217,7 @@ export function ImageCommunityTab({
   const handleRecreate = async (image: CommunityContent) => {
     // Check if user is authenticated
     if (!user) {
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 
@@ -330,7 +331,7 @@ export function ImageCommunityTab({
 
     // Check if user is authenticated
     if (!user) {
-      router.push("/signin");
+      router.push(hostHref("/signin"));
       return;
     }
 

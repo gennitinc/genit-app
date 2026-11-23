@@ -4,7 +4,7 @@ import { apiResponse } from "@/utils/apiResponse";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://www.trygenit.com";
+  const baseUrl = "https://trygenit.com";
 
   const staticRoutes = [
     "",

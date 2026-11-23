@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import {
   BrevoBrand,
   FacebookBrand,
@@ -770,7 +771,7 @@ export function IntegrationsExplorer({
                       status={status}
                       onConnect={() =>
                         publicView
-                          ? router.push("/signin?redirect=/plugins")
+                          ? router.push(hostHref("/signin?redirect=/plugins"))
                           : setConnectFor(integration)
                       }
                       onManage={() => setManageFor(integration)}

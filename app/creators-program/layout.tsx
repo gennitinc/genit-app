@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Creators & Affiliate Program | Genit AI",
     description:
       "Earn a recurring commission when people you refer subscribe to Genit.",
-    url: "https://www.trygenit.com/creators-program",
+    url: "https://trygenit.com/creators-program",
     type: "website",
     images: [
       {

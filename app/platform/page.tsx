@@ -1,3 +1,4 @@
+import { hostHref } from "@/lib/domains";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
 import { marketingCapabilities } from "@/lib/marketing-capabilities";
@@ -46,12 +47,12 @@ export default function PlatformPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Genit AI Marketing Platform",
-    url: "https://www.trygenit.com/platform",
+    url: "https://trygenit.com/platform",
     description: metadata.description,
     mainEntity: marketingCapabilities.map((capability) => ({
       "@type": "SoftwareApplication",
       name: capability.name,
-      url: `https://www.trygenit.com/platform/${capability.slug}`,
+      url: `https://trygenit.com/platform/${capability.slug}`,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description: capability.description,
@@ -240,7 +241,7 @@ export default function PlatformPage() {
           </p>
           <div className='mt-6 flex flex-wrap items-center justify-center gap-4'>
             <Link
-              href='/signup'
+              href={hostHref("/signup")}
               className='rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 dark:bg-white dark:text-neutral-950'
             >
               Get started free

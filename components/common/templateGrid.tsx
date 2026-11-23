@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { AIThinkingContent } from "../chat/messages";
 import ShinyText from "../ui/shiny-text";
 import AnimatedTooltipPreview from "./homeAgentsTooltip";
@@ -327,7 +328,7 @@ export default function TemplateGrid() {
 
       // Check if user is authenticated
       if (!user) {
-        router.push("/signin");
+        router.push(hostHref("/signin"));
         return;
       }
 
@@ -383,7 +384,7 @@ export default function TemplateGrid() {
 
         if (result.type && result.id) {
           // Redirect to chat page with project ID
-          router.push(`/chat/${result.id}`);
+          router.push(hostHref(`/chat/${result.id}`));
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
@@ -491,7 +492,7 @@ export default function TemplateGrid() {
       </h2>
       {/* <button
         className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-sm'
-        onClick={() => router.push("/community")}
+        onClick={() => router.push(hostHref("/community"))}
       >
         <LocalizedText text={"View all"} />
         <ArrowRight className='h-4 w-4' />
@@ -777,7 +778,7 @@ export default function TemplateGrid() {
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
-                                onClick={() => router.push("/pricing")}
+                                onClick={() => router.push(hostHref("/pricing"))}
                               >
                                 <LocalizedText text={"Upgrade"} />
                               </span>
@@ -785,7 +786,7 @@ export default function TemplateGrid() {
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() =>
-                                  router.push("/user/settings?tab=billing")
+                                  router.push(hostHref("/user/settings?tab=billing"))
                                 }
                               >
                                 <LocalizedText text={"Buy Credits"} />
@@ -812,7 +813,7 @@ export default function TemplateGrid() {
                           ? handleSubmit
                           : (e) => {
                               e.preventDefault();
-                              router.push("/signin");
+                              router.push(hostHref("/signin"));
                             }
                       }
                       className='relative flex min-h-0 flex-1 flex-col'
@@ -1048,7 +1049,7 @@ export default function TemplateGrid() {
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
-                                onClick={() => router.push("/pricing")}
+                                onClick={() => router.push(hostHref("/pricing"))}
                               >
                                 <LocalizedText text={"Upgrade"} />
                               </span>
@@ -1056,7 +1057,7 @@ export default function TemplateGrid() {
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() =>
-                                  router.push("/user/settings?tab=billing")
+                                  router.push(hostHref("/user/settings?tab=billing"))
                                 }
                               >
                                 <LocalizedText text={"Buy Credits"} />
@@ -1083,7 +1084,7 @@ export default function TemplateGrid() {
                           ? handleSubmit
                           : (e) => {
                               e.preventDefault();
-                              router.push("/signin");
+                              router.push(hostHref("/signin"));
                             }
                       }
                       className='relative flex min-h-0 flex-1 flex-col'
@@ -1317,7 +1318,7 @@ export default function TemplateGrid() {
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
-                                onClick={() => router.push("/pricing")}
+                                onClick={() => router.push(hostHref("/pricing"))}
                               >
                                 <LocalizedText text={"Upgrade"} />
                               </span>
@@ -1325,7 +1326,7 @@ export default function TemplateGrid() {
                               <span
                                 className='cursor-pointer text-sm font-medium hover:underline'
                                 onClick={() =>
-                                  router.push("/user/settings?tab=billing")
+                                  router.push(hostHref("/user/settings?tab=billing"))
                                 }
                               >
                                 <LocalizedText text={"Buy Credits"} />
@@ -1352,7 +1353,7 @@ export default function TemplateGrid() {
                           ? handleSubmit
                           : (e) => {
                               e.preventDefault();
-                              router.push("/signin");
+                              router.push(hostHref("/signin"));
                             }
                       }
                       className='relative flex min-h-0 flex-1 flex-col'

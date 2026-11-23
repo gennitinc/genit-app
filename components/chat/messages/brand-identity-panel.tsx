@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { BrandOnboardingDialog } from "./brand-onboarding-dialog";
 import { LocalizedText } from "@/components/localized-text";
 import { Switch } from "@/components/ui/switch";
@@ -389,7 +390,7 @@ export function BrandIdentityPanel({ disabled }: { disabled?: boolean } = {}) {
 
       <div className='border-border/70 sticky bottom-0 flex items-center justify-between gap-3 border-t bg-white/90 px-4 py-3 backdrop-blur-xl dark:bg-black/90'>
         <Link
-          href='/user/settings?tab=brand'
+          href={hostHref("/user/settings?tab=brand")}
           target='_blank'
           className='inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-xs font-medium text-white transition-colors hover:bg-indigo-700'
         >

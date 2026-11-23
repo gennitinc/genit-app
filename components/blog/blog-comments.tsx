@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { useUserContext } from "@/context/AuthenticatedContext";
 import { LoadingFileLoader } from "@/utils/Loading";
@@ -112,7 +113,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
 
   const handlePostComment = async (parentId?: string) => {
     if (!user) {
-      router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
+      router.push(hostHref(`/signin?redirect=${encodeURIComponent(pathname)}`));
       return;
     }
 
@@ -284,7 +285,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
               onClick={() => {
                 if (!user) {
                   router.push(
-                    `/signin?redirect=${encodeURIComponent(pathname)}`
+                    hostHref(`/signin?redirect=${encodeURIComponent(pathname)}`)
                   );
                   return;
                 }
@@ -375,7 +376,7 @@ export function BlogComments({ postId }: BlogCommentsProps) {
             }
             onClick={() => {
               if (!user)
-                router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
+                router.push(hostHref(`/signin?redirect=${encodeURIComponent(pathname)}`));
             }}
             className='w-full resize-none rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm transition-colors focus:border-cyan-500 focus:bg-white focus:outline-none dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-white dark:focus:bg-black'
             rows={3}

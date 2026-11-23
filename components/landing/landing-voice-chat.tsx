@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { useLanguage } from "@/context/LanguageContext";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
@@ -22,7 +23,7 @@ export function LandingVoiceClone() {
       </div>
       <div className='mt-6 mb-8 flex justify-center'>
         <Link
-          href='/signup'
+          href={hostHref("/signup")}
           className='relative z-20 inline-flex items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-zinc-800 active:scale-95 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200'
         >
           <span>{t("Voice your prompt")}</span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { DeleteConfirmation } from "../messages/delete-confirmation";
 import { DesignInspirationResults } from "../messages/design-inspiration-results";
 import { AgentCard } from "./agent-card";
@@ -623,7 +624,7 @@ export function AgentMessage({
                 </p>
                 <div className='mt-2.5 flex flex-wrap gap-2'>
                   <Button asChild size='sm' className='h-8 text-xs'>
-                    <Link href='/feedback?tab=suggestion'>
+                    <Link href={hostHref("/feedback?tab=suggestion")}>
                       Request this feature
                     </Link>
                   </Button>
@@ -633,7 +634,7 @@ export function AgentMessage({
                     variant='outline'
                     className='h-8 text-xs'
                   >
-                    <Link href='/feedback?tab=support'>Contact support</Link>
+                    <Link href={hostHref("/feedback?tab=support")}>Contact support</Link>
                   </Button>
                 </div>
               </div>

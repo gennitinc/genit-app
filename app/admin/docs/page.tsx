@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { LocalizedText } from "@/components/localized-text";
 import { LoadingFileLoader } from "@/utils/Loading";
 import { apiResponse } from "@/utils/apiResponse";
@@ -210,7 +211,7 @@ export default function AdminDocsPage() {
                     <td className='px-6 py-4 text-right'>
                       <div className='flex items-center justify-end gap-2'>
                         <Link
-                          href={`/docs/${doc.slug}`}
+                          href={hostHref(`/docs/${doc.slug}`)}
                           target='_blank'
                           className='rounded-xl p-2 text-zinc-400 transition duration-150 hover:bg-zinc-800 hover:text-white'
                           title='Preview'

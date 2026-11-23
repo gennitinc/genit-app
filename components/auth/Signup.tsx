@@ -1,4 +1,5 @@
 "use client";
+import { hostHref } from "@/lib/domains";
 
 import { AuthMediaCarousel, signupCarouselData } from "./AuthMediaCarousel";
 import { LocalizedText } from "@/components/localized-text";
@@ -244,7 +245,7 @@ export const SignupComp = () => {
           { auth_method: "google" }
         );
 
-        router.push(redirect);
+        router.push(hostHref(redirect));
       }
     } catch (error: any) {
       setLoading2(false);

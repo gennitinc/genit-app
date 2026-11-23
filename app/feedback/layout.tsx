@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Feature Requests & Support | Genit AI",
     description:
       "Report a problem, ask for help, or suggest a feature for Genit.",
-    url: "https://www.trygenit.com/feedback",
+    url: "https://trygenit.com/feedback",
     type: "website",
     images: [
       {

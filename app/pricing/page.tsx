@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     title: "Pricing – Genit AI",
     description:
       "Plans for autonomous marketing, campaign execution, and cross-channel publishing.",
-    url: "https://www.trygenit.com/pricing",
+    url: "https://trygenit.com/pricing",
     images: [
       {
-        url: "https://www.trygenit.com/opengraph-image.png",
+        url: "https://trygenit.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "Genit AI Pricing",

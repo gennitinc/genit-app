@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { Section } from "../../campaigns/_components/campaign-ui";
 import { pipelineKeys } from "./pipeline-utils";
 import { Button } from "@/components/ui/button";
@@ -204,7 +205,7 @@ ${vertical.questions
             {!data.calendars.length ? (
               <p className='rounded-md bg-amber-50 p-3 text-sm dark:bg-amber-500/10'>
                 Connect Google Calendar in{" "}
-                <Link href='/integrations' className='font-medium underline underline-offset-2'>
+                <Link href={"/plugins"} className='font-medium underline underline-offset-2'>
                   Integrations
                 </Link>{" "}
                 so the assistant can see when you’re free.
@@ -345,7 +346,7 @@ ${vertical.questions
               ) : (
                 <p className='text-muted-foreground pt-2 text-xs'>
                   Connect Gmail or Brevo in{" "}
-                  <Link href='/integrations' className='underline underline-offset-2'>
+                  <Link href={"/plugins"} className='underline underline-offset-2'>
                     Integrations
                   </Link>{" "}
                   to email form leads.

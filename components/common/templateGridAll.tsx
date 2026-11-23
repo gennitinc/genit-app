@@ -1,5 +1,6 @@
 "use client";
 
+import { hostHref } from "@/lib/domains";
 import { AIThinkingContent } from "../chat/messages";
 import { BrandIdentityPanel } from "../chat/messages/brand-identity-panel";
 import { BorderBeam } from "../ui/border-beam";
@@ -486,7 +487,7 @@ export default function TemplateGridAll() {
 
       // Check if user is authenticated
       if (!user) {
-        router.push("/signin");
+        router.push(hostHref("/signin"));
         return;
       }
 
@@ -529,7 +530,7 @@ export default function TemplateGridAll() {
 
         if (result.type && result.id) {
           // Redirect to chat page with project ID
-          router.push(`/chat/${result.id}`);
+          router.push(hostHref(`/chat/${result.id}`));
         }
       } catch (error: any) {
         console.error("Failed to create project:", error);
@@ -935,7 +936,7 @@ export default function TemplateGridAll() {
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
                                 className="cursor-pointer text-sm font-medium hover:underline"
-                                onClick={() => router.push("/pricing")}
+                                onClick={() => router.push(hostHref("/pricing"))}
                               >
                                 Upgrade
                               </span>
@@ -943,7 +944,7 @@ export default function TemplateGridAll() {
                               <span
                                 className="cursor-pointer text-sm font-medium hover:underline"
                                 onClick={() =>
-                                  router.push("/user/settings?tab=billing")
+                                  router.push(hostHref("/user/settings?tab=billing"))
                                 }
                               >
                                 Buy Credits
@@ -970,7 +971,7 @@ export default function TemplateGridAll() {
                           ? handleSubmit
                           : (e) => {
                               e.preventDefault();
-                              router.push("/signin");
+                              router.push(hostHref("/signin"));
                             }
                       }
                       className='group flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
@@ -1306,7 +1307,7 @@ export default function TemplateGridAll() {
                             {(user?.userPlan as any) === "Basic" ? (
                               <span
                                 className="cursor-pointer text-sm font-medium hover:underline"
-                                onClick={() => router.push("/pricing")}
+                                onClick={() => router.push(hostHref("/pricing"))}
                               >
                                 Upgrade
                               </span>
@@ -1314,7 +1315,7 @@ export default function TemplateGridAll() {
                               <span
                                 className="cursor-pointer text-sm font-medium hover:underline"
                                 onClick={() =>
-                                  router.push("/user/settings?tab=billing")
+                                  router.push(hostHref("/user/settings?tab=billing"))
                                 }
                               >
                                 Buy Credits
@@ -1341,7 +1342,7 @@ export default function TemplateGridAll() {
                           ? handleSubmit
                           : (e) => {
                               e.preventDefault();
-                              router.push("/signin");
+                              router.push(hostHref("/signin"));
                             }
                       }
                       className='group flex w-full flex-col gap-2 rounded-lg border border-white bg-white/80 p-3 text-base shadow-xl ring-1 ring-black/[0.08] backdrop-blur-xl transition-all duration-150 ease-in-out focus-within:ring-black/[0.16] hover:ring-black/[0.12] focus-within:hover:ring-black/[0.16] dark:border-white/[0.08] dark:bg-zinc-900/50 dark:ring-black/[0.88] dark:focus-within:ring-black/[0.96]'
