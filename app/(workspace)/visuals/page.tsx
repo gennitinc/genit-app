@@ -7,7 +7,6 @@ import {
   resolveStatus,
 } from "@/app/integrations/integrations-explorer";
 import { LocalizedText } from "@/components/localized-text";
-import { Button } from "@/components/ui/button";
 import {
   DAY_MS,
   DateRangePicker,
@@ -24,8 +23,8 @@ import { isFreePlan, isProPlugin } from "@/lib/plan";
 import { POST_PLATFORMS, getSocialPostStats } from "@/lib/social-posts-api";
 import { useQuery } from "@tanstack/react-query";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CheckmarkCircle02Icon, CrownIcon, PlusSignIcon } from "@hugeicons/core-free-icons";
-import { IconSourceView, type IconSource } from "@/components/ui/icon-source";
+import { CheckmarkCircle02Icon, CrownIcon, MoreHorizontalIcon, PlusSignIcon } from "@hugeicons/core-free-icons";
+import { IconSourceView } from "@/components/ui/icon-source";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
@@ -176,10 +175,7 @@ export default function VisualsHomePage() {
     });
   }, [byPlatform, identityBySurface]);
 
-  const pluginCards = useMemo(() => {
-    const slack = INTEGRATIONS.find((item) => item.appSlug === "slack");
-    return [...INTEGRATIONS.slice(0, 7), ...(slack ? [slack] : [])];
-  }, []);
+  const pluginCards = INTEGRATIONS.filter((item) => item.category === "Socials");
   const manageConnections = manageFor
     ? connectionsForIntegration(manageFor, byPlatform)
     : [];
@@ -275,7 +271,7 @@ export default function VisualsHomePage() {
         <div className='h-[460px] animate-pulse rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/[0.035]' />
       )}
 
-      <section className='mt-5 sm:rounded-2xl sm:border sm:border-zinc-200 sm:bg-white sm:p-4 sm:shadow-sm sm:dark:border-white/10 sm:dark:bg-white/[0.035] sm:dark:shadow-none'>
+      <section className='mt-5'>
         <div className='flex items-center justify-between gap-3 sm:items-start'>
           <div>
             <h2 className='text-base font-semibold'>
@@ -295,7 +291,7 @@ export default function VisualsHomePage() {
           </Link>
         </div>
 
-        <div className='mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+        <div className='mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-0'>
           {pluginCards.map((integration) => {
             const connections = connectionsForIntegration(
               integration,
@@ -312,14 +308,6 @@ export default function VisualsHomePage() {
             const Icon = integration.icon;
             const isManageable = status === "connected" || status === "partial";
             const isSoon = status === "soon";
-            const statusLabel =
-              status === "connected"
-                ? "Connected"
-                : status === "partial"
-                  ? "Needs setup"
-                  : status === "soon"
-                    ? "Soon"
-                    : "Available";
             const pro = isFreePlan(user?.userPlan) && isProPlugin(integration) && !isManageable && !isSoon;
             return (
               <React.Fragment key={integration.name}>
@@ -345,41 +333,36 @@ export default function VisualsHomePage() {
                     </span>
                   )}
                 </button>
-                <article
-                  className='hidden rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:block dark:border-white/10 dark:bg-[#0c0c0c]'
-                >
-                  <div className='flex items-start justify-between gap-3'>
-                    <span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-zinc-200 dark:bg-white/10 dark:ring-white/10'>
-                      <IconSourceView icon={Icon} className='h-5 w-5' />
-                    </span>
-                    <span
-                      className={[
-                        "rounded-full px-2.5 py-1 text-xs",
-                        isManageable
-                          ? "bg-sky-500/10 text-sky-700 dark:text-sky-200"
-                          : "bg-zinc-200/70 text-zinc-600 dark:bg-white/10 dark:text-white/55",
-                      ].join(" ")}
-                    >
-                      {statusLabel}
-                    </span>
+                <article className='hidden min-w-0 items-center gap-4 border-b border-zinc-100 py-6 sm:flex dark:border-zinc-900'>
+                  <span className='flex size-14 shrink-0 items-center justify-center rounded-[10px] border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950'>
+                    <IconSourceView icon={Icon} className='size-7 text-zinc-800 dark:text-zinc-200' />
+                  </span>
+                  <div className='min-w-0 flex-1'>
+                    <h3 className='truncate text-base font-semibold tracking-tight'>{integration.name}</h3>
+                    <p className='mt-1 line-clamp-2 text-sm leading-5 text-zinc-500 dark:text-zinc-400'>
+                      {integration.description}
+                    </p>
                   </div>
-                  <h3 className='mt-4 font-semibold'>{integration.name}</h3>
-                  <p className='mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-zinc-500 dark:text-white/50'>
-                    {integration.description}
-                  </p>
-                  <Button
-                    type='button'
-                    disabled={isSoon}
-                    onClick={() =>
-                      isManageable
-                        ? setManageFor(integration)
-                        : setConnectFor(integration)
-                    }
-                    variant={isManageable ? "outline" : "default"}
-                    className='mt-4 w-full rounded-xl disabled:cursor-not-allowed'
-                  >
-                    {isManageable ? "Manage" : isSoon ? "Coming soon" : "Add"}
-                  </Button>
+                  {isManageable ? (
+                    <button
+                      type='button'
+                      onClick={() => setManageFor(integration)}
+                      aria-label={`Manage ${integration.name}${status === "partial" ? " (needs setup)" : ""}`}
+                      title={status === "partial" ? "Needs setup" : `Manage ${integration.name}`}
+                      className='shrink-0 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:text-zinc-400 dark:hover:bg-zinc-900'
+                    >
+                      <HugeiconsIcon icon={MoreHorizontalIcon} className='size-5' />
+                    </button>
+                  ) : (
+                    <button
+                      type='button'
+                      disabled={isSoon}
+                      onClick={() => setConnectFor(integration)}
+                      className='shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:border disabled:border-zinc-200 disabled:bg-zinc-50 disabled:text-zinc-400 dark:disabled:border-zinc-800 dark:disabled:bg-zinc-950 dark:disabled:text-zinc-500'
+                    >
+                      <LocalizedText text={isSoon ? "Soon" : "Connect"} />
+                    </button>
+                  )}
                 </article>
               </React.Fragment>
             );
