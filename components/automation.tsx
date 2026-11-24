@@ -300,7 +300,7 @@ export default function AutomationWorkflow({
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const validationCount = nodes.filter(
-    (node) => (node.data?.validationErrors as string[] | undefined)?.length
+    (node: Node) => (node.data?.validationErrors as string[] | undefined)?.length
   ).length;
 
   const [saveStatus, setSaveStatus] = useState<
@@ -1448,7 +1448,7 @@ export default function AutomationWorkflow({
                           autoFocus
                           value={addSearch}
                           onChange={(event) => setAddSearch(event.target.value)}
-                          placeholder='Search nodes and 1,000+ apps'
+                          placeholder='Search nodes and 1,800+ apps'
                           className='border-border bg-muted/40 text-foreground placeholder:text-muted-foreground h-8 w-full rounded-md border pr-2 pl-7 text-xs transition-[border-color] duration-150 outline-none focus:border-violet-500/60'
                         />
                       </div>
@@ -1549,11 +1549,11 @@ export default function AutomationWorkflow({
               }
             >
               {workflowReady ? (
-                <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3' />
+                <HugeiconsIcon icon={Tick02Icon} className='h-3 w-3 rounded-full' />
               ) : (
-                <HugeiconsIcon icon={Alert02Icon} className='h-3 w-3' />
+                <HugeiconsIcon icon={Alert02Icon} className='h-3 w-3 rounded-full' />
               )}
-              {workflowReady ? "Verified" : "Draft"}
+              {workflowReady ? "" : ""}
             </div>
           )}
           {validationCount > 0 && (

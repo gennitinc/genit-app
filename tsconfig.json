@@ -25,6 +25,12 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@reactflow/packages/core/src/*": [
+        "./node_modules/@reactflow/core/dist/esm/*"
+      ],
+      "@reactflow/packages/core/src/types": [
+        "./node_modules/@reactflow/core/dist/esm/types/index.d.ts"
       ]
     },
     "types": [
