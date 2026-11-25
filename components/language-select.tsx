@@ -43,7 +43,7 @@ export function LanguageSelect({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent align={iconOnly ? "end" : "start"}>
+      <SelectContent align={iconOnly ? "end" : "start"} className='z-[70]'>
         {languages.map((item) => (
           <SelectItem key={item.code} value={item.code}>
             <span className='flex items-center gap-2'>

@@ -203,7 +203,7 @@ export function LandingNavbar() {
 
   return (
     <>
-      <header className='sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
+      <header className='sticky top-0 z-[60] w-full border-b border-black/[0.06] bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55 dark:border-white/10 dark:bg-zinc-950/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.22)] dark:supports-[backdrop-filter]:bg-zinc-950/50'>
         <nav className='z-50 mx-auto flex h-fit items-center justify-between px-2 py-1 md:px-12 lg:px-20 xl:px-24'>
           {/* Replace <img> with new <Image> */}
           <Link href={hostHref("/")} className='z-40 flex items-center'>
@@ -264,7 +264,7 @@ export function LandingNavbar() {
                     onPointerEnter={openPlugins}
                     onPointerLeave={closePluginsSoon}
                     onCloseAutoFocus={(event) => event.preventDefault()}
-                    className='border-border/80 bg-popover/95 w-[min(1000px,calc(100vw-2rem))] overflow-x-hidden overflow-y-auto rounded-2xl p-2 shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:shadow-[0_24px_80px_rgba(0,0,0,0.5)]'
+                    className='border-border/80 bg-popover/95 z-[70] w-[min(1000px,calc(100vw-2rem))] overflow-x-hidden overflow-y-auto rounded-2xl p-2 shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:shadow-[0_24px_80px_rgba(0,0,0,0.5)]'
                   >
                     <DropdownMenuGroup className='grid grid-cols-3 gap-1 p-2'>
                       {featuredPlugins.map((plugin) => {
@@ -466,7 +466,7 @@ export function LandingNavbar() {
                   <span className='sr-only'>{t("Toggle menu")}</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side='right'>
+              <SheetContent side='right' className='z-[70]'>
                 <div className='mt-8 flex flex-col gap-4'>
                   {navigation.map((item) => (
                     <Link

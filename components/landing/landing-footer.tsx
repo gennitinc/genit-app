@@ -1,6 +1,5 @@
 "use client";
 
-import { hostHref } from "@/lib/domains";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,14 +14,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useLanguage } from "@/context/LanguageContext";
+import { hostHref } from "@/lib/domains";
 import { cn } from "@/lib/utils";
+import { ComputerIcon, MoonIcon, Sun01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Sun01Icon, MoonIcon, ComputerIcon } from "@hugeicons/core-free-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { toast } from "sonner";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export function LandingFooter() {
   const [email, setEmail] = useState("");
@@ -292,9 +292,12 @@ export function LandingFooter() {
       <footer className='relative min-h-[400px] overflow-hidden'>
         <div className='relative z-10 mx-auto px-4 pt-16 pb-5 md:px-12 lg:px-20 xl:px-24'>
           <div className='flex flex-col justify-between gap-12 lg:flex-row lg:gap-24'>
-            <div className='lg:max-w-lg flex flex-col gap-y-2'>
+            <div className='flex flex-col gap-y-2 lg:max-w-lg'>
               <div className='flex flex-col'>
-                <Link href={hostHref("/")} className='z-40 mb-1 flex items-center'>
+                <Link
+                  href={hostHref("/")}
+                  className='z-40 mb-1 flex items-center'
+                >
                   <Logo className='h-12 w-12 flex-shrink-0' />
                   <span className='text-foreground text-xl font-semibold transition-colors duration-300'>
                     {t("Genit")}
@@ -305,7 +308,6 @@ export function LandingFooter() {
                     "Autonomous AI marketing agents that work 24/7, so you don't have to."
                   )}
                 </p>
-                
               </div>
 
               <div className='mt-2 mb-6'>
@@ -330,7 +332,7 @@ export function LandingFooter() {
                       <div className='text-muted-foreground text-[11px] leading-tight'>
                         {t("Download on the")}
                       </div>
-                      <div className='-mt-0.5 font-sans text-base font-semibold leading-tight'>
+                      <div className='-mt-0.5 font-sans text-base leading-tight font-semibold'>
                         App Store
                       </div>
                     </div>
@@ -342,7 +344,11 @@ export function LandingFooter() {
                     className='border-border bg-card text-card-foreground hover:bg-accent flex h-12 flex-1 cursor-pointer items-center justify-center rounded-xl border px-3 shadow-sm transition-colors sm:flex-initial sm:px-4'
                   >
                     <div className='mr-2.5 shrink-0'>
-                      <svg viewBox='30 336.7 120.9 129.2' width={24} height={24}>
+                      <svg
+                        viewBox='30 336.7 120.9 129.2'
+                        width={24}
+                        height={24}
+                      >
                         <path
                           fill='#FFD400'
                           d='M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z'
@@ -365,7 +371,7 @@ export function LandingFooter() {
                       <div className='text-muted-foreground text-[11px] leading-tight'>
                         {t("GET IT ON")}
                       </div>
-                      <div className='-mt-0.5 font-sans text-base font-semibold leading-tight'>
+                      <div className='-mt-0.5 font-sans text-base leading-tight font-semibold'>
                         Google Play
                       </div>
                     </div>
@@ -374,87 +380,87 @@ export function LandingFooter() {
               </div>
 
               <div className='mb-6 flex items-center gap-3'>
-                  <a
-                    href='https://www.linkedin.com/company/genit-ai/'
-                    className='text-muted-foreground hover:text-foreground transition-colors'
-                    aria-label='LinkedIn'
+                <a
+                  href='https://www.linkedin.com/company/genit-ai/'
+                  className='text-muted-foreground hover:text-foreground transition-colors'
+                  aria-label='LinkedIn'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={20}
+                    height={20}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='lucide lucide-linkedin'
                   >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width={20}
-                      height={20}
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='lucide lucide-linkedin'
-                    >
-                      <path d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z' />
-                      <rect width={4} height={12} x={2} y={9} />
-                      <circle cx={4} cy={4} r={2} />
-                    </svg>
-                  </a>
-                  <a
-                    href='https://x.com/genit_ai'
-                    className='text-muted-foreground hover:text-foreground transition-colors'
-                    aria-label='X'
+                    <path d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z' />
+                    <rect width={4} height={12} x={2} y={9} />
+                    <circle cx={4} cy={4} r={2} />
+                  </svg>
+                </a>
+                <a
+                  href='https://x.com/genit_ai'
+                  className='text-muted-foreground hover:text-foreground transition-colors'
+                  aria-label='X'
+                >
+                  <svg
+                    width={20}
+                    height={20}
+                    viewBox='0 0 24 24'
+                    fill='currentColor'
                   >
-                    <svg
-                      width={20}
-                      height={20}
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                    >
-                      <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
-                    </svg>
-                  </a>
+                    <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
+                  </svg>
+                </a>
 
-                  <a
-                    href='https://instagram.com/genitai'
-                    className='text-muted-foreground hover:text-foreground transition-colors'
-                    aria-label='Instagram'
+                <a
+                  href='https://instagram.com/genitai'
+                  className='text-muted-foreground hover:text-foreground transition-colors'
+                  aria-label='Instagram'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={20}
+                    height={20}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='lucide lucide-instagram'
                   >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width={20}
-                      height={20}
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='lucide lucide-instagram'
-                    >
-                      <rect width={20} height={20} x={2} y={2} rx={5} ry={5} />
-                      <path d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z' />
-                      <line x1='17.5' x2='17.51' y1='6.5' y2='6.5' />
-                    </svg>
-                  </a>
-                  <a
-                    href='https://www.youtube.com/@genitai'
-                    className='text-muted-foreground hover:text-foreground transition-colors'
-                    aria-label='YouTube'
+                    <rect width={20} height={20} x={2} y={2} rx={5} ry={5} />
+                    <path d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z' />
+                    <line x1='17.5' x2='17.51' y1='6.5' y2='6.5' />
+                  </svg>
+                </a>
+                <a
+                  href='https://www.youtube.com/@genitai'
+                  className='text-muted-foreground hover:text-foreground transition-colors'
+                  aria-label='YouTube'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width={20}
+                    height={20}
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='lucide lucide-youtube'
                   >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width={20}
-                      height={20}
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='lucide lucide-youtube'
-                    >
-                      <path d='M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17' />
-                      <path d='m10 15 5-3-5-3z' />
-                    </svg>
-                  </a>
-                </div>
+                    <path d='M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17' />
+                    <path d='m10 15 5-3-5-3z' />
+                  </svg>
+                </a>
+              </div>
             </div>
             <div className='grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-16'>
               <div>
@@ -570,7 +576,10 @@ export function LandingFooter() {
               </div>
               <div>
                 <h4 className='text-foreground mb-4 font-semibold'>
-                  <Link href={hostHref("/use-cases")} className='hover:underline'>
+                  <Link
+                    href={hostHref("/use-cases")}
+                    className='hover:underline'
+                  >
                     {t("Use cases")}
                   </Link>
                 </h4>
