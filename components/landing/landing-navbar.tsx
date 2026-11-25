@@ -1,6 +1,7 @@
 "use client";
 
 import { hostHref } from "@/lib/domains";
+import { LanguageSelect } from "@/components/language-select";
 import { Logo } from "../logo";
 import Aurora from "../ui/aurora";
 import UserPopOver from "../user/userPopOver";
@@ -384,23 +385,6 @@ export function LandingNavbar() {
                 </Link>
               </div>
 
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className='hover:bg-accent h-8 w-8 rounded-lg p-0'
-              >
-                {mounted ? (
-                  theme === "dark" ? (
-                    <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
-                  ) : (
-                    <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
-                  )
-                ) : (
-                  <div className='h-4 w-4' />
-                )}
-              </Button>
-
               {currentUser ? (
                 <UserPopOver />
               ) : (
@@ -421,6 +405,28 @@ export function LandingNavbar() {
                   </Link>
                 </div>
               )}
+
+              <LanguageSelect
+                iconOnly
+                className='hover:bg-accent dark:hover:bg-accent h-8 w-auto gap-1 rounded-lg border-transparent bg-transparent px-2 shadow-none dark:bg-transparent'
+              />
+
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className='hover:bg-accent h-8 w-8 rounded-lg p-0'
+              >
+                {mounted ? (
+                  theme === "dark" ? (
+                    <HugeiconsIcon icon={Sun01Icon} className='h-4 w-4' />
+                  ) : (
+                    <HugeiconsIcon icon={MoonIcon} className='h-4 w-4' />
+                  )
+                ) : (
+                  <div className='h-4 w-4' />
+                )}
+              </Button>
             </div>
           </div>
 
@@ -447,6 +453,11 @@ export function LandingNavbar() {
               // </div>
               <div className=''></div>
             )}
+
+            <LanguageSelect
+              iconOnly
+              className='hover:bg-accent dark:hover:bg-accent h-8 w-auto gap-1 rounded-lg border-transparent bg-transparent px-2 shadow-none dark:bg-transparent'
+            />
 
             <Sheet>
               <SheetTrigger asChild>
